@@ -184,7 +184,7 @@ public class MixinMinecraft {
 			}
 		}
     	
-    	else if (Keyboard.isKeyDown(Hotkeys.zero.getKeyCode()) && das <= 0 && TickrateChanger.advanceClient == false && !Hotkeys.isFreecaming) { 
+    	else if (Keyboard.isKeyDown(Hotkeys.zero.getKeyCode()) && das <= 0 && TickrateChanger.advanceClient == false && !Hotkeys.isFreecaming && Minecraft.getMinecraft().currentScreen == null) { 
     		if (TickrateChanger.tickrate > 0) {
     			save = TickrateChanger.index;
     			TickrateChanger.updateTickrate(0);
