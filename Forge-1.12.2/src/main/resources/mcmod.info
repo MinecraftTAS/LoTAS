@@ -1,0 +1,16 @@
+[
+{
+  "modid": "lotas",
+  "name": "LoTAS",
+  "description": "Low Optimization Tool Assisted Speedrun Mod",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Pfannekuchen"],
+  "credits": "Credits to ScribbleLP for helping out with a lot of the code",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
