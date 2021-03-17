@@ -39,7 +39,7 @@ minecraft {
     runDir = "run"
     
     mappings = "snapshot_20171003"
-    makeObfSourceJar = false
+    //makeObfSourceJar = false
     replace '${version}':project.version,'${mcversion}':project.minecraft.version
 }
 
