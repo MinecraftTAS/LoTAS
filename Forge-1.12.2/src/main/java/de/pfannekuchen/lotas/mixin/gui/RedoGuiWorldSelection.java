@@ -25,7 +25,8 @@ public abstract class RedoGuiWorldSelection extends GuiScreen {
 	@Inject(at = @At("HEAD"), method = "initGui")
 	public void injectinitGui(CallbackInfo ci) {
 		this.buttonList.add(new GuiButton(6, 5, 5, 98, 20, "Seeds"));
-		this.buttonList.add(new GuiCheckBox(7, width - 16 - mc.fontRenderer.getStringWidth("Open ESC when joining world"), 5, "Open ESC when joining world", ConfigManager.getBoolean("tools", "hitEscape")));
+		this.buttonList.add(new GuiCheckBox(7, width - 17 - mc.fontRenderer.getStringWidth("Open ESC when joining world"), 4, "Open ESC when joining world", ConfigManager.getBoolean("tools", "hitEscape")));
+		this.buttonList.add(new GuiCheckBox(8, width - 17 - mc.fontRenderer.getStringWidth("Open ESC when joining world"), 16, "Show TAS Challenge Maps", !ConfigManager.getBoolean("tools", "hideMaps")));
 	}
 	
 	@Inject(at = @At("HEAD"), method = "actionPerformed")
@@ -38,6 +39,9 @@ public abstract class RedoGuiWorldSelection extends GuiScreen {
 				ConfigManager.setBoolean("tools", "hitEscape", ((GuiCheckBox) button).isChecked());
 				ConfigManager.save();
 				break;
+			case 8:
+				ConfigManager.setBoolean("tools", "hideMaps", !((GuiCheckBox) button).isChecked());
+				ConfigManager.save();
 			default:
 				
 				break;
