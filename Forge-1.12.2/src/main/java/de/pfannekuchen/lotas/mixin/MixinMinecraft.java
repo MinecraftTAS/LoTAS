@@ -13,6 +13,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import de.pfannekuchen.lotas.config.ConfigManager;
 import de.pfannekuchen.lotas.hotkeys.Hotkeys;
 import de.pfannekuchen.lotas.savestate.SavestateMod;
+import de.pfannekuchen.lotas.savestates.SavestateHandler;
+import de.pfannekuchen.lotas.savestates.exceptions.LoadstateException;
+import de.pfannekuchen.lotas.savestates.exceptions.SavestateException;
+import de.pfannekuchen.lotas.savestates.motion.MotionEvents;
 import de.pfannekuchen.lotas.tickratechanger.TickrateChanger;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -43,8 +47,6 @@ public class MixinMinecraft {
 	
 	@Shadow
 	public Timer timer;
-	
-	private int save = 6;
 	
 	private int das = 0;
 	
@@ -84,23 +86,30 @@ public class MixinMinecraft {
 		
 		TickrateChanger.show = !TickrateChanger.show;
 		
-		if (Hotkeys.shouldSavestate) {
-			Hotkeys.shouldSavestate = false;
-			try {
-				SavestateMod.savestate();
-			} catch (IOException e) {
-				RLogAPI.logError(e, "[Savestate] Savestate Error #3");
-			}
-		}
-		
-		if (Hotkeys.shouldLoadstate) {
-			Hotkeys.shouldLoadstate = false;
-			try {
-				SavestateMod.loadstate();
-			} catch (IOException e) {
-				RLogAPI.logError(e, "[Savestate] Loadstate Error #3");
-			}
-		}
+		MotionEvents.onTick();
+//		if (Hotkeys.shouldSavestate) {
+//			Hotkeys.shouldSavestate = false;
+//			try {
+//				SavestateHandler.saveState();
+//			} catch (IOException e) {
+//				RLogAPI.logError(e, "[Savestate] Savestate Error #3");
+//			} catch (SavestateException e) {
+//				System.err.println("Something didn't work ._.");
+//				e.printStackTrace();
+//			}
+//		}
+//		
+//		if (Hotkeys.shouldLoadstate) {
+//			Hotkeys.shouldLoadstate = false;
+//			try {
+//				SavestateHandler.loadState();
+//			} catch (IOException e) {
+//				RLogAPI.logError(e, "[Savestate] Loadstate Error #3");
+//			} catch (LoadstateException e) {
+//				System.err.println("Something didn't work ._.");
+//				e.printStackTrace();
+//			}
+//		}
 		
 		if (TickrateChanger.advanceClient) {
 			TickrateChanger.resetAdvanceClient();
@@ -186,12 +195,12 @@ public class MixinMinecraft {
     	
     	else if (Keyboard.isKeyDown(Hotkeys.zero.getKeyCode()) && das <= 0 && TickrateChanger.advanceClient == false && !Hotkeys.isFreecaming && Minecraft.getMinecraft().currentScreen == null) { 
     		if (TickrateChanger.tickrate > 0) {
-    			save = TickrateChanger.index;
+    			TickrateChanger.indexSave = TickrateChanger.index;
     			TickrateChanger.updateTickrate(0);
     			TickrateChanger.index = 0;
     		} else {
-    			TickrateChanger.updateTickrate(TickrateChanger.ticks[save]);
-    			TickrateChanger.index = save;
+    			TickrateChanger.updateTickrate(TickrateChanger.ticks[TickrateChanger.indexSave]);
+    			TickrateChanger.index = TickrateChanger.indexSave;
     		}
     		das = 15;
     	}

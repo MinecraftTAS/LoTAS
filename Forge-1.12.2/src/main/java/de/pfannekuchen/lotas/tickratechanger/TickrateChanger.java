@@ -49,6 +49,7 @@ public class TickrateChanger {
 	public static int ticksToJump = -1;
 	
 	public static int index = 6;
+	public static int indexSave = 6;
 	public static final int[] ticks = new int[] {0, 1, 2, 4, 5, 10, 20, 40, 50, 200, 600};
 	
 	public static boolean ticksync = true;

@@ -1,5 +1,7 @@
 package de.pfannekuchen.lotas.mixin;
 
+import java.io.IOException;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -7,6 +9,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import de.pfannekuchen.lotas.hotkeys.Hotkeys;
+import de.pfannekuchen.lotas.savestates.SavestateHandler;
+import de.pfannekuchen.lotas.savestates.exceptions.SavestateException;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiGameOver;
 import net.minecraft.client.gui.GuiIngameMenu;
@@ -36,8 +40,14 @@ public abstract class MixinGuiGameOver extends GuiScreen {
 	@Inject(method = "actionPerformed", at = @At("HEAD"))
 	public void injectactionPerformed(GuiButton button, CallbackInfo ci) {
         if (button.id == 2) {
-        	mc.displayGuiScreen(new GuiIngameMenu());
-        	Hotkeys.shouldLoadstate = true;
+        	try {
+				SavestateHandler.saveState();
+			} catch (SavestateException e) {
+				System.err.println("Failed to load a savestate: "+e.getMessage());
+			} catch (IOException e) {
+				System.err.println("Failed to load a savestate: "+e.getCause().toString());
+				e.printStackTrace();
+			}
         }
 	}
 	
