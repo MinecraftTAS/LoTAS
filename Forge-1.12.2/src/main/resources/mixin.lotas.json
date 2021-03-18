@@ -6,7 +6,11 @@
     "compatibilityLevel": "JAVA_8",
     "mixins": [
 		"tickratechanger.BindMinecraftServer",
-		"MixinEntityPlayerMP"
+		"MixinEntityPlayerMP",
+		"savestates.AccessorSaveHandler",
+		"savestates.AccessorWorld",
+		"savestates.MixinChunkProviderServer",
+		"savestates.MixinEntityPlayerMP"
     ],
     "client": [
     	"gui.RedoGuiMainMenu",
@@ -29,6 +33,7 @@
     	"MixinExplosionDropChance",
     	"MixinWorldborder",
     	"MixinTegratedServer",
-    	"MixinEndPortal"
+    	"MixinEndPortal",
+    	"savestates.MixinChunkProviderClient"
 	]
 }

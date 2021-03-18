@@ -42,27 +42,36 @@ public class SavestateMod {
 	 */
 	public static void savestate() throws IOException {
 		RLogAPI.logDebug("[Savestate] Trying to create a Savestate");
+		
+		//Genrate data of the player
 		String data = generateSavestateFile();
 		
+		//Get the necessary files
 		String worldName = Minecraft.getMinecraft().getIntegratedServer().getFolderName();
 		File worldDir = new File(Minecraft.getMinecraft().mcDataDir, "saves/" + worldName);
 		File savestatesDir = new File(Minecraft.getMinecraft().mcDataDir, "savestates/");
 		
+		//Make the directory if it doesn't exist
 		if(!savestatesDir.exists()) savestatesDir.mkdir();
 		
+		//Kill the server
         Minecraft.getMinecraft().world.sendQuittingDisconnectingPacket();
         Minecraft.getMinecraft().loadWorld((WorldClient)null);
         
+        //Get the current savestate count
         int existingSavestates = savestatesDir.listFiles((d, s) -> {
         	return s.startsWith(worldName);
         }).length;
         
+        //Change the target directory
         File savestateDir = new File(savestatesDir, worldName + (existingSavestates+1));
         
+        //Read the motion of the data again
         double x = Double.parseDouble(data.split(":")[0]);
         double y = Double.parseDouble(data.split(":")[1]);
         double z = Double.parseDouble(data.split(":")[2]);
         
+        //Do the actual copying
         FileUtils.copyDirectory(worldDir, savestateDir);
         Files.write(data.getBytes(), new File(savestateDir, "savestate.dat"));
         motionX = x;

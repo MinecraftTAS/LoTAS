@@ -1,6 +1,5 @@
 package de.pfannekuchen.lotas.mixin.gui;
 
-import java.io.IOException;
 import java.time.Duration;
 import java.util.ArrayList;
 
@@ -16,7 +15,9 @@ import de.pfannekuchen.lotas.gui.GuiAIRig;
 import de.pfannekuchen.lotas.gui.GuiDragonPhase;
 import de.pfannekuchen.lotas.gui.GuiEntitySpawner;
 import de.pfannekuchen.lotas.gui.GuiLootManipulation;
-import de.pfannekuchen.lotas.savestate.SavestateMod;
+import de.pfannekuchen.lotas.savestates.LoadstatePacket;
+import de.pfannekuchen.lotas.savestates.SavestateHandler;
+import de.pfannekuchen.lotas.savestates.SavestatePacket;
 import de.pfannekuchen.lotas.tickratechanger.TickrateChanger;
 import de.pfannekuchen.lotas.tickratechanger.Timer;
 import net.minecraft.client.Minecraft;
@@ -28,7 +29,6 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.client.config.GuiCheckBox;
-import rlog.RLogAPI;
 
 @Mixin(GuiIngameMenu.class)
 public abstract class RedoGuiIngameMenu extends GuiScreen {
@@ -57,14 +57,16 @@ public abstract class RedoGuiIngameMenu extends GuiScreen {
         }
 		
         buttonList.get(0).y += 24;
+        this.buttonList.add(new GuiButton(18, 5, 75, 98, 20, I18n.format("Load Items")));
     	this.buttonList.add(new GuiButton(13, this.width / 2 - 100, this.height / 4 + 96 + -16, 98, 20, I18n.format("Savestate")));
     	GuiButton loadstate = new GuiButton(14, this.width / 2 + 2, this.height / 4 + 96 + -16, 98, 20, I18n.format("Loadstate"));
-    	loadstate.enabled = SavestateMod.hasSavestate();
+        loadstate.enabled = SavestateHandler.hasSavestate();
     	this.buttonList.add(loadstate);
         this.buttonList.add(new GuiButton(15, 5, 15, 48, 20, I18n.format("+")));
         this.buttonList.add(new GuiButton(16, 55, 15, 48, 20, I18n.format("-")));
         this.buttonList.add(new GuiButton(17, 5, 55, 98, 20, I18n.format("Save Items")));
         this.buttonList.add(new GuiButton(18, 5, 75, 98, 20, I18n.format("Load Items")));
+        	
         
         this.buttonList.add(new GuiButton(19, (width / 4) * 0 + 1, height - 20, width / 4 - 2, 20, I18n.format("Manipulate Drops")));
     	this.buttonList.add(new GuiButton(20, (width / 4) * 1 + 2, height - 20, width / 4 - 2, 20, I18n.format("Manipulate Dragon")));
@@ -99,17 +101,13 @@ public abstract class RedoGuiIngameMenu extends GuiScreen {
 	@Inject(method = "actionPerformed", at = @At("HEAD"))
 	public void redoactionPerformed(GuiButton button, CallbackInfo ci) {
 		if (button.id == 13) {
-			try {
-				SavestateMod.savestate();
-			} catch (IOException e) {
-				RLogAPI.logError(e, "[Savestate] Savestate Error #3");
-			}
+			LoTASModContainer.NETWORK.sendToServer(new SavestatePacket());
 		} else if (button.id == 14) {
-			try {
-				SavestateMod.loadstate();
-			} catch (IOException e) {
-				RLogAPI.logError(e, "[Savestate] Loadstate Error #3");
-			}
+			mc.displayGuiScreen(null);
+			LoTASModContainer.NETWORK.sendToServer(new LoadstatePacket());
+//			} catch (IOException e) {
+//				RLogAPI.logError(e, "[Savestate] Loadstate Error #3");
+//			}
 		} else if (button.id == 15) {
 			TickrateChanger.index++;
 			TickrateChanger.index = MathHelper.clamp(TickrateChanger.index, 1, 10);
