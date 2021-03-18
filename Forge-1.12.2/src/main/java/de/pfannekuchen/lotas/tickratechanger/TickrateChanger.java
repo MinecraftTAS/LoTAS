@@ -17,6 +17,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.GameType;
+import net.minecraft.world.border.WorldBorder;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -76,6 +77,7 @@ public class TickrateChanger {
 		RLogAPI.logDebug("[TickrateChanger] Updated Tickrate to " + tickrateIn);
 		updateClientTickrate(tickrateIn);
 		updateServerTickrate(tickrateIn);
+		
 		ConfigManager.setInt("hidden", "tickrate", index);
 		ConfigManager.save();
 	}

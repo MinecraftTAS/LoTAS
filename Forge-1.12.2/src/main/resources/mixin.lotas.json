@@ -26,6 +26,7 @@
     	"tickratechanger.MixinSubtitle",
     	"MixinGuiGameOver",
     	"MixinI18n",
-    	"MixinExplosionDropChance"
+    	"MixinExplosionDropChance",
+    	"MixinWorldborder"
 	]
 }

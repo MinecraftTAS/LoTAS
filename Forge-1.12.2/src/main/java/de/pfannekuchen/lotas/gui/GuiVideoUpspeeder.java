@@ -97,8 +97,6 @@ public class GuiVideoUpspeeder extends GuiScreen {
 				throw new Exception();
 			}
 			
-			// TODO: Recalculate
-			
 			buttonList.get(1).enabled = true;
 			buttonList.get(2).enabled = true;
 		} catch (Exception e) {
