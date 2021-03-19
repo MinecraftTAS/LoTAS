@@ -27,6 +27,7 @@
     	"MixinGuiGameOver",
     	"MixinI18n",
     	"MixinExplosionDropChance",
-    	"MixinWorldborder"
+    	"MixinWorldborder",
+    	"MixinTegratedServer"
 	]
 }

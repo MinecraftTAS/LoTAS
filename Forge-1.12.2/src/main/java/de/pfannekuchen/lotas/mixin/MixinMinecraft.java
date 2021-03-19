@@ -50,11 +50,6 @@ public class MixinMinecraft {
 	
 	private boolean isLoadingWorld;
 	
-	private boolean ogL;
-	
-	private double motionXOld = 0;
-	private double motionZOld = 0;
-	
 	@Shadow
 	public EntityPlayerSP player;
 	
@@ -66,21 +61,6 @@ public class MixinMinecraft {
 	@Inject(method = "runTick", at = @At(value="HEAD"))
 	public void injectrunTick(CallbackInfo ci) {
 		if (ConfigManager.getBoolean("tools", "lAutoClicker")) rightClickDelayTimer = 0;
-		
-		if (player != null && ((Minecraft) (Object) this).world != null) {
-			if (ogL == false && player.onGround == true) {
-				if (gameSettings.keyBindJump.isKeyDown() && gameSettings.keyBindBack.isKeyDown()) {
-					player.motionX = motionXOld * 2;
-					player.motionZ = motionZOld * 2;
-					player.motionY = .4;
-					player.onGround = false;
-				}
-			}
-			ogL = player.onGround;
-			
-			motionXOld = player.motionX * 2;
-			motionZOld = player.motionZ * 2;
-		}
 		
 		TickrateChanger.show = !TickrateChanger.show;
 		
