@@ -13,6 +13,13 @@ public class MixinI18n {
 	@Shadow
 	private static Locale i18nLocale;
 	
+	/**
+	 * @author Pancake
+	 * @reason Remove CopyOf
+	 * @param translateKey
+	 * @param parameters
+	 * @return
+	 */
 	@Overwrite
     public static String format(String translateKey, Object... parameters) {
         return translateKey == "selectWorld.newWorld.copyOf" ? (String) parameters[0] : i18nLocale.formatMessage(translateKey, parameters);

@@ -22,7 +22,14 @@ public abstract class MixinWorldborder {
 	@Shadow
 	public long startTime;
 
-	@Overwrite
+	/**
+	 * @author Pancake
+	 * @reason Easy ;)
+	 * @param oldSize
+	 * @param newSize
+	 * @param time
+	 */
+	@Overwrite 
     public void setTransition(double oldSize, double newSize, long time) {
 		time /= (TickrateChanger.tickrateServer / 20F);
         this.startDiameter = oldSize;

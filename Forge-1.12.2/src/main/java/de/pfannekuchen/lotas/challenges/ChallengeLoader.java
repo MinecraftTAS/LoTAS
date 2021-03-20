@@ -17,7 +17,7 @@ import java.util.zip.ZipInputStream;
 
 import javax.annotation.Nullable;
 
-import org.codehaus.plexus.util.FileUtils;
+import org.apache.commons.io.FileUtils;
 
 import com.mojang.authlib.GameProfileRepository;
 import com.mojang.authlib.minecraft.MinecraftSessionService;

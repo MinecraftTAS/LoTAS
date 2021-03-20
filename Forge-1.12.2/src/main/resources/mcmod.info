@@ -7,8 +7,8 @@
   "mcversion": "${mcversion}",
   "url": "",
   "updateUrl": "",
-  "authorList": ["Pfannekuchen"],
-  "credits": "Credits to ScribbleLP for helping out with a lot of the code",
+  "authorList": ["Pfannekuchen", "ScribbleLP"],
+  "credits": "Credits in README.md",
   "logoFile": "",
   "screenshots": [],
   "dependencies": []
