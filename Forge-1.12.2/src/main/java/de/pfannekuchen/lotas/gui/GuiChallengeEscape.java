@@ -131,7 +131,7 @@ public class GuiChallengeEscape extends GuiIngameMenu {
 			if (((GuiCheckBox) button).isChecked()) {
 				ConfigManager.setBoolean("tools", "manipulateVelocityAway", false);
 				ConfigManager.save();
-				((GuiCheckBox) this.buttonList.get(14)).setIsChecked(false);
+				((GuiCheckBox) this.buttonList.get(16)).setIsChecked(false);
 			}
 			ConfigManager.setBoolean("tools", "manipulateVelocityTowards", ((GuiCheckBox) button).isChecked());
 			ConfigManager.save();
@@ -139,7 +139,7 @@ public class GuiChallengeEscape extends GuiIngameMenu {
 			if (((GuiCheckBox) button).isChecked()) {
 				ConfigManager.setBoolean("tools", "manipulateVelocityTowards", false);
 				ConfigManager.save();
-				((GuiCheckBox) this.buttonList.get(13)).setIsChecked(false);
+				((GuiCheckBox) this.buttonList.get(15)).setIsChecked(false);
 			}
 			ConfigManager.setBoolean("tools", "manipulateVelocityAway", ((GuiCheckBox) button).isChecked());
 			ConfigManager.save();
