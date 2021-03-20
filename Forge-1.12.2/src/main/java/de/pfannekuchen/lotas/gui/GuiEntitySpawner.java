@@ -3,6 +3,7 @@ package de.pfannekuchen.lotas.gui;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
@@ -68,17 +69,17 @@ public class GuiEntitySpawner extends GuiScreen {
 	
 	public static EntityLiving e;
 	
-	public static List<EnchantmentData> enchHelmetZombie;
-	public static List<EnchantmentData> enchChestZombie;
-	public static List<EnchantmentData> enchLeggingsZombie;
-	public static List<EnchantmentData> enchBootsZombie;
-	public static List<EnchantmentData> enchSwordZombie;
+	public static List<EnchantmentData> enchHelmetZombie = new ArrayList<>();
+	public static List<EnchantmentData> enchChestZombie = new ArrayList<>();
+	public static List<EnchantmentData> enchLeggingsZombie = new ArrayList<>();
+	public static List<EnchantmentData> enchBootsZombie = new ArrayList<>();
+	public static List<EnchantmentData> enchSwordZombie = new ArrayList<>();
 	
-	public static List<EnchantmentData> enchHelmetSkel;
-	public static List<EnchantmentData> enchChestSkel;
-	public static List<EnchantmentData> enchLeggingsSkel;
-	public static List<EnchantmentData> enchBootsSkel;
-	public static List<EnchantmentData> enchBowSkel;
+	public static List<EnchantmentData> enchHelmetSkel = new ArrayList<>();
+	public static List<EnchantmentData> enchChestSkel = new ArrayList<>();
+	public static List<EnchantmentData> enchLeggingsSkel = new ArrayList<>();
+	public static List<EnchantmentData> enchBootsSkel = new ArrayList<>();
+	public static List<EnchantmentData> enchBowSkel = new ArrayList<>();
 	public static GuiCheckBox leatherZombie = new GuiCheckBox(2, 1, - 12, "This is", false);
 	public static GuiCheckBox chainZombie = new GuiCheckBox(2, 1,  - 12, "just random", false);
 	public static GuiCheckBox ironZombie = new GuiCheckBox(2, 1, - 12, "numbers", false);

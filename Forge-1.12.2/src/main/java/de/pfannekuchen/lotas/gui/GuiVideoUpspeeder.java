@@ -87,7 +87,7 @@ public class GuiVideoUpspeeder extends GuiScreen implements IProgressMeter {
 				e.printStackTrace();
 			}
 		}
-		codecFFMPEG = GL11.glGetString(GL11.GL_VENDOR).toUpperCase().contains("NVIDIA") ? "nvenc_h264" : "x264";
+		codecFFMPEG = GL11.glGetString(GL11.GL_VENDOR).toUpperCase().contains("NVIDIA") ? "nvenc_h264" : "h264";
 	}
 	
 	private static final int BUFFER_SIZE = 4096;
