@@ -48,13 +48,16 @@ public class GuiAIRig extends GuiScreen {
 		RLogAPI.logDebug("[AiRig] Found " + entities.size() + " Entities around the Player");
 		selectedIndex = 0;
 		
-		buttonList.get(0).enabled = false;
-		if (entities.size() == 0) {
+		if (selectedIndex + 2 > entities.size()) {
+			buttonList.get(1).enabled = false;
+		} else {
+			buttonList.get(1).enabled = true;
+		}
+		
+		if (selectedIndex - 1 < 0) {
 			buttonList.get(0).enabled = false;
-			buttonList.get(1).enabled = false;
-			buttonList.get(2).enabled = false;
-		} else if (entities.size() == 1) {
-			buttonList.get(1).enabled = false;
+		} else {
+			buttonList.get(0).enabled = true;
 		}
 		super.initGui();
 	}
@@ -124,6 +127,18 @@ public class GuiAIRig extends GuiScreen {
 			} catch (Exception e) {
 				RLogAPI.logError(e, "Parse Invalid Data #2");
 			}
+		}
+		
+		if (selectedIndex + 2 > entities.size()) {
+			buttonList.get(1).enabled = false;
+		} else {
+			buttonList.get(1).enabled = true;
+		}
+		
+		if (selectedIndex - 1  < 0) {
+			buttonList.get(0).enabled = false;
+		} else {
+			buttonList.get(0).enabled = true;
 		}
 	}
 
