@@ -46,7 +46,7 @@ public abstract class RedoGuiIngameMenu extends GuiScreen {
 	@Inject(method = "initGui", at = @At("RETURN"))
 	public void injectinitGui(CallbackInfo ci) {
 		for (GuiButton guiButton : buttonList) {
-			guiButton.y -= 25;
+			guiButton.y -= 24;
 		}
 		
 		double pX = Minecraft.getMinecraft().player.posX;
@@ -77,7 +77,7 @@ public abstract class RedoGuiIngameMenu extends GuiScreen {
 	        this.buttonList.add(new GuiCheckBox(22, 2, height - 20 - 15, I18n.format("Avoid taking damage"), !ConfigManager.getBoolean("tools", "takeDamage")));
 	        this.buttonList.add(new GuiButton(23, 35, 107, 68, 20, I18n.format("Jump ticks")));
 	        this.buttonList.add(new GuiButton(24, 5, 107, 30, 20, I18n.format(TickrateChanger.ticks[TickrateChanger.ji] + "t")));
-			this.buttonList.add(new GuiButton(25, this.width / 2 - 100, this.height / 4 + 120 + 8, I18n.format("Reset Timer")));
+			this.buttonList.add(new GuiButton(25, this.width / 2 - 100, this.height / 4 + 144 + -16, I18n.format("Reset Timer")));
 			this.buttonList.add(new GuiCheckBox(26, 2, height - 32 - 15, I18n.format("Drop towards me"), ConfigManager.getBoolean("tools", "manipulateVelocityTowards")));
 			this.buttonList.add(new GuiCheckBox(27, 2, height - 44 - 15, I18n.format("Drop away from me"), ConfigManager.getBoolean("tools", "manipulateVelocityAway")));
 			this.buttonList.add(new GuiCheckBox(28, 2, height - 56 - 15, I18n.format("Optimize Explosions"), ConfigManager.getBoolean("tools", "manipulateExplosionDropChance")));
