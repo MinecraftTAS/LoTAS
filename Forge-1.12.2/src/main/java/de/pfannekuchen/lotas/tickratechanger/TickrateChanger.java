@@ -203,7 +203,8 @@ public class TickrateChanger {
 			if (Timer.running) rta = Duration.ofMillis(System.currentTimeMillis() - Timer.startTime.toMillis());
 			Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(Timer.getDuration(dur), 1, 3, 0xFFFFFFFF);
 			if (!ConfigManager.getBoolean("ui", "hideRTATimer")) Minecraft.getMinecraft().fontRenderer.drawStringWithShadow("RTA: " + Timer.getDuration(rta), 1, 15, 0xFFFFFFFF);
-		} else if (e.getType() == ElementType.TEXT && ConfigManager.getBoolean("tools", "showTickIndicator") && tickrate <= 5F && show) {
+		} 
+		if (e.getType() == ElementType.TEXT && ConfigManager.getBoolean("tools", "showTickIndicator") && tickrate <= 5F && show) {
 			Minecraft.getMinecraft().getTextureManager().bindTexture(streaming);
 			Gui.drawModalRectWithCustomSizedTexture(new ScaledResolution(Minecraft.getMinecraft()).getScaledWidth() - 17, 1, 0, 0, 16, 16, 16, 64);
 		}
