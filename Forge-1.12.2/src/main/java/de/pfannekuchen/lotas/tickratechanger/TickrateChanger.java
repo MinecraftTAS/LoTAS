@@ -178,16 +178,6 @@ public class TickrateChanger {
 	}
 	
 	/**
-	 * Converting the duration to a string that will be displayed in the gui
-	 * @param d
-	 * @return Timer as a string
-	 * @see TickrateChanger#onDraw(net.minecraftforge.client.event.RenderGameOverlayEvent.Post)
-	 */
-	public static String getDuration(Duration d) {
-		return d.toHours() + ":" + d.toMinutes() % 60 + ":" + d.getSeconds() % 60 + ":" + (int) ((d.toMillis() % 1000) / 100);
-	}
-	
-	/**
 	 * Set's the gamemode to survival if the player joins a world
 	 * @param e EntityJoinWorldEvent
 	 */
@@ -211,8 +201,8 @@ public class TickrateChanger {
 			Gui.drawRect(0, 0, 75, ConfigManager.getBoolean("ui", "hideRTATimer") ? 13 : 24, new Color(0, 0, 0, 175).getRGB());
 			Duration dur = Duration.ofMillis(Timer.ticks * 50);
 			if (Timer.running) rta = Duration.ofMillis(System.currentTimeMillis() - Timer.startTime.toMillis());
-			Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(getDuration(dur), 1, 3, 0xFFFFFFFF);
-			if (!ConfigManager.getBoolean("ui", "hideRTATimer")) Minecraft.getMinecraft().fontRenderer.drawStringWithShadow("RTA: " + getDuration(rta), 1, 15, 0xFFFFFFFF);
+			Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(Timer.getDuration(dur), 1, 3, 0xFFFFFFFF);
+			if (!ConfigManager.getBoolean("ui", "hideRTATimer")) Minecraft.getMinecraft().fontRenderer.drawStringWithShadow("RTA: " + Timer.getDuration(rta), 1, 15, 0xFFFFFFFF);
 		} else if (e.getType() == ElementType.TEXT && ConfigManager.getBoolean("tools", "showTickIndicator") && tickrate <= 5F && show) {
 			Minecraft.getMinecraft().getTextureManager().bindTexture(streaming);
 			Gui.drawModalRectWithCustomSizedTexture(new ScaledResolution(Minecraft.getMinecraft()).getScaledWidth() - 17, 1, 0, 0, 16, 16, 16, 64);

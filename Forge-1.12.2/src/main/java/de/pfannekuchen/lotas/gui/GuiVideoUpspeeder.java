@@ -147,16 +147,12 @@ public class GuiVideoUpspeeder extends GuiScreen implements IProgressMeter {
 		
 		videoFormat = result.format.format_name.split(",")[0];
 		codec = result.getStreams().get(0).codec_name; 
-		length = getTime(Duration.ofMillis((long) result.format.duration * 1000));
+		length = de.pfannekuchen.lotas.tickratechanger.Timer.getDuration(Duration.ofMillis((long) result.format.duration * 1000));
 		resolution = result.streams.get(0).width + "x" + result.streams.get(0).height;
 		filesize = (Files.size(f.toPath()) / 1024 / 1024) + " MB";
 		lengthInMilliseconds = (long) (result.format.duration * 1000);
 		
 		buttonList.get(3).enabled = true;
-	}
-	
-	public static String getTime(Duration d) {
-		return d.toHours() + ":" + d.toMinutes() % 60 + ":" + d.getSeconds() % 60 + "." + (int) ((d.toMillis() % 1000) / 100);
 	}
 	
 	@Override
@@ -286,7 +282,7 @@ public class GuiVideoUpspeeder extends GuiScreen implements IProgressMeter {
 		drawString(mc.fontRenderer, "Resolution: " + resolution, (width / 4) * 3 - (width / 12), (height / 8) * 4 + 20, 0xFFFFFF);
 		String dur = null;
 		try {
-			dur = getTime(Duration.ofMillis((long) (lengthInMilliseconds * (Integer.parseInt(tickrate.getText()) / 20F))));
+			dur = de.pfannekuchen.lotas.tickratechanger.Timer.getDuration(Duration.ofMillis((long) (lengthInMilliseconds * (Integer.parseInt(tickrate.getText()) / 20F))));
 		} catch (Exception e) {
 			
 		}

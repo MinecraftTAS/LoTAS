@@ -18,10 +18,14 @@ public class Timer {
 	
 	public static final List<String> allowed = ImmutableList.of("guichest", "guibeacon", "guibrewingstand", "guichat", "guinewchat", "guicommandblock", "guidispenser",
 			"guienchantment", "guifurnace", "guihopper", "guiinventory", "guirecipebook", "guigameover", "guirecipeoverlay", "guimerchant", "guicontainercreative", "guishulkerbox", "guirepair", "guicrafting");
-
+    
+    public static String getDuration(Duration d) {
+        return String.format("%02d", d.toMinutes()) + ":" + String.format("%02d", d.getSeconds() % 60) + ":" + String.format("%02d", (int) ((d.toMillis() % 1000)));
+    }
+	
 	public static String getCurrentTimerFormatted() {
 		Duration d = Duration.ofMillis(ticks * 50);
-		return d.toHours() + ":" + d.toMinutes() % 60 + ":" + d.getSeconds() % 60 + "." + (int) ((d.toMillis() % 1000) / 100);
+		return String.format("%02d", d.toMinutes()) + ":" + String.format("%02d", d.getSeconds() % 60) + "." + String.format("%02d", (int) ((d.toMillis() % 1000)));
 	}
 	
 }

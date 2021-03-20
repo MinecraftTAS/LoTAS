@@ -83,7 +83,6 @@ public class GuiSeedList extends GuiListExtended {
 					8421504);
 			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 			GlStateManager.enableBlend();
-			//GL11.glBindTexture(GL11.GL_TEXTURE_2D, dw.getGlTextureId());
 			Minecraft.getMinecraft().getTextureManager().bindTexture(loc);
 			Gui.drawModalRectWithCustomSizedTexture(x, y, 0.0F, 0.0F, 32, 32, 32.0F, 32.0F);
 			GlStateManager.disableBlend();

@@ -25,7 +25,7 @@ public class Timer {
      * @return Timer as a string
      */
     public static String getDuration(Duration d) {
-        return d.toHours() + ":" + d.toMinutes() % 60 + ":" + d.getSeconds() % 60 + ":" + (int) ((d.toMillis() % 1000) / 100);
+        return String.format("%02d", d.toMinutes()) + ":" + String.format("%02d", d.getSeconds() % 60) + ":" + (int) ((d.toMillis() % 1000) / 100) + "0";
     }
 
     /**
