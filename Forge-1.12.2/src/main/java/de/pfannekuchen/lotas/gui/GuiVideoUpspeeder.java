@@ -79,6 +79,13 @@ public class GuiVideoUpspeeder extends GuiScreen implements IProgressMeter {
 					}
 				}
 			}).start();
+		} else {
+			try {
+				ffmpeg = new FFmpeg(System.getenv("localappdata") + "\\ffmpeg\\bin\\ffmpeg.exe");
+				ffprobe = new FFprobe(System.getenv("localappdata") + "\\ffmpeg\\bin\\ffprobe.exe");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		codecFFMPEG = GL11.glGetString(GL11.GL_VENDOR).toUpperCase().contains("NVIDIA") ? "nvenc_h264" : "x264";
 	}
