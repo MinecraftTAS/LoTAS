@@ -28,6 +28,7 @@
     	"MixinI18n",
     	"MixinExplosionDropChance",
     	"MixinWorldborder",
-    	"MixinTegratedServer"
+    	"MixinTegratedServer",
+    	"MixinEndPortal"
 	]
 }

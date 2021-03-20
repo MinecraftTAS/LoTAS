@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.lwjgl.input.Keyboard;
 
+import de.pfannekuchen.lotas.challenges.ChallengeLoader;
 import de.pfannekuchen.lotas.dupemod.DupeMod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiIngameMenu;
@@ -31,11 +32,11 @@ public class Hotkeys {
 	public static int savedTickrate;
 	
 	public static void keyEvent() throws IOException {
-		if (saveState.isPressed()) {
+		if (saveState.isPressed() && ChallengeLoader.map == null) {
 			Minecraft.getMinecraft().displayGuiScreen(new GuiIngameMenu());
 			RLogAPI.logDebug("[Hotkeys] Requesting Savestate");
 			shouldSavestate = true;
-		} else if (loadState.isPressed()) {
+		} else if (loadState.isPressed() && ChallengeLoader.map == null) {
 			Minecraft.getMinecraft().displayGuiScreen(new GuiIngameMenu());
 			shouldLoadstate = true;
 			RLogAPI.logDebug("[Hotkeys] Requesting Loadstate");

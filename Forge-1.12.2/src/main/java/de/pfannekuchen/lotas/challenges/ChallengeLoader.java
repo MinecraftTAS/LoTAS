@@ -49,9 +49,11 @@ import net.minecraft.world.storage.WorldInfo;
 public class ChallengeLoader {
 
 	public static ChallengeMap map;
+	public static boolean startTimer;
 	
 	public static void reload() throws IOException {
-		// TODO: unload
+        Minecraft.getMinecraft().world.sendQuittingDisconnectingPacket();
+        Minecraft.getMinecraft().loadWorld((WorldClient)null);
 		load();
 	}
 	
@@ -75,6 +77,7 @@ public class ChallengeLoader {
 		unzip("map.zip", "challenges/" + map.name);
 		
 		// Load World
+		startTimer = true;
 		launchIntegratedServer(map.name, map.name, new WorldSettings(0L, GameType.ADVENTURE, false, true, WorldType.FLAT));
 	}
 	
