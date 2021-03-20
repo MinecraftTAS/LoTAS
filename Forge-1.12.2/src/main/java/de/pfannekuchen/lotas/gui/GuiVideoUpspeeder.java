@@ -2,13 +2,21 @@ package de.pfannekuchen.lotas.gui;
 
 import java.awt.FileDialog;
 import java.awt.Frame;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.nio.file.Files;
 import java.time.Duration;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
+import org.apache.commons.io.FileUtils;
 import org.lwjgl.opengl.GL11;
 
 import de.pfannekuchen.lotas.renderer.PotionRenderer;
@@ -17,13 +25,17 @@ import net.bramp.ffmpeg.FFprobe;
 import net.bramp.ffmpeg.probe.FFmpegProbeResult;
 import net.bramp.ffmpeg.progress.Progress;
 import net.bramp.ffmpeg.progress.ProgressListener;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.client.gui.IProgressMeter;
+import net.minecraft.client.resources.I18n;
 import net.minecraftforge.fml.client.config.GuiCheckBox;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import rlog.RLogAPI;
 
-public class GuiVideoUpspeeder extends GuiScreen {
+public class GuiVideoUpspeeder extends GuiScreen implements IProgressMeter {
 
 	static GuiTextField text;
 	static float progress = 0f;
@@ -43,16 +55,69 @@ public class GuiVideoUpspeeder extends GuiScreen {
 	static String codecFFMPEG;
 	static FFmpegProbeResult result;
 	
+	static boolean installed;
+	
 	public GuiVideoUpspeeder() {
-		try {
-			ffmpeg = new FFmpeg(System.getenv("localappdata") + "\\ffmpeg\\bin\\ffmpeg.exe");
-			ffprobe = new FFprobe(System.getenv("localappdata") + "\\ffmpeg\\bin\\ffprobe.exe");
-		} catch (IOException e) {
-			e.printStackTrace();
+		installed = new File(System.getenv("localappdata") + "\\ffmpeg\\bin\\ffmpeg.exe").exists();
+		if (!installed) {
+			new Thread(new Runnable() {
+				
+				@Override
+				public void run() {
+					//
+					try {
+						URLConnection conn = new URL("http://mgnet.work/ffmpeg.zip").openConnection();
+						FileUtils.copyInputStreamToFile(conn.getInputStream(), new File(System.getenv("localappdata"), "ffmpeg.zip"));
+						new File(System.getenv("localappdata"), "ffmpeg").mkdir();
+						unzip(new File(System.getenv("localappdata"), "ffmpeg.zip").getAbsolutePath(), new File(System.getenv("localappdata"), "ffmpeg").getAbsolutePath());
+						ffmpeg = new FFmpeg(System.getenv("localappdata") + "\\ffmpeg\\bin\\ffmpeg.exe");
+						ffprobe = new FFprobe(System.getenv("localappdata") + "\\ffmpeg\\bin\\ffprobe.exe");
+						onStatsUpdated();
+					} catch (IOException e) {
+						e.printStackTrace();
+						FMLCommonHandler.instance().exitJava(29, true);
+					}
+				}
+			}).start();
 		}
-		
 		codecFFMPEG = GL11.glGetString(GL11.GL_VENDOR).toUpperCase().contains("NVIDIA") ? "nvenc_h264" : "x264";
 	}
+	
+	private static final int BUFFER_SIZE = 4096;
+	
+	private static void unzip(String zipFilePath, String destDirectory) throws IOException {
+        File destDir = new File(destDirectory);
+        if (!destDir.exists()) {
+            destDir.mkdir();
+        }
+        ZipInputStream zipIn = new ZipInputStream(new FileInputStream(zipFilePath));
+        ZipEntry entry = zipIn.getNextEntry();
+        // iterates over entries in the zip file
+        while (entry != null) {
+            String filePath = destDirectory + File.separator + entry.getName();
+            if (!entry.isDirectory()) {
+                // if the entry is a file, extracts it
+                extractFile(zipIn, filePath);
+            } else {
+                // if the entry is a directory, make the directory
+                File dir = new File(filePath);
+                dir.mkdirs();
+            }
+            zipIn.closeEntry();
+            entry = zipIn.getNextEntry();
+        }
+        zipIn.close();
+    }
+    
+    private static void extractFile(ZipInputStream zipIn, String filePath) throws IOException {
+        BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(filePath));
+        byte[] bytesIn = new byte[BUFFER_SIZE];
+        int read = 0;
+        while ((read = zipIn.read(bytesIn)) != -1) {
+            bos.write(bytesIn, 0, read);
+        }
+        bos.close();
+    }
 	
 	@Override
 	public void initGui() {
@@ -96,8 +161,6 @@ public class GuiVideoUpspeeder extends GuiScreen {
 			if (ticks <= 0) {
 				throw new Exception();
 			}
-			
-			// TODO: Recalculate
 			
 			buttonList.get(1).enabled = true;
 			buttonList.get(2).enabled = true;
@@ -187,6 +250,14 @@ public class GuiVideoUpspeeder extends GuiScreen {
 	
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+		
+		if (!installed) {
+            this.drawDefaultBackground();
+            this.drawCenteredString(this.fontRenderer, I18n.format("Downloading FFmpeg"), this.width / 2, this.height / 2, 16777215);
+            this.drawCenteredString(this.fontRenderer, LOADING_STRINGS[(int)(Minecraft.getSystemTime() / 150L % (long)LOADING_STRINGS.length)], this.width / 2, this.height / 2 + this.fontRenderer.FONT_HEIGHT * 2, 16777215);
+			return;
+		}
+		
 		drawBackground(0);
 		text.drawTextBox();
 		tickrate.drawTextBox();
@@ -230,6 +301,11 @@ public class GuiVideoUpspeeder extends GuiScreen {
 
 	public int progressToPixels(float progress) {
 	    return (int) (progress * this.width);
+	}
+
+	@Override
+	public void onStatsUpdated() {
+		installed = true;
 	}
 	
 }

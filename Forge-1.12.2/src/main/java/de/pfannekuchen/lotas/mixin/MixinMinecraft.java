@@ -1,6 +1,7 @@
 package de.pfannekuchen.lotas.mixin;
 
 import java.io.IOException;
+import java.time.Duration;
 
 import org.lwjgl.input.Keyboard;
 import org.spongepowered.asm.mixin.Mixin;
@@ -10,7 +11,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import de.pfannekuchen.lotas.challenges.ChallengeLoader;
 import de.pfannekuchen.lotas.config.ConfigManager;
+import de.pfannekuchen.lotas.gui.GuiChallengeEscape;
 import de.pfannekuchen.lotas.hotkeys.Hotkeys;
 import de.pfannekuchen.lotas.savestate.SavestateMod;
 import de.pfannekuchen.lotas.tickratechanger.TickrateChanger;
@@ -50,37 +53,23 @@ public class MixinMinecraft {
 	
 	private boolean isLoadingWorld;
 	
-	private boolean ogL;
-	
-	private double motionXOld = 0;
-	private double motionZOld = 0;
-	
 	@Shadow
 	public EntityPlayerSP player;
 	
 	@Inject(method = "loadWorld", at = @At("HEAD"))
 	public void injectloadWorld(WorldClient worldClientIn, CallbackInfo ci) {
 		isLoadingWorld = ConfigManager.getBoolean("tools", "hitEscape") && worldClientIn != null;
+		if (ChallengeLoader.startTimer) {
+			ChallengeLoader.startTimer = false;
+			de.pfannekuchen.lotas.tickratechanger.Timer.startTime = Duration.ofMillis(System.currentTimeMillis());
+			de.pfannekuchen.lotas.tickratechanger.Timer.ticks = 1;
+			de.pfannekuchen.lotas.tickratechanger.Timer.running = true;
+		}
 	}
 	
 	@Inject(method = "runTick", at = @At(value="HEAD"))
 	public void injectrunTick(CallbackInfo ci) {
 		if (ConfigManager.getBoolean("tools", "lAutoClicker")) rightClickDelayTimer = 0;
-		
-		if (player != null && ((Minecraft) (Object) this).world != null) {
-			if (ogL == false && player.onGround == true) {
-				if (gameSettings.keyBindJump.isKeyDown() && gameSettings.keyBindBack.isKeyDown()) {
-					player.motionX = motionXOld * 2;
-					player.motionZ = motionZOld * 2;
-					player.motionY = .4;
-					player.onGround = false;
-				}
-			}
-			ogL = player.onGround;
-			
-			motionXOld = player.motionX * 2;
-			motionZOld = player.motionZ * 2;
-		}
 		
 		TickrateChanger.show = !TickrateChanger.show;
 		
@@ -184,7 +173,7 @@ public class MixinMinecraft {
 			}
 		}
     	
-    	else if (Keyboard.isKeyDown(Hotkeys.zero.getKeyCode()) && das <= 0 && TickrateChanger.advanceClient == false && !Hotkeys.isFreecaming) { 
+    	else if (Keyboard.isKeyDown(Hotkeys.zero.getKeyCode()) && das <= 0 && TickrateChanger.advanceClient == false && !Hotkeys.isFreecaming && Minecraft.getMinecraft().currentScreen == null) { 
     		if (TickrateChanger.tickrate > 0) {
     			save = TickrateChanger.index;
     			TickrateChanger.updateTickrate(0);
@@ -199,9 +188,12 @@ public class MixinMinecraft {
     
     @ModifyVariable(method = "displayGuiScreen", at = @At("STORE"), index = 1, ordinal = 0)
     public GuiScreen changeGuiScreen(GuiScreen screenIn) {
+    	if (ChallengeLoader.map != null && screenIn != null) {
+    		if (screenIn instanceof GuiIngameMenu) return new GuiChallengeEscape();
+    	}
 		if (isLoadingWorld && screenIn == null) {
 			isLoadingWorld = false;
-			return new GuiIngameMenu();
+			return ChallengeLoader.map == null ? new GuiIngameMenu() : new GuiChallengeEscape();
 		}
 		return screenIn;
     }

@@ -6,13 +6,16 @@ import static rlog.RLogAPI.logError;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 
+import de.pfannekuchen.lotas.challenges.ChallengeMap;
 import de.pfannekuchen.lotas.config.ConfigManager;
 import de.pfannekuchen.lotas.gui.GuiSeedList;
 import de.pfannekuchen.lotas.gui.GuiSeedList.SeedEntry;
@@ -29,7 +32,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 @Mod(acceptedMinecraftVersions = "1.12.2", canBeDeactivated = false, clientSideOnly = true, modid = "lotas", name = "LoTAS", version = "${version}")
 public class LoTASModContainer {
-
+	
 	/*
 	 *
 	 * This is the Mod Container. It manages forge stuff like loading configs and registering events
@@ -39,6 +42,7 @@ public class LoTASModContainer {
 	public static int tutorialState = -1;
 	public static int blazePearlState = 0;
 	public static volatile boolean playSound = false;
+	public static final List<ChallengeMap> maps = new ArrayList<>();
 	
 	static {
 		try {
@@ -78,7 +82,17 @@ public class LoTASModContainer {
 			TickrateChanger.updateTickrate(TickrateChanger.ticks[TickrateChanger.index]);
 		}
 		
-
+		logDebug("[PreInit] Downloading TAS Challenge Maps");
+		try {
+			ObjectInputStream stream = new ObjectInputStream(new URL("http://mgnet.work/maps.txt").openStream());
+			int maps = stream.readInt();
+			for (int i = 0; i < maps; i++) {
+				LoTASModContainer.maps.add((ChallengeMap) stream.readObject());
+			}
+			stream.close();
+		} catch (Exception e1) {
+			logError(e1, "Couldn't download Challenge Maps #6");
+		}
 	}
 	
 	/**

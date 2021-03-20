@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.time.Duration;
 
 import de.pfannekuchen.lotas.LoTASModContainer;
+import de.pfannekuchen.lotas.challenges.ChallengeLoader;
 import de.pfannekuchen.lotas.config.ConfigManager;
 import de.pfannekuchen.lotas.hotkeys.Hotkeys;
 import de.pfannekuchen.lotas.mixin.MixinMinecraft;
@@ -76,6 +77,7 @@ public class TickrateChanger {
 		RLogAPI.logDebug("[TickrateChanger] Updated Tickrate to " + tickrateIn);
 		updateClientTickrate(tickrateIn);
 		updateServerTickrate(tickrateIn);
+		
 		ConfigManager.setInt("hidden", "tickrate", index);
 		ConfigManager.save();
 	}
@@ -229,16 +231,12 @@ public class TickrateChanger {
 			RLogAPI.logError(e1, "Savestate Error #3");
 		}
 		
-		if (Hotkeys.timer.isPressed()) {
+		if (Hotkeys.timer.isPressed() && ChallengeLoader.map == null) {
 			if (Timer.ticks < 1 || Timer.startTime == null) {
 				Timer.startTime = Duration.ofMillis(System.currentTimeMillis());
 				Timer.ticks = 1;
 			}
 			Timer.running = !Timer.running;
-		} else if (Hotkeys.timer.isPressed()) {
-			Timer.startTime = Duration.ofMillis(System.currentTimeMillis());
-			Timer.ticks = 1;
-			Timer.running = true;
 		}
 	}
 	

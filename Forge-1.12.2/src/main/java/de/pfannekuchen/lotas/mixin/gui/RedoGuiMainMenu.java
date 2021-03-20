@@ -76,7 +76,8 @@ public abstract class RedoGuiMainMenu extends GuiScreen {
         	try {
         		Client.main(null);
         	} catch (Exception e) {
-				
+				e.printStackTrace();
+				// THIS IS BAD, NEED TO FIND A SOLUTION!
 			}
         }
 	}
