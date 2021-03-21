@@ -275,4 +275,8 @@ public class SavestateHandler {
         }).length;
         return existingSavestates != 0;
 	}
+	
+	public static void savestateLegacy() {
+		
+	}
 }

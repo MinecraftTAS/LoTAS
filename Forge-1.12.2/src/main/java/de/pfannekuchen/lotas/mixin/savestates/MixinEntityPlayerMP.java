@@ -13,7 +13,6 @@ import net.minecraft.nbt.NBTTagCompound;
 @Mixin(EntityPlayerMP.class)
 public class MixinEntityPlayerMP {
 		
-		
 		@Inject(method="writeEntityToNBT", at = @At(value="RETURN"))
 		public void writeClientMotion(NBTTagCompound compound, CallbackInfo ci) {
 			NBTTagCompound nbttagcompound = new NBTTagCompound();

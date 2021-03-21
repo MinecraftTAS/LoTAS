@@ -3,9 +3,6 @@ package de.pfannekuchen.lotas.savestates.motion;
 import de.pfannekuchen.lotas.LoTASModContainer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 
 public class MotionEvents {
 	public static void onTick() {

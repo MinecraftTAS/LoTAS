@@ -76,13 +76,13 @@ public class LoTASModContainer {
 		
 		logDebug("[PreInit] Setting up Networking");
 		NETWORK= NetworkRegistry.INSTANCE.newSimpleChannel("lotas");
-		int i=-1;
-		NETWORK.registerMessage(SavestatePlayerLoadingPacketHandler.class, SavestatePlayerLoadingPacket.class, i++, Side.CLIENT);
-		NETWORK.registerMessage(MotionPacketHandler.class, MotionPacket.class, i++, Side.SERVER);
-		NETWORK.registerMessage(SavestatePacketHandler.class, SavestatePacket.class, i++, Side.SERVER);
-		NETWORK.registerMessage(SavestatePacketHandler.class, SavestatePacket.class, i++, Side.CLIENT);
-		NETWORK.registerMessage(LoadstatePacketHandler.class, LoadstatePacket.class, i++, Side.SERVER);
-		NETWORK.registerMessage(LoadstatePacketHandler.class, LoadstatePacket.class, i++, Side.CLIENT);
+		int j=-1;
+		NETWORK.registerMessage(SavestatePlayerLoadingPacketHandler.class, SavestatePlayerLoadingPacket.class, j++, Side.CLIENT);
+		NETWORK.registerMessage(MotionPacketHandler.class, MotionPacket.class, j++, Side.SERVER);
+		NETWORK.registerMessage(SavestatePacketHandler.class, SavestatePacket.class, j++, Side.SERVER);
+		NETWORK.registerMessage(SavestatePacketHandler.class, SavestatePacket.class, j++, Side.CLIENT);
+		NETWORK.registerMessage(LoadstatePacketHandler.class, LoadstatePacket.class, j++, Side.SERVER);
+		NETWORK.registerMessage(LoadstatePacketHandler.class, LoadstatePacket.class, j++, Side.CLIENT);
 		
 		logDebug("[PreInit] Registering Keybindings");
 		Hotkeys.registerKeybindings();

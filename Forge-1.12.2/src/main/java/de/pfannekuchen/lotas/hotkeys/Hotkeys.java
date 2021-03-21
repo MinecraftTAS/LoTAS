@@ -4,17 +4,13 @@ import java.io.IOException;
 
 import org.lwjgl.input.Keyboard;
 
+import de.pfannekuchen.lotas.LoTASModContainer;
 import de.pfannekuchen.lotas.challenges.ChallengeLoader;
 import de.pfannekuchen.lotas.dupemod.DupeMod;
 import de.pfannekuchen.lotas.savestates.LoadstatePacket;
-import de.pfannekuchen.lotas.savestates.SavestateHandler;
 import de.pfannekuchen.lotas.savestates.SavestatePacket;
-import de.pfannekuchen.lotas.savestates.exceptions.LoadstateException;
-import de.pfannekuchen.lotas.savestates.exceptions.SavestateException;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import rlog.RLogAPI;
 
@@ -32,6 +28,7 @@ public class Hotkeys {
 	public static final KeyBinding advance = new KeyBinding("Advance Tick", Keyboard.KEY_F9, "Tickrate Changer");
 	public static final KeyBinding zero = new KeyBinding("Tickrate Zero Toggle", Keyboard.KEY_F8, "Tickrate Changer");
 	public static final KeyBinding timer = new KeyBinding("Start/Stop Timer", Keyboard.KEY_NUMPAD5, "Tickrate Changer");
+	public static final KeyBinding test = new KeyBinding("Test", Keyboard.KEY_F12, "Test");
 //	public static boolean shouldSavestate = false;
 //	public static boolean shouldLoadstate = false;
 	public static boolean isFreecaming  = false;
@@ -39,14 +36,12 @@ public class Hotkeys {
 	
 	public static void keyEvent() throws IOException {
 		if (saveState.isPressed() && ChallengeLoader.map == null) {
-			Minecraft.getMinecraft().displayGuiScreen(new GuiIngameMenu());
+//			Minecraft.getMinecraft().displayGuiScreen(new GuiIngameMenu());
 			RLogAPI.logDebug("[Hotkeys] Requesting Savestate");
-			shouldSavestate = true;
+			LoTASModContainer.NETWORK.sendToServer(new SavestatePacket());
 		} else if (loadState.isPressed() && ChallengeLoader.map == null) {
-			Minecraft.getMinecraft().displayGuiScreen(new GuiIngameMenu());
-			shouldLoadstate = true;
+//			Minecraft.getMinecraft().displayGuiScreen(new GuiIngameMenu());
 			RLogAPI.logDebug("[Hotkeys] Requesting Loadstate");
-//			shouldLoadstate = true;
 			LoTASModContainer.NETWORK.sendToServer(new LoadstatePacket());
 		} else if (loadDupe.isPressed()) {
 			DupeMod.loadChests();

@@ -9,6 +9,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import de.pfannekuchen.lotas.LoTASModContainer;
 import de.pfannekuchen.lotas.config.ConfigManager;
 import de.pfannekuchen.lotas.dupemod.DupeMod;
 import de.pfannekuchen.lotas.gui.GuiAIRig;
@@ -105,9 +106,6 @@ public abstract class RedoGuiIngameMenu extends GuiScreen {
 		} else if (button.id == 14) {
 			mc.displayGuiScreen(null);
 			LoTASModContainer.NETWORK.sendToServer(new LoadstatePacket());
-//			} catch (IOException e) {
-//				RLogAPI.logError(e, "[Savestate] Loadstate Error #3");
-//			}
 		} else if (button.id == 15) {
 			TickrateChanger.index++;
 			TickrateChanger.index = MathHelper.clamp(TickrateChanger.index, 1, 10);

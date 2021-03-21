@@ -8,12 +8,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import de.pfannekuchen.lotas.hotkeys.Hotkeys;
 import de.pfannekuchen.lotas.savestates.SavestateHandler;
 import de.pfannekuchen.lotas.savestates.exceptions.SavestateException;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiGameOver;
-import net.minecraft.client.gui.GuiIngameMenu;
 import net.minecraft.client.gui.GuiScreen;
 
 @Mixin(GuiGameOver.class)

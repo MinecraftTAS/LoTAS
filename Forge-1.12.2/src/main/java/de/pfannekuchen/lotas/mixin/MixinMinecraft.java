@@ -16,9 +16,6 @@ import de.pfannekuchen.lotas.config.ConfigManager;
 import de.pfannekuchen.lotas.gui.GuiChallengeEscape;
 import de.pfannekuchen.lotas.hotkeys.Hotkeys;
 import de.pfannekuchen.lotas.savestate.SavestateMod;
-import de.pfannekuchen.lotas.savestates.SavestateHandler;
-import de.pfannekuchen.lotas.savestates.exceptions.LoadstateException;
-import de.pfannekuchen.lotas.savestates.exceptions.SavestateException;
 import de.pfannekuchen.lotas.savestates.motion.MotionEvents;
 import de.pfannekuchen.lotas.tickratechanger.TickrateChanger;
 import net.minecraft.client.Minecraft;
@@ -29,7 +26,9 @@ import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.util.Timer;
 import net.minecraft.util.math.MathHelper;
-import rlog.RLogAPI;
+import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 
 @Mixin(Minecraft.class)
 public class MixinMinecraft {
@@ -197,6 +196,10 @@ public class MixinMinecraft {
     		}
     		das = 15;
     	}
+    	
+//    	else if(Keyboard.isKeyDown(Hotkeys.test.getKeyCode()) && das <=0) { //Ever since I had a dedicated testing key, my life became so much easier... remove if you want -Scribble
+//    		das=15;
+//    	}
     }
     
     @ModifyVariable(method = "displayGuiScreen", at = @At("STORE"), index = 1, ordinal = 0)

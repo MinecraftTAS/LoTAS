@@ -4,7 +4,6 @@ import de.pfannekuchen.lotas.savestates.chunkloading.SavestatesChunkControl;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -21,13 +20,24 @@ public class SavestatePlayerLoadingPacketHandler implements IMessageHandler<Save
 	public IMessage onMessage(SavestatePlayerLoadingPacket message, MessageContext ctx) {
 		if(ctx.side.isClient()) {
 			Minecraft.getMinecraft().addScheduledTask(()->{
+				
 				EntityPlayerSP player=Minecraft.getMinecraft().player;
 				NBTTagCompound compound = message.getNbtTagCompound();
+				
 				player.readFromNBT(compound);
-				NBTTagList relmotion=compound.getTagList("RelMotion", 5);
-				float rx=relmotion.getFloatAt(0);
-				float ry=relmotion.getFloatAt(1);
-				float rz=relmotion.getFloatAt(2);
+				
+				NBTTagCompound motioncompound=compound.getCompoundTag("clientMotion");
+				
+				double motionX=motioncompound.getDouble("x");
+				double motionY=motioncompound.getDouble("y");
+				double motionZ=motioncompound.getDouble("z");
+				player.motionX=motionX;
+				player.motionY=motionY;
+				player.motionZ=motionZ;
+				
+				float rx=motioncompound.getFloat("RelativeX");
+				float ry=motioncompound.getFloat("RelativeY");
+				float rz=motioncompound.getFloat("RelativeX");
 				player.moveForward=rx;
 				player.moveVertical=ry;
 				player.moveStrafing=rz;
