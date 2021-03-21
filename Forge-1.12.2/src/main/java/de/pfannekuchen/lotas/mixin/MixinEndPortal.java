@@ -33,7 +33,7 @@ public abstract class MixinEndPortal extends EntityPlayer {
 
 	@Inject(at = @At(value = "INVOKE", shift = Shift.BEFORE, target = "Lnet/minecraft/server/management/PlayerList;transferPlayerToDimension(Lnet/minecraft/entity/player/EntityPlayerMP;ILnet/minecraftforge/common/util/ITeleporter;)V"), method = "changeDimension", cancellable = true, remap = false)
 	public void injectHere(int dimensionIn, net.minecraftforge.common.util.ITeleporter teleporter, CallbackInfoReturnable<Entity> ci) {
-		if (dimensionIn == 1 && dimension == 0 && ChallengeLoader.map != null) {
+		if (dimensionIn == 1 && ChallengeLoader.map != null) {
 			setGameType(GameType.SPECTATOR);
 			Timer.running = false;
 			GuiIngame chat = Minecraft.getMinecraft().ingameGUI;
