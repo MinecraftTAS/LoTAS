@@ -1,5 +1,6 @@
 package de.pfannekuchen.lotas.mixin.gui;
 
+import java.io.IOException;
 import java.time.Duration;
 import java.util.ArrayList;
 
@@ -18,6 +19,7 @@ import de.pfannekuchen.lotas.gui.GuiEntitySpawner;
 import de.pfannekuchen.lotas.gui.GuiLootManipulation;
 import de.pfannekuchen.lotas.savestates.LoadstatePacket;
 import de.pfannekuchen.lotas.savestates.SavestateHandler;
+import de.pfannekuchen.lotas.savestates.SavestateMod;
 import de.pfannekuchen.lotas.savestates.SavestatePacket;
 import de.pfannekuchen.lotas.tickratechanger.TickrateChanger;
 import de.pfannekuchen.lotas.tickratechanger.Timer;
@@ -30,6 +32,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.client.config.GuiCheckBox;
+import rlog.RLogAPI;
 
 @Mixin(GuiIngameMenu.class)
 public abstract class RedoGuiIngameMenu extends GuiScreen {
@@ -102,10 +105,22 @@ public abstract class RedoGuiIngameMenu extends GuiScreen {
 	@Inject(method = "actionPerformed", at = @At("HEAD"))
 	public void redoactionPerformed(GuiButton button, CallbackInfo ci) {
 		if (button.id == 13) {
+			
 			LoTASModContainer.NETWORK.sendToServer(new SavestatePacket());
+			
 		} else if (button.id == 14) {
 			mc.displayGuiScreen(null);
-			LoTASModContainer.NETWORK.sendToServer(new LoadstatePacket());
+			if(ConfigManager.getBoolean("savestates", "useExperimentalSavestates")) {
+				LoTASModContainer.NETWORK.sendToServer(new LoadstatePacket());
+			}
+			else {
+				try {
+					SavestateMod.loadstate();
+				} catch (IOException e) {
+					RLogAPI.logError(e, "[Savestate] Loadstate Error #3");
+					e.printStackTrace();
+				}
+			}
 		} else if (button.id == 15) {
 			TickrateChanger.index++;
 			TickrateChanger.index = MathHelper.clamp(TickrateChanger.index, 1, 10);

@@ -15,7 +15,7 @@ import de.pfannekuchen.lotas.challenges.ChallengeLoader;
 import de.pfannekuchen.lotas.config.ConfigManager;
 import de.pfannekuchen.lotas.gui.GuiChallengeEscape;
 import de.pfannekuchen.lotas.hotkeys.Hotkeys;
-import de.pfannekuchen.lotas.savestate.SavestateMod;
+import de.pfannekuchen.lotas.savestates.SavestateMod;
 import de.pfannekuchen.lotas.savestates.motion.MotionEvents;
 import de.pfannekuchen.lotas.tickratechanger.TickrateChanger;
 import net.minecraft.client.Minecraft;
@@ -26,9 +26,7 @@ import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.util.Timer;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.WorldServer;
-import net.minecraftforge.common.DimensionManager;
-import net.minecraftforge.fml.common.FMLCommonHandler;
+import rlog.RLogAPI;
 
 @Mixin(Minecraft.class)
 public class MixinMinecraft {
@@ -87,17 +85,14 @@ public class MixinMinecraft {
 //			}
 //		}
 //		
-//		if (Hotkeys.shouldLoadstate) {
-//			Hotkeys.shouldLoadstate = false;
-//			try {
-//				SavestateHandler.loadState();
-//			} catch (IOException e) {
-//				RLogAPI.logError(e, "[Savestate] Loadstate Error #3");
-//			} catch (LoadstateException e) {
-//				System.err.println("Something didn't work ._.");
-//				e.printStackTrace();
-//			}
-//		}
+		if (Hotkeys.shouldLoadstate) {
+			Hotkeys.shouldLoadstate = false;
+			try {
+				SavestateMod.loadstate();
+			} catch (IOException e) {
+				RLogAPI.logError(e, "[Savestate] Loadstate Error #3");
+			}
+		}
 		
 		if (TickrateChanger.advanceClient) {
 			TickrateChanger.resetAdvanceClient();

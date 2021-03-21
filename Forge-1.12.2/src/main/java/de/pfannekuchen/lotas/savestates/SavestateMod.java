@@ -1,4 +1,4 @@
-package de.pfannekuchen.lotas.savestate;
+package de.pfannekuchen.lotas.savestates;
 
 import java.io.File;
 import java.io.IOException;
@@ -49,7 +49,7 @@ public class SavestateMod {
 		//Get the necessary files
 		String worldName = Minecraft.getMinecraft().getIntegratedServer().getFolderName();
 		File worldDir = new File(Minecraft.getMinecraft().mcDataDir, "saves/" + worldName);
-		File savestatesDir = new File(Minecraft.getMinecraft().mcDataDir, "savestates/");
+		File savestatesDir = new File(Minecraft.getMinecraft().mcDataDir, "saves/savestates/");
 		
 		//Make the directory if it doesn't exist
 		if(!savestatesDir.exists()) savestatesDir.mkdir();
@@ -90,19 +90,24 @@ public class SavestateMod {
 		RLogAPI.logDebug("[Savestate] Trying to Loadstate");
 		String worldName = Minecraft.getMinecraft().getIntegratedServer().getFolderName();
 		File worldDir = new File(Minecraft.getMinecraft().mcDataDir, "saves/" + worldName);
-		File savestatesDir = new File(Minecraft.getMinecraft().mcDataDir, "savestates/");
+		File savestatesDir = new File(Minecraft.getMinecraft().mcDataDir, "saves/savestates/");
 		
         //Minecraft.getMinecraft().world.sendQuittingDisconnectingPacket();
         Minecraft.getMinecraft().getIntegratedServer().stopServer();
         //Minecraft.getMinecraft().loadWorld((WorldClient)null);
         
+        SavestateTrackerFile tracker = new SavestateTrackerFile(new File(savestatesDir, worldName+"-info.txt"));
+		tracker.increaseRerecords();
+		tracker.saveFile();
+        
         int existingSavestates = savestatesDir.listFiles((d, s) -> {
-        	return s.startsWith(worldName);
+        	return s.startsWith(worldName + "-Savestate");
         }).length;
         
-        File savestateDir = new File(savestatesDir, worldName + (existingSavestates));
+        File savestateDir = new File(savestatesDir, worldName + "-Savestate" + existingSavestates);
         String data = new String(Files.toByteArray(new File(savestateDir, "savestate.dat")));
      
+		
         motionX = Double.parseDouble(data.split(":")[0]);
         motionY = Double.parseDouble(data.split(":")[1]);
         motionZ = Double.parseDouble(data.split(":")[2]);

@@ -6,13 +6,17 @@ import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 
+import com.google.common.io.Files;
+
 import de.pfannekuchen.lotas.LoTASModContainer;
 import de.pfannekuchen.lotas.savestates.chunkloading.SavestatesChunkControl;
 import de.pfannekuchen.lotas.savestates.exceptions.LoadstateException;
 import de.pfannekuchen.lotas.savestates.exceptions.SavestateException;
 import de.pfannekuchen.lotas.savestates.playerloading.SavestatePlayerLoading;
 import de.pfannekuchen.lotas.tickratechanger.TickrateChanger;
+import de.pfannekuchen.lotas.tickratechanger.Timer;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
@@ -101,6 +105,10 @@ public class SavestateHandler {
 		tracker.increaseSavestates();
 		tracker.saveFile();
 		
+		EntityPlayerSP p = Minecraft.getMinecraft().player;
+		String data=p.motionX + ":" + p.motionY + ":" + p.motionZ + ":" + Timer.ticks;
+		Files.write(data.getBytes(), new File(targetfolder, "savestate.dat"));
+		
 		//Close the GuiSavestateScreen on the client
 //		LoTASModContainer.NETWORK.sendToAll(new SavestatePacket());
 		Minecraft.getMinecraft().displayGuiScreen(null);
@@ -143,7 +151,7 @@ public class SavestateHandler {
 	 * @throws LoadstateException
 	 * @throws IOException
 	 */
-	public static void loadState() throws LoadstateException, IOException {
+	public static void loadState() throws IOException, LoadstateException{
 		if(isSaving) {
 			throw new LoadstateException("A savestating operation is already being carried out");
 		}
@@ -208,6 +216,9 @@ public class SavestateHandler {
 		SavestateTrackerFile tracker = new SavestateTrackerFile(new File(savestateDirectory, worldname+"-info.txt"));
 		tracker.increaseRerecords();
 		tracker.saveFile();
+		
+		String data = new String(Files.toByteArray(new File(currentfolder, "savestate.dat")));
+		Timer.ticks = (int) Double.parseDouble(data.split(":")[3]);
 		
 		//Send a notification that the savestate has been loaded
 		server.getPlayerList().sendMessage(new TextComponentString(TextFormatting.GREEN+"Savestate loaded"));
@@ -274,9 +285,5 @@ public class SavestateHandler {
         	return s.startsWith(worldName);
         }).length;
         return existingSavestates != 0;
-	}
-	
-	public static void savestateLegacy() {
-		
 	}
 }
