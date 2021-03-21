@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.io.IOException;
 import java.time.Duration;
 
-import de.pfannekuchen.lotas.LoTASModContainer;
 import de.pfannekuchen.lotas.challenges.ChallengeLoader;
 import de.pfannekuchen.lotas.config.ConfigManager;
 import de.pfannekuchen.lotas.hotkeys.Hotkeys;
@@ -17,13 +16,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextComponentString;
-import net.minecraft.world.GameType;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import rlog.RLogAPI;
@@ -43,6 +40,7 @@ public class TickrateChanger {
 	public static int tickrateServer = 20;
 	
 	public static long timeOffset = 0L;
+	public static long timeSinceZero = System.currentTimeMillis();
 	
 	public static int ji = 5; // <- ignore this
 	
@@ -69,17 +67,32 @@ public class TickrateChanger {
 	 */
 	public static boolean advanceServer=false;
 
+	public static long timeSinceTC = System.currentTimeMillis();
+	public static long fakeTimeSinceTC = System.currentTimeMillis();
+	
 	/**
 	 * Changes the tickrate of the client and server.
 	 * @param tickrateIn
 	 */
 	public static void updateTickrate(int tickrateIn) {
+		if (tickrateIn == 0) timeSinceZero = System.currentTimeMillis() - timeOffset;
+		
+		long time = System.currentTimeMillis() - timeSinceTC - timeOffset;
+		fakeTimeSinceTC += (long) (time * (tickrate / 20F));
+		timeSinceTC = System.currentTimeMillis() - timeOffset;
+		
 		RLogAPI.logDebug("[TickrateChanger] Updated Tickrate to " + tickrateIn);
 		updateClientTickrate(tickrateIn);
 		updateServerTickrate(tickrateIn);
 		
 		ConfigManager.setInt("hidden", "tickrate", index);
 		ConfigManager.save();
+	}
+	
+	public static long getMilliseconds() {
+		long time = System.currentTimeMillis() - timeSinceTC - timeOffset;
+		time *= (tickrate / 20F);
+		return (long) (fakeTimeSinceTC + time);
 	}
 	
 	/**
@@ -159,32 +172,12 @@ public class TickrateChanger {
 		}
 	}
 	
-	/**
-	 * Advances the tutorial when something is crafted
-	 * @param e ItemCraftedEvent
-	 */
-	@SubscribeEvent
-	public void listenForCraft(ItemCraftedEvent e) {
-		if (LoTASModContainer.tutorialState != -1) LoTASModContainer.tutorialState = -1;
-	}
-	
 	@SubscribeEvent
 	public void onJoinWorld(EntityJoinWorldEvent e) {
 		if (e.getEntity() instanceof EntityPlayer) {
 			TickrateChanger.ticksPassed = 0;
 			e.getEntity().fallDistance = 0f;
 			TickrateChanger.ticksPassedServer = 0;
-		}
-	}
-	
-	/**
-	 * Set's the gamemode to survival if the player joins a world
-	 * @param e EntityJoinWorldEvent
-	 */
-	@SubscribeEvent
-	public void onJoin(EntityJoinWorldEvent e) {
-		if (e.getEntity() instanceof EntityPlayer && LoTASModContainer.tutorialState != -1) {
-			((EntityPlayer) e.getEntity()).setGameType(GameType.SURVIVAL);
 		}
 	}
 	

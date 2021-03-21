@@ -4,15 +4,12 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.mojang.authlib.GameProfile;
 
-import de.pfannekuchen.lotas.LoTASModContainer;
 import de.pfannekuchen.lotas.config.ConfigManager;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
@@ -35,16 +32,6 @@ public abstract class MixinEntityPlayerMP extends EntityPlayer {
 	
 	@Shadow
 	public abstract boolean canPlayersAttack();
-	
-	@Inject(at = @At("HEAD"), method = "onItemPickup")
-	public void injectitemPickup(Entity entityIn, int quantity, CallbackInfo ci) {
-		if (LoTASModContainer.tutorialState != -1) {
-			LoTASModContainer.blazePearlState++;
-			if (LoTASModContainer.blazePearlState == 3) {
-				LoTASModContainer.tutorialState = 4;
-			}
-		}
-	}
 	
 	public MixinEntityPlayerMP(World worldIn, GameProfile gameProfileIn) {
 		super(worldIn, gameProfileIn);

@@ -70,7 +70,7 @@ public class MixinMinecraft {
 	@Inject(method = "runTick", at = @At(value="HEAD"))
 	public void injectrunTick(CallbackInfo ci) {
 		if (ConfigManager.getBoolean("tools", "lAutoClicker")) rightClickDelayTimer = 0;
-		
+    	
 		TickrateChanger.show = !TickrateChanger.show;
 		
 		if (Hotkeys.shouldSavestate) {
@@ -95,7 +95,6 @@ public class MixinMinecraft {
 			TickrateChanger.resetAdvanceClient();
 		}
 		
-		TickrateChanger.timeOffset = System.currentTimeMillis();
 		TickrateChanger.ticksPassed++;
 		if (de.pfannekuchen.lotas.tickratechanger.Timer.running) {
 			if (currentScreen == null) de.pfannekuchen.lotas.tickratechanger.Timer.ticks++;
@@ -132,6 +131,11 @@ public class MixinMinecraft {
     @Inject(method = "runGameLoop", at = @At(value="HEAD"))
     public void injectrunGameLoop(CallbackInfo ci) throws IOException {
     	das--;
+    	
+    	if (TickrateChanger.tickrate == 0) {
+    		TickrateChanger.timeOffset += System.currentTimeMillis() - TickrateChanger.timeSinceZero;
+    		TickrateChanger.timeSinceZero = System.currentTimeMillis();
+    	}
     	
     	if (TickrateChanger.tickrate == 0 && Keyboard.isKeyDown(Hotkeys.advance.getKeyCode()) && das <= 0 && !Hotkeys.isFreecaming) {
     		TickrateChanger.advanceTick();

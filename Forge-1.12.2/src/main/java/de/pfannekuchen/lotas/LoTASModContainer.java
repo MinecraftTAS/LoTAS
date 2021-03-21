@@ -39,8 +39,6 @@ public class LoTASModContainer {
 	 *
 	 */
 	
-	public static int tutorialState = -1;
-	public static int blazePearlState = 0;
 	public static volatile boolean playSound = false;
 	public static final List<ChallengeMap> maps = new ArrayList<>();
 	

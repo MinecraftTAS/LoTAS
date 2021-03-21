@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
-import de.pfannekuchen.lotas.LoTASModContainer;
 import de.pfannekuchen.lotas.challenges.ChallengeLoader;
 import de.pfannekuchen.lotas.config.ConfigManager;
 import de.pfannekuchen.lotas.dupemod.DupeMod;
@@ -100,7 +99,6 @@ public class GuiChallengeEscape extends GuiIngameMenu {
 		} else if (button.id == 16) {
 			TickrateChanger.index--;
 			TickrateChanger.index = MathHelper.clamp(TickrateChanger.index, 1, 10);
-			if (TickrateChanger.ticks[TickrateChanger.index] == 4 && LoTASModContainer.tutorialState == 2) LoTASModContainer.tutorialState++;
 			TickrateChanger.updateTickrate(TickrateChanger.ticks[TickrateChanger.index]);
 		} else if (button.id == 17) {
 			DupeMod.saveItems();

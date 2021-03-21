@@ -10,7 +10,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import de.pfannekuchen.lotas.LoTASModContainer;
 import de.pfannekuchen.lotas.config.ConfigManager;
 import de.pfannekuchen.lotas.dupemod.DupeMod;
 import de.pfannekuchen.lotas.gui.GuiAIRig;
@@ -58,44 +57,40 @@ public abstract class RedoGuiIngameMenu extends GuiScreen {
         }
 		
         buttonList.get(0).y += 24;
-        if (LoTASModContainer.tutorialState == 1 || LoTASModContainer.tutorialState == -1 || LoTASModContainer.tutorialState == 5) { 
-        	this.buttonList.add(new GuiButton(13, this.width / 2 - 100, this.height / 4 + 96 + -16, 98, 20, I18n.format("Savestate")));
-        	GuiButton loadstate = new GuiButton(14, this.width / 2 + 2, this.height / 4 + 96 + -16, 98, 20, I18n.format("Loadstate"));
-        	loadstate.enabled = SavestateMod.hasSavestate();
-        	this.buttonList.add(loadstate);
-        }
-        if (LoTASModContainer.tutorialState == 2 || LoTASModContainer.tutorialState == -1) this.buttonList.add(new GuiButton(15, 5, 15, 48, 20, I18n.format("+")));
-        if (LoTASModContainer.tutorialState == 2 || LoTASModContainer.tutorialState == -1) this.buttonList.add(new GuiButton(16, 55, 15, 48, 20, I18n.format("-")));
-        if (LoTASModContainer.tutorialState == 4 || LoTASModContainer.tutorialState == -1) this.buttonList.add(new GuiButton(17, 5, 55, 98, 20, I18n.format("Save Items")));
-        if (LoTASModContainer.tutorialState == 4 || LoTASModContainer.tutorialState == -1) this.buttonList.add(new GuiButton(18, 5, 75, 98, 20, I18n.format("Load Items")));
+    	this.buttonList.add(new GuiButton(13, this.width / 2 - 100, this.height / 4 + 96 + -16, 98, 20, I18n.format("Savestate")));
+    	GuiButton loadstate = new GuiButton(14, this.width / 2 + 2, this.height / 4 + 96 + -16, 98, 20, I18n.format("Loadstate"));
+    	loadstate.enabled = SavestateMod.hasSavestate();
+    	this.buttonList.add(loadstate);
+        this.buttonList.add(new GuiButton(15, 5, 15, 48, 20, I18n.format("+")));
+        this.buttonList.add(new GuiButton(16, 55, 15, 48, 20, I18n.format("-")));
+        this.buttonList.add(new GuiButton(17, 5, 55, 98, 20, I18n.format("Save Items")));
+        this.buttonList.add(new GuiButton(18, 5, 75, 98, 20, I18n.format("Load Items")));
         
-        if (LoTASModContainer.tutorialState == 3 || LoTASModContainer.tutorialState == -1) this.buttonList.add(new GuiButton(19, (width / 4) * 0 + 1, height - 20, width / 4 - 2, 20, I18n.format("Manipulate Drops")));
-        if (LoTASModContainer.tutorialState == -1) { 
-        	this.buttonList.add(new GuiButton(20, (width / 4) * 1 + 2, height - 20, width / 4 - 2, 20, I18n.format("Manipulate Dragon")));
-	        this.buttonList.add(new GuiButton(21, (width / 4) * 2 + 3, height - 20, width / 4 - 2, 20, I18n.format("Manipulate Spawning")));
-	        
-	        this.buttonList.add(new GuiCheckBox(22, 2, height - 20 - 15, I18n.format("Avoid taking damage"), !ConfigManager.getBoolean("tools", "takeDamage")));
-	        this.buttonList.add(new GuiButton(23, 35, 107, 68, 20, I18n.format("Jump ticks")));
-	        this.buttonList.add(new GuiButton(24, 5, 107, 30, 20, I18n.format(TickrateChanger.ticks[TickrateChanger.ji] + "t")));
-			this.buttonList.add(new GuiButton(25, this.width / 2 - 100, this.height / 4 + 144 + -16, I18n.format("Reset Timer")));
-			this.buttonList.add(new GuiCheckBox(26, 2, height - 32 - 15, I18n.format("Drop towards me"), ConfigManager.getBoolean("tools", "manipulateVelocityTowards")));
-			this.buttonList.add(new GuiCheckBox(27, 2, height - 44 - 15, I18n.format("Drop away from me"), ConfigManager.getBoolean("tools", "manipulateVelocityAway")));
-			this.buttonList.add(new GuiCheckBox(28, 2, height - 56 - 15, I18n.format("Optimize Explosions"), ConfigManager.getBoolean("tools", "manipulateExplosionDropChance")));
-			this.buttonList.add(new GuiCheckBox(30, 2, height - 68 - 15, I18n.format("Toggle R Auto Clicker"), ConfigManager.getBoolean("tools", "lAutoClicker")));
-			
-			this.buttonList.add(new GuiButton(29, (width / 4) * 3 + 4, height - 20, width / 4 - 4, 20, I18n.format("Rig AI")));
-        }
+        this.buttonList.add(new GuiButton(19, (width / 4) * 0 + 1, height - 20, width / 4 - 2, 20, I18n.format("Manipulate Drops")));
+    	this.buttonList.add(new GuiButton(20, (width / 4) * 1 + 2, height - 20, width / 4 - 2, 20, I18n.format("Manipulate Dragon")));
+        this.buttonList.add(new GuiButton(21, (width / 4) * 2 + 3, height - 20, width / 4 - 2, 20, I18n.format("Manipulate Spawning")));
+        
+        this.buttonList.add(new GuiCheckBox(22, 2, height - 20 - 15, I18n.format("Avoid taking damage"), !ConfigManager.getBoolean("tools", "takeDamage")));
+        this.buttonList.add(new GuiButton(23, 35, 107, 68, 20, I18n.format("Jump ticks")));
+        this.buttonList.add(new GuiButton(24, 5, 107, 30, 20, I18n.format(TickrateChanger.ticks[TickrateChanger.ji] + "t")));
+		this.buttonList.add(new GuiButton(25, this.width / 2 - 100, this.height / 4 + 144 + -16, I18n.format("Reset Timer")));
+		this.buttonList.add(new GuiCheckBox(26, 2, height - 32 - 15, I18n.format("Drop towards me"), ConfigManager.getBoolean("tools", "manipulateVelocityTowards")));
+		this.buttonList.add(new GuiCheckBox(27, 2, height - 44 - 15, I18n.format("Drop away from me"), ConfigManager.getBoolean("tools", "manipulateVelocityAway")));
+		this.buttonList.add(new GuiCheckBox(28, 2, height - 56 - 15, I18n.format("Optimize Explosions"), ConfigManager.getBoolean("tools", "manipulateExplosionDropChance")));
+		this.buttonList.add(new GuiCheckBox(30, 2, height - 68 - 15, I18n.format("Toggle R Auto Clicker"), ConfigManager.getBoolean("tools", "lAutoClicker")));
+		
+		this.buttonList.add(new GuiButton(29, (width / 4) * 3 + 4, height - 20, width / 4 - 4, 20, I18n.format("Rig AI")));
 	}
 	
 	@Inject(method = "drawScreen", at = @At("TAIL"))
 	public void drawScreen(int mouseX, int mouseY, float partialTicks, CallbackInfo ci) {
-		if (LoTASModContainer.tutorialState == 2 || LoTASModContainer.tutorialState == -1) drawString(mc.fontRenderer, "Tickrate Changer (" + TickrateChanger.tickrate + ")", 5, 5, 0xFFFFFF);
-		if (LoTASModContainer.tutorialState == -1) mc.fontRenderer.drawStringWithShadow("Tickrate Changer", 10, 97, 0xFFFFFF);
-		if (LoTASModContainer.tutorialState == 4 || LoTASModContainer.tutorialState == -1) mc.fontRenderer.drawStringWithShadow("Duping", 10, 45, 0xFFFFFF);
+		drawString(mc.fontRenderer, "Tickrate Changer (" + TickrateChanger.tickrate + ")", 5, 5, 0xFFFFFF);
+		mc.fontRenderer.drawStringWithShadow("Tickrate Changer", 10, 97, 0xFFFFFF);
+		mc.fontRenderer.drawStringWithShadow("Duping", 10, 45, 0xFFFFFF);
 		int w = width - 5;
-		if (LoTASModContainer.tutorialState == 4 || LoTASModContainer.tutorialState == -1) mc.fontRenderer.drawStringWithShadow("Tracked Items Delay: ", w - mc.fontRenderer.getStringWidth("Tracked Items Delay: ") - 1, 10, 0xFFFFFFFF);
+		mc.fontRenderer.drawStringWithShadow("Tracked Items Delay: ", w - mc.fontRenderer.getStringWidth("Tracked Items Delay: ") - 1, 10, 0xFFFFFFFF);
 		int h = 22;
-		if (LoTASModContainer.tutorialState == 4 || LoTASModContainer.tutorialState == -1) for (EntityItem item : DupeMod.trackedObjects) {
+		for (EntityItem item : DupeMod.trackedObjects) {
 			mc.fontRenderer.drawStringWithShadow(item.pickupDelay + "t " + item.getItem().getDisplayName(), w - mc.fontRenderer.getStringWidth("Tracked Items Delay: "), h, 0xFFFFFFFF);
 			h += 10;
 		}
@@ -104,7 +99,6 @@ public abstract class RedoGuiIngameMenu extends GuiScreen {
 	@Inject(method = "actionPerformed", at = @At("HEAD"))
 	public void redoactionPerformed(GuiButton button, CallbackInfo ci) {
 		if (button.id == 13) {
-			if (LoTASModContainer.tutorialState != -1 && LoTASModContainer.tutorialState != 5) LoTASModContainer.tutorialState++;
 			try {
 				SavestateMod.savestate();
 			} catch (IOException e) {
@@ -123,7 +117,6 @@ public abstract class RedoGuiIngameMenu extends GuiScreen {
 		} else if (button.id == 16) {
 			TickrateChanger.index--;
 			TickrateChanger.index = MathHelper.clamp(TickrateChanger.index, 1, 10);
-			if (TickrateChanger.ticks[TickrateChanger.index] == 4 && LoTASModContainer.tutorialState == 2) LoTASModContainer.tutorialState++;
 			TickrateChanger.updateTickrate(TickrateChanger.ticks[TickrateChanger.index]);
 		} else if (button.id == 17) {
 			DupeMod.saveItems();
