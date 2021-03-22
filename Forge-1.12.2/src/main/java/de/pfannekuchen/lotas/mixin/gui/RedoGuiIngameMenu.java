@@ -127,7 +127,7 @@ public abstract class RedoGuiIngameMenu extends GuiScreen {
 			DupeMod.loadChests();
 			button.enabled = false;
 		} else if (button.id == 19) {
-			Minecraft.getMinecraft().displayGuiScreen(new GuiLootManipulation());
+			Minecraft.getMinecraft().displayGuiScreen(new GuiLootManipulation((GuiIngameMenu) (Object) this));
 		} else if (button.id == 20) {
 			Minecraft.getMinecraft().displayGuiScreen(new GuiDragonPhase(this));
 		} else if (button.id == 21) {
