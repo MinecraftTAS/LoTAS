@@ -194,12 +194,14 @@ public class MixinMinecraft {
 	@Inject(method = "displayGuiScreen", at = @At("HEAD"))
 	public void injectdisplayGuiScreen(GuiScreen guiScreenIn, CallbackInfo ci) {
     	if (guiScreenIn == null) {
-			if (SavestateMod.applyVelocity) {
-				SavestateMod.applyVelocity = false;
-				player.motionX = SavestateMod.motionX;
-				player.motionY = SavestateMod.motionY;
-				player.motionZ = SavestateMod.motionZ;
-			}
+    		if(player!=null) {
+				if (SavestateMod.applyVelocity) {
+					SavestateMod.applyVelocity = false;
+					player.motionX = SavestateMod.motionX;
+					player.motionY = SavestateMod.motionY;
+					player.motionZ = SavestateMod.motionZ;
+				}
+    		}
     	}
 	}
 	
