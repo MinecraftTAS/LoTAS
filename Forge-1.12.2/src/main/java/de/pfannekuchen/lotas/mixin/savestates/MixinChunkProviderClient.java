@@ -11,16 +11,15 @@ import net.minecraft.client.multiplayer.ChunkProviderClient;
 import net.minecraft.world.chunk.Chunk;
 
 @Mixin(ChunkProviderClient.class)
-public class MixinChunkProviderClient implements ChunkProviderDuck{
+public class MixinChunkProviderClient implements ChunkProviderDuck {
 	@Shadow @Final
 	private Long2ObjectMap<Chunk> chunkMapping;
 
 	@Override
 	public void unloadAllChunks() {
-    	ObjectIterator objectiterator = this.chunkMapping.values().iterator();
+    	ObjectIterator<Chunk> objectiterator = this.chunkMapping.values().iterator();
 
-        while (objectiterator.hasNext())
-        {
+        while (objectiterator.hasNext()) {
             Chunk chunk = (Chunk)objectiterator.next();
             chunk.onUnload();
         }

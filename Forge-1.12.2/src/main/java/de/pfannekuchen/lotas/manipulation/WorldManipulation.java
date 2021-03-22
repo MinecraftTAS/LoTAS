@@ -18,7 +18,7 @@ import de.pfannekuchen.lotas.LoTASModContainer;
 import de.pfannekuchen.lotas.gui.GuiAIRig;
 import de.pfannekuchen.lotas.gui.GuiEntitySpawner;
 import de.pfannekuchen.lotas.gui.GuiLootManipulation;
-import de.pfannekuchen.lotas.renderer.RenderUtils;
+import de.pfannekuchen.lotas.util.RenderUtils;
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.BlockPlanks.EnumType;

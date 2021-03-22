@@ -10,17 +10,13 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import de.pfannekuchen.lotas.LoTASModContainer;
 import de.pfannekuchen.lotas.config.ConfigManager;
 import de.pfannekuchen.lotas.dupemod.DupeMod;
 import de.pfannekuchen.lotas.gui.GuiAIRig;
 import de.pfannekuchen.lotas.gui.GuiDragonPhase;
 import de.pfannekuchen.lotas.gui.GuiEntitySpawner;
 import de.pfannekuchen.lotas.gui.GuiLootManipulation;
-import de.pfannekuchen.lotas.savestates.LoadstatePacket;
-import de.pfannekuchen.lotas.savestates.SavestateHandler;
 import de.pfannekuchen.lotas.savestates.SavestateMod;
-import de.pfannekuchen.lotas.savestates.SavestatePacket;
 import de.pfannekuchen.lotas.tickratechanger.TickrateChanger;
 import de.pfannekuchen.lotas.tickratechanger.Timer;
 import net.minecraft.client.Minecraft;
@@ -64,7 +60,7 @@ public abstract class RedoGuiIngameMenu extends GuiScreen {
         this.buttonList.add(new GuiButton(18, 5, 75, 98, 20, I18n.format("Load Items")));
     	this.buttonList.add(new GuiButton(13, this.width / 2 - 100, this.height / 4 + 96 + -16, 98, 20, I18n.format("Savestate")));
     	GuiButton loadstate = new GuiButton(14, this.width / 2 + 2, this.height / 4 + 96 + -16, 98, 20, I18n.format("Loadstate"));
-        loadstate.enabled = SavestateHandler.hasSavestate();
+        loadstate.enabled = SavestateMod.hasSavestate();
     	this.buttonList.add(loadstate);
         this.buttonList.add(new GuiButton(15, 5, 15, 48, 20, I18n.format("+")));
         this.buttonList.add(new GuiButton(16, 55, 15, 48, 20, I18n.format("-")));
@@ -105,21 +101,18 @@ public abstract class RedoGuiIngameMenu extends GuiScreen {
 	@Inject(method = "actionPerformed", at = @At("HEAD"))
 	public void redoactionPerformed(GuiButton button, CallbackInfo ci) {
 		if (button.id == 13) {
-			
-			LoTASModContainer.NETWORK.sendToServer(new SavestatePacket());
-			
+			try {
+				SavestateMod.savestate();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		} else if (button.id == 14) {
 			mc.displayGuiScreen(null);
-			if(ConfigManager.getBoolean("savestates", "useExperimentalSavestates")) {
-				LoTASModContainer.NETWORK.sendToServer(new LoadstatePacket());
-			}
-			else {
-				try {
-					SavestateMod.loadstate();
-				} catch (IOException e) {
-					RLogAPI.logError(e, "[Savestate] Loadstate Error #3");
-					e.printStackTrace();
-				}
+			try {
+				SavestateMod.loadstate();
+			} catch (IOException e) {
+				RLogAPI.logError(e, "[Savestate] Loadstate Error #3");
+				e.printStackTrace();
 			}
 		} else if (button.id == 15) {
 			TickrateChanger.index++;

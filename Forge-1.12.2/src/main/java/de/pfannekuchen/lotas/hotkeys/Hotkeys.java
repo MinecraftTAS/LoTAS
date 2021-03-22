@@ -4,14 +4,10 @@ import java.io.IOException;
 
 import org.lwjgl.input.Keyboard;
 
-import de.pfannekuchen.lotas.LoTASModContainer;
 import de.pfannekuchen.lotas.challenges.ChallengeLoader;
-import de.pfannekuchen.lotas.config.ConfigManager;
 import de.pfannekuchen.lotas.dupemod.DupeMod;
-import de.pfannekuchen.lotas.savestates.LoadstatePacket;
-import de.pfannekuchen.lotas.savestates.SavestatePacket;
+import de.pfannekuchen.lotas.savestates.SavestateMod;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiIngameMenu;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import rlog.RLogAPI;
@@ -38,15 +34,10 @@ public class Hotkeys {
 	public static void keyEvent() throws IOException {
 		if (saveState.isPressed() && ChallengeLoader.map == null) {
 			RLogAPI.logDebug("[Hotkeys] Requesting Savestate");
-			LoTASModContainer.NETWORK.sendToServer(new SavestatePacket());
+			SavestateMod.savestate();
 		} else if (loadState.isPressed() && ChallengeLoader.map == null) {
 			RLogAPI.logDebug("[Hotkeys] Requesting Loadstate");
-			if(ConfigManager.getBoolean("savestates", "useExperimentalSavestates")) {
-				LoTASModContainer.NETWORK.sendToServer(new LoadstatePacket());
-			}else {
-				Minecraft.getMinecraft().displayGuiScreen(new GuiIngameMenu());
-				shouldLoadstate=true;
-			}
+			SavestateMod.loadstate();
 		} else if (loadDupe.isPressed()) {
 			DupeMod.loadChests();
 			DupeMod.loadItems();

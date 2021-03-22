@@ -9,8 +9,7 @@
 		"MixinEntityPlayerMP",
 		"savestates.AccessorSaveHandler",
 		"savestates.AccessorWorld",
-		"savestates.MixinChunkProviderServer",
-		"savestates.MixinEntityPlayerMP"
+		"savestates.MixinChunkProviderServer"
     ],
     "client": [
     	"gui.RedoGuiMainMenu",

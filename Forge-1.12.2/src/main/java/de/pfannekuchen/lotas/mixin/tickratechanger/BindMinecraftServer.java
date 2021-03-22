@@ -6,7 +6,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-import de.pfannekuchen.lotas.savestates.SavestateHandler;
 import de.pfannekuchen.lotas.tickratechanger.TickrateChanger;
 import net.minecraft.server.MinecraftServer;
 
@@ -37,11 +36,6 @@ public abstract class BindMinecraftServer {
 		}
 		TickrateChanger.ticksPassedServer++;
 		TickrateChanger.resetAdvanceServer();
-		
-		if(SavestateHandler.wasLoading) {
-       	 SavestateHandler.wasLoading=false;
-       	 SavestateHandler.playerLoadSavestateEvent();
-        }
 	}
 	
 	@Shadow

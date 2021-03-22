@@ -1,4 +1,4 @@
-package de.pfannekuchen.lotas.renderer;
+package de.pfannekuchen.lotas.util;
 
 import static org.lwjgl.opengl.GL11.GL_LINES;
 import static org.lwjgl.opengl.GL11.GL_QUADS;

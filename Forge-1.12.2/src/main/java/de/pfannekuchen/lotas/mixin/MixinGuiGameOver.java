@@ -8,8 +8,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import de.pfannekuchen.lotas.savestates.SavestateHandler;
-import de.pfannekuchen.lotas.savestates.exceptions.SavestateException;
+import de.pfannekuchen.lotas.savestates.SavestateMod;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiGameOver;
 import net.minecraft.client.gui.GuiScreen;
@@ -39,9 +38,7 @@ public abstract class MixinGuiGameOver extends GuiScreen {
 	public void injectactionPerformed(GuiButton button, CallbackInfo ci) {
         if (button.id == 2) {
         	try {
-				SavestateHandler.saveState();
-			} catch (SavestateException e) {
-				System.err.println("Failed to load a savestate: "+e.getMessage());
+				SavestateMod.savestate();
 			} catch (IOException e) {
 				System.err.println("Failed to load a savestate: "+e.getCause().toString());
 				e.printStackTrace();
