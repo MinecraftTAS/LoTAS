@@ -33,6 +33,8 @@
     	"MixinWorldborder",
     	"MixinTegratedServer",
     	"MixinEndPortal",
-    	"savestates.MixinChunkProviderClient"
+    	"savestates.MixinChunkProviderClient",
+    	"MixinLootEntity",
+    	"MixinLootBlock"
 	]
 }

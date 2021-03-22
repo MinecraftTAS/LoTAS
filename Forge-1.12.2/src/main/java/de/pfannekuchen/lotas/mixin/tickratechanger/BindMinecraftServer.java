@@ -9,7 +9,6 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import de.pfannekuchen.lotas.savestates.SavestateMod;
 import de.pfannekuchen.lotas.tickratechanger.TickrateChanger;
 import de.pfannekuchen.lotas.util.ChunkUtil;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
