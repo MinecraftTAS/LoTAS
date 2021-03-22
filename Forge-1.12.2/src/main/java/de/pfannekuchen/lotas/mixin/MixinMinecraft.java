@@ -17,12 +17,15 @@ import de.pfannekuchen.lotas.gui.GuiChallengeEscape;
 import de.pfannekuchen.lotas.hotkeys.Hotkeys;
 import de.pfannekuchen.lotas.savestates.SavestateMod;
 import de.pfannekuchen.lotas.tickratechanger.TickrateChanger;
+import de.pfannekuchen.lotas.util.ChunkUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiIngameMenu;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.settings.GameSettings;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Timer;
 import net.minecraft.util.math.MathHelper;
 import rlog.RLogAPI;
@@ -194,12 +197,12 @@ public class MixinMinecraft {
 	@Inject(method = "displayGuiScreen", at = @At("HEAD"))
 	public void injectdisplayGuiScreen(GuiScreen guiScreenIn, CallbackInfo ci) {
     	if (guiScreenIn == null) {
-    		if (SavestateMod.applyVelocity) {
-    			SavestateMod.applyVelocity = false;
-    			player.motionX = SavestateMod.motionX;
-    			player.motionY = SavestateMod.motionY;
-    			player.motionZ = SavestateMod.motionZ;
-    		}
+			if (SavestateMod.applyVelocity) {
+				SavestateMod.applyVelocity = false;
+				player.motionX = SavestateMod.motionX;
+				player.motionY = SavestateMod.motionY;
+				player.motionZ = SavestateMod.motionZ;
+			}
     	}
 	}
 	

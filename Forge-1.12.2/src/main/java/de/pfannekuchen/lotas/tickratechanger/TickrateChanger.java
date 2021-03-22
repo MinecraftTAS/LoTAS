@@ -214,6 +214,7 @@ public class TickrateChanger {
 			Hotkeys.keyEvent();
 		} catch (IOException e1) {
 			RLogAPI.logError(e1, "Savestate Error #3");
+			e1.printStackTrace();
 		}
 		
 		if (Hotkeys.timer.isPressed() && ChallengeLoader.map == null) {

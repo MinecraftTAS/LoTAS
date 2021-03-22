@@ -6,7 +6,12 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
+import de.pfannekuchen.lotas.savestates.SavestateMod;
 import de.pfannekuchen.lotas.tickratechanger.TickrateChanger;
+import de.pfannekuchen.lotas.util.ChunkUtil;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 
 @Mixin(MinecraftServer.class)
@@ -36,6 +41,14 @@ public abstract class BindMinecraftServer {
 		}
 		TickrateChanger.ticksPassedServer++;
 		TickrateChanger.resetAdvanceServer();
+		
+		if(SavestateMod.reattachEntity) {
+			SavestateMod.reattachEntity=false;
+			MinecraftServer server= (MinecraftServer) (Object) this;
+			EntityPlayerMP playerMP= server.getPlayerList().getPlayers().get(0);
+			NBTTagCompound compound= server.getPlayerList().getPlayerNBT(playerMP);
+			ChunkUtil.reattachEntityToPlayer(compound, playerMP.getServerWorld(), playerMP);
+		}
 	}
 	
 	@Shadow

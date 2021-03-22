@@ -33,6 +33,7 @@ public class SavestateMod {
 	private static final File savestateDirectory = new File(server.getDataDirectory() + File.separator + "saves" + File.separator + "savestates" + File.separator);
 	
 	public static boolean applyVelocity;
+	public static boolean reattachEntity;
 	public static double motionX;
 	public static double motionY;
 	public static double motionZ;
@@ -79,7 +80,7 @@ public class SavestateMod {
 		
 		Minecraft.getMinecraft().displayGuiScreen(null);
 		
-		TickrateChanger.updateTickrate(TickrateChanger.ticks[TickrateChanger.indexSave]);
+		TickrateChanger.updateTickrate(TickrateChanger.ticks[TickrateChanger.indexSave]); //Why???
 		TickrateChanger.index = TickrateChanger.indexSave;
         RLogAPI.logDebug("[Savestate] Savestate created");
 	}
@@ -101,6 +102,13 @@ public class SavestateMod {
         }).length;
         File savestateDir = new File(savestatesDir, worldName + "-Savestate" + existingSavestates);
 		
+        String data = new String(Files.toByteArray(new File(savestateDir, "savestate.dat")));
+        
+        motionX = Double.parseDouble(data.split(":")[0]);
+        motionY = Double.parseDouble(data.split(":")[1]);
+        motionZ = Double.parseDouble(data.split(":")[2]);
+        Timer.ticks = (int) Double.parseDouble(data.split(":")[3]);
+        
 		if (experimental) {
 			createSavestateDirectory();
 			
@@ -114,9 +122,7 @@ public class SavestateMod {
 				world.disableLevelSaving=true;		
 			}
 			
-			Minecraft.getMinecraft().addScheduledTask(()->{
-				ChunkUtil.unloadAllClientChunks();
-			});
+			ChunkUtil.unloadAllClientChunks();
 			
 			ChunkUtil.disconnectPlayersFromChunkMap();
 			ChunkUtil.unloadAllServerChunks();
@@ -126,34 +132,32 @@ public class SavestateMod {
 			FileUtils.copyDirectory(targetfolder, worldDir);
 			
 			ChunkUtil.loadAndSendMotionToPlayer();
+			
+			EntityPlayerSP player=Minecraft.getMinecraft().player;
+        	player.motionX=motionX;
+        	player.motionY=motionY;
+        	player.motionZ=motionZ;
+        	
 			ChunkUtil.updateSessionLock();
 			ChunkUtil.addPlayersToChunkMap();
 			
 			for(WorldServer world : server.worlds) {
 				world.disableLevelSaving = false;
 			}
-		
-			/*PlayerList list = server.getPlayerList();
-			for (EntityPlayerMP player : list.getPlayers()) {
-				NBTTagCompound tag = list.getPlayerNBT(player);
-				ChunkUtil.reattachEntityToPlayer(tag, player.getServerWorld(), player);
-			}*/
+			
+			reattachEntity=true;
 			
 		} else {
 			Minecraft.getMinecraft().displayGuiScreen(new GuiIngameMenu());
 	        Minecraft.getMinecraft().getIntegratedServer().stopServer();
 	        FileUtils.deleteDirectory(worldDir);
 	        FileUtils.copyDirectory(savestateDir, worldDir);
+	        applyVelocity = true;
 	        Minecraft.getMinecraft().launchIntegratedServer(worldName, worldName, null);
 		}
 
-        String data = new String(Files.toByteArray(new File(savestateDir, "savestate.dat")));
         
-        motionX = Double.parseDouble(data.split(":")[0]);
-        motionY = Double.parseDouble(data.split(":")[1]);
-        motionZ = Double.parseDouble(data.split(":")[2]);
-        Timer.ticks = (int) Double.parseDouble(data.split(":")[3]);
-        applyVelocity = true;
+        
         
         Minecraft.getMinecraft().ingameGUI.getChatGUI().clearChatMessages(true);
         RLogAPI.logDebug("[Savestates] Loadstate Done");
@@ -166,10 +170,10 @@ public class SavestateMod {
 	 */
 	public static boolean hasSavestate() {
 		String worldName = Minecraft.getMinecraft().getIntegratedServer().getWorldName();
-		File savestatesDir = new File(Minecraft.getMinecraft().mcDataDir, "savestates/");
+		File savestatesDir = new File(Minecraft.getMinecraft().mcDataDir, "saves/savestates/");
         if (!savestatesDir.exists()) return false;
 		int existingSavestates = savestatesDir.listFiles((d, s) -> {
-        	return s.startsWith(worldName);
+        	return s.startsWith(worldName+ "-Savestate");
         }).length;
         return existingSavestates != 0;
 	}

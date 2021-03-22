@@ -190,10 +190,8 @@ public class ChunkUtil {
 			
 			player.readFromNBT(nbttagcompound);
 			
-			Minecraft.getMinecraft().addScheduledTask(() -> {
-				Minecraft.getMinecraft().player.readFromNBT(nbttagcompound);
-				ChunkUtil.keepPlayerInLoadedEntityList(player);
-			});
+			Minecraft.getMinecraft().player.readFromNBT(nbttagcompound);
+			ChunkUtil.keepPlayerInLoadedEntityList(player);
 		}
 	}
 	
@@ -202,18 +200,18 @@ public class ChunkUtil {
 	 * 
 	 * Side: Server
 	 * @param nbttagcompound where the ridden entity is saved
-	 * @param worldserver that needs to spawn the entity
+	 * @param world that needs to spawn the entity
 	 * @param playerIn that needs to ride the entity
 	 */
-	public static void reattachEntityToPlayer(NBTTagCompound nbttagcompound, World worldserver, Entity playerIn) {
+	public static void reattachEntityToPlayer(NBTTagCompound nbttagcompound, World world, Entity playerIn) {
 		if (nbttagcompound != null && nbttagcompound.hasKey("RootVehicle", 10))
         {
             NBTTagCompound nbttagcompound1 = nbttagcompound.getCompoundTag("RootVehicle");
-            Entity entity1 = AnvilChunkLoader.readWorldEntity(nbttagcompound1.getCompoundTag("Entity"), worldserver, true);
+            Entity entity1 = AnvilChunkLoader.readWorldEntity(nbttagcompound1.getCompoundTag("Entity"), world, true);
             
             
             if(entity1==null) {
-            	for (Entity entity : worldserver.loadedEntityList) {
+            	for (Entity entity : world.loadedEntityList) {
             		if(entity.getUniqueID().equals(nbttagcompound1.getUniqueId("Attach"))) entity1=entity;
             	}
             }
@@ -240,11 +238,11 @@ public class ChunkUtil {
 
                 if (!playerIn.isRiding())
                 {
-                    worldserver.removeEntityDangerously(entity1);
+                    world.removeEntityDangerously(entity1);
 
                     for (Entity entity2 : entity1.getRecursivePassengers())
                     {
-                        worldserver.removeEntityDangerously(entity2);
+                        world.removeEntityDangerously(entity2);
                     }
                 }
             }
