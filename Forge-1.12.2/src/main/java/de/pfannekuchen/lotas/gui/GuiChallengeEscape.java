@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
+import com.google.common.base.Predicates;
+
 import de.pfannekuchen.lotas.challenges.ChallengeLoader;
 import de.pfannekuchen.lotas.config.ConfigManager;
 import de.pfannekuchen.lotas.dupemod.DupeMod;
@@ -17,6 +19,7 @@ import net.minecraft.client.gui.GuiOptions;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
@@ -50,7 +53,12 @@ public class GuiChallengeEscape extends GuiIngameMenu {
         this.buttonList.add(new GuiButton(18, 5, 75, 98, 20, I18n.format("Load Items")));
         
         this.buttonList.add(new GuiButton(19, (width / 4) * 0 + 1, height - 20, width / 4 - 2, 20, I18n.format("Manipulate Drops")));
-    	this.buttonList.add(new GuiButton(20, (width / 4) * 1 + 2, height - 20, width / 4 - 2, 20, I18n.format("Manipulate Dragon")));
+    	try {
+    		this.buttonList.add(new GuiButton(20, (width / 4) * 1 + 2, height - 20, width / 4 - 2, 20, I18n.format("Manipulate Dragon")));
+    		this.buttonList.get(this.buttonList.size() - 1).enabled = Minecraft.getMinecraft().integratedServer.getWorld(mc.player.dimension).getEntities(EntityDragon.class, Predicates.alwaysTrue()).size() != 0;
+    	} catch (Exception e) {
+    		System.out.println("No Enderdragon found.");
+    	}
         this.buttonList.add(new GuiButton(21, (width / 4) * 2 + 3, height - 20, width / 4 - 2, 20, I18n.format("Manipulate Spawning")));
         
         this.buttonList.add(new GuiCheckBox(22, 2, height - 20 - 15, I18n.format("Avoid taking damage"), !ConfigManager.getBoolean("tools", "takeDamage")));
