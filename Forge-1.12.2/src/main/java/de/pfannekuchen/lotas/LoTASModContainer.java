@@ -53,8 +53,37 @@ public class LoTASModContainer {
 	
 	@EventHandler
 	public void preinit(FMLPreInitializationEvent e) {
-		logDebug("[PreInit] Initializing Configuration");
-		ConfigManager.init(new Configuration(e.getSuggestedConfigurationFile()));
+		new Thread(() -> {
+			logDebug("[PreInit] Initializing Configuration");
+			ConfigManager.init(new Configuration(e.getSuggestedConfigurationFile()));
+		
+			logDebug("[PreInit] Downloading Seeds");
+			try {
+				loadSeeds();
+			} catch (Exception e1) {
+				logDebug("[PreInit] Reading Seeds File failed");
+				logError(e1, "Couldn't read Seeds File #0");
+				e1.printStackTrace();
+			}
+			
+			if (ConfigManager.getBoolean("tools", "saveTickrate")) {
+				logDebug("[PreInit] Loading Tickrate");
+				TickrateChanger.index = ConfigManager.getInt("hidden", "tickrate");
+				TickrateChanger.updateTickrate(TickrateChanger.ticks[TickrateChanger.index]);
+			}
+			
+			logDebug("[PreInit] Downloading TAS Challenge Maps");
+			try {
+				ObjectInputStream stream = new ObjectInputStream(new URL("http://mgnet.work/maps.txt").openStream());
+				int maps = stream.readInt();
+				for (int i = 0; i < maps; i++) {
+					LoTASModContainer.maps.add((ChallengeMap) stream.readObject());
+				}
+				stream.close();
+			} catch (Exception e1) {
+				logError(e1, "Couldn't download Challenge Maps #6");
+			}
+		}).start();
 		
 		logDebug("[PreInit] Registering Events");
 		MinecraftForge.EVENT_BUS.register(new TickrateChanger()); logDebug("[PreInit] Registered TickrateChanger Events");
@@ -64,33 +93,6 @@ public class LoTASModContainer {
 		logDebug("[PreInit] Registering Keybindings");
 		Hotkeys.registerKeybindings();
 		
-		logDebug("[PreInit] Downloading Seeds");
-		try {
-			loadSeeds();
-		} catch (Exception e1) {
-			logDebug("[PreInit] Reading Seeds File failed");
-			logError(e1, "Couldn't read Seeds File #0");
-			e1.printStackTrace();
-		}
-		
-		
-		if (ConfigManager.getBoolean("tools", "saveTickrate")) {
-			logDebug("[PreInit] Loading Tickrate");
-			TickrateChanger.index = ConfigManager.getInt("hidden", "tickrate");
-			TickrateChanger.updateTickrate(TickrateChanger.ticks[TickrateChanger.index]);
-		}
-		
-		logDebug("[PreInit] Downloading TAS Challenge Maps");
-		try {
-			ObjectInputStream stream = new ObjectInputStream(new URL("http://mgnet.work/maps.txt").openStream());
-			int maps = stream.readInt();
-			for (int i = 0; i < maps; i++) {
-				LoTASModContainer.maps.add((ChallengeMap) stream.readObject());
-			}
-			stream.close();
-		} catch (Exception e1) {
-			logError(e1, "Couldn't download Challenge Maps #6");
-		}
 	}
 	
 	/**

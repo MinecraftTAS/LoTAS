@@ -25,7 +25,6 @@ import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.util.Timer;
 import net.minecraft.util.math.MathHelper;
-import rlog.RLogAPI;
 
 @Mixin(Minecraft.class)
 public class MixinMinecraft {
@@ -67,6 +66,11 @@ public class MixinMinecraft {
 		}
 	}
 	
+	@Inject(method = "updateDisplay", cancellable = true, at = @At("HEAD"))
+	public void redoUpdateDisplay(CallbackInfo ci) {
+		if (SavestateMod.isLoading) ci.cancel();
+	}
+	
 	@Inject(method = "runTick", at = @At(value="HEAD"))
 	public void injectrunTick(CallbackInfo ci) {
 		if (ConfigManager.getBoolean("tools", "lAutoClicker")) rightClickDelayTimer = 0;
@@ -75,20 +79,12 @@ public class MixinMinecraft {
 		
 		if (Hotkeys.shouldSavestate) {
 			Hotkeys.shouldSavestate = false;
-			try {
-				SavestateMod.savestate();
-			} catch (IOException e) {
-				RLogAPI.logError(e, "[Savestate] Savestate Error #3");
-			}
+			SavestateMod.savestate();
 		}
 		
 		if (Hotkeys.shouldLoadstate) {
 			Hotkeys.shouldLoadstate = false;
-			try {
-				SavestateMod.loadstate();
-			} catch (IOException e) {
-				RLogAPI.logError(e, "[Savestate] Loadstate Error #3");
-			}
+			SavestateMod.loadstate();
 		}
 		
 		if (TickrateChanger.advanceClient) {
@@ -204,6 +200,11 @@ public class MixinMinecraft {
     
 	@Inject(method = "displayGuiScreen", at = @At("HEAD"))
 	public void injectdisplayGuiScreen(GuiScreen guiScreenIn, CallbackInfo ci) {
+		if (((guiScreenIn == null) ? true : guiScreenIn instanceof GuiIngameMenu) && SavestateMod.isLoading) {
+			SavestateMod.isLoading = false;
+	        SavestateMod.showLoadstateDone = true;
+	        SavestateMod.timeTitle = System.currentTimeMillis();
+		}
     	if (guiScreenIn == null) {
     		if(player!=null) {
 				if (SavestateMod.applyVelocity) {

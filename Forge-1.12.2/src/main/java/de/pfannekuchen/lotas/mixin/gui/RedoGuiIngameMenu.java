@@ -1,6 +1,6 @@
 package de.pfannekuchen.lotas.mixin.gui;
 
-import java.io.IOException;
+import java.awt.Color;
 import java.time.Duration;
 import java.util.ArrayList;
 
@@ -31,7 +31,6 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.client.config.GuiCheckBox;
-import rlog.RLogAPI;
 
 @Mixin(GuiIngameMenu.class)
 public abstract class RedoGuiIngameMenu extends GuiScreen {
@@ -93,6 +92,23 @@ public abstract class RedoGuiIngameMenu extends GuiScreen {
 	@Inject(method = "drawScreen", at = @At("TAIL"))
 	public void drawScreen(int mouseX, int mouseY, float partialTicks, CallbackInfo ci) {
 		drawString(mc.fontRenderer, "Tickrate Changer (" + TickrateChanger.tickrate + ")", 5, 5, 0xFFFFFF);
+		
+		if (SavestateMod.showSavestateDone) {
+			long timeSince = System.currentTimeMillis() - SavestateMod.timeTitle;
+			if (timeSince >= 1800) {
+				SavestateMod.showSavestateDone = false;
+				return;
+			}
+			drawCenteredString(mc.fontRenderer, "\u00A76Savestate successful...", width / 2, 40, new Color(1F, 1F, 1F, 1F - (timeSince / 2000F)).getRGB());
+		} else if (SavestateMod.showLoadstateDone) {
+			long timeSince = System.currentTimeMillis() - SavestateMod.timeTitle;
+			if (timeSince >= 1800) {
+				SavestateMod.showLoadstateDone = false;
+				return;
+			}
+			drawCenteredString(mc.fontRenderer, "\u00A76Loadstate successful...", width / 2, 40, new Color(1F, 1F, 1F, 1F - (timeSince / 2000F)).getRGB());
+		}
+		
 		mc.fontRenderer.drawStringWithShadow("Tickrate Changer", 10, 97, 0xFFFFFF);
 		mc.fontRenderer.drawStringWithShadow("Duping", 10, 45, 0xFFFFFF);
 		int w = width - 5;
@@ -107,17 +123,9 @@ public abstract class RedoGuiIngameMenu extends GuiScreen {
 	@Inject(method = "actionPerformed", at = @At("HEAD"))
 	public void redoactionPerformed(GuiButton button, CallbackInfo ci) {
 		if (button.id == 13) {
-			try {
-				SavestateMod.savestate();
-			} catch (IOException e) {
-				RLogAPI.logError(e, "[Savestate] Savestate Error #3");
-			}
+			SavestateMod.savestate();
 		} else if (button.id == 14) {
-			try {
-				SavestateMod.loadstate();
-			} catch (IOException e) {
-				RLogAPI.logError(e, "[Savestate] Loadstate Error #3");
-			}
+			SavestateMod.loadstate();
 		} else if (button.id == 15) {
 			TickrateChanger.index++;
 			TickrateChanger.index = MathHelper.clamp(TickrateChanger.index, 1, 10);
