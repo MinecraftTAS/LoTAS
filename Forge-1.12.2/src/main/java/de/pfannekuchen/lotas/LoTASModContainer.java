@@ -23,12 +23,17 @@ import de.pfannekuchen.lotas.gui.InfoGui;
 import de.pfannekuchen.lotas.hotkeys.Hotkeys;
 import de.pfannekuchen.lotas.manipulation.WorldManipulation;
 import de.pfannekuchen.lotas.tickratechanger.TickrateChanger;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ImageBufferDownload;
+import net.minecraft.client.renderer.ThreadDownloadImageData;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import rlog.RLogAPI;
 
 @Mod(acceptedMinecraftVersions = "1.12.2", canBeDeactivated = false, clientSideOnly = true, modid = "lotas", name = "LoTAS", version = "${version}")
 public class LoTASModContainer {
@@ -77,7 +82,13 @@ public class LoTASModContainer {
 				ObjectInputStream stream = new ObjectInputStream(new URL("http://mgnet.work/maps.txt").openStream());
 				int maps = stream.readInt();
 				for (int i = 0; i < maps; i++) {
-					LoTASModContainer.maps.add((ChallengeMap) stream.readObject());
+					ChallengeMap map = (ChallengeMap) stream.readObject();
+					RLogAPI.logDebug("[TASChallenges] Downloading " + map.name + " image.");
+					ResourceLocation loc = new ResourceLocation("maps", map.name);
+					ThreadDownloadImageData dw = new ThreadDownloadImageData((File) null, "http://mgnet.work/maps/" + map.name + ".png", null, new ImageBufferDownload());
+					Minecraft.getMinecraft().getTextureManager().loadTexture(loc, dw);
+					map.resourceLoc = loc.getResourcePath();
+					LoTASModContainer.maps.add(map);
 				}
 				stream.close();
 			} catch (Exception e1) {
@@ -121,8 +132,14 @@ public class LoTASModContainer {
 			String seed = line.split(":")[0];
 			String name = line.split(":")[1];
 			String description = line.split(":")[2];
-			
-			GuiSeedList.seeds.add(new SeedEntry(name, description, seed, c));
+			SeedEntry entry = new SeedEntry(name, description, seed, c);
+			new Thread(() -> {
+				RLogAPI.logDebug("[SeedList] Downloading " + seed + " image.");
+				entry.loc = new ResourceLocation("seeds", seed);
+				ThreadDownloadImageData dw = new ThreadDownloadImageData((File) null, "http://mgnet.work/seeds/" + seed + ".png", null, new ImageBufferDownload());
+				Minecraft.getMinecraft().getTextureManager().loadTexture(entry.loc, dw);
+			}).start();
+			GuiSeedList.seeds.add(entry);
 			logDebug("[PreInit] Seed found: " + name + " (" + seed + ") ");
 			c++;
 		}

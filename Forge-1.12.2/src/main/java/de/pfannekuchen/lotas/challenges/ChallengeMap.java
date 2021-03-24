@@ -25,6 +25,7 @@ public class ChallengeMap implements Serializable {
 	public String name;
 	public String description;
 	public String[] leaderboard;
+	public String resourceLoc;
 	
 	public WorldSummary getSummary() {
 		WorldSettings settings = new WorldSettings(0L, GameType.ADVENTURE, false, true, WorldType.FLAT);

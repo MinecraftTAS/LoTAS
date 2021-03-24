@@ -17,6 +17,7 @@ import net.minecraft.client.gui.GuiListWorldSelection;
 import net.minecraft.client.gui.GuiListWorldSelectionEntry;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiWorldSelection;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.config.GuiCheckBox;
 
 @Mixin(GuiWorldSelection.class)
@@ -35,7 +36,8 @@ public abstract class RedoGuiWorldSelection extends GuiScreen {
 	public void injectinitGui2(CallbackInfo ci) {
 		if (!ConfigManager.getBoolean("tools", "hideMaps")) {
 			for (ChallengeMap map : LoTASModContainer.maps) {
-				GuiListWorldSelectionEntry entry = new GuiCustomMapEntry(selectionList, map);
+				GuiCustomMapEntry entry = new GuiCustomMapEntry(selectionList, map);
+				entry.loc = new ResourceLocation("maps", map.resourceLoc);
 				selectionList.entries.add(entry);
 			}
 		}
