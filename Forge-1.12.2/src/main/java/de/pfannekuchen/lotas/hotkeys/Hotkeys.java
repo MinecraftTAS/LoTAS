@@ -6,7 +6,6 @@ import org.lwjgl.input.Keyboard;
 
 import de.pfannekuchen.lotas.challenges.ChallengeLoader;
 import de.pfannekuchen.lotas.dupemod.DupeMod;
-import de.pfannekuchen.lotas.savestate.SavestateMod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiIngameMenu;
 import net.minecraft.client.settings.KeyBinding;
@@ -33,12 +32,12 @@ public class Hotkeys {
 	public static int savedTickrate;
 	
 	public static void keyEvent() throws IOException {
+		
 		if (saveState.isPressed() && ChallengeLoader.map == null) {
 			RLogAPI.logDebug("[Hotkeys] Requesting Savestate");
 			Minecraft.getMinecraft().displayGuiScreen(new GuiIngameMenu());
 			shouldSavestate = true;
-		} else if (loadState.isPressed() && ChallengeLoader.map == null) {
-			if (!SavestateMod.hasSavestate()) return;
+		} else if (loadState.isPressed()) {
 			Minecraft.getMinecraft().displayGuiScreen(new GuiIngameMenu());
 			shouldLoadstate = true;
 			RLogAPI.logDebug("[Hotkeys] Requesting Loadstate");

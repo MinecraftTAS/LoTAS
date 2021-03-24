@@ -84,7 +84,12 @@ public class MixinMinecraft {
 		
 		if (Hotkeys.shouldLoadstate) {
 			Hotkeys.shouldLoadstate = false;
-			SavestateMod.loadstate();
+			try {
+				if (ChallengeLoader.map != null) ChallengeLoader.reload();
+				else if (SavestateMod.hasSavestate()) SavestateMod.loadstate();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		
 		if (TickrateChanger.advanceClient) {
@@ -206,6 +211,14 @@ public class MixinMinecraft {
 	        SavestateMod.timeTitle = System.currentTimeMillis();
 		}
     	if (guiScreenIn == null) {
+    		if (ChallengeLoader.map != null) {
+    			gameSettings.enableVsync = true;
+    			gameSettings.viewBobbing = false;
+    			gameSettings.useVbo = true;
+    			gameSettings.renderDistanceChunks = 8;
+    			gameSettings.fancyGraphics = false;
+    			gameSettings.particleSetting = 2;
+    		}
     		if(player!=null) {
 				if (SavestateMod.applyVelocity) {
 					SavestateMod.applyVelocity = false;

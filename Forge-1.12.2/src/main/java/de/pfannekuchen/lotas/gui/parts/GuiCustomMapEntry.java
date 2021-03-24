@@ -48,7 +48,7 @@ public class GuiCustomMapEntry extends GuiListWorldSelectionEntry {
 	public void joinWorld() {
 		ChallengeLoader.map = map;
 		try {
-			ChallengeLoader.load();
+			ChallengeLoader.load(true);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
