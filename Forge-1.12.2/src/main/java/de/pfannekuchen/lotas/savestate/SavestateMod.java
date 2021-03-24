@@ -2,6 +2,8 @@ package de.pfannekuchen.lotas.savestate;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.apache.commons.io.FileUtils;
 
@@ -49,7 +51,7 @@ public class SavestateMod {
 	 * Closes the server and creates a savestate in .minecraft/savestates/
 	 * @throws IOException
 	 */
-	public static void savestate() {
+	public static void savestate(String name) {
 		RLogAPI.logDebug("[Savestate] Trying to create a Savestate");
 		final String data = generateSavestateFile();
 		final Minecraft mc = Minecraft.getMinecraft();
@@ -76,19 +78,26 @@ public class SavestateMod {
         new Thread(() -> {
     		final String worldName = server.getFolderName();
     		final File worldDir = new File(mc.mcDataDir, "saves/" + worldName);
-    		final File savestatesDir = new File(mc.mcDataDir, "savestates/");
+    		final File savestatesDir = new File(mc.mcDataDir, "saves/savestates/");
     		
     		if (!savestatesDir.exists()) savestatesDir.mkdir();
     		
     		final int existingSavestates = savestatesDir.listFiles((d, s) -> {
-            	return s.startsWith(worldName);
+            	return s.startsWith(worldName + "-Savestate");
             }).length;
             
-            File savestateDir = new File(savestatesDir, worldName + (existingSavestates + 1));
+            File savestateDir = new File(savestatesDir, worldName + "-Savestate" + (existingSavestates + 1));
             
             try {
 				FileUtils.copyDirectory(worldDir, savestateDir);
 				Files.write(data.getBytes(), new File(savestateDir, "savestate.dat"));
+				Files.write((name == null) ? new SimpleDateFormat("yyyy-MM-dd HH.mm.ss").format(new Date()).getBytes() : name.getBytes(), new File(savestateDir, "lotas.dat"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+            
+            try {
+				TrackerFile.increaseSavestates(savestatesDir, worldName);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -113,7 +122,7 @@ public class SavestateMod {
 	 * Closes the server and loads the latest savestate in .minecraft/savestates/
 	 * @throws IOException
 	 */
-	public static void loadstate() {
+	public static void loadstate(int number) {
 		if (!hasSavestate()) return;
 		isLoading = true;
 		
@@ -131,13 +140,15 @@ public class SavestateMod {
         
     	final String worldName = server.getFolderName();
 		final File worldDir = new File(mc.mcDataDir, "saves/" + worldName);
-		final File savestatesDir = new File(mc.mcDataDir, "savestates/");
+		final File savestatesDir = new File(mc.mcDataDir, "saves/savestates/");
         
-		final int existingSavestates = savestatesDir.listFiles((d, s) -> {
-        	return s.startsWith(worldName);
+		int existingSavestates = savestatesDir.listFiles((d, s) -> {
+        	return s.startsWith(worldName + "-Savestate");
         }).length;
         
-		final File savestateDir = new File(savestatesDir, worldName + (existingSavestates));
+		if (number != -1) existingSavestates = number;
+		
+		final File savestateDir = new File(savestatesDir, worldName + "-Savestate" + (existingSavestates));
 		try {
 			final String data = new String(Files.toByteArray(new File(savestateDir, "savestate.dat")));
 			FileUtils.deleteDirectory(worldDir);
@@ -148,6 +159,7 @@ public class SavestateMod {
 			motionZ = Double.parseDouble(data.split(":")[2]);
 			Timer.ticks = Integer.parseInt(data.split(":")[3]);
 			applyVelocity = true;
+            TrackerFile.increaseLoadstates(savestatesDir, worldName);
 		} catch (NumberFormatException | IOException e) {
 			e.printStackTrace();
 		}
@@ -165,10 +177,10 @@ public class SavestateMod {
 	 */
 	public static boolean hasSavestate() {
 		String worldName = Minecraft.getMinecraft().getIntegratedServer().getFolderName();
-		File savestatesDir = new File(Minecraft.getMinecraft().mcDataDir, "savestates/");
+		File savestatesDir = new File(Minecraft.getMinecraft().mcDataDir, "saves/savestates/");
         if (!savestatesDir.exists()) return false;
 		int existingSavestates = savestatesDir.listFiles((d, s) -> {
-        	return s.startsWith(worldName);
+        	return s.startsWith(worldName + "-Savestate");
         }).length;
         return existingSavestates != 0;
 	}

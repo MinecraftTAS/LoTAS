@@ -1,9 +1,11 @@
 package de.pfannekuchen.lotas.mixin.gui;
 
 import java.awt.Color;
+import java.io.IOException;
 import java.time.Duration;
 import java.util.ArrayList;
 
+import org.lwjgl.input.Keyboard;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -17,6 +19,7 @@ import de.pfannekuchen.lotas.dupemod.DupeMod;
 import de.pfannekuchen.lotas.gui.GuiAIRig;
 import de.pfannekuchen.lotas.gui.GuiDragonPhase;
 import de.pfannekuchen.lotas.gui.GuiEntitySpawner;
+import de.pfannekuchen.lotas.gui.GuiLoadstate;
 import de.pfannekuchen.lotas.gui.GuiLootManipulation;
 import de.pfannekuchen.lotas.savestate.SavestateMod;
 import de.pfannekuchen.lotas.tickratechanger.TickrateChanger;
@@ -25,6 +28,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiIngameMenu;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.item.EntityItem;
@@ -35,9 +39,11 @@ import net.minecraftforge.fml.client.config.GuiCheckBox;
 @Mixin(GuiIngameMenu.class)
 public abstract class RedoGuiIngameMenu extends GuiScreen {
 
-	/*
+	/*	
 	 * Adds a few utility buttons
 	 */
+	
+	public GuiTextField savestateName;
 	
 	@ModifyArg(index = 3, method = "drawScreen", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiIngameMenu;drawCenteredString(Lnet/minecraft/client/gui/FontRenderer;Ljava/lang/String;III)V"))
 	public int cheeseIt(int in) {
@@ -60,6 +66,7 @@ public abstract class RedoGuiIngameMenu extends GuiScreen {
 		
         buttonList.get(0).y += 24;
     	this.buttonList.add(new GuiButton(13, this.width / 2 - 100, this.height / 4 + 96 + -16, 98, 20, I18n.format("Savestate")));
+    	
     	GuiButton loadstate = new GuiButton(14, this.width / 2 + 2, this.height / 4 + 96 + -16, 98, 20, I18n.format("Loadstate"));
     	loadstate.enabled = SavestateMod.hasSavestate();
     	this.buttonList.add(loadstate);
@@ -91,7 +98,20 @@ public abstract class RedoGuiIngameMenu extends GuiScreen {
 	
 	@Inject(method = "drawScreen", at = @At("TAIL"))
 	public void drawScreen(int mouseX, int mouseY, float partialTicks, CallbackInfo ci) {
+		
+		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+			this.buttonList.get(7).displayString = "§6Name Savestate";
+			this.buttonList.get(8).displayString = "§6Choose State";
+		} else {
+			this.buttonList.get(7).displayString = "Savestate";
+			this.buttonList.get(8).displayString = "Loadstate";
+		}
+		
 		drawString(mc.fontRenderer, "Tickrate Changer (" + TickrateChanger.tickrate + ")", 5, 5, 0xFFFFFF);
+		
+		drawCenteredString(mc.fontRenderer, "Hold Shift to access more features", width / 2, this.height / 4 + 150, 0xFFFFFF);
+		
+		if (savestateName != null) savestateName.drawTextBox();
 		
 		if (SavestateMod.showSavestateDone) {
 			long timeSince = System.currentTimeMillis() - SavestateMod.timeTitle;
@@ -120,12 +140,43 @@ public abstract class RedoGuiIngameMenu extends GuiScreen {
 		}
 	}
 	
+	@Override
+	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+		if (savestateName != null) {
+			savestateName.mouseClicked(mouseX, mouseY, mouseButton);
+		}
+		super.mouseClicked(mouseX, mouseY, mouseButton);
+	}
+	
+	
+	
+	@Override
+	protected void keyTyped(char typedChar, int keyCode) throws IOException {
+		if (savestateName != null) {
+			boolean focused = savestateName.isFocused();
+			savestateName.textboxKeyTyped(typedChar, keyCode);
+			if (keyCode == Keyboard.KEY_RETURN && focused) {
+				if (savestateName.getText().isEmpty()) {
+					SavestateMod.savestate(null);
+				} else {
+					SavestateMod.savestate(savestateName.getText());
+				}
+			}
+		}
+		super.keyTyped(typedChar, keyCode);
+	}
+	
 	@Inject(method = "actionPerformed", at = @At("HEAD"))
 	public void redoactionPerformed(GuiButton button, CallbackInfo ci) {
 		if (button.id == 13) {
-			SavestateMod.savestate();
+			if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+				savestateName = new GuiTextField(93, mc.fontRenderer, this.width / 2 - 100, this.height / 4 + 96 + -16, 98, 20);
+				button.enabled = false;
+				savestateName.setFocused(true);
+			} else SavestateMod.savestate(null);
 		} else if (button.id == 14) {
-			SavestateMod.loadstate();
+			if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) mc.displayGuiScreen(new GuiLoadstate());
+			else SavestateMod.loadstate(-1);
 		} else if (button.id == 15) {
 			TickrateChanger.index++;
 			TickrateChanger.index = MathHelper.clamp(TickrateChanger.index, 1, 10);

@@ -79,14 +79,14 @@ public class MixinMinecraft {
 		
 		if (Hotkeys.shouldSavestate) {
 			Hotkeys.shouldSavestate = false;
-			SavestateMod.savestate();
+			SavestateMod.savestate(null);
 		}
 		
 		if (Hotkeys.shouldLoadstate) {
 			Hotkeys.shouldLoadstate = false;
 			try {
 				if (ChallengeLoader.map != null) ChallengeLoader.reload();
-				else if (SavestateMod.hasSavestate()) SavestateMod.loadstate();
+				else if (SavestateMod.hasSavestate()) SavestateMod.loadstate(-1);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
