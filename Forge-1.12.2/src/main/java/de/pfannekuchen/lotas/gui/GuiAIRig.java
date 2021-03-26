@@ -167,7 +167,7 @@ public class GuiAIRig extends GuiScreen {
 		xText.drawTextBox();
 		yText.drawTextBox();
 		zText.drawTextBox();
-		drawCenteredString(mc.fontRenderer, entities.get(selectedIndex).getClass().getSimpleName().replaceFirst("Entity", ""), width / 2, 5, 0xFFFFFF);
+		drawCenteredString(mc.fontRenderer, entities.get(selectedIndex).getClass().getSimpleName().replaceFirst("Entity", "") + " (" + entities.get(selectedIndex).getPosition().getX() + ", " + entities.get(selectedIndex).getPosition().getY() + ", " + entities.get(selectedIndex).getPosition().getZ() + ")", width / 2, 5, 0xFFFFFF);
 	}
 	
 }
