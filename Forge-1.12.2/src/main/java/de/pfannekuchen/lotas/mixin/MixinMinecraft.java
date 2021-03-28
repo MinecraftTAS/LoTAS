@@ -182,6 +182,9 @@ public class MixinMinecraft {
 				TickrateChanger.updateTickrate(Hotkeys.savedTickrate);
 			} else {
 				Hotkeys.isFreecaming = true;
+				player.moveForward = 0f;
+				player.moveStrafing = 0f;
+				player.moveVertical = 0f;
 				Hotkeys.savedTickrate = (int)TickrateChanger.tickrate;
 				TickrateChanger.updateTickrate(0);
 			}

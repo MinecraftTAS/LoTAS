@@ -91,7 +91,7 @@ public class SavestateMod {
             try {
 				FileUtils.copyDirectory(worldDir, savestateDir);
 				Files.write(data.getBytes(), new File(savestateDir, "savestate.dat"));
-				Files.write((name == null) ? new SimpleDateFormat("yyyy-MM-dd HH.mm.ss").format(new Date()).getBytes() : name.getBytes(), new File(savestateDir, "lotas.dat"));
+				Files.write((name == null) ? new SimpleDateFormat("MM-dd-yyyy HH.mm.ss").format(new Date()).getBytes() : name.getBytes(), new File(savestateDir, "lotas.dat"));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

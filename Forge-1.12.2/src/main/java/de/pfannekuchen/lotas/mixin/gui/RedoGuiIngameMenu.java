@@ -99,12 +99,14 @@ public abstract class RedoGuiIngameMenu extends GuiScreen {
 	@Inject(method = "drawScreen", at = @At("TAIL"))
 	public void drawScreen(int mouseX, int mouseY, float partialTicks, CallbackInfo ci) {
 		
-		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-			this.buttonList.get(7).displayString = "§6Name Savestate";
-			this.buttonList.get(8).displayString = "§6Choose State";
-		} else {
-			this.buttonList.get(7).displayString = "Savestate";
-			this.buttonList.get(8).displayString = "Loadstate";
+		if (getClass().getSimpleName().contains("GuiIngameMenu")) {
+			if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+				this.buttonList.get(7).displayString = "§6Name Savestate";
+				this.buttonList.get(8).displayString = "§6Choose State";
+			} else {
+				this.buttonList.get(7).displayString = "Savestate";
+				this.buttonList.get(8).displayString = "Loadstate";
+			}	
 		}
 		
 		drawString(mc.fontRenderer, "Tickrate Changer (" + TickrateChanger.tickrate + ")", 5, 5, 0xFFFFFF);
