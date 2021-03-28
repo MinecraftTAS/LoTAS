@@ -183,6 +183,7 @@ public class TickrateChanger {
 	
 	public static ResourceLocation streaming = new ResourceLocation("textures/gui/stream_indicator.png");
 	public static boolean show = false;
+	public static boolean watchGuiClose;
 	
 	/**
 	 * Drawing timer and RTA timer

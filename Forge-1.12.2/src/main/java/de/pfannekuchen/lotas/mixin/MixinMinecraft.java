@@ -55,6 +55,9 @@ public class MixinMinecraft {
 	@Shadow
 	public EntityPlayerSP player;
 	
+	@Shadow
+	private boolean isGamePaused;
+	
 	@Inject(method = "loadWorld", at = @At("HEAD"))
 	public void injectloadWorld(WorldClient worldClientIn, CallbackInfo ci) {
 		isLoadingWorld = ConfigManager.getBoolean("tools", "hitEscape") && worldClientIn != null;
@@ -141,7 +144,13 @@ public class MixinMinecraft {
     	if (TickrateChanger.tickrate == 0 && Keyboard.isKeyDown(Hotkeys.advance.getKeyCode()) && das <= 0 && !Hotkeys.isFreecaming) {
     		TickrateChanger.advanceTick();
     		das = 15;
-    	} 
+    	}
+    	if (TickrateChanger.tickrate == 0 && currentScreen == null && Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
+    		((Minecraft) (Object) this).displayGuiScreen(new GuiIngameMenu());
+    		TickrateChanger.updateTickrate(Hotkeys.savedTickrate);
+    		Hotkeys.isFreecaming = false;
+    		Minecraft.getMinecraft().renderGlobal.loadRenderers();
+    	}
     	
     	//Controls for freecam
     	if (Hotkeys.isFreecaming) {
