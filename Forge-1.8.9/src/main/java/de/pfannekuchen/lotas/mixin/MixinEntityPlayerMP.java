@@ -42,7 +42,7 @@ public abstract class MixinEntityPlayerMP extends EntityPlayer {
 		boolean flag = this.mcServer.isDedicatedServer() && this.canPlayersAttack() && "fall".equals(source.damageType);
 		
 		if (!ConfigManager.getBoolean("tools", "takeDamage")) Minecraft.getMinecraft().getIntegratedServer().getConfigurationManager().playerEntityList.forEach(p -> {
-			if (p.respawnInvulnerabilityTicks <= 1 && p.dimension != 1) {
+			if (p.respawnInvulnerabilityTicks <= 1) {
 				p.respawnInvulnerabilityTicks = 60;
 				flag2 = true;
 			}

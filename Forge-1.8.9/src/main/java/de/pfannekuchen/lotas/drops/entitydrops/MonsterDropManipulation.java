@@ -79,8 +79,8 @@ public class MonsterDropManipulation extends GuiLootManipulation.DropManipulatio
         optimizeCreeper.yPosition = 112;
         optimizeSlime.yPosition = 144;
         optimizeWitch.yPosition = 128;
-        optimizeSkeleton.yPosition = 176;
-        optimizeGuardian.yPosition = 208;
+        optimizeSkeleton.yPosition = 160;
+        optimizeGuardian.yPosition = 96;
         optimizeCaveSpider.xPosition = x;
         optimizeEnderman.xPosition = x;
         optimizeCreeper.xPosition = x;

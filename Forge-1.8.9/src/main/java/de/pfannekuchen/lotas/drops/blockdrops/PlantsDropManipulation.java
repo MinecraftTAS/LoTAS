@@ -79,8 +79,8 @@ public class PlantsDropManipulation extends GuiLootManipulation.DropManipulation
         optimizeWheat.yPosition = 112;
         optimizePotato.yPosition = 128;
         optimizeCocoa.yPosition = 144;
-        optimizeNetherwart.yPosition = 176;
-        optimizeMushroom.yPosition = 192;
+        optimizeNetherwart.yPosition = 160;
+        optimizeMushroom.yPosition = 80;
         optimizeCarrots.xPosition = x;
         optimizeMelons.xPosition = x;
         optimizeWheat.xPosition = x;

@@ -7,7 +7,16 @@ import de.pfannekuchen.lotas.gui.GuiEntitySpawner;
 import de.pfannekuchen.lotas.renderer.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemPotion;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -17,6 +26,31 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 *
 */
 public class WorldManipulation {
+	
+	ResourceLocation potion = new ResourceLocation("lotas", "potion_small.png");
+	
+	@SubscribeEvent
+	public void drawStuff2(RenderGameOverlayEvent event){
+		Minecraft mc = Minecraft.getMinecraft();
+		if (event.isCancelable() || event.type != ElementType.AIR || event.type == ElementType.TEXT) {
+			return;
+		}
+		int posX = event.resolution.getScaledWidth() / 2;
+		int posY = event.resolution.getScaledHeight();
+		if(!mc.thePlayer.capabilities.isCreativeMode&&!mc.thePlayer.isSpectator()) {
+			mc.renderEngine.bindTexture(potion);
+			ItemStack stack = new ItemStack(Items.potionitem);
+			
+			NBTTagCompound cp = new NBTTagCompound();
+			cp.setInteger("CustomPotionColor", 0x546980);
+			stack.setTagCompound(cp);
+			stack.addEnchantment(Enchantment.luckOfTheSea, 1);
+			GlStateManager.pushMatrix();
+			GlStateManager.scale(1.4, 1.4, 1.4);
+			mc.getRenderItem().renderItemIntoGUI(stack, (int) ((posX - 12) / 1.4f), (int) ((posY - 54) / 1.4f));
+			GlStateManager.popMatrix();
+		}
+	}
 	
 	/**
 	 * Draws a visual help where a new entity is spawned in

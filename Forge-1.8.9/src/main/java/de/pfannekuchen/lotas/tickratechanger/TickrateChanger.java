@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.time.Duration;
 
 import de.pfannekuchen.lotas.Binds;
-import de.pfannekuchen.lotas.challenges.ChallengeLoader;
 import de.pfannekuchen.lotas.config.ConfigManager;
 import de.pfannekuchen.lotas.mixin.MixinMinecraft;
 import de.pfannekuchen.lotas.mixin.tickratechanger.BindMinecraftServer;
@@ -216,7 +215,7 @@ public class TickrateChanger {
 			RLogAPI.logError(e1, "Savestate Error #3");
 		}
 		
-		if (Binds.timer.isPressed() && ChallengeLoader.map == null) {
+		if (Binds.timer.isPressed()) {
 			if (Timer.ticks < 1 || Timer.startTime == null) {
 				Timer.startTime = Duration.ofMillis(System.currentTimeMillis());
 				Timer.ticks = 1;

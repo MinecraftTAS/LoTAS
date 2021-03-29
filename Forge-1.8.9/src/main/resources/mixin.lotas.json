@@ -15,7 +15,6 @@
     	"MixinGuiScreenWorking",
     	"MixinMinecraft",
     	"MixinDropBlock",
-    	"MixinPotionEntityRenderer",
     	"tickratechanger.BindRenderItem",
     	"tickratechanger.BindSource",
     	"MixinDropItem",
@@ -24,8 +23,8 @@
     	"MixinI18n",
     	"MixinExplosionDropChance",
     	"MixinWorldborder",
-    	"MixinEndPortal",
     	"MixinLootEntity",
-    	"MixinLootBlock"
+    	"MixinLootBlock",
+    	"MixinAchievement"
 	]
 }

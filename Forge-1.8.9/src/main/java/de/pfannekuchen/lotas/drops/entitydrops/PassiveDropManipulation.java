@@ -106,8 +106,8 @@ public class PassiveDropManipulation extends GuiLootManipulation.DropManipulatio
         optimizeRabbit.yPosition = 176;
         optimizeSnowgolem.yPosition = 192;
         optimizeSheep.yPosition = 208;
-        optimizeSquid.yPosition = 224;
-        optimizeHorses.yPosition = 240;
+        optimizeSquid.yPosition = 160;
+        optimizeHorses.yPosition = 80;
         optimizeIronGolem.yPosition = 96;
         optimizeChicken.xPosition = x;
         optimizeMooshroom.xPosition = x;

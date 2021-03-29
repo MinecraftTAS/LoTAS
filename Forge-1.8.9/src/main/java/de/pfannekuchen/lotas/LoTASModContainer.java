@@ -1,27 +1,24 @@
 package de.pfannekuchen.lotas;
 
+import static rlog.RLogAPI.instantiate;
+import static rlog.RLogAPI.logDebug;
+import static rlog.RLogAPI.logError;
+
 import java.io.File;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.file.Files;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 
-import de.pfannekuchen.lotas.challenges.ChallengeMap;
 import de.pfannekuchen.lotas.config.ConfigManager;
 import de.pfannekuchen.lotas.gui.GuiSeedList;
 import de.pfannekuchen.lotas.gui.GuiSeedList.SeedEntry;
 import de.pfannekuchen.lotas.gui.InfoGui;
 import de.pfannekuchen.lotas.manipulation.WorldManipulation;
 import de.pfannekuchen.lotas.tickratechanger.TickrateChanger;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ImageBufferDownload;
-import net.minecraft.client.renderer.ThreadDownloadImageData;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -29,7 +26,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import static rlog.RLogAPI.*;
 
 @Mod(acceptedMinecraftVersions = "1.8.9", canBeDeactivated = false, clientSideOnly = true, modid = "lotas", name = "LoTAS", version = "${version}")
 public class LoTASModContainer {
@@ -41,7 +37,6 @@ public class LoTASModContainer {
 	 */
 	
 	public static volatile boolean playSound = false;
-	public static final List<ChallengeMap> maps = new ArrayList<>();
 	
 	static {
 		try {
@@ -77,24 +72,6 @@ public class LoTASModContainer {
 				logDebug("[PreInit] Loading Tickrate");
 				TickrateChanger.index = ConfigManager.getInt("hidden", "tickrate");
 				TickrateChanger.updateTickrate(TickrateChanger.ticks[TickrateChanger.index]);
-			}
-			
-			logDebug("[PreInit] Downloading TAS Challenge Maps");
-			try {
-				ObjectInputStream stream = new ObjectInputStream(new URL("http://mgnet.work/maps1.8.9.txt").openStream());
-				int maps = stream.readInt();
-				for (int i = 0; i < maps; i++) {
-					ChallengeMap map = (ChallengeMap) stream.readObject();
-					logDebug("[TASChallenges] Downloading " + map.name + " image.");
-					ResourceLocation loc = new ResourceLocation("maps", map.name);
-					ThreadDownloadImageData dw = new ThreadDownloadImageData((File) null, "http://mgnet.work/maps/" + map.name + ".png", null, new ImageBufferDownload());
-					Minecraft.getMinecraft().getTextureManager().loadTexture(loc, dw);
-					map.resourceLoc = loc.getResourcePath();
-					LoTASModContainer.maps.add(map);
-				}
-				stream.close();
-			} catch (Exception e1) {
-				logError(e1, "Couldn't download Challenge Maps #6");
 			}
 		}).start();
 		
