@@ -25,7 +25,6 @@ import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.util.Timer;
 import net.minecraft.util.math.MathHelper;
-import rlog.RLogAPI;
 
 @Mixin(Minecraft.class)
 public class MixinMinecraft {
@@ -56,6 +55,9 @@ public class MixinMinecraft {
 	@Shadow
 	public EntityPlayerSP player;
 	
+	@Shadow
+	private boolean isGamePaused;
+	
 	@Inject(method = "loadWorld", at = @At("HEAD"))
 	public void injectloadWorld(WorldClient worldClientIn, CallbackInfo ci) {
 		isLoadingWorld = ConfigManager.getBoolean("tools", "hitEscape") && worldClientIn != null;
@@ -67,27 +69,29 @@ public class MixinMinecraft {
 		}
 	}
 	
+	@Inject(method = "updateDisplay", cancellable = true, at = @At("HEAD"))
+	public void redoUpdateDisplay(CallbackInfo ci) {
+		if (SavestateMod.isLoading) ci.cancel();
+	}
+	
 	@Inject(method = "runTick", at = @At(value="HEAD"))
 	public void injectrunTick(CallbackInfo ci) {
 		if (ConfigManager.getBoolean("tools", "lAutoClicker")) rightClickDelayTimer = 0;
-		
+    	
 		TickrateChanger.show = !TickrateChanger.show;
 		
 		if (Hotkeys.shouldSavestate) {
 			Hotkeys.shouldSavestate = false;
-			try {
-				SavestateMod.savestate();
-			} catch (IOException e) {
-				RLogAPI.logError(e, "[Savestate] Savestate Error #3");
-			}
+			SavestateMod.savestate(null);
 		}
 		
 		if (Hotkeys.shouldLoadstate) {
 			Hotkeys.shouldLoadstate = false;
 			try {
-				SavestateMod.loadstate();
+				if (ChallengeLoader.map != null) ChallengeLoader.reload();
+				else if (SavestateMod.hasSavestate()) SavestateMod.loadstate(-1);
 			} catch (IOException e) {
-				RLogAPI.logError(e, "[Savestate] Loadstate Error #3");
+				e.printStackTrace();
 			}
 		}
 		
@@ -95,7 +99,6 @@ public class MixinMinecraft {
 			TickrateChanger.resetAdvanceClient();
 		}
 		
-		TickrateChanger.timeOffset = System.currentTimeMillis();
 		TickrateChanger.ticksPassed++;
 		if (de.pfannekuchen.lotas.tickratechanger.Timer.running) {
 			if (currentScreen == null) de.pfannekuchen.lotas.tickratechanger.Timer.ticks++;
@@ -133,10 +136,21 @@ public class MixinMinecraft {
     public void injectrunGameLoop(CallbackInfo ci) throws IOException {
     	das--;
     	
+    	if (TickrateChanger.tickrate == 0) {
+    		TickrateChanger.timeOffset += System.currentTimeMillis() - TickrateChanger.timeSinceZero;
+    		TickrateChanger.timeSinceZero = System.currentTimeMillis();
+    	}
+    	
     	if (TickrateChanger.tickrate == 0 && Keyboard.isKeyDown(Hotkeys.advance.getKeyCode()) && das <= 0 && !Hotkeys.isFreecaming) {
     		TickrateChanger.advanceTick();
     		das = 15;
-    	} 
+    	}
+    	if (TickrateChanger.tickrate == 0 && currentScreen == null && Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
+    		((Minecraft) (Object) this).displayGuiScreen(new GuiIngameMenu());
+    		TickrateChanger.updateTickrate(Hotkeys.savedTickrate);
+    		Hotkeys.isFreecaming = false;
+    		Minecraft.getMinecraft().renderGlobal.loadRenderers();
+    	}
     	
     	//Controls for freecam
     	if (Hotkeys.isFreecaming) {
@@ -168,6 +182,9 @@ public class MixinMinecraft {
 				TickrateChanger.updateTickrate(Hotkeys.savedTickrate);
 			} else {
 				Hotkeys.isFreecaming = true;
+				player.moveForward = 0f;
+				player.moveStrafing = 0f;
+				player.moveVertical = 0f;
 				Hotkeys.savedTickrate = (int)TickrateChanger.tickrate;
 				TickrateChanger.updateTickrate(0);
 			}
@@ -200,12 +217,27 @@ public class MixinMinecraft {
     
 	@Inject(method = "displayGuiScreen", at = @At("HEAD"))
 	public void injectdisplayGuiScreen(GuiScreen guiScreenIn, CallbackInfo ci) {
+		if (((guiScreenIn == null) ? true : guiScreenIn instanceof GuiIngameMenu) && SavestateMod.isLoading) {
+			SavestateMod.isLoading = false;
+	        SavestateMod.showLoadstateDone = true;
+	        SavestateMod.timeTitle = System.currentTimeMillis();
+		}
     	if (guiScreenIn == null) {
-    		if (SavestateMod.applyVelocity) {
-    			SavestateMod.applyVelocity = false;
-    			player.motionX = SavestateMod.motionX;
-    			player.motionY = SavestateMod.motionY;
-    			player.motionZ = SavestateMod.motionZ;
+    		if (ChallengeLoader.map != null) {
+    			gameSettings.enableVsync = true;
+    			gameSettings.viewBobbing = false;
+    			gameSettings.useVbo = true;
+    			gameSettings.renderDistanceChunks = 8;
+    			gameSettings.fancyGraphics = false;
+    			gameSettings.particleSetting = 2;
+    		}
+    		if(player!=null) {
+				if (SavestateMod.applyVelocity) {
+					SavestateMod.applyVelocity = false;
+					player.motionX = SavestateMod.motionX;
+					player.motionY = SavestateMod.motionY;
+					player.motionZ = SavestateMod.motionZ;
+				}
     		}
     	}
 	}

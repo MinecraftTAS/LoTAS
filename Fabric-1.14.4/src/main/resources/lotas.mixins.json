@@ -30,7 +30,8 @@
     "events.RenderHandEvent",
     "MixinBlaze",
     "MixinGameOver",
-    "MixinExplosionDropChance"
+    "MixinExplosionDropChance",
+    "keystrokes.MixinInGameHud"
   ],
   "injectors": {
     "defaultRequire": 1

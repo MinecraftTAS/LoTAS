@@ -32,11 +32,12 @@ public class Hotkeys {
 	public static int savedTickrate;
 	
 	public static void keyEvent() throws IOException {
+		
 		if (saveState.isPressed() && ChallengeLoader.map == null) {
-			Minecraft.getMinecraft().displayGuiScreen(new GuiIngameMenu());
 			RLogAPI.logDebug("[Hotkeys] Requesting Savestate");
+			Minecraft.getMinecraft().displayGuiScreen(new GuiIngameMenu());
 			shouldSavestate = true;
-		} else if (loadState.isPressed() && ChallengeLoader.map == null) {
+		} else if (loadState.isPressed()) {
 			Minecraft.getMinecraft().displayGuiScreen(new GuiIngameMenu());
 			shouldLoadstate = true;
 			RLogAPI.logDebug("[Hotkeys] Requesting Loadstate");

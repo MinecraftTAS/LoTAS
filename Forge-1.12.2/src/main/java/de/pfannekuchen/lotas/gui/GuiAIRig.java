@@ -32,29 +32,34 @@ public class GuiAIRig extends GuiScreen {
 		xText.setText(spawnX + "");
 		yText = new GuiTextField(92, Minecraft.getMinecraft().fontRenderer, width / 2 - 30, height - 50, 60, 20);
 		yText.setText(spawnY + "");
-		zText = new GuiTextField(93, Minecraft.getMinecraft().fontRenderer, width / 2 + 50, height - 50, 60, 20);
+		zText = new GuiTextField(93, Minecraft.getMinecraft().fontRenderer, width / 2 + 40, height - 50, 60, 20);
 		zText.setText(spawnZ + "");
 		
 		buttonList.add(new GuiButton(2, width / 2 - 100, height - 25, 200, 20, "Change Target"));
 		
-		this.buttonList.add(new GuiButton(7, width / 2 - 35, 80, 30, 20, "X++"));
-		this.buttonList.add(new GuiButton(3, width / 2 + 5, 80, 30, 20, "X--"));
-		this.buttonList.add(new GuiButton(5, width / 2 - 35, 105, 30, 20, "Y++"));
-		this.buttonList.add(new GuiButton(8, width / 2 + 5, 105, 30, 20, "Y--"));
-		this.buttonList.add(new GuiButton(6, width / 2 - 35, 130, 30, 20, "Z++"));
-		this.buttonList.add(new GuiButton(4, width / 2 + 5, 130, 30, 20, "Z--"));
+		this.buttonList.add(new GuiButton(7, width / 2 - 100, height - 72, 60, 20, "X++"));
+		this.buttonList.add(new GuiButton(3, width / 2 - 100, height - 94, 60, 20, "X--"));
+		this.buttonList.add(new GuiButton(5, width / 2 - 30, height - 72, 60, 20, "Y++"));
+		this.buttonList.add(new GuiButton(8, width / 2 - 30, height - 94, 60, 20, "Y--"));
+		this.buttonList.add(new GuiButton(6, width / 2 + 40, height - 72, 60, 20, "Z++"));
+		this.buttonList.add(new GuiButton(4, width / 2 + 40, height - 94, 60, 20, "Z--"));
+		this.buttonList.add(new GuiButton(10, width / 2 - 100, height - 116, 200, 20, "Move to me"));
+		this.buttonList.add(new GuiButton(11, width / 2 - 100, height - 138, 200, 20, "Move to entity"));
 		RLogAPI.logDebug("[AiRig] Trying to get all Entities around the Player");
 		entities = mc.getIntegratedServer().getWorld(mc.player.dimension).getEntitiesWithinAABB(EntityLiving.class, mc.player.getEntityBoundingBox().grow(32, 32, 32));
 		RLogAPI.logDebug("[AiRig] Found " + entities.size() + " Entities around the Player");
 		selectedIndex = 0;
 		
-		buttonList.get(0).enabled = false;
-		if (entities.size() == 0) {
+		if (selectedIndex + 2 > entities.size()) {
+			buttonList.get(1).enabled = false;
+		} else {
+			buttonList.get(1).enabled = true;
+		}
+		
+		if (selectedIndex - 1 < 0) {
 			buttonList.get(0).enabled = false;
-			buttonList.get(1).enabled = false;
-			buttonList.get(2).enabled = false;
-		} else if (entities.size() == 1) {
-			buttonList.get(1).enabled = false;
+		} else {
+			buttonList.get(0).enabled = true;
 		}
 		super.initGui();
 	}
@@ -106,6 +111,26 @@ public class GuiAIRig extends GuiScreen {
 		case 4:
 			spawnZ--;
 			break;
+		case 10:
+			spawnX = (int) mc.player.posX;
+			spawnY = (int) mc.player.posY;
+			spawnZ = (int) mc.player.posZ;
+			xText.setText(spawnX + "");
+			yText.setText(spawnY + "");
+			zText.setText(spawnZ + "");
+			break;
+		case 11:
+			try {
+				spawnX = (int) entities.get(selectedIndex).posX;
+				spawnY = (int) entities.get(selectedIndex).posY;
+				spawnZ = (int) entities.get(selectedIndex).posZ;
+				xText.setText(spawnX + "");
+				yText.setText(spawnY + "");
+				zText.setText(spawnZ + "");
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+			break;
 		}
 		
 		xText.setText(spawnX + "");
@@ -124,6 +149,18 @@ public class GuiAIRig extends GuiScreen {
 			} catch (Exception e) {
 				RLogAPI.logError(e, "Parse Invalid Data #2");
 			}
+		}
+		
+		if (selectedIndex + 2 > entities.size()) {
+			buttonList.get(1).enabled = false;
+		} else {
+			buttonList.get(1).enabled = true;
+		}
+		
+		if (selectedIndex - 1  < 0) {
+			buttonList.get(0).enabled = false;
+		} else {
+			buttonList.get(0).enabled = true;
 		}
 	}
 
@@ -152,7 +189,7 @@ public class GuiAIRig extends GuiScreen {
 		xText.drawTextBox();
 		yText.drawTextBox();
 		zText.drawTextBox();
-		drawCenteredString(mc.fontRenderer, entities.get(selectedIndex).getClass().getSimpleName().replaceFirst("Entity", ""), width / 2, 5, 0xFFFFFF);
+		drawCenteredString(mc.fontRenderer, entities.get(selectedIndex).getClass().getSimpleName().replaceFirst("Entity", "") + " (" + entities.get(selectedIndex).getPosition().getX() + ", " + entities.get(selectedIndex).getPosition().getY() + ", " + entities.get(selectedIndex).getPosition().getZ() + ")", width / 2, 5, 0xFFFFFF);
 	}
 	
 }

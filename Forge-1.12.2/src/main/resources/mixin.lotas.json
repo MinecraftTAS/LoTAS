@@ -29,6 +29,8 @@
     	"MixinExplosionDropChance",
     	"MixinWorldborder",
     	"MixinTegratedServer",
-    	"MixinEndPortal"
+    	"MixinEndPortal",
+    	"MixinLootEntity",
+    	"MixinLootBlock"
 	]
 }

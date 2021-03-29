@@ -30,12 +30,15 @@ import net.minecraft.client.gui.toasts.GuiToast;
  * 
  * == Rewrite by Pancake ==
  * Yeah, so with newly gained knowledge of ModifyVariable, I have just completly rewritten this mixin. It's readable now :)
+ * 
+ * 21.03.21
+ * I did it again, I rewrote it again. Looks smoother now
  */
 @Mixin(GuiToast.ToastInstance.class)
 public abstract class BindToast{
 	
 	@ModifyVariable(method = "render(II)Z", at = @At(value = "STORE", ordinal=0))
 	public long modifyAnimationTime(long animationTimer) {
-		return TickrateChanger.tickrate == 0 || TickrateChanger.advanceClient ? (TickrateChanger.ticksPassed * 50L) : ((TickrateChanger.ticksPassed * 50L) + ((System.currentTimeMillis() - TickrateChanger.timeOffset) * ((int)TickrateChanger.tickrate / 20L)));
+		return TickrateChanger.getMilliseconds();
 	}
 }

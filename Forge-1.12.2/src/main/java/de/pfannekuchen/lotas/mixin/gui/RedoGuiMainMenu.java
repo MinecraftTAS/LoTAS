@@ -5,21 +5,15 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URL;
-import java.nio.channels.Channels;
-import java.nio.channels.FileChannel;
-import java.nio.channels.ReadableByteChannel;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import org.apache.commons.io.FileUtils;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import de.pfannekuchen.lotas.LoTASModContainer;
 import de.pfannekuchen.lotas.config.ConfigManager;
 import de.pfannekuchen.lotas.gui.GuiAcceptance;
 import de.pfannekuchen.lotas.gui.GuiConfiguration;
@@ -28,7 +22,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiScreen;
-import rlog.RLogAPI;
 import work.mgnet.identifier.Client;
 
 @Mixin(GuiMainMenu.class)
@@ -52,22 +45,12 @@ public abstract class RedoGuiMainMenu extends GuiScreen {
 
 	@Inject(at = @At("RETURN"), method = "addSingleplayerMultiplayerButtons")
 	public void redoaddSingleplayerMultiplayerButtons(int p_73969_1_, int p_73969_2_, CallbackInfo ci) {
-		LoTASModContainer.tutorialState = -1;
 		this.buttonList.get(1).id = 24;
 		this.buttonList.get(1).displayString = "Speed up Video";
 		this.modButton.width = this.buttonList.get(1).width;
 		this.modButton.visible = false;
 		buttonList.add(new GuiButton(69, modButton.x, modButton.y, modButton.width, modButton.height, "Configuration"));
 		this.realmsButton.visible = false;
-        
-        if (new File("saves/tutorial").exists()) {
-        	try {
-				FileUtils.deleteDirectory(new File("saves/tutorial"));
-			} catch (IOException e) {
-				RLogAPI.logError(e, "[Tutorial] Couldn't delete Tutorial #4");
-			}
-        	RLogAPI.logDebug("[Tutorial] Tutorial has been deleted");
-        }
         
         if (!ConfigManager.getBoolean("hidden", "acceptedDataSending")) {
         	Minecraft.getMinecraft().displayGuiScreen(new GuiAcceptance());
@@ -120,24 +103,7 @@ public abstract class RedoGuiMainMenu extends GuiScreen {
     
 	@Inject(at= @At("HEAD"), method = "actionPerformed")
 	public void actionPerformed(GuiButton button, CallbackInfo ci) throws IOException {
-		if (button.id == 20) {
-			URL url = new URL("http://mgnet.work/tutorial.zip");
-			ReadableByteChannel readableByteChannel = Channels.newChannel(url.openStream());
-			
-			FileOutputStream fileOutputStream = new FileOutputStream("saves/tutorial.zip");
-			FileChannel fileChannel = fileOutputStream.getChannel();
-			
-			fileOutputStream.getChannel()
-			  .transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
-			
-			fileOutputStream.close();
-			fileChannel.close();
-			
-			unzip("saves/tutorial.zip", "saves/tutorial");
-			
-			Minecraft.getMinecraft().launchIntegratedServer("tutorial", "tutorial", null);
-			LoTASModContainer.tutorialState = 1;
-		} else if (button.id == 69) {
+		if (button.id == 69) {
 			mc.displayGuiScreen(new GuiConfiguration());
 		} else if (button.id == 24) {
 			mc.displayGuiScreen(new GuiVideoUpspeeder());

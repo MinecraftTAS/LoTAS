@@ -3,6 +3,7 @@ package de.pfannekuchen.lotas.challenges;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -23,6 +24,7 @@ import com.mojang.authlib.GameProfileRepository;
 import com.mojang.authlib.minecraft.MinecraftSessionService;
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
 
+import de.pfannekuchen.lotas.savestate.SavestateMod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiScreenWorking;
@@ -41,6 +43,7 @@ import net.minecraft.server.management.PlayerProfileCache;
 import net.minecraft.tileentity.TileEntitySkull;
 import net.minecraft.util.ReportedException;
 import net.minecraft.world.GameType;
+import net.minecraft.world.WorldServer;
 import net.minecraft.world.WorldSettings;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.storage.ISaveHandler;
@@ -52,29 +55,55 @@ public class ChallengeLoader {
 	public static boolean startTimer;
 	
 	public static void reload() throws IOException {
+		Minecraft.getMinecraft().displayGuiScreen(null);
+		SavestateMod.isLoading = true;
+		
+		for (WorldServer w : Minecraft.getMinecraft().integratedServer.worlds) {
+			w.disableLevelSaving = true;
+		}
+		
         Minecraft.getMinecraft().world.sendQuittingDisconnectingPacket();
         Minecraft.getMinecraft().loadWorld((WorldClient)null);
-		load();
+        load(false);
 	}
 	
-	public static void load() throws IOException {
-		File worldDir = new File(Minecraft.getMinecraft().mcDataDir, "challenges" + File.separator + "");
+	public static void load(boolean reload) throws IOException {
+		final File worldDir = new File(Minecraft.getMinecraft().mcDataDir, "challenges" + File.separator + "");
 		if (worldDir.exists()) FileUtils.deleteDirectory(worldDir);
 		
-		// Download
-		URL url = map.map;
-		ReadableByteChannel readableByteChannel = Channels.newChannel(url.openStream());
-		
-		FileOutputStream fileOutputStream = new FileOutputStream("map.zip");
-		FileChannel fileChannel = fileOutputStream.getChannel();
-		
-		fileOutputStream.getChannel()
-		  .transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
-		
-		fileOutputStream.close();
-		fileChannel.close();
-		
+		if (reload) {
+			final URL url = map.map;
+			ReadableByteChannel readableByteChannel = Channels.newChannel(url.openStream());
+			
+			final FileOutputStream fileOutputStream = new FileOutputStream("map.zip");
+			final FileChannel fileChannel = fileOutputStream.getChannel();
+			
+			fileOutputStream.getChannel().transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
+			
+			fileOutputStream.close();
+			fileChannel.close();
+		}
 		unzip("map.zip", "challenges/" + map.name);
+		
+		new Thread(() -> {
+			try {
+				// Download
+				final URL url = map.map;
+				final ReadableByteChannel readableByteChannel = Channels.newChannel(url.openStream());
+				
+				final FileOutputStream fileOutputStream = new FileOutputStream("map.zip");
+				final FileChannel fileChannel = fileOutputStream.getChannel();
+				
+				fileOutputStream.getChannel().transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
+				
+				fileOutputStream.close();
+				fileChannel.close();
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}).start();
 		
 		// Load World
 		startTimer = true;

@@ -3,6 +3,7 @@ package de.pfannekuchen.lotas.gui;
 import java.time.Duration;
 
 import de.pfannekuchen.lotas.challenges.ChallengeLoader;
+import de.pfannekuchen.lotas.tickratechanger.Timer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiSlot;
@@ -55,12 +56,8 @@ public class GuiLeaderboard extends GuiScreen {
 		protected void drawSlot(int slotIndex, int xPos, int yPos, int heightIn, int mouseXIn, int mouseYIn, float partialTicks) {
             String runner = ChallengeLoader.map.leaderboard[slotIndex].split(";")[0];
             GuiLeaderboard.this.drawString(GuiLeaderboard.this.fontRenderer, runner, xPos + 2, yPos + 1, slotIndex % 2 == 0 ? 16777215 : 9474192);
-            String time = getTime(Duration.ofMillis(Integer.parseInt(ChallengeLoader.map.leaderboard[slotIndex].split(";")[1])));
+            String time = Timer.getDuration(Duration.ofMillis(Integer.parseInt(ChallengeLoader.map.leaderboard[slotIndex].split(";")[1])));
             GuiLeaderboard.this.drawString(GuiLeaderboard.this.fontRenderer, time, xPos + 2 + 213 - GuiLeaderboard.this.fontRenderer.getStringWidth(time), yPos + 1, slotIndex % 2 == 0 ? 16777215 : 9474192);
-		}
-		
-		private String getTime(Duration d) {
-			return d.toHours() + ":" + d.toMinutes() % 60 + ":" + d.getSeconds() % 60 + "." + (int) ((d.toMillis() % 1000) / 100);
 		}
 		
 	}

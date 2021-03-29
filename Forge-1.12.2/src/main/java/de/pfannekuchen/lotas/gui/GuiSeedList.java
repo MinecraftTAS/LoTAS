@@ -1,6 +1,5 @@
 package de.pfannekuchen.lotas.gui;
 
-import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,11 +10,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiListExtended;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.ImageBufferDownload;
-import net.minecraft.client.renderer.ThreadDownloadImageData;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
-import rlog.RLogAPI;
 
 /**
  * Draws a list of commonly used seeds in TASing and speedrunning.
@@ -39,7 +35,7 @@ public class GuiSeedList extends GuiListExtended {
 		public String description;
 		public String seed;
 		private int index;
-		private ResourceLocation loc = null;
+		public ResourceLocation loc = null;
 		
 		public SeedEntry(String name, String description, String seed, int index) {
 			this.name = name;
@@ -56,13 +52,6 @@ public class GuiSeedList extends GuiListExtended {
 		@Override
 		public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, int mouseX, int mouseY,
 				boolean isSelected, float partialTicks) {
-			
-			if (loc == null) {
-				RLogAPI.logDebug("[SeedList] Downloading " + seed + " image.");
-				loc = new ResourceLocation("seeds", seed);
-				ThreadDownloadImageData dw = new ThreadDownloadImageData((File) null, "http://mgnet.work/seeds/" + seed + ".png", null, new ImageBufferDownload());
-				Minecraft.getMinecraft().getTextureManager().loadTexture(loc, dw);
-			}
 			
 			String s = name;
 			String s1 = description;
@@ -83,7 +72,6 @@ public class GuiSeedList extends GuiListExtended {
 					8421504);
 			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 			GlStateManager.enableBlend();
-			//GL11.glBindTexture(GL11.GL_TEXTURE_2D, dw.getGlTextureId());
 			Minecraft.getMinecraft().getTextureManager().bindTexture(loc);
 			Gui.drawModalRectWithCustomSizedTexture(x, y, 0.0F, 0.0F, 32, 32, 32.0F, 32.0F);
 			GlStateManager.disableBlend();

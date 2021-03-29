@@ -2,6 +2,8 @@ package de.pfannekuchen.lotas.savestate;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.apache.commons.io.FileUtils;
 
@@ -11,7 +13,11 @@ import de.pfannekuchen.lotas.mixin.gui.RedoGuiIngameMenu;
 import de.pfannekuchen.lotas.tickratechanger.Timer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.client.multiplayer.WorldClient;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.integrated.IntegratedServer;
+import net.minecraft.world.MinecraftException;
+import net.minecraft.world.WorldServer;
+import net.minecraft.world.chunk.storage.AnvilChunkLoader;
 import rlog.RLogAPI;
 
 /**
@@ -27,12 +33,18 @@ public class SavestateMod {
 	public static double motionY;
 	public static double motionZ;
 	
+	public static boolean showSavestateDone;
+	public static boolean showLoadstateDone;
+	public static long timeTitle;
+	
+	public static boolean isLoading;
+	
 	/**
 	 * Returns the motion of the player, and the current time of the timer as a string
 	 * @return Data as String
 	 */
-	public static String generateSavestateFile() {
-		EntityPlayerSP p = Minecraft.getMinecraft().player;
+	public static final String generateSavestateFile() {
+		final EntityPlayerSP p = Minecraft.getMinecraft().player;
 		return p.motionX + ":" + p.motionY + ":" + p.motionZ + ":" + Timer.ticks;
 	}
 	
@@ -40,71 +52,129 @@ public class SavestateMod {
 	 * Closes the server and creates a savestate in .minecraft/savestates/
 	 * @throws IOException
 	 */
-	public static void savestate() throws IOException {
+	public static void savestate(String name) {
 		RLogAPI.logDebug("[Savestate] Trying to create a Savestate");
-		String data = generateSavestateFile();
+		final String data = generateSavestateFile();
+		final Minecraft mc = Minecraft.getMinecraft();
 		
-		String worldName = Minecraft.getMinecraft().getIntegratedServer().getFolderName();
-		File worldDir = new File(Minecraft.getMinecraft().mcDataDir, "saves/" + worldName);
-		File savestatesDir = new File(Minecraft.getMinecraft().mcDataDir, "savestates/");
-		
-		if(!savestatesDir.exists()) savestatesDir.mkdir();
-		
-        Minecraft.getMinecraft().world.sendQuittingDisconnectingPacket();
-        Minecraft.getMinecraft().loadWorld((WorldClient)null);
+		// Hack 1
+		final MinecraftServer server = mc.integratedServer;
+		server.getPlayerList().saveAllPlayerData();
+		server.saveAllWorlds(false);
+		for (WorldServer world : server.worlds) {
+			try {
+				world.saveAllChunks(true, null);
+			} catch (MinecraftException e) {
+				e.printStackTrace();
+			}
+		}
+        for (final WorldServer worldserver : mc.integratedServer.worlds) {
+        	worldserver.disableLevelSaving = true;
+        }
         
-        int existingSavestates = savestatesDir.listFiles((d, s) -> {
-        	return s.startsWith(worldName);
-        }).length;
+        // Orig Hack 1
+		/*Minecraft.getMinecraft().world.sendQuittingDisconnectingPacket();
+        Minecraft.getMinecraft().loadWorld((WorldClient)null);*/
         
-        File savestateDir = new File(savestatesDir, worldName + (existingSavestates+1));
+        for(WorldServer world:server.worlds) {
+    		AnvilChunkLoader chunkloader=(AnvilChunkLoader)world.getChunkProvider().chunkLoader;
+    		while(chunkloader.getPendingSaveCount()>0) {
+    		}
+    	}
         
-        double x = Double.parseDouble(data.split(":")[0]);
-        double y = Double.parseDouble(data.split(":")[1]);
-        double z = Double.parseDouble(data.split(":")[2]);
+        new Thread(() -> {
+    		final String worldName = server.getFolderName();
+    		final File worldDir = new File(mc.mcDataDir, "saves/" + worldName);
+    		final File savestatesDir = new File(mc.mcDataDir, "saves/savestates/");
+    		
+    		if (!savestatesDir.exists()) savestatesDir.mkdir();
+    		
+    		final int existingSavestates = savestatesDir.listFiles((d, s) -> {
+            	return s.startsWith(worldName + "-Savestate");
+            }).length;
+            
+            File savestateDir = new File(savestatesDir, worldName + "-Savestate" + (existingSavestates + 1));
+            
+            try {
+				FileUtils.copyDirectory(worldDir, savestateDir);
+				Files.write(data.getBytes(), new File(savestateDir, "savestate.dat"));
+				Files.write((name == null) ? new SimpleDateFormat("MM-dd-yyyy HH.mm.ss").format(new Date()).getBytes() : name.getBytes(), new File(savestateDir, "lotas.dat"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+            
+            try {
+				TrackerFile.increaseSavestates(savestatesDir, worldName);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+            
+            // Hack 2
+            for (WorldServer worldserver : server.worlds) {
+            	worldserver.disableLevelSaving = false;
+            }
+            RLogAPI.logDebug("[Savestate] Savestate created");
+        }).start();
         
-        FileUtils.copyDirectory(worldDir, savestateDir);
-        Files.write(data.getBytes(), new File(savestateDir, "savestate.dat"));
-        motionX = x;
-        motionY = y;
-        motionZ = z;
-        applyVelocity = true;
-        Minecraft.getMinecraft().launchIntegratedServer(worldName, worldName, null);
-        RLogAPI.logDebug("[Savestate] Savestate created");
+        
+        // Orig Hack 2
+        //applyVelocity = true;
+        //Minecraft.getMinecraft().launchIntegratedServer(worldName, worldName, null);
+        
+        showSavestateDone = true;
+        timeTitle = System.currentTimeMillis();
 	}
 	
 	/**
 	 * Closes the server and loads the latest savestate in .minecraft/savestates/
 	 * @throws IOException
 	 */
-	public static void loadstate() throws IOException {
-		RLogAPI.logDebug("[Savestate] Trying to Loadstate");
-		String worldName = Minecraft.getMinecraft().getIntegratedServer().getFolderName();
-		File worldDir = new File(Minecraft.getMinecraft().mcDataDir, "saves/" + worldName);
-		File savestatesDir = new File(Minecraft.getMinecraft().mcDataDir, "savestates/");
+	public static void loadstate(int number) {
+		if (!hasSavestate()) return;
+		isLoading = true;
 		
-        //Minecraft.getMinecraft().world.sendQuittingDisconnectingPacket();
-        Minecraft.getMinecraft().getIntegratedServer().stopServer();
-        //Minecraft.getMinecraft().loadWorld((WorldClient)null);
+		RLogAPI.logDebug("[Savestate] Trying to Loadstate");
+		final Minecraft mc = Minecraft.getMinecraft();
+		final IntegratedServer server = mc.integratedServer;
+		
+		// Imagine Saving the World when loading a state ._.
+        for (WorldServer worldserver : server.worlds) {
+        	worldserver.disableLevelSaving = true;
+        }
+		
+        mc.world.sendQuittingDisconnectingPacket();
+        Minecraft.stopIntegratedServer();
         
-        int existingSavestates = savestatesDir.listFiles((d, s) -> {
-        	return s.startsWith(worldName);
+    	final String worldName = server.getFolderName();
+		final File worldDir = new File(mc.mcDataDir, "saves/" + worldName);
+		final File savestatesDir = new File(mc.mcDataDir, "saves/savestates/");
+        
+		int existingSavestates = savestatesDir.listFiles((d, s) -> {
+        	return s.startsWith(worldName + "-Savestate");
         }).length;
         
-        File savestateDir = new File(savestatesDir, worldName + (existingSavestates));
-        String data = new String(Files.toByteArray(new File(savestateDir, "savestate.dat")));
-     
-        motionX = Double.parseDouble(data.split(":")[0]);
-        motionY = Double.parseDouble(data.split(":")[1]);
-        motionZ = Double.parseDouble(data.split(":")[2]);
-        Timer.ticks = (int) Double.parseDouble(data.split(":")[3]);
-        applyVelocity = true;
+		if (number != -1) existingSavestates = number;
+		
+		final File savestateDir = new File(savestatesDir, worldName + "-Savestate" + (existingSavestates));
+		try {
+			final String data = new String(Files.toByteArray(new File(savestateDir, "savestate.dat")));
+			FileUtils.deleteDirectory(worldDir);
+			FileUtils.copyDirectory(savestateDir, worldDir);
+			
+			motionX = Double.parseDouble(data.split(":")[0]);
+			motionY = Double.parseDouble(data.split(":")[1]);
+			motionZ = Double.parseDouble(data.split(":")[2]);
+			Timer.ticks = Integer.parseInt(data.split(":")[3]);
+			applyVelocity = true;
+            TrackerFile.increaseLoadstates(savestatesDir, worldName);
+		} catch (NumberFormatException | IOException e) {
+			e.printStackTrace();
+		}
+        mc.ingameGUI.getChatGUI().clearChatMessages(true);
         
-        FileUtils.deleteDirectory(worldDir);
-        FileUtils.copyDirectory(savestateDir, worldDir);
-        Minecraft.getMinecraft().launchIntegratedServer(worldName, worldName, null);
-        Minecraft.getMinecraft().ingameGUI.getChatGUI().clearChatMessages(true);
+        mc.launchIntegratedServer(worldName, worldName, null);
         RLogAPI.logDebug("[Savestates] Loadstate Done");
+        
 	}
 
 	/**
@@ -114,10 +184,10 @@ public class SavestateMod {
 	 */
 	public static boolean hasSavestate() {
 		String worldName = Minecraft.getMinecraft().getIntegratedServer().getFolderName();
-		File savestatesDir = new File(Minecraft.getMinecraft().mcDataDir, "savestates/");
+		File savestatesDir = new File(Minecraft.getMinecraft().mcDataDir, "saves/savestates/");
         if (!savestatesDir.exists()) return false;
 		int existingSavestates = savestatesDir.listFiles((d, s) -> {
-        	return s.startsWith(worldName);
+        	return s.startsWith(worldName + "-Savestate");
         }).length;
         return existingSavestates != 0;
 	}

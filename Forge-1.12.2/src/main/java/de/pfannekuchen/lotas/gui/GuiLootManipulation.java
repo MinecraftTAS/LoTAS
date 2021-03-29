@@ -1,213 +1,142 @@
 package de.pfannekuchen.lotas.gui;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.TreeMap;
+import java.util.ArrayList;
+import java.util.List;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiButton;
+import de.pfannekuchen.lotas.drops.blockdrops.DeadbushDropManipulation;
+import de.pfannekuchen.lotas.drops.blockdrops.GlowstoneDropManipulation;
+import de.pfannekuchen.lotas.drops.blockdrops.GravelDropManipulation;
+import de.pfannekuchen.lotas.drops.blockdrops.LeaveDropManipulation;
+import de.pfannekuchen.lotas.drops.blockdrops.OreDropManipulation;
+import de.pfannekuchen.lotas.drops.blockdrops.PlantsDropManipulation;
+import de.pfannekuchen.lotas.drops.blockdrops.SealanternDropManipulation;
+import de.pfannekuchen.lotas.drops.entitydrops.MonsterDropManipulation;
+import de.pfannekuchen.lotas.drops.entitydrops.NetherMobDropManipulation;
+import de.pfannekuchen.lotas.drops.entitydrops.PassiveDropManipulation;
+import de.pfannekuchen.lotas.drops.entitydrops.ZombieDropManipulation;
+import de.pfannekuchen.lotas.gui.parts.CheckboxWidget;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.gui.GuiIngameMenu;
-import net.minecraft.client.gui.GuiListExtended;
 import net.minecraft.client.gui.GuiScreen;
-import rlog.RLogAPI;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemStack;
 
 public class GuiLootManipulation extends GuiScreen {
 
-	public static Map<String, Boolean> drops = new TreeMap<String, Boolean>();
-	public static Map<String, Boolean> entityDrops = new TreeMap<String, Boolean>();
-	public static Map<String, Boolean> blockDrops = new TreeMap<String, Boolean>();
-	public static String selectedList = "Entity Drops";
-	public GuiListExtended list;
 
-	static {
-		blockDrops.put("Flint", false);
-		blockDrops.put("Glowstone", false);
-		blockDrops.put("Sealantern", false);
-		blockDrops.put("Wheatseeds", false);
-		blockDrops.put("Melons", false);
-		blockDrops.put("Apple", false);
-		blockDrops.put("Seed", false);
-		blockDrops.put("Potato", false);
-		blockDrops.put("Deadbush", false);
-		blockDrops.put("Carrot", false);
-		blockDrops.put("Redstone", false);
-		blockDrops.put("Lapis", false);
-		blockDrops.put("Cocoa_Beans", false);
-		blockDrops.put("Chorus_Plant", false);
-		blockDrops.put("Nether_Wart", false);
-		blockDrops.put("Mushroom_Block", false);
-		
-		entityDrops.put("Blaze_Rod", false);
-		entityDrops.put("Enderman_Enderpearl", false);
-		entityDrops.put("Slime_Slimeball", false);
-		entityDrops.put("Witch_Waterbreathing", false);
-		entityDrops.put("Witch_Swiftness", false);
-		entityDrops.put("Zombiepigman_Sword", false);
-		entityDrops.put("Spider_Eye", false);
-		entityDrops.put("Shulker_Shell", false);
-		entityDrops.put("Witch_Firepot", false);
-		entityDrops.put("Witch_Healingpot", false);
-		entityDrops.put("Witch_General", false);
-		entityDrops.put("Witherskeleton_Skull", false);
-		entityDrops.put("Zombie_Potato", false);
-		entityDrops.put("Zombie_Carrot", false);
-		entityDrops.put("Zombie_Iron", false);
-		entityDrops.put("Skeleton_BowArrow", false);
-		entityDrops.put("Ghast_Tear", false);
-		entityDrops.put("Creeper_Gunpowder", false);
-		entityDrops.put("Magma_Creme", false);
-		entityDrops.put("Elder_Guardian", false);
-		entityDrops.put("Guardian", false);
-		
-		entityDrops.put("Chicken", false);
-		entityDrops.put("Cow", false);
-		entityDrops.put("Mooshroom", false);
-		entityDrops.put("Pig", false);
-		entityDrops.put("Rabbit", false);
-		entityDrops.put("Sheep", false);
-		entityDrops.put("Squid", false);
-		entityDrops.put("Iron_Golem", false);
-	}
+    public static ArrayList<DropManipulation> manipulations;
+    public static int selected = 0;
 
-	@Override
+    static {
+        manipulations = new ArrayList<>();
+        manipulations.add(new GravelDropManipulation(0, 0, 0, 0));
+        manipulations.add(new LeaveDropManipulation(0, 0, 0, 0));
+        manipulations.add(new PlantsDropManipulation(0, 0, 0, 0));
+        manipulations.add(new DeadbushDropManipulation(0, 0, 0, 0));
+        manipulations.add(new GlowstoneDropManipulation(0, 0, 0, 0));
+        manipulations.add(new SealanternDropManipulation(0, 0, 0, 0));
+        manipulations.add(new OreDropManipulation(0, 0, 0, 0));
+        manipulations.add(new NetherMobDropManipulation(0, 0, 0, 0));
+        manipulations.add(new PassiveDropManipulation(0, 0, 0, 0));
+        manipulations.add(new MonsterDropManipulation(0, 0, 0, 0));
+        manipulations.add(new ZombieDropManipulation(0, 0, 0, 0));
+    }
+
+    public GuiLootManipulation(GuiIngameMenu gameMenuScreen) {
+        super();
+    }
+
+    @Override
 	public void initGui() {
-		
-		int w = width / 4;
-		
-		this.buttonList.add(new GuiButton(42069, (width / 2) - 20 - w, 16, w, 20, "Entity Drops"));
-		this.buttonList.add(new GuiButton(42069, (width / 2) + 20, 16, w, 20, "Block Drops"));
+        for (DropManipulation man : manipulations) {
+            DropManipulation.width = width;
+            DropManipulation.height = height;
+            DropManipulation.y = 25;
+            DropManipulation.x = (int) (width / 3.5f + 24);
+            man.update();
+        }
+        super.initGui();
+    }
+    
+    @Override
+    public void mouseClicked(int mouseX, int mouseY, int button) {
+        manipulations.get(selected).mouseAction(mouseX, mouseY, button);
+        if (mouseX > width / 3.5f || mouseX < 25) return;
+        mouseY-=30;
+        mouseY /= 15;
+        if (mouseY < 0) return;
+        if (manipulations.size() - 1 >= (int) mouseY)
+            selected = (int) mouseY;
+    }
 
-		this.buttonList.add(new GuiButton(55, (width / 2) - w, height - 26, w * 2, 20, "Done"));
+    @Override
+    public void drawScreen(int mouseX, int mouseY, float delta) {
+    	drawDefaultBackground();
+        drawBackground(0);
+        
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferBuilder = tessellator.getBuffer();
 
-		
-		int i = 0;
-		int widthOfBtn = (int) (this.width * .95f / 4);
-		int heightOfBtn = 20;
+        GlStateManager.disableTexture2D();
+        GlStateManager.color(.5f, .5f, .5f, 0.5F);
+        bufferBuilder.begin(7, DefaultVertexFormats.POSITION);
+        bufferBuilder.pos(24, 24, 0).endVertex();
+        bufferBuilder.pos(24, height - 24, 0).endVertex();
+        bufferBuilder.pos(width / 3.5f + 1, height - 24, 0).endVertex();
+        bufferBuilder.pos(width / 3.5f + 1, 24, 0).endVertex();
+        tessellator.draw();
 
-		int spaceInBetween = (int) (this.width * .05f / 5);
-		list = new GuiListExtended(Minecraft.getMinecraft(), width, height, 42, height - 32, 0) {
-			
-			@Override
-			protected int getSize() {
-				return 0;
-			}
-			
-			@Override
-			public IGuiListEntry getListEntry(int index) {
-				return null;
-			}
-		};
-		for (Entry<String, Boolean> s : drops.entrySet()) {
+        GlStateManager.color(0, 0, 0, 0.5F);
+        bufferBuilder.begin(7, DefaultVertexFormats.POSITION);
+        bufferBuilder.pos(25, 25, 0).endVertex();
+        bufferBuilder.pos(25, height - 25, 0).endVertex();
+        bufferBuilder.pos(width / 3.5f, height - 25, 0).endVertex();
+        bufferBuilder.pos(width / 3.5f, 25, 0).endVertex();
+        tessellator.draw();
 
-			int row = (int) Math.floor(i / 4);
-			int column = i % 4;
-			row += 2;
-			this.buttonList.add(new GuiButton(i, column * (widthOfBtn + spaceInBetween) + spaceInBetween, row * 25 - 12 + 16,
-					widthOfBtn, heightOfBtn,
-					s.getKey().replaceAll("_", " ") + ": " + (drops.get(s.getKey()) ? "\u00A7aYes" : "\u00A7cNo")));
+        int boxY = 30 + selected * 15;
+        GlStateManager.color(1f, 1f, 1f, 1F);
+        bufferBuilder.begin(7, DefaultVertexFormats.POSITION);
+        bufferBuilder.pos(27, boxY - 4, 0).endVertex();
+        bufferBuilder.pos(27, boxY + 11, 0).endVertex();
+        bufferBuilder.pos(width / 3.5f - 2, boxY + 11, 0).endVertex();
+        bufferBuilder.pos(width / 3.5f - 2, boxY - 4, 0).endVertex();
+        tessellator.draw();
+        GlStateManager.color(0f, 0f, 0f, .5F);
+        bufferBuilder.begin(7, DefaultVertexFormats.POSITION);
+        bufferBuilder.pos(28, boxY - 3, 0).endVertex();
+        bufferBuilder.pos(28, boxY + 10, 0).endVertex();
+        bufferBuilder.pos(width / 3.5f - 3, boxY + 10, 0).endVertex();
+        bufferBuilder.pos(width / 3.5f - 3, boxY - 3, 0).endVertex();
+        tessellator.draw();
 
-			i++;
-		}
-	}
+        GlStateManager.enableTexture2D();
+        int y = 30;
+        for (DropManipulation m : manipulations) {
+            drawString(mc.fontRenderer, m.getName(), 32, y, 0xFFFFFF);
+            y += 15;
+        }
+        manipulations.get(selected).render(mouseX, mouseY, delta);
 
-	@Override
-	public void actionPerformed(GuiButton button) throws IOException {
-		if (button.id == 42069) {
-			for (GuiButton guiButton : buttonList) {
-				if (guiButton.displayString.equalsIgnoreCase(selectedList))
-					guiButton.enabled = true;
-			}
-			button.enabled = false;
-			selectedList = button.displayString;
-			this.buttonList = this.buttonList.subList(0, 3);
-			if (selectedList.equalsIgnoreCase("Entity Drops")) {
-				drops = entityDrops;
-			} else if (selectedList.equalsIgnoreCase("Block Drops")) {
-				drops = blockDrops;
-			}
-			int i = 0;
-			int widthOfBtn = (int) (this.width * .95f / 4);
-			int heightOfBtn = 20;
+        super.drawScreen(mouseX, mouseY, delta);
+    }
 
-			int spaceInBetween = (int) (this.width * .05f / 5);
-
-			for (Entry<String, Boolean> s : drops.entrySet()) {
-
-				int row = (int) Math.floor(i / 4);
-				int column = i % 4;
-				row += 2;
-				this.buttonList.add(new GuiButton(i, column * (widthOfBtn + spaceInBetween) + spaceInBetween, row * 25 - 12 + 16,
-						widthOfBtn, heightOfBtn,
-						s.getKey().replaceAll("_", " ") + ": " + (drops.get(s.getKey()) ? "\u00A7aYes" : "\u00A7cNo")));
-
-				i++;
-			}
-			
-			
-		} else if (button.id == 55) {
-			Minecraft.getMinecraft().displayGuiScreen(new GuiIngameMenu());
-		} else {
-			String manip = button.displayString.replaceAll(" ", "_").split(":")[0];
-			boolean isEnabled = drops.get(manip);
-			RLogAPI.logDebug("[LootManipulation] Toggline " + manip + " to " + !isEnabled);
-			drops.remove(manip);
-
-			for (Entry<String, Boolean> entry : new HashMap<String, Boolean>(drops).entrySet()) {
-				if (entry.getKey().startsWith(manip.split("_")[0])) {
-					drops.remove(entry.getKey());
-					drops.put(entry.getKey(), false);
-				}
-			}
-
-			for (Entry<String, Boolean> entry : new HashMap<String, Boolean>(blockDrops).entrySet()) {
-				if (entry.getKey().startsWith(manip.split("_")[0])) {
-					drops.remove(entry.getKey());
-					drops.put(entry.getKey(), false);
-				}
-			}
-
-			for (Entry<String, Boolean> entry : new HashMap<String, Boolean>(entityDrops).entrySet()) {
-				if (entry.getKey().startsWith(manip.split("_")[0])) {
-					drops.remove(entry.getKey());
-					drops.put(entry.getKey(), false);
-				}
-			}
-
-			drops.put(manip, !isEnabled);
-			if (selectedList.equalsIgnoreCase("Entity Drops")) {
-				entityDrops = drops;
-			} else if (selectedList.equalsIgnoreCase("Block Drops")) {
-				blockDrops = drops;
-			}
-			drops = new TreeMap<String, Boolean>(drops);
-			this.buttonList = this.buttonList.subList(0, 3);
-			int i = 0;
-			int widthOfBtn = (int) (this.width * .95f / 4);
-			int heightOfBtn = 20;
-
-			int spaceInBetween = (int) (this.width * .05f / 5);
-
-			for (Entry<String, Boolean> s : drops.entrySet()) {
-
-				int row = (int) Math.floor(i / 4);
-				int column = i % 4;
-				row += 2;
-				this.buttonList.add(new GuiButton(i, column * (widthOfBtn + spaceInBetween) + spaceInBetween, row * 25 - 12 + 16,
-						widthOfBtn, heightOfBtn,
-						s.getKey().replaceAll("_", " ") + ": " + (drops.get(s.getKey()) ? "\u00A7aYes" : "\u00A7cNo")));
-
-				i++;
-			}
-		}
-	}
-	
-	@Override
-	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-		list.drawScreen(mouseX, mouseY, partialTicks);
-		drawCenteredString(Minecraft.getMinecraft().fontRenderer, "Entity and Block Drop Manipulator", width / 2, 4, 0xFFFFFF);
-		super.drawScreen(mouseX, mouseY, partialTicks);
-	}
+    public static abstract class DropManipulation {
+        public static int x;
+        public static int y;
+        public static int width;
+        public static int height;
+        public CheckboxWidget enabled;
+        public abstract String getName();
+        public abstract List<ItemStack> redirectDrops(IBlockState block);
+        public abstract List<ItemStack> redirectDrops(Entity entity);
+        public abstract void update();
+        public abstract void mouseAction(int mouseX, int mouseY, int button);
+        public abstract void render(int mouseX, int mouseY, float delta);
+    }
 
 }

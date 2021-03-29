@@ -5,7 +5,8 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
-import de.pfannekuchen.lotas.LoTASModContainer;
+import com.google.common.base.Predicates;
+
 import de.pfannekuchen.lotas.challenges.ChallengeLoader;
 import de.pfannekuchen.lotas.config.ConfigManager;
 import de.pfannekuchen.lotas.dupemod.DupeMod;
@@ -18,6 +19,7 @@ import net.minecraft.client.gui.GuiOptions;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
@@ -42,7 +44,7 @@ public class GuiChallengeEscape extends GuiIngameMenu {
         this.buttonList.add(new GuiButton(4, this.width / 2 - 100, this.height / 4 + 24 + -16, I18n.format("menu.returnToGame")));
         this.buttonList.add(new GuiButton(0, this.width / 2 - 100, this.height / 4 + 48 + -16, I18n.format("menu.options")));
         
-        this.buttonList.add(new GuiButton(31, this.width / 2 - 100, this.height / 4 + 72 + -16, I18n.format("Leaderboards")));
+        this.buttonList.add(new GuiButton(31, this.width / 2 - 100, this.height / 4 + 72 + -16, I18n.format("Leaderboard")));
         this.buttonList.add(new GuiButton(32, this.width / 2 - 100, this.height / 4 + 96 + -16, I18n.format("Restart")));
         
         this.buttonList.add(new GuiButton(15, 5, 15, 48, 20, I18n.format("+")));
@@ -51,7 +53,12 @@ public class GuiChallengeEscape extends GuiIngameMenu {
         this.buttonList.add(new GuiButton(18, 5, 75, 98, 20, I18n.format("Load Items")));
         
         this.buttonList.add(new GuiButton(19, (width / 4) * 0 + 1, height - 20, width / 4 - 2, 20, I18n.format("Manipulate Drops")));
-    	this.buttonList.add(new GuiButton(20, (width / 4) * 1 + 2, height - 20, width / 4 - 2, 20, I18n.format("Manipulate Dragon")));
+    	try {
+    		this.buttonList.add(new GuiButton(20, (width / 4) * 1 + 2, height - 20, width / 4 - 2, 20, I18n.format("Manipulate Dragon")));
+    		this.buttonList.get(this.buttonList.size() - 1).enabled = Minecraft.getMinecraft().integratedServer.getWorld(mc.player.dimension).getEntities(EntityDragon.class, Predicates.alwaysTrue()).size() != 0;
+    	} catch (Exception e) {
+    		System.out.println("No Enderdragon found.");
+    	}
         this.buttonList.add(new GuiButton(21, (width / 4) * 2 + 3, height - 20, width / 4 - 2, 20, I18n.format("Manipulate Spawning")));
         
         this.buttonList.add(new GuiCheckBox(22, 2, height - 20 - 15, I18n.format("Avoid taking damage"), !ConfigManager.getBoolean("tools", "takeDamage")));
@@ -100,7 +107,6 @@ public class GuiChallengeEscape extends GuiIngameMenu {
 		} else if (button.id == 16) {
 			TickrateChanger.index--;
 			TickrateChanger.index = MathHelper.clamp(TickrateChanger.index, 1, 10);
-			if (TickrateChanger.ticks[TickrateChanger.index] == 4 && LoTASModContainer.tutorialState == 2) LoTASModContainer.tutorialState++;
 			TickrateChanger.updateTickrate(TickrateChanger.ticks[TickrateChanger.index]);
 		} else if (button.id == 17) {
 			DupeMod.saveItems();
@@ -111,7 +117,7 @@ public class GuiChallengeEscape extends GuiIngameMenu {
 			DupeMod.loadChests();
 			button.enabled = false;
 		} else if (button.id == 19) {
-			Minecraft.getMinecraft().displayGuiScreen(new GuiLootManipulation());
+			Minecraft.getMinecraft().displayGuiScreen(new GuiLootManipulation((GuiIngameMenu) (Object) this));
 		} else if (button.id == 20) {
 			Minecraft.getMinecraft().displayGuiScreen(new GuiDragonPhase(this));
 		} else if (button.id == 21) {
@@ -131,7 +137,7 @@ public class GuiChallengeEscape extends GuiIngameMenu {
 			if (((GuiCheckBox) button).isChecked()) {
 				ConfigManager.setBoolean("tools", "manipulateVelocityAway", false);
 				ConfigManager.save();
-				((GuiCheckBox) this.buttonList.get(14)).setIsChecked(false);
+				((GuiCheckBox) this.buttonList.get(16)).setIsChecked(false);
 			}
 			ConfigManager.setBoolean("tools", "manipulateVelocityTowards", ((GuiCheckBox) button).isChecked());
 			ConfigManager.save();
@@ -139,7 +145,7 @@ public class GuiChallengeEscape extends GuiIngameMenu {
 			if (((GuiCheckBox) button).isChecked()) {
 				ConfigManager.setBoolean("tools", "manipulateVelocityTowards", false);
 				ConfigManager.save();
-				((GuiCheckBox) this.buttonList.get(13)).setIsChecked(false);
+				((GuiCheckBox) this.buttonList.get(15)).setIsChecked(false);
 			}
 			ConfigManager.setBoolean("tools", "manipulateVelocityAway", ((GuiCheckBox) button).isChecked());
 			ConfigManager.save();
