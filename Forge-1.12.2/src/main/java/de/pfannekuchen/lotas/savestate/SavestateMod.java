@@ -17,6 +17,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.integrated.IntegratedServer;
 import net.minecraft.world.MinecraftException;
 import net.minecraft.world.WorldServer;
+import net.minecraft.world.chunk.storage.AnvilChunkLoader;
 import rlog.RLogAPI;
 
 /**
@@ -74,6 +75,12 @@ public class SavestateMod {
         // Orig Hack 1
 		/*Minecraft.getMinecraft().world.sendQuittingDisconnectingPacket();
         Minecraft.getMinecraft().loadWorld((WorldClient)null);*/
+        
+        for(WorldServer world:server.worlds) {
+    		AnvilChunkLoader chunkloader=(AnvilChunkLoader)world.getChunkProvider().chunkLoader;
+    		while(chunkloader.getPendingSaveCount()>0) {
+    		}
+    	}
         
         new Thread(() -> {
     		final String worldName = server.getFolderName();
