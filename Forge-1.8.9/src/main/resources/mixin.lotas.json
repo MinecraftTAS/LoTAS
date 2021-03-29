@@ -1,0 +1,31 @@
+{
+    "required": true,
+    "minVersion": "0.7.10",
+    "package": "de.pfannekuchen.lotas.mixin",
+    "refmap": "mixin.lotas.refmap.json",
+    "compatibilityLevel": "JAVA_8",
+    "mixins": [
+		"tickratechanger.BindMinecraftServer",
+		"MixinEntityPlayerMP"
+    ],
+    "client": [
+    	"gui.RedoGuiMainMenu",
+    	"gui.RedoGuiIngameMenu",
+    	"gui.RedoGuiWorldSelection",
+    	"MixinGuiScreenWorking",
+    	"MixinMinecraft",
+    	"MixinDropBlock",
+    	"MixinPotionEntityRenderer",
+    	"tickratechanger.BindRenderItem",
+    	"tickratechanger.BindSource",
+    	"MixinDropItem",
+    	"tickratechanger.BindWorldborder",
+    	"MixinGuiGameOver",
+    	"MixinI18n",
+    	"MixinExplosionDropChance",
+    	"MixinWorldborder",
+    	"MixinEndPortal",
+    	"MixinLootEntity",
+    	"MixinLootBlock"
+	]
+}
