@@ -18,7 +18,7 @@ import net.minecraft.world.IBlockAccess;
 @Mixin(Block.class)
 public class MixinLootBlock {
 	
-	@Inject(at = @At("HEAD"), method = "Lnet/minecraft/block/Block;getDrops(Lnet/minecraft/util/NonNullList;Lnet/minecraft/world/IBlockAccess;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;I)V", cancellable = true)
+	@Inject(remap = false, at = @At("HEAD"), method = "Lnet/minecraft/block/Block;getDrops(Lnet/minecraft/util/NonNullList;Lnet/minecraft/world/IBlockAccess;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;I)V", cancellable = true)
 	public void getDropsInject(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune, CallbackInfo ci) {
         for (GuiLootManipulation.DropManipulation man : GuiLootManipulation.manipulations) {
             if (!man.enabled.isChecked()) continue;
