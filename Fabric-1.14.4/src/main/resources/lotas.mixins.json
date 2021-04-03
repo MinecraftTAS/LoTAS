@@ -23,6 +23,7 @@
     "tickratechanger.BindWorldborder",
     "tickratechanger.InjectMinecraftClient",
     "tickratechanger.MixinRenderTickCounter",
+    "tickratechanger.MixinScreen",
     "tickratechanger.MixinSubtitle",
     "events.RenderTextEvent",
     "tickratechanger.BindSound",

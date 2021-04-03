@@ -21,7 +21,8 @@ public class GuiConfiguration extends Screen {
 	public static String[] optionsBoolean = new String[] {
 		"B:tools:saveTickrate:INSERT",
 		"B:ui:hideTickrateMessages:INSERT",
-		"B:tools:showTickIndicator:INSERT"
+		"B:tools:showTickIndicator:INSERT",
+		"B:tools:tickrateZeroGui:INSERT"
 	};
 	
 	public static String[] optionsInteger = new String[] {

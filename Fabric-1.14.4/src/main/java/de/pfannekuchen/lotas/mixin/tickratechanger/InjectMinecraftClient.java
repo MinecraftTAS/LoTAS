@@ -64,6 +64,15 @@ public class InjectMinecraftClient implements TickDuck{
 		}
 	}
 
+	@Inject(method = "openScreen", at = @At("TAIL"))
+	public void endOfOpenScreen(Screen screenIn, CallbackInfo ci) {
+        if (TickrateChanger.isScreenBlocking && screenIn != TickrateChanger.whatScreenIsCausingBlock) {
+            TickrateChanger.updateTickrate((int) TickrateChanger.tickrateSaved);
+            TickrateChanger.whatScreenIsCausingBlock = null;
+            TickrateChanger.isScreenBlocking = false;
+        }
+	}
+	
 	
 	@Inject(method = "render", at = @At(value="HEAD"))
     public void injectrender(CallbackInfo ci) throws IOException {
@@ -159,5 +168,20 @@ public class InjectMinecraftClient implements TickDuck{
 	@Override
 	public void setTickTime(float ticksPerSecond) {
 		((TickDuck)renderTickCounter).setTickTime(ticksPerSecond);
+	}
+
+	@Inject(method = "startIntegratedServer(Ljava/lang/String;Ljava/lang/String;Lnet/minecraft/world/level/LevelInfo;)V", at = @At("TAIL"))
+	private void startIntegratedServer(CallbackInfo info) {
+		MinecraftClient client = MinecraftClient.getInstance();
+		new Thread(() -> {
+			while (client.getServer() == null || client.world == null || client.player == null) {
+				try {
+					Thread.sleep(50L);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			TickrateChanger.updateTickrate(0);
+		}).start();
 	}
 }

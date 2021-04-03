@@ -8,14 +8,22 @@ import de.pfannekuchen.lotas.mixin.tickratechanger.MixinMinecraftServer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.*;
+import net.minecraft.client.gui.screen.world.SelectWorldScreen;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
+import net.minecraft.realms.RealmsScreenProxy;
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import rlog.RLogAPI;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 public class TickrateChanger {
+	public static Set<Class<? extends Screen>> exceptions = new HashSet<>(Arrays.asList(RealmsScreenProxy.class, TitleScreen.class, SelectWorldScreen.class, LevelLoadingScreen.class, ProgressScreen.class, SaveLevelScreen.class));
+
 	/**
 	 * Current tickrate of the client
 	 */
@@ -34,8 +42,8 @@ public class TickrateChanger {
 	public static long timeOffset;
 	
 	public static int ticksToJump = -1;
-	
 
+	public static boolean isScreenBlocking;
 	
 	public static int index = 6;
 	public static final int[] ticks = new int[] {0, 1, 2, 4, 5, 10, 20, 40, 50, 200, 600};
@@ -55,6 +63,8 @@ public class TickrateChanger {
 	 * Signals the MinecraftServer in {@link MixinMinecraftServer#injectrunTick(java.util.function.BooleanSupplier, org.spongepowered.asm.mixin.injection.callback.CallbackInfo)} to reset the tickrate to 0
 	 */
 	public static boolean advanceServer=false;
+
+	public static Screen whatScreenIsCausingBlock;
 
 	// private static Duration rta = Duration.ZERO;
 	
