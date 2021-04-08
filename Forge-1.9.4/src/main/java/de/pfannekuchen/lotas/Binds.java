@@ -14,25 +14,25 @@ import rlog.RLogAPI;
 
 public class Binds {
 
-	public static KeyBinding saveState  = new KeyBinding("Savestate", Keyboard.KEY_J, "Savestates");
-	public static KeyBinding loadState  = new KeyBinding("Loadstate", Keyboard.KEY_K, "Savestates");
-	public static KeyBinding loadDupe  = new KeyBinding("Load Items/Chests", Keyboard.KEY_O, "Duping");
-	public static KeyBinding saveDupe  = new KeyBinding("Save Items/Chests", Keyboard.KEY_P, "Duping");
-	public static KeyBinding strafe  = new KeyBinding("Strafe +45", Keyboard.KEY_H, "Movement");
-	public static KeyBinding unstrafe = new KeyBinding("Strafe -45", Keyboard.KEY_G, "Movement");
-	public static KeyBinding freecam = new KeyBinding("Freecam", Keyboard.KEY_I, "Movement");
+	public static KeyBinding saveState = new KeyBinding("Savestate", Keyboard.KEY_J, "States");
+	public static KeyBinding loadState = new KeyBinding("Loadstate", Keyboard.KEY_K, "States");
+	public static KeyBinding loadDupe = new KeyBinding("Load Items/Chests", Keyboard.KEY_O, "Duping");
+	public static KeyBinding saveDupe = new KeyBinding("Save Items/Chests", Keyboard.KEY_P, "Duping");
+	public static KeyBinding strafe = new KeyBinding("Strafe +45", Keyboard.KEY_H, "Moving");
+	public static KeyBinding unstrafe = new KeyBinding("Strafe -45", Keyboard.KEY_G, "Moving");
+	public static KeyBinding freecam = new KeyBinding("Freecam", Keyboard.KEY_I, "Moving");
 	public static KeyBinding slower = new KeyBinding("Faster Tickrate", Keyboard.KEY_PERIOD, "Tickrate Changer");
 	public static KeyBinding faster = new KeyBinding("Slower Tickrate", Keyboard.KEY_COMMA, "Tickrate Changer");
 	public static KeyBinding advance = new KeyBinding("Advance Tick", Keyboard.KEY_F9, "Tickrate Changer");
 	public static KeyBinding zero = new KeyBinding("Tickrate Zero Toggle", Keyboard.KEY_F8, "Tickrate Changer");
 	public static KeyBinding timer = new KeyBinding("Start/Stop Timer", Keyboard.KEY_NUMPAD5, "Tickrate Changer");
+	
 	public static boolean shouldSavestate = false;
 	public static boolean shouldLoadstate = false;
 	public static boolean isFreecaming  = false;
 	public static int savedTickrate;
 	
 	public static void keyEvent() throws IOException {
-		
 		if (saveState.isPressed() && ChallengeLoader.map == null) {
 			RLogAPI.logDebug("[Hotkeys] Requesting Savestate");
 			Minecraft.getMinecraft().displayGuiScreen(new GuiIngameMenu());
