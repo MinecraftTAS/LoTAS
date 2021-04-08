@@ -159,7 +159,7 @@ public class LoTASModContainer {
 		File file = new File("seeddata.txt");
 		try {
 			logDebug("[PreInit] Trying to download seeds.txt from http://mgnet.work/seeds/seeds.txt");
-			URL url = new URL("http://mgnet.work/seeds/seeds.txt");
+			URL url = new URL("http://mgnet.work/seeds/seeds1.11.2.txt");
 			URLConnection conn = url.openConnection();
 			conn.setReadTimeout(5000);
 			file.createNewFile();
