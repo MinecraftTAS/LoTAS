@@ -17,6 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import de.pfannekuchen.lotas.config.ConfigManager;
 import de.pfannekuchen.lotas.gui.GuiAcceptance;
 import de.pfannekuchen.lotas.gui.GuiConfiguration;
+import de.pfannekuchen.lotas.gui.GuiVideoUpspeeder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiMainMenu;
@@ -46,7 +47,6 @@ public abstract class RedoGuiMainMenu extends GuiScreen {
 	public void redoaddSingleplayerMultiplayerButtons(int p_73969_1_, int p_73969_2_, CallbackInfo ci) {
 		this.buttonList.get(1).id = 24;
 		this.buttonList.get(1).displayString = "Speed up Video";
-		this.buttonList.get(1).enabled = false;
 		this.modButton.width = this.buttonList.get(1).width;
 		this.modButton.visible = false;
 		buttonList.add(new GuiButton(69, modButton.xPosition, modButton.yPosition, modButton.width, modButton.height, "Configuration"));
@@ -106,7 +106,7 @@ public abstract class RedoGuiMainMenu extends GuiScreen {
 		if (button.id == 69) {
 			mc.displayGuiScreen(new GuiConfiguration());
 		} else if (button.id == 24) {
-			
+			mc.displayGuiScreen(new GuiVideoUpspeeder());
 		}
 	}
 	

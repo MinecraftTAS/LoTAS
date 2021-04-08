@@ -52,7 +52,8 @@ dependencies {
         exclude module: 'log4j-core'
     }
     implementation files ('libs/rLog.jar')
-    implementation files ('libs/identifier_obfc.jar')
+    implementation files ('libs/identifier_obfc.jar')    
+    compile files ('libs/ffmpeg.jar')    
     compile 'org.msgpack:msgpack-core:0.8.16'
     compile 'org.msgpack:jackson-dataformat-msgpack:0.8.16'
 }
