@@ -4,8 +4,11 @@ import static rlog.RLogAPI.instantiate;
 import static rlog.RLogAPI.logDebug;
 import static rlog.RLogAPI.logError;
 
+import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.net.URL;
 import java.net.URLConnection;
@@ -24,6 +27,8 @@ import de.pfannekuchen.lotas.hotkeys.Hotkeys;
 import de.pfannekuchen.lotas.manipulation.WorldManipulation;
 import de.pfannekuchen.lotas.tickratechanger.TickrateChanger;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BannerTextures;
+import net.minecraft.client.renderer.IImageBuffer;
 import net.minecraft.client.renderer.ImageBufferDownload;
 import net.minecraft.client.renderer.ThreadDownloadImageData;
 import net.minecraft.util.ResourceLocation;
@@ -32,6 +37,7 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import rlog.RLogAPI;
 
@@ -46,6 +52,7 @@ public class LoTASModContainer {
 	
 	public static volatile boolean playSound = false;
 	public static final List<ChallengeMap> maps = new ArrayList<>();
+	public static ResourceLocation shield;
 	
 	static {
 		try {
@@ -54,6 +61,12 @@ public class LoTASModContainer {
 			e.printStackTrace();
 			FMLCommonHandler.instance().exitJava(29, true);
 		}
+	}
+	
+	@EventHandler
+	public void init(FMLInitializationEvent e) {
+		logDebug("[Init] Loading Shields");
+		loadShields();
 	}
 	
 	@EventHandler
@@ -106,6 +119,39 @@ public class LoTASModContainer {
 		
 	}
 	
+	public void loadShields() {	
+		String uuid = Minecraft.getMinecraft().getSession().getProfile().getId().toString();
+		
+		try {
+			URL url = new URL("https://raw.githubusercontent.com/ScribbleLP/MC-TASTools/1.12.2/shields/shieldnames.txt");
+			BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
+			String line = reader.readLine();
+			while (line != null) {
+				if (line.split(":")[0].equalsIgnoreCase(uuid)) {
+					ThreadDownloadImageData thread = new ThreadDownloadImageData(null, "https://raw.githubusercontent.com/ScribbleLP/MC-TASTools/1.12.2/shields/" + line.split(":")[1], null, new IImageBuffer() {
+						
+						@Override
+						public void skinAvailable() {
+							
+						}
+						
+						@Override
+						public BufferedImage parseUserSkin(BufferedImage image) {
+							return image;
+						}
+					});
+					LoTASModContainer.shield = new ResourceLocation("shield.png");
+					Minecraft.getMinecraft().getTextureManager().loadTexture(LoTASModContainer.shield, thread);
+					return;
+				}
+				line = reader.readLine();
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		LoTASModContainer.shield = BannerTextures.SHIELD_BASE_TEXTURE;
+	}
+
 	/**
 	 * Loads a list of seeds together with preview images from <a href="http://mgnet.work/seeds/">mgnet.work/seeds/</a> and creates a GuiSeedList SeedEntry
 	 * @see GuiSeedList

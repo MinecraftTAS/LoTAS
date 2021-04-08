@@ -61,6 +61,7 @@ public class MixinMinecraft {
 	@Inject(method = "loadWorld", at = @At("HEAD"))
 	public void injectloadWorld(WorldClient worldClientIn, CallbackInfo ci) {
 		isLoadingWorld = ConfigManager.getBoolean("tools", "hitEscape") && worldClientIn != null;
+		
 		if (ChallengeLoader.startTimer) {
 			ChallengeLoader.startTimer = false;
 			de.pfannekuchen.lotas.tickratechanger.Timer.startTime = Duration.ofMillis(System.currentTimeMillis());
