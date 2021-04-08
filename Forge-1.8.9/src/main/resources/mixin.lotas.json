@@ -25,6 +25,8 @@
     	"MixinWorldborder",
     	"MixinLootEntity",
     	"MixinLootBlock",
-    	"MixinAchievement"
+    	"MixinAchievement",
+    	"MixinEndPortal",
+    	"MixinTegratedServer"
 	]
 }

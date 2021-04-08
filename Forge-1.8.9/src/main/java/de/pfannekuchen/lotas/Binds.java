@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.apache.commons.lang3.ArrayUtils;
 import org.lwjgl.input.Keyboard;
 
+import de.pfannekuchen.lotas.challenges.ChallengeLoader;
 import de.pfannekuchen.lotas.dupemod.DupeMod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiIngameMenu;
@@ -32,7 +33,7 @@ public class Binds {
 	public static int savedTickrate;
 	
 	public static void keyEvent() throws IOException {
-		if (saveState.isPressed()) {
+		if (saveState.isPressed() && ChallengeLoader.map == null) {
 			RLogAPI.logDebug("[Hotkeys] Requesting Savestate");
 			Minecraft.getMinecraft().displayGuiScreen(new GuiIngameMenu());
 			shouldSavestate = true;

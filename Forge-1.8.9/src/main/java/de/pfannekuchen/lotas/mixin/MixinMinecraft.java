@@ -1,6 +1,7 @@
 package de.pfannekuchen.lotas.mixin;
 
 import java.io.IOException;
+import java.time.Duration;
 
 import org.lwjgl.input.Keyboard;
 import org.spongepowered.asm.mixin.Mixin;
@@ -11,7 +12,9 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import de.pfannekuchen.lotas.Binds;
+import de.pfannekuchen.lotas.challenges.ChallengeLoader;
 import de.pfannekuchen.lotas.config.ConfigManager;
+import de.pfannekuchen.lotas.gui.GuiChallengeEscape;
 import de.pfannekuchen.lotas.savestate.SavestateMod;
 import de.pfannekuchen.lotas.tickratechanger.TickrateChanger;
 import net.minecraft.client.Minecraft;
@@ -55,6 +58,12 @@ public class MixinMinecraft {
 	@Inject(method = "loadWorld", at = @At("HEAD"))
 	public void injectloadWorld(WorldClient worldClientIn, CallbackInfo ci) {
 		isLoadingWorld = ConfigManager.getBoolean("tools", "hitEscape") && worldClientIn != null;
+		if (ChallengeLoader.startTimer) {
+			ChallengeLoader.startTimer = false;
+			de.pfannekuchen.lotas.tickratechanger.Timer.startTime = Duration.ofMillis(System.currentTimeMillis());
+			de.pfannekuchen.lotas.tickratechanger.Timer.ticks = 1;
+			de.pfannekuchen.lotas.tickratechanger.Timer.running = true;
+		}
 	}
 	
 	@Inject(method = "updateDisplay", cancellable = true, at = @At("HEAD"))
@@ -76,7 +85,12 @@ public class MixinMinecraft {
 		
 		if (Binds.shouldLoadstate) {
 			Binds.shouldLoadstate = false;
-			SavestateMod.loadstate(-1);
+			try {
+				if (ChallengeLoader.map != null) ChallengeLoader.reload();
+				else if (SavestateMod.hasSavestate()) SavestateMod.loadstate(-1);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		
 		
@@ -190,9 +204,12 @@ public class MixinMinecraft {
     
     @ModifyVariable(method = "displayGuiScreen", at = @At("STORE"), index = 1, ordinal = 0)
     public GuiScreen changeGuiScreen(GuiScreen screenIn) {
+    	if (ChallengeLoader.map != null && screenIn != null) {
+    		if (screenIn instanceof GuiIngameMenu) return new GuiChallengeEscape();
+    	}
 		if (isLoadingWorld && screenIn == null) {
 			isLoadingWorld = false;
-			return new GuiIngameMenu();
+			return ChallengeLoader.map == null ? new GuiIngameMenu() : new GuiChallengeEscape();
 		}
 		return screenIn;
     }

@@ -50,7 +50,8 @@ public class GuiCustomMapEntry extends GuiListWorldSelectionEntry {
 		}
 	}
 	
-    public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, int mouseX, int mouseY, boolean isSelected, float partialTicks) {
+	@Override
+    public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, int mouseX, int mouseY, boolean isSelected) {
         String s = "\u00A76TAS Challenge Map - \u00A7f" + map.displayName;
         String s1 = map.description;
         String s2 = "WR: " + map.leaderboard[0].split(";")[0] + " - " + Timer.getDuration(Duration.ofMillis(Integer.parseInt(map.leaderboard[0].split(";")[1])));

@@ -9,7 +9,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.file.Files;
@@ -93,16 +92,30 @@ public class LoTASModContainer {
 			
 			logDebug("[PreInit] Downloading TAS Challenge Maps");
 			try {
-				ObjectInputStream stream = new ObjectInputStream(new URL("http://mgnet.work/maps.txt").openStream());
-				int maps = stream.readInt();
+				BufferedReader stream = new BufferedReader(new InputStreamReader(new URL("http://mgnet.work/taschallenges/maps1.9.4.txt").openStream()));
+				int maps = Integer.parseInt(stream.readLine().charAt(0) + "");
 				for (int i = 0; i < maps; i++) {
-					ChallengeMap map = (ChallengeMap) stream.readObject();
+					ChallengeMap map = new ChallengeMap();
+					
+					map.displayName = stream.readLine();
+					map.name = stream.readLine();
+					map.description = stream.readLine();
+					map.map = new URL("http://mgnet.work/taschallenges/" + stream.readLine());
+					int board = Integer.parseInt(stream.readLine().charAt(0) + "");
+					map.leaderboard = new String[board];
+					for (int j = 0; j < board; j++) {
+						map.leaderboard[j] = stream.readLine();
+					}
+					
 					RLogAPI.logDebug("[TASChallenges] Downloading " + map.name + " image.");
 					ResourceLocation loc = new ResourceLocation("maps", map.name);
-					ThreadDownloadImageData dw = new ThreadDownloadImageData((File) null, "http://mgnet.work/maps/" + map.name + ".png", null, new ImageBufferDownload());
+					ThreadDownloadImageData dw = new ThreadDownloadImageData((File) null, "http://mgnet.work/taschallenges/" + map.name + ".png", null, new ImageBufferDownload());
 					Minecraft.getMinecraft().getTextureManager().loadTexture(loc, dw);
 					map.resourceLoc = loc.getResourcePath();
+					
 					LoTASModContainer.maps.add(map);
+					
+					stream.readLine(); // Empty
 				}
 				stream.close();
 			} catch (Exception e1) {

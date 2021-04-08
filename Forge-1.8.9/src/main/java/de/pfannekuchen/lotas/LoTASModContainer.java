@@ -4,15 +4,19 @@ import static rlog.RLogAPI.instantiate;
 import static rlog.RLogAPI.logDebug;
 import static rlog.RLogAPI.logError;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 
+import de.pfannekuchen.lotas.challenges.ChallengeMap;
 import de.pfannekuchen.lotas.config.ConfigManager;
 import de.pfannekuchen.lotas.gui.GuiSeedList;
 import de.pfannekuchen.lotas.gui.GuiSeedList.SeedEntry;
@@ -37,6 +41,7 @@ public class LoTASModContainer {
 	 */
 	
 	public static volatile boolean playSound = false;
+	public static final List<ChallengeMap> maps = new ArrayList<>();
 	
 	static {
 		try {
@@ -72,6 +77,32 @@ public class LoTASModContainer {
 				logDebug("[PreInit] Loading Tickrate");
 				TickrateChanger.index = ConfigManager.getInt("hidden", "tickrate");
 				TickrateChanger.updateTickrate(TickrateChanger.ticks[TickrateChanger.index]);
+			}
+			
+			logDebug("[PreInit] Downloading TAS Challenge Maps");
+			try {
+				BufferedReader stream = new BufferedReader(new InputStreamReader(new URL("http://mgnet.work/taschallenges/maps1.8.9.txt").openStream()));
+				int maps = Integer.parseInt(stream.readLine().charAt(0) + "");
+				for (int i = 0; i < maps; i++) {
+					ChallengeMap map = new ChallengeMap();
+					
+					map.displayName = stream.readLine();
+					map.name = stream.readLine();
+					map.description = stream.readLine();
+					map.map = new URL("http://mgnet.work/taschallenges/" + stream.readLine());
+					int board = Integer.parseInt(stream.readLine().charAt(0) + "");
+					map.leaderboard = new String[board];
+					for (int j = 0; j < board; j++) {
+						map.leaderboard[j] = stream.readLine();
+					}
+					
+					LoTASModContainer.maps.add(map);
+					
+					stream.readLine(); // Empty
+				}
+				stream.close();
+			} catch (Exception e1) {
+				logError(e1, "Couldn't download Challenge Maps #6");
 			}
 		}).start();
 		
