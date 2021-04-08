@@ -13,7 +13,9 @@ import net.minecraft.enchantment.EnchantmentData;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.init.Enchantments;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumDifficulty;
+import net.minecraft.world.EnumSkyBlock;
 import rlog.RLogAPI;
 
 /**
@@ -125,9 +127,9 @@ public class GuiEntitySpawner extends GuiScreen {
 		e = entity.getEntity(mc.theIntegratedServer.worldServerForDimension(mc.thePlayer.dimension));
 		e.setPositionAndRotation(spawnX, spawnY, spawnZ, 0, 0);
 		if (e instanceof EntityMob) {
-//			this.buttonList.get(this.buttonList.size() - 2).enabled = e.worldObj.getDifficulty() != EnumDifficulty.PEACEFUL && ((EntityMob) e).getBlockPathWeight(new BlockPos(e.posX, e.getEntityBoundingBox().minY, e.posZ)) >= 0.0F && e.worldObj.getBlockState((new BlockPos(e)).down()).canEntitySpawn(e) && isValidLightLevel(e);
+			this.buttonList.get(this.buttonList.size() - 2).enabled = e.worldObj.getDifficulty() != EnumDifficulty.PEACEFUL && ((EntityMob) e).getBlockPathWeight(new BlockPos(e.posX, e.getEntityBoundingBox().minY, e.posZ)) >= 0.0F && isValidLightLevel(e);
 		} else {
-//			this.buttonList.get(this.buttonList.size() - 2).enabled = e.worldObj.getBlockState((new BlockPos(e)).down()).does(e);
+			this.buttonList.get(this.buttonList.size() - 2).enabled = true;
 		}
 	}
 	
@@ -138,30 +140,30 @@ public class GuiEntitySpawner extends GuiScreen {
 		e.setPositionAndRotation(spawnX, spawnY, spawnZ, 0, 0);
 		
 		if (e instanceof EntityMob) {
-//			this.buttonList.get(this.buttonList.size() - 2).enabled = e.worldObj.getDifficulty() != EnumDifficulty.PEACEFUL && ((EntityMob) e).getBlockPathWeight(new BlockPos(e.posX, e.getEntityBoundingBox().minY, e.posZ)) >= 0.0F && e.worldObj.getBlockState((new BlockPos(e)).down()).canEntitySpawn(e) && isValidLightLevel(e);
+			this.buttonList.get(this.buttonList.size() - 2).enabled = e.worldObj.getDifficulty() != EnumDifficulty.PEACEFUL && ((EntityMob) e).getBlockPathWeight(new BlockPos(e.posX, e.getEntityBoundingBox().minY, e.posZ)) >= 0.0F && isValidLightLevel(e);
 		} else {
-//			this.buttonList.get(this.buttonList.size() - 2).enabled = e.worldObj.getBlockState((new BlockPos(e)).down()).canEntitySpawn(e);
+			this.buttonList.get(this.buttonList.size() - 2).enabled = true;
 		}
 	}
 	
-//	private boolean isValidLightLevel(EntityLiving entity) {
-//        BlockPos blockpos = new BlockPos(entity.posX, entity.getEntityBoundingBox().minY, entity.posZ);
-//
-//        if (entity.worldObj.getLightFor(EnumSkyBlock.SKY, blockpos) > 31) {
-//            return false;
-//        } else {
-//            int i = entity.worldObj.getLightFromNeighbors(blockpos);
-//
-//            if (entity.worldObj.isThundering()) {
-//                int j = entity.worldObj.getSkylightSubtracted();
-//                entity.worldObj.setSkylightSubtracted(10);
-//                i = entity.worldObj.getLightFromNeighbors(blockpos);
-//                entity.worldObj.setSkylightSubtracted(j);
-//            }
-//
-//            return i <= 7;
-//        }
-//	}
+	private boolean isValidLightLevel(EntityLiving entity) {
+        BlockPos blockpos = new BlockPos(entity.posX, entity.getEntityBoundingBox().minY, entity.posZ);
+
+        if (entity.worldObj.getLightFor(EnumSkyBlock.SKY, blockpos) > 31) {
+            return false;
+        } else {
+            int i = entity.worldObj.getLightFromNeighbors(blockpos);
+
+            if (entity.worldObj.isThundering()) {
+                int j = entity.worldObj.getSkylightSubtracted();
+                entity.worldObj.setSkylightSubtracted(10);
+                i = entity.worldObj.getLightFromNeighbors(blockpos);
+                entity.worldObj.setSkylightSubtracted(j);
+            }
+
+            return i <= 7;
+        }
+	}
 
 	@Override
 	protected void actionPerformed(GuiButton button) throws IOException {
