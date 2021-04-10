@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.apache.commons.io.FileUtils;
+import org.lwjgl.input.Mouse;
 
 import com.google.common.io.Files;
 
@@ -131,6 +132,10 @@ public class SavestateMod {
 	 */
 	public static void loadstate(int number) {
 		if (!hasSavestate()) return;
+		
+		int x = Mouse.getX();
+		int y = Mouse.getY();
+		
 		isLoading = true;
 		
 		RLogAPI.logDebug("[Savestate] Trying to Loadstate");
@@ -172,8 +177,17 @@ public class SavestateMod {
 		}
         mc.ingameGUI.getChatGUI().clearChatMessages(true);
         
+        Mouse.setCursorPosition(x, y);
+        Mouse.getDX();
+        Mouse.getDY();
+        
         mc.launchIntegratedServer(worldName, worldName, null);
         RLogAPI.logDebug("[Savestates] Loadstate Done");
+        
+        Mouse.setCursorPosition(x, y);
+        Mouse.getDX();
+        Mouse.getDY();
+        
         
 	}
 
