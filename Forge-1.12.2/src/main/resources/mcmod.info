@@ -9,7 +9,7 @@
   "updateUrl": "",
   "authorList": ["Pfannekuchen", "ScribbleLP"],
   "credits": "Credits in README.md",
-  "logoFile": "",
+  "logoFile": "assets/lotas/potion.png",
   "screenshots": [],
   "dependencies": []
 }
