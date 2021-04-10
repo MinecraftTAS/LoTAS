@@ -101,8 +101,8 @@ public abstract class RedoGuiIngameMenu extends GuiScreen {
 		
 		if (getClass().getSimpleName().contains("GuiIngameMenu")) {
 			if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-				this.buttonList.get(7).displayString = "§6Name Savestate";
-				this.buttonList.get(8).displayString = "§6Choose State";
+				this.buttonList.get(7).displayString = "\u00A76Name Savestate";
+				this.buttonList.get(8).displayString = "\u00A76Choose State";
 			} else {
 				this.buttonList.get(7).displayString = "Savestate";
 				this.buttonList.get(8).displayString = "Loadstate";
