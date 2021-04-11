@@ -214,7 +214,7 @@ public abstract class RedoGuiIngameMenu extends GuiScreen {
 			buttonList.clear();
 			initGui();
 		} else if (button.id == 25) {
-			Timer.ticks = 0;
+			Timer.ticks = -1;
 			Timer.startTime = Duration.ofMillis(System.currentTimeMillis());
 		} else if (button.id == 26) {
 			if (((GuiCheckBox) button).isChecked()) {
