@@ -62,7 +62,7 @@ public class GuiChallengeEscape extends GuiIngameMenu {
         this.buttonList.add(new GuiButton(21, (width / 4) * 2 + 3, height - 20, width / 4 - 2, 20, I18n.format("Manipulate Spawning")));
         
         this.buttonList.add(new GuiCheckBox(22, 2, height - 20 - 15, I18n.format("Avoid taking damage"), !ConfigManager.getBoolean("tools", "takeDamage")));
-        this.buttonList.add(new GuiButton(23, 35, 107, 68, 20, I18n.format("Jump ticks")));
+        this.buttonList.add(new GuiButton(23, 37, 107, 66, 20, I18n.format("Jump ticks")));
         this.buttonList.add(new GuiButton(24, 5, 107, 30, 20, I18n.format(TickrateChanger.ticks[TickrateChanger.ji] + "t")));
 		this.buttonList.add(new GuiCheckBox(26, 2, height - 32 - 15, I18n.format("Drop towards me"), ConfigManager.getBoolean("tools", "manipulateVelocityTowards")));
 		this.buttonList.add(new GuiCheckBox(27, 2, height - 44 - 15, I18n.format("Drop away from me"), ConfigManager.getBoolean("tools", "manipulateVelocityAway")));
@@ -126,9 +126,10 @@ public class GuiChallengeEscape extends GuiIngameMenu {
 		} else if (button.id == 23) {
 			TickrateChanger.ticksToJump = TickrateChanger.ticks[TickrateChanger.ji];
 			button.enabled = false;
+			button.displayString = "Jumping...";
 		} else if (button.id == 24) {
 			TickrateChanger.ji++;
-			if (TickrateChanger.ji > 10) TickrateChanger.ji = 0;
+			if (TickrateChanger.ji > 10) TickrateChanger.ji = 1;
 			buttonList.clear();
 			initGui();
 		} else if (button.id == 26) {
