@@ -7,7 +7,7 @@ LoTAS is a Mod used to create [Tool Assisted Speedruns](https://en.wikipedia.org
 
 Once you installed the Mod and opened a World you can access the TAS Features by pressing `Escape`.
 This might look confusing to you, but all you need to know is that the top left buttons + and -, increase or decrease the speed of the game.
-Have a look in the [Wiki](nope) to see the rest of the features explained
+Have a look in the [Wiki](https://github.com/MCPfannkuchenYT/LoTAS/wiki) to see the rest of the features explained
 
 ## Bugs / Feature Requests
 
