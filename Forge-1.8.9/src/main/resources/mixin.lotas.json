@@ -27,6 +27,7 @@
     	"MixinLootBlock",
     	"MixinAchievement",
     	"MixinEndPortal",
-    	"MixinTegratedServer"
+    	"MixinTegratedServer",
+    	"MixinEnchantmentDurability"
 	]
 }

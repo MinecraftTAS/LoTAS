@@ -33,6 +33,7 @@
     	"MixinLootEntity",
     	"MixinLootBlock",
     	"MixinRenderItem",
-    	"MixinPearlDelay"
+    	"MixinPearlDelay",
+    	"MixinEnchantmentDurability"
 	]
 }
