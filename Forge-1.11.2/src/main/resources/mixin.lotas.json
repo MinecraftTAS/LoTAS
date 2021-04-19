@@ -32,6 +32,7 @@
     	"MixinLootEntity",
     	"MixinLootBlock",
     	"MixinRenderItem",
-    	"MixinAchievement"
+    	"MixinAchievement",
+    	"MixinPearlDelay"
 	]
 }
