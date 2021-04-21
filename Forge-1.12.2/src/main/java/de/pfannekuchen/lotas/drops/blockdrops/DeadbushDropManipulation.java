@@ -111,7 +111,7 @@ public class DeadbushDropManipulation extends GuiLootManipulation.DropManipulati
         if (!enabled.isChecked()) {
             GlStateManager.color(.5f, .5f, .5f, .4f);
         } else {
-            Minecraft.getMinecraft().fontRenderer.drawStringWithShadow("Drop " + sticks + " Sticks when breaking Gravel", x, y + 64, 0xFFFFFF);
+            Minecraft.getMinecraft().fontRenderer.drawStringWithShadow("Drop " + sticks + " Sticks when breaking a Dead Bush", x, y + 64, 0xFFFFFF);
             drop2Stick.render(mouseX, mouseY, delta);
             drop1Stick.render(mouseX, mouseY, delta);
             drop0Stick.render(mouseX, mouseY, delta);
