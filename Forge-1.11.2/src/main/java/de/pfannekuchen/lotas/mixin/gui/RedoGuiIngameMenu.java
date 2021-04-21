@@ -85,8 +85,8 @@ public abstract class RedoGuiIngameMenu extends GuiScreen {
         this.buttonList.add(new GuiButton(21, (width / 4) * 2 + 3, height - 20, width / 4 - 2, 20, I18n.format("Manipulate Spawning")));
         
         this.buttonList.add(new GuiCheckBox(22, 2, height - 20 - 15, I18n.format("Avoid taking damage"), !ConfigManager.getBoolean("tools", "takeDamage")));
-        this.buttonList.add(new GuiButton(23, 37, 107, 66, 20, I18n.format("Jump ticks")));
-        this.buttonList.add(new GuiButton(24, 5, 107, 30, 20, I18n.format(TickrateChanger.ticks[TickrateChanger.ji] + "t")));
+        this.buttonList.add(new GuiButton(23, 37, 115, 66, 20, I18n.format("Jump ticks")));
+        this.buttonList.add(new GuiButton(24, 5, 115, 30, 20, I18n.format(TickrateChanger.ticks[TickrateChanger.ji] + "t")));
 		this.buttonList.add(new GuiButton(25, this.width / 2 - 100, this.height / 4 + 144 + -16, I18n.format("Reset Timer")));
 		this.buttonList.add(new GuiCheckBox(26, 2, height - 32 - 15, I18n.format("Drop towards me"), ConfigManager.getBoolean("tools", "manipulateVelocityTowards")));
 		this.buttonList.add(new GuiCheckBox(27, 2, height - 44 - 15, I18n.format("Drop away from me"), ConfigManager.getBoolean("tools", "manipulateVelocityAway")));
@@ -131,7 +131,11 @@ public abstract class RedoGuiIngameMenu extends GuiScreen {
 			drawCenteredString(mc.fontRendererObj, "\u00A76Loadstate successful...", width / 2, 40, new Color(1F, 1F, 1F, 1F - (timeSince / 2000F)).getRGB());
 		}
 		
-		mc.fontRendererObj.drawStringWithShadow("Tickrate Changer", 10, 97, 0xFFFFFF);
+		mc.fontRendererObj.drawStringWithShadow("Tickjump", 10, 105, 0xFFFFFF);
+		if(buttonList.get(17).enabled==false) {
+			mc.fontRendererObj.drawStringWithShadow("Tickjump is ready,", 8, 137, 0xFFFFFF);
+			mc.fontRendererObj.drawStringWithShadow("press ESC to continue", 8, 147, 0xFFFFFF);
+		}
 		mc.fontRendererObj.drawStringWithShadow("Duping", 10, 45, 0xFFFFFF);
 		int w = width - 5;
 		mc.fontRendererObj.drawStringWithShadow("Tracked Items Delay: ", w - mc.fontRendererObj.getStringWidth("Tracked Items Delay: ") - 1, 10, 0xFFFFFFFF);
