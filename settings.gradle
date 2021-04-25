@@ -2,7 +2,8 @@ pluginManagement {
     repositories {
     	maven { url 'https://jitpack.io' }
         maven {
-        	name = 'maven'
+        	// You also need to comment out this line when using Gradle
+        	// name = 'maven'
             url = 'https://maven.fabricmc.net/'
         }
         gradlePluginPortal()

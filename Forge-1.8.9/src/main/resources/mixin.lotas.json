@@ -28,6 +28,7 @@
     	"MixinAchievement",
     	"MixinEndPortal",
     	"MixinTegratedServer",
-    	"MixinEnchantmentDurability"
+    	"MixinEnchantmentDurability",
+    	"MixinLeaves"
 	]
 }

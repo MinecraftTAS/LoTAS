@@ -23,7 +23,8 @@
     	"MixinAchievement",
     	"MixinEndPortal",
     	"MixinTegratedServer",
-    	"MixinEnchantmentDurability"
+    	"MixinEnchantmentDurability",
+    	"MixinLeaves"
 	],
 	"compatibilityLevel": "JAVA_8"
 }
