@@ -68,7 +68,8 @@ public abstract class RedoGuiWorldSelection extends GuiScreen {
 				if (((GuiCheckBox) button).isChecked()) {
 					selectionList.refreshList();
 					for (ChallengeMap map : LoTASModContainer.maps) {
-						GuiListWorldSelectionEntry entry = new GuiCustomMapEntry(selectionList, map);
+						GuiCustomMapEntry entry = new GuiCustomMapEntry(selectionList, map);
+						entry.loc = new ResourceLocation("maps", map.resourceLoc);
 						selectionList.entries.add(entry);
 					}
 				} else {
