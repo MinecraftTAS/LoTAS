@@ -6,7 +6,7 @@ import java.util.List;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.platform.GlStateManager;
 
-import de.pfannekuchen.lotas.gui.DropManipulatorScreen;
+import de.pfannekuchen.lotas.gui.LootManipulationScreen;
 import de.pfannekuchen.lotas.gui.widgets.ImageButton;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
@@ -20,7 +20,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.Identifier;
 
-public class ZombieDropManipulation extends DropManipulatorScreen.DropManipulation {
+public class ZombieDropManipulation extends LootManipulationScreen.DropManipulation {
 
     public static ImageButton dropIron = new ImageButton(x, y, c -> {
         ZombieDropManipulation.dropPotato.setToggled(false);

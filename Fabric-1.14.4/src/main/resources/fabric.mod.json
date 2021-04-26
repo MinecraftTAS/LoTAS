@@ -22,7 +22,7 @@
     ]
   },
   "mixins": [
-    "lotas.mixins.json"
+    "lotas.mixin.json"
   ],
   "depends": {
     "fabricloader": ">=0.11.1",

@@ -5,7 +5,7 @@ import java.util.List;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.platform.GlStateManager;
 
-import de.pfannekuchen.lotas.gui.DropManipulatorScreen;
+import de.pfannekuchen.lotas.gui.LootManipulationScreen;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
@@ -17,7 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.Identifier;
 
-public class SealanternDropManipulation extends DropManipulatorScreen.DropManipulation {
+public class SealanternDropManipulation extends LootManipulationScreen.DropManipulation {
 
     public static int pris = 2;
 

@@ -1,0 +1,20 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "de.pfannekuchen.lotas.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    
+  ],
+  "client": [
+	"screen.MixinMainMenuScreen",
+	"screen.MixinSelectWorldScreen",
+	"screen.MixinGameMenuScreen",
+	"server.MixinDropBlock",
+	"server.MixinDropEntity",
+	"MixinMinecraftClient"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
