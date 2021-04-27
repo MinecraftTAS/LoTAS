@@ -1,5 +1,7 @@
 package de.pfannekuchen.lotas.dupemod;
 
+import static rlog.RLogAPI.logDebug;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -14,8 +16,6 @@ import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
-
-import static rlog.RLogAPI.*;
 
 public class DupeMod {
 	
