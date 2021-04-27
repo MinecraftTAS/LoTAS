@@ -15,4 +15,8 @@ public class Keyboard {
 		MinecraftClient mc=MinecraftClient.getInstance();
 		return GLFW.glfwGetKey(mc.window.getHandle(), keyCode) == GLFW.GLFW_PRESS;
 	}
+	public static boolean isPressed(int keyCode) {
+		MinecraftClient mc=MinecraftClient.getInstance();
+		return GLFW.glfwGetKey(mc.window.getHandle(), keyCode) == GLFW.GLFW_PRESS;
+	}
 }
