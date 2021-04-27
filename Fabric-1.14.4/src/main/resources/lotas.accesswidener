@@ -5,5 +5,7 @@ accessible    class    net/minecraft/client/toast/ToastManager$Entry
 accessible    field    net/minecraft/client/gui/widget/AbstractButtonWidget    message    Lnet/minecraft/text/Text;
 accessible    method    net/minecraft/entity/mob/MobEntity    initEquipment    (Lnet/minecraft/world/LocalDifficulty;)V
 accessible    field    net/minecraft/client/gui/widget/TextFieldWidget    uneditableColor    I
+accessible    field    net/minecraft/client/render/RenderTickCounter    tickTime    F
+mutable    field    net/minecraft/client/render/RenderTickCounter    tickTime    F
 accessible    field    net/minecraft/client/gui/widget/ButtonWidget    onPress    Lnet/minecraft/client/gui/widget/ButtonWidget$PressAction;
 mutable    field    net/minecraft/client/gui/widget/ButtonWidget    onPress    Lnet/minecraft/client/gui/widget/ButtonWidget$PressAction;

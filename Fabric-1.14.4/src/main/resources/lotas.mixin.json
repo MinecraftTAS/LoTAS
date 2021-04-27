@@ -13,6 +13,14 @@
 	"server.MixinDropBlock",
 	"server.MixinDropEntity",
 	"event.MixinRenderEvent",
+	"accessors.MinecraftClientAccessor",
+	"tickratechanger.BindGuiSubtitleOverlay",
+	"tickratechanger.BindRenderItem",
+	"tickratechanger.BindSound",
+	"tickratechanger.BindToast",
+	"tickratechanger.BindWorldborder",
+	"tickratechanger.BindSubtitle",
+	"tickratechanger.MixinMinecraftServer",
 	"MixinMinecraftClient"
   ],
   "injectors": {

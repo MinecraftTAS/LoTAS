@@ -15,6 +15,7 @@ import de.pfannekuchen.lotas.gui.LoadstateScreen;
 import de.pfannekuchen.lotas.gui.LootManipulationScreen;
 import de.pfannekuchen.lotas.gui.SpawnManipulationScreen;
 import de.pfannekuchen.lotas.savestate.SavestateMod;
+import de.pfannekuchen.lotas.tickratechanger.TickrateChanger;
 import de.pfannekuchen.lotas.utils.Keyboard;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.GameMenuScreen;
@@ -23,6 +24,7 @@ import net.minecraft.client.gui.widget.AbstractButtonWidget;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.text.Text;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.dimension.DimensionType;
 
 @Mixin(GameMenuScreen.class)
@@ -72,6 +74,28 @@ public abstract class MixinGameMenuScreen extends Screen {
 			DupeMod.load(minecraft);
 			btn.active = false;
 		}));
+		
+        addButton(new ButtonWidget(5, 15, 48, 20, "+", b -> {
+            TickrateChanger.index++;
+            TickrateChanger.index = MathHelper.clamp(TickrateChanger.index, 1, 10);
+            TickrateChanger.updateTickrate(TickrateChanger.ticks[TickrateChanger.index]);
+        }));
+        addButton(new ButtonWidget( 55, 15, 48, 20, "-", b -> {
+            TickrateChanger.index--;
+            TickrateChanger.index = MathHelper.clamp(TickrateChanger.index, 1, 10);
+            TickrateChanger.updateTickrate(TickrateChanger.ticks[TickrateChanger.index]);
+        }));
+        addButton(new ButtonWidget(37, 115, 66, 20, "Jump ticks", btn -> {
+			TickrateChanger.ticksToJump = TickrateChanger.ticks[TickrateChanger.ji];
+			btn.active = false;
+			btn.setMessage("Jumping...");
+        }));
+        addButton(new ButtonWidget(5, 115, 30, 20, TickrateChanger.ticks[TickrateChanger.ji] + "t", btn -> {
+        	TickrateChanger.ji++;
+			if (TickrateChanger.ji > 10) TickrateChanger.ji = 1;
+			buttons.clear();
+			init();
+        }));
 	}
 	
 	@Inject(method = "render", at = @At("TAIL"))
@@ -107,8 +131,12 @@ public abstract class MixinGameMenuScreen extends Screen {
 			drawCenteredString(minecraft.textRenderer, "\u00A76Loadstate successful...", width / 2, 20, new Color(1F, 1F, 1F, 1F - (timeSince / 2000F)).getRGB());
 		}
 		
-		drawString(minecraft.textRenderer, "Tickrate Changer (" + "X" + ")", 5, 5, 0xFFFFFF);
+		drawString(minecraft.textRenderer, "Tickrate Changer (" + TickrateChanger.tickrate + ")", 5, 5, 0xFFFFFF);
 		minecraft.textRenderer.drawWithShadow("Tickjump", 10, 105, 0xFFFFFF);
+		if(buttons.get(18).active==false) {
+			minecraft.textRenderer.drawWithShadow("Tickjump is ready,", 8, 137, 0xFFFFFF);
+			minecraft.textRenderer.drawWithShadow("press ESC to continue", 8, 147, 0xFFFFFF);
+		}
 		minecraft.textRenderer.drawWithShadow("Duping", 10, 45, 0xFFFFFF);
 		int w = width - 5;
 		minecraft.textRenderer.drawWithShadow("Tracked Items Delay: ", w - minecraft.textRenderer.getStringWidth("Tracked Items Delay: ") - 1, 10, 0xFFFFFFFF);

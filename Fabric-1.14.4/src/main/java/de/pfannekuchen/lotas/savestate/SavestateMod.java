@@ -9,6 +9,7 @@ import org.apache.commons.io.FileUtils;
 
 import com.google.common.io.Files;
 
+import de.pfannekuchen.lotas.tickratechanger.Timer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.server.MinecraftServer;
@@ -41,7 +42,7 @@ public class SavestateMod {
 	 */
 	public static final String generateSavestateFile() {
 		final ClientPlayerEntity p = MinecraftClient.getInstance().player;
-		return p.getVelocity().x + ":" + p.getVelocity().y + ":" + p.getVelocity().z;
+		return p.getVelocity().x + ":" + p.getVelocity().y + ":" + p.getVelocity().z + ":" + Timer.ticks;
 	}
 	
 	/**
@@ -153,7 +154,7 @@ public class SavestateMod {
 			motionX = Double.parseDouble(data.split(":")[0]);
 			motionY = Double.parseDouble(data.split(":")[1]);
 			motionZ = Double.parseDouble(data.split(":")[2]);
-//			Timer.ticks = Integer.parseInt(data.split(":")[3]);
+			Timer.ticks = Integer.parseInt(data.split(":")[3]);
 			applyVelocity = true;
             TrackerFile.increaseLoadstates(savestatesDir, worldName);
 		} catch (NumberFormatException | IOException e) {

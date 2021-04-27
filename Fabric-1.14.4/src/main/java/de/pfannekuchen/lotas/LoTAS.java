@@ -11,6 +11,7 @@ import org.apache.commons.io.FileUtils;
 
 import de.pfannekuchen.lotas.gui.SeedListScreen;
 import de.pfannekuchen.lotas.utils.ConfigManager;
+import de.pfannekuchen.lotas.utils.Hotkeys;
 import net.fabricmc.api.ClientModInitializer;
 import net.minecraft.client.MinecraftClient;
 import rlog.RLogAPI;
@@ -34,6 +35,7 @@ public class LoTAS implements ClientModInitializer {
         } catch (Exception e) {
         	RLogAPI.logError(e, "[PreInit] Reading Seeds File failed #0");
         }
+        Hotkeys.registerKeybindings();
     }
     
     /**

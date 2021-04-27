@@ -118,7 +118,7 @@ public class SpawnManipulationScreen extends Screen {
 		zText = new TextFieldWidget(MinecraftClient.getInstance().textRenderer, width / 9 * 7 + 2, height - 46, (int) (width/ 4.5) - 6, 20, spawnZ + "");
 		
 		addButton(new ButtonWidget(5, height - 24, width / 3, 20, "Spawn Entity", btn -> MinecraftClient.getInstance().getServer().getWorld(minecraft.player.dimension).spawnEntity(e)));
-		addButton(new ButtonWidget(5, height - 46, width / 3, 20, "Done", btn -> minecraft.openScreen(new GameMenuScreen(false))));
+		addButton(new ButtonWidget(5, height - 46, width / 3, 20, "Done", btn -> minecraft.openScreen(new GameMenuScreen(true))));
 		
 	}
 	
