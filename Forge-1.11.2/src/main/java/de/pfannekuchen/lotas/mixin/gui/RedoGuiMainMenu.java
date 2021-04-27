@@ -38,7 +38,7 @@ public abstract class RedoGuiMainMenu extends GuiScreen {
 	
 	@Shadow
 	public String splashText;
-	@Shadow
+	@Shadow(remap = false)
 	public GuiButton modButton;
 	@Shadow
 	public GuiButton realmsButton;
