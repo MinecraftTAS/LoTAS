@@ -104,5 +104,5 @@ public abstract class MixinRenderEvent {
 			GL11.glPopMatrix();
 		}
 	}
-	
 }
+

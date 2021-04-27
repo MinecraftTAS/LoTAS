@@ -13,7 +13,9 @@
 	"server.MixinDropBlock",
 	"server.MixinDropEntity",
 	"event.MixinRenderEvent",
+	"event.MixinTextEvent",
 	"accessors.MinecraftClientAccessor",
+	"accessors.ServerPlayerEntityAccessor",
 	"tickratechanger.BindGuiSubtitleOverlay",
 	"tickratechanger.BindRenderItem",
 	"tickratechanger.BindSound",
@@ -21,7 +23,12 @@
 	"tickratechanger.BindWorldborder",
 	"tickratechanger.BindSubtitle",
 	"tickratechanger.MixinMinecraftServer",
-	"MixinMinecraftClient"
+	"MixinMinecraftClient",
+	"MixinServerPlayerEntity",
+	"MixinPearlDelay",
+	"MixinDeathScreen",
+	"MixinExplosionDropChance",
+	"MixinEnchantmentDurability"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -1,5 +1,7 @@
 package de.pfannekuchen.lotas.tickratechanger;
 
+import java.time.Duration;
+
 import de.pfannekuchen.lotas.mixin.accessors.MinecraftClientAccessor;
 import de.pfannekuchen.lotas.utils.ConfigManager;
 import net.minecraft.client.MinecraftClient;
@@ -25,6 +27,8 @@ public class TickrateChanger {
 	
 	public static int ji = 5; // <- ignore this
 	
+	public static Duration rta = Duration.ZERO;
+ 	
 	public static int ticksToJump = -1;
 	
 	public static int index = 6;
@@ -48,6 +52,7 @@ public class TickrateChanger {
 
 	public static long timeSinceTC = System.currentTimeMillis();
 	public static long fakeTimeSinceTC = System.currentTimeMillis();
+	public static boolean show;
 	
 	/**
 	 * Changes the tickrate of the client and server.

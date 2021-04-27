@@ -1,6 +1,7 @@
 package de.pfannekuchen.lotas.mixin.screen;
 
 import java.awt.Color;
+import java.time.Duration;
 
 import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Mixin;
@@ -14,8 +15,11 @@ import de.pfannekuchen.lotas.gui.DragonManipulationScreen;
 import de.pfannekuchen.lotas.gui.LoadstateScreen;
 import de.pfannekuchen.lotas.gui.LootManipulationScreen;
 import de.pfannekuchen.lotas.gui.SpawnManipulationScreen;
+import de.pfannekuchen.lotas.gui.widgets.SmallCheckboxWidget;
 import de.pfannekuchen.lotas.savestate.SavestateMod;
 import de.pfannekuchen.lotas.tickratechanger.TickrateChanger;
+import de.pfannekuchen.lotas.tickratechanger.Timer;
+import de.pfannekuchen.lotas.utils.ConfigManager;
 import de.pfannekuchen.lotas.utils.Keyboard;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.GameMenuScreen;
@@ -32,6 +36,8 @@ public abstract class MixinGameMenuScreen extends Screen {
 	protected MixinGameMenuScreen(Text title) { super(title); }
 
 	public TextFieldWidget savestateName;
+	
+	 SmallCheckboxWidget fw = null; // do not pay attention
 	
 	@Inject(at = @At("RETURN"), method = "init")
 	public void addCustomButtons(CallbackInfo ci) {
@@ -96,6 +102,40 @@ public abstract class MixinGameMenuScreen extends Screen {
 			buttons.clear();
 			init();
         }));
+        addButton(new SmallCheckboxWidget(2, height - 20 - 15, "Avoid taking damage", !ConfigManager.getBoolean("tools", "takeDamage"), b -> {
+            ConfigManager.setBoolean("tools", "takeDamage", !b.isChecked());
+            ConfigManager.save();
+        }));
+       
+        final SmallCheckboxWidget tw = addButton(new SmallCheckboxWidget(2, height - 32 - 15, "Drop towards me", ConfigManager.getBoolean("tools", "manipulateVelocityTowards"), b -> {
+            ConfigManager.setBoolean("tools", "manipulateVelocityTowards", b.isChecked());
+            if (b.isChecked()) {
+                ConfigManager.setBoolean("tools", "manipulateVelocityAway", false);
+                fw.silentPress(false);
+            }
+            ConfigManager.save();
+        }));
+        fw = addButton(new SmallCheckboxWidget(2, height - 44 - 15, "Drop away from me", ConfigManager.getBoolean("tools", "manipulateVelocityAway"), b -> {
+            ConfigManager.setBoolean("tools", "manipulateVelocityAway", b.isChecked());
+            if (b.isChecked()) {
+                ConfigManager.setBoolean("tools", "manipulateVelocityTowards", false);
+                tw.silentPress(false);
+            }
+            ConfigManager.save();
+        }));
+        addButton(new SmallCheckboxWidget(2, height - 56 - 15 , "Optimize Explosions", ConfigManager.getBoolean("tools", "manipulateExplosionDropChance"), b -> {
+            ConfigManager.setBoolean("tools", "manipulateExplosionDropChance", b.isChecked());
+            ConfigManager.save();
+        }));
+        addButton(new SmallCheckboxWidget(2, height - 68 - 15 , "Left Auto Clicker", ConfigManager.getBoolean("tools", "lAutoClicker"), b -> {
+            ConfigManager.setBoolean("tools", "lAutoClicker", b.isChecked());
+            ConfigManager.save();
+        }));
+        
+        addButton(new ButtonWidget(this.width / 2 - 100, this.height / 4 + 144 + -16, 200, 20, "Reset Timer", btn -> {
+        	Timer.ticks = -1;
+			Timer.startTime = Duration.ofMillis(System.currentTimeMillis());
+        }));
 	}
 	
 	@Inject(method = "render", at = @At("TAIL"))
@@ -111,7 +151,7 @@ public abstract class MixinGameMenuScreen extends Screen {
 			}	
 		}
 		
-		drawCenteredString(minecraft.textRenderer, "Hold Shift to access more features", width / 2, this.height / 4 + 126, 0xFFFFFF);
+		drawCenteredString(minecraft.textRenderer, "Hold Shift to access more features", width / 2, this.height / 4 + 152, 0xFFFFFF);
 	
 		if (savestateName != null) savestateName.render(mouseX, mouseX, partialTicks);
 		

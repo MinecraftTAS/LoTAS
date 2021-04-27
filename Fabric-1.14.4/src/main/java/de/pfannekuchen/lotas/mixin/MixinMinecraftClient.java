@@ -32,6 +32,7 @@ import net.minecraft.util.math.MathHelper;
 public abstract class MixinMinecraftClient {
 
 	private boolean isLoadingWorld;
+	@Shadow public int itemUseCooldown;
 	
 	@Inject(method = "joinWorld", at = @At("HEAD"))
 	public void injectloadWorld(ClientWorld worldClientIn, CallbackInfo ci) {
@@ -40,6 +41,8 @@ public abstract class MixinMinecraftClient {
 	
 	@Inject(method = "tick", at = @At(value="HEAD"))
 	public void injectrunTick(CallbackInfo ci) {
+		if (ConfigManager.getBoolean("tools", "lAutoClicker")) itemUseCooldown = 0;
+		
 		if (Hotkeys.shouldLoadstate) {
 			Hotkeys.shouldLoadstate = false;
 			SavestateMod.loadstate(-1);
@@ -47,6 +50,8 @@ public abstract class MixinMinecraftClient {
 			Hotkeys.shouldSavestate = false;
 			SavestateMod.savestate(null);
 		}
+		
+		TickrateChanger.show = !TickrateChanger.show;
 		
 		TickrateChanger.timeOffset = Util.getMeasuringTimeMs();
 		TickrateChanger.ticksPassed++;
