@@ -28,7 +28,9 @@
 	"MixinPearlDelay",
 	"MixinDeathScreen",
 	"MixinExplosionDropChance",
-	"MixinEnchantmentDurability"
+	"MixinEnchantmentDurability",
+	"MixinPotionEntityRenderer",
+	"MixinShield"
   ],
   "injectors": {
     "defaultRequire": 1
