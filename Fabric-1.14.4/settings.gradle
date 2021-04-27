@@ -1,1 +1,12 @@
+pluginManagement {
+    repositories {
+    	maven { url 'https://jitpack.io' }
+        maven {
+        	// You also need to comment out this line when using Gradle 3
+        	// name = 'maven'
+            url = 'https://maven.fabricmc.net/'
+        }
+        gradlePluginPortal()
+    }
+}
 rootProject.name = 'Fabric-1.14.4'

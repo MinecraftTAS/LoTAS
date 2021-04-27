@@ -11,9 +11,9 @@ import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.enchantment.InfoEnchantment;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.SpawnType;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.text.LiteralText;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Difficulty;
 import rlog.RLogAPI;
 
@@ -24,7 +24,7 @@ import rlog.RLogAPI;
  */
 public class SpawnManipulationScreen extends Screen {
 	
-	protected SpawnManipulationScreen() {
+	public SpawnManipulationScreen() {
 		super(new LiteralText(""));
 	}
 
@@ -102,7 +102,7 @@ public class SpawnManipulationScreen extends Screen {
 			entities.put(26, "Zombie with Diamond Armor and Enchanted Sword");
 		}
 		
-		entity = new EntitySliderWidget(5, 2, entities, width - 10, 25, btn -> {
+		entity = new EntitySliderWidget(width / 2 - 102, 2, entities, 204, 20, btn -> {
 			
 		});
 		addButton(entity);
@@ -131,23 +131,22 @@ public class SpawnManipulationScreen extends Screen {
 		e = entity.getEntity(minecraft.getServer().getWorld(minecraft.player.dimension));
 		e.updatePositionAndAngles(spawnX, spawnY, spawnZ, 0, 0);
 		if (e instanceof MobEntity) {
-			buttons.get(buttons.size() - 2).active = e.world.getDifficulty() != Difficulty.PEACEFUL && ((MobEntity) e).getBlockPathWeight(new BlockPos(e.posX, e.getEntityBoundingBox().minY, e.posZ)) >= 0.0F && e.world.getBlockState((new BlockPos(e)).down()).canEntitySpawn(e) && isValidLightLevel(e);
+			buttons.get(buttons.size() - 2).active = ((MobEntity) e).canSpawn(minecraft.getServer().getWorld(minecraft.player.dimension), SpawnType.NATURAL);
 		} else {
-			buttons.get(buttons.size() - 2).active = e.world.getBlockState((new BlockPos(e)).down()).allowsSpawning(e);
+			buttons.get(buttons.size() - 2).active = true;
 		}
 		return b;
 	}
 	
 	@Override
 	public boolean mouseReleased(double mouseX, double mouseY, int state) {
-		boolean b = super.mouseReleased(mouseX, mouseY, state)
+		boolean b = super.mouseReleased(mouseX, mouseY, state);
 		e = entity.getEntity(minecraft.getServer().getWorld(minecraft.player.dimension));
 		e.updatePositionAndAngles(spawnX, spawnY, spawnZ, 0, 0);
-		
 		if (e instanceof MobEntity) {
-			buttons.get(buttons.size() - 2).active = e.world.getDifficulty() != Difficulty.PEACEFUL && ((MobEntity) e).getBlockPathWeight(new BlockPos(e.posX, e.getEntityBoundingBox().minY, e.posZ)) >= 0.0F && e.world.getBlockState((new BlockPos(e)).down()).canEntitySpawn(e) && isValidLightLevel(e);
+			buttons.get(buttons.size() - 2).active = ((MobEntity) e).canSpawn(minecraft.getServer().getWorld(minecraft.player.dimension), SpawnType.NATURAL);
 		} else {
-			buttons.get(buttons.size() - 2).active = e.world.getBlockState((new BlockPos(e)).down()).canEntitySpawn(e);
+			buttons.get(buttons.size() - 2).active = true;
 		}
 		return b;
 	}

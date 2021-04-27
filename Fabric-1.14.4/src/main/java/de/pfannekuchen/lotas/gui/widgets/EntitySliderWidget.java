@@ -1,39 +1,36 @@
 package de.pfannekuchen.lotas.gui.widgets;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.HashMap;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 
-import de.pfannekuchen.lotas.gui.GuiEntitySpawner;
-import net.minecraft.client.Minecraft;
+import de.pfannekuchen.lotas.gui.SpawnManipulationScreen;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.AbstractButtonWidget;
 import net.minecraft.client.gui.widget.ButtonWidget.PressAction;
+import net.minecraft.enchantment.InfoEnchantment;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.monster.EntityBlaze;
-import net.minecraft.entity.monster.EntityCaveSpider;
-import net.minecraft.entity.monster.EntityCreeper;
-import net.minecraft.entity.monster.EntityEnderman;
-import net.minecraft.entity.monster.EntityGhast;
-import net.minecraft.entity.monster.EntityHusk;
-import net.minecraft.entity.monster.EntityIronGolem;
-import net.minecraft.entity.monster.EntityMagmaCube;
-import net.minecraft.entity.monster.EntitySkeleton;
-import net.minecraft.entity.monster.EntitySlime;
-import net.minecraft.entity.monster.EntitySpider;
-import net.minecraft.entity.monster.EntityWitch;
-import net.minecraft.entity.monster.EntityWitherSkeleton;
-import net.minecraft.entity.monster.EntityZombie;
-import net.minecraft.entity.monster.EntityZombieVillager;
-import net.minecraft.init.Items;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.entity.mob.BlazeEntity;
+import net.minecraft.entity.mob.CaveSpiderEntity;
+import net.minecraft.entity.mob.CreeperEntity;
+import net.minecraft.entity.mob.EndermanEntity;
+import net.minecraft.entity.mob.GhastEntity;
+import net.minecraft.entity.mob.HuskEntity;
+import net.minecraft.entity.mob.MagmaCubeEntity;
+import net.minecraft.entity.mob.SkeletonEntity;
+import net.minecraft.entity.mob.SlimeEntity;
+import net.minecraft.entity.mob.SpiderEntity;
+import net.minecraft.entity.mob.WitchEntity;
+import net.minecraft.entity.mob.WitherSkeletonEntity;
+import net.minecraft.entity.mob.ZombieEntity;
+import net.minecraft.entity.mob.ZombieVillagerEntity;
+import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.EnumDifficulty;
-import net.minecraft.world.WorldServer;
-import rlog.RLogAPI;
+import net.minecraft.item.Items;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.Hand;
+import net.minecraft.world.Difficulty;
 
 public class EntitySliderWidget extends AbstractButtonWidget {
 
@@ -165,151 +162,158 @@ public class EntitySliderWidget extends AbstractButtonWidget {
 		}
 	}
 	
-	public LivingEntity getEntity(WorldServer world) {
-		LivingEntity entity = null;
-		switch (getValueInt()) {
+	public LivingEntity getEntity(ServerWorld world) {
+		LivingEntity entity = new BlazeEntity(EntityType.BLAZE, world);
+		switch ((int) Math.round(sliderPosition * (max - min) + min)) {
 		case 0:
-			entity = new EntityBlaze(world);
+			entity = new BlazeEntity(EntityType.BLAZE, world);
 			break;
 		case 1:
-			entity = new EntityCaveSpider(world);
+			entity = new CaveSpiderEntity(EntityType.CAVE_SPIDER, world);
 			break;
 		case 2:
-			entity = new EntityCreeper(world);
+			entity = new CreeperEntity(EntityType.CREEPER, world);
 			break;
 		case 3:
-			entity = new EntityEnderman(world);
+			entity = new EndermanEntity(EntityType.ENDERMAN, world);
 			break;
 		case 4:
-			entity = new EntityGhast(world);
+			entity = new GhastEntity(EntityType.GHAST, world);
 			break;
 		case 5:
-			entity = new EntityHusk(world);
+			entity = new HuskEntity(EntityType.HUSK, world);
 			break;
 		case 6:
-			entity = new EntityIronGolem(world);
+			entity = new IronGolemEntity(EntityType.IRON_GOLEM, world);
 			break;
 		case 7:
-			entity = new EntityMagmaCube(world);
+			entity = new MagmaCubeEntity(EntityType.MAGMA_CUBE, world);
 			break;
 		case 8:
-			entity = new EntitySkeleton(world);
+			entity = new SkeletonEntity(EntityType.SKELETON, world);
 			break;
 		case 9:
-			entity = new EntitySlime(world);
+			entity = new SlimeEntity(EntityType.SLIME, world);
 			break;
 		case 10:
-			entity = new EntitySpider(world);
+			entity = new SpiderEntity(EntityType.SPIDER, world);
 			break;
 		case 11:
-			entity = new EntityWitch(world);
+			entity = new WitchEntity(EntityType.WITCH, world);
 			break;
 		case 12:
-			entity = new EntityWitherSkeleton(world);
+			entity = new WitherSkeletonEntity(EntityType.WITHER_SKELETON, world);
 			break;
 		case 13:
-			entity = new EntityZombie(world);
+			entity = new ZombieEntity(world);
 			break;
 		case 14:
-			entity = new EntityZombieVillager(world);
+			entity = new ZombieVillagerEntity(EntityType.ZOMBIE_VILLAGER, world);
 			break;
 		}
-		if (world.getDifficulty() == EnumDifficulty.HARD) {
-			switch ((int) getSliderValue()) {
+		if (world.getDifficulty() == Difficulty.HARD) {
+			switch ((int) Math.round(sliderPosition * (max - min) + min)) {
 			case 15:
-				entity = new EntitySkeleton(world);
-				entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, addEnchants(new ItemStack(Items.BOW), GuiEntitySpawner.skelBow));
+				entity = new SkeletonEntity(EntityType.SKELETON, world);
+				entity.setStackInHand(Hand.MAIN_HAND, addEnchants(new ItemStack(Items.BOW), SpawnManipulationScreen.skelBow));
 				break;
 			case 17:
-				entity = new EntitySkeleton(world);
-				entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, addEnchants(new ItemStack(Items.BOW), GuiEntitySpawner.skelBow));
-				entity.setItemStackToSlot(EntityEquipmentSlot.FEET, new ItemStack(Items.LEATHER_BOOTS));
-				entity.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(Items.LEATHER_CHESTPLATE));
-				entity.setItemStackToSlot(EntityEquipmentSlot.LEGS, new ItemStack(Items.LEATHER_LEGGINGS));
-				entity.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(Items.LEATHER_HELMET));
+				entity = new SkeletonEntity(EntityType.SKELETON, world);
+				entity.setStackInHand(Hand.MAIN_HAND, addEnchants(new ItemStack(Items.BOW), SpawnManipulationScreen.skelBow));
+				entity.equipStack(EquipmentSlot.FEET, new ItemStack(Items.LEATHER_BOOTS));
+				entity.equipStack(EquipmentSlot.CHEST, new ItemStack(Items.LEATHER_CHESTPLATE));
+				entity.equipStack(EquipmentSlot.LEGS, new ItemStack(Items.LEATHER_LEGGINGS));
+				entity.equipStack(EquipmentSlot.HEAD, new ItemStack(Items.LEATHER_HELMET));
 				break;
 			case 19:
-				entity = new EntitySkeleton(world);
-				entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, addEnchants(new ItemStack(Items.BOW), GuiEntitySpawner.skelBow));
-				entity.setItemStackToSlot(EntityEquipmentSlot.FEET, new ItemStack(Items.GOLDEN_BOOTS));
-				entity.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(Items.GOLDEN_CHESTPLATE));
-				entity.setItemStackToSlot(EntityEquipmentSlot.LEGS, new ItemStack(Items.GOLDEN_LEGGINGS));
-				entity.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(Items.GOLDEN_HELMET));
+				entity = new SkeletonEntity(EntityType.SKELETON, world);
+				entity.setStackInHand(Hand.MAIN_HAND, addEnchants(new ItemStack(Items.BOW), SpawnManipulationScreen.skelBow));
+				entity.equipStack(EquipmentSlot.FEET, new ItemStack(Items.GOLDEN_BOOTS));
+				entity.equipStack(EquipmentSlot.CHEST, new ItemStack(Items.GOLDEN_CHESTPLATE));
+				entity.equipStack(EquipmentSlot.LEGS, new ItemStack(Items.GOLDEN_LEGGINGS));
+				entity.equipStack(EquipmentSlot.HEAD, new ItemStack(Items.GOLDEN_HELMET));
 				break;
 			case 21:
-				entity = new EntitySkeleton(world);
-				entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, addEnchants(new ItemStack(Items.BOW), GuiEntitySpawner.skelBow));
-				entity.setItemStackToSlot(EntityEquipmentSlot.FEET, new ItemStack(Items.CHAINMAIL_BOOTS));
-				entity.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(Items.CHAINMAIL_CHESTPLATE));
-				entity.setItemStackToSlot(EntityEquipmentSlot.LEGS, new ItemStack(Items.CHAINMAIL_LEGGINGS));
-				entity.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(Items.CHAINMAIL_HELMET));
+				entity = new SkeletonEntity(EntityType.SKELETON, world);
+				entity.setStackInHand(Hand.MAIN_HAND, addEnchants(new ItemStack(Items.BOW), SpawnManipulationScreen.skelBow));
+				entity.equipStack(EquipmentSlot.FEET, new ItemStack(Items.CHAINMAIL_BOOTS));
+				entity.equipStack(EquipmentSlot.CHEST, new ItemStack(Items.CHAINMAIL_CHESTPLATE));
+				entity.equipStack(EquipmentSlot.LEGS, new ItemStack(Items.CHAINMAIL_LEGGINGS));
+				entity.equipStack(EquipmentSlot.HEAD, new ItemStack(Items.CHAINMAIL_HELMET));
 				break;
 			case 23:
-				entity = new EntitySkeleton(world);
-				entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, addEnchants(new ItemStack(Items.BOW), GuiEntitySpawner.skelBow));
-				entity.setItemStackToSlot(EntityEquipmentSlot.FEET, new ItemStack(Items.IRON_BOOTS));
-				entity.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(Items.IRON_CHESTPLATE));
-				entity.setItemStackToSlot(EntityEquipmentSlot.LEGS, new ItemStack(Items.IRON_LEGGINGS));
-				entity.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(Items.IRON_HELMET));
+				entity = new SkeletonEntity(EntityType.SKELETON, world);
+				entity.setStackInHand(Hand.MAIN_HAND, addEnchants(new ItemStack(Items.BOW), SpawnManipulationScreen.skelBow));
+				entity.equipStack(EquipmentSlot.FEET, new ItemStack(Items.IRON_BOOTS));
+				entity.equipStack(EquipmentSlot.CHEST, new ItemStack(Items.IRON_CHESTPLATE));
+				entity.equipStack(EquipmentSlot.LEGS, new ItemStack(Items.IRON_LEGGINGS));
+				entity.equipStack(EquipmentSlot.HEAD, new ItemStack(Items.IRON_HELMET));
 				break;
 			case 25:
-				entity = new EntitySkeleton(world);
-				entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, addEnchants(new ItemStack(Items.BOW), GuiEntitySpawner.skelBow));
-				entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.BOW));
-				entity.setItemStackToSlot(EntityEquipmentSlot.FEET, new ItemStack(Items.DIAMOND_BOOTS));
-				entity.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(Items.DIAMOND_CHESTPLATE));
-				entity.setItemStackToSlot(EntityEquipmentSlot.LEGS, new ItemStack(Items.DIAMOND_LEGGINGS));
-				entity.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(Items.DIAMOND_HELMET));
+				entity = new SkeletonEntity(EntityType.SKELETON, world);
+				entity.setStackInHand(Hand.MAIN_HAND, addEnchants(new ItemStack(Items.BOW), SpawnManipulationScreen.skelBow));
+				entity.setStackInHand(Hand.MAIN_HAND, new ItemStack(Items.BOW));
+				entity.equipStack(EquipmentSlot.FEET, new ItemStack(Items.DIAMOND_BOOTS));
+				entity.equipStack(EquipmentSlot.CHEST, new ItemStack(Items.DIAMOND_CHESTPLATE));
+				entity.equipStack(EquipmentSlot.LEGS, new ItemStack(Items.DIAMOND_LEGGINGS));
+				entity.equipStack(EquipmentSlot.HEAD, new ItemStack(Items.DIAMOND_HELMET));
 				break;
 			case 16:
-				entity = new EntityZombie(world);
-				entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, addEnchants(new ItemStack(Items.IRON_SWORD), GuiEntitySpawner.zombieSword));
+				entity = new ZombieEntity(world);
+				entity.setStackInHand(Hand.MAIN_HAND, addEnchants(new ItemStack(Items.IRON_SWORD), SpawnManipulationScreen.zombieSword));
 				break;
 			case 18:
-				entity = new EntityZombie(world);
-				entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, addEnchants(new ItemStack(Items.IRON_SWORD), GuiEntitySpawner.zombieSword));
-				entity.setItemStackToSlot(EntityEquipmentSlot.FEET, new ItemStack(Items.LEATHER_BOOTS));
-				entity.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(Items.LEATHER_CHESTPLATE));
-				entity.setItemStackToSlot(EntityEquipmentSlot.LEGS, new ItemStack(Items.LEATHER_LEGGINGS));
-				entity.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(Items.LEATHER_HELMET));
+				entity = new ZombieEntity(world);
+				entity.setStackInHand(Hand.MAIN_HAND, addEnchants(new ItemStack(Items.IRON_SWORD), SpawnManipulationScreen.zombieSword));
+				entity.equipStack(EquipmentSlot.FEET, new ItemStack(Items.LEATHER_BOOTS));
+				entity.equipStack(EquipmentSlot.CHEST, new ItemStack(Items.LEATHER_CHESTPLATE));
+				entity.equipStack(EquipmentSlot.LEGS, new ItemStack(Items.LEATHER_LEGGINGS));
+				entity.equipStack(EquipmentSlot.HEAD, new ItemStack(Items.LEATHER_HELMET));
 				break;
 			case 20:
-				entity = new EntityZombie(world);
-				entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, addEnchants(new ItemStack(Items.IRON_SWORD), GuiEntitySpawner.zombieSword));
-				entity.setItemStackToSlot(EntityEquipmentSlot.FEET, new ItemStack(Items.GOLDEN_BOOTS));
-				entity.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(Items.GOLDEN_CHESTPLATE));
-				entity.setItemStackToSlot(EntityEquipmentSlot.LEGS, new ItemStack(Items.GOLDEN_LEGGINGS));
-				entity.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(Items.GOLDEN_HELMET));
+				entity = new ZombieEntity(world);
+				entity.setStackInHand(Hand.MAIN_HAND, addEnchants(new ItemStack(Items.IRON_SWORD), SpawnManipulationScreen.zombieSword));
+				entity.equipStack(EquipmentSlot.FEET, new ItemStack(Items.GOLDEN_BOOTS));
+				entity.equipStack(EquipmentSlot.CHEST, new ItemStack(Items.GOLDEN_CHESTPLATE));
+				entity.equipStack(EquipmentSlot.LEGS, new ItemStack(Items.GOLDEN_LEGGINGS));
+				entity.equipStack(EquipmentSlot.HEAD, new ItemStack(Items.GOLDEN_HELMET));
 				break;
 			case 22:
-				entity = new EntityZombie(world);
-				entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, addEnchants(new ItemStack(Items.IRON_SWORD), GuiEntitySpawner.zombieSword));
-				entity.setItemStackToSlot(EntityEquipmentSlot.FEET, new ItemStack(Items.CHAINMAIL_BOOTS));
-				entity.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(Items.CHAINMAIL_CHESTPLATE));
-				entity.setItemStackToSlot(EntityEquipmentSlot.LEGS, new ItemStack(Items.CHAINMAIL_LEGGINGS));
-				entity.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(Items.CHAINMAIL_HELMET));
+				entity = new ZombieEntity(world);
+				entity.setStackInHand(Hand.MAIN_HAND, addEnchants(new ItemStack(Items.IRON_SWORD), SpawnManipulationScreen.zombieSword));
+				entity.equipStack(EquipmentSlot.FEET, new ItemStack(Items.CHAINMAIL_BOOTS));
+				entity.equipStack(EquipmentSlot.CHEST, new ItemStack(Items.CHAINMAIL_CHESTPLATE));
+				entity.equipStack(EquipmentSlot.LEGS, new ItemStack(Items.CHAINMAIL_LEGGINGS));
+				entity.equipStack(EquipmentSlot.HEAD, new ItemStack(Items.CHAINMAIL_HELMET));
 				break;
 			case 24:
-				entity = new EntityZombie(world);
-				entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, addEnchants(new ItemStack(Items.IRON_SWORD), GuiEntitySpawner.zombieSword));
-				entity.setItemStackToSlot(EntityEquipmentSlot.FEET, new ItemStack(Items.IRON_BOOTS));
-				entity.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(Items.IRON_CHESTPLATE));
-				entity.setItemStackToSlot(EntityEquipmentSlot.LEGS, new ItemStack(Items.IRON_LEGGINGS));
-				entity.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(Items.IRON_HELMET));
+				entity = new ZombieEntity(world);
+				entity.setStackInHand(Hand.MAIN_HAND, addEnchants(new ItemStack(Items.IRON_SWORD), SpawnManipulationScreen.zombieSword));
+				entity.equipStack(EquipmentSlot.FEET, new ItemStack(Items.IRON_BOOTS));
+				entity.equipStack(EquipmentSlot.CHEST, new ItemStack(Items.IRON_CHESTPLATE));
+				entity.equipStack(EquipmentSlot.LEGS, new ItemStack(Items.IRON_LEGGINGS));
+				entity.equipStack(EquipmentSlot.HEAD, new ItemStack(Items.IRON_HELMET));
 				break;
 			case 26:
-				entity = new EntityZombie(world);
-				entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, addEnchants(new ItemStack(Items.IRON_SWORD), GuiEntitySpawner.zombieSword));
-				entity.setItemStackToSlot(EntityEquipmentSlot.FEET, new ItemStack(Items.DIAMOND_BOOTS));
-				entity.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(Items.DIAMOND_CHESTPLATE));
-				entity.setItemStackToSlot(EntityEquipmentSlot.LEGS, new ItemStack(Items.DIAMOND_LEGGINGS));
-				entity.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(Items.DIAMOND_HELMET));
+				entity = new ZombieEntity(world);
+				entity.setStackInHand(Hand.MAIN_HAND, addEnchants(new ItemStack(Items.IRON_SWORD), SpawnManipulationScreen.zombieSword));
+				entity.equipStack(EquipmentSlot.FEET, new ItemStack(Items.DIAMOND_BOOTS));
+				entity.equipStack(EquipmentSlot.CHEST, new ItemStack(Items.DIAMOND_CHESTPLATE));
+				entity.equipStack(EquipmentSlot.LEGS, new ItemStack(Items.DIAMOND_LEGGINGS));
+				entity.equipStack(EquipmentSlot.HEAD, new ItemStack(Items.DIAMOND_HELMET));
 				break;
 			}
 		}
-		entity.inventoryArmorDropChances = new float[] { 1.0f, 1.0f, 1.0f, 1.0f };
-		entity.inventoryHandsDropChances = new float[] { 1.0f, 1.0f };
+//		entity.inventoryArmorDropChances = new float[] { 1.0f, 1.0f, 1.0f, 1.0f };
+//		entity.inventoryHandsDropChances = new float[] { 1.0f, 1.0f };
 		return entity;
+	}
+	
+	public ItemStack addEnchants(ItemStack item,  InfoEnchantment[] enchants) {
+		for (InfoEnchantment enchantmentData : enchants) {
+			item.addEnchantment(enchantmentData.enchantment, enchantmentData.level);
+		}
+		return item;
 	}
 	
 	/**

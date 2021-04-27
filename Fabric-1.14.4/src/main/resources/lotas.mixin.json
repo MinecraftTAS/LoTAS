@@ -12,6 +12,7 @@
 	"screen.MixinGameMenuScreen",
 	"server.MixinDropBlock",
 	"server.MixinDropEntity",
+	"event.MixinRenderEvent",
 	"MixinMinecraftClient"
   ],
   "injectors": {

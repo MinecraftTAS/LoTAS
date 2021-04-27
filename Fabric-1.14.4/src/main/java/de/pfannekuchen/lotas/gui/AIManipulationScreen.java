@@ -14,7 +14,7 @@ import rlog.RLogAPI;
 
 public class AIManipulationScreen extends Screen {
 
-	protected AIManipulationScreen() {
+	public AIManipulationScreen() {
 		super(new LiteralText(""));
 	}
 

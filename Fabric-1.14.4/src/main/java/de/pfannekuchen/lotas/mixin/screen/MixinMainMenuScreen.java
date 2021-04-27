@@ -87,6 +87,10 @@ public abstract class MixinMainMenuScreen extends Screen {
         titleScreen.drawCenteredString(textRenderer, "TaS iS cHeAtInG !!1", centerX, y, color);
     }
 
+    /**
+     * @reason Why do you want me to put this here javac
+     * @author Pancake
+     */
 	@Overwrite
 	private void initWidgetsNormal(int y, int spacingY) {
 		this.addButton(new ButtonWidget(this.width / 2 - 100, y, 200, 20, I18n.translate("menu.singleplayer"), (buttonWidget) -> {
