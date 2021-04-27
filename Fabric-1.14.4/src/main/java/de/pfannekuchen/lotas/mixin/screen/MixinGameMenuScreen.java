@@ -8,6 +8,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import de.pfannekuchen.lotas.dupemod.DupeMod;
 import de.pfannekuchen.lotas.gui.AIManipulationScreen;
 import de.pfannekuchen.lotas.gui.DragonManipulationScreen;
 import de.pfannekuchen.lotas.gui.LoadstateScreen;
@@ -63,6 +64,14 @@ public abstract class MixinGameMenuScreen extends Screen {
 		this.addButton(new ButtonWidget((width / 4) * 3 + 4, height - 20, width / 4 - 4, 20, "Manipulate AI", btn -> {
 			this.minecraft.openScreen(new AIManipulationScreen());
 		}));
+		this.addButton(new ButtonWidget(5, 55, 98, 20, "Save Items",btn -> {
+			DupeMod.save(minecraft);
+			btn.active = false;
+		}));
+		this.addButton(new ButtonWidget(5, 75, 98, 20, "Load Items", btn -> {
+			DupeMod.load(minecraft);
+			btn.active = false;
+		}));
 	}
 	
 	@Inject(method = "render", at = @At("TAIL"))
@@ -97,6 +106,12 @@ public abstract class MixinGameMenuScreen extends Screen {
 			}
 			drawCenteredString(minecraft.textRenderer, "\u00A76Loadstate successful...", width / 2, 20, new Color(1F, 1F, 1F, 1F - (timeSince / 2000F)).getRGB());
 		}
+		
+		drawString(minecraft.textRenderer, "Tickrate Changer (" + "X" + ")", 5, 5, 0xFFFFFF);
+		minecraft.textRenderer.drawWithShadow("Tickjump", 10, 105, 0xFFFFFF);
+		minecraft.textRenderer.drawWithShadow("Duping", 10, 45, 0xFFFFFF);
+		int w = width - 5;
+		minecraft.textRenderer.drawWithShadow("Tracked Items Delay: ", w - minecraft.textRenderer.getStringWidth("Tracked Items Delay: ") - 1, 10, 0xFFFFFFFF);
 	}
 	
 	
