@@ -17,7 +17,7 @@ import net.minecraft.world.storage.loot.LootTable;
 @Mixin(EntityLiving.class)
 public class MixinLootEntity {
 	
-	@Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/world/storage/loot/LootTable;generateLootForPools(Ljava/util/Random;Lnet/minecraft/loot/context/LootContext;)Ljava/util/List;", remap = false), method = "dropLoot")
+	@Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/world/storage/loot/LootTable;generateLootForPools(Ljava/util/Random;Lnet/minecraft/world/storage/loot/LootContext;)Ljava/util/List;", remap = false), method = "dropLoot")
     public List<ItemStack> generateLootForPools(LootTable input, Random rng, LootContext context) {
         for (DropManipulation man : GuiLootManipulation.manipulations) {
             if (!man.enabled.isChecked()) continue;

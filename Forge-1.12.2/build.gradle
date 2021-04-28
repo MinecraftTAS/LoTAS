@@ -1,7 +1,8 @@
 buildscript {
     repositories {
+    	maven { url = "https://sizableshrimp.me/maven" }
         jcenter()
-        maven { url = "https://files.minecraftforge.net/maven" }
+        maven { url = "https://maven.minecraftforge.net" }
         maven { url = "https://repo.spongepowered.org/maven" }
     }
     dependencies {
