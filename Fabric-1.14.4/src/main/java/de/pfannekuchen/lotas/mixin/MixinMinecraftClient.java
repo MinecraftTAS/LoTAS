@@ -12,6 +12,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import de.pfannekuchen.lotas.LoTAS;
 import de.pfannekuchen.lotas.savestate.SavestateMod;
 import de.pfannekuchen.lotas.tickratechanger.TickrateChanger;
 import de.pfannekuchen.lotas.tickratechanger.Timer;
@@ -94,6 +95,11 @@ public abstract class MixinMinecraftClient {
 	public WorldRenderer worldRenderer;
 	
 	public int save;
+	
+	@Inject(method = "init", at = @At("TAIL"))
+	public void loadRenderingLate(CallbackInfo ci) {
+		LoTAS.loadShields();
+	}
 	
     @Inject(method = "render", at = @At(value="HEAD"))
     public void injectrunGameLoop(CallbackInfo ci) throws IOException {

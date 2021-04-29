@@ -45,8 +45,6 @@ public class PotionRenderer {
 		}
 		float f = (float)1.0F;
         float f1 = f / (float)stack.getMaxUseTime();
-
-        GlStateManager.translatef(-.75F, 0.15f, 0f);
         
         float f2 = MathHelper.abs(MathHelper.cos(f / 4.0F * (float)Math.PI) * 0.1F);
         GlStateManager.translatef(0.0F, f2 - 4.5f, -4.0F);
