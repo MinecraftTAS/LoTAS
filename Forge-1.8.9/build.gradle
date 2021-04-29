@@ -64,17 +64,10 @@ dependencies {
         exclude module: 'commons-io'
         exclude module: 'log4j-core'
     }
-    compile('net.bramp.ffmpeg:ffmpeg:0.6.2') {
-    	exclude module: 'guava'
-        exclude module: 'gson'
-    }
-    
     
     compile 'org.msgpack:msgpack-core:0.8.16'
     compile 'org.msgpack:jackson-dataformat-msgpack:0.8.16'
-    compile group: 'com.google.guava', name: 'guava', version: '18.0'
-    // https://mvnrepository.com/artifact/com.google.code.gson/gson
-	compile group: 'com.google.code.gson', name: 'gson', version: '2.2.4'
+    implementation files ('libs/ffmpeg.jar')
     
     // real examples
     //compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env
