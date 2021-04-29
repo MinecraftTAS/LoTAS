@@ -9,3 +9,5 @@ accessible    field    net/minecraft/client/render/RenderTickCounter    tickTime
 mutable    field    net/minecraft/client/render/RenderTickCounter    tickTime    F
 accessible    field    net/minecraft/client/gui/widget/ButtonWidget    onPress    Lnet/minecraft/client/gui/widget/ButtonWidget$PressAction;
 mutable    field    net/minecraft/client/gui/widget/ButtonWidget    onPress    Lnet/minecraft/client/gui/widget/ButtonWidget$PressAction;
+extendable    class    net/minecraft/client/gui/screen/world/WorldListWidget$Entry
+accessible    field    net/minecraft/client/gui/widget/EntryListWidget    children    Ljava/util/List;

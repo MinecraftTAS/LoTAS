@@ -5,6 +5,7 @@ import java.time.Duration;
 
 import org.lwjgl.glfw.GLFW;
 
+import de.pfannekuchen.lotas.challenges.ChallengeLoader;
 import de.pfannekuchen.lotas.dupemod.DupeMod;
 import de.pfannekuchen.lotas.tickratechanger.TickrateChanger;
 import de.pfannekuchen.lotas.tickratechanger.Timer;
@@ -34,7 +35,7 @@ public class Hotkeys {
 	public static int savedTickrate;
 	
 	public static void keyEvent() throws IOException {
-		if (saveState.wasPressed()) {
+		if (saveState.wasPressed() && ChallengeLoader.map == null) {
 			RLogAPI.logDebug("[Hotkeys] Requesting Savestate");
 			MinecraftClient.getInstance().openScreen(new GameMenuScreen(true));
 			shouldSavestate = true;
@@ -60,7 +61,7 @@ public class Hotkeys {
 			TickrateChanger.index--;
 			if (TickrateChanger.index <= 0) TickrateChanger.index = 0;
 			TickrateChanger.updateTickrate(TickrateChanger.ticks[TickrateChanger.index]);
-		} else if (timer.wasPressed()) {
+		} else if (timer.wasPressed() && ChallengeLoader.map == null) {
 			if (Timer.ticks < 1 || Timer.startTime == null) {
 				Timer.startTime = Duration.ofMillis(System.currentTimeMillis());
 				Timer.ticks = 1;

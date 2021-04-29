@@ -41,4 +41,15 @@ public class TextureYoinker {
         image.close();
         return imgNew;
     }
+
+	public static Identifier download(String name, InputStream stream) {
+        NativeImage img = null;
+        try {
+            img = NativeImage.read(stream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        NativeImageBackedTexture nIBT = new NativeImageBackedTexture(parseImage(img));
+        return MinecraftClient.getInstance().getTextureManager().registerDynamicTexture(name, nIBT);
+	}
 }

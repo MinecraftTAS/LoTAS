@@ -1,6 +1,13 @@
 package de.pfannekuchen.lotas.mixin;
 
+import static rlog.RLogAPI.logDebug;
+import static rlog.RLogAPI.logError;
+
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.time.Duration;
 
 import javax.annotation.Nullable;
 
@@ -13,12 +20,16 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import de.pfannekuchen.lotas.LoTAS;
+import de.pfannekuchen.lotas.challenges.ChallengeLoader;
+import de.pfannekuchen.lotas.challenges.ChallengeMap;
+import de.pfannekuchen.lotas.gui.ChallengeMenuScreen;
 import de.pfannekuchen.lotas.savestate.SavestateMod;
 import de.pfannekuchen.lotas.tickratechanger.TickrateChanger;
 import de.pfannekuchen.lotas.tickratechanger.Timer;
 import de.pfannekuchen.lotas.utils.ConfigManager;
 import de.pfannekuchen.lotas.utils.Hotkeys;
 import de.pfannekuchen.lotas.utils.Keyboard;
+import de.pfannekuchen.lotas.utils.TextureYoinker;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.GameMenuScreen;
 import net.minecraft.client.gui.screen.Screen;
@@ -28,6 +39,7 @@ import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.MathHelper;
+import rlog.RLogAPI;
 
 @Mixin(MinecraftClient.class)
 public abstract class MixinMinecraftClient {
@@ -38,6 +50,13 @@ public abstract class MixinMinecraftClient {
 	@Inject(method = "joinWorld", at = @At("HEAD"))
 	public void injectloadWorld(ClientWorld worldClientIn, CallbackInfo ci) {
 		isLoadingWorld = ConfigManager.getBoolean("tools", "hitEscape") && worldClientIn != null;
+		
+		if (ChallengeLoader.startTimer) {
+			ChallengeLoader.startTimer = false;
+			de.pfannekuchen.lotas.tickratechanger.Timer.startTime = Duration.ofMillis(System.currentTimeMillis());
+			de.pfannekuchen.lotas.tickratechanger.Timer.ticks = 1;
+			de.pfannekuchen.lotas.tickratechanger.Timer.running = true;
+		}
 	}
 	
 	@Inject(method = "tick", at = @At(value="HEAD"))
@@ -49,7 +68,14 @@ public abstract class MixinMinecraftClient {
 			SavestateMod.loadstate(-1);
 		} else if (Hotkeys.shouldSavestate) {
 			Hotkeys.shouldSavestate = false;
-			SavestateMod.savestate(null);
+			try {
+				if (ChallengeLoader.map == null)
+					SavestateMod.savestate(null);
+				else 
+					ChallengeLoader.reload();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		
 		TickrateChanger.show = !TickrateChanger.show;
@@ -99,6 +125,34 @@ public abstract class MixinMinecraftClient {
 	@Inject(method = "init", at = @At("TAIL"))
 	public void loadRenderingLate(CallbackInfo ci) {
 		LoTAS.loadShields();
+		logDebug("[PreInit] Downloading TAS Challenge Maps");
+		try {
+			BufferedReader stream = new BufferedReader(new InputStreamReader(new URL("http://mgnet.work/taschallenges/maps1.14.4.txt").openStream()));
+			int maps = Integer.parseInt(stream.readLine().charAt(0) + "");
+			for (int i = 0; i < maps; i++) {
+				ChallengeMap map = new ChallengeMap();
+				
+				map.displayName = stream.readLine();
+				map.name = stream.readLine();
+				map.description = stream.readLine();
+				map.map = new URL("http://mgnet.work/taschallenges/" + stream.readLine());
+				int board = Integer.parseInt(stream.readLine().charAt(0) + "");
+				map.leaderboard = new String[board];
+				for (int j = 0; j < board; j++) {
+					map.leaderboard[j] = stream.readLine();
+				}
+				
+				RLogAPI.logDebug("[TASChallenges] Downloading " + map.name + " image.");
+				map.resourceLoc = TextureYoinker.download(map.name, new URL("http://mgnet.work/taschallenges/" + map.name + ".png").openStream());
+				
+				LoTAS.maps.add(map);
+				
+				stream.readLine(); // Empty
+			}
+			stream.close();
+		} catch (Exception e1) {
+			logError(e1, "Couldn't download Challenge Maps #6");
+		}
 	}
 	
     @Inject(method = "render", at = @At(value="HEAD"))
@@ -176,11 +230,14 @@ public abstract class MixinMinecraftClient {
 	@Shadow @Nullable 
 	public Screen currentScreen;
 	
-	@ModifyVariable(method = "openScreen", at = @At("STORE"), index = 1, ordinal = 0)
-    public Screen changeGuiScreen(Screen screenIn) {
+	@ModifyVariable(method = "openScreen", at = @At("HEAD"), index = 1, ordinal = 0)
+    public Screen openScreen(Screen screenIn) {
+    	if (ChallengeLoader.map != null && screenIn != null) {
+    		if (screenIn instanceof GameMenuScreen) return new ChallengeMenuScreen();
+    	}
 		if (isLoadingWorld && screenIn == null) {
 			isLoadingWorld = false;
-			return new GameMenuScreen(true);
+			return ChallengeLoader.map == null ? new GameMenuScreen(true) : new ChallengeMenuScreen();
 		}
 		return screenIn;
     }

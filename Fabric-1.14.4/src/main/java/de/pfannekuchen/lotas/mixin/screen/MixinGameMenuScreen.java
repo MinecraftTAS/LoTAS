@@ -178,8 +178,6 @@ public abstract class MixinGameMenuScreen extends Screen {
 			minecraft.textRenderer.drawWithShadow("press ESC to continue", 8, 147, 0xFFFFFF);
 		}
 		minecraft.textRenderer.drawWithShadow("Duping", 10, 45, 0xFFFFFF);
-		int w = width - 5;
-		minecraft.textRenderer.drawWithShadow("Tracked Items Delay: ", w - minecraft.textRenderer.getStringWidth("Tracked Items Delay: ") - 1, 10, 0xFFFFFFFF);
 	}
 	
 	

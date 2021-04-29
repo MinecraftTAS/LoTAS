@@ -30,7 +30,9 @@
 	"MixinExplosionDropChance",
 	"MixinEnchantmentDurability",
 	"MixinPotionEntityRenderer",
-	"MixinShield"
+	"MixinShield",
+	"MixinEndPortal",
+	"MixinIntegratedServer"
   ],
   "injectors": {
     "defaultRequire": 1

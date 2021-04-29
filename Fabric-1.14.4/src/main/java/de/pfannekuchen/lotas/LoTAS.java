@@ -7,10 +7,12 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 
+import de.pfannekuchen.lotas.challenges.ChallengeMap;
 import de.pfannekuchen.lotas.gui.SeedListScreen;
 import de.pfannekuchen.lotas.utils.ConfigManager;
 import de.pfannekuchen.lotas.utils.Hotkeys;
@@ -23,7 +25,8 @@ import rlog.RLogAPI;
 public class LoTAS implements ClientModInitializer {
 
 	public static Identifier shield;
-
+	public static final List<ChallengeMap> maps = new ArrayList<>();
+	
 	/**
      * Runs the mod initializer on the client environment.
      */
