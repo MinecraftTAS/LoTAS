@@ -21,7 +21,7 @@ public abstract class MixinLeaves {
 		return LeaveDropManipulation.dropSapling.isToggled() ? 0:rand.nextInt(chance);
 	}
 	
-	@Redirect(method = "getDrops", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BlockLeaves;dropApple(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;I)V"), remap = false)
+	@Redirect(remap = false, method = "getDrops", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BlockLeaves;dropApple(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;I)V"), remap = false)
 	public void redirectDropApple(BlockLeaves leaves, World world, BlockPos pos, IBlockState state, int chance) {
 		this.dropApple((World)world, pos, state, !LeaveDropManipulation.dropApple.isToggled() ? chance : 1);
 	}
