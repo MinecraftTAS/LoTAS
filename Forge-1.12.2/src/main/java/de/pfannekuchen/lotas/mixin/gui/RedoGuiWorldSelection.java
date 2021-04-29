@@ -14,7 +14,6 @@ import de.pfannekuchen.lotas.gui.parts.GuiCustomMapEntry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiListWorldSelection;
-import net.minecraft.client.gui.GuiListWorldSelectionEntry;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiWorldSelection;
 import net.minecraft.util.ResourceLocation;
@@ -68,7 +67,8 @@ public abstract class RedoGuiWorldSelection extends GuiScreen {
 				if (((GuiCheckBox) button).isChecked()) {
 					selectionList.refreshList();
 					for (ChallengeMap map : LoTASModContainer.maps) {
-						GuiListWorldSelectionEntry entry = new GuiCustomMapEntry(selectionList, map);
+						GuiCustomMapEntry entry = new GuiCustomMapEntry(selectionList, map);
+						entry.loc = new ResourceLocation("maps", map.resourceLoc);
 						selectionList.entries.add(entry);
 					}
 				} else {

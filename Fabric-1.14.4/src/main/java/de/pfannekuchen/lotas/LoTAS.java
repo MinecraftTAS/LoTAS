@@ -1,61 +1,79 @@
 package de.pfannekuchen.lotas;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
-import org.lwjgl.opengl.GL11;
 
-import de.pfannekuchen.lotas.gui.AiRigScreen;
-import de.pfannekuchen.lotas.gui.EntitySpawnerScreen;
+import de.pfannekuchen.lotas.challenges.ChallengeMap;
 import de.pfannekuchen.lotas.gui.SeedListScreen;
-import de.pfannekuchen.lotas.hotkeys.Hotkeys;
+import de.pfannekuchen.lotas.utils.ConfigManager;
+import de.pfannekuchen.lotas.utils.Hotkeys;
+import de.pfannekuchen.lotas.utils.TextureYoinker;
 import net.fabricmc.api.ClientModInitializer;
-import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.util.Identifier;
 import rlog.RLogAPI;
 
 public class LoTAS implements ClientModInitializer {
 
-    /**
+	public static Identifier shield;
+	public static final List<ChallengeMap> maps = new ArrayList<>();
+	
+	/**
      * Runs the mod initializer on the client environment.
      */
     @Override
     public void onInitializeClient() {
-    	RLogAPI.logDebug("[Version] 1.14.4");
-    	
     	try {
-			RLogAPI.instantiate();
-		} catch (Exception e1) {
-			e1.printStackTrace();
+			ConfigManager.init(new File(MinecraftClient.getInstance().runDirectory, "lotas.properties"));
+		} catch (IOException e) {
+			System.err.println("Couldn't load Configuration");
+			e.printStackTrace();
 		}
-    	RLogAPI.logDebug("[PreInit] Initializing Configuration");
-        try {
-            ConfigManager.init(new File("lotas.properties"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        RLogAPI.logDebug("[PreInit] Initializing Keybindings");
-        Hotkeys.initKeybindings();
         RLogAPI.logDebug("[PreInit] Downloading Seeds");
         try {
             loadSeeds();
         } catch (Exception e) {
         	RLogAPI.logError(e, "[PreInit] Reading Seeds File failed #0");
         }
+        Hotkeys.registerKeybindings();
     }
-
+    
+    public static void loadShields() {	
+		String uuid = MinecraftClient.getInstance().getSession().getProfile().getId().toString();
+		
+		try {
+			URL url = new URL("https://raw.githubusercontent.com/ScribbleLP/MC-TASTools/1.12.2/shields/shieldnames.txt");
+			BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
+			String line = reader.readLine();
+			while (line != null) {
+				if (line.split(":")[0].equalsIgnoreCase(uuid)) {
+					LoTAS.shield = TextureYoinker.downloadShield(uuid, new URL("https://raw.githubusercontent.com/ScribbleLP/MC-TASTools/1.12.2/shields/" + line.split(":")[1]).openStream());
+					return;
+				}
+				line = reader.readLine();
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+    
     /**
-     * Loads a list of seeds together with preview images from <a href="http://mgnet.work/seeds/">mgnet.work/seeds/seeds2.txt</a> and creates a List
+     * Loads a list of seeds together with preview images from <a href="http://mgnet.work/seeds/">mgnet.work/seeds/seeds1.14.4.txt</a> and creates a List
      * @throws IOException
      */
     public void loadSeeds() throws Exception {
         File file = new File("seeddata.txt");
         try {
-            URL url = new URL("http://mgnet.work/seeds/seeds2.txt");
+            URL url = new URL("http://mgnet.work/seeds/seeds1.14.4.txt");
             URLConnection conn = url.openConnection();
             conn.setReadTimeout(5000);
             file.createNewFile();
@@ -73,92 +91,5 @@ public class LoTAS implements ClientModInitializer {
         }
         RLogAPI.logDebug("[PreInit] " + SeedListScreen.seeds.size() + " seeds loaded and attached to Seed List.");
     }
-
-	public static void renderEvent(Screen gui) {
-		if (gui instanceof EntitySpawnerScreen) {
-			GL11.glPushMatrix();
-			GL11.glDisable(GL11.GL_TEXTURE_2D);
-			GL11.glEnable(GL11.GL_BLEND);
-			GL11.glDepthMask(true);
-			GL11.glEnable(GL11.GL_DEPTH_TEST);
-			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-			GL11.glEnable(GL11.GL_LINE_SMOOTH);
-			GL11.glLineWidth(2);
-			
-			RenderUtils.applyRenderOffset();
-			
-			double renderX = ((double) ((EntitySpawnerScreen) gui).spawnX - 0.5f);
-			double renderY = ((double) ((EntitySpawnerScreen) gui).spawnY);
-			double renderZ = ((double) ((EntitySpawnerScreen) gui).spawnZ - 0.5F);
-			
-			GL11.glTranslated(renderX, renderY, renderZ);
-			GL11.glScalef(1, 2, 1);
-			GL11.glColor4f(28, 188, 220, 0.5f);
-			RenderUtils.drawOutlinedBox();
-			RenderUtils.drawCrossBox();
-			GL11.glColor4f(0F, 1F, 0F, 0.15F);
-			RenderUtils.drawSolidBox();
-			
-			GL11.glDisable(GL11.GL_BLEND);
-			GL11.glEnable(GL11.GL_TEXTURE_2D);
-			GL11.glDisable(GL11.GL_DEPTH_TEST);
-			GL11.glDisable(GL11.GL_LINE_SMOOTH);
-			GL11.glPopMatrix();
-		} else if (gui instanceof AiRigScreen) {
-			if (AiRigScreen.entities.size() == 0) return;
-			GL11.glPushMatrix();
-			GL11.glDisable(GL11.GL_TEXTURE_2D);
-			GL11.glEnable(GL11.GL_BLEND);
-			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-			GL11.glEnable(GL11.GL_LINE_SMOOTH);
-			GL11.glLineWidth(2);
-			RenderUtils.applyRenderOffset();
-			
-			double renderX = ((double) AiRigScreen.entities.get(AiRigScreen.selectedIndex).x - 0.5f);
-			double renderY = ((double) AiRigScreen.entities.get(AiRigScreen.selectedIndex).y);
-			double renderZ = ((double) AiRigScreen.entities.get(AiRigScreen.selectedIndex).z - 0.5F);
-			
-			GL11.glTranslated(renderX, renderY, renderZ);
-			GL11.glScalef(1, 2, 1);
-			GL11.glColor4f(28, 188, 220, 0.5f);
-			RenderUtils.drawOutlinedBox();
-			RenderUtils.drawCrossBox();
-			GL11.glColor4f(1F, 0F, 0F, 0.15F);
-			RenderUtils.drawSolidBox();
-			
-			GL11.glDisable(GL11.GL_BLEND);
-			GL11.glEnable(GL11.GL_TEXTURE_2D);
-			GL11.glDisable(GL11.GL_LINE_SMOOTH);
-			GL11.glPopMatrix();
-			
-			GL11.glPushMatrix();
-			GL11.glDisable(GL11.GL_TEXTURE_2D);
-			GL11.glEnable(GL11.GL_BLEND);
-			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-			GL11.glEnable(GL11.GL_LINE_SMOOTH);
-			GL11.glLineWidth(2);
-			
-			// Draw output
-			
-			RenderUtils.applyRenderOffset();
-			
-			renderX = AiRigScreen.spawnX;
-			renderY = AiRigScreen.spawnY;
-			renderZ = AiRigScreen.spawnZ;
-			
-			GL11.glTranslated(renderX, renderY, renderZ);
-			GL11.glScalef(1, 1, 1);
-			GL11.glColor4f(28, 188, 220, 0.5f);
-			RenderUtils.drawOutlinedBox();
-			RenderUtils.drawCrossBox();
-			GL11.glColor4f(0F, 0F, 1F, 0.15F);
-			RenderUtils.drawSolidBox();
-			
-			GL11.glDisable(GL11.GL_BLEND);
-			GL11.glEnable(GL11.GL_TEXTURE_2D);
-			GL11.glDisable(GL11.GL_LINE_SMOOTH);
-			GL11.glPopMatrix();
-		}
-	}
 
 }

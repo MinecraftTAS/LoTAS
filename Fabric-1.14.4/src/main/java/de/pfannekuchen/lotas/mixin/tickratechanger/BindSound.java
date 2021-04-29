@@ -11,11 +11,11 @@ import net.minecraft.client.sound.SoundSystem;
 public class BindSound {
 
     /**
-     * IntelliJ wants me to put this here idk.
+     * @reason IntelliJ wants me to put this here idk.
      * @author Pancake
      */
     @Overwrite
-    public float getAdjustedPitch(SoundInstance soundInstance) {
+    private float getAdjustedPitch(SoundInstance soundInstance) {
         return soundInstance.getPitch() * (TickrateChanger.tickrate / 20F);
     }
 

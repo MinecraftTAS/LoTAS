@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.time.Duration;
 
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.Display;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -61,6 +62,7 @@ public class MixinMinecraft {
 	@Inject(method = "loadWorld", at = @At("HEAD"))
 	public void injectloadWorld(WorldClient worldClientIn, CallbackInfo ci) {
 		isLoadingWorld = ConfigManager.getBoolean("tools", "hitEscape") && worldClientIn != null;
+		
 		if (ChallengeLoader.startTimer) {
 			ChallengeLoader.startTimer = false;
 			de.pfannekuchen.lotas.tickratechanger.Timer.startTime = Duration.ofMillis(System.currentTimeMillis());
@@ -213,6 +215,11 @@ public class MixinMinecraft {
 			return ChallengeLoader.map == null ? new GuiIngameMenu() : new GuiChallengeEscape();
 		}
 		return screenIn;
+    }
+    
+    @Inject(at = @At("RETURN"), method = "createDisplay")
+    public void injectLogo(CallbackInfo ci) {
+		Display.setTitle(Display.getTitle() + " - LoTAS");
     }
     
 	@Inject(method = "displayGuiScreen", at = @At("HEAD"))

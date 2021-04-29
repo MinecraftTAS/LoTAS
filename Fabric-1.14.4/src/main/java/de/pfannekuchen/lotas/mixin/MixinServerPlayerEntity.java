@@ -11,7 +11,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.mojang.authlib.GameProfile;
 
-import de.pfannekuchen.lotas.ConfigManager;
+import de.pfannekuchen.lotas.mixin.accessors.ServerPlayerEntityAccessor;
+import de.pfannekuchen.lotas.utils.ConfigManager;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
@@ -40,8 +41,8 @@ public abstract class MixinServerPlayerEntity extends PlayerEntity {
         boolean bl = this.server.isDedicated() && this.method_14230() && "fall".equals(source.name);
         AtomicBoolean flag = new AtomicBoolean(false);
         server.getPlayerManager().getPlayerList().forEach(player -> {
-            if (((AccessorServerPlayerEntity) player).getField_13998() <= 0) {
-                ((AccessorServerPlayerEntity) player).setField_13998(60);
+            if (((ServerPlayerEntityAccessor) player).getField_13998() <= 0) {
+                ((ServerPlayerEntityAccessor) player).setField_13998(60);
                 flag.set(true);
             }
         });

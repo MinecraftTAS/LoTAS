@@ -1,8 +1,10 @@
 pluginManagement {
     repositories {
+    	maven { url = "https://sizableshrimp.me/maven" }
     	maven { url 'https://jitpack.io' }
         maven {
-            name = 'Fabric'
+        	// You also need to comment out this line when using Gradle
+        	// name = 'maven'
             url = 'https://maven.fabricmc.net/'
         }
         gradlePluginPortal()
@@ -10,7 +12,15 @@ pluginManagement {
 }
 
 rootProject.name = 'LoTAS'
-include 'Forge-1.12.2'
+
 include 'Fabric-1.14.4'
-include 'Fabric-1.15.2'
-include 'Forge-1.8.9'
+
+// Unfortunatly, you cannot run Forge and Fabric at the same time. Therefore when using Gradle Version 3.5.1 or lower, you can only work with Forge.
+// This means that you need to select Gradle Version 4.10.3 to 5.6.4 for Fabric Development
+
+//include 'Forge-1.12.2'
+//include 'Forge-1.11.2'
+//include 'Forge-1.10.2'
+//include 'Forge-1.9.4'
+//include 'Forge-1.8.9'
+//include 'Forge-1.7.10'

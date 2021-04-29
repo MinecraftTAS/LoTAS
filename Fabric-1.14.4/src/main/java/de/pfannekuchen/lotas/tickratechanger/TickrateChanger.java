@@ -1,41 +1,35 @@
 package de.pfannekuchen.lotas.tickratechanger;
 
-import de.pfannekuchen.lotas.ConfigManager;
-import de.pfannekuchen.lotas.duck.TickDuck;
-import de.pfannekuchen.lotas.hotkeys.Hotkeys;
-import de.pfannekuchen.lotas.mixin.tickratechanger.InjectMinecraftClient;
-import de.pfannekuchen.lotas.mixin.tickratechanger.MixinMinecraftServer;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import java.time.Duration;
+
+import de.pfannekuchen.lotas.mixin.accessors.MinecraftClientAccessor;
+import de.pfannekuchen.lotas.utils.ConfigManager;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.text.LiteralText;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.MathHelper;
 import rlog.RLogAPI;
 
+/**
+ * Here is the basic Tickrate Changer Management.
+ * It contains the Hotkeys, Ticksync, Tickrate and the ticks passed
+ */
 public class TickrateChanger {
 	/**
-	 * Current tickrate of the client
+	 * Current tickrate
 	 */
-	public static float tickrate = 20;
-	/**
-	 * Saved tickrate of the client
-	 */
-	public static float tickrateSaved=20;
+	public static float tickrate = 20F;
 	/**
 	 * Current tickrate of the server
 	 */
 	public static int tickrateServer = 20;
-
-	// public static int ji = 5;
-
-	public static long timeOffset;
 	
+	public static long timeOffset = 0L;
+	public static long timeSinceZero = System.currentTimeMillis();
+	
+	public static int ji = 5; // <- ignore this
+	
+	public static Duration rta = Duration.ZERO;
+ 	
 	public static int ticksToJump = -1;
-	
-
 	
 	public static int index = 6;
 	public static final int[] ticks = new int[] {0, 1, 2, 4, 5, 10, 20, 40, 50, 200, 600};
@@ -44,51 +38,63 @@ public class TickrateChanger {
 	
 	public static long ticksPassed = 0;
 	public static long ticksPassedServer = 0;
-	
-	public static boolean showTickIndicator = false;
-	
+
+	public static float tickrateSaved=20;
+
 	/**
-	 * Signals the MinecraftClient in {@link InjectMinecraftClient#injectrunTick(org.spongepowered.asm.mixin.injection.callback.CallbackInfo)} to reset the tickrate to 0
+	 * Signals the MinecraftClient in {@link MixinMinecraft#injectrunTick(org.spongepowered.asm.mixin.injection.callback.CallbackInfo)} to reset the tickrate to 0
 	 */
 	public static boolean advanceClient=false;
 	/**
-	 * Signals the MinecraftServer in {@link MixinMinecraftServer#injectrunTick(java.util.function.BooleanSupplier, org.spongepowered.asm.mixin.injection.callback.CallbackInfo)} to reset the tickrate to 0
+	 * Signals the MinecraftServer in {@link BindMinecraftServer#redoServerWait(long)} to reset the tickrate to 0
 	 */
 	public static boolean advanceServer=false;
 
-	// private static Duration rta = Duration.ZERO;
+	public static long timeSinceTC = System.currentTimeMillis();
+	public static long fakeTimeSinceTC = System.currentTimeMillis();
+	public static boolean show;
 	
 	/**
-	 * Changes the tickrate of client and server.
-	 * @param tickrate
+	 * Changes the tickrate of the client and server.
+	 * @param tickrateIn
 	 */
-	public static void updateTickrate(int tickrate) {
-		RLogAPI.logDebug("[TickrateChanger] Updated Tickrate to " + tickrate);
-		updateClientTickrate(tickrate);
-		updateServerTickrate(tickrate);
+	public static void updateTickrate(int tickrateIn) {
+		if (tickrateIn == 0) timeSinceZero = System.currentTimeMillis() - timeOffset;
+		
+		long time = System.currentTimeMillis() - timeSinceTC - timeOffset;
+		fakeTimeSinceTC += (long) (time * (tickrate / 20F));
+		timeSinceTC = System.currentTimeMillis() - timeOffset;
+		
+		RLogAPI.logDebug("[TickrateChanger] Updated Tickrate to " + tickrateIn);
+		updateClientTickrate(tickrateIn);
+		updateServerTickrate(tickrateIn);
+		
+		ConfigManager.setInt("hidden", "tickrate", index);
+		ConfigManager.save();
+	}
+	
+	public static long getMilliseconds() {
+		long time = System.currentTimeMillis() - timeSinceTC - timeOffset;
+		time *= (tickrate / 20F);
+		return (long) (fakeTimeSinceTC + time);
 	}
 	
 	/**
 	 * Changes the tickrate only on the client
 	 * @param tickrateIn tickrate to change
 	 */
-	@Environment(EnvType.CLIENT)
 	public static void updateClientTickrate(int tickrateIn) {
-		TickrateChanger.tickrate = tickrateIn;
+		RLogAPI.logDebug("[TickrateChanger] Updated Client Tickrate to " + tickrateIn);
 		if (tickrateIn != 0f) {
-			setTickTime(1000f / tickrateIn);
+			((MinecraftClientAccessor) MinecraftClient.getInstance()).getRenderTickCounter().tickTime = 1000f / tickrateIn;
 		} else {
 			if(tickrate!=0) {
 				tickrateSaved=tickrate;
 			}
-			setTickTime(Float.MAX_VALUE);
+			((MinecraftClientAccessor) MinecraftClient.getInstance()).getRenderTickCounter().tickTime = Float.MAX_VALUE;
 		}
-		MinecraftClient mc = MinecraftClient.getInstance();
-		if (!ConfigManager.getBoolean("ui", "hideTickrateMessages")) mc.inGameHud.getChatHud().addMessage(new LiteralText("\u00A7b\u00BB \u00A7fUpdated Tickrate to \u00A7b" + tickrateIn));
-		if (ConfigManager.getBoolean("tools", "saveTickrate")) {
-			ConfigManager.setInt("hidden", "tickrate", TickrateChanger.index);
-			ConfigManager.save();
-		}
+		tickrate = tickrateIn;
+		if (!ConfigManager.getBoolean("ui", "hideTickrateMessages") && MinecraftClient.getInstance().inGameHud != null) MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(new LiteralText("Updated Tickrate to \u00A7b" + tickrateIn));
 	}
 	
 	/**
@@ -96,6 +102,7 @@ public class TickrateChanger {
 	 * @param tickrate
 	 */
 	public static void updateServerTickrate(int tickrate) {
+		RLogAPI.logDebug("[TickrateChanger] Updated Server to " + tickrate);
 		TickrateChanger.tickrateServer = tickrate;
 	}
 	
@@ -113,7 +120,7 @@ public class TickrateChanger {
 	public static void advanceClient() {
 		if(tickrate==0) {
 			advanceClient=true;
-			updateClientTickrate(20);
+			updateClientTickrate((int)tickrateSaved);
 		}
 	}
 	
@@ -123,7 +130,7 @@ public class TickrateChanger {
 	public static void advanceServer() {
 		if(tickrateServer==0) {
 			advanceServer=true;
-			updateServerTickrate(20);
+			updateServerTickrate((int)tickrateSaved);
 		}
 	}
 	
@@ -148,45 +155,4 @@ public class TickrateChanger {
 		}
 	}
 	
-	/**
-	 * @return Current tick time of the RenderTickCounter
-	 */
-	public static float getTickTime() {
-		return ((TickDuck)MinecraftClient.getInstance()).getTickTime();
-	}
-	
-	/**
-	 * 
-	 * @param ticksPerSeconds Replaces the ticktime in RenderTickCounter
-	 */
-	public static void setTickTime(float ticksPerSeconds) {
-		((TickDuck)MinecraftClient.getInstance()).setTickTime(ticksPerSeconds);
-	}
-
-	public static void onJoinWorld(AbstractClientPlayerEntity player) {
-		TickrateChanger.ticksPassed = 0;
-		player.fallDistance = 0f;
-		TickrateChanger.ticksPassedServer = 0;
-	}
-
-	/**
-	 * Increasing or decreasing the tickrate
-	 */
-	public static void onInput() {
-		if (Hotkeys.slower.wasPressed())
-			index++;
-		else if (Hotkeys.faster.wasPressed())
-			index--;
-		else
-			return;
-		index = MathHelper.clamp(index, 0, 10);
-		TickrateChanger.updateTickrate(ticks[index]);
-	}
-
-	public static void onDraw() {
-		if (TickrateChanger.tickrate <= 5 && showTickIndicator && ConfigManager.getBoolean("ui", "showTickIndicator")) {
-			MinecraftClient.getInstance().getTextureManager().bindTexture(new Identifier("textures/gui/stream_indicator.png"));
-			Screen.blit(MinecraftClient.getInstance().window.getScaledWidth() - 17, 1, 0, 0, 16, 16, 16, 64);
-		}
-	}
 }

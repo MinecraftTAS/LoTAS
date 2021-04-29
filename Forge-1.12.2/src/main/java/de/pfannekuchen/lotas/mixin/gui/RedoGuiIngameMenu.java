@@ -85,8 +85,8 @@ public abstract class RedoGuiIngameMenu extends GuiScreen {
         this.buttonList.add(new GuiButton(21, (width / 4) * 2 + 3, height - 20, width / 4 - 2, 20, I18n.format("Manipulate Spawning")));
         
         this.buttonList.add(new GuiCheckBox(22, 2, height - 20 - 15, I18n.format("Avoid taking damage"), !ConfigManager.getBoolean("tools", "takeDamage")));
-        this.buttonList.add(new GuiButton(23, 35, 107, 68, 20, I18n.format("Jump ticks")));
-        this.buttonList.add(new GuiButton(24, 5, 107, 30, 20, I18n.format(TickrateChanger.ticks[TickrateChanger.ji] + "t")));
+        this.buttonList.add(new GuiButton(23, 37, 115, 66, 20, I18n.format("Jump ticks")));
+        this.buttonList.add(new GuiButton(24, 5, 115, 30, 20, I18n.format(TickrateChanger.ticks[TickrateChanger.ji] + "t")));
 		this.buttonList.add(new GuiButton(25, this.width / 2 - 100, this.height / 4 + 144 + -16, I18n.format("Reset Timer")));
 		this.buttonList.add(new GuiCheckBox(26, 2, height - 32 - 15, I18n.format("Drop towards me"), ConfigManager.getBoolean("tools", "manipulateVelocityTowards")));
 		this.buttonList.add(new GuiCheckBox(27, 2, height - 44 - 15, I18n.format("Drop away from me"), ConfigManager.getBoolean("tools", "manipulateVelocityAway")));
@@ -101,8 +101,8 @@ public abstract class RedoGuiIngameMenu extends GuiScreen {
 		
 		if (getClass().getSimpleName().contains("GuiIngameMenu")) {
 			if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-				this.buttonList.get(7).displayString = "§6Name Savestate";
-				this.buttonList.get(8).displayString = "§6Choose State";
+				this.buttonList.get(7).displayString = "\u00A76Name Savestate";
+				this.buttonList.get(8).displayString = "\u00A76Choose State";
 			} else {
 				this.buttonList.get(7).displayString = "Savestate";
 				this.buttonList.get(8).displayString = "Loadstate";
@@ -131,7 +131,11 @@ public abstract class RedoGuiIngameMenu extends GuiScreen {
 			drawCenteredString(mc.fontRenderer, "\u00A76Loadstate successful...", width / 2, 40, new Color(1F, 1F, 1F, 1F - (timeSince / 2000F)).getRGB());
 		}
 		
-		mc.fontRenderer.drawStringWithShadow("Tickrate Changer", 10, 97, 0xFFFFFF);
+		mc.fontRenderer.drawStringWithShadow("Tickjump", 10, 105, 0xFFFFFF);
+		if(buttonList.get(17).enabled==false) {
+			mc.fontRenderer.drawStringWithShadow("Tickjump is ready,", 8, 137, 0xFFFFFF);
+			mc.fontRenderer.drawStringWithShadow("press ESC to continue", 8, 147, 0xFFFFFF);
+		}
 		mc.fontRenderer.drawStringWithShadow("Duping", 10, 45, 0xFFFFFF);
 		int w = width - 5;
 		mc.fontRenderer.drawStringWithShadow("Tracked Items Delay: ", w - mc.fontRenderer.getStringWidth("Tracked Items Delay: ") - 1, 10, 0xFFFFFFFF);
@@ -207,13 +211,14 @@ public abstract class RedoGuiIngameMenu extends GuiScreen {
 		} else if (button.id == 23) {
 			TickrateChanger.ticksToJump = TickrateChanger.ticks[TickrateChanger.ji];
 			button.enabled = false;
+			button.displayString = "Jumping...";
 		} else if (button.id == 24) {
 			TickrateChanger.ji++;
-			if (TickrateChanger.ji > 10) TickrateChanger.ji = 0;
+			if (TickrateChanger.ji > 10) TickrateChanger.ji = 1;
 			buttonList.clear();
 			initGui();
 		} else if (button.id == 25) {
-			Timer.ticks = 0;
+			Timer.ticks = -1;
 			Timer.startTime = Duration.ofMillis(System.currentTimeMillis());
 		} else if (button.id == 26) {
 			if (((GuiCheckBox) button).isChecked()) {

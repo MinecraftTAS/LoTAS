@@ -8,6 +8,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import de.pfannekuchen.lotas.config.ConfigManager;
 import de.pfannekuchen.lotas.gui.GuiSeedsMenu;
+import de.pfannekuchen.lotas.gui.parts.GuiCustomMapEntry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -37,10 +38,17 @@ public abstract class RedoGuiWorldSelection extends GuiScreen {
 	@Inject(at = @At("HEAD"), method = "initGui")
 	public void injectinitGui(CallbackInfo ci) {
 		this.buttonList.add(new GuiButton(16, 5, 5, 98, 20, "Seeds"));
-		this.buttonList
-				.add(new GuiCheckBox(17, width - 17 - mc.fontRendererObj.getStringWidth("Open ESC when joining world"),
-						4, "Open ESC when joining world", ConfigManager.getBoolean("tools", "hitEscape")));
+		this.buttonList.add(new GuiCheckBox(17, width - 17 - mc.fontRendererObj.getStringWidth("Open ESC when joining world"), 4, "Open ESC when joining world", ConfigManager.getBoolean("tools", "hitEscape")));
+		this.buttonList.add(new GuiCheckBox(18, width - 17 - mc.fontRendererObj.getStringWidth("Open ESC when joining world"), 16, "Show TAS Challenge Maps", !ConfigManager.getBoolean("tools", "hideMaps")));
 	}
+	
+	@Inject(at = @At("RETURN"), method = "initGui")
+	public void injectinitGui2(CallbackInfo ci) {
+		if (!ConfigManager.getBoolean("tools", "hideMaps")) {
+			field_146638_t = new GuiCustomMapEntry((GuiSelectWorld) (Object) this, mc);
+		}
+	}
+	
 
 	@Inject(at = @At("HEAD"), method = "actionPerformed")
 	public void injectactionPerformed(GuiButton button, CallbackInfo ci) {
@@ -52,6 +60,15 @@ public abstract class RedoGuiWorldSelection extends GuiScreen {
 			ConfigManager.setBoolean("tools", "hitEscape", ((GuiCheckBox) button).isChecked());
 			ConfigManager.save();
 			break;
+		case 18:
+			ConfigManager.setBoolean("tools", "hideMaps", !((GuiCheckBox) button).isChecked());
+			ConfigManager.save();
+			
+			if (((GuiCheckBox) button).isChecked()) {
+				field_146638_t = new GuiCustomMapEntry((GuiSelectWorld) (Object) this, mc);
+			} else {
+				field_146638_t = ((GuiSelectWorld) (Object) this).new List(mc);
+			}
 		default:
 			
 			break;

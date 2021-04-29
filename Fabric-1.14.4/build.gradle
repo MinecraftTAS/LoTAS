@@ -1,5 +1,5 @@
 plugins {
-    id 'fabric-loom' version '0.6-SNAPSHOT'
+    id 'fabric-loom' version '0.7.9'
 }
 
 // Setup = genSources
@@ -24,6 +24,8 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:0.11.1"
     implementation files ('libs/rLog.jar')
     implementation files ('libs/identifier_obfc.jar')
+    compile group: 'net.bramp.ffmpeg', name: 'ffmpeg', version: '0.6.2'
+	compile group: 'com.google.guava', name: 'guava', version: '22.0'
     modImplementation  "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 }
 

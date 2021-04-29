@@ -6,7 +6,8 @@
     "compatibilityLevel": "JAVA_8",
     "mixins": [
 		"tickratechanger.BindMinecraftServer",
-		"MixinEntityPlayerMP"
+		"MixinEntityPlayerMP",
+		"MixinLeaves"
     ],
     "client": [
     	"gui.RedoGuiMainMenu",
@@ -31,6 +32,9 @@
     	"MixinTegratedServer",
     	"MixinEndPortal",
     	"MixinLootEntity",
-    	"MixinLootBlock"
+    	"MixinLootBlock",
+    	"MixinRenderItem",
+    	"MixinPearlDelay",
+    	"MixinEnchantmentDurability"
 	]
 }
