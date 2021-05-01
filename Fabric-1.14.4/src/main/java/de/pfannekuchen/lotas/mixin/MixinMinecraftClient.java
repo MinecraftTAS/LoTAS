@@ -9,8 +9,6 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.time.Duration;
 
-import javax.annotation.Nullable;
-
 import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -227,7 +225,7 @@ public abstract class MixinMinecraftClient {
 		}
 	}
 	
-	@Shadow @Nullable 
+	@Shadow
 	public Screen currentScreen;
 	
 	@ModifyVariable(method = "openScreen", at = @At("HEAD"), index = 1, ordinal = 0)
