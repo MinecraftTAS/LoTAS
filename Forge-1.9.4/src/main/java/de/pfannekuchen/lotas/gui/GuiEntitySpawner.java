@@ -127,9 +127,9 @@ public class GuiEntitySpawner extends GuiScreen {
 		e = entity.getEntity(mc.theIntegratedServer.worldServerForDimension(mc.thePlayer.dimension));
 		e.setPositionAndRotation(spawnX, spawnY, spawnZ, 0, 0);
 		if (e instanceof EntityMob) {
-			this.buttonList.get(this.buttonList.size() - 2).enabled = e.worldObj.getDifficulty() != EnumDifficulty.PEACEFUL && ((EntityMob) e).getBlockPathWeight(new BlockPos(e.posX, e.getEntityBoundingBox().minY, e.posZ)) >= 0.0F && isValidLightLevel(e);
+			this.buttonList.get(this.buttonList.size() - 2).enabled = e.worldObj.getDifficulty() != EnumDifficulty.PEACEFUL && ((EntityMob) e).getBlockPathWeight(new BlockPos(e.posX, e.getEntityBoundingBox().minY, e.posZ)) >= 0.0F && isValidLightLevel(e) && !e.worldObj.collidesWithAnyBlock(e.getEntityBoundingBox());
 		} else {
-			this.buttonList.get(this.buttonList.size() - 2).enabled = true;
+			this.buttonList.get(this.buttonList.size() - 2).enabled = !e.worldObj.collidesWithAnyBlock(e.getEntityBoundingBox());
 		}
 	}
 	
@@ -140,9 +140,9 @@ public class GuiEntitySpawner extends GuiScreen {
 		e.setPositionAndRotation(spawnX, spawnY, spawnZ, 0, 0);
 		
 		if (e instanceof EntityMob) {
-			this.buttonList.get(this.buttonList.size() - 2).enabled = e.worldObj.getDifficulty() != EnumDifficulty.PEACEFUL && ((EntityMob) e).getBlockPathWeight(new BlockPos(e.posX, e.getEntityBoundingBox().minY, e.posZ)) >= 0.0F && isValidLightLevel(e);
+			this.buttonList.get(this.buttonList.size() - 2).enabled = e.worldObj.getDifficulty() != EnumDifficulty.PEACEFUL && ((EntityMob) e).getBlockPathWeight(new BlockPos(e.posX, e.getEntityBoundingBox().minY, e.posZ)) >= 0.0F && isValidLightLevel(e) && !e.worldObj.collidesWithAnyBlock(e.getEntityBoundingBox());
 		} else {
-			this.buttonList.get(this.buttonList.size() - 2).enabled = true;
+			this.buttonList.get(this.buttonList.size() - 2).enabled = !e.worldObj.collidesWithAnyBlock(e.getEntityBoundingBox());
 		}
 	}
 	

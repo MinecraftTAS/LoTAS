@@ -13,7 +13,6 @@ import net.minecraft.entity.monster.EntityCaveSpider;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.monster.EntityGhast;
-import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.entity.monster.EntityMagmaCube;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntitySlime;
@@ -61,7 +60,7 @@ public class CustomEntitySlider extends GuiSlider {
 			entity = new EntityZombie(world);
 			break;
 		case 6:
-			entity = new EntityIronGolem(world);
+			entity = new EntityGhast(world);
 			break;
 		case 7:
 			entity = new EntityMagmaCube(world);

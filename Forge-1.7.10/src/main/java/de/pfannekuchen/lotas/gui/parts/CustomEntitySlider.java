@@ -55,7 +55,7 @@ public class CustomEntitySlider extends GuiSlider {
 			entity = new EntityZombie(world);
 			break;
 		case 6:
-			entity = new EntityIronGolem(world);
+			entity = new EntityGhast(world);
 			break;
 		case 7:
 			entity = new EntityMagmaCube(world);

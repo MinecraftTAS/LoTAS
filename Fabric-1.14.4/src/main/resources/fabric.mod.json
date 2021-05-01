@@ -11,7 +11,7 @@
     "website": "mgnet.work"
   },
   "license": "MIT",
-  "icon": "assets/lotas/icon.png",
+  "icon": "assets/lotas/potion_small.png",
   "environment": "*",
   "accessWidener" : "lotas.accesswidener",
   "entrypoints": {

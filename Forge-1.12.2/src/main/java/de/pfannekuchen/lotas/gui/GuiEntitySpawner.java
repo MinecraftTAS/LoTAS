@@ -130,9 +130,9 @@ public class GuiEntitySpawner extends GuiScreen {
 		e = entity.getEntity(mc.integratedServer.getWorld(mc.player.dimension));
 		e.setPositionAndRotation(spawnX, spawnY, spawnZ, 0, 0);
 		if (e instanceof EntityMob) {
-			this.buttonList.get(this.buttonList.size() - 2).enabled = e.world.getDifficulty() != EnumDifficulty.PEACEFUL && ((EntityMob) e).getBlockPathWeight(new BlockPos(e.posX, e.getEntityBoundingBox().minY, e.posZ)) >= 0.0F && e.world.getBlockState((new BlockPos(e)).down()).canEntitySpawn(e) && isValidLightLevel(e);
+			this.buttonList.get(this.buttonList.size() - 2).enabled = e.world.getDifficulty() != EnumDifficulty.PEACEFUL && ((EntityMob) e).getBlockPathWeight(new BlockPos(e.posX, e.getEntityBoundingBox().minY, e.posZ)) >= 0.0F && e.world.getBlockState((new BlockPos(e)).down()).canEntitySpawn(e) && isValidLightLevel(e) && !e.world.collidesWithAnyBlock(e.getEntityBoundingBox());
 		} else {
-			this.buttonList.get(this.buttonList.size() - 2).enabled = e.world.getBlockState((new BlockPos(e)).down()).canEntitySpawn(e);
+			this.buttonList.get(this.buttonList.size() - 2).enabled = e.world.getBlockState((new BlockPos(e)).down()).canEntitySpawn(e) && !e.world.collidesWithAnyBlock(e.getEntityBoundingBox());
 		}
 	}
 	
@@ -143,9 +143,9 @@ public class GuiEntitySpawner extends GuiScreen {
 		e.setPositionAndRotation(spawnX, spawnY, spawnZ, 0, 0);
 		
 		if (e instanceof EntityMob) {
-			this.buttonList.get(this.buttonList.size() - 2).enabled = e.world.getDifficulty() != EnumDifficulty.PEACEFUL && ((EntityMob) e).getBlockPathWeight(new BlockPos(e.posX, e.getEntityBoundingBox().minY, e.posZ)) >= 0.0F && e.world.getBlockState((new BlockPos(e)).down()).canEntitySpawn(e) && isValidLightLevel(e);
+			this.buttonList.get(this.buttonList.size() - 2).enabled = e.world.getDifficulty() != EnumDifficulty.PEACEFUL && ((EntityMob) e).getBlockPathWeight(new BlockPos(e.posX, e.getEntityBoundingBox().minY, e.posZ)) >= 0.0F && e.world.getBlockState((new BlockPos(e)).down()).canEntitySpawn(e) && isValidLightLevel(e) && !e.world.collidesWithAnyBlock(e.getEntityBoundingBox());
 		} else {
-			this.buttonList.get(this.buttonList.size() - 2).enabled = e.world.getBlockState((new BlockPos(e)).down()).canEntitySpawn(e);
+			this.buttonList.get(this.buttonList.size() - 2).enabled = e.world.getBlockState((new BlockPos(e)).down()).canEntitySpawn(e) && !e.world.collidesWithAnyBlock(e.getEntityBoundingBox());
 		}
 	}
 	

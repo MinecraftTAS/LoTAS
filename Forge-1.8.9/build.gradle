@@ -29,7 +29,7 @@ compileJava {
     sourceCompatibility = targetCompatibility = '1.8'
 }
 
-version = "1.0.0"
+version = "1.0.1"
 group= "de.pfannekuchen.lotas" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "lotas"
 
@@ -57,24 +57,17 @@ dependencies {
     // or you may define them like so..
     //compile "some.group:artifact:version:classifier"
     //compile "some.group:artifact:version"
-     compile('org.spongepowered:mixin:0.7.10-SNAPSHOT') {
+     implementation('org.spongepowered:mixin:0.7.10-SNAPSHOT') {
         exclude module: 'launchwrapper'
         exclude module: 'guava'
         exclude module: 'gson'
         exclude module: 'commons-io'
         exclude module: 'log4j-core'
     }
-    compile('net.bramp.ffmpeg:ffmpeg:0.6.2') {
-    	exclude module: 'guava'
-        exclude module: 'gson'
-    }
     
-    
-    compile 'org.msgpack:msgpack-core:0.8.16'
-    compile 'org.msgpack:jackson-dataformat-msgpack:0.8.16'
-    compile group: 'com.google.guava', name: 'guava', version: '18.0'
-    // https://mvnrepository.com/artifact/com.google.code.gson/gson
-	compile group: 'com.google.code.gson', name: 'gson', version: '2.2.4'
+    implementation 'org.msgpack:msgpack-core:0.8.16'
+    implementation 'org.msgpack:jackson-dataformat-msgpack:0.8.16'
+    implementation files ('libs/ffmpeg.jar')
     
     // real examples
     //compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env

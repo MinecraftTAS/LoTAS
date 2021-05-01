@@ -30,7 +30,7 @@ public abstract class MixinEndPortal extends EntityPlayer {
 		super(worldIn, gameProfileIn);
 	}
 
-	@Inject(at = @At(value = "INVOKE", shift = Shift.BEFORE, target = "Lnet/minecraft/server/management/PlayerList;changePlayerDimension(Lnet/minecraft/entity/player/EntityPlayerMP;I)V"), method = "changeDimension", cancellable = true, remap = false)
+	@Inject(at = @At(value = "INVOKE", shift = Shift.BEFORE, target = "Lnet/minecraft/server/management/PlayerList;changePlayerDimension(Lnet/minecraft/entity/player/EntityPlayerMP;I)V", remap = false), method = "changeDimension", cancellable = true)
 	public void injectHere(int dimensionIn, CallbackInfoReturnable<Entity> ci) {
 		if (dimensionIn == 1 && ChallengeLoader.map != null) {
 			setGameType(GameType.SPECTATOR);
