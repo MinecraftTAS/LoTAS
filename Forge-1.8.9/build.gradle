@@ -64,10 +64,12 @@ dependencies {
         exclude module: 'commons-io'
         exclude module: 'log4j-core'
     }
+        implementation 'com.google.code.gson:gson:2.4'
     
     compile 'org.msgpack:msgpack-core:0.8.16'
     compile 'org.msgpack:jackson-dataformat-msgpack:0.8.16'
-    implementation files ('libs/ffmpeg.jar')
+    compile group: 'net.bramp.ffmpeg', name: 'ffmpeg', version: '0.6.2'
+	compile group: 'com.google.guava', name: 'guava', version: '20.0'
     
     // real examples
     //compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env

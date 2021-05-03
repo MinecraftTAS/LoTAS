@@ -42,7 +42,7 @@ public abstract class MixinEndPortal extends EntityPlayer {
 			ChallengeLoader.map = null;
 			
             try {
-            	Field h = Minecraft.getMinecraft().getClass().getDeclaredField("saveLoader");
+            	Field h = Minecraft.getMinecraft().getClass().getDeclaredField("field_71469_aa");
             	h.setAccessible(true);
             	h.set(Minecraft.getMinecraft(), new AnvilSaveConverter(new File(Minecraft.getMinecraft().mcDataDir, "saves"), Minecraft.getMinecraft().getDataFixer()));
             } catch (Exception e) {

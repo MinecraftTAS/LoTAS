@@ -48,6 +48,7 @@ import net.minecraft.world.WorldSettings;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.storage.ISaveHandler;
 import net.minecraft.world.storage.WorldInfo;
+import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 
 public class ChallengeLoader {
 
@@ -149,7 +150,7 @@ public class ChallengeLoader {
     private static void launchIntegratedServer(String folderName, String worldName, @Nullable WorldSettings worldSettingsIn) {
         
         try {
-        	Field h = Minecraft.getMinecraft().getClass().getDeclaredField("saveLoader");
+        	Field h = Minecraft.getMinecraft().getClass().getDeclaredField(FMLLaunchHandler.isDeobfuscatedEnvironment() ? "saveLoader" : "field_71469_aa");
         	h.setAccessible(true);
         	h.set(Minecraft.getMinecraft(), map.getSaveLoader());
         } catch (Exception e) {

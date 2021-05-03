@@ -52,6 +52,8 @@ dependencies {
         exclude module: 'commons-io'
         exclude module: 'log4j-core'
     }
+       implementation 'com.google.code.gson:gson:2.4'
+    
     implementation files ('libs/rLog.jar')
     implementation files ('libs/identifier_obfc.jar')    
     compile files ('libs/ffmpeg.jar')    

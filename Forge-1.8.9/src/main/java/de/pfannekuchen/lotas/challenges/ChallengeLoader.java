@@ -141,7 +141,7 @@ public class ChallengeLoader {
     private static void launchIntegratedServer(String folderName, String worldName, @Nullable WorldSettings worldSettingsIn) {
         
         try {
-        	Field h = Minecraft.getMinecraft().getClass().getDeclaredField("saveLoader");
+        	Field h = Minecraft.getMinecraft().getClass().getDeclaredField("field_71469_aa");
         	h.setAccessible(true);
         	h.set(Minecraft.getMinecraft(), map.getSaveLoader());
         } catch (Exception e) {

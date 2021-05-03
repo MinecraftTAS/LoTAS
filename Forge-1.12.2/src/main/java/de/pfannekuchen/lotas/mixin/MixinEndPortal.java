@@ -23,6 +23,7 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.GameType;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.storage.AnvilSaveConverter;
+import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 
 @Mixin(EntityPlayerMP.class)
 public abstract class MixinEndPortal extends EntityPlayer {
@@ -43,7 +44,7 @@ public abstract class MixinEndPortal extends EntityPlayer {
 			ChallengeLoader.map = null;
 			
             try {
-            	Field h = Minecraft.getMinecraft().getClass().getDeclaredField("saveLoader");
+            	Field h = Minecraft.getMinecraft().getClass().getDeclaredField(FMLLaunchHandler.isDeobfuscatedEnvironment() ? "saveLoader" : "field_71469_aa");
             	h.setAccessible(true);
             	h.set(Minecraft.getMinecraft(), new AnvilSaveConverter(new File(Minecraft.getMinecraft().mcDataDir, "saves"), Minecraft.getMinecraft().getDataFixer()));
             } catch (Exception e) {

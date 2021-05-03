@@ -82,7 +82,7 @@ public class GuiChallengeEscape extends GuiIngameMenu {
                 
                 ChallengeLoader.map = null;
                 try {
-                	Field h = Minecraft.getMinecraft().getClass().getDeclaredField("saveLoader");
+                	Field h = Minecraft.getMinecraft().getClass().getDeclaredField(FMLLaunchHandler.isDeobfuscatedEnvironment() ? "saveLoader" : "field_71469_aa");
                 	h.setAccessible(true);
                 	h.set(Minecraft.getMinecraft(), new AnvilSaveConverter(new File(mc.mcDataDir, "saves")));
                 } catch (Exception e) {
