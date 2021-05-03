@@ -74,7 +74,7 @@ public class GuiEntitySpawner extends GuiScreen {
 		entities.put(3, "Enderman");
 		entities.put(4, "Ghast");
 		entities.put(5, "Husk");
-		entities.put(6, "Iron Golem");
+		entities.put(6, "Ghast");
 		entities.put(7, "Magma Cube");
 		entities.put(8, "Skeleton");
 		entities.put(9, "Slime");

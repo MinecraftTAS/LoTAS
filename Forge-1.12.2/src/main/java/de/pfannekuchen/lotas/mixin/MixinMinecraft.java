@@ -150,7 +150,7 @@ public class MixinMinecraft {
     	if (TickrateChanger.tickrate == 0 && currentScreen == null && Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
     		((Minecraft) (Object) this).displayGuiScreen(new GuiIngameMenu());
     		TickrateChanger.updateTickrate(Hotkeys.savedTickrate);
-    		Hotkeys.isFreecaming = false;
+    		Hotkeys.isFreecaming = false; player.noClip = false;
     		Minecraft.getMinecraft().renderGlobal.loadRenderers();
     	}
     	
@@ -179,11 +179,11 @@ public class MixinMinecraft {
     	if (Keyboard.isKeyDown(Hotkeys.freecam.getKeyCode()) && Minecraft.getMinecraft().currentScreen == null && das <= 0) {
     		das = 15;
     		if (Hotkeys.isFreecaming) {
-    			Hotkeys.isFreecaming = false;
+    			Hotkeys.isFreecaming = false; player.noClip = false;
     			Minecraft.getMinecraft().renderGlobal.loadRenderers();
 				TickrateChanger.updateTickrate(Hotkeys.savedTickrate);
 			} else {
-				Hotkeys.isFreecaming = true;
+				Hotkeys.isFreecaming = true; player.noClip = true;
 				player.moveForward = 0f;
 				player.moveStrafing = 0f;
 				player.moveVertical = 0f;

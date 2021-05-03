@@ -19,7 +19,7 @@ plugins {
 apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'org.spongepowered.mixin'
 
-version = "1.0.1"
+version = "1.0.2"
 group = "de.pfannekuchen.lotas"
 archivesBaseName = "lotas"
 
@@ -45,18 +45,20 @@ minecraft {
 }
 
 dependencies {
-    implementation('org.spongepowered:mixin:0.7.10-SNAPSHOT') {
+    compile('org.spongepowered:mixin:0.7.10-SNAPSHOT') {
         exclude module: 'launchwrapper'
         exclude module: 'guava'
         exclude module: 'gson'
         exclude module: 'commons-io'
         exclude module: 'log4j-core'
     }
+       implementation 'com.google.code.gson:gson:2.4'
+    
     implementation files ('libs/rLog.jar')
     implementation files ('libs/identifier_obfc.jar')    
     compile files ('libs/ffmpeg.jar')    
-    implementation 'org.msgpack:msgpack-core:0.8.16'
-    implementation 'org.msgpack:jackson-dataformat-msgpack:0.8.16'
+    compile 'org.msgpack:msgpack-core:0.8.16'
+    compile 'org.msgpack:jackson-dataformat-msgpack:0.8.16'
 }
 jar {
     manifest {

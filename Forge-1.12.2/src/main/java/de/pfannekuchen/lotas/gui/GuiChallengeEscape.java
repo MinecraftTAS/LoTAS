@@ -25,6 +25,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.chunk.storage.AnvilSaveConverter;
 import net.minecraftforge.fml.client.config.GuiCheckBox;
+import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 
 public class GuiChallengeEscape extends GuiIngameMenu {
 	
@@ -85,7 +86,7 @@ public class GuiChallengeEscape extends GuiIngameMenu {
                 
                 ChallengeLoader.map = null;
                 try {
-                	Field h = Minecraft.getMinecraft().getClass().getDeclaredField("saveLoader");
+                	Field h = Minecraft.getMinecraft().getClass().getDeclaredField(FMLLaunchHandler.isDeobfuscatedEnvironment() ? "saveLoader" : "field_71469_aa");
                 	h.setAccessible(true);
                 	h.set(Minecraft.getMinecraft(), new AnvilSaveConverter(new File(mc.mcDataDir, "saves"), Minecraft.getMinecraft().getDataFixer()));
                 } catch (Exception e) {

@@ -29,6 +29,7 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.client.config.GuiSlider;
+import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import rlog.RLogAPI;
 
 public class CustomEntitySlider extends GuiSlider {
@@ -93,7 +94,7 @@ public class CustomEntitySlider extends GuiSlider {
 		}
 		
 		try {
-			Method method = EntityLiving.class.getDeclaredMethod("setEquipmentBasedOnDifficulty", DifficultyInstance.class);
+			Method method = EntityLiving.class.getDeclaredMethod(FMLLaunchHandler.isDeobfuscatedEnvironment() ? "setEquipmentBasedOnDifficulty" : "func_180481_a", DifficultyInstance.class);
 			method.setAccessible(true);
 			if (entity != null) method.invoke(entity, Minecraft.getMinecraft().getIntegratedServer().getWorld(entity.dimension).getDifficultyForLocation(Minecraft.getMinecraft().player.getPosition()));
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
