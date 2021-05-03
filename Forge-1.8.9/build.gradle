@@ -29,7 +29,7 @@ compileJava {
     sourceCompatibility = targetCompatibility = '1.8'
 }
 
-version = "1.0.1"
+version = "1.0.2"
 group= "de.pfannekuchen.lotas" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "lotas"
 
