@@ -14,6 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import de.pfannekuchen.lotas.Binds;
 import de.pfannekuchen.lotas.challenges.ChallengeLoader;
 import de.pfannekuchen.lotas.config.ConfigManager;
+import de.pfannekuchen.lotas.dupemod.DupeMod;
 import de.pfannekuchen.lotas.gui.GuiChallengeEscape;
 import de.pfannekuchen.lotas.savestate.SavestateMod;
 import de.pfannekuchen.lotas.tickratechanger.TickrateChanger;
@@ -57,6 +58,13 @@ public class MixinMinecraft {
 	
 	@Shadow
 	private boolean isGamePaused;
+	
+	@Inject(at = @At("HEAD"), method = "stopIntegratedServer")
+    private static void injectstopIntegratedServer() {
+		DupeMod.items.clear();
+		DupeMod.trackedObjects.clear();
+		DupeMod.tileentities.clear();
+    }
 	
 	@Inject(method = "loadWorld", at = @At("HEAD"))
 	public void injectloadWorld(WorldClient worldClientIn, CallbackInfo ci) {
