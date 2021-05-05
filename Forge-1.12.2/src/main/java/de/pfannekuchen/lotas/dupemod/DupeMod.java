@@ -27,7 +27,7 @@ public class DupeMod {
 	 * The Dupe Mod allows you to save items and chests without relogging. And Loading Items and Chests without alt + f4'ing the game
 	 */
 	
-	public static void loadChests() {
+	public static synchronized void loadChests() {
 		try {
 			logDebug("[DupeMod] Trying to load Chests");
 			Minecraft mc = Minecraft.getMinecraft();
@@ -42,7 +42,7 @@ public class DupeMod {
 		}
 	}
 	
-	public static void loadItems() {
+	public static synchronized void loadItems() {
 		try {
 			logDebug("[DupeMod] Trying to load Items");
 			Minecraft mc = Minecraft.getMinecraft();
@@ -81,7 +81,7 @@ public class DupeMod {
 		}
 	}
 	
-	public static void saveItems() {
+	public static synchronized void saveItems() {
 		try {
 			logDebug("[DupeMod] Trying to save Items");
 			Minecraft mc = Minecraft.getMinecraft();
@@ -111,7 +111,7 @@ public class DupeMod {
 		}
 	}
 	
-	public static void saveChests() {
+	public static synchronized void saveChests() {
 		try {
 			logDebug("[DupeMod] Trying to save Chests");
 			Minecraft mc = Minecraft.getMinecraft();

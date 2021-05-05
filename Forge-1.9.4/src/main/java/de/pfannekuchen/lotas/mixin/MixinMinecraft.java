@@ -60,7 +60,7 @@ public class MixinMinecraft {
 	private boolean isGamePaused;
 	
 	@Inject(at = @At("HEAD"), method = "stopIntegratedServer")
-    private static void injectstopIntegratedServer() {
+    private static void injectstopIntegratedServer(CallbackInfo ci) {
 		DupeMod.items.clear();
 		DupeMod.trackedObjects.clear();
 		DupeMod.tileentities.clear();
