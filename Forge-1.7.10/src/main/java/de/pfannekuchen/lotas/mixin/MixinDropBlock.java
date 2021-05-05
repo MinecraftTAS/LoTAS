@@ -21,12 +21,12 @@ public abstract class MixinDropBlock {
 			if (ConfigManager.getBoolean("tools", "manipulateVelocityTowards")) {
 				double pX = Minecraft.getMinecraft().thePlayer.posX - x;
 				double pZ = Minecraft.getMinecraft().thePlayer.posZ - z;
-				it.motionX = Math.max(Math.round(pX), 1) * 0.03f;
+				it.motionX = Math.min(Math.max(Math.round(pX), 1), -1) * 0.03f;
 				it.motionZ = Math.max(Math.round(pZ), 1) * 0.03f;
 			} else if (ConfigManager.getBoolean("tools", "manipulateVelocityAway")) {
 				double pX = Minecraft.getMinecraft().thePlayer.posX - x;
 				double pZ = Minecraft.getMinecraft().thePlayer.posZ - z;
-				it.motionX = Math.max(Math.round(pX), 1) * -0.03f;
+				it.motionX = Math.min(Math.max(Math.round(pX), 1), -1) * -0.03f;
 				it.motionZ = Math.max(Math.round(pZ), 1) * -0.03f;
 			}
 		} catch (Exception e) {

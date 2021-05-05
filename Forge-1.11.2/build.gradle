@@ -19,7 +19,7 @@ plugins {
 apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'org.spongepowered.mixin'
 
-version = "1.0.2"
+version = "1.0.3"
 group = "de.pfannekuchen.lotas"
 archivesBaseName = "lotas"
 

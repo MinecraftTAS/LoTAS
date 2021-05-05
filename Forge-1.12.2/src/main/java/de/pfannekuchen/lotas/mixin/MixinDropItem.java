@@ -29,12 +29,12 @@ public class MixinDropItem {
 			if (ConfigManager.getBoolean("tools", "manipulateVelocityTowards")) {
 				double pX = Minecraft.getMinecraft().player.posX - posX;
 				double pZ = Minecraft.getMinecraft().player.posZ - posZ;
-				it.motionX = Math.max(Math.round(pX), 1) * 0.03f;
+				it.motionX = Math.min(Math.max(Math.round(pX), 1), -1) * 0.03f;
 				it.motionZ = Math.max(Math.round(pZ), 1) * 0.03f;
 			} else if (ConfigManager.getBoolean("tools", "manipulateVelocityAway")) {
 				double pX = Minecraft.getMinecraft().player.posX - posX;
 				double pZ = Minecraft.getMinecraft().player.posZ - posZ;
-				it.motionX = Math.max(Math.round(pX), 1) * -0.03f;
+				it.motionX = Math.min(Math.max(Math.round(pX), 1), -1) * -0.03f;
 				it.motionZ = Math.max(Math.round(pZ), 1) * -0.03f;
 			}
 		} catch (Exception e) {
