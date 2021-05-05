@@ -40,11 +40,11 @@ public class MixinDropBlock {
 			if (ConfigManager.getBoolean("tools", "manipulateVelocityTowards")) {
 				double pX = MinecraftClient.getInstance().player.x - x;
 				double pZ = MinecraftClient.getInstance().player.z - z;
-				it.setVelocity(Math.round(pX) * 0.03f, it.getVelocity().y, Math.round(pZ) * 0.03f);
+				it.setVelocity(Math.max(Math.round(pX), 1) * 0.03f, it.getVelocity().y, Math.max(Math.round(pZ), 1) * 0.03f);
 			} else if (ConfigManager.getBoolean("tools", "manipulateVelocityAway")) {
 				double pX = MinecraftClient.getInstance().player.x - x;
 				double pZ = MinecraftClient.getInstance().player.z - z;
-				it.setVelocity(Math.round(pX) * -0.03f, it.getVelocity().y, Math.round(pZ) * -0.03f);
+				it.setVelocity(Math.max(Math.round(pX), 1) * -0.03f, it.getVelocity().y, Math.max(Math.round(pZ), 1) * -0.03f);
 			}
 		} catch (Exception e) {
 			// Ignore this Error
