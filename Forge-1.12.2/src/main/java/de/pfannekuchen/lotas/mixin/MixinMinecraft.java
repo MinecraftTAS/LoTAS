@@ -14,6 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import de.pfannekuchen.lotas.challenges.ChallengeLoader;
 import de.pfannekuchen.lotas.config.ConfigManager;
+import de.pfannekuchen.lotas.dupemod.DupeMod;
 import de.pfannekuchen.lotas.gui.GuiChallengeEscape;
 import de.pfannekuchen.lotas.hotkeys.Hotkeys;
 import de.pfannekuchen.lotas.savestate.SavestateMod;
@@ -220,6 +221,13 @@ public class MixinMinecraft {
     @Inject(at = @At("RETURN"), method = "createDisplay")
     public void injectLogo(CallbackInfo ci) {
 		Display.setTitle(Display.getTitle() + " - LoTAS");
+    }
+    
+    @Inject(at = @At("HEAD"), method = "stopIntegratedServer")
+    private static void injectstopIntegratedServer(CallbackInfo ci) {
+		DupeMod.items.clear();
+		DupeMod.trackedObjects.clear();
+		DupeMod.tileentities.clear();
     }
     
 	@Inject(method = "displayGuiScreen", at = @At("HEAD"))
