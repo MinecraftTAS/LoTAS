@@ -59,13 +59,6 @@ public class MixinMinecraft {
 	@Shadow
 	private boolean isGamePaused;
 	
-    @Inject(at = @At("HEAD"), method = "stopIntegratedServer")
-    private static void injectstopIntegratedServer(CallbackInfo ci) {
-		DupeMod.items.clear();
-		DupeMod.trackedObjects.clear();
-		DupeMod.tileentities.clear();
-    }
-	
 	@Inject(method = "loadWorld", at = @At("HEAD"))
 	public void injectloadWorld(WorldClient worldClientIn, CallbackInfo ci) {
 		isLoadingWorld = ConfigManager.getBoolean("tools", "hitEscape") && worldClientIn != null;
@@ -221,6 +214,13 @@ public class MixinMinecraft {
 			return ChallengeLoader.map == null ? new GuiIngameMenu() : new GuiChallengeEscape();
 		}
 		return screenIn;
+    }
+    
+    @Inject(at = @At("HEAD"), method = "stopIntegratedServer")
+    private static void injectstopIntegratedServer(CallbackInfo ci) {
+    	if(DupeMod.items!=null)	DupeMod.items.clear();
+		if(DupeMod.trackedObjects!=null) DupeMod.trackedObjects.clear();
+		if(DupeMod.tileentities!=null)DupeMod.tileentities.clear();
     }
     
 	@Inject(method = "displayGuiScreen", at = @At("HEAD"))

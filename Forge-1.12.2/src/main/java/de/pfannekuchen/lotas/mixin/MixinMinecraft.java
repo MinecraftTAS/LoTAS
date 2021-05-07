@@ -225,9 +225,9 @@ public class MixinMinecraft {
     
     @Inject(at = @At("HEAD"), method = "stopIntegratedServer")
     private static void injectstopIntegratedServer(CallbackInfo ci) {
-		DupeMod.items.clear();
-		DupeMod.trackedObjects.clear();
-		DupeMod.tileentities.clear();
+    	if(DupeMod.items!=null)	DupeMod.items.clear();
+		if(DupeMod.trackedObjects!=null) DupeMod.trackedObjects.clear();
+		if(DupeMod.tileentities!=null)DupeMod.tileentities.clear();
     }
     
 	@Inject(method = "displayGuiScreen", at = @At("HEAD"))
