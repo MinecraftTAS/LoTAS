@@ -56,7 +56,6 @@ import net.minecraft.world.storage.WorldInfo;
 
 public class ChallengeLoader {
 
-	public static ChallengeMap map;
 	public static boolean startTimer;
 	
 	public static void reload() throws IOException {
@@ -77,10 +76,10 @@ public class ChallengeLoader {
 		if (worldDir.exists()) FileUtils.deleteDirectory(worldDir);
 		
 		if (reload) {
-			final URL url = map.map;
+			final URL url = ChallengeMap.currentMap.map;
 			ReadableByteChannel readableByteChannel = Channels.newChannel(url.openStream());
 			
-			final FileOutputStream fileOutputStream = new FileOutputStream("map.zip");
+			final FileOutputStream fileOutputStream = new FileOutputStream("ChallengeMap.currentMap.zip");
 			final FileChannel fileChannel = fileOutputStream.getChannel();
 			
 			fileOutputStream.getChannel().transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
@@ -88,15 +87,15 @@ public class ChallengeLoader {
 			fileOutputStream.close();
 			fileChannel.close();
 		}
-		unzip("map.zip", "challenges/" + map.name);
+		unzip("ChallengeMap.currentMap.zip", "challenges/" + ChallengeMap.currentMap.name);
 		
 		new Thread(() -> {
 			try {
 				// Download
-				final URL url = map.map;
+				final URL url = ChallengeMap.currentMap.map;
 				final ReadableByteChannel readableByteChannel = Channels.newChannel(url.openStream());
 				
-				final FileOutputStream fileOutputStream = new FileOutputStream("map.zip");
+				final FileOutputStream fileOutputStream = new FileOutputStream("ChallengeMap.currentMap.zip");
 				final FileChannel fileChannel = fileOutputStream.getChannel();
 				
 				fileOutputStream.getChannel().transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
@@ -112,7 +111,7 @@ public class ChallengeLoader {
 		
 		// Load World
 		startTimer = true;
-		launchIntegratedServer(map.name, map.name, new WorldSettings(0L, GameType.ADVENTURE, false, true, WorldType.FLAT));
+		launchIntegratedServer(ChallengeMap.currentMap.name, ChallengeMap.currentMap.name, new WorldSettings(0L, GameType.ADVENTURE, false, true, WorldType.FLAT));
 	}
 	
 	private static final int BUFFER_SIZE = 4096;
@@ -156,7 +155,7 @@ public class ChallengeLoader {
         try {
         	Field h = Minecraft.getMinecraft().getClass().getDeclaredField("field_71469_aa");
         	h.setAccessible(true);
-        	h.set(Minecraft.getMinecraft(), map.getSaveLoader());
+        	h.set(Minecraft.getMinecraft(), ChallengeMap.currentMap.getSaveLoader());
         } catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -165,7 +164,7 @@ public class ChallengeLoader {
         System.gc();
 
         
-        ISaveHandler isavehandler = map.getSaveLoader().getSaveLoader(folderName, false);
+        ISaveHandler isavehandler = ChallengeMap.currentMap.getSaveLoader().getSaveLoader(folderName, false);
         WorldInfo worldinfo = isavehandler.loadWorldInfo();
 
         if (worldinfo == null && worldSettingsIn != null)

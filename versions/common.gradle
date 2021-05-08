@@ -1,5 +1,6 @@
 buildscript {
     repositories {
+    	maven { url = "https://mgnet.work/repo" }
     	maven { url = "https://jitpack.io" }
         mavenCentral()
     }

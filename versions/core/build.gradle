@@ -47,34 +47,14 @@ minecraft {
     //#endif
 }
 
+repositories {
+	maven { url = "https://mgnet.work/repo" }
+}
+
 dependencies {
-	//#if MC>=11202
-    compile 'com.google.guava:guava:21.0'
-    compile 'com.google.code.gson:gson:2.8.0'
+	//#if MC>=11100
+    shade 'net.bramp.ffmpeg:ffmpeg:2.8.0-21.0'
     //#else
-    //#if MC>=11200
-    //$$ compile 'com.google.guava:guava:21.0'
-    //$$ compile 'com.google.code.gson:gson:2.8.0'
-    //#else
-    //#if MC>=11102
-    //$$ compile 'com.google.guava:guava:17.0'
-    //$$ compile 'com.google.code.gson:gson:2.2.4'
-    //#else
-    //#if MC>=11100
-    //$$ compile 'com.google.guava:guava:17.0'
-    //$$ compile 'com.google.code.gson:gson:2.2.4'
-    //#else
-    //#if MC>=11002
-    //$$ compile 'com.google.guava:guava:17.0'
-    //$$ compile 'com.google.code.gson:gson:2.2.4'
-    //#else
-    //#if MC>=10904
-    //$$ compile 'com.google.guava:guava:17.0'
-    //$$ compile 'com.google.code.gson:gson:2.2.4'
-    //#endif
-    //#endif
-    //#endif
-    //#endif
-    //#endif
+    //$$ shade 'net.bramp.ffmpeg:ffmpeg:2.2.4-17.0'
     //#endif
 }

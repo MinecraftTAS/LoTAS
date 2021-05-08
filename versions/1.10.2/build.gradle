@@ -11,6 +11,10 @@ minecraft {
     mappings = "snapshot_20161111"
 }
 
-dependencies {
+repositories {
+	maven { url = "https://mgnet.work/repo" }
+}
 
+dependencies {
+    shade 'net.bramp.ffmpeg:ffmpeg:2.2.4-17.0'
 }

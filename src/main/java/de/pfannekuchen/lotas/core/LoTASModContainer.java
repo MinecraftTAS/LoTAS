@@ -16,8 +16,8 @@ import org.apache.commons.io.FileUtils;
 import de.pfannekuchen.lotas.core.utils.ConfigUtils;
 import de.pfannekuchen.lotas.core.utils.EventUtils;
 import de.pfannekuchen.lotas.core.utils.KeybindsUtils;
-import de.pfannekuchen.lotas.gui.GuiSeedList;
-import de.pfannekuchen.lotas.gui.GuiSeedList.SeedEntry;
+import de.pfannekuchen.lotas.gui.GuiSeedList.SeedListExtended;
+import de.pfannekuchen.lotas.gui.GuiSeedList.SeedListExtended.SeedEntry;
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;
 import de.pfannekuchen.lotas.taschallenges.ChallengeMap;
 import net.minecraft.client.Minecraft;
@@ -154,7 +154,7 @@ public class LoTASModContainer {
 				ThreadDownloadImageData dw = new ThreadDownloadImageData((File) null, "http://mgnet.work/seeds/" + seed + ".png", null, new ImageBufferDownload());
 				Minecraft.getMinecraft().getTextureManager().loadTexture(entry.loc, dw);
 			}).start();
-			GuiSeedList.seeds.add(entry);
+			SeedListExtended.seeds.add(entry);
 			c++;
 		}
 	}
