@@ -13,7 +13,7 @@ import net.minecraft.util.math.MathHelper;
 /**
  * Draws a potion in the gui hud that is moving with the camera
  * 
- * @see MixinPotionEntityRenderer
+ * @see MixinPotionRenderer
  * @author Pancake
  *
  */
