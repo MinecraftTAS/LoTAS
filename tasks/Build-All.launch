@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.eclipse.buildship.core.launch.runconfiguration">
+    <booleanAttribute key="override_workspace_settings" value="false"/>
+    <listAttribute key="tasks">
+        <listEntry value="build"/>
+    </listAttribute>
+    <stringAttribute key="working_dir" value="${workspace_loc:/LoTAS}"/>
+</launchConfiguration>

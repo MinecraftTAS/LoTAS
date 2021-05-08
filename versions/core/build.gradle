@@ -1,0 +1,80 @@
+buildscript {
+    dependencies {
+        //#if MC>=11200
+        //$$ classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+        //#else
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
+        //#endif
+    }
+}
+
+apply from: '../common.gradle'
+
+sourceSets {
+    main.java.srcDirs = ['../../src/main/java']
+    main.resources.srcDirs = ['../../src/main/resources']
+}
+
+minecraft {
+    //#if MC>=11202
+    //$$ version = '1.12.2-14.23.5.2847'
+    //$$ mappings = "snapshot_20171003"
+    //#else
+    //#if MC>=11200
+    //$$ version = '1.12-14.21.1.2443'
+    //$$ mappings = "snapshot_20171003"
+    //#else
+    //#if MC>=11102
+    //$$ version = '1.11.2-13.20.1.2588'
+    //$$ mappings = "snapshot_20161220"
+    //#else
+    //#if MC>=11100
+    //$$ version = '1.11-13.19.1.2199'
+    //$$ mappings = "snapshot_20161220"
+    //#else
+    //#if MC>=11002
+    //$$ version = '1.10.2-12.18.3.2511'
+    //$$ mappings = "snapshot_20161111"
+    //#else
+    //#if MC>=10904
+    version = '1.9.4-12.17.0.2317-1.9.4'
+    mappings = "snapshot_20160518"
+    //#endif
+    //#endif
+    //#endif
+    //#endif
+    //#endif
+    //#endif
+}
+
+dependencies {
+	//#if MC>=11202
+//$$     compile 'com.google.guava:guava:21.0'
+//$$     compile 'com.google.code.gson:gson:2.8.0'
+    //#else
+    //#if MC>=11200
+    //$$ compile 'com.google.guava:guava:21.0'
+    //$$ compile 'com.google.code.gson:gson:2.8.0'
+    //#else
+    //#if MC>=11102
+    //$$ compile 'com.google.guava:guava:17.0'
+    //$$ compile 'com.google.code.gson:gson:2.2.4'
+    //#else
+    //#if MC>=11100
+    //$$ compile 'com.google.guava:guava:17.0'
+    //$$ compile 'com.google.code.gson:gson:2.2.4'
+    //#else
+    //#if MC>=11002
+    //$$ compile 'com.google.guava:guava:17.0'
+    //$$ compile 'com.google.code.gson:gson:2.2.4'
+    //#else
+    //#if MC>=10904
+    compile 'com.google.guava:guava:17.0'
+    compile 'com.google.code.gson:gson:2.2.4'
+    //#endif
+    //#endif
+    //#endif
+    //#endif
+    //#endif
+    //#endif
+}
