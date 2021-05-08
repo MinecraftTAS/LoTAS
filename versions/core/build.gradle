@@ -1,9 +1,9 @@
 buildscript {
     dependencies {
         //#if MC>=11200
-        //$$ classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
         //#else
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
+        //$$ classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
         //#endif
     }
 }
@@ -17,8 +17,8 @@ sourceSets {
 
 minecraft {
     //#if MC>=11202
-    //$$ version = '1.12.2-14.23.5.2847'
-    //$$ mappings = "snapshot_20171003"
+    version = '1.12.2-14.23.5.2847'
+    mappings = "snapshot_20171003"
     //#else
     //#if MC>=11200
     //$$ version = '1.12-14.21.1.2443'
@@ -37,8 +37,8 @@ minecraft {
     //$$ mappings = "snapshot_20161111"
     //#else
     //#if MC>=10904
-    version = '1.9.4-12.17.0.2317-1.9.4'
-    mappings = "snapshot_20160518"
+    //$$ version = '1.9.4-12.17.0.2317-1.9.4'
+    //$$ mappings = "snapshot_20160518"
     //#endif
     //#endif
     //#endif
@@ -49,8 +49,8 @@ minecraft {
 
 dependencies {
 	//#if MC>=11202
-//$$     compile 'com.google.guava:guava:21.0'
-//$$     compile 'com.google.code.gson:gson:2.8.0'
+    compile 'com.google.guava:guava:21.0'
+    compile 'com.google.code.gson:gson:2.8.0'
     //#else
     //#if MC>=11200
     //$$ compile 'com.google.guava:guava:21.0'
@@ -69,8 +69,8 @@ dependencies {
     //$$ compile 'com.google.code.gson:gson:2.2.4'
     //#else
     //#if MC>=10904
-    compile 'com.google.guava:guava:17.0'
-    compile 'com.google.code.gson:gson:2.2.4'
+    //$$ compile 'com.google.guava:guava:17.0'
+    //$$ compile 'com.google.code.gson:gson:2.2.4'
     //#endif
     //#endif
     //#endif
