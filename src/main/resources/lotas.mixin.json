@@ -7,12 +7,14 @@
     "mixins": [
 		"patches.MixinBlockPatch",
 		"patches.MixinDragonSkipPatch",
+		"patches.MixinEntityLivingPatch",
 		"patches.MixinEntityPatch",
 		"patches.MixinExplosionPatch",
 		"patches.MixinLeavesPatch",
 		"patches.MixinPatchDurabilityEnch",
 		"patches.MixinPearlPatch",
-		"patches.MixinServerPatch"
+		"patches.MixinServerPatch",
+		"patches.MixinEntityPlayerMPPatch"
     ],
     "client": [
 		"render.gui.MixinGuiScreenWorking",

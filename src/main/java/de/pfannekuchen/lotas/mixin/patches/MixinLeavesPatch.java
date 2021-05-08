@@ -17,8 +17,9 @@ import net.minecraft.world.World;
 public abstract class MixinLeavesPatch {
 
 	// TODO: Double check this
+	// Check 1: Done
 	
-	@Redirect(method = "getDrops", at = @At(value = "INVOKE", target = "Ljava/util/Random;nextInt(I)I", remap = false))
+	@Redirect(method = "getDrops", at = @At(value = "INVOKE", target = "Ljava/util/Random;nextInt(I)I"), remap = false)
 	public int redirectRandom(Random rand, int chance) {
 		return LeaveDropManipulation.dropSapling.isToggled() ? 0:rand.nextInt(chance);
 	}

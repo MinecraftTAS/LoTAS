@@ -1,15 +1,29 @@
 package de.pfannekuchen.lotas.mixin.patches;
 
+import java.util.List;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+//#if MC<=11200
+//$$ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+//#endif
 
 import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.core.utils.ConfigUtils;
+import de.pfannekuchen.lotas.gui.GuiDropChanceManipulation;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
+//#if MC>=11200
+import net.minecraft.util.NonNullList;
+//#endif
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 @Mixin(Block.class)
@@ -34,6 +48,28 @@ public class MixinBlockPatch {
 			// When called in loading screen
 		}
 		return it;
+	}
+	
+	//#if MC>=11202
+	@Inject(at = @At("HEAD"), remap = false, method = "Lnet/minecraft/block/Block;getDrops(Lnet/minecraft/util/NonNullList;Lnet/minecraft/world/IBlockAccess;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;I)V", cancellable = true)
+	public void getDropsInject(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune, CallbackInfo ci) {
+    //#else
+	//$$ @Inject(at = @At("HEAD"), remap = false, method = "Lnet/minecraft/block/Block;getDrops(Lnet/minecraft/world/IBlockAccess;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;I)Ljava/util/List;", cancellable = true)
+	//$$ public void getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune, CallbackInfoReturnable<List<ItemStack>> ci) {
+	//#endif
+		for (GuiDropChanceManipulation.DropManipulation man : GuiDropChanceManipulation .manipulations) {
+            if (!man.enabled.isChecked()) continue;
+            List<ItemStack> list = man.redirectDrops(state);
+            if (!list.isEmpty()) {
+            	//#if MC>=11202
+                drops.clear();
+                drops.addAll(list);
+                //#else
+                //$$ ci.setReturnValue(list);
+                //#endif
+                ci.cancel();
+            }
+        }
 	}
 	
 }
