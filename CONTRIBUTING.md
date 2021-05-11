@@ -4,8 +4,6 @@ If you want to contribute to LoTAS, you need to understand how the current syste
 ### Eclipse
 Simply import the project using "Import -> Gradle Project"
 
-Copy the 'assets', 'META-INF' and 'lotas.mixin.json' Files in the 'versions/core/resources' Folder, to all subprojects, aka. 1.10.2/build/preprocessed/res/
-or
 Disable the FMLAT at in the common.gradle File temporarily
 
 You need to decompile Minecraft first, go into `tasks\` and run `SetupDecompWorkspace_and_AT.launch`. This can take up to 40 minutes... :(
