@@ -22,21 +22,10 @@ public class MixinEntityPatch {
 	private double posY;
 	@Shadow
 	private double posZ;
-	//#if MC>=11100
-	@Shadow
-	private World world;
-	//#else
-	//$$ @Shadow
-	//$$ private World worldObj;
-	//#endif
 	
 	@Redirect(method = "entityDropItem", at = @At(value = "NEW", target = "Lnet/minecraft/entity/item/EntityItem;<init>(Lnet/minecraft/world/World;DDDLnet/minecraft/item/ItemStack;)Lnet/minecraft/entity/item/EntityItem;"))
-	public EntityItem moveItem(ItemStack stack, float offsetY) {
-		//#if MC>=11100
-		EntityItem it = new EntityItem(world, posX, posY, posZ, stack);
-		//#else
-		//$$ EntityItem it = new EntityItem(worldObj, posX, posY, posZ, stack);
-		//#endif
+	public EntityItem moveItem(World w, double x, double y, double z, ItemStack stack) {
+		EntityItem it = new EntityItem(w, posX, posY, posZ, stack);
 		try {
 			if (ConfigUtils.getBoolean("tools", "manipulateVelocityTowards")) {
 				double pX = MCVer.player(Minecraft.getMinecraft()).posX - posX;

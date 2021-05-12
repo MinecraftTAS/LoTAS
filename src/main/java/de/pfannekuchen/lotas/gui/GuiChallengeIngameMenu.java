@@ -107,7 +107,7 @@ public class GuiChallengeIngameMenu extends GuiIngameMenu {
 			//#if MC>=11100
 			TickrateChangerMod.index = MathHelper.clamp(TickrateChangerMod.index, 1, 10);
 			//#else
-			//$$ TickrateChangerMod.index = MathHelper.clamp_int(TickrateChangerMod.index, 1, 10);
+//$$ 			TickrateChangerMod.index = MathHelper.clamp_int(TickrateChangerMod.index, 1, 10);
 			//#endif
 			TickrateChangerMod.updateTickrate(TickrateChangerMod.ticks[TickrateChangerMod.index]);
 		} else if (button.id == 16) {
@@ -115,7 +115,7 @@ public class GuiChallengeIngameMenu extends GuiIngameMenu {
 			//#if MC>=11100
 			TickrateChangerMod.index = MathHelper.clamp(TickrateChangerMod.index, 1, 10);
 			//#else
-			//$$ TickrateChangerMod.index = MathHelper.clamp_int(TickrateChangerMod.index, 1, 10);
+//$$ 			TickrateChangerMod.index = MathHelper.clamp_int(TickrateChangerMod.index, 1, 10);
 			//#endif
 			TickrateChangerMod.updateTickrate(TickrateChangerMod.ticks[TickrateChangerMod.index]);
 		} else if (button.id == 17) {

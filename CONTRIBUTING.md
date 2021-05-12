@@ -4,14 +4,12 @@ If you want to contribute to LoTAS, you need to understand how the current syste
 ### Eclipse
 Simply import the project using "Import -> Gradle Project"
 
-Disable the FMLAT at in the common.gradle File temporarily
-
 You need to decompile Minecraft first, go into `tasks\` and run `SetupDecompWorkspace_and_AT.launch`. This can take up to 40 minutes... :(
 After that you can start programming. The Code to work with is in the 'core' subproject.
 
 Here's how to change the MC Version:
 Change the Version in the version.gradle. (11202 = 1.12.2 XYYZZ)
-Now, run the `Update_Version.launch` File
+Now, run the `Update_Version.launch` File. Don't Forget to refresh the Gradle Project after that
 
 And Here's how to export the Project:
 Run the `Build-All.launch` File in `tasks\`. The JAR's will be in versions\X.YY.Z\build\libs\´.

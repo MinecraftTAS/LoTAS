@@ -49,17 +49,17 @@ public class MixinBlockPatch {
 		}
 		return it;
 	}
-	
+
 	//#if MC>=11202
 	@Inject(at = @At("HEAD"), remap = false, method = "Lnet/minecraft/block/Block;getDrops(Lnet/minecraft/util/NonNullList;Lnet/minecraft/world/IBlockAccess;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;I)V", cancellable = true)
 	public void getDropsInject(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune, CallbackInfo ci) {
-    //#else
+	//#else
 	//$$ @Inject(at = @At("HEAD"), remap = false, method = "Lnet/minecraft/block/Block;getDrops(Lnet/minecraft/world/IBlockAccess;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;I)Ljava/util/List;", cancellable = true)
 	//$$ public void getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune, CallbackInfoReturnable<List<ItemStack>> ci) {
 	//#endif
 		for (GuiDropChanceManipulation.DropManipulation man : GuiDropChanceManipulation .manipulations) {
-            if (!man.enabled.isChecked()) continue;
-            List<ItemStack> list = man.redirectDrops(state);
+			if (!man.enabled.isChecked()) continue;
+			List<ItemStack> list = man.redirectDrops(state);
             if (!list.isEmpty()) {
             	//#if MC>=11202
                 drops.clear();

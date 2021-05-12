@@ -57,7 +57,7 @@ public class GuiChallengeLeaderboard extends GuiScreen {
 		//#if MC>=11200
 		protected void drawSlot(int slotIndex, int xPos, int yPos, int heightIn, int mouseXIn, int mouseYIn, float partialTicks) {
 		//#else
-		//$$ protected void drawSlot(int slotIndex, int xPos, int yPos, int insideSlotHeight, int mouseXIn, int mouseYIn) {
+//$$ 		protected void drawSlot(int slotIndex, int xPos, int yPos, int insideSlotHeight, int mouseXIn, int mouseYIn) {
 		//#endif
 			String runner = ChallengeMap.currentMap.leaderboard[slotIndex].split(";")[0];
             GuiChallengeLeaderboard.this.drawString(MCVer.getFontRenderer(Minecraft.getMinecraft()), runner, xPos + 2, yPos + 1, slotIndex % 2 == 0 ? 16777215 : 9474192);

@@ -88,7 +88,7 @@ public class GuiDropChanceManipulation extends GuiScreen {
 		//#if MC>=11200
 		BufferBuilder bufferBuilder = tessellator.getBuffer();
 		//#else
-		//$$ VertexBuffer bufferBuilder = tessellator.getBuffer();
+//$$ 		VertexBuffer bufferBuilder = tessellator.getBuffer();
 		//#endif
 		
 		GlStateManager.disableTexture2D();
@@ -152,7 +152,7 @@ public class GuiDropChanceManipulation extends GuiScreen {
 			//#if MC>=11200
 			btn.x = y;
 			//#else
-			//$$ btn.xPosition = y;
+//$$ 			btn.xPosition = y;
 			//#endif
 		}
 		
@@ -160,7 +160,7 @@ public class GuiDropChanceManipulation extends GuiScreen {
 			//#if MC>=11200
 			btn.x = x;
 			//#else
-			//$$ btn.xPosition = x;
+//$$ 			btn.xPosition = x;
 			//#endif
 		}
 	}

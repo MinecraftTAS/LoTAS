@@ -104,14 +104,14 @@ public class GuiSeedList extends GuiScreen {
 			@Override
 			public void updatePosition(int p_192633_1_, int p_192633_2_, int p_192633_3_, float p_192633_4_) { }
 			//#else
-	//$$ 		@Override
-	//$$ 		public void setSelected(int p_178011_1_, int p_178011_2_, int p_178011_3_) { }
+//$$ 			@Override
+//$$ 			public void setSelected(int p_178011_1_, int p_178011_2_, int p_178011_3_) { }
 			//#endif
 			
 			//#if MC>=11200
 			@Override public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, int mouseX, int mouseY, boolean isSelected, float partialTicks) {
 			//#else
-	//$$ 		@Override public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, int mouseX, int mouseY, boolean isSelected) {
+//$$ 			@Override public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, int mouseX, int mouseY, boolean isSelected) {
 			//#endif
 				String s = name;
 				String s1 = description;

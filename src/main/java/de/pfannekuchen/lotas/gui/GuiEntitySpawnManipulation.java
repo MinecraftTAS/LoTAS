@@ -76,7 +76,7 @@ public class GuiEntitySpawnManipulation extends GuiScreen {
 		//#if MC>=11100
 		entities.put(5, "Husk");
 		//#else
-		//$$ entities.put(5, "Zombie");
+//$$ 		entities.put(5, "Zombie");
 		//#endif
 		entities.put(6, "Ghast");
 		entities.put(7, "Magma Cube");
@@ -93,7 +93,7 @@ public class GuiEntitySpawnManipulation extends GuiScreen {
 		//#if MC>=11100
 		if (mc.world.getDifficulty() == EnumDifficulty.HARD) {
 		//#else
-		//$$ if (mc.theWorld.getDifficulty() == EnumDifficulty.HARD) {
+//$$ 		if (mc.theWorld.getDifficulty() == EnumDifficulty.HARD) {
 		//#endif
 			entities.put(15, "Skeleton with Enchanted Bow");
 			entities.put(16, "Zombie with Enchanted Sword");
@@ -165,11 +165,11 @@ public class GuiEntitySpawnManipulation extends GuiScreen {
 		//$$ 	this.buttonList.get(this.buttonList.size() - 2).enabled = e.worldObj.getBlockState((new BlockPos(e)).down()).canEntitySpawn(e) && !e.worldObj.collidesWithAnyBlock(e.getEntityBoundingBox());
 		//$$ }
 		//#else
-		//$$ if (e instanceof EntityMob) {
-		//$$ 	this.buttonList.get(this.buttonList.size() - 2).enabled = e.worldObj.getDifficulty() != EnumDifficulty.PEACEFUL && ((EntityMob) e).getBlockPathWeight(new BlockPos(e.posX, e.getEntityBoundingBox().minY, e.posZ)) >= 0.0F && isValidLightLevel(e) && !e.worldObj.collidesWithAnyBlock(e.getEntityBoundingBox());
-		//$$ } else {
-		//$$ 	this.buttonList.get(this.buttonList.size() - 2).enabled = !e.worldObj.collidesWithAnyBlock(e.getEntityBoundingBox());
-		//$$ }
+//$$ 		if (e instanceof EntityMob) {
+//$$ 			this.buttonList.get(this.buttonList.size() - 2).enabled = e.worldObj.getDifficulty() != EnumDifficulty.PEACEFUL && ((EntityMob) e).getBlockPathWeight(new BlockPos(e.posX, e.getEntityBoundingBox().minY, e.posZ)) >= 0.0F && isValidLightLevel(e) && !e.worldObj.collidesWithAnyBlock(e.getEntityBoundingBox());
+//$$ 		} else {
+//$$ 			this.buttonList.get(this.buttonList.size() - 2).enabled = !e.worldObj.collidesWithAnyBlock(e.getEntityBoundingBox());
+//$$ 		}
 		//#endif
 		//#endif
 	}
@@ -221,7 +221,7 @@ public class GuiEntitySpawnManipulation extends GuiScreen {
 			//#if MC>=11100
 			MCVer.world(mc.getIntegratedServer(), MCVer.player(mc).dimension).spawnEntity(e);
 			//#else
-			//$$ MCVer.world(mc.getIntegratedServer(), MCVer.player(mc).dimension).spawnEntityInWorld(e);
+//$$ 			MCVer.world(mc.getIntegratedServer(), MCVer.player(mc).dimension).spawnEntityInWorld(e);
 			//#endif
 		default:
 			break;

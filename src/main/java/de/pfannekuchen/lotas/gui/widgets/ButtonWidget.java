@@ -26,7 +26,7 @@ public class ButtonWidget extends GuiButton {
 		//#if MC>=11200
 		if (this.enabled && this.visible && mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height) {
 		//#else
-		//$$ if (this.enabled && this.visible && mouseX >= this.xPosition && mouseY >= this.yPosition && mouseX < this.xPosition + this.width && mouseY < this.yPosition + this.height) {
+//$$ 		if (this.enabled && this.visible && mouseX >= this.xPosition && mouseY >= this.yPosition && mouseX < this.xPosition + this.width && mouseY < this.yPosition + this.height) {
 		//#endif
 			p.trigger(this);
 			return true;
@@ -39,7 +39,7 @@ public class ButtonWidget extends GuiButton {
 		//#if MC>=11200
 		super.drawButton(Minecraft.getMinecraft(), mouseX, mouseY, delta);
 		//#else
-		//$$ super.drawButton(Minecraft.getMinecraft(), mouseX, mouseY);
+//$$ 		super.drawButton(Minecraft.getMinecraft(), mouseX, mouseY);
 		//#endif
 	}
 

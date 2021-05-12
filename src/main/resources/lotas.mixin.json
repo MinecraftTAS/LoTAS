@@ -5,6 +5,10 @@
     "refmap": "mixin.lotas.refmap.json",
     "compatibilityLevel": "JAVA_8",
     "mixins": [
+    	"accessors.AccessorAnvilChunkLoader",
+    	"accessors.AccessorEntityPlayerMP",
+    	"accessors.AccessorEntityLiving",
+    	"accessors.AccessorEntityItem",
 		"patches.MixinBlockPatch",
 		"patches.MixinDragonSkipPatch",
 		"patches.MixinEntityLivingPatch",
@@ -14,12 +18,27 @@
 		"patches.MixinPatchDurabilityEnch",
 		"patches.MixinPearlPatch",
 		"patches.MixinServerPatch",
-		"patches.MixinEntityPlayerMPPatch"
+		"patches.MixinEntityPlayerMPPatch",
+		"MixinMinecraftServer",
     ],
     "client": [
+    	"accessors.AccessorMinecraftClient",
+    	"accessors.AccessorRenderManager",
+    	"accessors.AccessorGuiListWorldSelection",
+    	"accessors.AccessorTimer",
 		"render.gui.MixinGuiScreenWorking",
 		"render.gui.MixinGuiGameOver",
+		"render.gui.MixinGuiMainMenu",
+		"render.gui.MixinGuiWorldSelection",
+		"render.gui.MixinGuiIngameMenu",
+		"render.binds.MixinTickrateChangerSubtitleOverlay",
+		"render.binds.MixinTickrateChangerEnchantmentGlimm",
+		"render.binds.MixinTickrateChangerAudioPitch",
+		"render.binds.MixinTickrateChangerAchievement",
+		"render.binds.MixinTickrateChangerWorldborder",
+		"render.binds.MixinTickrateChangerSubtitle",
 		"render.MixinShieldRenderer",
-		"render.MixinPotionRenderer,
+		"render.MixinPotionRenderer",
+		"MixinMinecraft"
 	]
 }

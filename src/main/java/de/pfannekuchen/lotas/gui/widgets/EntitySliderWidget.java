@@ -5,6 +5,7 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 
 import de.pfannekuchen.lotas.gui.GuiEntitySpawnManipulation;
+import de.pfannekuchen.lotas.mixin.accessors.AccessorEntityLiving;
 import net.minecraft.client.Minecraft;
 import net.minecraft.enchantment.EnchantmentData;
 import net.minecraft.entity.EntityLiving;
@@ -66,7 +67,7 @@ public class EntitySliderWidget extends GuiSlider {
 			//#if MC>=11100
 			entity = new EntityHusk(world);
 			//#else
-			//$$ entity = new EntityZombie(world);
+//$$ 			entity = new EntityZombie(world);
 			//#endif
 			break;
 		case 6:
@@ -109,7 +110,7 @@ public class EntitySliderWidget extends GuiSlider {
 			//#if MC>=11100
 			//$$ if (entity != null) method.invoke(entity, Minecraft.getMinecraft().getIntegratedServer().worldServerForDimension(entity.dimension).getDifficultyForLocation(Minecraft.getMinecraft().player.getPosition()));
 			//#else
-			//$$ if (entity != null) method.invoke(entity, Minecraft.getMinecraft().getIntegratedServer().worldServerForDimension(entity.dimension).getDifficultyForLocation(Minecraft.getMinecraft().thePlayer.getPosition()));
+//$$ 			if (entity != null) method.invoke(entity, Minecraft.getMinecraft().getIntegratedServer().worldServerForDimension(entity.dimension).getDifficultyForLocation(Minecraft.getMinecraft().thePlayer.getPosition()));
 			//#endif
 			//#endif
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
@@ -209,8 +210,8 @@ public class EntitySliderWidget extends GuiSlider {
 				break;
 			}
 		}
-		entity.inventoryArmorDropChances = new float[] { 1.0f, 1.0f, 1.0f, 1.0f };
-		entity.inventoryHandsDropChances = new float[] { 1.0f, 1.0f };
+		((AccessorEntityLiving) entity).inventoryArmorDropChances(new float[] { 1.0f, 1.0f, 1.0f, 1.0f });
+		((AccessorEntityLiving) entity).inventoryHandsDropChances(new float[] { 1.0f, 1.0f });
 		return entity;
 	}
 
@@ -219,7 +220,7 @@ public class EntitySliderWidget extends GuiSlider {
 			//#if MC>=11200
 			item.addEnchantment(enchantmentData.enchantment, enchantmentData.enchantmentLevel);
 			//#else
-			//$$ item.addEnchantment(enchantmentData.enchantmentobj, enchantmentData.enchantmentLevel);
+//$$ 			item.addEnchantment(enchantmentData.enchantmentobj, enchantmentData.enchantmentLevel);
 			//#endif
 		}
 		return item;

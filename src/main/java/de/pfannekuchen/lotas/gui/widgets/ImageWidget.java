@@ -39,7 +39,7 @@ public class ImageWidget extends ButtonWidget {
 		//#if MC>=11200
 		drawButton(Minecraft.getMinecraft(), mouseX, mouseY, delta);
 		//#else
-		//$$ drawButton(Minecraft.getMinecraft(), mouseX, mouseY);
+//$$ 		drawButton(Minecraft.getMinecraft(), mouseX, mouseY);
 		//#endif
 	}
 	

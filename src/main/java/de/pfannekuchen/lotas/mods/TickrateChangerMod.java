@@ -3,6 +3,8 @@ package de.pfannekuchen.lotas.mods;
 import java.time.Duration;
 
 import de.pfannekuchen.lotas.core.utils.ConfigUtils;
+import de.pfannekuchen.lotas.mixin.accessors.AccessorMinecraftClient;
+import de.pfannekuchen.lotas.mixin.accessors.AccessorTimer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentString;
@@ -45,7 +47,7 @@ public class TickrateChangerMod {
 	 */
 	public static boolean advanceClient=false;
 	/**
-	 * Signals the MinecraftServer in {@link BindMinecraftServer#redoServerWait(long)} to reset the tickrate to 0
+	 * Signals the MinecraftServer in {@link MixinMinecraftServer#redoServerWait(long)} to reset the tickrate to 0
 	 */
 	public static boolean advanceServer=false;
 
@@ -83,18 +85,18 @@ public class TickrateChangerMod {
 	public static void updateClientTickrate(int tickrateIn) {
 		if (tickrateIn != 0f) {
 			//#if MC>=11200
-			Minecraft.getMinecraft().timer.tickLength = 1000f / tickrateIn;
+			((AccessorTimer) ((AccessorMinecraftClient) Minecraft.getMinecraft()).timer()).tickLength(1000f / tickrateIn);
 			//#else
-//$$ 			Minecraft.getMinecraft().timer.ticksPerSecond = tickrateIn;
+//$$ 			((AccessorTimer) ((AccessorMinecraftClient) Minecraft.getMinecraft()).timer()).tickLength(tickrateIn);
 			//#endif
 		} else {
 			if(tickrate!=0) {
 				tickrateSaved=tickrate;
 			}
 			//#if MC>=11200
-			Minecraft.getMinecraft().timer.tickLength = Float.MAX_VALUE;
+			((AccessorTimer) ((AccessorMinecraftClient) Minecraft.getMinecraft()).timer()).tickLength(Float.MAX_VALUE);
 			//#else
-//$$ 			Minecraft.getMinecraft().timer.ticksPerSecond = 0f;
+//$$ 			((AccessorTimer) ((AccessorMinecraftClient) Minecraft.getMinecraft()).timer()).tickLength(0);
 			//#endif
 		}
 		tickrate = tickrateIn;

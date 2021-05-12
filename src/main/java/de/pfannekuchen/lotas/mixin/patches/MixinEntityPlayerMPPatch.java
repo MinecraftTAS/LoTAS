@@ -13,6 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.core.utils.ConfigUtils;
 import de.pfannekuchen.lotas.core.utils.EventUtils.Timer;
+import de.pfannekuchen.lotas.mixin.accessors.AccessorEntityPlayerMP;
 import de.pfannekuchen.lotas.taschallenges.ChallengeMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -49,17 +50,17 @@ public abstract class MixinEntityPlayerMPPatch  {
 		//#if MC>=11100
 		if (!ConfigUtils.getBoolean("tools", "takeDamage")) Minecraft.getMinecraft().getIntegratedServer().getPlayerList().getPlayers().forEach(p -> {
 		//#else
-		//$$if (!ConfigUtils.getBoolean("tools", "takeDamage")) Minecraft.getMinecraft().getIntegratedServer().getPlayerList().getPlayerList().forEach(p -> {	
+//$$ 		if (!ConfigUtils.getBoolean("tools", "takeDamage")) Minecraft.getMinecraft().getIntegratedServer().getPlayerList().getPlayerList().forEach(p -> {	
 		//#endif	
-			if (p.respawnInvulnerabilityTicks <= 1 && p.dimension != 1) {
-				p.respawnInvulnerabilityTicks = 60;
+			if (((AccessorEntityPlayerMP) p).respawnInvulnerabilityTicks() <= 1 && p.dimension != 1) {
+				((AccessorEntityPlayerMP) p).respawnInvulnerabilityTicks(60);
 				takenDamage = true;
 			}
 		});
 		//#if MC>=11100
 		if (!flag && this.respawnInvulnerabilityTicks > 0 && source != DamageSource.OUT_OF_WORLD) {
 		//#else
-		//$$if (!flag && this.respawnInvulnerabilityTicks > 0 && source != DamageSource.outOfWorld) {	
+//$$ 		if (!flag && this.respawnInvulnerabilityTicks > 0 && source != DamageSource.outOfWorld) {	
 		//#endif
 			try {
 				if (takenDamage) {
@@ -84,8 +85,8 @@ public abstract class MixinEntityPlayerMPPatch  {
 	@Inject(remap = false, at = @At(value = "INVOKE", remap = false, shift = Shift.BEFORE, target = "Lnet/minecraft/server/management/PlayerList;transferPlayerToDimension(Lnet/minecraft/entity/player/EntityPlayerMP;ILnet/minecraftforge/common/util/ITeleporter;)V"), method = "changeDimension", cancellable = true)
 	public void injectHere(int dimensionIn, net.minecraftforge.common.util.ITeleporter teleporter, CallbackInfoReturnable<Entity> ci) {
 	//#else
-	//$$ @Inject(at = @At(value = "INVOKE", shift = Shift.BEFORE, target = "Lnet/minecraft/server/management/PlayerList;changePlayerDimension(Lnet/minecraft/entity/player/EntityPlayerMP;I)V", remap = false), method = "changeDimension", cancellable = true)
-	//$$ public void injectHere(int dimensionIn, CallbackInfoReturnable<Entity> ci) {
+//$$ 	@Inject(at = @At(value = "INVOKE", shift = Shift.BEFORE, target = "Lnet/minecraft/server/management/PlayerList;changePlayerDimension(Lnet/minecraft/entity/player/EntityPlayerMP;I)V", remap = false), method = "changeDimension", cancellable = true)
+//$$ 	public void injectHere(int dimensionIn, CallbackInfoReturnable<Entity> ci) {
 	//#endif
 		if (dimensionIn == 1 && ChallengeMap.currentMap != null) {
 			((EntityPlayerMP) (Object) this).setGameType(GameType.SPECTATOR);
@@ -94,7 +95,7 @@ public abstract class MixinEntityPlayerMPPatch  {
 			//#if MC>=11100
 			chat.getChatGUI().clearChatMessages(true);
 			//#else
-			//$$ chat.getChatGUI().clearChatMessages();
+//$$ 			chat.getChatGUI().clearChatMessages();
 			//#endif
 			ChallengeMap.currentMap = null;
 			chat.getChatGUI().printChatMessage(new TextComponentString("You have completed: \u00A76" + ChallengeMap.currentMap.displayName + "\u00A7f! Your Time is: " + Timer.getCurrentTimerFormatted()));

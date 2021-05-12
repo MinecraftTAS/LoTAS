@@ -25,6 +25,7 @@ import com.mojang.authlib.minecraft.MinecraftSessionService;
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
 
 import de.pfannekuchen.lotas.core.MCVer;
+import de.pfannekuchen.lotas.mixin.accessors.AccessorMinecraftClient;
 import de.pfannekuchen.lotas.mods.SavestateMod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
@@ -187,13 +188,9 @@ public class ChallengeLoader {
             TileEntitySkull.setProfileCache(playerprofilecache);
             TileEntitySkull.setSessionService(minecraftsessionservice);
             PlayerProfileCache.setOnlineMode(false);
-            //#if MC>=11200
-            Minecraft.getMinecraft().integratedServer = new IntegratedServer(Minecraft.getMinecraft(), folderName, worldName, worldSettingsIn, yggdrasilauthenticationservice, minecraftsessionservice, gameprofilerepository, playerprofilecache);
-            //#else
-            //$$ Minecraft.getMinecraft().theIntegratedServer = new IntegratedServer(Minecraft.getMinecraft(), folderName, worldName, worldSettingsIn, yggdrasilauthenticationservice, minecraftsessionservice, gameprofilerepository, playerprofilecache);
-            //#endif
+            ((AccessorMinecraftClient) Minecraft.getMinecraft()).integratedServer(new IntegratedServer(Minecraft.getMinecraft(), folderName, worldName, worldSettingsIn, yggdrasilauthenticationservice, minecraftsessionservice, gameprofilerepository, playerprofilecache));
             Minecraft.getMinecraft().getIntegratedServer().startServerThread();
-            Minecraft.getMinecraft().integratedServerIsRunning = true;
+            ((AccessorMinecraftClient) Minecraft.getMinecraft()).integratedServerIsRunning(true);
         }
         catch (Throwable throwable)
         {

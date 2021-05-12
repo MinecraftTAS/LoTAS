@@ -13,6 +13,7 @@ import com.google.common.collect.ImmutableList;
 import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.gui.GuiAiManipulation;
 import de.pfannekuchen.lotas.gui.GuiEntitySpawnManipulation;
+import de.pfannekuchen.lotas.mixin.accessors.AccessorRenderManager;
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;
 import de.pfannekuchen.lotas.taschallenges.ChallengeMap;
 import net.minecraft.client.Minecraft;
@@ -118,9 +119,9 @@ public class EventUtils {
 			GL11.glLineWidth(2);
 			
 			final RenderManager renderManager = Minecraft.getMinecraft().getRenderManager();
-			final double renderX = ((double) ((GuiEntitySpawnManipulation) gui).spawnX - 0.5f) - renderManager.renderPosX;
-			final double renderY = ((double) ((GuiEntitySpawnManipulation) gui).spawnY) - renderManager.renderPosY;
-			final double renderZ = ((double) ((GuiEntitySpawnManipulation) gui).spawnZ - 0.5F) - renderManager.renderPosZ;
+			final double renderX = ((double) ((GuiEntitySpawnManipulation) gui).spawnX - 0.5f) - ((AccessorRenderManager) renderManager).renderPosX();
+			final double renderY = ((double) ((GuiEntitySpawnManipulation) gui).spawnY) - ((AccessorRenderManager) renderManager).renderPosY();
+			final double renderZ = ((double) ((GuiEntitySpawnManipulation) gui).spawnZ - 0.5F) - ((AccessorRenderManager) renderManager).renderPosZ();
 			
 			GL11.glTranslated(renderX, renderY, renderZ);
 			GL11.glScalef(1, 2, 1);
@@ -144,9 +145,9 @@ public class EventUtils {
 			GL11.glLineWidth(2);
 			
 			final RenderManager renderManager = Minecraft.getMinecraft().getRenderManager();
-			double renderX = ((double) GuiAiManipulation.entities.get(GuiAiManipulation.selectedIndex).posX - 0.5f) - renderManager.renderPosX;
-			double renderY = ((double) GuiAiManipulation.entities.get(GuiAiManipulation.selectedIndex).posY) - renderManager.renderPosY;
-			double renderZ = ((double) GuiAiManipulation.entities.get(GuiAiManipulation.selectedIndex).posZ - 0.5F) - renderManager.renderPosZ;
+			double renderX = ((double) GuiAiManipulation.entities.get(GuiAiManipulation.selectedIndex).posX - 0.5f) - ((AccessorRenderManager) renderManager).renderPosX();
+			double renderY = ((double) GuiAiManipulation.entities.get(GuiAiManipulation.selectedIndex).posY) - ((AccessorRenderManager) renderManager).renderPosY();
+			double renderZ = ((double) GuiAiManipulation.entities.get(GuiAiManipulation.selectedIndex).posZ - 0.5F) - ((AccessorRenderManager) renderManager).renderPosZ();
 			
 			GL11.glTranslated(renderX, renderY, renderZ);
 			GL11.glScalef(1, 2, 1);
@@ -170,9 +171,9 @@ public class EventUtils {
 			
 			// Draw output
 			
-			renderX = GuiAiManipulation.spawnX - renderManager.renderPosX;
-			renderY = GuiAiManipulation.spawnY - renderManager.renderPosY;
-			renderZ = GuiAiManipulation.spawnZ - renderManager.renderPosZ;
+			renderX = GuiAiManipulation.spawnX - ((AccessorRenderManager) renderManager).renderPosX();
+			renderY = GuiAiManipulation.spawnY - ((AccessorRenderManager) renderManager).renderPosY();
+			renderZ = GuiAiManipulation.spawnZ - ((AccessorRenderManager) renderManager).renderPosZ();
 			
 			GL11.glTranslated(renderX, renderY, renderZ);
 			GL11.glScalef(1, 1, 1);

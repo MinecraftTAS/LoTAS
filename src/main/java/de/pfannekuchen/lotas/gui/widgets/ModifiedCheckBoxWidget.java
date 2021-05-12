@@ -12,9 +12,9 @@ public class ModifiedCheckBoxWidget extends GuiCheckBox {
 	}
 
 	//#if MC<=11102
-	//$$ public void drawButton(Minecraft mc, int mouseX, int mouseY, float partial) {
-	//$$ 	super.drawButton(mc, mouseX, mouseY);
-	//$$ }
+//$$ 	public void drawButton(Minecraft mc, int mouseX, int mouseY, float partial) {
+//$$ 		super.drawButton(mc, mouseX, mouseY);
+//$$ 	}
 	//#endif
 	
 }

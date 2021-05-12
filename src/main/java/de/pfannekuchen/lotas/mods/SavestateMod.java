@@ -14,6 +14,7 @@ import org.lwjgl.input.Mouse;
 
 import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.core.utils.EventUtils.Timer;
+import de.pfannekuchen.lotas.mixin.accessors.AccessorAnvilChunkLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.server.MinecraftServer;
@@ -74,15 +75,8 @@ public class SavestateMod {
 
 		for(WorldServer world:MCVer.getWorlds(server)) {
 			AnvilChunkLoader chunkloader=(AnvilChunkLoader)world.getChunkProvider().chunkLoader;
-			//#if MC>=11202
-			while(chunkloader.getPendingSaveCount()>0) {
-				//#else
-				//#if MC>=11200
-//$$ 				while(chunkloader.chunksToSave.size()>0) {
-				//#else
-//$$ 				while(chunkloader.pendingAnvilChunksCoordinates.size() > 0) {
-				//#endif
-				//#endif
+			while(((AccessorAnvilChunkLoader) chunkloader).chunksToSave().size() > 0) {
+				
 			}
 		}
 
@@ -190,7 +184,7 @@ public class SavestateMod {
 	/**
 	 * Checks if a savestate, that can be loaded, is present in the savestate directory
 	 * @return existingSavestates
-	 * @see RedoGuiIngameMenu#injectinitGui(org.spongepowered.asm.mixin.injection.callback.CallbackInfo)
+	 * @see MixinGuiIngameMenu#injectinitGui(org.spongepowered.asm.mixin.injection.callback.CallbackInfo)
 	 */
 	public static boolean hasSavestate() {
 		String worldName = Minecraft.getMinecraft().getIntegratedServer().getFolderName();
