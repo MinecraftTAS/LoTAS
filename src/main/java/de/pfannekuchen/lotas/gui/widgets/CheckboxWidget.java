@@ -32,11 +32,7 @@ public class CheckboxWidget extends GuiButton {
 
 	public void drawButton(Minecraft minecraftClient, int mouseX, int mouseY, float delta) {
 		GlStateManager.enableDepth();
-		//#if MC>=11200
-		FontRenderer textRenderer = minecraftClient.fontRenderer;
-		//#else
-//$$ 		FontRenderer textRenderer = minecraftClient.fontRendererObj;
-		//#endif
+		FontRenderer textRenderer = MCVer.getFontRenderer(minecraftClient);
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0f);
 		GlStateManager.enableBlend();
 		//#if MC>=10900
@@ -47,18 +43,8 @@ public class CheckboxWidget extends GuiButton {
 //$$ 		GlStateManager.blendFunc(770, 771);
 		//#endif
 		minecraftClient.getTextureManager().bindTexture(TEXTURE);
-		//#if MC>=11200
-		drawModalRectWithCustomSizedTexture(this.x, this.y, 0.0F, this.checked ? 20.0F : 0.0F, 20, this.height, 32, 64);
-		this.drawString(textRenderer, this.displayString, this.x + 24, this.y + (this.height - 8) / 2, 14737632 | MCVer.ceil(1.0f * 255.0F) << 24);
-		//#else
-		//#if MC>=11100
-		//$$ drawModalRectWithCustomSizedTexture(this.xPosition, this.yPosition, 0.0F, this.checked ? 20.0F : 0.0F, 20, this.height, 32, 64);
-		//$$ this.drawString(textRenderer, this.displayString, this.xPosition + 24, this.yPosition + (this.height - 8) / 2, 14737632 | MathHelper.ceil(1.0f * 255.0F) << 24);
-		//#else
-//$$ 		drawModalRectWithCustomSizedTexture(this.xPosition, this.yPosition, 0.0F, this.checked ? 20.0F : 0.0F, 20, this.height, 32, 64);
-//$$ 		this.drawString(textRenderer, this.displayString, this.xPosition + 24, this.yPosition + (this.height - 8) / 2, 14737632 | MathHelper.ceiling_float_int(1.0f * 255.0F) << 24);
-		//#endif
-		//#endif
+		drawModalRectWithCustomSizedTexture(MCVer.x(this), MCVer.y(this), 0.0F, this.checked ? 20.0F : 0.0F, 20, this.height, 32, 64);
+		this.drawString(textRenderer, this.displayString, MCVer.x(this) + 24, MCVer.y(this) + (this.height - 8) / 2, 14737632 | MCVer.ceil(1.0f * 255.0F) << 24);
 	}
 	
 	@Override

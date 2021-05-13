@@ -123,11 +123,7 @@ public class MixinMinecraft {
         float f = strafe * strafe + up * up + forward * forward;
         if (f >= 1.0E-4F)
         {
-        	//#if MC>=11100
             f = MCVer.sqrt(f);
-            //#else
-            //$$ f = MathHelper.sqrt_float(f);
-            //#endif
             if (f < 1.0F) f = 1.0F;
             f = friction / f;
             strafe = strafe * f;
@@ -140,8 +136,8 @@ public class MixinMinecraft {
             player.posY += (double)up;
             player.posZ += (double)(forward * f2 + strafe * f1);
             //#else
-            //$$ float f1 = MathHelper.sin(thePlayer.rotationYaw * 0.017453292F);
-            //$$ float f2 = MathHelper.cos(thePlayer.rotationYaw * 0.017453292F);
+            //$$ float f1 = MCVer.sin(thePlayer.rotationYaw * 0.017453292F);
+            //$$ float f2 = MCVer.cos(thePlayer.rotationYaw * 0.017453292F);
             //$$ thePlayer.posX += (double)(strafe * f2 - forward * f1);
             //$$ thePlayer.posY += (double)up;
             //$$ thePlayer.posZ += (double)(forward * f2 + strafe * f1);

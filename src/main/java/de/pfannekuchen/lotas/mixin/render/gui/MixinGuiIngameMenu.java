@@ -196,19 +196,11 @@ public abstract class MixinGuiIngameMenu extends GuiScreen {
 			else SavestateMod.loadstate(-1);
 		} else if (button.id == 15) {
 			TickrateChangerMod.index++;
-			//#if MC>=11100
 			TickrateChangerMod.index = MCVer.clamp(TickrateChangerMod.index, 1, 10);
-			//#else
-//$$ 			TickrateChangerMod.index = MathHelper.clamp_int(TickrateChangerMod.index, 1, 10);
-			//#endif
 			TickrateChangerMod.updateTickrate(TickrateChangerMod.ticks[TickrateChangerMod.index]);
 		} else if (button.id == 16) {
 			TickrateChangerMod.index--;
-			//#if MC>=11100
 			TickrateChangerMod.index = MCVer.clamp(TickrateChangerMod.index, 1, 10);
-			//#else
-//$$ 			TickrateChangerMod.index = MathHelper.clamp_int(TickrateChangerMod.index, 1, 10);
-			//#endif
 			TickrateChangerMod.updateTickrate(TickrateChangerMod.ticks[TickrateChangerMod.index]);
 		} else if (button.id == 17) {
 			DupeMod.saveItems();
