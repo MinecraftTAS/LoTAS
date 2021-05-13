@@ -43,7 +43,7 @@ public class ChallengeMap {
 		//#if MC>=10900
 		ISaveFormat format = new AnvilSaveConverter(new File(Minecraft.getMinecraft().mcDataDir, "challenges"), Minecraft.getMinecraft().getDataFixer());
 		//#else
-		//$$ ISaveFormat format = new AnvilSaveConverter(new File(Minecraft.getMinecraft().mcDataDir, "challenges"));
+//$$ 		ISaveFormat format = new AnvilSaveConverter(new File(Minecraft.getMinecraft().mcDataDir, "challenges"));
 		//#endif
 		return format;
 	}

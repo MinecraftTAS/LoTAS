@@ -15,56 +15,72 @@ import de.pfannekuchen.lotas.mixin.accessors.AccessorGuiListWorldSelection;
 import de.pfannekuchen.lotas.taschallenges.ChallengeMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiListWorldSelection;
+
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.GuiWorldSelection;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.config.GuiCheckBox;
 
+//#if MC>=10900
+import net.minecraft.client.gui.GuiListWorldSelection;
+import net.minecraft.client.gui.GuiWorldSelection;
 @Mixin(GuiWorldSelection.class)
 public abstract class MixinGuiWorldSelection extends GuiScreen {
-
-	/*
-	 *
-	 * This Code adds a CheckBox whether you want to auto-open the IngameMenu when entering a world to the top right corner of the world selection screen.
-	 *
-	 */
+//#else
+//$$ import net.minecraft.world.storage.SaveFormatComparator;
+//$$ import net.minecraft.client.gui.GuiSelectWorld;
+//$$ @Mixin(GuiSelectWorld.class)
+//$$ public abstract class MixinGuiWorldSelection extends GuiScreen {
+//#endif
 	
+	//#if MC>=10900
 	@Shadow
 	private GuiListWorldSelection selectionList;
+	//#else
+//$$ 	@Shadow
+//$$ 	private GuiSelectWorld.List field_146638_t;
+//$$ 	@Shadow
+//$$ 	private int selectedIndex;
+//$$ 	@Shadow
+//$$ 	private java.util.List<SaveFormatComparator> field_146639_s;
+	//#endif
 	
 	@Inject(at = @At("RETURN"), method = "initGui")
 	public void injectinitGui2(CallbackInfo ci) {
 		if (!ConfigUtils.getBoolean("tools", "hideMaps")) {
+			//#if MC>=10900
 			for (ChallengeMap map : LoTASModContainer.maps) {
 				ChallengeMapEntryWidget entry = new ChallengeMapEntryWidget(selectionList, map);
 				entry.loc = new ResourceLocation("maps", map.resourceLoc);
 				((AccessorGuiListWorldSelection) selectionList).entries().add(entry);
 			}
+			//#else
+//$$ 			field_146638_t = new ChallengeMapEntryWidget((GuiSelectWorld) (Object) this);
+			//#endif
 		}
 	}
 	
 	@Inject(at = @At("HEAD"), method = "initGui")
 	public void injectinitGui(CallbackInfo ci) {
-		this.buttonList.add(new GuiButton(6, 5, 5, 98, 20, "Seeds"));
-		this.buttonList.add(new GuiCheckBox(7, width - 17 - MCVer.getFontRenderer(mc).getStringWidth("Open ESC when joining world"), 4, "Open ESC when joining world", ConfigUtils.getBoolean("tools", "hitEscape")));
-		this.buttonList.add(new GuiCheckBox(8, width - 17 - MCVer.getFontRenderer(mc).getStringWidth("Open ESC when joining world"), 16, "Show TAS Challenge Maps", !ConfigUtils.getBoolean("tools", "hideMaps")));
+		this.buttonList.add(new GuiButton(16, 5, 5, 98, 20, "Seeds"));
+		this.buttonList.add(new GuiCheckBox(17, width - 17 - MCVer.getFontRenderer(mc).getStringWidth("Open ESC when joining world"), 4, "Open ESC when joining world", ConfigUtils.getBoolean("tools", "hitEscape")));
+		this.buttonList.add(new GuiCheckBox(18, width - 17 - MCVer.getFontRenderer(mc).getStringWidth("Open ESC when joining world"), 16, "Show TAS Challenge Maps", !ConfigUtils.getBoolean("tools", "hideMaps")));
 	}
 	
 	@Inject(at = @At("HEAD"), method = "actionPerformed")
 	public void injectactionPerformed(GuiButton button, CallbackInfo ci) {
 		switch (button.id) {
-			case 6:
+			case 16:
 				Minecraft.getMinecraft().displayGuiScreen(new GuiSeedList());
 				break;
-			case 7:
+			case 17:
 				ConfigUtils.setBoolean("tools", "hitEscape", ((GuiCheckBox) button).isChecked());
 				ConfigUtils.save();
 				break;
-			case 8:
+			case 18:
 				ConfigUtils.setBoolean("tools", "hideMaps", !((GuiCheckBox) button).isChecked());
 				ConfigUtils.save();
 				
+				//#if MC>=10900
 				((AccessorGuiListWorldSelection) selectionList).entries().clear();
 				if (((GuiCheckBox) button).isChecked()) {
 					selectionList.refreshList();
@@ -76,10 +92,22 @@ public abstract class MixinGuiWorldSelection extends GuiScreen {
 				} else {
 					selectionList.refreshList();
 				}
+				//#else
+//$$ 				if (((GuiCheckBox) button).isChecked()) {
+//$$ 					field_146638_t = new ChallengeMapEntryWidget((GuiSelectWorld) (Object) this);
+//$$ 				} else {
+//$$ 					field_146638_t = ((GuiSelectWorld) (Object) this).new List(mc);
+//$$ 				}
+				//#endif
 			default:
 				
 				break;
 		}
 	}
+	
+	//#if MC<=10809
+//$$ 	@Shadow
+//$$ 	public abstract void func_146627_h();
+	//#endif
 	
 }

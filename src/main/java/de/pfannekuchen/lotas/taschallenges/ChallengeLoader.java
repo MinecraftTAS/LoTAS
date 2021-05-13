@@ -47,7 +47,12 @@ import net.minecraft.tileentity.TileEntitySkull;
 //#else
 //$$ import net.minecraft.network.login.client.C00PacketLoginStart;
 //#endif
+
+//#if MC>=10900
 import net.minecraft.network.login.client.CPacketLoginStart;
+//#else
+//$$ import net.minecraft.network.handshake.client.C00Handshake;
+//#endif
 import net.minecraft.server.integrated.IntegratedServer;
 import net.minecraft.util.ReportedException;
 //#if MC>=11000
@@ -253,7 +258,6 @@ public class ChallengeLoader {
         //#else
         //$$ networkmanager.sendPacket(new C00Handshake(316, socketaddress.toString(), 0, EnumConnectionState.LOGIN, true));
         //#endif
-        // TODO: Read 316 from somewhere, it's the protocol version
         com.mojang.authlib.GameProfile gameProfile = Minecraft.getMinecraft().getSession().getProfile();
         if (!Minecraft.getMinecraft().getSession().hasCachedProperties())
         {

@@ -28,7 +28,11 @@ import net.minecraft.client.gui.GuiIngameMenu;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.settings.GameSettings;
+//#if MC>=10900
 import net.minecraft.util.math.MathHelper;
+//#else
+//$$ import net.minecraft.util.MathHelper;
+//#endif
 
 @Mixin(Minecraft.class)
 public class MixinMinecraft {
@@ -63,8 +67,8 @@ public class MixinMinecraft {
 	@Shadow
 	private boolean isGamePaused;
 	
-	@Inject(method = "loadWorld", at = @At("HEAD"))
-	public void injectloadWorld(WorldClient worldClientIn, CallbackInfo ci) {
+	@Inject(method = "Lnet/minecraft/client/Minecraft;loadWorld(Lnet/minecraft/client/multiplayer/WorldClient;Ljava/lang/String;)V", at = @At("HEAD"))
+	public void injectloadWorld(WorldClient worldClientIn, String loadingMessage, CallbackInfo ci) {
 		isLoadingWorld = ConfigUtils.getBoolean("tools", "hitEscape") && worldClientIn != null;
 		
 		if (ChallengeLoader.startTimer) {

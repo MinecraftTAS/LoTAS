@@ -2,7 +2,7 @@
     "required": true,
     "minVersion": "0.7.10",
     "package": "de.pfannekuchen.lotas.mixin",
-    "refmap": "mixin.lotas.refmap.json",
+    "refmap": "mixins.lotas.refmap.json",
     "compatibilityLevel": "JAVA_8",
     "mixins": [
     	"accessors.AccessorAnvilChunkLoader",

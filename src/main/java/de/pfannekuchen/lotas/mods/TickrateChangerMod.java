@@ -107,7 +107,7 @@ public class TickrateChangerMod {
 		//#if MC>=10900
 		if (!ConfigUtils.getBoolean("ui", "hideTickrateMessages") && Minecraft.getMinecraft().ingameGUI != null) Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(new TextComponentString("Updated Tickrate to \u00A7b" + tickrateIn));
 		//#else
-		//$$ if (!ConfigUtils.getBoolean("ui", "hideTickrateMessages") && Minecraft.getMinecraft().ingameGUI != null) Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(new ChatComponentText("Updated Tickrate to \u00A7b" + tickrateIn));
+//$$ 		if (!ConfigUtils.getBoolean("ui", "hideTickrateMessages") && Minecraft.getMinecraft().ingameGUI != null) Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(new ChatComponentText("Updated Tickrate to \u00A7b" + tickrateIn));
 		//#endif
 	}
 	

@@ -9,7 +9,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
 //#if MC>=10900
@@ -19,6 +18,7 @@ import net.minecraft.util.math.BlockPos;
 //$$ import net.minecraft.util.AxisAlignedBB;
 //$$ import net.minecraft.util.BlockPos;
 //#endif
+import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
 public class DupeMod {
@@ -68,7 +68,11 @@ public class DupeMod {
 						//#if MC>=11100
 						WorldServer w = mc.getIntegratedServer().getPlayerList().getPlayers().get(0).getServerWorld();
 						//#else
+						//#if MC>=10900
 //$$ 						WorldServer w = mc.getIntegratedServer().getPlayerList().getPlayerList().get(0).getServerWorld();
+						//#else
+//$$ 						World w = mc.getIntegratedServer().getConfigurationManager().getPlayerList().get(0).worldObj;
+						//#endif
 						//#endif
 						// ===========================================
 						//#if MC>=11200
@@ -142,7 +146,7 @@ public class DupeMod {
 			for (int x =- 5; x <= 5; x++) {
 				for (int y =- 5; y <= 5; y++) {
 					for (int z =- 5; z <= 5; z++) {
-						if (MCVer.world(mc.getIntegratedServer(), MCVer.player(mc).dimension).getBlockState(playerPos.add(x, y, z)).getBlock() == Blocks.CHEST || world.getBlockState(playerPos.add(x, y, z)).getBlock() == Blocks.TRAPPED_CHEST) {
+						if (MCVer.world(mc.getIntegratedServer(), MCVer.player(mc).dimension).getBlockState(playerPos.add(x, y, z)).getBlock() == MCVer.getBlock("CHEST") || world.getBlockState(playerPos.add(x, y, z)).getBlock() == MCVer.getBlock("TRAPPED_CHEST")) {
 							TileEntityChest foundchest = (TileEntityChest) world.getTileEntity(playerPos.add(x,y,z));
 							TileEntityChest newchest = new TileEntityChest(((TileEntityChest) world.getTileEntity(playerPos.add(x,y,z))).getChestType());
 							newchest.deserializeNBT(foundchest.serializeNBT());

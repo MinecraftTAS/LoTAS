@@ -8,6 +8,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.At.Shift;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import de.pfannekuchen.lotas.core.MCVer;
@@ -22,7 +23,11 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.DamageSource;
+//#if MC>=10900
 import net.minecraft.util.text.TextComponentString;
+//#else
+//$$ import net.minecraft.util.ChatComponentText;
+//#endif
 //#if MC>=11000
 import net.minecraft.world.GameType;
 //#else
@@ -50,7 +55,11 @@ public abstract class MixinEntityPlayerMPPatch  {
 		//#if MC>=11100
 		if (!ConfigUtils.getBoolean("tools", "takeDamage")) Minecraft.getMinecraft().getIntegratedServer().getPlayerList().getPlayers().forEach(p -> {
 		//#else
+		//#if MC>=10900
 //$$ 		if (!ConfigUtils.getBoolean("tools", "takeDamage")) Minecraft.getMinecraft().getIntegratedServer().getPlayerList().getPlayerList().forEach(p -> {	
+		//#else
+//$$ 		if (!ConfigUtils.getBoolean("tools", "takeDamage")) Minecraft.getMinecraft().getIntegratedServer().getConfigurationManager().getPlayerList().forEach(p -> {	
+		//#endif
 		//#endif	
 			if (((AccessorEntityPlayerMP) p).respawnInvulnerabilityTicks() <= 1 && p.dimension != 1) {
 				((AccessorEntityPlayerMP) p).respawnInvulnerabilityTicks(60);
@@ -78,15 +87,18 @@ public abstract class MixinEntityPlayerMPPatch  {
 			}
 		}
 	}
-	
-	// TODO: Check this
 
 	//#if MC>=11202
 	@Inject(remap = false, at = @At(value = "INVOKE", remap = false, shift = Shift.BEFORE, target = "Lnet/minecraft/server/management/PlayerList;transferPlayerToDimension(Lnet/minecraft/entity/player/EntityPlayerMP;ILnet/minecraftforge/common/util/ITeleporter;)V"), method = "changeDimension", cancellable = true)
 	public void injectHere(int dimensionIn, net.minecraftforge.common.util.ITeleporter teleporter, CallbackInfoReturnable<Entity> ci) {
 	//#else
+	//#if MC>=10900
 //$$ 	@Inject(at = @At(value = "INVOKE", shift = Shift.BEFORE, target = "Lnet/minecraft/server/management/PlayerList;changePlayerDimension(Lnet/minecraft/entity/player/EntityPlayerMP;I)V", remap = false), method = "changeDimension", cancellable = true)
 //$$ 	public void injectHere(int dimensionIn, CallbackInfoReturnable<Entity> ci) {
+	//#else
+//$$ 	@Inject(at = @At(value = "INVOKE", shift = Shift.BEFORE, target = "Lnet/minecraft/server/management/ServerConfigurationManager;transferPlayerToDimension(Lnet/minecraft/entity/player/EntityPlayerMP;I)V"), method = "travelToDimension", cancellable = true)
+//$$ 	public void injectHere(int dimensionIn, CallbackInfo ci) {
+	//#endif
 	//#endif
 		if (dimensionIn == 1 && ChallengeMap.currentMap != null) {
 			((EntityPlayerMP) (Object) this).setGameType(GameType.SPECTATOR);
@@ -98,23 +110,40 @@ public abstract class MixinEntityPlayerMPPatch  {
 //$$ 			chat.getChatGUI().clearChatMessages();
 			//#endif
 			ChallengeMap.currentMap = null;
+			//#if MC>=10900
 			chat.getChatGUI().printChatMessage(new TextComponentString("You have completed: \u00A76" + ChallengeMap.currentMap.displayName + "\u00A7f! Your Time is: " + Timer.getCurrentTimerFormatted()));
 			chat.getChatGUI().printChatMessage(new TextComponentString("Please submit your \u00A7craw \u00A7fvideo to \u00A77#new-misc-things \u00A7f on the Minecraft TAS Discord Server."));
+			//#else
+//$$ 			chat.getChatGUI().printChatMessage(new ChatComponentText("You have completed: \u00A76" + ChallengeMap.currentMap.displayName + "\u00A7f! Your Time is: " + Timer.getCurrentTimerFormatted()));
+//$$ 			chat.getChatGUI().printChatMessage(new ChatComponentText("Please submit your \u00A7craw \u00A7fvideo to \u00A77#new-misc-things \u00A7f on the Minecraft TAS Discord Server."));
+			//#endif
 			
             try {
             	Field h = Minecraft.getMinecraft().getClass().getDeclaredField("field_71469_aa");
             	h.setAccessible(true);
+            	//#if MC>=10900
             	h.set(Minecraft.getMinecraft(), new AnvilSaveConverter(new File(Minecraft.getMinecraft().mcDataDir, "saves"), Minecraft.getMinecraft().getDataFixer()));
+            	//#else
+            //$$ 	h.set(Minecraft.getMinecraft(), new AnvilSaveConverter(new File(Minecraft.getMinecraft().mcDataDir, "saves")));
+            	//#endif
             } catch (Exception e) {
     			e.printStackTrace();
     		}
 			
-			ci.setReturnValue((Entity) (Object) this);
-			ci.cancel();
+			//#if MC>=10900
+            ci.setReturnValue((Entity) (Object) this);
+			//#endif
+            ci.cancel();
 			return;
 		}
+		//#if MC>=10900
 		if (dimensionIn == 1 && ((EntityPlayerMP) (Object) this).dimension == 0 && ((EntityPlayerMP) (Object) this).interactionManager.getGameType() == GameType.SPECTATOR) {
-			ci.setReturnValue((Entity) (Object) this);
+		//#else
+//$$ 		if (dimensionIn == 1 && ((EntityPlayerMP) (Object) this).dimension == 0 && ((EntityPlayerMP) (Object) this).theItemInWorldManager.getGameType() == GameType.SPECTATOR) {
+		//#endif
+			//#if MC>=10900
+            ci.setReturnValue((Entity) (Object) this);
+			//#endif
 			ci.cancel();
 			return;
 		}

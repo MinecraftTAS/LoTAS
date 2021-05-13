@@ -5,12 +5,12 @@ import java.awt.image.BufferedImage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BannerTextures;
 import net.minecraft.client.renderer.IImageBuffer;
+import java.io.IOException;
 import net.minecraft.client.renderer.ImageBufferDownload;
 import net.minecraft.client.renderer.ThreadDownloadImageData;
 //#endif
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
@@ -46,7 +46,9 @@ public class LoTASModContainer {
 	
 	@EventHandler
 	public void onInit(FMLInitializationEvent e) {
+		//#if MC>=10900
 		loadShields();
+		//#endif
 		KeybindsUtils.registerKeybinds();
 	}
 	
@@ -102,9 +104,10 @@ public class LoTASModContainer {
 		MinecraftForge.EVENT_BUS.register(new EventUtils());
 	}
 	
+	//#if MC>=10900
 	public void loadShields() {	
 		String uuid = Minecraft.getMinecraft().getSession().getProfile().getId().toString();
-		
+
 		try {
 			URL url = new URL("https://raw.githubusercontent.com/ScribbleLP/MC-TASTools/1.12.2/shields/shieldnames.txt");
 			BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
@@ -112,12 +115,12 @@ public class LoTASModContainer {
 			while (line != null) {
 				if (line.split(":")[0].equalsIgnoreCase(uuid)) {
 					ThreadDownloadImageData thread = new ThreadDownloadImageData(null, "https://raw.githubusercontent.com/ScribbleLP/MC-TASTools/1.12.2/shields/" + line.split(":")[1], null, new IImageBuffer() {
-						
+
 						@Override
 						public void skinAvailable() {
-							
+
 						}
-						
+
 						@Override
 						public BufferedImage parseUserSkin(BufferedImage image) {
 							return image;
@@ -134,6 +137,7 @@ public class LoTASModContainer {
 		}
 		LoTASModContainer.shield = BannerTextures.SHIELD_BASE_TEXTURE;
 	}
+	//#endif
 
 	public void loadSeeds() throws Exception {
 		File file = new File("seeddata.txt");

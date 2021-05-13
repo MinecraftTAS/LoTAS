@@ -23,7 +23,11 @@ import net.minecraft.client.gui.GuiScreen;
 //#if MC>=11200
 import net.minecraft.client.renderer.BufferBuilder;
 //#else
+//#if MC>=10900
 //$$ import net.minecraft.client.renderer.VertexBuffer;
+//#else
+//$$ import net.minecraft.client.renderer.WorldRenderer;
+//#endif
 //#endif
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -88,7 +92,11 @@ public class GuiDropChanceManipulation extends GuiScreen {
 		//#if MC>=11200
 		BufferBuilder bufferBuilder = tessellator.getBuffer();
 		//#else
+		//#if MC>=10900
 //$$ 		VertexBuffer bufferBuilder = tessellator.getBuffer();
+		//#else
+//$$ 		WorldRenderer bufferBuilder = tessellator.getWorldRenderer();
+		//#endif
 		//#endif
 		
 		GlStateManager.disableTexture2D();
@@ -150,9 +158,9 @@ public class GuiDropChanceManipulation extends GuiScreen {
 		
 		public void updateY(GuiButton btn, int y) {
 			//#if MC>=11200
-			btn.x = y;
+			btn.y = y;
 			//#else
-//$$ 			btn.xPosition = y;
+//$$ 			btn.yPosition = y;
 			//#endif
 		}
 		

@@ -23,8 +23,13 @@ import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.item.EntityItem;
+//#if MC>=10900
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
+//#else
+//$$ import net.minecraft.util.AxisAlignedBB;
+//$$ import net.minecraft.util.MathHelper;
+//#endif
 import net.minecraft.world.chunk.storage.AnvilSaveConverter;
 import net.minecraftforge.fml.client.config.GuiCheckBox;
 
@@ -89,7 +94,11 @@ public class GuiChallengeIngameMenu extends GuiIngameMenu {
                 try {
                 	Field h = Minecraft.getMinecraft().getClass().getDeclaredField("field_71469_aa");
                 	h.setAccessible(true);
+                	//#if MC>=10900
                 	h.set(Minecraft.getMinecraft(), new AnvilSaveConverter(new File(mc.mcDataDir, "saves"), Minecraft.getMinecraft().getDataFixer()));
+                	//#else
+                //$$ 	h.set(Minecraft.getMinecraft(), new AnvilSaveConverter(new File(mc.mcDataDir, "saves")));
+                	//#endif
                 } catch (Exception e) {
         			e.printStackTrace();
         		}
@@ -129,7 +138,9 @@ public class GuiChallengeIngameMenu extends GuiIngameMenu {
 		} else if (button.id == 19) {
 			Minecraft.getMinecraft().displayGuiScreen(new GuiDropChanceManipulation((GuiIngameMenu) (Object) this));
 		} else if (button.id == 20) {
+			//#if MC>=10900
 			Minecraft.getMinecraft().displayGuiScreen(new GuiDragonManipulation(this));
+			//#endif
 		} else if (button.id == 21) {
 			Minecraft.getMinecraft().displayGuiScreen(new GuiEntitySpawnManipulation());
 		} else if (button.id == 22) {

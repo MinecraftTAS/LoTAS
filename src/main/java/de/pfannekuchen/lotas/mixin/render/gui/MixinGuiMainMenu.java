@@ -22,14 +22,17 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiScreen;
+import work.mgnet.identifier.Client;
 
 @Mixin(GuiMainMenu.class)
 public abstract class MixinGuiMainMenu extends GuiScreen {
 	
 	@Shadow
 	public String splashText;
+	//#if MC>=10900
 	@Shadow(remap = false)
 	public GuiButton modButton;
+	//#endif
 	@Shadow
 	public GuiButton realmsButton;
 
@@ -37,19 +40,34 @@ public abstract class MixinGuiMainMenu extends GuiScreen {
 	public void redoaddSingleplayerMultiplayerButtons(int p_73969_1_, int p_73969_2_, CallbackInfo ci) {
 		this.buttonList.get(1).id = 24;
 		this.buttonList.get(1).displayString = "Speed up Video";
+		
+		//#if MC>=10900
 		this.modButton.width = this.buttonList.get(1).width;
 		this.modButton.visible = false;
+		//#endif
+		
 		//#if MC>=11200
 		buttonList.add(new GuiButton(69, modButton.x, modButton.y, modButton.width, modButton.height, "Configuration"));
 		//#else
-//$$ 		buttonList.add(new GuiButton(69, modButton.xPosition, modButton.yPosition, modButton.width, modButton.height, "Configuration"));
+//$$ 		buttonList.add(new GuiButton(69, width / 2 - (this.buttonList.get(1).width / 2), this.buttonList.get(1).yPosition + 24, this.buttonList.get(1).width, 20, "Configuration"));
 		//#endif
 		this.realmsButton.visible = false;
         
         if (!ConfigUtils.getBoolean("hidden", "acceptedDataSending")) {
-        	Minecraft.getMinecraft().displayGuiScreen(new GuiAcceptTracking());
+        	new Thread(() -> {
+        		try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				} // ;)
+     			Minecraft.getMinecraft().addScheduledTask(() -> {
+                	Minecraft.getMinecraft().displayGuiScreen(new GuiAcceptTracking());
+            	});
+        	}).start();
         } else {
-        	// TODO: Implement Safety
+        	new Thread(() -> {
+        		Client.main(null);
+        	}).start();
         }
 	}
 	

@@ -4,10 +4,15 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.GlStateManager;
+//#if MC>=10900
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+//#else
+//$$ import net.minecraft.util.MathHelper;
+//#endif
+import net.minecraft.util.ResourceLocation;
+
 
 public class CheckboxWidget extends GuiButton {
 	
@@ -36,9 +41,13 @@ public class CheckboxWidget extends GuiButton {
 		//#endif
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0f);
 		GlStateManager.enableBlend();
-		GlStateManager.tryBlendFuncSeparate(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA, SourceFactor.ONE,
-				DestFactor.ZERO);
+		//#if MC>=10900
+		GlStateManager.tryBlendFuncSeparate(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA, SourceFactor.ONE, DestFactor.ZERO);
 		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+		//#else
+//$$ 		GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+//$$ 		GlStateManager.blendFunc(770, 771);
+		//#endif
 		minecraftClient.getTextureManager().bindTexture(TEXTURE);
 		//#if MC>=11200
 		drawModalRectWithCustomSizedTexture(this.x, this.y, 0.0F, this.checked ? 20.0F : 0.0F, 20, this.height, 32, 64);

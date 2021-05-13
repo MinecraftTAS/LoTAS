@@ -39,14 +39,20 @@ public class EventUtils {
 	
 	@SubscribeEvent
 	public void onDraw(RenderGameOverlayEvent.Post e) {
-		if (e.getType() == ElementType.TEXT && Timer.ticks != -1) {
+		//#if MC>=10900
+		if (e.getType() != ElementType.TEXT) return;
+		//#else
+//$$ 		if (e.type != ElementType.TEXT) return;
+		//#endif
+		
+		if (Timer.ticks != -1) {
 			Gui.drawRect(0, 0, 75, ConfigUtils.getBoolean("ui", "hideRTATimer") ? 13 : 24, new Color(0, 0, 0, 175).getRGB());
 			Duration dur = Duration.ofMillis(Timer.ticks * 50);
 			if (Timer.running) TickrateChangerMod.rta = Duration.ofMillis(System.currentTimeMillis() - Timer.startTime.toMillis());
 			MCVer.getFontRenderer(Minecraft.getMinecraft()).drawStringWithShadow(Timer.getDuration(dur), 1, 3, 0xFFFFFFFF);
 			if (!ConfigUtils.getBoolean("ui", "hideRTATimer")) MCVer.getFontRenderer(Minecraft.getMinecraft()).drawStringWithShadow("RTA: " + Timer.getDuration(TickrateChangerMod.rta), 1, 15, 0xFFFFFFFF);
 		} 
-		if (e.getType() == ElementType.TEXT && ConfigUtils.getBoolean("tools", "showTickIndicator") && TickrateChangerMod.tickrate <= 5F && TickrateChangerMod.show) {
+		if (ConfigUtils.getBoolean("tools", "showTickIndicator") && TickrateChangerMod.tickrate <= 5F && TickrateChangerMod.show) {
 			Minecraft.getMinecraft().getTextureManager().bindTexture(TickrateChangerMod.streaming);
 			Gui.drawModalRectWithCustomSizedTexture(new ScaledResolution(Minecraft.getMinecraft()).getScaledWidth() - 17, 1, 0, 0, 16, 16, 16, 64);
 		}
@@ -54,7 +60,12 @@ public class EventUtils {
 	
 	@SubscribeEvent
 	public void render(RenderGameOverlayEvent e) {
+		//#if MC>=10900
 		if (e.getType() != ElementType.TEXT) return;
+		//#else
+//$$ 		if (e.type != ElementType.TEXT) return;
+		//#endif
+		
 		FontRenderer renderer = MCVer.getFontRenderer(Minecraft.getMinecraft());
     	int height = new ScaledResolution(Minecraft.getMinecraft()).getScaledHeight();
 		String out1 = "";
@@ -70,8 +81,6 @@ public class EventUtils {
 		if (gs.keyBindUseItem.isKeyDown()) out1 += "RC ";
         renderer.drawStringWithShadow(out1, 5, height - 11, 0xFFFFFF);
 	}
-	
-	// TODO: Move onInput2 | onInput to Keybinds.keyEvent();
 	
 	/**
 	 * Turn off timer on timer keybinding, and Power Hotkeys

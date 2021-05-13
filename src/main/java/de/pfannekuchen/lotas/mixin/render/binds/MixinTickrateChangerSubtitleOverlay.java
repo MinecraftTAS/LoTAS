@@ -1,12 +1,13 @@
 package de.pfannekuchen.lotas.mixin.render.binds;
 
 import org.spongepowered.asm.mixin.Mixin;
+
+//#if MC>=10900
 import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
 
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;
 import net.minecraft.client.gui.GuiSubtitleOverlay;
-
 @Mixin(GuiSubtitleOverlay.class)
 public abstract class MixinTickrateChangerSubtitleOverlay {
 
@@ -23,3 +24,10 @@ public abstract class MixinTickrateChangerSubtitleOverlay {
 	}
 
 }
+//#else
+//$$ import net.minecraft.client.Minecraft;
+//$$ @Mixin(Minecraft.class)
+//$$ public abstract class MixinTickrateChangerSubtitleOverlay {
+//$$
+//$$ }
+//#endif

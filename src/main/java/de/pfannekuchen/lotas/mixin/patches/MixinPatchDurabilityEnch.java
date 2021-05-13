@@ -22,6 +22,4 @@ public class MixinPatchDurabilityEnch {
 		}
 	}
 	
-	// TODO: Patch Worldborder, but correctly
-	
 }

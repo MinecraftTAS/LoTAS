@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.gui.widgets.EntitySliderWidget;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiIngameMenu;
 import net.minecraft.client.gui.GuiScreen;
@@ -12,8 +13,13 @@ import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.enchantment.EnchantmentData;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.monster.EntityMob;
+//#if MC>=10900
 import net.minecraft.init.Enchantments;
 import net.minecraft.util.math.BlockPos;
+//#else
+//$$ import net.minecraft.util.BlockPos;
+//$$ import net.minecraft.enchantment.Enchantment;
+//#endif
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.EnumSkyBlock;
 
@@ -30,12 +36,17 @@ public class GuiEntitySpawnManipulation extends GuiScreen {
 	public static GuiTextField zText;
 	
 	public static EntityLiving e;
+	//#if MC>=10900
 	public static EnchantmentData[] skelBow = new EnchantmentData[] {new EnchantmentData(Enchantments.UNBREAKING, 1), new EnchantmentData(Enchantments.POWER, 1)};
 	public static EnchantmentData[] zombieSword = new EnchantmentData[] {new EnchantmentData(Enchantments.SHARPNESS, 2), new EnchantmentData(Enchantments.UNBREAKING, 2)};
+	//#else
+//$$ 	public static EnchantmentData[] skelBow = new EnchantmentData[] {new EnchantmentData(Enchantment.unbreaking, 1), new EnchantmentData(Enchantment.power, 1)};
+//$$ 	public static EnchantmentData[] zombieSword = new EnchantmentData[] {new EnchantmentData(Enchantment.sharpness, 2), new EnchantmentData(Enchantment.unbreaking, 2)};
+	//#endif
 	
-	public int spawnX = (int) MCVer.player(mc).posX;
-	public int spawnY = (int) MCVer.player(mc).posY;
-	public int spawnZ = (int) MCVer.player(mc).posZ;
+	public int spawnX = (int) MCVer.player(Minecraft.getMinecraft()).posX;
+	public int spawnY = (int) MCVer.player(Minecraft.getMinecraft()).posY;
+	public int spawnZ = (int) MCVer.player(Minecraft.getMinecraft()).posZ;
 	
 	public EntitySliderWidget entity;
 	
@@ -137,7 +148,7 @@ public class GuiEntitySpawnManipulation extends GuiScreen {
 		yText.mouseClicked(mouseX, mouseY, mouseButton);
 		zText.mouseClicked(mouseX, mouseY, mouseButton);
 		super.mouseClicked(mouseX, mouseY, mouseButton);
-		e = entity.getEntity(MCVer.world(mc.getIntegratedServer(), MCVer.player(mc).dimension));
+		e = entity.getEntity(MCVer.world(mc.getIntegratedServer(), MCVer.player(Minecraft.getMinecraft()).dimension));
 		e.setPositionAndRotation(spawnX, spawnY, spawnZ, 0, 0);
 		checkEntity();
 	}
@@ -145,7 +156,7 @@ public class GuiEntitySpawnManipulation extends GuiScreen {
 	@Override
 	protected void mouseReleased(int mouseX, int mouseY, int state) {
 		super.mouseReleased(mouseX, mouseY, state);
-		e = entity.getEntity(MCVer.world(mc.getIntegratedServer(), MCVer.player(mc).dimension));
+		e = entity.getEntity(MCVer.world(mc.getIntegratedServer(), MCVer.player(Minecraft.getMinecraft()).dimension));
 		e.setPositionAndRotation(spawnX, spawnY, spawnZ, 0, 0);
 		checkEntity();
 	}
@@ -165,11 +176,19 @@ public class GuiEntitySpawnManipulation extends GuiScreen {
 		//$$ 	this.buttonList.get(this.buttonList.size() - 2).enabled = e.worldObj.getBlockState((new BlockPos(e)).down()).canEntitySpawn(e) && !e.worldObj.collidesWithAnyBlock(e.getEntityBoundingBox());
 		//$$ }
 		//#else
+		//#if MC>=10900
 //$$ 		if (e instanceof EntityMob) {
 //$$ 			this.buttonList.get(this.buttonList.size() - 2).enabled = e.worldObj.getDifficulty() != EnumDifficulty.PEACEFUL && ((EntityMob) e).getBlockPathWeight(new BlockPos(e.posX, e.getEntityBoundingBox().minY, e.posZ)) >= 0.0F && isValidLightLevel(e) && !e.worldObj.collidesWithAnyBlock(e.getEntityBoundingBox());
 //$$ 		} else {
 //$$ 			this.buttonList.get(this.buttonList.size() - 2).enabled = !e.worldObj.collidesWithAnyBlock(e.getEntityBoundingBox());
 //$$ 		}
+		//#else
+//$$ 		if (e instanceof EntityMob) {
+//$$ 			this.buttonList.get(this.buttonList.size() - 2).enabled = e.worldObj.getDifficulty() != EnumDifficulty.PEACEFUL && ((EntityMob) e).getBlockPathWeight(new BlockPos(e.posX, e.getEntityBoundingBox().minY, e.posZ)) >= 0.0F && isValidLightLevel(e) && !e.worldObj.checkBlockCollision(e.getEntityBoundingBox());
+//$$ 		} else {
+//$$ 			this.buttonList.get(this.buttonList.size() - 2).enabled = !e.worldObj.checkBlockCollision(e.getEntityBoundingBox());
+//$$ 		}
+		//#endif
 		//#endif
 		//#endif
 	}
@@ -221,7 +240,7 @@ public class GuiEntitySpawnManipulation extends GuiScreen {
 			//#if MC>=11100
 			MCVer.world(mc.getIntegratedServer(), MCVer.player(mc).dimension).spawnEntity(e);
 			//#else
-//$$ 			MCVer.world(mc.getIntegratedServer(), MCVer.player(mc).dimension).spawnEntityInWorld(e);
+//$$ 			MCVer.world(mc.getIntegratedServer(), MCVer.player(Minecraft.getMinecraft()).dimension).spawnEntityInWorld(e);
 			//#endif
 		default:
 			break;

@@ -5,7 +5,11 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;
+//#if MC>=10900
 import net.minecraft.client.renderer.RenderItem;
+//#else
+//$$ import net.minecraft.client.renderer.entity.RenderItem;
+//#endif
 
 @Mixin(RenderItem.class)
 public abstract class MixinTickrateChangerEnchantmentGlimm {

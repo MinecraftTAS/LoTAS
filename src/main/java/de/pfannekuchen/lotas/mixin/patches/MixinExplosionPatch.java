@@ -9,8 +9,6 @@ import net.minecraft.world.Explosion;
 
 @Mixin(Explosion.class)
 public class MixinExplosionPatch {
-
-	// TODO: Double check this, this is not going to work!
 	
 	@ModifyArg(method = "doExplosionB", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;dropBlockAsItemWithChance(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;FI)V"), index = 3)
 	public float hijackExplosion(float orig) {

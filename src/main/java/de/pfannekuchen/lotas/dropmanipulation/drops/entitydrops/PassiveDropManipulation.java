@@ -19,7 +19,9 @@ import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.entity.monster.EntityPolarBear;
 //#endif
 import net.minecraft.entity.monster.EntitySnowman;
+//#if MC>=11100
 import net.minecraft.entity.passive.AbstractHorse;
+//#endif
 import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.passive.EntityCow;
 import net.minecraft.entity.passive.EntityHorse;
@@ -61,8 +63,6 @@ public class PassiveDropManipulation extends GuiDropChanceManipulation.DropManip
         //$$ optimizeParrot.enabled = false;
         //$$ optimizeHorses.enabled = false;
         //#endif
-        
-        //TODO: Fix Horses
         
         //#if MC<=11002
         //$$ optimizePolarbear.enabled = false;

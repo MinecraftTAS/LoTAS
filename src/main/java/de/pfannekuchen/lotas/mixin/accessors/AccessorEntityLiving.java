@@ -8,10 +8,11 @@ import net.minecraft.entity.EntityLiving;
 @Mixin(EntityLiving.class)
 public interface AccessorEntityLiving {
 
-	@Accessor("inventoryArmorDropChances")
-	public void inventoryArmorDropChances(float[] value);
-	
-	@Accessor("inventoryHandsDropChances")
-	public void inventoryHandsDropChances(float[] value);
+	//#if MC>=10900
+	@Accessor("inventoryArmorDropChances") public void inventoryArmorDropChances(float[] value);	
+	@Accessor("inventoryHandsDropChances") public void inventoryHandsDropChances(float[] value);
+	//#else
+//$$ 	@Accessor("equipmentDropChances") public void equipmentDropChances(float[] value);
+	//#endif
 	
 }

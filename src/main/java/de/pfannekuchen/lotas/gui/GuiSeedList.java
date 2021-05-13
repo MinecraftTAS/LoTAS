@@ -127,11 +127,13 @@ public class GuiSeedList extends GuiScreen {
 				MCVer.getFontRenderer(Minecraft.getMinecraft()).drawString(s1, x + 32 + 3, y + MCVer.getFontRenderer(Minecraft.getMinecraft()).FONT_HEIGHT + 3, 8421504);
 				MCVer.getFontRenderer(Minecraft.getMinecraft()).drawString(s2, x + 32 + 3, y + MCVer.getFontRenderer(Minecraft.getMinecraft()).FONT_HEIGHT + MCVer.getFontRenderer(Minecraft.getMinecraft()).FONT_HEIGHT + 3, 8421504);
 				
-				GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-				GlStateManager.enableBlend();
-				Minecraft.getMinecraft().getTextureManager().bindTexture(loc);
-				Gui.drawModalRectWithCustomSizedTexture(x, y, 0.0F, 0.0F, 32, 32, 32.0F, 32.0F);
-				GlStateManager.disableBlend();
+				if (loc != null) {
+					GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+					GlStateManager.enableBlend();
+					Minecraft.getMinecraft().getTextureManager().bindTexture(loc);
+					Gui.drawModalRectWithCustomSizedTexture(x, y, 0.0F, 0.0F, 32, 32, 32.0F, 32.0F);
+					GlStateManager.disableBlend();
+				}
 			}
 
 		    public boolean mousePressed(int slotIndex, int mouseX, int mouseY, int mouseEvent, int relativeX, int relativeY) {

@@ -53,7 +53,6 @@ public class NetherMobDropManipulation extends GuiDropChanceManipulation.DropMan
     public List<ItemStack> redirectDrops(Entity entity) {
         if (entity instanceof EntityBlaze && optimizeBlaze.isChecked()) return ImmutableList.of(new ItemStack(MCVer.getItem("BLAZE_ROD")));
         if (entity instanceof EntityGhast && optimizeGhast.isChecked()) return ImmutableList.of(new ItemStack(MCVer.getItem("GHAST_TEAR")), new ItemStack(MCVer.getItem("GUNPOWDER"), 2));
-        //TODO: How in the World do you check for Wither-Skeletons in 1.10 ??
         //#if MC>=11100
         if (entity instanceof EntityWitherSkeleton && optimizeWitherskeleton.isChecked()) return ImmutableList.of(new ItemStack(Items.COAL, 1), new ItemStack(Items.BONE, 2), new ItemStack(Items.SKULL, 1, 1));
         //#endif

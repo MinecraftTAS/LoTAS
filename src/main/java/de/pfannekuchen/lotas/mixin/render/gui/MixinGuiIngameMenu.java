@@ -34,8 +34,13 @@ import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.item.EntityItem;
+//#if MC>=10900
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
+//#else
+//$$ import net.minecraft.util.AxisAlignedBB;
+//$$ import net.minecraft.util.MathHelper;
+//#endif
 import net.minecraftforge.fml.client.config.GuiCheckBox;
 
 @Mixin(GuiIngameMenu.class)
@@ -223,7 +228,9 @@ public abstract class MixinGuiIngameMenu extends GuiScreen {
 		} else if (button.id == 19) {
 			Minecraft.getMinecraft().displayGuiScreen(new GuiDropChanceManipulation((GuiIngameMenu) (Object) this));
 		} else if (button.id == 20) {
+			//#if MC>=10900
 			Minecraft.getMinecraft().displayGuiScreen(new GuiDragonManipulation(this));
+			//#endif
 		} else if (button.id == 21) {
 			Minecraft.getMinecraft().displayGuiScreen(new GuiEntitySpawnManipulation());
 		} else if (button.id == 22) {

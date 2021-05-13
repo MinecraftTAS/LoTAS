@@ -27,7 +27,9 @@ import net.minecraft.entity.monster.EntityZombieVillager;
 //#endif
 
 import net.minecraft.init.Items;
+//#if MC>=10900
 import net.minecraft.inventory.EntityEquipmentSlot;
+//#endif
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.EnumDifficulty;
@@ -117,6 +119,35 @@ public class EntitySliderWidget extends GuiSlider {
 				| NoSuchMethodException | SecurityException e1) {
 			e1.printStackTrace();
 		}
+		return entity;
+	}
+
+	public ItemStack addEnchants(ItemStack item,  EnchantmentData[] enchants) {
+		for (EnchantmentData enchantmentData : enchants) {
+			//#if MC>=11200
+			item.addEnchantment(enchantmentData.enchantment, enchantmentData.enchantmentLevel);
+			//#else
+//$$ 			item.addEnchantment(enchantmentData.enchantmentobj, enchantmentData.enchantmentLevel);
+			//#endif
+		}
+		return item;
+	}
+	
+	public void updateSlider() {
+		if (this.sliderValue < 0.0F) {
+			this.sliderValue = 0.0F;
+		}
+
+		if (this.sliderValue > 1.0F) {
+			this.sliderValue = 1.0F;
+		}
+
+		displayString = dispString + entities.get((int) Math.round(sliderValue * (maxValue - minValue) + minValue))
+				+ suffix;
+	}
+
+	public EntityLiving additionalStuff(WorldServer world, EntityLiving entity) {
+		//#if MC>=10900
 		if (world.getDifficulty() == EnumDifficulty.HARD) {
 			switch (getValueInt()) {
 			case 15:
@@ -169,22 +200,22 @@ public class EntitySliderWidget extends GuiSlider {
 				entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, addEnchants(new ItemStack(Items.IRON_SWORD), GuiEntitySpawnManipulation.zombieSword));
 				break;
 			case 18:
-				entity = new EntityZombie(world);
-				entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, addEnchants(new ItemStack(Items.IRON_SWORD), GuiEntitySpawnManipulation.zombieSword));
+			entity = new EntityZombie(world);
+			entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, addEnchants(new ItemStack(Items.IRON_SWORD), GuiEntitySpawnManipulation.zombieSword));
 				entity.setItemStackToSlot(EntityEquipmentSlot.FEET, new ItemStack(Items.LEATHER_BOOTS));
-				entity.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(Items.LEATHER_CHESTPLATE));
-				entity.setItemStackToSlot(EntityEquipmentSlot.LEGS, new ItemStack(Items.LEATHER_LEGGINGS));
-				entity.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(Items.LEATHER_HELMET));
-				break;
-			case 20:
-				entity = new EntityZombie(world);
-				entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, addEnchants(new ItemStack(Items.IRON_SWORD), GuiEntitySpawnManipulation.zombieSword));
-				entity.setItemStackToSlot(EntityEquipmentSlot.FEET, new ItemStack(Items.GOLDEN_BOOTS));
-				entity.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(Items.GOLDEN_CHESTPLATE));
-				entity.setItemStackToSlot(EntityEquipmentSlot.LEGS, new ItemStack(Items.GOLDEN_LEGGINGS));
-				entity.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(Items.GOLDEN_HELMET));
-				break;
-			case 22:
+			entity.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(Items.LEATHER_CHESTPLATE));
+			entity.setItemStackToSlot(EntityEquipmentSlot.LEGS, new ItemStack(Items.LEATHER_LEGGINGS));
+			entity.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(Items.LEATHER_HELMET));
+			break;
+		case 20:
+			entity = new EntityZombie(world);
+			entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, addEnchants(new ItemStack(Items.IRON_SWORD), GuiEntitySpawnManipulation.zombieSword));
+			entity.setItemStackToSlot(EntityEquipmentSlot.FEET, new ItemStack(Items.GOLDEN_BOOTS));
+			entity.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(Items.GOLDEN_CHESTPLATE));
+			entity.setItemStackToSlot(EntityEquipmentSlot.LEGS, new ItemStack(Items.GOLDEN_LEGGINGS));
+			entity.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(Items.GOLDEN_HELMET));
+			break;
+		case 22:
 				entity = new EntityZombie(world);
 				entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, addEnchants(new ItemStack(Items.IRON_SWORD), GuiEntitySpawnManipulation.zombieSword));
 				entity.setItemStackToSlot(EntityEquipmentSlot.FEET, new ItemStack(Items.CHAINMAIL_BOOTS));
@@ -212,31 +243,103 @@ public class EntitySliderWidget extends GuiSlider {
 		}
 		((AccessorEntityLiving) entity).inventoryArmorDropChances(new float[] { 1.0f, 1.0f, 1.0f, 1.0f });
 		((AccessorEntityLiving) entity).inventoryHandsDropChances(new float[] { 1.0f, 1.0f });
+		//#else
+//$$ 		if (world.getDifficulty() == EnumDifficulty.HARD) {
+//$$ 			switch (getValueInt()) {
+//$$ 			case 15:
+//$$ 				entity = new EntitySkeleton(world);
+//$$ 				entity.setCurrentItemOrArmor(0, addEnchants(new ItemStack(Items.bow), GuiEntitySpawnManipulation.skelBow));
+//$$ 				break;
+//$$ 			case 17:
+//$$ 				entity = new EntitySkeleton(world);
+//$$ 				entity.setCurrentItemOrArmor(0, addEnchants(new ItemStack(Items.bow), GuiEntitySpawnManipulation.skelBow));
+//$$ 				entity.setCurrentItemOrArmor(1, new ItemStack(Items.leather_boots));
+//$$ 				entity.setCurrentItemOrArmor(2, new ItemStack(Items.leather_chestplate));
+//$$ 				entity.setCurrentItemOrArmor(3, new ItemStack(Items.leather_leggings));
+//$$ 				entity.setCurrentItemOrArmor(4, new ItemStack(Items.leather_helmet));
+//$$ 				break;
+//$$ 			case 19:
+//$$ 				entity = new EntitySkeleton(world);
+//$$ 				entity.setCurrentItemOrArmor(0, addEnchants(new ItemStack(Items.bow), GuiEntitySpawnManipulation.skelBow));
+//$$ 				entity.setCurrentItemOrArmor(1, new ItemStack(Items.golden_boots));
+//$$ 				entity.setCurrentItemOrArmor(2, new ItemStack(Items.golden_chestplate));
+//$$ 				entity.setCurrentItemOrArmor(3, new ItemStack(Items.golden_leggings));
+//$$ 				entity.setCurrentItemOrArmor(4, new ItemStack(Items.golden_helmet));
+//$$ 				break;
+//$$ 			case 21:
+//$$ 				entity = new EntitySkeleton(world);
+//$$ 				entity.setCurrentItemOrArmor(0, addEnchants(new ItemStack(Items.bow), GuiEntitySpawnManipulation.skelBow));
+//$$ 				entity.setCurrentItemOrArmor(1, new ItemStack(Items.chainmail_boots));
+//$$ 				entity.setCurrentItemOrArmor(2, new ItemStack(Items.chainmail_chestplate));
+//$$ 				entity.setCurrentItemOrArmor(3, new ItemStack(Items.chainmail_leggings));
+//$$ 				entity.setCurrentItemOrArmor(4, new ItemStack(Items.chainmail_helmet));
+//$$ 				break;
+//$$ 			case 23:
+//$$ 				entity = new EntitySkeleton(world);
+//$$ 				entity.setCurrentItemOrArmor(0, addEnchants(new ItemStack(Items.bow), GuiEntitySpawnManipulation.skelBow));
+//$$ 				entity.setCurrentItemOrArmor(1, new ItemStack(Items.iron_boots));
+//$$ 				entity.setCurrentItemOrArmor(2, new ItemStack(Items.iron_chestplate));
+//$$ 				entity.setCurrentItemOrArmor(3, new ItemStack(Items.iron_leggings));
+//$$ 				entity.setCurrentItemOrArmor(4, new ItemStack(Items.iron_helmet));
+//$$ 				break;
+//$$ 			case 25:
+//$$ 				entity = new EntitySkeleton(world);
+//$$ 				entity.setCurrentItemOrArmor(0, addEnchants(new ItemStack(Items.bow), GuiEntitySpawnManipulation.skelBow));
+//$$ 				entity.setCurrentItemOrArmor(0, new ItemStack(Items.bow));
+//$$ 				entity.setCurrentItemOrArmor(1, new ItemStack(Items.diamond_boots));
+//$$ 				entity.setCurrentItemOrArmor(2, new ItemStack(Items.diamond_chestplate));
+//$$ 				entity.setCurrentItemOrArmor(3, new ItemStack(Items.diamond_leggings));
+//$$ 				entity.setCurrentItemOrArmor(4, new ItemStack(Items.diamond_helmet));
+//$$ 				break;
+//$$ 			case 16:
+//$$ 				entity = new EntityZombie(world);
+//$$ 				entity.setCurrentItemOrArmor(0, addEnchants(new ItemStack(Items.iron_sword), GuiEntitySpawnManipulation.zombieSword));
+//$$ 				break;
+//$$ 			case 18:
+//$$ 				entity = new EntityZombie(world);
+//$$ 				entity.setCurrentItemOrArmor(0, addEnchants(new ItemStack(Items.iron_sword), GuiEntitySpawnManipulation.zombieSword));
+//$$ 				entity.setCurrentItemOrArmor(1, new ItemStack(Items.leather_boots));
+//$$ 				entity.setCurrentItemOrArmor(2, new ItemStack(Items.leather_chestplate));
+//$$ 				entity.setCurrentItemOrArmor(3, new ItemStack(Items.leather_leggings));
+//$$ 				entity.setCurrentItemOrArmor(4, new ItemStack(Items.leather_helmet));
+//$$ 				break;
+//$$ 			case 20:
+//$$ 				entity = new EntityZombie(world);
+//$$ 				entity.setCurrentItemOrArmor(0, addEnchants(new ItemStack(Items.iron_sword), GuiEntitySpawnManipulation.zombieSword));
+//$$ 				entity.setCurrentItemOrArmor(1, new ItemStack(Items.golden_boots));
+//$$ 				entity.setCurrentItemOrArmor(2, new ItemStack(Items.golden_chestplate));
+//$$ 				entity.setCurrentItemOrArmor(3, new ItemStack(Items.golden_leggings));
+//$$ 				entity.setCurrentItemOrArmor(4, new ItemStack(Items.golden_helmet));
+//$$ 				break;
+//$$ 			case 22:
+//$$ 				entity = new EntityZombie(world);
+//$$ 				entity.setCurrentItemOrArmor(0, addEnchants(new ItemStack(Items.iron_sword), GuiEntitySpawnManipulation.zombieSword));
+//$$ 				entity.setCurrentItemOrArmor(1, new ItemStack(Items.chainmail_boots));
+//$$ 				entity.setCurrentItemOrArmor(2, new ItemStack(Items.chainmail_chestplate));
+//$$ 				entity.setCurrentItemOrArmor(3, new ItemStack(Items.chainmail_leggings));
+//$$ 				entity.setCurrentItemOrArmor(4, new ItemStack(Items.chainmail_helmet));
+//$$ 				break;
+//$$ 			case 24:
+//$$ 				entity = new EntityZombie(world);
+//$$ 				entity.setCurrentItemOrArmor(0, addEnchants(new ItemStack(Items.iron_sword), GuiEntitySpawnManipulation.zombieSword));
+//$$ 				entity.setCurrentItemOrArmor(1, new ItemStack(Items.iron_boots));
+//$$ 				entity.setCurrentItemOrArmor(2, new ItemStack(Items.iron_chestplate));
+//$$ 				entity.setCurrentItemOrArmor(3, new ItemStack(Items.iron_leggings));
+//$$ 				entity.setCurrentItemOrArmor(4, new ItemStack(Items.iron_helmet));
+//$$ 				break;
+//$$ 			case 26:
+//$$ 				entity = new EntityZombie(world);
+//$$ 				entity.setCurrentItemOrArmor(0, addEnchants(new ItemStack(Items.iron_sword), GuiEntitySpawnManipulation.zombieSword));
+//$$ 				entity.setCurrentItemOrArmor(1, new ItemStack(Items.diamond_boots));
+//$$ 				entity.setCurrentItemOrArmor(2, new ItemStack(Items.diamond_chestplate));
+//$$ 				entity.setCurrentItemOrArmor(3, new ItemStack(Items.diamond_leggings));
+//$$ 				entity.setCurrentItemOrArmor(4, new ItemStack(Items.diamond_helmet));
+//$$ 				break;
+//$$ 			}
+//$$ 		}
+//$$ 		((AccessorEntityLiving) entity).equipmentDropChances(new float[] { 1.0f, 1.0f, 1.0f, 1.0f, 1.0f });
+		//#endif
 		return entity;
 	}
-
-	public ItemStack addEnchants(ItemStack item,  EnchantmentData[] enchants) {
-		for (EnchantmentData enchantmentData : enchants) {
-			//#if MC>=11200
-			item.addEnchantment(enchantmentData.enchantment, enchantmentData.enchantmentLevel);
-			//#else
-//$$ 			item.addEnchantment(enchantmentData.enchantmentobj, enchantmentData.enchantmentLevel);
-			//#endif
-		}
-		return item;
-	}
 	
-	public void updateSlider() {
-		if (this.sliderValue < 0.0F) {
-			this.sliderValue = 0.0F;
-		}
-
-		if (this.sliderValue > 1.0F) {
-			this.sliderValue = 1.0F;
-		}
-
-		displayString = dispString + entities.get((int) Math.round(sliderValue * (maxValue - minValue) + minValue))
-				+ suffix;
-	}
-
 }

@@ -1,5 +1,7 @@
 package de.pfannekuchen.lotas.gui;
 
+import net.minecraft.client.gui.GuiScreen;
+//#if MC>=10900
 import java.io.IOException;
 import java.util.HashMap;
 
@@ -8,7 +10,6 @@ import com.google.common.base.Predicates;
 import de.pfannekuchen.lotas.core.MCVer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.boss.EntityDragon;
@@ -19,22 +20,20 @@ import net.minecraft.entity.boss.dragon.phase.PhaseList;
 import net.minecraft.entity.boss.dragon.phase.PhaseSittingBase;
 import net.minecraft.entity.boss.dragon.phase.PhaseStrafePlayer;
 import net.minecraft.util.ResourceLocation;
+//#endif
 
-/**
- * Draws a gui screen where the player can select the next dragon phase the dragon will execute. All buttons are disabled if there is no dragon available
- * @author Pancake
- */
+//#if MC>=10900
 @SuppressWarnings("serial")
 public class GuiDragonManipulation extends GuiScreen {
-	
+
     GuiScreen here;
-    
+
     static final ResourceLocation DRAGONGIF = new ResourceLocation("lotas", "dragon/flying.png");
     static final ResourceLocation DRAGONGIF2 = new ResourceLocation("lotas", "dragon/breath.png");
     static final ResourceLocation DRAGONGIF3 = new ResourceLocation("lotas", "dragon/shooting.png");
-    
+
     static HashMap<String, PhaseList<?>> phases = new HashMap<String, PhaseList<?>>();
-    
+
     static HashMap<String, String> translation = new HashMap<String, String>() {
     	{
     		put("PhaseHoldingPattern", "Ender Dragon is flying through the air");
@@ -50,18 +49,18 @@ public class GuiDragonManipulation extends GuiScreen {
     		put("PhaseHover", "Ender Dragon is hovering over the Portal");
     	}
     };
-    		
+
     IPhase dragonPhase;
-    
+
     GuiButton action1;
     GuiButton action2;
     GuiButton action3;
-    
+
 	public GuiDragonManipulation(GuiScreen screen) {
 		EntityDragon dragon = MCVer.world(Minecraft.getMinecraft().getIntegratedServer(), MCVer.player(Minecraft.getMinecraft()).dimension).getEntities(EntityDragon.class, Predicates.alwaysTrue()).get(0);
 		dragonPhase = dragon.getPhaseManager().getCurrentPhase();
 		here = screen;
-		
+
 		phases = new HashMap<String, PhaseList<?>>();
 		phases.put("Stop shooting at the Player", PhaseList.HOLDING_PATTERN);
 		phases.put("Shoot at the Player", PhaseList.STRAFE_PLAYER);
@@ -72,18 +71,18 @@ public class GuiDragonManipulation extends GuiScreen {
 		phases.put("Cancel Landing", PhaseList.HOLDING_PATTERN);
 		phases.put("Cancel Landing and shoot at Player", PhaseList.STRAFE_PLAYER);
 	}
-	
+
 	@Override
 	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
 		super.mouseClicked(mouseX, mouseY, mouseButton);
 	}
-	
+
 	@Override
 	public void initGui() {
 		action1 = new GuiButton(0, this.width / 3 * 0 + 5, height / 8, this.width / 3 - 10, 20, "Phase1");
 		action2 = new GuiButton(1, this.width / 3 * 1 + 5, height / 8, this.width / 3 - 10, 20, "Phase2");
 		action3 = new GuiButton(2, this.width / 3 * 2 + 5, height / 8, this.width / 3 - 10, 20, "Phase3");
-		
+
 		if (dragonPhase instanceof PhaseHoldingPattern) {
 			action1.displayString = "Try to land";
 			action2.displayString = "Shoot at the Player";
@@ -120,26 +119,26 @@ public class GuiDragonManipulation extends GuiScreen {
 			action2.enabled = false;
 			action3.enabled = false;
 		}
-		
+
 		this.buttonList.add(action1);
 		this.buttonList.add(action2);
 		this.buttonList.add(action3);
         this.buttonList.add(new GuiButton(2000, this.width / 2 - 155, this.height - 29, 300, 20, I18n.format("gui.done")));
         super.initGui();
 	}
-	
+
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         drawBackground(0);
         GlStateManager.enableTexture2D();
-        			
+
         drawCenteredString(MCVer.getFontRenderer(mc), translation.get(dragonPhase.getClass().getSimpleName()), width / 2, 10, 0xFFFFFF);
-        
+
 		mc.getTextureManager().bindTexture(DRAGONGIF);
 		drawModalRectWithCustomSizedTexture(width / 28 * 3, height / 19 * 2, 0, 0, width / 28 * 23, height / 19 * 17, width / 28 * 23, height / 19 * 17);
 		super.drawScreen(mouseX, mouseY, partialTicks);
 	}
-	
+
 	@Override
 	protected void actionPerformed(GuiButton button) throws IOException {
 		if (button.id == 2000) mc.displayGuiScreen(here);
@@ -147,11 +146,18 @@ public class GuiDragonManipulation extends GuiScreen {
 			action1.enabled = false;
 			action2.enabled = false;
 			action3.enabled = false;
-		
+
 			EntityDragon dragon = MCVer.world(Minecraft.getMinecraft().getIntegratedServer(), MCVer.player(Minecraft.getMinecraft()).dimension).getEntities(EntityDragon.class, Predicates.alwaysTrue()).get(0);
 			dragon.getPhaseManager().setPhase(phases.get(button.displayString));
 			dragonPhase = dragon.getPhaseManager().getCurrentPhase();
 		}
 	}
-	
+
 }
+//#else
+//$$ public class GuiDragonManipulation extends GuiScreen {	
+//$$ 	public GuiDragonManipulation(GuiScreen screen) {
+//$$
+//$$ 	}
+//$$ }
+//#endif

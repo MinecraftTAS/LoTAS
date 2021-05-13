@@ -4,11 +4,14 @@ import de.pfannekuchen.lotas.core.MCVer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemPotion;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+//#if MC>=10900
 import net.minecraft.util.math.MathHelper;
+//#else
+//$$ import net.minecraft.util.MathHelper;
+//#endif
 
 /**
  * Draws a potion in the gui hud that is moving with the camera
@@ -41,7 +44,7 @@ public class PotionRenderingUtils {
         
         GlStateManager.translate(lerpY * .025, lerpX * -.025, 0);
 		
-		ItemStack stack = new ItemStack(Items.POTIONITEM);
+		ItemStack stack = new ItemStack(MCVer.getItem("POTIONITEM"));
 		if (stack.getItem() instanceof ItemPotion) {
 			NBTTagCompound cp = new NBTTagCompound();
 			cp.setInteger("CustomPotionColor", 0x546980);
