@@ -1,15 +1,18 @@
 package de.pfannekuchen.lotas.core;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.item.Item;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.integrated.IntegratedServer;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.ForgeVersion;
 
 public class MCVer {
 	
@@ -77,4 +80,20 @@ public class MCVer {
         //#endif
 	}
     
+	public static Item getItem(String itemId) {
+		int mainVersion = Integer.parseInt(ForgeVersion.mcVersion.split("\\.")[1]);
+		if (mainVersion <= 8) {
+			return Item.getByNameOrId(itemId.toLowerCase());
+		}
+		return Item.getByNameOrId(itemId);
+	}
+	
+	public static Block getBlock(String blockId) {
+		int mainVersion = Integer.parseInt(ForgeVersion.mcVersion.split("\\.")[1]);
+		if (mainVersion <= 8) {
+			return Block.getBlockFromName(blockId.toLowerCase());
+		}
+		return Block.getBlockFromName(blockId);
+	}
+	
 }

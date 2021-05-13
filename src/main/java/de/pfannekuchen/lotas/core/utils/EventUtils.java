@@ -24,7 +24,11 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.client.settings.KeyBinding;
+//#if MC>=10900
 import net.minecraft.util.math.MathHelper;
+//#else
+//$$ import net.minecraft.util.MathHelper;
+//#endif
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.client.event.RenderWorldLastEvent;

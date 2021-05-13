@@ -13,8 +13,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
@@ -57,8 +55,8 @@ public class SealanternDropManipulation extends GuiDropChanceManipulation.DropMa
 
     @Override
     public List<ItemStack> redirectDrops(IBlockState block) {
-        if (block.getBlock().getDefaultState().getBlock() != Blocks.SEA_LANTERN) return ImmutableList.of();
-        return ImmutableList.of(new ItemStack(Items.PRISMARINE_CRYSTALS, pris));
+        if (block.getBlock().getDefaultState().getBlock() != MCVer.getBlock("SEA_LANTERN")) return ImmutableList.of();
+        return ImmutableList.of(new ItemStack(MCVer.getItem("PRISMARINE_CRYSTALS"), pris));
     }
 
     @Override

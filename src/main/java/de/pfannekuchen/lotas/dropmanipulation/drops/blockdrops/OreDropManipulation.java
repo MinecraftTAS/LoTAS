@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.google.common.collect.ImmutableList;
 
+import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.gui.GuiDropChanceManipulation;
 import de.pfannekuchen.lotas.gui.widgets.CheckboxWidget;
 import de.pfannekuchen.lotas.gui.widgets.ModifiedCheckBoxWidget;
@@ -13,8 +14,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
@@ -39,10 +38,10 @@ public class OreDropManipulation extends GuiDropChanceManipulation.DropManipulat
     @Override
     public List<ItemStack> redirectDrops(IBlockState blockstate) {
         Block block = blockstate.getBlock();
-        if (block.getDefaultState().getBlock() == Blocks.LAPIS_ORE && optimizeLapis.isChecked()) {
-            return ImmutableList.of(new ItemStack(Items.DYE, 9, 4));
-        } else if (block.getDefaultState().getBlock() == Blocks.REDSTONE_ORE && optimizeRedstone.isChecked()) {
-            return ImmutableList.of(new ItemStack(Items.REDSTONE, 5));
+        if (block.getDefaultState().getBlock() == MCVer.getBlock("LAPIS_ORE") && optimizeLapis.isChecked()) {
+            return ImmutableList.of(new ItemStack(MCVer.getItem("DYE"), 9, 4));
+        } else if (block.getDefaultState().getBlock() == MCVer.getBlock("REDSTONE_ORE") && optimizeRedstone.isChecked()) {
+            return ImmutableList.of(new ItemStack(MCVer.getItem("REDSTONE"), 5));
         }
         return ImmutableList.of();
     }

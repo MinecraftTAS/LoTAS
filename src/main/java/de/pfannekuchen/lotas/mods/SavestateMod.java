@@ -21,7 +21,9 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.integrated.IntegratedServer;
 import net.minecraft.world.MinecraftException;
 import net.minecraft.world.WorldServer;
+//#if MC>=10900
 import net.minecraft.world.chunk.storage.AnvilChunkLoader;
+//#endif
 
 /**
  * Saves the player velocity and makes a copy of the world in a seperate folder.
@@ -60,7 +62,11 @@ public class SavestateMod {
 		final Minecraft mc = Minecraft.getMinecraft();
 
 		final MinecraftServer server = mc.getIntegratedServer();
+		//#if MC>=10900
 		server.getPlayerList().saveAllPlayerData();
+		//#else
+		//$$ server.getConfigurationManager().saveAllPlayerData();
+		//#endif
 		server.saveAllWorlds(false);
 		for (WorldServer world : MCVer.getWorlds(server)) {
 			try {
@@ -69,6 +75,7 @@ public class SavestateMod {
 				e.printStackTrace();
 			}
 		}
+		
 		for (final WorldServer worldserver : MCVer.getWorlds(server)) {
 			worldserver.disableLevelSaving = true;
 		}

@@ -17,22 +17,20 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-public class LeaveDropManipulation extends GuiDropChanceManipulation.DropManipulation {
+public class LeavesDropManipulation extends GuiDropChanceManipulation.DropManipulation {
 
-    public static ImageWidget dropApple = new ImageWidget(x, y, c -> {LeaveDropManipulation.dropApple.setToggled(!LeaveDropManipulation.dropApple.isToggled());}, new ResourceLocation("lotas", "drops/apple.png"));
-    public static ImageWidget dropSapling = new ImageWidget(x, y, c -> {LeaveDropManipulation.dropSapling.setToggled(!LeaveDropManipulation.dropSapling.isToggled());}, new ResourceLocation("lotas", "drops/sapling.png"));
+    public static ImageWidget dropApple = new ImageWidget(x, y, c -> {LeavesDropManipulation.dropApple.setToggled(!LeavesDropManipulation.dropApple.isToggled());}, new ResourceLocation("lotas", "drops/apple.png"));
+    public static ImageWidget dropSapling = new ImageWidget(x, y, c -> {LeavesDropManipulation.dropSapling.setToggled(!LeavesDropManipulation.dropSapling.isToggled());}, new ResourceLocation("lotas", "drops/sapling.png"));
 
-    public LeaveDropManipulation(int x, int y, int width, int height) {
-    	LeaveDropManipulation.x = x;
-    	LeaveDropManipulation.y = y;
-    	LeaveDropManipulation.width = width;
-        LeaveDropManipulation.height = height;
+    public LeavesDropManipulation(int x, int y, int width, int height) {
+    	LeavesDropManipulation.x = x;
+    	LeavesDropManipulation.y = y;
+    	LeavesDropManipulation.width = width;
+        LeavesDropManipulation.height = height;
         enabled = new CheckboxWidget(x, y, 150, 20, "Override Leave Drops", false);
     }
 
@@ -45,14 +43,14 @@ public class LeaveDropManipulation extends GuiDropChanceManipulation.DropManipul
     public List<ItemStack> redirectDrops(IBlockState block) {
         List<ItemStack> list = new ArrayList<>();
         
-        if (block.getBlock().getDefaultState().getBlock() == Blocks.LEAVES) {
+        if (block.getBlock().getDefaultState().getBlock() == MCVer.getBlock("LEAVES")) {
         	BlockPlanks.EnumType leave = ((BlockLeaves) block.getBlock()).getWoodType(block.getBlock().getMetaFromState(block));
-			if (leave == EnumType.OAK && dropApple.isToggled()) list.add(new ItemStack(Items.APPLE));
-			if (dropSapling.isToggled()) list.add(new ItemStack(Item.getItemFromBlock(Blocks.SAPLING), 1, leave.getMetadata()));
-        } else if (block.getBlock().getDefaultState().getBlock() == Blocks.LEAVES2) {
+			if (leave == EnumType.OAK && dropApple.isToggled()) list.add(new ItemStack(MCVer.getItem("APPLE")));
+			if (dropSapling.isToggled()) list.add(new ItemStack(Item.getItemFromBlock(MCVer.getBlock("SAPLING")), 1, leave.getMetadata()));
+        } else if (block.getBlock().getDefaultState().getBlock() == MCVer.getBlock("LEAVES2")) {
         	BlockPlanks.EnumType leave = ((BlockLeaves) block.getBlock()).getWoodType(block.getBlock().getMetaFromState(block));
-			if (leave == EnumType.DARK_OAK && dropApple.isToggled()) list.add(new ItemStack(Items.APPLE));
-			if (dropSapling.isToggled()) list.add(new ItemStack(Item.getItemFromBlock(Blocks.SAPLING), 1, leave.getMetadata()));
+			if (leave == EnumType.DARK_OAK && dropApple.isToggled()) list.add(new ItemStack(MCVer.getItem("APPLE")));
+			if (dropSapling.isToggled()) list.add(new ItemStack(Item.getItemFromBlock(MCVer.getBlock("SAPLING")), 1, leave.getMetadata()));
         } else {
         	return ImmutableList.<ItemStack>of();
         }

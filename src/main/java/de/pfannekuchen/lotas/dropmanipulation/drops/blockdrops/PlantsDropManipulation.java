@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.google.common.collect.ImmutableList;
 
+import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.gui.GuiDropChanceManipulation;
 import de.pfannekuchen.lotas.gui.widgets.CheckboxWidget;
 import de.pfannekuchen.lotas.gui.widgets.ModifiedCheckBoxWidget;
@@ -36,6 +37,10 @@ public class PlantsDropManipulation extends GuiDropChanceManipulation.DropManipu
         PlantsDropManipulation.y = y;
         PlantsDropManipulation.width = width;
         PlantsDropManipulation.height = height;
+        //#if MC<=10809
+        //$$ optimizeBeetroot.enabled = false;
+        //$$ optimizeChorus.enabled = false;
+        //#endif
         enabled = new CheckboxWidget(x, y, 150, 20, "Override Plant Drops", false);
     }
 
@@ -47,26 +52,28 @@ public class PlantsDropManipulation extends GuiDropChanceManipulation.DropManipu
     @Override
     public List<ItemStack> redirectDrops(IBlockState blockstate) {
         Block block = blockstate.getBlock();
-        if (block.getDefaultState().getBlock() == Blocks.CARROTS && optimizeCarrots.isChecked()) {
-            if (blockstate.getValue(PropertyInteger.create("age", 0, 7)) == 7) return ImmutableList.of(new ItemStack(Items.CARROT, 5));
-        } else if (block.getDefaultState().getBlock() == Blocks.POTATOES && optimizePotato.isChecked()) {
-            if (blockstate.getValue(PropertyInteger.create("age", 0, 7)) == 7) return ImmutableList.of(new ItemStack(Items.POTATO, 5), new ItemStack(Items.POISONOUS_POTATO, 1));
-        } else if (block.getDefaultState().getBlock() == Blocks.WHEAT && optimizeWheat.isChecked()) {
-            if (blockstate.getValue(PropertyInteger.create("age", 0, 7)) == 7) return ImmutableList.of(new ItemStack(Items.WHEAT_SEEDS, 3), new ItemStack(Items.WHEAT, 1));
+        if (block.getDefaultState().getBlock() == MCVer.getBlock("CARROTS") && optimizeCarrots.isChecked()) {
+            if (blockstate.getValue(PropertyInteger.create("age", 0, 7)) == 7) return ImmutableList.of(new ItemStack(MCVer.getItem("CARROTS"), 5));
+        } else if (block.getDefaultState().getBlock() == MCVer.getBlock("POTATOES") && optimizePotato.isChecked()) {
+            if (blockstate.getValue(PropertyInteger.create("age", 0, 7)) == 7) return ImmutableList.of(new ItemStack(MCVer.getItem("POTATOES"), 5), new ItemStack(MCVer.getItem("POISONOUS_POTATO"), 1));
+        } else if (block.getDefaultState().getBlock() == MCVer.getBlock("WHEAT") && optimizeWheat.isChecked()) {
+            if (blockstate.getValue(PropertyInteger.create("age", 0, 7)) == 7) return ImmutableList.of(new ItemStack(MCVer.getItem("WHEAT_SEEDS"), 3), new ItemStack(MCVer.getItem("WHEAT"), 1));
+        //#if MC>=10900
         } else if (block.getDefaultState().getBlock() == Blocks.BEETROOTS && optimizeBeetroot.isChecked()) {
-            if (blockstate.getValue(PropertyInteger.create("age", 0, 3)) == 3) return ImmutableList.of(new ItemStack(Items.BEETROOT, 1), new ItemStack(Items.BEETROOT_SEEDS, 4));
-        } else if (block.getDefaultState().getBlock() == Blocks.MELON_BLOCK && optimizeMelons.isChecked()) {
-            return ImmutableList.of(new ItemStack(Items.MELON, 7));
-        } else if (block.getDefaultState().getBlock() == Blocks.COCOA && optimizeCocoa.isChecked()) {
-            if (blockstate.getValue(PropertyInteger.create("age", 0, 2)) == 2) return ImmutableList.of(new ItemStack(Items.DYE, 3, 3));
+        	if (blockstate.getValue(PropertyInteger.create("age", 0, 3)) == 3) return ImmutableList.of(new ItemStack(Items.BEETROOT, 1), new ItemStack(Items.BEETROOT_SEEDS, 4));
         } else if (block.getDefaultState().getBlock() == Blocks.CHORUS_PLANT && optimizeChorus.isChecked()) {
-            return ImmutableList.of(new ItemStack(Items.CHORUS_FRUIT, 1));
-        } else if (block.getDefaultState().getBlock() == Blocks.BROWN_MUSHROOM_BLOCK && optimizeMushroom.isChecked()) {
-            return ImmutableList.of(new ItemStack(Blocks.BROWN_MUSHROOM, 2));
-        } else if (block.getDefaultState().getBlock() == Blocks.RED_MUSHROOM_BLOCK && optimizeMushroom.isChecked()) {
-            return ImmutableList.of(new ItemStack(Blocks.RED_MUSHROOM, 2));
-        }  else if (block.getDefaultState().getBlock() == Blocks.NETHER_WART && optimizeNetherwart.isChecked()) {
-            if (blockstate.getValue(PropertyInteger.create("age", 0, 3)) == 3) return ImmutableList.of(new ItemStack(Items.NETHER_WART, 4));
+        	return ImmutableList.of(new ItemStack(Items.CHORUS_FRUIT, 1));
+        //#endif
+        } else if (block.getDefaultState().getBlock() == MCVer.getBlock("MELON_BLOCK") && optimizeMelons.isChecked()) {
+            return ImmutableList.of(new ItemStack(MCVer.getItem("MELON"), 7));
+        } else if (block.getDefaultState().getBlock() == MCVer.getBlock("COCOA") && optimizeCocoa.isChecked()) {
+            if (blockstate.getValue(PropertyInteger.create("age", 0, 2)) == 2) return ImmutableList.of(new ItemStack(MCVer.getItem("DYE"), 3, 3));
+        } else if (block.getDefaultState().getBlock() == MCVer.getBlock("BROWN_MUSHROOM_BLOCK") && optimizeMushroom.isChecked()) {
+            return ImmutableList.of(new ItemStack(MCVer.getBlock("BROWN_MUSHROOM"), 2));
+        } else if (block.getDefaultState().getBlock() == MCVer.getBlock("RED_MUSHROOM_BLOCK") && optimizeMushroom.isChecked()) {
+            return ImmutableList.of(new ItemStack(MCVer.getBlock("RED_MUSHROOM"), 2));
+        }  else if (block.getDefaultState().getBlock() == MCVer.getBlock("NETHER_WART") && optimizeNetherwart.isChecked()) {
+            if (blockstate.getValue(PropertyInteger.create("age", 0, 3)) == 3) return ImmutableList.of(new ItemStack(MCVer.getItem("NETHER_WART"), 4));
         }
         return ImmutableList.of();
     }

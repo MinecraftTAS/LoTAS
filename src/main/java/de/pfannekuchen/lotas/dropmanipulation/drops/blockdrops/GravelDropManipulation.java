@@ -13,8 +13,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
@@ -57,11 +55,11 @@ public class GravelDropManipulation extends GuiDropChanceManipulation.DropManipu
 
     @Override
     public List<ItemStack> redirectDrops(IBlockState block) {
-        if (block.getBlock().getDefaultState().getBlock() != Blocks.GRAVEL) return ImmutableList.of();
+        if (block.getBlock().getDefaultState().getBlock() != MCVer.getBlock("GRAVEL")) return ImmutableList.of();
         if (flint) {
-            return ImmutableList.of(new ItemStack(Items.FLINT));
+            return ImmutableList.of(new ItemStack(MCVer.getItem("FLINT")));
         }
-        return ImmutableList.of(new ItemStack(Blocks.GRAVEL));
+        return ImmutableList.of(new ItemStack(MCVer.getBlock("GRAVEL")));
     }
 
     @Override

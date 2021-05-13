@@ -12,8 +12,13 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
+//#if MC>=10900
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+//#else
+//$$ import net.minecraft.util.AxisAlignedBB;
+//$$ import net.minecraft.util.BlockPos;
+//#endif
 import net.minecraft.world.WorldServer;
 
 public class DupeMod {

@@ -1,6 +1,13 @@
 package de.pfannekuchen.lotas.core;
 
+//#if MC>=10900
 import java.awt.image.BufferedImage;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BannerTextures;
+import net.minecraft.client.renderer.IImageBuffer;
+import net.minecraft.client.renderer.ImageBufferDownload;
+import net.minecraft.client.renderer.ThreadDownloadImageData;
+//#endif
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -20,11 +27,6 @@ import de.pfannekuchen.lotas.gui.GuiSeedList.SeedListExtended;
 import de.pfannekuchen.lotas.gui.GuiSeedList.SeedListExtended.SeedEntry;
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;
 import de.pfannekuchen.lotas.taschallenges.ChallengeMap;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BannerTextures;
-import net.minecraft.client.renderer.IImageBuffer;
-import net.minecraft.client.renderer.ImageBufferDownload;
-import net.minecraft.client.renderer.ThreadDownloadImageData;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.ForgeVersion;
 import net.minecraftforge.common.MinecraftForge;
@@ -80,10 +82,12 @@ public class LoTASModContainer {
 						map.leaderboard[j] = stream.readLine();
 					}
 					
+					//#if MC>=10900
 					ResourceLocation loc = new ResourceLocation("maps", map.name);
 					ThreadDownloadImageData dw = new ThreadDownloadImageData((File) null, "http://mgnet.work/taschallenges/" + map.name + ".png", null, new ImageBufferDownload());
 					Minecraft.getMinecraft().getTextureManager().loadTexture(loc, dw);
 					map.resourceLoc = loc.getResourcePath();
+					//#endif
 					
 					LoTASModContainer.maps.add(map);
 					
@@ -149,11 +153,13 @@ public class LoTASModContainer {
 			String name = line.split(":")[1];
 			String description = line.split(":")[2];
 			SeedEntry entry = new SeedEntry(name, description, seed, c);
+			//#if MC>=10900
 			new Thread(() -> {
 				entry.loc = new ResourceLocation("seeds", seed);
 				ThreadDownloadImageData dw = new ThreadDownloadImageData((File) null, "http://mgnet.work/seeds/" + seed + ".png", null, new ImageBufferDownload());
 				Minecraft.getMinecraft().getTextureManager().loadTexture(entry.loc, dw);
 			}).start();
+			//#endif
 			SeedListExtended.seeds.add(entry);
 			c++;
 		}

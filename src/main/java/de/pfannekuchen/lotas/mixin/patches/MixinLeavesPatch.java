@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-import de.pfannekuchen.lotas.dropmanipulation.drops.blockdrops.LeaveDropManipulation;
+import de.pfannekuchen.lotas.dropmanipulation.drops.blockdrops.LeavesDropManipulation;
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
@@ -21,12 +21,12 @@ public abstract class MixinLeavesPatch {
 	
 	@Redirect(method = "getDrops", at = @At(value = "INVOKE", target = "Ljava/util/Random;nextInt(I)I"), remap = false)
 	public int redirectRandom(Random rand, int chance) {
-		return LeaveDropManipulation.dropSapling.isToggled() ? 0:rand.nextInt(chance);
+		return LeavesDropManipulation.dropSapling.isToggled() ? 0:rand.nextInt(chance);
 	}
 	
 	@Redirect(method = "getDrops", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BlockLeaves;dropApple(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;I)V"))
 	public void redirectDropApple(BlockLeaves leaves, World world, BlockPos pos, IBlockState state, int chance) {
-		this.dropApple((World)world, pos, state, !LeaveDropManipulation.dropApple.isToggled() ? chance : 1);
+		this.dropApple((World)world, pos, state, !LeavesDropManipulation.dropApple.isToggled() ? chance : 1);
 	}
 	
 	@Shadow

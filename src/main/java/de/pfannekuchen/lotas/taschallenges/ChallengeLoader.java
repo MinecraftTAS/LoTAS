@@ -20,9 +20,11 @@ import javax.annotation.Nullable;
 
 import org.apache.commons.io.FileUtils;
 
+//#if MC>=10900
 import com.mojang.authlib.GameProfileRepository;
 import com.mojang.authlib.minecraft.MinecraftSessionService;
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
+//#endif
 
 import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.mixin.accessors.AccessorMinecraftClient;
@@ -37,12 +39,16 @@ import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.network.EnumConnectionState;
 import net.minecraft.network.NetworkManager;
+//#if MC>=10900
 import net.minecraft.network.handshake.client.C00Handshake;
-import net.minecraft.network.login.client.CPacketLoginStart;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.integrated.IntegratedServer;
 import net.minecraft.server.management.PlayerProfileCache;
 import net.minecraft.tileentity.TileEntitySkull;
+//#else
+//$$ import net.minecraft.network.login.client.C00PacketLoginStart;
+//#endif
+import net.minecraft.network.login.client.CPacketLoginStart;
+import net.minecraft.server.integrated.IntegratedServer;
 import net.minecraft.util.ReportedException;
 //#if MC>=11000
 import net.minecraft.world.GameType;
@@ -161,8 +167,10 @@ public class ChallengeLoader {
 			e.printStackTrace();
 		}
     	net.minecraftforge.fml.client.FMLClientHandler.instance().startIntegratedServer(folderName, worldName, worldSettingsIn);
-        Minecraft.getMinecraft().loadWorld((WorldClient)null);
-        System.gc();
+        //#if MC>=10900
+    	Minecraft.getMinecraft().loadWorld((WorldClient)null);
+        //#endif
+    	System.gc();
 
         
         ISaveHandler isavehandler = ChallengeMap.currentMap.getSaveLoader().getSaveLoader(folderName, false);
@@ -181,6 +189,7 @@ public class ChallengeLoader {
 
         try
         {
+        	//#if MC>=10900
             YggdrasilAuthenticationService yggdrasilauthenticationservice = new YggdrasilAuthenticationService(Minecraft.getMinecraft().getProxy(), UUID.randomUUID().toString());
             MinecraftSessionService minecraftsessionservice = yggdrasilauthenticationservice.createMinecraftSessionService();
             GameProfileRepository gameprofilerepository = yggdrasilauthenticationservice.createProfileRepository();
@@ -189,6 +198,9 @@ public class ChallengeLoader {
             TileEntitySkull.setSessionService(minecraftsessionservice);
             PlayerProfileCache.setOnlineMode(false);
             ((AccessorMinecraftClient) Minecraft.getMinecraft()).integratedServer(new IntegratedServer(Minecraft.getMinecraft(), folderName, worldName, worldSettingsIn, yggdrasilauthenticationservice, minecraftsessionservice, gameprofilerepository, playerprofilecache));
+            //#else
+            //$$ ((AccessorMinecraftClient) Minecraft.getMinecraft()).integratedServer(new IntegratedServer(Minecraft.getMinecraft(), folderName, worldName, worldSettingsIn));
+            //#endif
             Minecraft.getMinecraft().getIntegratedServer().startServerThread();
             ((AccessorMinecraftClient) Minecraft.getMinecraft()).integratedServerIsRunning(true);
         }
@@ -248,7 +260,11 @@ public class ChallengeLoader {
             gameProfile = Minecraft.getMinecraft().getSessionService().fillProfileProperties(gameProfile, true); //Forge: Fill profile properties upon game load. Fixes MC-52974.
             Minecraft.getMinecraft().getSession().setProperties(gameProfile.getProperties());
         }
+        //#if MC>=10900
         networkmanager.sendPacket(new CPacketLoginStart(gameProfile));
+        //#else
+        //$$ networkmanager.sendPacket(new C00PacketLoginStart(gameProfile));
+        //#endif
         try {
         	Field networkManager2 = Minecraft.getMinecraft().getClass().getDeclaredField("myNetworkManager");
         	networkManager2.setAccessible(true);

@@ -14,7 +14,11 @@ import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
+//#if MC>=10900
 import net.minecraft.util.math.AxisAlignedBB;
+//#else
+//$$ import net.minecraft.util.AxisAlignedBB;
+//#endif
 
 public class RenderUtils {
 	private static final AxisAlignedBB DEFAULT_AABB = new AxisAlignedBB(0, 0, 0, 1, 1, 1);

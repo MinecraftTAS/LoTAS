@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.google.common.collect.ImmutableList;
 
+import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.gui.GuiDropChanceManipulation;
 import de.pfannekuchen.lotas.gui.widgets.CheckboxWidget;
 import de.pfannekuchen.lotas.gui.widgets.ModifiedCheckBoxWidget;
@@ -69,20 +70,20 @@ public class MonsterDropManipulation extends GuiDropChanceManipulation.DropManip
     @Override
     public List<ItemStack> redirectDrops(Entity entity) {
         if (entity instanceof EntityCaveSpider && optimizeCaveSpider.isChecked())
-            return ImmutableList.of(new ItemStack(Items.SPIDER_EYE), new ItemStack(Items.STRING, 2));
+            return ImmutableList.of(new ItemStack(MCVer.getItem("SPIDER_EYE")), new ItemStack(MCVer.getItem("STRING"), 2));
         if (entity instanceof EntityCreeper && optimizeCreeper.isChecked())
-            return ImmutableList.of(new ItemStack(Items.GUNPOWDER, 2));
+            return ImmutableList.of(new ItemStack(MCVer.getItem("GUNPOWDER"), 2));
         if (entity instanceof EntityEnderman && optimizeEnderman.isChecked())
-            return ImmutableList.of(new ItemStack(Items.ENDER_PEARL, 1));
+            return ImmutableList.of(new ItemStack(MCVer.getItem("ENDER_PEARL"), 1));
         if (entity instanceof EntitySkeleton && optimizeSkeleton.isChecked())
-            return ImmutableList.of(new ItemStack(Items.ARROW, 2), new ItemStack(Items.BONE, 2));
+            return ImmutableList.of(new ItemStack(MCVer.getItem("ARRROW"), 2), new ItemStack(MCVer.getItem("BONE"), 2));
         if (entity instanceof EntitySlime && optimizeSlime.isChecked())
-            if (((EntitySlime) entity).getSlimeSize() == 1) return ImmutableList.of(new ItemStack(Items.SLIME_BALL, 2));
+            if (((EntitySlime) entity).getSlimeSize() == 1) return ImmutableList.of(new ItemStack(MCVer.getItem("SLIME_BALL"), 2));
         if (entity instanceof EntityGuardian && optimizeGuardian.isChecked())
-            return ImmutableList.of(new ItemStack(Items.PRISMARINE_SHARD, 2));
+            return ImmutableList.of(new ItemStack(MCVer.getItem("PRISMARINE_SHARD"), 2));
         if (entity instanceof EntityWitch && optimizeWitch.isChecked()) {
             if (!((EntityWitch) entity).isChild())
-                return ImmutableList.of(new ItemStack(Items.GLOWSTONE_DUST), new ItemStack(Items.STICK), new ItemStack(Items.REDSTONE), new ItemStack(Items.GUNPOWDER), new ItemStack(Items.GLASS_BOTTLE), new ItemStack(Items.SPIDER_EYE));
+                return ImmutableList.of(new ItemStack(MCVer.getItem("GLOWSTONE_DUST")), new ItemStack(MCVer.getItem("STICK")), new ItemStack(MCVer.getItem("REDSTONE")), new ItemStack(MCVer.getItem("GUNPOWDER")), new ItemStack(MCVer.getItem("GLASS_BOTTLE")), new ItemStack(MCVer.getItem("SPIDER_EYE")));
         }
         
         //#if MC>=11100

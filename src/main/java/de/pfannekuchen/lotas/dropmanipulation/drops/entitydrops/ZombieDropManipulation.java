@@ -15,7 +15,6 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntityZombie;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
@@ -57,11 +56,11 @@ public class ZombieDropManipulation extends GuiDropChanceManipulation.DropManipu
     public List<ItemStack> redirectDrops(Entity entity) {
         List<ItemStack> list = new ArrayList<>();
         if (entity instanceof EntityZombie) {
-            list.add(new ItemStack(Items.ROTTEN_FLESH, 2));
+            list.add(new ItemStack(MCVer.getItem("ROTTEN_FLESH"), 2));
 
-            if (dropIron.isToggled()) list.add(new ItemStack(Items.IRON_INGOT));
-            if (dropPotato.isToggled()) list.add(new ItemStack(Items.POTATO));
-            if (dropCarrot.isToggled()) list.add(new ItemStack(Items.CARROT));
+            if (dropIron.isToggled()) list.add(new ItemStack(MCVer.getItem("IRON_INGOT")));
+            if (dropPotato.isToggled()) list.add(new ItemStack(MCVer.getItem("POTATO")));
+            if (dropCarrot.isToggled()) list.add(new ItemStack(MCVer.getItem("CARROT")));
 
         }
         return list;

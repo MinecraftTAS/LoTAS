@@ -13,8 +13,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
@@ -69,8 +67,8 @@ public class GlowstoneDropManipulation extends GuiDropChanceManipulation.DropMan
 
     @Override
     public List<ItemStack> redirectDrops(IBlockState block) {
-        if (block.getBlock().getDefaultState().getBlock() != Blocks.GLOWSTONE) return ImmutableList.of();
-        return ImmutableList.of(new ItemStack(Items.GLOWSTONE_DUST, dust));
+        if (block.getBlock().getDefaultState().getBlock() != MCVer.getBlock("GLOWSTONE")) return ImmutableList.of();
+        return ImmutableList.of(new ItemStack(MCVer.getItem("GLOWSTONE_DUST"), dust));
     }
 
     @Override
