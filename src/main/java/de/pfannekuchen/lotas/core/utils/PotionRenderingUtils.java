@@ -7,11 +7,6 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.item.ItemPotion;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-//#if MC>=10900
-import net.minecraft.util.math.MathHelper;
-//#else
-//$$ import net.minecraft.util.MathHelper;
-//#endif
 
 /**
  * Draws a potion in the gui hud that is moving with the camera
@@ -31,13 +26,8 @@ public class PotionRenderingUtils {
         EntityPlayerSP entityplayersp = MCVer.player(Minecraft.getMinecraft());
         float f22 = entityplayersp.prevRenderArmPitch - entityplayersp.renderArmPitch;
         float f221 = entityplayersp.prevRenderArmYaw - entityplayersp.renderArmYaw;
-        //#if MC>=11100
-        f22 = MathHelper.clamp(f22, -16, 16);
-        f221 = MathHelper.clamp(f221, -16, 16);
-        //#else
-        //$$ f22 = MathHelper.clamp_float(f22, -16, 16);
-        //$$ f221 = MathHelper.clamp_float(f221, -16, 16);
-        //#endif
+        f22 = MCVer.clamp(f22, -16, 16);
+        f221 = MCVer.clamp(f221, -16, 16);
         
         lerpX = lerp(f22, lerpX, .8f);
         lerpY = lerp(f221, lerpY, .8f);
@@ -55,7 +45,7 @@ public class PotionRenderingUtils {
 
         GlStateManager.translate(-.75F, 0.15f, 0f);
         
-        float f2 = MathHelper.abs(MathHelper.cos(f / 4.0F * (float)Math.PI) * 0.1F);
+        float f2 = MCVer.abs((float) (StrictMath.cos(f / 4.0F * (float)Math.PI) * 0.1F));
         GlStateManager.translate(0.0F, f2 - 4.5f, -4.0F);
 
         float f3 = 1.0F - (float)Math.pow((double)f1, 27.0D);

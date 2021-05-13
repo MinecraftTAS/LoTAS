@@ -1,8 +1,6 @@
 package de.pfannekuchen.lotas.gui.widgets;
 
-//#if MC<=11102
-//$$ import net.minecraft.client.Minecraft;
-//#endif
+import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.client.config.GuiCheckBox;
 
 public class ModifiedCheckBoxWidget extends GuiCheckBox {

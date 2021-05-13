@@ -24,13 +24,9 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.client.settings.KeyBinding;
-//#if MC>=10900
-import net.minecraft.util.math.MathHelper;
-//#else
-//$$ import net.minecraft.util.MathHelper;
-//#endif
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
+
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
@@ -39,11 +35,7 @@ public class EventUtils {
 	
 	@SubscribeEvent
 	public void onDraw(RenderGameOverlayEvent.Post e) {
-		//#if MC>=10900
-		if (e.getType() != ElementType.TEXT) return;
-		//#else
-//$$ 		if (e.type != ElementType.TEXT) return;
-		//#endif
+		if (checkNonText(e)) return;
 		
 		if (Timer.ticks != -1) {
 			Gui.drawRect(0, 0, 75, ConfigUtils.getBoolean("ui", "hideRTATimer") ? 13 : 24, new Color(0, 0, 0, 175).getRGB());
@@ -58,13 +50,18 @@ public class EventUtils {
 		}
 	}
 	
+	private boolean checkNonText(RenderGameOverlayEvent e) {
+		//#if MC>=10900
+		if (e.getType() != ElementType.TEXT) return true;
+		//#else
+//$$ 		if (e.type != ElementType.TEXT) return true;
+		//#endif
+		return false;
+	}
+
 	@SubscribeEvent
 	public void render(RenderGameOverlayEvent e) {
-		//#if MC>=10900
-		if (e.getType() != ElementType.TEXT) return;
-		//#else
-//$$ 		if (e.type != ElementType.TEXT) return;
-		//#endif
+		if (checkNonText(e)) return;
 		
 		FontRenderer renderer = MCVer.getFontRenderer(Minecraft.getMinecraft());
     	int height = new ScaledResolution(Minecraft.getMinecraft()).getScaledHeight();
@@ -112,11 +109,7 @@ public class EventUtils {
 		if (KeybindsUtils.increaseTickrateKeybind.isPressed()) TickrateChangerMod.index++;
 		else if (KeybindsUtils.decreaseTickrateKeybind.isPressed()) TickrateChangerMod.index--;
 		else return;
-		//#if MC>=11100
-		TickrateChangerMod.index = MathHelper.clamp(TickrateChangerMod.index, 0, 10);
-		//#else
-//$$ 		TickrateChangerMod.index = MathHelper.clamp_int(TickrateChangerMod.index, 0, 10);
-		//#endif
+		TickrateChangerMod.index = MCVer.clamp(TickrateChangerMod.index, 0, 10);
 		TickrateChangerMod.updateTickrate(TickrateChangerMod.ticks[TickrateChangerMod.index]);
 	}
 	

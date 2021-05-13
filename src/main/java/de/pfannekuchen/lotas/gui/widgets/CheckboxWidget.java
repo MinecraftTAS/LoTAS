@@ -1,5 +1,6 @@
 package de.pfannekuchen.lotas.gui.widgets;
 
+import de.pfannekuchen.lotas.core.MCVer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
@@ -7,9 +8,6 @@ import net.minecraft.client.renderer.GlStateManager;
 //#if MC>=10900
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
-import net.minecraft.util.math.MathHelper;
-//#else
-//$$ import net.minecraft.util.MathHelper;
 //#endif
 import net.minecraft.util.ResourceLocation;
 
@@ -51,7 +49,7 @@ public class CheckboxWidget extends GuiButton {
 		minecraftClient.getTextureManager().bindTexture(TEXTURE);
 		//#if MC>=11200
 		drawModalRectWithCustomSizedTexture(this.x, this.y, 0.0F, this.checked ? 20.0F : 0.0F, 20, this.height, 32, 64);
-		this.drawString(textRenderer, this.displayString, this.x + 24, this.y + (this.height - 8) / 2, 14737632 | MathHelper.ceil(1.0f * 255.0F) << 24);
+		this.drawString(textRenderer, this.displayString, this.x + 24, this.y + (this.height - 8) / 2, 14737632 | MCVer.ceil(1.0f * 255.0F) << 24);
 		//#else
 		//#if MC>=11100
 		//$$ drawModalRectWithCustomSizedTexture(this.xPosition, this.yPosition, 0.0F, this.checked ? 20.0F : 0.0F, 20, this.height, 32, 64);

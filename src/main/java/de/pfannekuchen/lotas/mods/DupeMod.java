@@ -11,18 +11,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
-//#if MC>=10900
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-//#else
-//$$ import net.minecraft.util.AxisAlignedBB;
-//$$ import net.minecraft.util.BlockPos;
-//#endif
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 
 public class DupeMod {
-	
 	public static List<EntityItem> items;
 	public static List<TileEntity> tileentities;
 	public static ArrayList<EntityItem> trackedObjects = new ArrayList<>();
@@ -66,10 +57,10 @@ public class DupeMod {
 					}
 					for (EntityItem item : DupeMod.items) {
 						//#if MC>=11100
-						WorldServer w = mc.getIntegratedServer().getPlayerList().getPlayers().get(0).getServerWorld();
+						World w = mc.getIntegratedServer().getPlayerList().getPlayers().get(0).getServerWorld();
 						//#else
 						//#if MC>=10900
-//$$ 						WorldServer w = mc.getIntegratedServer().getPlayerList().getPlayerList().get(0).getServerWorld();
+//$$ 						World w = mc.getIntegratedServer().getPlayerList().getPlayerList().get(0).getServerWorld();
 						//#else
 //$$ 						World w = mc.getIntegratedServer().getConfigurationManager().getPlayerList().get(0).worldObj;
 						//#endif
@@ -114,7 +105,7 @@ public class DupeMod {
 			
 			DupeMod.items = new LinkedList<EntityItem>();
 			
-			for (EntityItem item : MCVer.world(mc.getIntegratedServer(), MCVer.player(mc).dimension).getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(pX - 16, pY - 16, pZ - 16, pX + 16, pY + 16, pZ + 16))) {
+			for (EntityItem item : MCVer.world(mc.getIntegratedServer(), MCVer.player(mc).dimension).getEntitiesWithinAABB(EntityItem.class, MCVer.aabb(pX - 16, pY - 16, pZ - 16, pX + 16, pY + 16, pZ + 16))) {
 				//#if MC>=11200
 				EntityItem itemDupe = new EntityItem(item.world, item.posX, item.posY, item.posZ, item.getItem().copy());
 				//#else
@@ -139,16 +130,15 @@ public class DupeMod {
 	public static synchronized void saveChests() {
 		try {
 			Minecraft mc = Minecraft.getMinecraft();
-			WorldServer world = MCVer.world(mc.getIntegratedServer(), MCVer.player(mc).dimension);
-			BlockPos playerPos = MCVer.player(mc).getPosition();
+			World world = MCVer.world(mc.getIntegratedServer(), MCVer.player(mc).dimension);
 			
 			DupeMod.tileentities = new LinkedList<TileEntity>();
 			for (int x =- 5; x <= 5; x++) {
 				for (int y =- 5; y <= 5; y++) {
 					for (int z =- 5; z <= 5; z++) {
-						if (MCVer.world(mc.getIntegratedServer(), MCVer.player(mc).dimension).getBlockState(playerPos.add(x, y, z)).getBlock() == MCVer.getBlock("CHEST") || world.getBlockState(playerPos.add(x, y, z)).getBlock() == MCVer.getBlock("TRAPPED_CHEST")) {
-							TileEntityChest foundchest = (TileEntityChest) world.getTileEntity(playerPos.add(x,y,z));
-							TileEntityChest newchest = new TileEntityChest(((TileEntityChest) world.getTileEntity(playerPos.add(x,y,z))).getChestType());
+						if (MCVer.world(mc.getIntegratedServer(), MCVer.player(mc).dimension).getBlockState(MCVer.player(mc).getPosition().add(x, y, z)).getBlock() == MCVer.getBlock("CHEST") || world.getBlockState(MCVer.player(mc).getPosition().add(x, y, z)).getBlock() == MCVer.getBlock("TRAPPED_CHEST")) {
+							TileEntityChest foundchest = (TileEntityChest) world.getTileEntity(MCVer.player(mc).getPosition().add(x,y,z));
+							TileEntityChest newchest = new TileEntityChest(((TileEntityChest) world.getTileEntity(MCVer.player(mc).getPosition().add(x,y,z))).getChestType());
 							newchest.deserializeNBT(foundchest.serializeNBT());
 							tileentities.add(newchest);
 						}

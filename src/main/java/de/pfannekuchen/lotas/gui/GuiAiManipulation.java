@@ -9,11 +9,6 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.entity.EntityLiving;
-//#if MC>=10900
-import net.minecraft.util.math.AxisAlignedBB;
-//#else
-//$$ import net.minecraft.util.AxisAlignedBB;
-//#endif
 
 public class GuiAiManipulation extends GuiScreen {
 
@@ -50,8 +45,7 @@ public class GuiAiManipulation extends GuiScreen {
 		this.buttonList.add(new GuiButton(4, width / 2 + 40, height - 94, 60, 20, "Z--"));
 		this.buttonList.add(new GuiButton(10, width / 2 - 100, height - 116, 200, 20, "Move to me"));
 		this.buttonList.add(new GuiButton(11, width / 2 - 100, height - 138, 200, 20, "Move to entity"));
-		AxisAlignedBB box = MCVer.player(Minecraft.getMinecraft()).getEntityBoundingBox();
-		entities = MCVer.world(mc.getIntegratedServer(), MCVer.player(Minecraft.getMinecraft()).dimension).getEntitiesWithinAABB(EntityLiving.class, new AxisAlignedBB(box.minX - 16, box.minY - 16, box.minZ - 16, box.maxX + 16, box.maxY + 16, box.maxZ + 16));
+		entities = MCVer.world(mc.getIntegratedServer(), MCVer.player(Minecraft.getMinecraft()).dimension).getEntitiesWithinAABB(EntityLiving.class, MCVer.expandBy32(MCVer.player(Minecraft.getMinecraft()).getEntityBoundingBox()));
 		selectedIndex = 0;
 		
 		if (selectedIndex + 2 > entities.size()) {

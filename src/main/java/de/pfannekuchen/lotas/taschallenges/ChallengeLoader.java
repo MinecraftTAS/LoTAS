@@ -39,21 +39,10 @@ import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.network.EnumConnectionState;
 import net.minecraft.network.NetworkManager;
-//#if MC>=10900
-import net.minecraft.network.handshake.client.C00Handshake;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.integrated.IntegratedServer;
 import net.minecraft.server.management.PlayerProfileCache;
 import net.minecraft.tileentity.TileEntitySkull;
-//#else
-//$$ import net.minecraft.network.login.client.C00PacketLoginStart;
-//#endif
-
-//#if MC>=10900
-import net.minecraft.network.login.client.CPacketLoginStart;
-//#else
-//$$ import net.minecraft.network.handshake.client.C00Handshake;
-//#endif
-import net.minecraft.server.integrated.IntegratedServer;
 import net.minecraft.util.ReportedException;
 //#if MC>=11000
 import net.minecraft.world.GameType;
@@ -253,22 +242,15 @@ public class ChallengeLoader {
         SocketAddress socketaddress = Minecraft.getMinecraft().getIntegratedServer().getNetworkSystem().addLocalEndpoint();
         NetworkManager networkmanager = NetworkManager.provideLocalClient(socketaddress);
         networkmanager.setNetHandler(new NetHandlerLoginClient(networkmanager, Minecraft.getMinecraft(), (GuiScreen)null));
-        //#if MC>=11202
-        networkmanager.sendPacket(new C00Handshake(socketaddress.toString(), 0, EnumConnectionState.LOGIN, true));
-        //#else
-        //$$ networkmanager.sendPacket(new C00Handshake(316, socketaddress.toString(), 0, EnumConnectionState.LOGIN, true));
-        //#endif
+        networkmanager.sendPacket(MCVer.handshake(socketaddress.toString(), 0, EnumConnectionState.LOGIN, true));
+
         com.mojang.authlib.GameProfile gameProfile = Minecraft.getMinecraft().getSession().getProfile();
         if (!Minecraft.getMinecraft().getSession().hasCachedProperties())
         {
             gameProfile = Minecraft.getMinecraft().getSessionService().fillProfileProperties(gameProfile, true); //Forge: Fill profile properties upon game load. Fixes MC-52974.
             Minecraft.getMinecraft().getSession().setProperties(gameProfile.getProperties());
         }
-        //#if MC>=10900
-        networkmanager.sendPacket(new CPacketLoginStart(gameProfile));
-        //#else
-        //$$ networkmanager.sendPacket(new C00PacketLoginStart(gameProfile));
-        //#endif
+        networkmanager.sendPacket(MCVer.loginStart(gameProfile));
         try {
         	Field networkManager2 = Minecraft.getMinecraft().getClass().getDeclaredField("myNetworkManager");
         	networkManager2.setAccessible(true);

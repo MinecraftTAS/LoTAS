@@ -23,13 +23,6 @@ import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.item.EntityItem;
-//#if MC>=10900
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.MathHelper;
-//#else
-//$$ import net.minecraft.util.AxisAlignedBB;
-//$$ import net.minecraft.util.MathHelper;
-//#endif
 import net.minecraft.world.chunk.storage.AnvilSaveConverter;
 import net.minecraftforge.fml.client.config.GuiCheckBox;
 
@@ -41,7 +34,7 @@ public class GuiChallengeIngameMenu extends GuiIngameMenu {
 		double pY = MCVer.player(Minecraft.getMinecraft()).posY;
 		double pZ = MCVer.player(Minecraft.getMinecraft()).posZ;
 		DupeMod.trackedObjects = new ArrayList<EntityItem>();
-        for (EntityItem item : MCVer.world(Minecraft.getMinecraft().getIntegratedServer(), MCVer.player(Minecraft.getMinecraft()).dimension).getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(pX - 16, pY - 16, pZ - 16, pX + 16, pY + 16, pZ + 16))) {
+        for (EntityItem item : MCVer.world(Minecraft.getMinecraft().getIntegratedServer(), MCVer.player(Minecraft.getMinecraft()).dimension).getEntitiesWithinAABB(EntityItem.class, MCVer.aabb(pX - 16, pY - 16, pZ - 16, pX + 16, pY + 16, pZ + 16))) {
         	DupeMod.trackedObjects.add(item);
         }
         
@@ -113,19 +106,11 @@ public class GuiChallengeIngameMenu extends GuiIngameMenu {
         
 		if (button.id == 15) {
 			TickrateChangerMod.index++;
-			//#if MC>=11100
-			TickrateChangerMod.index = MathHelper.clamp(TickrateChangerMod.index, 1, 10);
-			//#else
-//$$ 			TickrateChangerMod.index = MathHelper.clamp_int(TickrateChangerMod.index, 1, 10);
-			//#endif
+			TickrateChangerMod.index = MCVer.clamp(TickrateChangerMod.index, 1, 10);
 			TickrateChangerMod.updateTickrate(TickrateChangerMod.ticks[TickrateChangerMod.index]);
 		} else if (button.id == 16) {
 			TickrateChangerMod.index--;
-			//#if MC>=11100
-			TickrateChangerMod.index = MathHelper.clamp(TickrateChangerMod.index, 1, 10);
-			//#else
-//$$ 			TickrateChangerMod.index = MathHelper.clamp_int(TickrateChangerMod.index, 1, 10);
-			//#endif
+			TickrateChangerMod.index = MCVer.clamp(TickrateChangerMod.index, 1, 10);
 			TickrateChangerMod.updateTickrate(TickrateChangerMod.ticks[TickrateChangerMod.index]);
 		} else if (button.id == 17) {
 			DupeMod.saveItems();

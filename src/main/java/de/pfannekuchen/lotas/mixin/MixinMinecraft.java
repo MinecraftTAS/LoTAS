@@ -28,11 +28,6 @@ import net.minecraft.client.gui.GuiIngameMenu;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.settings.GameSettings;
-//#if MC>=10900
-import net.minecraft.util.math.MathHelper;
-//#else
-//$$ import net.minecraft.util.MathHelper;
-//#endif
 
 @Mixin(Minecraft.class)
 public class MixinMinecraft {
@@ -129,7 +124,7 @@ public class MixinMinecraft {
         if (f >= 1.0E-4F)
         {
         	//#if MC>=11100
-            f = MathHelper.sqrt(f);
+            f = MCVer.sqrt(f);
             //#else
             //$$ f = MathHelper.sqrt_float(f);
             //#endif
@@ -139,8 +134,8 @@ public class MixinMinecraft {
             up = up * f;
             forward = forward * f;
             //#if MC>=11100
-            float f1 = MathHelper.sin(player.rotationYaw * 0.017453292F);
-            float f2 = MathHelper.cos(player.rotationYaw * 0.017453292F);
+            float f1 = MCVer.sin(player.rotationYaw * 0.017453292F);
+            float f2 = MCVer.cos(player.rotationYaw * 0.017453292F);
             player.posX += (double)(strafe * f2 - forward * f1);
             player.posY += (double)up;
             player.posZ += (double)(forward * f2 + strafe * f1);
