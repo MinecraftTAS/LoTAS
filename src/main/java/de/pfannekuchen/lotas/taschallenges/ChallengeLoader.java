@@ -44,6 +44,7 @@ import net.minecraft.server.integrated.IntegratedServer;
 import net.minecraft.server.management.PlayerProfileCache;
 import net.minecraft.tileentity.TileEntitySkull;
 import net.minecraft.util.ReportedException;
+import net.minecraft.util.Session;
 //#if MC>=11000
 import net.minecraft.world.GameType;
 //#else
@@ -58,6 +59,7 @@ import net.minecraft.world.storage.WorldInfo;
 public class ChallengeLoader {
 
 	public static boolean startTimer;
+	public static Session cachedSession;
 	
 	public static void reload() throws IOException {
 		Minecraft.getMinecraft().displayGuiScreen(null);
@@ -152,7 +154,12 @@ public class ChallengeLoader {
     }
     
     private static void launchIntegratedServer(String folderName, String worldName, @Nullable WorldSettings worldSettingsIn) {
-        
+        if (cachedSession == null) {
+        	cachedSession = Minecraft.getMinecraft().getSession();
+        	System.out.println(Minecraft.getMinecraft().getSession().getPlayerID());
+        	System.out.println(Minecraft.getMinecraft().getSession().getToken());
+        	((AccessorMinecraftClient) Minecraft.getMinecraft()).session(new Session("TASBot", "b8abdafc-5002-40df-ab68-63206ea4c7e8", "b8abdafc-5002-40df-ab68-63206ea4c7e8", "MOJANG"));
+        }
         try {
         	Field h = Minecraft.getMinecraft().getClass().getDeclaredField("field_71469_aa");
         	h.setAccessible(true);
@@ -160,6 +167,7 @@ public class ChallengeLoader {
         } catch (Exception e) {
 			e.printStackTrace();
 		}
+        
     	net.minecraftforge.fml.client.FMLClientHandler.instance().startIntegratedServer(folderName, worldName, worldSettingsIn);
         //#if MC>=10900
     	Minecraft.getMinecraft().loadWorld((WorldClient)null);
@@ -259,5 +267,12 @@ public class ChallengeLoader {
 			e.printStackTrace();
 		}
     }
+
+	public static void backupSession() {
+		if (ChallengeLoader.cachedSession != null) {
+    		((AccessorMinecraftClient) Minecraft.getMinecraft()).session(ChallengeLoader.cachedSession);
+    		ChallengeLoader.cachedSession = null;
+    	}
+	}
 	
 }

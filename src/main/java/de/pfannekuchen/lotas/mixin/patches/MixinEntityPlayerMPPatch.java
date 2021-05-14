@@ -15,6 +15,8 @@ import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.core.utils.ConfigUtils;
 import de.pfannekuchen.lotas.core.utils.EventUtils.Timer;
 import de.pfannekuchen.lotas.mixin.accessors.AccessorEntityPlayerMP;
+import de.pfannekuchen.lotas.mixin.accessors.AccessorMinecraftClient;
+import de.pfannekuchen.lotas.taschallenges.ChallengeLoader;
 import de.pfannekuchen.lotas.taschallenges.ChallengeMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -109,7 +111,6 @@ public abstract class MixinEntityPlayerMPPatch  {
 			//#else
 //$$ 			chat.getChatGUI().clearChatMessages();
 			//#endif
-			ChallengeMap.currentMap = null;
 			//#if MC>=10900
 			chat.getChatGUI().printChatMessage(new TextComponentString("You have completed: \u00A76" + ChallengeMap.currentMap.displayName + "\u00A7f! Your Time is: " + Timer.getCurrentTimerFormatted()));
 			chat.getChatGUI().printChatMessage(new TextComponentString("Please submit your \u00A7craw \u00A7fvideo to \u00A77#new-misc-things \u00A7f on the Minecraft TAS Discord Server."));
@@ -117,7 +118,8 @@ public abstract class MixinEntityPlayerMPPatch  {
 //$$ 			chat.getChatGUI().printChatMessage(new ChatComponentText("You have completed: \u00A76" + ChallengeMap.currentMap.displayName + "\u00A7f! Your Time is: " + Timer.getCurrentTimerFormatted()));
 //$$ 			chat.getChatGUI().printChatMessage(new ChatComponentText("Please submit your \u00A7craw \u00A7fvideo to \u00A77#new-misc-things \u00A7f on the Minecraft TAS Discord Server."));
 			//#endif
-			
+			ChallengeMap.currentMap = null;
+        	ChallengeLoader.backupSession();
             try {
             	Field h = Minecraft.getMinecraft().getClass().getDeclaredField("field_71469_aa");
             	h.setAccessible(true);

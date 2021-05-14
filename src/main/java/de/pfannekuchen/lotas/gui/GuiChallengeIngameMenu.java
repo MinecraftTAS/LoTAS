@@ -9,6 +9,7 @@ import com.google.common.base.Predicates;
 
 import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.core.utils.ConfigUtils;
+import de.pfannekuchen.lotas.mixin.accessors.AccessorMinecraftClient;
 import de.pfannekuchen.lotas.mods.DupeMod;
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;
 import de.pfannekuchen.lotas.taschallenges.ChallengeLoader;
@@ -79,6 +80,7 @@ public class GuiChallengeIngameMenu extends GuiIngameMenu {
                 this.mc.displayGuiScreen(new GuiOptions(this, this.mc.gameSettings));
                 break;
             case 1:
+            	ChallengeLoader.backupSession();
                 button.enabled = false;
                 MCVer.world(Minecraft.getMinecraft()).sendQuittingDisconnectingPacket();
                 this.mc.loadWorld((WorldClient)null);
