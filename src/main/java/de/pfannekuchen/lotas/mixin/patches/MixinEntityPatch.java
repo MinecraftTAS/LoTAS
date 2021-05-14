@@ -27,16 +27,18 @@ public class MixinEntityPatch {
 	public EntityItem moveItem(World w, double x, double y, double z, ItemStack stack) {
 		EntityItem it = new EntityItem(w, posX, posY, posZ, stack);
 		try {
+			double pX = MCVer.player(Minecraft.getMinecraft()).posX - posX;
+			double pZ = MCVer.player(Minecraft.getMinecraft()).posZ - posZ;
+			if (pX > 0) pX = 1;
+			if (pX < 0) pX = -1;
+			if (pZ > 0) pZ = 1;
+			if (pZ < 0) pZ = -1;
 			if (ConfigUtils.getBoolean("tools", "manipulateVelocityTowards")) {
-				double pX = MCVer.player(Minecraft.getMinecraft()).posX - posX;
-				double pZ = MCVer.player(Minecraft.getMinecraft()).posZ - posZ;
-				it.motionX = Math.min(Math.max((int) pX, 1), -1) * 0.03f;
-				it.motionZ = Math.min(Math.max((int) pZ, 1), -1) * 0.03f;
+				it.motionX = pX * 0.1f;
+				it.motionZ = pZ * 0.1f;
 			} else if (ConfigUtils.getBoolean("tools", "manipulateVelocityAway")) {
-				double pX = MCVer.player(Minecraft.getMinecraft()).posX - posX;
-				double pZ = MCVer.player(Minecraft.getMinecraft()).posZ - posZ;
-				it.motionX = Math.min(Math.max((int) pX, 1), -1) * -0.03f;
-				it.motionZ = Math.min(Math.max((int) pZ, 1), -1) * -0.03f;
+				it.motionX = pX * -0.1f;
+				it.motionZ = pZ * -0.1f;
 			}
 		} catch (Exception e) {
 			// When called in loading screen
