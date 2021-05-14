@@ -28,7 +28,7 @@ public abstract class MixinMinecraftServer {
 				Thread.sleep(1);
 			}
 		} else {
-			Thread.sleep(Math.max(1L, (1000 / TickrateChangerMod.tickrateServer)));
+			Thread.sleep((long) Math.max(1L, (1000F / TickrateChangerMod.tickrateServer)));
 		}
 		TickrateChangerMod.ticksPassedServer++;
 		TickrateChangerMod.resetAdvanceServer();

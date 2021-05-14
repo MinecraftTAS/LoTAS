@@ -109,7 +109,7 @@ public class EventUtils {
 		if (KeybindsUtils.increaseTickrateKeybind.isPressed()) TickrateChangerMod.index++;
 		else if (KeybindsUtils.decreaseTickrateKeybind.isPressed()) TickrateChangerMod.index--;
 		else return;
-		TickrateChangerMod.index = MCVer.clamp(TickrateChangerMod.index, 0, 10);
+		TickrateChangerMod.index = MCVer.clamp(TickrateChangerMod.index, 0, 11);
 		TickrateChangerMod.updateTickrate(TickrateChangerMod.ticks[TickrateChangerMod.index]);
 	}
 	

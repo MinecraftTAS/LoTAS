@@ -63,7 +63,7 @@ public class GuiChallengeIngameMenu extends GuiIngameMenu {
         
         this.buttonList.add(new GuiCheckBox(22, 2, height - 20 - 15, I18n.format("Avoid taking damage"), !ConfigUtils.getBoolean("tools", "takeDamage")));
         this.buttonList.add(new GuiButton(23, 37, 107, 66, 20, I18n.format("Jump ticks")));
-        this.buttonList.add(new GuiButton(24, 5, 107, 30, 20, I18n.format(TickrateChangerMod.ticks[TickrateChangerMod.ji] + "t")));
+        this.buttonList.add(new GuiButton(24, 5, 107, 30, 20, I18n.format(((int) TickrateChangerMod.ticks[TickrateChangerMod.ji]) + "t")));
 		this.buttonList.add(new GuiCheckBox(26, 2, height - 32 - 15, I18n.format("Drop towards me"), ConfigUtils.getBoolean("tools", "manipulateVelocityTowards")));
 		this.buttonList.add(new GuiCheckBox(27, 2, height - 44 - 15, I18n.format("Drop away from me"), ConfigUtils.getBoolean("tools", "manipulateVelocityAway")));
 		this.buttonList.add(new GuiCheckBox(28, 2, height - 56 - 15, I18n.format("Optimize Explosions"), ConfigUtils.getBoolean("tools", "manipulateExplosionDropChance")));
@@ -106,11 +106,11 @@ public class GuiChallengeIngameMenu extends GuiIngameMenu {
         
 		if (button.id == 15) {
 			TickrateChangerMod.index++;
-			TickrateChangerMod.index = MCVer.clamp(TickrateChangerMod.index, 1, 10);
+			TickrateChangerMod.index = MCVer.clamp(TickrateChangerMod.index, 0, 11);
 			TickrateChangerMod.updateTickrate(TickrateChangerMod.ticks[TickrateChangerMod.index]);
 		} else if (button.id == 16) {
 			TickrateChangerMod.index--;
-			TickrateChangerMod.index = MCVer.clamp(TickrateChangerMod.index, 1, 10);
+			TickrateChangerMod.index = MCVer.clamp(TickrateChangerMod.index, 0, 11);
 			TickrateChangerMod.updateTickrate(TickrateChangerMod.ticks[TickrateChangerMod.index]);
 		} else if (button.id == 17) {
 			DupeMod.saveItems();
@@ -130,12 +130,12 @@ public class GuiChallengeIngameMenu extends GuiIngameMenu {
 			ConfigUtils.setBoolean("tools", "takeDamage", !((GuiCheckBox) button).isChecked());
 			ConfigUtils.save();
 		} else if (button.id == 23) {
-			TickrateChangerMod.ticksToJump = TickrateChangerMod.ticks[TickrateChangerMod.ji];
+			TickrateChangerMod.ticksToJump = (int) TickrateChangerMod.ticks[TickrateChangerMod.ji];
 			button.enabled = false;
 			button.displayString = "Jumping...";
 		} else if (button.id == 24) {
 			TickrateChangerMod.ji++;
-			if (TickrateChangerMod.ji > 10) TickrateChangerMod.ji = 1;
+			if (TickrateChangerMod.ji > 11) TickrateChangerMod.ji = 2;
 			buttonList.clear();
 			initGui();
 		} else if (button.id == 26) {

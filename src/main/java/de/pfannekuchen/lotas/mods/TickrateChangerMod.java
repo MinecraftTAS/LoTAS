@@ -25,7 +25,7 @@ public class TickrateChangerMod {
 	/**
 	 * Current tickrate of the server
 	 */
-	public static int tickrateServer = 20;
+	public static float tickrateServer = 20F;
 	
 	public static long timeOffset = 0L;
 	public static long timeSinceZero = System.currentTimeMillis();
@@ -34,8 +34,8 @@ public class TickrateChangerMod {
 	
 	public static int ticksToJump = -1;
 	
-	public static int index = 6;
-	public static final int[] ticks = new int[] {0, 1, 2, 4, 5, 10, 20, 40, 50, 200, 600};
+	public static int index = 7;
+	public static final float[] ticks = new float[] {0, 0.5f, 1, 2, 4, 5, 10, 20, 40, 50, 200, 600};
 	
 	public static boolean ticksync = true;
 	
@@ -62,8 +62,8 @@ public class TickrateChangerMod {
 	 * Changes the tickrate of the client and server.
 	 * @param tickrateIn
 	 */
-	public static void updateTickrate(int tickrateIn) {
-		if (tickrateIn == 0) timeSinceZero = System.currentTimeMillis() - timeOffset;
+	public static void updateTickrate(float tickrateIn) {
+		if (tickrateIn == 0F) timeSinceZero = System.currentTimeMillis() - timeOffset;
 		
 		long time = System.currentTimeMillis() - timeSinceTC - timeOffset;
 		fakeTimeSinceTC += (long) (time * (tickrate / 20F));
@@ -86,7 +86,7 @@ public class TickrateChangerMod {
 	 * Changes the tickrate only on the client
 	 * @param tickrateIn tickrate to change
 	 */
-	public static void updateClientTickrate(int tickrateIn) {
+	public static void updateClientTickrate(float tickrateIn) {
 		if (tickrateIn != 0f) {
 			//#if MC>=11200
 			((AccessorTimer) ((AccessorMinecraftClient) Minecraft.getMinecraft()).timer()).tickLength(1000f / tickrateIn);
@@ -115,7 +115,7 @@ public class TickrateChangerMod {
 	 * Changes the tickrate only on the server
 	 * @param tickrate
 	 */
-	public static void updateServerTickrate(int tickrate) {
+	public static void updateServerTickrate(float tickrate) {
 		TickrateChangerMod.tickrateServer = tickrate;
 	}
 	
@@ -133,7 +133,7 @@ public class TickrateChangerMod {
 	public static void advanceClient() {
 		if(tickrate==0) {
 			advanceClient=true;
-			updateClientTickrate((int)tickrateSaved);
+			updateClientTickrate(tickrateSaved);
 		}
 	}
 	
@@ -143,7 +143,7 @@ public class TickrateChangerMod {
 	public static void advanceServer() {
 		if(tickrateServer==0) {
 			advanceServer=true;
-			updateServerTickrate((int)tickrateSaved);
+			updateServerTickrate(tickrateSaved);
 		}
 	}
 	
