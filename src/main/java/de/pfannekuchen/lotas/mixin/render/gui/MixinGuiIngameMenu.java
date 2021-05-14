@@ -45,6 +45,7 @@ public abstract class MixinGuiIngameMenu extends GuiScreen {
 	 */
 	
 	public GuiTextField savestateName;
+	public GuiTextField tickrateField;
 	
 	@ModifyArg(index = 3, method = "drawScreen", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiIngameMenu;drawCenteredString(Lnet/minecraft/client/gui/FontRenderer;Ljava/lang/String;III)V"))
 	public int cheeseIt(int in) {
@@ -122,11 +123,19 @@ public abstract class MixinGuiIngameMenu extends GuiScreen {
 				this.buttonList.get(8).displayString = "Loadstate";
 			}	
 		}
+		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+			this.buttonList.get(9).displayString = "\u00A76Custom";
+			this.buttonList.get(10).displayString = "\u00A76Tickrate";
+		} else {
+			this.buttonList.get(9).displayString = "+";
+			this.buttonList.get(10).displayString = "-";
+		}	
 		
 		drawString(MCVer.getFontRenderer(mc), "Tickrate Changer (" + TickrateChangerMod.tickrate + ")", 5, 5, 0xFFFFFF);
 		drawCenteredString(MCVer.getFontRenderer(mc), "Hold Shift to access more features", width / 2, this.height / 4 + 150, 0xFFFFFF);
 		
 		if (savestateName != null) savestateName.drawTextBox();
+		if (tickrateField != null) tickrateField.drawTextBox();
 		
 		if (SavestateMod.showSavestateDone) {
 			long timeSince = System.currentTimeMillis() - SavestateMod.timeTitle;
@@ -168,6 +177,9 @@ public abstract class MixinGuiIngameMenu extends GuiScreen {
 		if (savestateName != null) {
 			savestateName.mouseClicked(mouseX, mouseY, mouseButton);
 		}
+		if (tickrateField != null) {
+			tickrateField.mouseClicked(mouseX, mouseY, mouseButton);
+		}
 		super.mouseClicked(mouseX, mouseY, mouseButton);
 	}
 	
@@ -186,6 +198,16 @@ public abstract class MixinGuiIngameMenu extends GuiScreen {
 				}
 			}
 		}
+		if (tickrateField != null) {
+			boolean focused = tickrateField.isFocused();
+			tickrateField.textboxKeyTyped(typedChar, keyCode);
+			if (keyCode == Keyboard.KEY_RETURN && focused) {
+				if (!tickrateField.getText().isEmpty()) {
+					TickrateChangerMod.updateTickrate(Float.parseFloat(tickrateField.getText()));
+				}
+			}
+		}
+		// new GuiTextField(0, MCVer.getFontRenderer(Minecraft.getMinecraft()), 4, 15, 103, 20)
 		super.keyTyped(typedChar, keyCode);
 	}
 	
@@ -201,13 +223,26 @@ public abstract class MixinGuiIngameMenu extends GuiScreen {
 			if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) mc.displayGuiScreen(new GuiLoadstateMenu());
 			else SavestateMod.loadstate(-1);
 		} else if (button.id == 15) {
-			TickrateChangerMod.index++;
-			TickrateChangerMod.index = MCVer.clamp(TickrateChangerMod.index, 0, 11);
-			TickrateChangerMod.updateTickrate(TickrateChangerMod.ticks[TickrateChangerMod.index]);
+			if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+				tickrateField = new GuiTextField(0, MCVer.getFontRenderer(Minecraft.getMinecraft()), 4, 15, 103, 20);
+				button.enabled = false;
+				tickrateField.setFocused(true);
+			} else {
+				TickrateChangerMod.index++;
+				TickrateChangerMod.index = MCVer.clamp(TickrateChangerMod.index, 0, 11);
+				TickrateChangerMod.updateTickrate(TickrateChangerMod.ticks[TickrateChangerMod.index]);
+			}
+			// 
 		} else if (button.id == 16) {
-			TickrateChangerMod.index--;
-			TickrateChangerMod.index = MCVer.clamp(TickrateChangerMod.index, 0, 11);
-			TickrateChangerMod.updateTickrate(TickrateChangerMod.ticks[TickrateChangerMod.index]);
+			if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+				tickrateField = new GuiTextField(0, MCVer.getFontRenderer(Minecraft.getMinecraft()), 4, 15, 103, 20);
+				button.enabled = false;
+				tickrateField.setFocused(true);
+			} else {
+				TickrateChangerMod.index--;
+				TickrateChangerMod.index = MCVer.clamp(TickrateChangerMod.index, 0, 11);
+				TickrateChangerMod.updateTickrate(TickrateChangerMod.ticks[TickrateChangerMod.index]);
+			}
 		} else if (button.id == 17) {
 			DupeMod.saveItems();
 			DupeMod.saveChests();
