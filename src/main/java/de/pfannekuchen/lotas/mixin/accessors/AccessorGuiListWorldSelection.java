@@ -8,13 +8,9 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 //#if MC>=10900
 import net.minecraft.client.gui.GuiListWorldSelection;
 import net.minecraft.client.gui.GuiListWorldSelectionEntry;
-//#else
-//$$ import net.minecraft.client.gui.GuiSelectWorld;
-//#endif
-
-//#if MC>=10900
 @Mixin(GuiListWorldSelection.class)
 //#else
+//$$ import net.minecraft.client.gui.GuiSelectWorld;
 //$$ @Mixin(GuiSelectWorld.class)
 //#endif
 public interface AccessorGuiListWorldSelection {

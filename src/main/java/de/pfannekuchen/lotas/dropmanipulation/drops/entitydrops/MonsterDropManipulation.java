@@ -49,13 +49,6 @@ public class MonsterDropManipulation extends GuiDropChanceManipulation.DropManip
     	MonsterDropManipulation.y = y;
     	MonsterDropManipulation.width = width;
         MonsterDropManipulation.height = height;
-        
-        //#if MC<=11002
-        //$$ optimizeElderGuardian.enabled = false;
-        //$$ optimizeVindicator.enabled = false;
-        //$$ optimizeShulker.enabled = false;
-        //#endif
-        
         enabled = new CheckboxWidget(x, y, 150, 20, "Override Monster Drops", false);
     }
 

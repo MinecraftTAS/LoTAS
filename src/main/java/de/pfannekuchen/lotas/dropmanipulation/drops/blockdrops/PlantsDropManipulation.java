@@ -37,10 +37,6 @@ public class PlantsDropManipulation extends GuiDropChanceManipulation.DropManipu
         PlantsDropManipulation.y = y;
         PlantsDropManipulation.width = width;
         PlantsDropManipulation.height = height;
-        //#if MC<=10809
-        //$$ optimizeBeetroot.enabled = false;
-        //$$ optimizeChorus.enabled = false;
-        //#endif
         enabled = new CheckboxWidget(x, y, 150, 20, "Override Plant Drops", false);
     }
 

@@ -1,14 +1,15 @@
 package de.pfannekuchen.lotas.core;
 
+
 //#if MC>=10900
-import java.awt.image.BufferedImage;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BannerTextures;
+//#endif
 import net.minecraft.client.renderer.IImageBuffer;
 import java.io.IOException;
 import net.minecraft.client.renderer.ImageBufferDownload;
 import net.minecraft.client.renderer.ThreadDownloadImageData;
-//#endif
+import java.awt.image.BufferedImage;
+import net.minecraft.client.Minecraft;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
@@ -17,9 +18,7 @@ import java.net.URLConnection;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.apache.commons.io.FileUtils;
-
 import de.pfannekuchen.lotas.core.utils.ConfigUtils;
 import de.pfannekuchen.lotas.core.utils.EventUtils;
 import de.pfannekuchen.lotas.core.utils.KeybindsUtils;
@@ -46,9 +45,7 @@ public class LoTASModContainer {
 	
 	@EventHandler
 	public void onInit(FMLInitializationEvent e) {
-		//#if MC>=10900
 		loadShields();
-		//#endif
 		KeybindsUtils.registerKeybinds();
 	}
 	
@@ -84,12 +81,10 @@ public class LoTASModContainer {
 						map.leaderboard[j] = stream.readLine();
 					}
 					
-					//#if MC>=10900
 					ResourceLocation loc = new ResourceLocation("maps", map.name);
 					ThreadDownloadImageData dw = new ThreadDownloadImageData((File) null, "http://mgnet.work/taschallenges/" + map.name + ".png", null, new ImageBufferDownload());
 					Minecraft.getMinecraft().getTextureManager().loadTexture(loc, dw);
 					map.resourceLoc = loc.getResourcePath();
-					//#endif
 					
 					LoTASModContainer.maps.add(map);
 					
@@ -104,8 +99,9 @@ public class LoTASModContainer {
 		MinecraftForge.EVENT_BUS.register(new EventUtils());
 	}
 	
-	//#if MC>=10900
+	
 	public void loadShields() {	
+		//#if MC>=10900
 		String uuid = Minecraft.getMinecraft().getSession().getProfile().getId().toString();
 
 		try {
@@ -136,8 +132,8 @@ public class LoTASModContainer {
 			e.printStackTrace();
 		}
 		LoTASModContainer.shield = BannerTextures.SHIELD_BASE_TEXTURE;
+		//#endif
 	}
-	//#endif
 
 	public void loadSeeds() throws Exception {
 		File file = new File("seeddata.txt");
@@ -157,13 +153,11 @@ public class LoTASModContainer {
 			String name = line.split(":")[1];
 			String description = line.split(":")[2];
 			SeedEntry entry = new SeedEntry(name, description, seed, c);
-			//#if MC>=10900
 			new Thread(() -> {
 				entry.loc = new ResourceLocation("seeds", seed);
 				ThreadDownloadImageData dw = new ThreadDownloadImageData((File) null, "http://mgnet.work/seeds/" + seed + ".png", null, new ImageBufferDownload());
 				Minecraft.getMinecraft().getTextureManager().loadTexture(entry.loc, dw);
 			}).start();
-			//#endif
 			SeedListExtended.seeds.add(entry);
 			c++;
 		}

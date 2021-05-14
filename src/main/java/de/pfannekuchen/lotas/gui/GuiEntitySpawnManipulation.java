@@ -101,11 +101,7 @@ public class GuiEntitySpawnManipulation extends GuiScreen {
 		entities.put(14, "Zombievillager");
 		//#endif
 		
-		//#if MC>=11100
-		if (mc.world.getDifficulty() == EnumDifficulty.HARD) {
-		//#else
-//$$ 		if (mc.theWorld.getDifficulty() == EnumDifficulty.HARD) {
-		//#endif
+		if (MCVer.world(mc).getDifficulty() == EnumDifficulty.HARD) {
 			entities.put(15, "Skeleton with Enchanted Bow");
 			entities.put(16, "Zombie with Enchanted Sword");
 			

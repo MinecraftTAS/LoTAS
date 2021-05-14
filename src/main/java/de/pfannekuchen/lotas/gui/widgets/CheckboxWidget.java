@@ -5,10 +5,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.GlStateManager;
-//#if MC>=10900
-import net.minecraft.client.renderer.GlStateManager.DestFactor;
-import net.minecraft.client.renderer.GlStateManager.SourceFactor;
-//#endif
 import net.minecraft.util.ResourceLocation;
 
 
@@ -35,13 +31,8 @@ public class CheckboxWidget extends GuiButton {
 		FontRenderer textRenderer = MCVer.getFontRenderer(minecraftClient);
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0f);
 		GlStateManager.enableBlend();
-		//#if MC>=10900
-		GlStateManager.tryBlendFuncSeparate(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA, SourceFactor.ONE, DestFactor.ZERO);
-		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
-		//#else
-//$$ 		GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
-//$$ 		GlStateManager.blendFunc(770, 771);
-		//#endif
+		GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+		GlStateManager.blendFunc(770, 771);
 		minecraftClient.getTextureManager().bindTexture(TEXTURE);
 		drawModalRectWithCustomSizedTexture(MCVer.x(this), MCVer.y(this), 0.0F, this.checked ? 20.0F : 0.0F, 20, this.height, 32, 64);
 		this.drawString(textRenderer, this.displayString, MCVer.x(this) + 24, MCVer.y(this) + (this.height - 8) / 2, 14737632 | MCVer.ceil(1.0f * 255.0F) << 24);

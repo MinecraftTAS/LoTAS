@@ -14,13 +14,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
+
 //#if MC>=10900
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootTable;
-//#endif
-import net.minecraft.world.World;
-
-//#if MC>=10900
 @Mixin(EntityLiving.class)
 public class MixinEntityLivingPatch {
 
@@ -38,6 +35,7 @@ public class MixinEntityLivingPatch {
 
 }
 //#else
+//$$ import net.minecraft.world.World;
 //$$ @Mixin(EntityLivingBase.class)
 //$$ public abstract class MixinEntityLivingPatch extends Entity {
 //$$

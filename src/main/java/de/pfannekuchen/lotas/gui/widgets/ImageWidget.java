@@ -1,5 +1,6 @@
 package de.pfannekuchen.lotas.gui.widgets;
 
+import de.pfannekuchen.lotas.core.MCVer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
@@ -34,14 +35,11 @@ public class ImageWidget extends ButtonWidget {
 		}
 	}
     
-	@Override
+	//#if MC>=11200
 	public void render(int mouseX, int mouseY, float delta) {
-		//#if MC>=11200
 		drawButton(Minecraft.getMinecraft(), mouseX, mouseY, delta);
-		//#else
-//$$ 		drawButton(Minecraft.getMinecraft(), mouseX, mouseY);
-		//#endif
 	}
+	//#endif
 	
     @Override
     //#if MC>=11200
@@ -54,11 +52,7 @@ public class ImageWidget extends ButtonWidget {
         Minecraft.getMinecraft().getTextureManager().bindTexture(pic);
         GlStateManager.pushMatrix();
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-        //#if MC>=11200
-        Gui.drawModalRectWithCustomSizedTexture(x, y, 0.0F, 0.0F, 20, 20, 20, 20);
-        //#else
-        //$$ Gui.drawModalRectWithCustomSizedTexture(xPosition, yPosition, 0.0F, 0.0F, 20, 20, 20, 20);
-        //#endif
+        Gui.drawModalRectWithCustomSizedTexture(MCVer.x(this), MCVer.y(this), 0.0F, 0.0F, 20, 20, 20, 20);
         GlStateManager.popMatrix();
     }
 

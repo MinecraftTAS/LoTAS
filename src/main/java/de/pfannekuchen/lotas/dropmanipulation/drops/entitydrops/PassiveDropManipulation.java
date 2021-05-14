@@ -19,9 +19,6 @@ import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.entity.monster.EntityPolarBear;
 //#endif
 import net.minecraft.entity.monster.EntitySnowman;
-//#if MC>=11100
-import net.minecraft.entity.passive.AbstractHorse;
-//#endif
 import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.passive.EntityCow;
 import net.minecraft.entity.passive.EntityHorse;
@@ -59,14 +56,6 @@ public class PassiveDropManipulation extends GuiDropChanceManipulation.DropManip
     	PassiveDropManipulation.y = y;
     	PassiveDropManipulation.width = width;
         PassiveDropManipulation.height = height;
-        //#if MC<=11102
-        //$$ optimizeParrot.enabled = false;
-        //$$ optimizeHorses.enabled = false;
-        //#endif
-        
-        //#if MC<=11002
-        //$$ optimizePolarbear.enabled = false;
-        //#endif
         enabled = new CheckboxWidget(x, y, 150, 20, "Override Passive Mob Drops", false);
     }
 
@@ -97,9 +86,6 @@ public class PassiveDropManipulation extends GuiDropChanceManipulation.DropManip
         else if (entity instanceof EntityParrot && optimizeParrot.isChecked()) {
             if (!((EntityParrot) entity).isChild())
                 return ImmutableList.of(new ItemStack(Items.FEATHER, 2));
-        } else if ((entity instanceof AbstractHorse) && optimizeHorses.isChecked()) {
-            if (!((EntityHorse) entity).isChild())
-                return ImmutableList.of(new ItemStack(Items.LEATHER, 2));
         }
         //#endif
         else if (entity instanceof EntityRabbit && optimizeRabbit.isChecked()) {

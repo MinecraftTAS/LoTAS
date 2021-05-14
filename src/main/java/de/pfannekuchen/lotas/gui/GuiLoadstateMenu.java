@@ -99,17 +99,14 @@ public class GuiLoadstateMenu extends GuiScreen {
 			public void updatePosition(int slotIndex, int x, int y, float partialTicks) {
 
 			}
+			@Override
+			public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, int mouseX, int mouseY, boolean isSelected, float partialTicks) {
 			//#else
 //$$ 			@Override
 //$$ 			public void setSelected(int p_178011_1_, int p_178011_2_, int p_178011_3_) {
 //$$
 //$$ 			}
-			//#endif
-			
-			@Override
-			//#if MC>=11200
-			public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, int mouseX, int mouseY, boolean isSelected, float partialTicks) {
-			//#else
+//$$ 			@Override
 //$$ 			public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, int mouseX, int mouseY, boolean isSelected) {
 			//#endif
 				String s = name;

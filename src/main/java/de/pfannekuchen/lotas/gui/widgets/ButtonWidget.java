@@ -1,5 +1,6 @@
 package de.pfannekuchen.lotas.gui.widgets;
 
+import de.pfannekuchen.lotas.core.MCVer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 
@@ -23,18 +24,14 @@ public class ButtonWidget extends GuiButton {
 	@Override
 	public boolean mousePressed(Minecraft mc, int mouseX, int mouseY) {
 		playPressSound(mc.getSoundHandler());
-		//#if MC>=11200
-		if (this.enabled && this.visible && mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height) {
-		//#else
-//$$ 		if (this.enabled && this.visible && mouseX >= this.xPosition && mouseY >= this.yPosition && mouseX < this.xPosition + this.width && mouseY < this.yPosition + this.height) {
-		//#endif
+		if (this.enabled && this.visible && mouseX >= MCVer.x(this) && mouseY >= MCVer.y(this) && mouseX < MCVer.x(this) + this.width && mouseY < MCVer.y(this) + this.height) {
 			p.trigger(this);
 			return true;
 		} else {
 			return false;
 		}
 	}
-
+	
 	public void render(int mouseX, int mouseY, float delta) {
 		//#if MC>=11200
 		super.drawButton(Minecraft.getMinecraft(), mouseX, mouseY, delta);

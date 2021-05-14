@@ -14,6 +14,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.core.utils.ConfigUtils;
 import de.pfannekuchen.lotas.gui.GuiAcceptTracking;
 import de.pfannekuchen.lotas.gui.GuiConfiguration;
@@ -46,11 +47,7 @@ public abstract class MixinGuiMainMenu extends GuiScreen {
 		this.modButton.visible = false;
 		//#endif
 		
-		//#if MC>=11200
-		buttonList.add(new GuiButton(69, modButton.x, modButton.y, modButton.width, modButton.height, "Configuration"));
-		//#else
-//$$ 		buttonList.add(new GuiButton(69, width / 2 - (this.buttonList.get(1).width / 2), this.buttonList.get(1).yPosition + 24, this.buttonList.get(1).width, 20, "Configuration"));
-		//#endif
+		buttonList.add(new GuiButton(69, width / 2 - (this.buttonList.get(1).width / 2), MCVer.y(this.buttonList.get(1)) + 24, this.buttonList.get(1).width, 20, "Configuration"));
 		this.realmsButton.visible = false;
         
         if (!ConfigUtils.getBoolean("hidden", "acceptedDataSending")) {

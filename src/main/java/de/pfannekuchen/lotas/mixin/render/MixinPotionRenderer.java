@@ -19,7 +19,7 @@ import net.minecraft.item.ItemStack;
 @Mixin(ItemRenderer.class)
 public abstract class MixinPotionRenderer {
 	// TODO: Bring this to 1.8
-	// TODO: Does not work.
+	// TODO: Does not work in any versions
 	//#if MC>=10900
 	@Shadow
 	public Minecraft mc;

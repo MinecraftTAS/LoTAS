@@ -23,7 +23,6 @@ import de.pfannekuchen.lotas.mods.TickrateChangerMod;
 import de.pfannekuchen.lotas.taschallenges.ChallengeLoader;
 import de.pfannekuchen.lotas.taschallenges.ChallengeMap;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiIngameMenu;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.multiplayer.WorldClient;
@@ -51,13 +50,6 @@ public class MixinMinecraft {
 	private int das = 0;
 	
 	private boolean isLoadingWorld;
-	
-	@Shadow
-	//#if MC>=11100
-	public EntityPlayerSP player;
-	//#else
-//$$ 	public EntityPlayerSP thePlayer;
-	//#endif
 	
 	@Shadow
 	private boolean isGamePaused;
@@ -129,19 +121,11 @@ public class MixinMinecraft {
             strafe = strafe * f;
             up = up * f;
             forward = forward * f;
-            //#if MC>=11100
-            float f1 = MCVer.sin(player.rotationYaw * 0.017453292F);
-            float f2 = MCVer.cos(player.rotationYaw * 0.017453292F);
-            player.posX += (double)(strafe * f2 - forward * f1);
-            player.posY += (double)up;
-            player.posZ += (double)(forward * f2 + strafe * f1);
-            //#else
-            //$$ float f1 = MCVer.sin(thePlayer.rotationYaw * 0.017453292F);
-            //$$ float f2 = MCVer.cos(thePlayer.rotationYaw * 0.017453292F);
-            //$$ thePlayer.posX += (double)(strafe * f2 - forward * f1);
-            //$$ thePlayer.posY += (double)up;
-            //$$ thePlayer.posZ += (double)(forward * f2 + strafe * f1);
-            //#endif
+            float f1 = MCVer.sin(MCVer.player((Minecraft) (Object) this).rotationYaw * 0.017453292F);
+            float f2 = MCVer.cos(MCVer.player((Minecraft) (Object) this).rotationYaw * 0.017453292F);
+            MCVer.player((Minecraft) (Object) this).posX += (double)(strafe * f2 - forward * f1);
+            MCVer.player((Minecraft) (Object) this).posY += (double)up;
+            MCVer.player((Minecraft) (Object) this).posZ += (double)(forward * f2 + strafe * f1);
         }
 	}
 	
@@ -195,13 +179,8 @@ public class MixinMinecraft {
 				TickrateChangerMod.updateTickrate(KeybindsUtils.savedTickrate);
 			} else {
 				KeybindsUtils.isFreecaming = true; MCVer.player((Minecraft) (Object) this).noClip = true;
-				//#if MC>=11100
-				player.moveForward = 0f;
-				player.moveStrafing = 0f;
-				//#else
-//$$ 				thePlayer.moveForward = 0f;
-//$$ 				thePlayer.moveStrafing = 0f;
-				//#endif
+				MCVer.player((Minecraft) (Object) this).moveForward = 0f;
+				MCVer.player((Minecraft) (Object) this).moveStrafing = 0f;
 				KeybindsUtils.savedTickrate = (int)TickrateChangerMod.tickrate;
 				TickrateChangerMod.updateTickrate(0);
 			}
@@ -251,26 +230,13 @@ public class MixinMinecraft {
 	        SavestateMod.showLoadstateDone = true;
 	        SavestateMod.timeTitle = System.currentTimeMillis();
 		}
-		//#if MC>=11100
-		if (guiScreenIn == null && player != null) {
-		//#else
-//$$ 		if (guiScreenIn == null && thePlayer != null) {
-		//#endif
-			//#if MC>=11100
+		if (guiScreenIn == null && MCVer.player((Minecraft) (Object) this) != null) {
 			if (SavestateMod.applyVelocity) {
 				SavestateMod.applyVelocity = false;
-				player.motionX = SavestateMod.motionX;
-				player.motionY = SavestateMod.motionY;
-				player.motionZ = SavestateMod.motionZ;
+				MCVer.player((Minecraft) (Object) this).motionX = SavestateMod.motionX;
+				MCVer.player((Minecraft) (Object) this).motionY = SavestateMod.motionY;
+				MCVer.player((Minecraft) (Object) this).motionZ = SavestateMod.motionZ;
 			}
-			//#else
-//$$ 			if (SavestateMod.applyVelocity) {
-//$$ 				SavestateMod.applyVelocity = false;
-//$$ 				thePlayer.motionX = SavestateMod.motionX;
-//$$ 				thePlayer.motionY = SavestateMod.motionY;
-//$$ 				thePlayer.motionZ = SavestateMod.motionZ;
-//$$ 			}
-			//#endif
 		}
 
 	}

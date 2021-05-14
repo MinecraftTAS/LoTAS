@@ -5,11 +5,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;
-//#if MC<=11102
-//$$ import net.minecraft.client.gui.achievement.GuiAchievement;
-//$$ import net.minecraft.stats.Achievement;
-//$$ import org.spongepowered.asm.mixin.injection.Redirect;
-//#endif
 
 //#if MC>=11200
 @Mixin(targets = "net/minecraft/client/gui/toasts/GuiToast$ToastInstance")
@@ -22,6 +17,9 @@ public abstract class MixinTickrateChangerAchievement {
 
 }
 //#else
+//$$ import net.minecraft.client.gui.achievement.GuiAchievement;
+//$$ import net.minecraft.stats.Achievement;
+//$$ import org.spongepowered.asm.mixin.injection.Redirect;
 //$$ @Mixin(GuiAchievement.class)
 //$$ public abstract class MixinTickrateChangerAchievement {
 //$$

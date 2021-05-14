@@ -25,24 +25,20 @@ import net.minecraft.client.gui.GuiListWorldSelection;
 import net.minecraft.client.gui.GuiWorldSelection;
 @Mixin(GuiWorldSelection.class)
 public abstract class MixinGuiWorldSelection extends GuiScreen {
+	@Shadow
+	private GuiListWorldSelection selectionList;
 //#else
 //$$ import net.minecraft.world.storage.SaveFormatComparator;
 //$$ import net.minecraft.client.gui.GuiSelectWorld;
 //$$ @Mixin(GuiSelectWorld.class)
 //$$ public abstract class MixinGuiWorldSelection extends GuiScreen {
-//#endif
-	
-	//#if MC>=10900
-	@Shadow
-	private GuiListWorldSelection selectionList;
-	//#else
 //$$ 	@Shadow
 //$$ 	private GuiSelectWorld.List field_146638_t;
 //$$ 	@Shadow
 //$$ 	private int selectedIndex;
 //$$ 	@Shadow
 //$$ 	private java.util.List<SaveFormatComparator> field_146639_s;
-	//#endif
+//#endif
 	
 	@Inject(at = @At("RETURN"), method = "initGui")
 	public void injectinitGui2(CallbackInfo ci) {
@@ -104,10 +100,5 @@ public abstract class MixinGuiWorldSelection extends GuiScreen {
 				break;
 		}
 	}
-	
-	//#if MC<=10809
-//$$ 	@Shadow
-//$$ 	public abstract void func_146627_h();
-	//#endif
 	
 }

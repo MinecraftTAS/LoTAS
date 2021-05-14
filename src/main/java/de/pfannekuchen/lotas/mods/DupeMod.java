@@ -42,18 +42,8 @@ public class DupeMod {
 				if (!DupeMod.items.isEmpty()) {
 			        mc.displayGuiScreen((GuiScreen)null);
 			        mc.setIngameFocus();
-			        //#if MC>=11200
-					for (Entity entity : new ArrayList<Entity>(mc.getIntegratedServer().getWorld(mc.player.dimension).loadedEntityList)) {
-						if (entity instanceof EntityItem) mc.getIntegratedServer().getWorld(mc.player.dimension).removeEntity(entity);
-					//#else
-						//#if MC>=11100
-						//$$ for (Entity entity : new ArrayList<Entity>(mc.getIntegratedServer().worldServerForDimension(mc.player.dimension).loadedEntityList)) {
-						//$$ 	if (entity instanceof EntityItem) mc.getIntegratedServer().worldServerForDimension(mc.player.dimension).removeEntity(entity);
-						//#else
-//$$ 						for (Entity entity : new ArrayList<Entity>(mc.getIntegratedServer().worldServerForDimension(mc.thePlayer.dimension).loadedEntityList)) {
-//$$ 							if (entity instanceof EntityItem) mc.getIntegratedServer().worldServerForDimension(mc.thePlayer.dimension).removeEntity(entity);
-						//#endif
-					//#endif
+					for (Entity entity : new ArrayList<Entity>(MCVer.world(mc.getIntegratedServer(), MCVer.player(mc).dimension).loadedEntityList)) {
+						if (entity instanceof EntityItem) MCVer.world(mc.getIntegratedServer(), MCVer.player(mc).dimension).removeEntity(entity);
 					}
 					for (EntityItem item : DupeMod.items) {
 						//#if MC>=11100

@@ -18,11 +18,7 @@ public class GuiConfiguration extends GuiScreen {
 		"B:ui:hideTickrateMessages:INSERT",
 		"B:tools:showTickIndicator:INSERT",
 		"B:ui:hideRTATimer:INSERT",
-		
-		//#if MC>=10900
 		"B:tools:removePearlDelay:INSERT",
-		//#endif
-		
 		"B:tools:noDamageUnbreaking:INSERT"
 	};
 	

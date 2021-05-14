@@ -1,6 +1,7 @@
 package de.pfannekuchen.lotas.gui;
 
 import net.minecraft.client.gui.GuiScreen;
+
 //#if MC>=10900
 import java.io.IOException;
 import java.util.HashMap;
@@ -20,9 +21,6 @@ import net.minecraft.entity.boss.dragon.phase.PhaseList;
 import net.minecraft.entity.boss.dragon.phase.PhaseSittingBase;
 import net.minecraft.entity.boss.dragon.phase.PhaseStrafePlayer;
 import net.minecraft.util.ResourceLocation;
-//#endif
-
-//#if MC>=10900
 @SuppressWarnings("serial")
 public class GuiDragonManipulation extends GuiScreen {
 

@@ -123,9 +123,7 @@ public class GuiChallengeIngameMenu extends GuiIngameMenu {
 		} else if (button.id == 19) {
 			Minecraft.getMinecraft().displayGuiScreen(new GuiDropChanceManipulation((GuiIngameMenu) (Object) this));
 		} else if (button.id == 20) {
-			//#if MC>=10900
 			Minecraft.getMinecraft().displayGuiScreen(new GuiDragonManipulation(this));
-			//#endif
 		} else if (button.id == 21) {
 			Minecraft.getMinecraft().displayGuiScreen(new GuiEntitySpawnManipulation());
 		} else if (button.id == 22) {
