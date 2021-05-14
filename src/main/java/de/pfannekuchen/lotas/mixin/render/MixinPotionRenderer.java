@@ -19,7 +19,6 @@ import net.minecraft.item.ItemStack;
 @Mixin(ItemRenderer.class)
 public abstract class MixinPotionRenderer {
 	// TODO: Bring this to 1.8
-	// TODO: Does not work in any versions
 	//#if MC>=10900
 	@Shadow
 	public Minecraft mc;
@@ -27,22 +26,22 @@ public abstract class MixinPotionRenderer {
 	public abstract void rotateArm(float partialTicks);
 	@Shadow
 	protected abstract void renderItemSide(EntityLivingBase entitylivingbaseIn, ItemStack heldStack, ItemCameraTransforms.TransformType transform, boolean leftHanded);
-
+	
 	@Redirect(method = "Lnet/minecraft/client/renderer/ItemRenderer;renderItemInFirstPerson(F)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/ItemRenderer;rotateArm(F)V"))
-	private void cancelRotateArm(ItemRenderer renderer, float f) {
-
+	private void cancelRotateArm(ItemRenderer renderer, float pff) {
+		
 	}
-
+	
 	@Inject(method = "Lnet/minecraft/client/renderer/ItemRenderer;renderItemInFirstPerson(Lnet/minecraft/client/entity/AbstractClientPlayer;FFLnet/minecraft/util/EnumHand;FLnet/minecraft/item/ItemStack;F)V", at = @At(value = "INVOKE", shift = At.Shift.AFTER, target = "Lnet/minecraft/client/renderer/GlStateManager;popMatrix()V"))
 	public void drawPotionAfter(CallbackInfo ci) {
         GlStateManager.pushMatrix();
         GlStateManager.disableLighting();
         ItemStack stack2 = PotionRenderingUtils.renderPotion();
-        this.renderItemSide(MCVer.player(mc), stack2, ItemCameraTransforms.TransformType.FIRST_PERSON_RIGHT_HAND, false);
+        this.renderItemSide(mc.player, stack2, ItemCameraTransforms.TransformType.FIRST_PERSON_RIGHT_HAND, false);
         GlStateManager.enableLighting();
         GlStateManager.popMatrix();
 	}
-
+	
 
 	@Inject(method = "Lnet/minecraft/client/renderer/ItemRenderer;renderItemInFirstPerson(Lnet/minecraft/client/entity/AbstractClientPlayer;FFLnet/minecraft/util/EnumHand;FLnet/minecraft/item/ItemStack;F)V", at = @At(value = "INVOKE", shift = At.Shift.AFTER, target = "Lnet/minecraft/client/renderer/GlStateManager;pushMatrix()V"))
 	public void rotateArmLater(CallbackInfo ci) {

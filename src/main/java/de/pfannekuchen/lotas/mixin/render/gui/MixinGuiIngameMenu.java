@@ -57,7 +57,6 @@ public abstract class MixinGuiIngameMenu extends GuiScreen {
 			@Override
 			public void playPressSound(SoundHandler soundHandlerIn) {
 				// Don't play the sound when returning to game
-				System.out.println("sub");
 			}
 		});
 		for (GuiButton guiButton : buttonList) {

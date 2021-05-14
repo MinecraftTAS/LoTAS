@@ -4,6 +4,7 @@ import de.pfannekuchen.lotas.core.MCVer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemPotion;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -32,10 +33,11 @@ public class PotionRenderingUtils {
         lerpX = lerp(f22, lerpX, .8f);
         lerpY = lerp(f221, lerpY, .8f);
         
-        GlStateManager.translate(lerpY * .025, lerpX * -.025, 0);
+        GlStateManager.translate(lerpY * .012, lerpX * -.012, 0);
 		
-		ItemStack stack = new ItemStack(MCVer.getItem("POTIONITEM"));
-		if (stack.getItem() instanceof ItemPotion) {
+		ItemStack stack = new ItemStack(MCVer.getItem("POTION"));
+        //ItemStack stack = new ItemStack(Items.POTIONITEM);
+        if (stack.getItem() instanceof ItemPotion) {
 			NBTTagCompound cp = new NBTTagCompound();
 			cp.setInteger("CustomPotionColor", 0x546980);
 			stack.setTagCompound(cp);
