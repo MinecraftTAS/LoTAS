@@ -106,7 +106,7 @@ public class MixinMinecraft {
 			TickrateChangerMod.ticksToJump--;
 			if (TickrateChangerMod.ticksToJump == 0) {
 				TickrateChangerMod.ticksToJump = -1;
-				Minecraft.getMinecraft().displayGuiScreen(new GuiIngameMenu());
+				if (currentScreen == null && MCVer.player((Minecraft) (Object) this) != null) Minecraft.getMinecraft().displayGuiScreen(new GuiIngameMenu());
 			}
 		}
 	}
