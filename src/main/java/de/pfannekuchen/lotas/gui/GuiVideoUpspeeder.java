@@ -85,6 +85,12 @@ public class GuiVideoUpspeeder extends GuiScreen {
 				ffprobe = new FFprobe(System.getenv("localappdata") + "\\ffmpeg\\bin\\ffprobe.exe");
 			} catch (IOException e) {
 				e.printStackTrace();
+				try {
+					FileUtils.deleteDirectory(new File(System.getenv("localappdata") + "\\ffmpeg"));
+					Minecraft.getMinecraft().displayGuiScreen(new GuiVideoUpspeeder());
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
 			}
 		}
 		codecFFMPEG = GL11.glGetString(GL11.GL_VENDOR).toUpperCase().contains("NVIDIA") ? "nvenc_h264" : "h264";
