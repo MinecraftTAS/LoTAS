@@ -29,7 +29,7 @@ public abstract class MixinPotionRenderer {
 	protected abstract void renderItemSide(EntityLivingBase entitylivingbaseIn, ItemStack heldStack, ItemCameraTransforms.TransformType transform, boolean leftHanded);
 
 	@Redirect(method = "Lnet/minecraft/client/renderer/ItemRenderer;renderItemInFirstPerson(F)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/ItemRenderer;rotateArm(F)V"))
-	private void cancelRotateArm(ItemRenderer renderer) {
+	private void cancelRotateArm(ItemRenderer renderer, float f) {
 
 	}
 

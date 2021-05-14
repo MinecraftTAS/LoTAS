@@ -27,6 +27,7 @@ import de.pfannekuchen.lotas.mods.DupeMod;
 import de.pfannekuchen.lotas.mods.SavestateMod;
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiIngameMenu;
 import net.minecraft.client.gui.GuiScreen;
@@ -52,6 +53,13 @@ public abstract class MixinGuiIngameMenu extends GuiScreen {
 	
 	@Inject(method = "initGui", at = @At("RETURN"))
 	public void injectinitGui(CallbackInfo ci) {
+		this.buttonList.set(1, new GuiButton(4, this.width / 2 - 100, this.height / 4 + 24 + -16, I18n.format("menu.returnToGame")) {
+			@Override
+			public void playPressSound(SoundHandler soundHandlerIn) {
+				// Don't play the sound when returning to game
+				System.out.println("sub");
+			}
+		});
 		for (GuiButton guiButton : buttonList) {
 			//#if MC>=11200
 			guiButton.y -= 24;
@@ -59,7 +67,6 @@ public abstract class MixinGuiIngameMenu extends GuiScreen {
 //$$ 			guiButton.yPosition -= 24;
 			//#endif
 		}
-		
 		double pX = MCVer.player(Minecraft.getMinecraft()).posX;
 		double pY = MCVer.player(Minecraft.getMinecraft()).posY;
 		double pZ = MCVer.player(Minecraft.getMinecraft()).posZ;
