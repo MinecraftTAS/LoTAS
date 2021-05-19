@@ -19,6 +19,7 @@
 		"patches.MixinPearlPatch",
 		"patches.MixinServerPatch",
 		"patches.MixinEntityPlayerMPPatch",
+		"patches.MixinWorldProviderPatch",
 		"MixinMinecraftServer",
     ],
     "client": [
@@ -31,6 +32,7 @@
 		"render.gui.MixinGuiMainMenu",
 		"render.gui.MixinGuiWorldSelection",
 		"render.gui.MixinGuiIngameMenu",
+		"render.gui.MixinGuiCreateWorld",
 		"render.binds.MixinTickrateChangerSubtitleOverlay",
 		"render.binds.MixinTickrateChangerEnchantmentGlimm",
 		"render.binds.MixinTickrateChangerAudioPitch",

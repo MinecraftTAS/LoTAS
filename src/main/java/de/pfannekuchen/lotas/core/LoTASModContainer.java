@@ -41,6 +41,9 @@ public class LoTASModContainer {
 	public static final List<ChallengeMap> maps = new ArrayList<>();
 	public static ResourceLocation shield;
 	
+	public static int offsetX = 0;
+	public static int offsetZ = 0;
+	
 	public static String version = ForgeVersion.mcVersion;
 	
 	@EventHandler
