@@ -7,10 +7,13 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import com.ibm.icu.impl.ICUService.Key;
 
 import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.core.utils.ConfigUtils;
@@ -27,6 +30,7 @@ import net.minecraft.client.gui.GuiIngameMenu;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.settings.GameSettings;
+import net.minecraft.client.settings.KeyBinding;
 
 @Mixin(Minecraft.class)
 public class MixinMinecraft {
@@ -53,6 +57,8 @@ public class MixinMinecraft {
 	
 	@Shadow
 	private boolean isGamePaused;
+	@Unique
+	public boolean wasOnGround = false;
 	
 	@Inject(method = "Lnet/minecraft/client/Minecraft;loadWorld(Lnet/minecraft/client/multiplayer/WorldClient;Ljava/lang/String;)V", at = @At("HEAD"))
 	public void injectloadWorld(WorldClient worldClientIn, String loadingMessage, CallbackInfo ci) {
@@ -102,12 +108,24 @@ public class MixinMinecraft {
 			else if (EventUtils.Timer.allowed.contains(currentScreen.getClass().getSimpleName().toLowerCase())) EventUtils.Timer.ticks++;
 		}
 		
+				
 		if (TickrateChangerMod.ticksToJump != -1 && Minecraft.getMinecraft().currentScreen instanceof GuiIngameMenu == false) {
 			TickrateChangerMod.ticksToJump--;
 			if (TickrateChangerMod.ticksToJump == 0) {
 				TickrateChangerMod.ticksToJump = -1;
 				if (currentScreen == null && MCVer.player((Minecraft) (Object) this) != null) Minecraft.getMinecraft().displayGuiScreen(new GuiIngameMenu());
 			}
+		}
+		
+		if (MCVer.player((Minecraft) (Object) this) != null) {
+			if (MCVer.player((Minecraft) (Object) this).onGround && !wasOnGround && KeybindsUtils.holdStrafeKeybind.isKeyDown()) {
+				 MCVer.player((Minecraft) (Object) this).rotationYaw += 45;
+				 KeyBinding.setKeyBindState(32, false);
+			} else if (!MCVer.player((Minecraft) (Object) this).onGround && wasOnGround && KeybindsUtils.holdStrafeKeybind.isKeyDown()) {
+				MCVer.player((Minecraft) (Object) this).rotationYaw -= 45;
+				KeyBinding.setKeyBindState(32, true);
+			}
+			wasOnGround = MCVer.player((Minecraft) (Object) this).onGround;
 		}
 	}
 	

@@ -18,8 +18,7 @@ public class KeybindsUtils {
 	public static final KeyBinding loadStateKeybind  = new KeyBinding("Loadstate", Keyboard.KEY_K, "Stating");
 	public static final KeyBinding loadDupeKeybind  = new KeyBinding("Load Items/Chests", Keyboard.KEY_O, "Duping");
 	public static final KeyBinding saveDupeKeybind  = new KeyBinding("Save Items/Chests", Keyboard.KEY_P, "Duping");
-	public static final KeyBinding strafeRightKeybind = new KeyBinding("Strafe +45", Keyboard.KEY_H, "Moving");
-	public static final KeyBinding strafeLeftKeybind = new KeyBinding("Strafe -45", Keyboard.KEY_G, "Moving");
+	public static final KeyBinding holdStrafeKeybind = new KeyBinding("Auto-Strafe", Keyboard.KEY_H, "Moving");
 	public static final KeyBinding toggleFreecamKeybind = new KeyBinding("Freecam", Keyboard.KEY_I, "Moving");
 	public static final KeyBinding increaseTickrateKeybind = new KeyBinding("Faster Tickrate", Keyboard.KEY_PERIOD, "Tickrate Changer");
 	public static final KeyBinding decreaseTickrateKeybind = new KeyBinding("Slower Tickrate", Keyboard.KEY_COMMA, "Tickrate Changer");
@@ -44,16 +43,11 @@ public class KeybindsUtils {
 		} else if (saveDupeKeybind.isPressed()) {
 			DupeMod.saveChests();
 			DupeMod.saveItems();
-		} else if (strafeRightKeybind.isPressed()) {
-			MCVer.player(Minecraft.getMinecraft()).rotationYaw += 45;
-		} else if (strafeLeftKeybind.isPressed()) {
-			MCVer.player(Minecraft.getMinecraft()).rotationYaw -= 45;
 		}
-		
 	}
 	
 	public static void registerKeybinds() {
-		Minecraft.getMinecraft().gameSettings.keyBindings = ArrayUtils.addAll(Minecraft.getMinecraft().gameSettings.keyBindings, saveStateKeybind, loadStateKeybind, loadDupeKeybind, saveDupeKeybind, strafeRightKeybind, strafeLeftKeybind, toggleFreecamKeybind, increaseTickrateKeybind, decreaseTickrateKeybind, advanceTicksKeybind, toggleAdvanceKeybind, toggleTimerKeybind);
+		Minecraft.getMinecraft().gameSettings.keyBindings = ArrayUtils.addAll(Minecraft.getMinecraft().gameSettings.keyBindings, saveStateKeybind, loadStateKeybind, loadDupeKeybind, saveDupeKeybind, holdStrafeKeybind, toggleFreecamKeybind, increaseTickrateKeybind, decreaseTickrateKeybind, advanceTicksKeybind, toggleAdvanceKeybind, toggleTimerKeybind);
 	}
 	
 }
