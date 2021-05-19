@@ -1,5 +1,6 @@
 package de.pfannekuchen.lotas.gui;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,10 +16,15 @@ import de.pfannekuchen.lotas.dropmanipulation.drops.entitydrops.MonsterDropManip
 import de.pfannekuchen.lotas.dropmanipulation.drops.entitydrops.NetherMobDropManipulation;
 import de.pfannekuchen.lotas.dropmanipulation.drops.entitydrops.PassiveDropManipulation;
 import de.pfannekuchen.lotas.dropmanipulation.drops.entitydrops.ZombieDropManipulation;
+import de.pfannekuchen.lotas.gui.widgets.ButtonWidget;
 import de.pfannekuchen.lotas.gui.widgets.CheckboxWidget;
+import de.pfannekuchen.lotas.taschallenges.ChallengeLoader;
+import de.pfannekuchen.lotas.taschallenges.ChallengeMap;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiIngameMenu;
+import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiScreen;
 //#if MC>=11200
 import net.minecraft.client.renderer.BufferBuilder;
@@ -69,11 +75,16 @@ public class GuiDropChanceManipulation extends GuiScreen {
 			DropManipulation.x = (int) (width / 3.5f + 24);
 			man.update();
 		}
+		this.buttonList.add(new ButtonWidget((int) (width / 3.5f + 24), this.height - 40, 200, 20, "Done", b -> {
+			Minecraft.getMinecraft().displayGuiScreen(ChallengeMap.currentMap == null ? new GuiIngameMenu() : new GuiChallengeIngameMenu());
+		}));
 		super.initGui();
 	}
-
+	
 	@Override
 	public void mouseClicked(int mouseX, int mouseY, int button) {
+		((ButtonWidget) this.buttonList.get(0)).mousePressed(Minecraft.getMinecraft(), mouseX, mouseY);
+		
 		manipulations.get(selected).mouseAction(mouseX, mouseY, button);
 		if (mouseX > width / 3.5f || mouseX < 25) return;
 		mouseY-=30;

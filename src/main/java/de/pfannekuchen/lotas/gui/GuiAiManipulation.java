@@ -4,8 +4,11 @@ import java.io.IOException;
 import java.util.List;
 
 import de.pfannekuchen.lotas.core.MCVer;
+import de.pfannekuchen.lotas.gui.widgets.ButtonWidget;
+import de.pfannekuchen.lotas.taschallenges.ChallengeMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiIngameMenu;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.entity.EntityLiving;
@@ -45,6 +48,9 @@ public class GuiAiManipulation extends GuiScreen {
 		this.buttonList.add(new GuiButton(4, width / 2 + 40, height - 94, 60, 20, "Z--"));
 		this.buttonList.add(new GuiButton(10, width / 2 - 100, height - 116, 200, 20, "Move to me"));
 		this.buttonList.add(new GuiButton(11, width / 2 - 100, height - 138, 200, 20, "Move to entity"));
+		this.buttonList.add(new ButtonWidget(2, height - 22, 60, 20, "Done", b -> {
+			Minecraft.getMinecraft().displayGuiScreen(ChallengeMap.currentMap == null ? new GuiIngameMenu() : new GuiChallengeIngameMenu());
+		}));
 		entities = MCVer.world(mc.getIntegratedServer(), MCVer.player(Minecraft.getMinecraft()).dimension).getEntitiesWithinAABB(EntityLiving.class, MCVer.expandBy32(MCVer.player(Minecraft.getMinecraft()).getEntityBoundingBox()));
 		selectedIndex = 0;
 		

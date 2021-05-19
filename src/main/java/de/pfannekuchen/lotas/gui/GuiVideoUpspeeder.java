@@ -27,6 +27,7 @@ import net.bramp.ffmpeg.progress.Progress;
 import net.bramp.ffmpeg.progress.ProgressListener;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.resources.I18n;
@@ -139,7 +140,8 @@ public class GuiVideoUpspeeder extends GuiScreen {
 		this.buttonList.add(new GuiButton(2, (width / 2) - 70, (height / 8) * 2 + 20, 20, 20, "-"));
 		this.buttonList.add(new GuiButton(3, (width / 2) + 50, (height / 8) * 2 + 20, 20, 20, "+"));
 		this.buttonList.add(new GuiButton(4, (width / 2) - 98, this.height - (this.height / 10) - 15 - 20 - 5, 204, 20, "Speed up video"));
-		this.buttonList.add(new GuiCheckBox(5, 2, this.height  - (this.height / 10), "High Quality", false));
+		this.buttonList.add(new GuiCheckBox(5, 2, this.height - 22 - 13,"High Quality", false));
+		this.buttonList.add(new GuiButton(6, 2, this.height - 21, 68, 20, "Done"));
 		buttonList.get(3).enabled = f == null ? false : f.exists();
 		tickrate = new GuiTextField(4, MCVer.getFontRenderer(mc), (width / 2) - 45, (height / 8) * 2 + 23, 90, 14);
 		tickrate.setText("20");
@@ -254,6 +256,8 @@ public class GuiVideoUpspeeder extends GuiScreen {
 				}
 			}).start();
 			
+		} else if (button.id == 6) {
+			mc.displayGuiScreen(new GuiMainMenu());
 		}
 		super.actionPerformed(button);
 	}

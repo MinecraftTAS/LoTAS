@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
+import org.lwjgl.input.Keyboard;
+
 import com.google.common.base.Predicates;
 
 import de.pfannekuchen.lotas.core.MCVer;
@@ -20,6 +22,7 @@ import net.minecraft.client.gui.GuiIngameMenu;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiOptions;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.boss.EntityDragon;
@@ -48,23 +51,25 @@ public class GuiChallengeIngameMenu extends GuiIngameMenu {
         this.buttonList.add(new GuiButton(31, this.width / 2 - 100, this.height / 4 + 72 + -16, I18n.format("Leaderboard")));
         this.buttonList.add(new GuiButton(32, this.width / 2 - 100, this.height / 4 + 96 + -16, I18n.format("Restart")));
         
-        this.buttonList.add(new GuiButton(15, 5, 15, 48, 20, I18n.format("+")));
-        this.buttonList.add(new GuiButton(16, 55, 15, 48, 20, I18n.format("-")));
         this.buttonList.add(new GuiButton(17, 5, 55, 98, 20, I18n.format("Save Items")));
         this.buttonList.add(new GuiButton(18, 5, 75, 98, 20, I18n.format("Load Items")));
+
         
         this.buttonList.add(new GuiButton(19, (width / 4) * 0 + 1, height - 20, width / 4 - 2, 20, I18n.format("Manipulate Drops")));
-    	try {
+        try {
     		this.buttonList.add(new GuiButton(20, (width / 4) * 1 + 2, height - 20, width / 4 - 2, 20, I18n.format("Manipulate Dragon")));
     		this.buttonList.get(this.buttonList.size() - 1).enabled = MCVer.world(Minecraft.getMinecraft().getIntegratedServer(), MCVer.player(Minecraft.getMinecraft()).dimension).getEntities(EntityDragon.class, Predicates.alwaysTrue()).size() != 0;
     	} catch (Exception e) {
     		System.out.println("No Enderdragon found.");
     	}
+        this.buttonList.add(new GuiButton(15, 5, 15, 48, 20, I18n.format("+")));
+        this.buttonList.add(new GuiButton(16, 55, 15, 48, 20, I18n.format("-")));
+        
         this.buttonList.add(new GuiButton(21, (width / 4) * 2 + 3, height - 20, width / 4 - 2, 20, I18n.format("Manipulate Spawning")));
         
         this.buttonList.add(new GuiCheckBox(22, 2, height - 20 - 15, I18n.format("Avoid taking damage"), !ConfigUtils.getBoolean("tools", "takeDamage")));
-        this.buttonList.add(new GuiButton(23, 37, 107, 66, 20, I18n.format("Jump ticks")));
-        this.buttonList.add(new GuiButton(24, 5, 107, 30, 20, I18n.format(((int) TickrateChangerMod.ticks[TickrateChangerMod.ji]) + "t")));
+        this.buttonList.add(new GuiButton(23, 37, 115, 66, 20, I18n.format("Jump ticks")));
+        this.buttonList.add(new GuiButton(24, 5, 115, 30, 20, I18n.format(((int) TickrateChangerMod.ticks[TickrateChangerMod.ji]) + "t")));
 		this.buttonList.add(new GuiCheckBox(26, 2, height - 32 - 15, I18n.format("Drop towards me"), ConfigUtils.getBoolean("tools", "manipulateVelocityTowards")));
 		this.buttonList.add(new GuiCheckBox(27, 2, height - 44 - 15, I18n.format("Drop away from me"), ConfigUtils.getBoolean("tools", "manipulateVelocityAway")));
 		this.buttonList.add(new GuiCheckBox(28, 2, height - 56 - 15, I18n.format("Optimize Explosions"), ConfigUtils.getBoolean("tools", "manipulateExplosionDropChance")));
@@ -105,15 +110,11 @@ public class GuiChallengeIngameMenu extends GuiIngameMenu {
                 break;
         }
         
-        
-		if (button.id == 15) {
-			TickrateChangerMod.index++;
-			TickrateChangerMod.index = MCVer.clamp(TickrateChangerMod.index, 0, 11);
-			TickrateChangerMod.updateTickrate(TickrateChangerMod.ticks[TickrateChangerMod.index]);
+        // For Tickrate + and - call super, so we can access the tickrateField which is only in the mixin
+        if (button.id == 15) {
+			super.actionPerformed(button);
 		} else if (button.id == 16) {
-			TickrateChangerMod.index--;
-			TickrateChangerMod.index = MCVer.clamp(TickrateChangerMod.index, 0, 11);
-			TickrateChangerMod.updateTickrate(TickrateChangerMod.ticks[TickrateChangerMod.index]);
+			super.actionPerformed(button);
 		} else if (button.id == 17) {
 			DupeMod.saveItems();
 			DupeMod.saveChests();

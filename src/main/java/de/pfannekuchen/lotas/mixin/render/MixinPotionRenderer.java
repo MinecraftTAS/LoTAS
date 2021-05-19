@@ -37,7 +37,7 @@ public abstract class MixinPotionRenderer {
         GlStateManager.pushMatrix();
         GlStateManager.disableLighting();
         ItemStack stack2 = PotionRenderingUtils.renderPotion();
-        this.renderItemSide(mc.player, stack2, ItemCameraTransforms.TransformType.FIRST_PERSON_RIGHT_HAND, false);
+        this.renderItemSide(MCVer.player(mc), stack2, ItemCameraTransforms.TransformType.FIRST_PERSON_RIGHT_HAND, false);
         GlStateManager.enableLighting();
         GlStateManager.popMatrix();
 	}
