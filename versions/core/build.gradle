@@ -28,16 +28,8 @@ minecraft {
     version = '1.12.2-14.23.5.2847'
     mappings = "snapshot_20171003"
     //#else
-    //#if MC>=11200
-    //$$ version = '1.12-14.21.1.2443'
-    //$$ mappings = "snapshot_20171003"
-    //#else
     //#if MC>=11102
     //$$ version = '1.11.2-13.20.1.2588'
-    //$$ mappings = "snapshot_20161220"
-    //#else
-    //#if MC>=11100
-    //$$ version = '1.11-13.19.1.2199'
     //$$ mappings = "snapshot_20161220"
     //#else
     //#if MC>=11002
@@ -48,15 +40,8 @@ minecraft {
     //$$ version = '1.9.4-12.17.0.2317-1.9.4'
     //$$ mappings = "snapshot_20160518"
     //#else
-    //#if MC>=10809
     //$$ version = '1.8.9-11.15.1.1722'
     //$$ mappings = "stable_22"
-    //#else
-    //$$ version = '1.8-11.14.4.1563'
-    //$$ mappings = "snapshot_nodoc_20141130"
-    //#endif
-    //#endif
-    //#endif
     //#endif
     //#endif
     //#endif
