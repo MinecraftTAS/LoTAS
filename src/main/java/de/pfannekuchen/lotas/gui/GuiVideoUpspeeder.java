@@ -58,8 +58,21 @@ public class GuiVideoUpspeeder extends GuiScreen {
 	
 	String[] LOADING_STRINGS = new String[] {"oooooo", "Oooooo", "oOoooo", "ooOooo", "oooOoo", "ooooOo", "oooooO"};
 	
+	public static boolean isWindows() {
+        return System.getProperty("os.name").toLowerCase().contains("win");
+    }
+
+    public static boolean isMac() {
+    	return System.getProperty("os.name").toLowerCase().contains("mac");
+    }
+
+    public static boolean isUnix() {
+    	String OS = System.getProperty("os.name").toLowerCase();
+        return (OS.contains("nix") || OS.contains("nux") || OS.contains("aix"));
+    }
+	
 	public GuiVideoUpspeeder() {
-		installed = new File(System.getenv("localappdata") + "\\ffmpeg\\bin\\ffmpeg.exe").exists();
+		installed = new File(Minecraft.getMinecraft().mcDataDir + "\\ffmpeg\\bin\\ffmpeg.exe").exists();
 		if (!installed) {
 			new Thread(new Runnable() {
 				
@@ -68,11 +81,19 @@ public class GuiVideoUpspeeder extends GuiScreen {
 					//
 					try {
 						URLConnection conn = new URL("http://mgnet.work/ffmpeg.zip").openConnection();
-						FileUtils.copyInputStreamToFile(conn.getInputStream(), new File(System.getenv("localappdata"), "ffmpeg.zip"));
-						new File(System.getenv("localappdata"), "ffmpeg").mkdir();
-						unzip(new File(System.getenv("localappdata"), "ffmpeg.zip").getAbsolutePath(), new File(System.getenv("localappdata"), "ffmpeg").getAbsolutePath());
-						ffmpeg = new FFmpeg(System.getenv("localappdata") + "\\ffmpeg\\bin\\ffmpeg.exe");
-						ffprobe = new FFprobe(System.getenv("localappdata") + "\\ffmpeg\\bin\\ffprobe.exe");
+						FileUtils.copyInputStreamToFile(conn.getInputStream(), new File(Minecraft.getMinecraft().mcDataDir, "ffmpeg.zip"));
+						new File(Minecraft.getMinecraft().mcDataDir, "ffmpeg").mkdir();
+						unzip(new File(Minecraft.getMinecraft().mcDataDir, "ffmpeg.zip").getAbsolutePath(), new File(Minecraft.getMinecraft().mcDataDir, "ffmpeg").getAbsolutePath());
+						if (isWindows()) {
+							ffmpeg = new FFmpeg(Minecraft.getMinecraft().mcDataDir + "\\ffmpeg\\bin\\ffmpeg.exe");
+							ffprobe = new FFprobe(Minecraft.getMinecraft().mcDataDir + "\\ffmpeg\\bin\\ffprobe.exe");
+						} else if (isMac()) {
+							ffmpeg = new FFmpeg(Minecraft.getMinecraft().mcDataDir + "\\ffmpeg\\bin\\macos\\ffmpeg");
+							ffprobe = new FFprobe(Minecraft.getMinecraft().mcDataDir + "\\ffmpeg\\bin\\macos\\ffprobe");
+						} else if (isUnix()) {
+							ffmpeg = new FFmpeg(Minecraft.getMinecraft().mcDataDir + "\\ffmpeg\\bin\\linux\\ffmpeg");
+							ffprobe = new FFprobe(Minecraft.getMinecraft().mcDataDir + "\\ffmpeg\\bin\\linux\\ffprobe");
+						}
 						onStatsUpdated();
 					} catch (IOException e) {
 						e.printStackTrace();
@@ -82,12 +103,20 @@ public class GuiVideoUpspeeder extends GuiScreen {
 			}).start();
 		} else {
 			try {
-				ffmpeg = new FFmpeg(System.getenv("localappdata") + "\\ffmpeg\\bin\\ffmpeg.exe");
-				ffprobe = new FFprobe(System.getenv("localappdata") + "\\ffmpeg\\bin\\ffprobe.exe");
+				if (isWindows()) {
+					ffmpeg = new FFmpeg(Minecraft.getMinecraft().mcDataDir + "\\ffmpeg\\bin\\ffmpeg.exe");
+					ffprobe = new FFprobe(Minecraft.getMinecraft().mcDataDir + "\\ffmpeg\\bin\\ffprobe.exe");
+				} else if (isMac()) {
+					ffmpeg = new FFmpeg(Minecraft.getMinecraft().mcDataDir + "\\ffmpeg\\bin\\macos\\ffmpeg");
+					ffprobe = new FFprobe(Minecraft.getMinecraft().mcDataDir + "\\ffmpeg\\bin\\macos\\ffprobe");
+				} else if (isUnix()) {
+					ffmpeg = new FFmpeg(Minecraft.getMinecraft().mcDataDir + "\\ffmpeg\\bin\\linux\\ffmpeg");
+					ffprobe = new FFprobe(Minecraft.getMinecraft().mcDataDir + "\\ffmpeg\\bin\\linux\\ffprobe");
+				}
 			} catch (IOException e) {
 				e.printStackTrace();
 				try {
-					FileUtils.deleteDirectory(new File(System.getenv("localappdata") + "\\ffmpeg"));
+					FileUtils.deleteDirectory(new File(Minecraft.getMinecraft().mcDataDir + "\\ffmpeg"));
 					Minecraft.getMinecraft().displayGuiScreen(new GuiVideoUpspeeder());
 				} catch (IOException e1) {
 					e1.printStackTrace();
