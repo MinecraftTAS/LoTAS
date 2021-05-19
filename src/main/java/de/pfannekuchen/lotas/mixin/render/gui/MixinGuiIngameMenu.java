@@ -26,7 +26,6 @@ import de.pfannekuchen.lotas.gui.GuiDragonManipulation;
 import de.pfannekuchen.lotas.gui.GuiDropChanceManipulation;
 import de.pfannekuchen.lotas.gui.GuiEntitySpawnManipulation;
 import de.pfannekuchen.lotas.gui.GuiLoadstateMenu;
-import de.pfannekuchen.lotas.mixin.accessors.AccessorEntityItem;
 import de.pfannekuchen.lotas.mods.DupeMod;
 import de.pfannekuchen.lotas.mods.SavestateMod;
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;
@@ -119,14 +118,18 @@ public abstract class MixinGuiIngameMenu extends GuiScreen {
 	@Overwrite
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		this.drawDefaultBackground();
-		this.drawCenteredString(this.fontRenderer, I18n.format("menu.game"), this.width / 2, 15, 16777215);
+		this.drawCenteredString(MCVer.getFontRenderer(mc), I18n.format("menu.game"), this.width / 2, 15, 16777215);
 	        
         for (int i = 0; i < this.buttonList.size(); ++i) {
         	// Advanced and non-advanced buttons
         	int id = ((GuiButton) this.buttonList.get(i)).id;
         	if (!ConfigUtils.getBoolean("ui", "glitchedMode") && glitchedButtons.contains((Integer) id)) continue;
         	if (!ConfigUtils.getBoolean("ui", "advancedMode") && advancedButtons.contains((Integer) id)) continue;
-            ((GuiButton)this.buttonList.get(i)).drawButton(this.mc, mouseX, mouseY, partialTicks);
+    		//#if MC>=11200
+        	((GuiButton)this.buttonList.get(i)).drawButton(Minecraft.getMinecraft(), mouseX, mouseY, partialTicks);
+        	//#else
+        //$$ 	((GuiButton)this.buttonList.get(i)).drawButton(Minecraft.getMinecraft(), mouseX, mouseY);
+        	//#endif
         }   
 	    
 		if (getClass().getSimpleName().contains("GuiIngameMenu")) {
@@ -176,15 +179,18 @@ public abstract class MixinGuiIngameMenu extends GuiScreen {
 		if (ConfigUtils.getBoolean("ui", "glitchedMode")) MCVer.getFontRenderer(mc).drawStringWithShadow("Duping", 10, 45, 0xFFFFFF);
 		int w = width - 5;
 		if (ConfigUtils.getBoolean("ui", "advancedMode")) MCVer.getFontRenderer(mc).drawStringWithShadow("Tracked Items Delay: ", w - MCVer.getFontRenderer(mc).getStringWidth("Tracked Items Delay: ") - 1, 10, 0xFFFFFFFF);
-		int h = 22;
+		/*int h = 22;
 		if (ConfigUtils.getBoolean("ui", "advancedMode")) for (EntityItem item : DupeMod.trackedObjects) {
+			
+			Temporary removed as to Mixin Bug, that is patched in 0.8, but 0.8 doesn't work with 1.8
 			//#if MC>=11200
 			MCVer.getFontRenderer(mc).drawStringWithShadow(((AccessorEntityItem) item).pickupDelay() + "t " + item.getItem().getDisplayName(), w - MCVer.getFontRenderer(mc).getStringWidth("Tracked Items Delay: "), h, 0xFFFFFFFF);
 			//#else
 //$$ 			MCVer.getFontRenderer(mc).drawStringWithShadow(((AccessorEntityItem) item).pickupDelay() + "t " + item.getEntityItem().getDisplayName(), w - MCVer.getFontRenderer(mc).getStringWidth("Tracked Items Delay: "), h, 0xFFFFFFFF);
 			//#endif
+			
 			h += 10;
-		}
+		}*/
 	}
 	
 	@Override

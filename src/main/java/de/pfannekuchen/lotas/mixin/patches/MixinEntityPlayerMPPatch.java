@@ -11,20 +11,22 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import com.mojang.authlib.GameProfile;
+
 import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.core.utils.ConfigUtils;
 import de.pfannekuchen.lotas.core.utils.EventUtils.Timer;
-import de.pfannekuchen.lotas.mixin.accessors.AccessorEntityPlayerMP;
-import de.pfannekuchen.lotas.mixin.accessors.AccessorMinecraftClient;
 import de.pfannekuchen.lotas.taschallenges.ChallengeLoader;
 import de.pfannekuchen.lotas.taschallenges.ChallengeMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.DamageSource;
+import net.minecraft.world.World;
 //#if MC>=10900
 import net.minecraft.util.text.TextComponentString;
 //#else
@@ -38,13 +40,15 @@ import net.minecraft.world.GameType;
 import net.minecraft.world.chunk.storage.AnvilSaveConverter;
 
 @Mixin(EntityPlayerMP.class)
-public abstract class MixinEntityPlayerMPPatch  {
+public abstract class MixinEntityPlayerMPPatch extends EntityPlayer {
+	public MixinEntityPlayerMPPatch(World worldIn, GameProfile gameProfileIn) { super(worldIn, gameProfileIn); }
 
+	
 	@Shadow
 	public int respawnInvulnerabilityTicks;
 	@Shadow
 	public MinecraftServer mcServer;
-
+	
 	public boolean takenDamage = false;
 	
 	@Shadow
@@ -54,20 +58,11 @@ public abstract class MixinEntityPlayerMPPatch  {
 	public void injectAfterFlag(DamageSource source, float amount, CallbackInfoReturnable<Boolean> ci) {
 		boolean flag = this.mcServer.isDedicatedServer() && this.canPlayersAttack() && "fall".equals(source.damageType);
 		
-		//#if MC>=11100
-		if (!ConfigUtils.getBoolean("tools", "takeDamage")) Minecraft.getMinecraft().getIntegratedServer().getPlayerList().getPlayers().forEach(p -> {
-		//#else
-		//#if MC>=10900
-//$$ 		if (!ConfigUtils.getBoolean("tools", "takeDamage")) Minecraft.getMinecraft().getIntegratedServer().getPlayerList().getPlayerList().forEach(p -> {	
-		//#else
-//$$ 		if (!ConfigUtils.getBoolean("tools", "takeDamage")) Minecraft.getMinecraft().getIntegratedServer().getConfigurationManager().getPlayerList().forEach(p -> {	
-		//#endif
-		//#endif	
-			if (((AccessorEntityPlayerMP) p).respawnInvulnerabilityTicks() <= 1 && p.dimension != 1) {
-				((AccessorEntityPlayerMP) p).respawnInvulnerabilityTicks(60);
+		if (!ConfigUtils.getBoolean("tools", "takeDamage"))
+			if (respawnInvulnerabilityTicks <= 1 && dimension != 1) {
+				respawnInvulnerabilityTicks = 60;
 				takenDamage = true;
 			}
-		});
 		//#if MC>=11100
 		if (!flag && this.respawnInvulnerabilityTicks > 0 && source != DamageSource.OUT_OF_WORLD) {
 		//#else

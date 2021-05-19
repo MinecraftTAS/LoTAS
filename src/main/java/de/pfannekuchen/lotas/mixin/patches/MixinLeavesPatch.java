@@ -28,7 +28,7 @@ public abstract class MixinLeavesPatch {
 	//#if MC>=10900
 	@Redirect(method = "getDrops", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BlockLeaves;dropApple(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;I)V"))
 	//#else
-	//$$ @Redirect(method = "getDrops", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BlockLeaves;dropApple(Lnet/minecraft/world/World;Lnet/minecraft/util/BlockPos;Lnet/minecraft/block/state/IBlockState;I)V"))
+//$$ 	@Redirect(method = "getDrops", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BlockLeaves;dropApple(Lnet/minecraft/world/World;Lnet/minecraft/util/BlockPos;Lnet/minecraft/block/state/IBlockState;I)V"))
 	//#endif
 	public void redirectDropApple(BlockLeaves leaves, World world, BlockPos pos, IBlockState state, int chance) {
 		this.dropApple((World)world, pos, state, !LeavesDropManipulation.dropApple.isToggled() ? chance : 1);

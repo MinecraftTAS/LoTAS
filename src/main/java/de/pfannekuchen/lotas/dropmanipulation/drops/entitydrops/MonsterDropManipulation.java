@@ -81,7 +81,7 @@ public class MonsterDropManipulation extends GuiDropChanceManipulation.DropManip
             			//#if MC>=10900
             			((EntityWitch) entity).isDrinkingPotion() ? entity.getHeldEquipment().iterator().next() : new ItemStack(MCVer.getItem("GLASS_BOTTLE"))
             			//#else
-            			//$$ new ItemStack(MCVer.getItem("GLASS_BOTTLE"))
+            //$$ 			new ItemStack(MCVer.getItem("GLASS_BOTTLE"))
             			//#endif
             					, new ItemStack(MCVer.getItem("SPIDER_EYE")));
         }
