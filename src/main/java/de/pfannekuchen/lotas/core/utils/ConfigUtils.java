@@ -40,7 +40,7 @@ public class ConfigUtils {
 		
 		// Defaults
 		if (ConfigUtils.getInt("hidden", "tickrate") <= 0) ConfigUtils.setInt("hidden", "tickrate", 6);
-		if (ConfigUtils.getInt("hidden", "explosionoptimization") <= 0) ConfigUtils.setInt("hidden", "explosionoptimization", 100);
+		if (ConfigUtils.getInt("hidden", "explosionoptimization") <= 0) ConfigUtils.setInt("hidden", "explosionoptimization", 100);		
 		ConfigUtils.save();
 		
 		for (int i = 0; i < GuiConfiguration.optionsBoolean.length; i++) {

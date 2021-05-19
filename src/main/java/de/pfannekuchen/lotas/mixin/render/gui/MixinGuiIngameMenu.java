@@ -7,13 +7,17 @@ import java.util.ArrayList;
 
 import org.lwjgl.input.Keyboard;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.google.common.base.Predicates;
+import com.google.common.collect.ImmutableList;
 
+import de.pfannekuchen.lotas.core.LoTASModContainer;
 import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.core.utils.ConfigUtils;
 import de.pfannekuchen.lotas.core.utils.EventUtils.Timer;
@@ -36,6 +40,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraftforge.fml.client.config.GuiCheckBox;
+import scala.actors.threadpool.Arrays;
 
 @Mixin(GuiIngameMenu.class)
 public abstract class MixinGuiIngameMenu extends GuiScreen {
@@ -44,13 +49,13 @@ public abstract class MixinGuiIngameMenu extends GuiScreen {
 	 * Adds a few utility buttons
 	 */
 	
+	@Unique
+	private static ImmutableList<Integer> glitchedButtons = ImmutableList.of(17, 18, 22);
+	@Unique
+	private static ImmutableList<Integer> advancedButtons = ImmutableList.of(21, 22, 30, 28, 27, 26, 29, 24, 23);
+	
 	public GuiTextField savestateName;
 	public GuiTextField tickrateField;
-	
-	@ModifyArg(index = 3, method = "drawScreen", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiIngameMenu;drawCenteredString(Lnet/minecraft/client/gui/FontRenderer;Ljava/lang/String;III)V"))
-	public int cheeseIt(int in) {
-		return in == 40 ? 15 : in;
-	}
 	
 	@Inject(method = "initGui", at = @At("RETURN"))
 	public void injectinitGui(CallbackInfo ci) {
@@ -111,9 +116,19 @@ public abstract class MixinGuiIngameMenu extends GuiScreen {
 		this.buttonList.add(new GuiButton(29, (width / 4) * 3 + 4, height - 20, width / 4 - 4, 20, I18n.format("Rig AI")));
 	}
 	
-	@Inject(method = "drawScreen", at = @At("TAIL"))
-	public void drawScreen(int mouseX, int mouseY, float partialTicks, CallbackInfo ci) {
-		
+	@Overwrite
+	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+		this.drawDefaultBackground();
+		this.drawCenteredString(this.fontRenderer, I18n.format("menu.game"), this.width / 2, 15, 16777215);
+	        
+        for (int i = 0; i < this.buttonList.size(); ++i) {
+        	// Advanced and non-advanced buttons
+        	int id = ((GuiButton) this.buttonList.get(i)).id;
+        	if (!ConfigUtils.getBoolean("ui", "glitchedMode") && glitchedButtons.contains((Integer) id)) continue;
+        	if (!ConfigUtils.getBoolean("ui", "advancedMode") && advancedButtons.contains((Integer) id)) continue;
+            ((GuiButton)this.buttonList.get(i)).drawButton(this.mc, mouseX, mouseY, partialTicks);
+        }   
+	    
 		if (getClass().getSimpleName().contains("GuiIngameMenu")) {
 			if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
 				this.buttonList.get(7).displayString = "\u00A76Name Savestate";
@@ -132,7 +147,7 @@ public abstract class MixinGuiIngameMenu extends GuiScreen {
 		}	
 		
 		drawString(MCVer.getFontRenderer(mc), "Tickrate Changer (" + TickrateChangerMod.tickrate + ")", 5, 5, 0xFFFFFF);
-		drawCenteredString(MCVer.getFontRenderer(mc), "Hold Shift to access more features", width / 2, this.height / 4 + 150, 0xFFFFFF);
+		if (ConfigUtils.getBoolean("ui", "advancedMode")) drawCenteredString(MCVer.getFontRenderer(mc), "Hold Shift to access more features", width / 2, this.height / 4 + 150, 0xFFFFFF);
 		
 		if (savestateName != null) savestateName.drawTextBox();
 		if (tickrateField != null) tickrateField.drawTextBox();
@@ -153,16 +168,16 @@ public abstract class MixinGuiIngameMenu extends GuiScreen {
 			drawCenteredString(MCVer.getFontRenderer(mc), "\u00A76Loadstate successful...", width / 2, 40, new Color(1F, 1F, 1F, 1F - (timeSince / 2000F)).getRGB());
 		}
 		
-		MCVer.getFontRenderer(mc).drawStringWithShadow("Tickjump", 10, 105, 0xFFFFFF);
+		if (ConfigUtils.getBoolean("ui", "advancedMode")) MCVer.getFontRenderer(mc).drawStringWithShadow("Tickjump", 10, 105, 0xFFFFFF);
 		if(buttonList.get(17).enabled==false) {
 			MCVer.getFontRenderer(mc).drawStringWithShadow("Tickjump is ready,", 8, 137, 0xFFFFFF);
 			MCVer.getFontRenderer(mc).drawStringWithShadow("press ESC to continue", 8, 147, 0xFFFFFF);
 		}
-		MCVer.getFontRenderer(mc).drawStringWithShadow("Duping", 10, 45, 0xFFFFFF);
+		if (ConfigUtils.getBoolean("ui", "glitchedMode")) MCVer.getFontRenderer(mc).drawStringWithShadow("Duping", 10, 45, 0xFFFFFF);
 		int w = width - 5;
-		MCVer.getFontRenderer(mc).drawStringWithShadow("Tracked Items Delay: ", w - MCVer.getFontRenderer(mc).getStringWidth("Tracked Items Delay: ") - 1, 10, 0xFFFFFFFF);
+		if (ConfigUtils.getBoolean("ui", "advancedMode")) MCVer.getFontRenderer(mc).drawStringWithShadow("Tracked Items Delay: ", w - MCVer.getFontRenderer(mc).getStringWidth("Tracked Items Delay: ") - 1, 10, 0xFFFFFFFF);
 		int h = 22;
-		for (EntityItem item : DupeMod.trackedObjects) {
+		if (ConfigUtils.getBoolean("ui", "advancedMode")) for (EntityItem item : DupeMod.trackedObjects) {
 			//#if MC>=11200
 			MCVer.getFontRenderer(mc).drawStringWithShadow(((AccessorEntityItem) item).pickupDelay() + "t " + item.getItem().getDisplayName(), w - MCVer.getFontRenderer(mc).getStringWidth("Tracked Items Delay: "), h, 0xFFFFFFFF);
 			//#else
