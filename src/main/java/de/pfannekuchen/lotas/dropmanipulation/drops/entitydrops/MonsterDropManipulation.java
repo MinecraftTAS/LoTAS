@@ -76,7 +76,14 @@ public class MonsterDropManipulation extends GuiDropChanceManipulation.DropManip
             return ImmutableList.of(new ItemStack(MCVer.getItem("PRISMARINE_SHARD"), 2));
         if (entity instanceof EntityWitch && optimizeWitch.isChecked()) {
             if (!((EntityWitch) entity).isChild())
-                return ImmutableList.of(new ItemStack(MCVer.getItem("GLOWSTONE_DUST")), new ItemStack(MCVer.getItem("STICK")), new ItemStack(MCVer.getItem("REDSTONE")), new ItemStack(MCVer.getItem("GUNPOWDER")), new ItemStack(MCVer.getItem("GLASS_BOTTLE")), new ItemStack(MCVer.getItem("SPIDER_EYE")));
+            	return ImmutableList.of(new ItemStack(MCVer.getItem("GLOWSTONE_DUST")), new ItemStack(MCVer.getItem("STICK")), new ItemStack(MCVer.getItem("REDSTONE")), new ItemStack(MCVer.getItem("GUNPOWDER")), 
+            			// Witches don't drop potions in 1.8
+            			//#if MC>=10900
+            			((EntityWitch) entity).isDrinkingPotion() ? entity.getHeldEquipment().iterator().next() : new ItemStack(MCVer.getItem("GLASS_BOTTLE"))
+            			//#else
+            			//$$ new ItemStack(MCVer.getItem("GLASS_BOTTLE"))
+            			//#endif
+            					, new ItemStack(MCVer.getItem("SPIDER_EYE")));
         }
         
         //#if MC>=11100
