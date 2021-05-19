@@ -40,7 +40,6 @@ public class PotionRenderingUtils {
         GlStateManager.translate(lerpY * .012, lerpX * -.012, 0);
 
 		ItemStack stack = new ItemStack(MCVer.getItem("POTION"));
-        //$$ ItemStack stack = new ItemStack(Items.POTIONITEM);
         if (stack.getItem() instanceof ItemPotion) {
 			NBTTagCompound cp = new NBTTagCompound();
 			cp.setInteger("CustomPotionColor", 0x546980);

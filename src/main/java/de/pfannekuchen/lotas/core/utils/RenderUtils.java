@@ -22,7 +22,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 
 public class RenderUtils {
 	private static final AxisAlignedBB DEFAULT_AABB = new AxisAlignedBB(0, 0, 0, 1, 1, 1);
-
+	
 	public static void scissorBox(int x, int y, int xend, int yend) {
 		int width = xend - x;
 		int height = yend - y;

@@ -50,7 +50,7 @@ public abstract class MixinGuiWorldSelection extends GuiScreen {
 		if (!ConfigUtils.getBoolean("tools", "hideMaps")) {
 			//#if MC>=10900
 			for (ChallengeMap map : LoTASModContainer.maps) {
-				ChallengeMapEntryWidget entry = new ChallengeMapEntryWidget(selectionList, map);
+				ChallengeMapEntryWidget entry = new ChallengeMapEntryWidget(selectionList, map, width);
 				entry.loc = new ResourceLocation("maps", map.resourceLoc);
 				try {
 					java.util.List<GuiListWorldSelectionEntry> i = (java.util.List<GuiListWorldSelectionEntry>) getFinal(selectionList, GuiListWorldSelection.class.getDeclaredField("entries"));
@@ -59,7 +59,7 @@ public abstract class MixinGuiWorldSelection extends GuiScreen {
 				} catch (Exception e) { }
 			}
 			//#else
-//$$ 			field_146638_t = new ChallengeMapEntryWidget((GuiSelectWorld) (Object) this);
+//$$ 			field_146638_t = new ChallengeMapEntryWidget((GuiSelectWorld) (Object) this, width);
 			//#endif
 		}
 	}
@@ -114,7 +114,7 @@ public abstract class MixinGuiWorldSelection extends GuiScreen {
 					if (((GuiCheckBox) button).isChecked()) {
 						selectionList.refreshList();
 						for (ChallengeMap map : LoTASModContainer.maps) {
-							ChallengeMapEntryWidget entry = new ChallengeMapEntryWidget(selectionList, map);
+							ChallengeMapEntryWidget entry = new ChallengeMapEntryWidget(selectionList, map, width);
 							entry.loc = new ResourceLocation("maps", map.resourceLoc);
 							i = (java.util.List<GuiListWorldSelectionEntry>) getFinal(selectionList, GuiListWorldSelection.class.getDeclaredField("entries"));
 							i.add(entry);
@@ -128,7 +128,7 @@ public abstract class MixinGuiWorldSelection extends GuiScreen {
 				}
 				//#else
 //$$ 				if (((GuiCheckBox) button).isChecked()) {
-//$$ 					field_146638_t = new ChallengeMapEntryWidget((GuiSelectWorld) (Object) this);
+//$$ 					field_146638_t = new ChallengeMapEntryWidget((GuiSelectWorld) (Object) this, width);
 //$$ 				} else {
 //$$ 					field_146638_t = ((GuiSelectWorld) (Object) this).new List(mc);
 //$$ 				}

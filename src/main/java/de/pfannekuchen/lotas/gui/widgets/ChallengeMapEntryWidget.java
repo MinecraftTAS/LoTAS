@@ -6,6 +6,7 @@ import java.time.Duration;
 import de.pfannekuchen.lotas.core.LoTASModContainer;
 import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.core.utils.EventUtils.Timer;
+import de.pfannekuchen.lotas.gui.GuiChallengeLeaderboard;
 import de.pfannekuchen.lotas.taschallenges.ChallengeLoader;
 import de.pfannekuchen.lotas.taschallenges.ChallengeMap;
 import net.minecraft.client.Minecraft;
@@ -28,15 +29,18 @@ public class ChallengeMapEntryWidget extends GuiListWorldSelectionEntry {
 	
 	
 	public ResourceLocation loc = null;
+	int width;
 	
 	//#if MC>=10900
 	public ChallengeMap map;
-	public ChallengeMapEntryWidget(GuiListWorldSelection listWorldSelIn, ChallengeMap map) {
+	public ChallengeMapEntryWidget(GuiListWorldSelection listWorldSelIn, ChallengeMap map, int width) {
 		super(listWorldSelIn, map.getSummary(), map.getSaveLoader());
 		this.map = map;
+		this.width = width;
 	//#else
-//$$ 	public ChallengeMapEntryWidget(GuiSelectWorld guiSelectWorld) {
+//$$ 	public ChallengeMapEntryWidget(GuiSelectWorld guiSelectWorld, int width) {
 //$$ 		guiSelectWorld.super(Minecraft.getMinecraft());
+//$$ 		this.width = width;
 	//#endif
 	}
 
@@ -76,6 +80,22 @@ public class ChallengeMapEntryWidget extends GuiListWorldSelectionEntry {
 //$$ 	}
 	//#endif
 	
+	//#if MC>=10900
+	@Override
+	public boolean mousePressed(int slotIndex, int mouseX, int mouseY, int mouseEvent, int relativeX, int relativeY) {
+        int posX = width - x - 80;
+        int posY = y + MCVer.getFontRenderer(Minecraft.getMinecraft()).FONT_HEIGHT + MCVer.getFontRenderer(Minecraft.getMinecraft()).FONT_HEIGHT + 3;
+        
+        if (mouseX > posX && mouseX < (posX + 80) && mouseY > posY && mouseY < (posY + MCVer.getFontRenderer(Minecraft.getMinecraft()).FONT_HEIGHT)) {
+        	Minecraft.getMinecraft().displayGuiScreen(new GuiChallengeLeaderboard(map));
+        }
+		return super.mousePressed(slotIndex, mouseX, mouseY, mouseEvent, relativeX, relativeY);
+	}
+	//#endif
+	
+	int x;
+	int y;
+	
 	@Override
 	//#if MC>=11200
 	public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, int mouseX, int mouseY, boolean isSelected, float partialTicks) {
@@ -86,7 +106,10 @@ public class ChallengeMapEntryWidget extends GuiListWorldSelectionEntry {
 //$$ 		public void drawSlot(int slotIndex, int x, int y, int p_180791_4_, int mouseXIn, int mouseYIn) {
 			//#endif
 			//#endif
+		
 		//#if MC>=10900
+		this.x = x;
+		this.y = y;
 		String s = "\u00A76TAS Challenge Map - \u00A7f" + map.displayName;
     	String s1 = map.description;
         String s2 = "WR: " + map.leaderboard[0].split(";")[0] + " - " + Timer.getDuration(Duration.ofMillis(Integer.parseInt(map.leaderboard[0].split(";")[1])));
@@ -109,7 +132,7 @@ public class ChallengeMapEntryWidget extends GuiListWorldSelectionEntry {
 		GlStateManager.disableBlend();
         if (Minecraft.getMinecraft().gameSettings.touchscreen || isSelected) {
         	Minecraft.getMinecraft().getTextureManager().bindTexture(ICON_OVERLAY_LOCATION);
-           Gui.drawRect(x, y, x + 32, y + 32, -1601138544);
+        	Gui.drawRect(x, y, x + 32, y + 32, -1601138544);
             GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
             int j = mouseX - x;
             int i = j < 32 ? 32 : 0;
@@ -121,8 +144,17 @@ public class ChallengeMapEntryWidget extends GuiListWorldSelectionEntry {
         //$$     Gui.drawRect(x, y, x + 32, y + 32, -1601138544);
         //$$ }
 		//#endif
-		
-
+        
+        boolean hover = false;
+        int posX = width - x - 80;
+        int posY = y + MCVer.getFontRenderer(Minecraft.getMinecraft()).FONT_HEIGHT + MCVer.getFontRenderer(Minecraft.getMinecraft()).FONT_HEIGHT + 3;
+        
+        if (mouseX > posX && mouseX < (posX + 80) && mouseY > posY && mouseY < (posY + MCVer.getFontRenderer(Minecraft.getMinecraft()).FONT_HEIGHT)) {
+        	hover = true;
+        }
+        
+        MCVer.getFontRenderer(Minecraft.getMinecraft()).drawString((hover ? "\u00A7l" : "") + "Leaderboard >", posX, posY, 0xadadad);
+        
     }
 	
 }
