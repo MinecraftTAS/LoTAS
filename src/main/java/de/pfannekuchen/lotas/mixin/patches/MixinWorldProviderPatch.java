@@ -27,7 +27,7 @@ public class MixinWorldProviderPatch {
 	//$$ @Redirect(method = "getRandomizedSpawnPoint", remap = false, at = @At(value = "INVOKE", target = "Lnet/minecraft/world/WorldType;getSpawnFuzz()I"))
 		//$$ public int redirectRandomizedSpawnPoint(WorldType source) {
 	//#endif
-		return 1;
+		return 2;
 	}
 	
 	//#if MC>=10900

@@ -115,6 +115,11 @@ public abstract class MixinGuiIngameMenu extends GuiScreen {
 		this.buttonList.add(new GuiButton(29, (width / 4) * 3 + 4, height - 20, width / 4 - 4, 20, I18n.format("Rig AI")));
 	}
 	
+	/**
+	 * All of this is just so eclipe doesn't throw a warning when exporting (worth it kappa)
+	 * @reason We overwrite this because it's empty anyways
+	 * @author Pancake
+	 */
 	@Overwrite
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		this.drawDefaultBackground();

@@ -46,7 +46,7 @@ configurations {
 
 dependencies {
     compile 'org.projectlombok:lombok:1.16.4'
-	compile 'work.mgnet:identifier:1.0'
+	shade 'work.mgnet:identifier:1.0'
     compile 'org.spongepowered:mixin:0.7.10-SNAPSHOT'
     
     //shade 'com.googlecode.mp4parser:isoparser:1.1.7'
