@@ -30,6 +30,7 @@ public class GuiLoadstateMenu extends GuiScreen {
 			e.printStackTrace();
 		}
 		this.buttonList.add(new GuiButton(0, width / 2 - 102, height - 52, 204, 20, "Loadstate"));
+		this.buttonList.add(new GuiButton(1, width / 2 - 102, height - 31, 204, 20, "Delete State"));
 		super.initGui();
 	}
 	
@@ -37,6 +38,9 @@ public class GuiLoadstateMenu extends GuiScreen {
 	protected void actionPerformed(GuiButton button) throws IOException {
 		if (button.id == 0) {
 			SavestateMod.loadstate(list.selectedIndex + 1);
+		} else if (button.id == 1) {
+			SavestateMod.yeet(list.selectedIndex + 1);
+			Minecraft.getMinecraft().displayGuiScreen(new GuiLoadstateMenu());
 		}
 		super.actionPerformed(button);
 	}
@@ -73,7 +77,7 @@ public class GuiLoadstateMenu extends GuiScreen {
 				}
 			});
 			for (File file : f) {
-				states.add(new StateEntry(Files.readLines(new File(file, "lotas.dat"), StandardCharsets.UTF_8).get(0), "Savestate " + file.getName().split("-Savestate")[1], Integer.parseInt(file.getName().split("-Savestate")[1]) - 1));
+				states.add(new StateEntry(Files.readLines(new File(file, "lotas.dat"), StandardCharsets.UTF_8).get(0), "Savestate " + file.getName().split("-Savestate")[1]));
 			}
 			
 		}
@@ -86,12 +90,10 @@ public class GuiLoadstateMenu extends GuiScreen {
 			private static final long serialVersionUID = 4428898479076411871L;
 			public String name;
 			public String description;
-			private int index;
 			
-			public StateEntry(String name, String description, int index) {
+			public StateEntry(String name, String description) {
 				this.name = name;
 				this.description = description;
-				this.index = index;
 			}
 			
 			//#if MC>=11200
@@ -118,7 +120,7 @@ public class GuiLoadstateMenu extends GuiScreen {
 			}
 
 		    public boolean mousePressed(int slotIndex, int mouseX, int mouseY, int mouseEvent, int relativeX, int relativeY) {
-				GuiLoadstateList.this.selectedIndex = index;
+				GuiLoadstateList.this.selectedIndex = slotIndex;
 		        return false;
 		    }
 

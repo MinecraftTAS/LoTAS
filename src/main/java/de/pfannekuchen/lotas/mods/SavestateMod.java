@@ -6,7 +6,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
@@ -250,6 +252,31 @@ public class SavestateMod {
 			hwga.close();
 		}
 
+	}
+
+	// Delete
+	public static void yeet(int i) {
+		final Minecraft mc = Minecraft.getMinecraft();
+		final IntegratedServer server = mc.getIntegratedServer();
+		
+		final String worldName = server.getFolderName();
+		final File savestatesDir = new File(mc.mcDataDir, "saves/savestates/");
+		
+		final File savestateDir = new File(savestatesDir, worldName + "-Savestate" + (i));
+		try {
+			FileUtils.deleteDirectory(savestateDir);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		int existingSavestates = savestatesDir.listFiles((d, s) -> {
+			return s.startsWith(worldName + "-Savestate");
+		}).length;
+		
+		// Re Number all of the rest
+		for (int j = i; j < existingSavestates + 1; j++) {
+			new File(savestatesDir, worldName + "-Savestate" + (j + 1)).renameTo(new File(savestatesDir, worldName + "-Savestate" + (j)));
+		}
+		
 	}
 
 }
