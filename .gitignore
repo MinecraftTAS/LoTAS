@@ -4,8 +4,8 @@
 .project
 build
 bin
-*.launch
 run
+*.launch
 Private.java
 
 .idea/
@@ -13,3 +13,5 @@ Fabric-1.14.4/.gradle/
 Fabric-1.14.4/build/
 Fabric-1.14.4/run/
 out/
+
+eclipse/

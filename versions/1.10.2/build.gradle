@@ -1,0 +1,20 @@
+buildscript {
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
+    }
+}
+
+apply from: '../common.gradle'
+
+minecraft {
+    version = '1.10.2-12.18.3.2511'
+    mappings = "snapshot_20161111"
+}
+
+repositories {
+	maven { url = "https://mgnet.work/repo" }
+}
+
+dependencies {
+    shade 'net.bramp.ffmpeg:ffmpeg:2.2.4-17.0'
+}

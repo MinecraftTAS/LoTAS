@@ -1,0 +1,18 @@
+// Hello! Select the MC Version you want to edit here! 11202 = 1.12.2, 10904 = 1.9.4!
+
+task setCoreVersion() {
+    doLast {
+        def vars = [MC: 
+        
+        
+        // Change this!!!! XYYZZ
+        11202
+        
+        
+        
+        , DEV_ENV: 1]
+        project.convertTree(vars, 'src/main/java')
+        project.convertTree(vars, 'src/main/resources')
+        project.convertTree(vars, 'versions/core/build.gradle')
+    }
+}
