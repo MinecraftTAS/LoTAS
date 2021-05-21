@@ -49,6 +49,11 @@ public class MCVer {
         return (float) Math.cos(value);
     }
 
+    public static double sqrt(double value)
+    {
+        return Math.sqrt(value);
+    }
+    
     public static float sqrt(float value)
     {
         return (float)Math.sqrt((double)value);

@@ -48,6 +48,16 @@ public class EventUtils {
 			Minecraft.getMinecraft().getTextureManager().bindTexture(TickrateChangerMod.streaming);
 			Gui.drawModalRectWithCustomSizedTexture(new ScaledResolution(Minecraft.getMinecraft()).getScaledWidth() - 17, 1, 0, 0, 16, 16, 16, 64);
 		}
+		
+		if (ConfigUtils.getBoolean("tools", "showSpeedometer")) {
+			double distTraveledLastTickX = MCVer.player(Minecraft.getMinecraft()).posX - MCVer.player(Minecraft.getMinecraft()).prevPosX;
+			double distTraveledLastTickZ = MCVer.player(Minecraft.getMinecraft()).posZ - MCVer.player(Minecraft.getMinecraft()).prevPosZ;
+			
+			String message = String.format("%.2f", MCVer.sqrt((distTraveledLastTickX * distTraveledLastTickX + distTraveledLastTickZ * distTraveledLastTickZ)) / 0.05F) + " blocks/sec";
+			int width = MCVer.getFontRenderer(Minecraft.getMinecraft()).getStringWidth(message);
+			Gui.drawRect(4, 4, 4 + width + 2 * 2, 4 + MCVer.getFontRenderer(Minecraft.getMinecraft()).FONT_HEIGHT + 2 + 2 - 1, 0xAA000000);
+			MCVer.getFontRenderer(Minecraft.getMinecraft()).drawString(message, 6, 6, 14737632);
+		}
 	}
 	
 	private boolean checkNonText(RenderGameOverlayEvent e) {

@@ -20,6 +20,7 @@ public class GuiConfiguration extends GuiScreen {
 		"B:ui:hideRTATimer:INSERT",
 		"B:tools:removePearlDelay:INSERT",
 		"B:tools:noDamageUnbreaking:INSERT",
+		"B:tools:showSpeedometer:INSERT",
 		"B:ui:advancedMode:INSERT",
 		"B:ui:glitchedMode:INSERT"
 	};
