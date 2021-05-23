@@ -1,0 +1,18 @@
+// Hello! Select the MC Version you want to edit here! 11404 = 1.14.4
+
+task setCoreVersion() {
+    doLast {
+        def vars = [MC: 
+        
+        
+        // Change this!!!! XYYZZ
+        11404
+        
+        
+        
+        , DEV_ENV: 1]
+        project.convertTree(vars, 'src/main/java')
+        project.convertTree(vars, 'src/main/resources')
+        project.convertTree(vars, 'versions2/fabric/build.gradle')
+    }
+}

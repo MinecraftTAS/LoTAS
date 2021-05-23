@@ -1,10 +1,10 @@
 ## Developers
-If you want to contribute to LoTAS, you need to understand how the current system works. I am using an pre-processor made by the Replay-Mod guy...
+If you want to contribute to LoTAS, you need to understand how the current system works. I am using an pre-processor made by the Replay-Mod guy... He is a legend!
 
 ### Eclipse
 Simply import the project using "Import -> Gradle Project"
 
-You need to decompile Minecraft first, go into `tasks\` and run `SetupDecompWorkspace_and_AT.launch`. This can take up to 40 minutes... :(
+You need to decompile Minecraft first, go into `tasks\` and run `SetupDecompWorkspace_and_AT.launch` or `GenSources.launch`. This can take up to 40 minutes... :(
 After that you can start programming. The Code to work with is in the 'core' subproject.
 
 Here's how to change the MC Version:
