@@ -6,7 +6,6 @@
 build
 bin
 run
-*.launch
 Private.java
 
 .idea/
