@@ -9,7 +9,13 @@
     "client": [
     	"MixinMinecraftClient",
     	"accessors.AccessorMinecraftClient",
-    	"accessors.AccessorTimer"
+    	"accessors.AccessorTimer",
+    	"render.binds.MixinTickrateChangerAchievement",
+		"render.binds.MixinTickrateChangerAudioPitch",
+		"render.binds.MixinTickrateChangerEnchantmentGlimm",
+		"render.binds.MixinTickrateChangerSubtitle",
+		"render.binds.MixinTickrateChangerSubtitleOverlay",
+		"render.binds.MixinTickrateChangerWorldborder"
 	],
   	"injectors": {
     	"defaultRequire": 1
