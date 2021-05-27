@@ -100,7 +100,6 @@ public class MixinMinecraft {
 			TickrateChangerMod.resetAdvanceClient();
 		}
 		
-		TickrateChangerMod.ticksPassed++;
 		if (EventUtils.Timer.running) {
 			if (currentScreen == null) EventUtils.Timer.ticks++;
 			else if (EventUtils.Timer.allowed.contains(currentScreen.getClass().getSimpleName().toLowerCase())) EventUtils.Timer.ticks++;

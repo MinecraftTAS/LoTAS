@@ -4,10 +4,12 @@
     "package": "de.pfannekuchen.lotas.mixin",
     "compatibilityLevel": "JAVA_8",
     "mixins": [
-    
+    	"MixinMinecraftServer"
     ],
     "client": [
-    	
+    	"MixinMinecraftClient",
+    	"accessors.AccessorMinecraftClient",
+    	"accessors.AccessorTimer"
 	],
   	"injectors": {
     	"defaultRequire": 1

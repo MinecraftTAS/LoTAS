@@ -7,7 +7,7 @@ import org.lwjgl.glfw.GLFW;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.options.KeyBinding;
 
-public class KeyBindsUtils {
+public class KeybindsUtils {
 
 	public static KeyBinding saveStateKeybind = new KeyBinding("Savestate", GLFW.GLFW_KEY_J, "Stating");
 	public static final KeyBinding loadStateKeybind = new KeyBinding("Loadstate", GLFW.GLFW_KEY_K, "Stating");
@@ -48,10 +48,10 @@ public class KeyBindsUtils {
 //		KeyBindingHelper.registerKeyBinding(saveDupeKeybind);
 //		KeyBindingHelper.registerKeyBinding(holdStrafeKeybind);
 //		KeyBindingHelper.registerKeyBinding(toggleFreecamKeybind);
-//		KeyBindingHelper.registerKeyBinding(increaseTickrateKeybind);
-//		KeyBindingHelper.registerKeyBinding(decreaseTickrateKeybind);
-//		KeyBindingHelper.registerKeyBinding(advanceTicksKeybind);
-//		KeyBindingHelper.registerKeyBinding(toggleAdvanceKeybind);
+		KeyBindingHelper.registerKeyBinding(increaseTickrateKeybind);
+		KeyBindingHelper.registerKeyBinding(decreaseTickrateKeybind);
+		KeyBindingHelper.registerKeyBinding(advanceTicksKeybind);
+		KeyBindingHelper.registerKeyBinding(toggleAdvanceKeybind);
 //		KeyBindingHelper.registerKeyBinding(toggleTimerKeybind);
 	}
 }
