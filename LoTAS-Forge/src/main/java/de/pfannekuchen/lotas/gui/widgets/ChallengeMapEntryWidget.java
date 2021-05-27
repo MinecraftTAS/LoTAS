@@ -85,7 +85,7 @@ public class ChallengeMapEntryWidget extends GuiListWorldSelectionEntry {
 	public boolean mousePressed(int slotIndex, int mouseX, int mouseY, int mouseEvent, int relativeX, int relativeY) {
         int posX = width - x - 80;
         int posY = y + MCVer.getFontRenderer(Minecraft.getMinecraft()).FONT_HEIGHT + MCVer.getFontRenderer(Minecraft.getMinecraft()).FONT_HEIGHT + 3;
-        
+
         if (mouseX > posX && mouseX < (posX + 80) && mouseY > posY && mouseY < (posY + MCVer.getFontRenderer(Minecraft.getMinecraft()).FONT_HEIGHT)) {
         	Minecraft.getMinecraft().displayGuiScreen(new GuiChallengeLeaderboard(map));
         }

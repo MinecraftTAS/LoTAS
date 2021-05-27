@@ -147,9 +147,9 @@ public class GuiAiManipulation extends GuiScreen {
 				spawnZ = entities.get(selectedIndex).getNavigator().getPath().getTarget().z;
 				//#else
 				//#if MC>=11100
-				//$$ spawnX = entities.get(selectedIndex).getNavigator().getPath().getTarget().xCoord;
-				//$$ spawnY = entities.get(selectedIndex).getNavigator().getPath().getTarget().yCoord;
-				//$$ spawnZ = entities.get(selectedIndex).getNavigator().getPath().getTarget().zCoord;
+//$$ 				spawnX = entities.get(selectedIndex).getNavigator().getPath().getTarget().xCoord;
+//$$ 				spawnY = entities.get(selectedIndex).getNavigator().getPath().getTarget().yCoord;
+//$$ 				spawnZ = entities.get(selectedIndex).getNavigator().getPath().getTarget().zCoord;
 				//#else
 //$$ 				spawnX = entities.get(selectedIndex).getNavigator().getPath().getFinalPathPoint().xCoord;
 //$$ 				spawnY = entities.get(selectedIndex).getNavigator().getPath().getFinalPathPoint().yCoord;

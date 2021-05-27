@@ -24,8 +24,8 @@ public class MixinWorldProviderPatch {
 	@Redirect(method = "getRandomizedSpawnPoint", remap = false, at = @At(value = "INVOKE", target = "Lnet/minecraft/world/WorldType;getSpawnFuzz(Lnet/minecraft/world/WorldServer;Lnet/minecraft/server/MinecraftServer;)I"))
 	public int redirectRandomizedSpawnPoint(WorldType source, WorldServer world, MinecraftServer server) {
 	//#else
-	//$$ @Redirect(method = "getRandomizedSpawnPoint", remap = false, at = @At(value = "INVOKE", target = "Lnet/minecraft/world/WorldType;getSpawnFuzz()I"))
-		//$$ public int redirectRandomizedSpawnPoint(WorldType source) {
+//$$ 	@Redirect(method = "getRandomizedSpawnPoint", remap = false, at = @At(value = "INVOKE", target = "Lnet/minecraft/world/WorldType;getSpawnFuzz()I"))
+//$$ 		public int redirectRandomizedSpawnPoint(WorldType source) {
 	//#endif
 		return 2;
 	}
@@ -33,7 +33,7 @@ public class MixinWorldProviderPatch {
 	//#if MC>=10900
 	@Redirect(method = "getRandomizedSpawnPoint", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;getTopSolidOrLiquidBlock(Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/util/math/BlockPos;"))
 	//#else
-	//$$ @Redirect(method = "getRandomizedSpawnPoint", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;getTopSolidOrLiquidBlock(Lnet/minecraft/util/BlockPos;)Lnet/minecraft/util/BlockPos;"))
+//$$ 	@Redirect(method = "getRandomizedSpawnPoint", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;getTopSolidOrLiquidBlock(Lnet/minecraft/util/BlockPos;)Lnet/minecraft/util/BlockPos;"))
 	//#endif
 	public BlockPos redirectBlockPos(World source, BlockPos blockPos) {
 		return source.getTopSolidOrLiquidBlock(blockPos.add(-LoTASModContainer.offsetX, 0, -LoTASModContainer.offsetZ));

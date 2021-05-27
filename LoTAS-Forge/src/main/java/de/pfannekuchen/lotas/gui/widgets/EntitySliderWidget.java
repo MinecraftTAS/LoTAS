@@ -110,7 +110,7 @@ public class EntitySliderWidget extends GuiSlider {
 			if (entity != null) method.invoke(entity, Minecraft.getMinecraft().getIntegratedServer().getWorld(entity.dimension).getDifficultyForLocation(Minecraft.getMinecraft().player.getPosition()));
 			//#else
 			//#if MC>=11100
-			//$$ if (entity != null) method.invoke(entity, Minecraft.getMinecraft().getIntegratedServer().worldServerForDimension(entity.dimension).getDifficultyForLocation(Minecraft.getMinecraft().player.getPosition()));
+//$$ 			if (entity != null) method.invoke(entity, Minecraft.getMinecraft().getIntegratedServer().worldServerForDimension(entity.dimension).getDifficultyForLocation(Minecraft.getMinecraft().player.getPosition()));
 			//#else
 //$$ 			if (entity != null) method.invoke(entity, Minecraft.getMinecraft().getIntegratedServer().worldServerForDimension(entity.dimension).getDifficultyForLocation(Minecraft.getMinecraft().thePlayer.getPosition()));
 			//#endif

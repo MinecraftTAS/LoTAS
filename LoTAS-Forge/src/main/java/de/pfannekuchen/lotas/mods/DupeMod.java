@@ -100,7 +100,7 @@ public class DupeMod {
 				EntityItem itemDupe = new EntityItem(item.world, item.posX, item.posY, item.posZ, item.getItem().copy());
 				//#else
 				//#if MC>=11100
-				//$$ EntityItem itemDupe = new EntityItem(item.world, item.posX, item.posY, item.posZ, item.getEntityItem().copy());
+//$$ 				EntityItem itemDupe = new EntityItem(item.world, item.posX, item.posY, item.posZ, item.getEntityItem().copy());
 				//#else
 //$$ 				EntityItem itemDupe = new EntityItem(item.worldObj, item.posX, item.posY, item.posZ, item.getEntityItem().copy());
 				//#endif

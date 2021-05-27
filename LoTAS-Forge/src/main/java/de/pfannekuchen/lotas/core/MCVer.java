@@ -137,7 +137,7 @@ public class MCVer {
     
 	public static Item getItem(String itemId) {
 		int mainVersion = Integer.parseInt(ForgeVersion.mcVersion.split("\\.")[1]);
-		if (mainVersion <= 8) {
+		if (mainVersion <= 10) {
 			return Item.getByNameOrId(itemId.toLowerCase());
 		}
 		return Item.getByNameOrId(itemId);

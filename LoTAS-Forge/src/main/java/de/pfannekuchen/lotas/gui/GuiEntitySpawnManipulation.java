@@ -166,11 +166,11 @@ public class GuiEntitySpawnManipulation extends GuiScreen {
 		}
 		//#else
 		//#if MC>=11000
-		//$$ if (e instanceof EntityMob) {
-		//$$ 	this.buttonList.get(this.buttonList.size() - 2).enabled = e.worldObj.getDifficulty() != EnumDifficulty.PEACEFUL && ((EntityMob) e).getBlockPathWeight(new BlockPos(e.posX, e.getEntityBoundingBox().minY, e.posZ)) >= 0.0F && e.worldObj.getBlockState((new BlockPos(e)).down()).canEntitySpawn(e) && isValidLightLevel(e) && !e.worldObj.collidesWithAnyBlock(e.getEntityBoundingBox());
-		//$$ } else {
-		//$$ 	this.buttonList.get(this.buttonList.size() - 2).enabled = e.worldObj.getBlockState((new BlockPos(e)).down()).canEntitySpawn(e) && !e.worldObj.collidesWithAnyBlock(e.getEntityBoundingBox());
-		//$$ }
+//$$ 		if (e instanceof EntityMob) {
+//$$ 			this.buttonList.get(this.buttonList.size() - 2).enabled = e.worldObj.getDifficulty() != EnumDifficulty.PEACEFUL && ((EntityMob) e).getBlockPathWeight(new BlockPos(e.posX, e.getEntityBoundingBox().minY, e.posZ)) >= 0.0F && e.worldObj.getBlockState((new BlockPos(e)).down()).canEntitySpawn(e) && isValidLightLevel(e) && !e.worldObj.collidesWithAnyBlock(e.getEntityBoundingBox());
+//$$ 		} else {
+//$$ 			this.buttonList.get(this.buttonList.size() - 2).enabled = e.worldObj.getBlockState((new BlockPos(e)).down()).canEntitySpawn(e) && !e.worldObj.collidesWithAnyBlock(e.getEntityBoundingBox());
+//$$ 		}
 		//#else
 		//#if MC>=10900
 //$$ 		if (e instanceof EntityMob) {
