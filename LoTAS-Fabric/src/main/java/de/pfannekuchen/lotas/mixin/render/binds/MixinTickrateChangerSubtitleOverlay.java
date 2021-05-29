@@ -1,7 +1,6 @@
 package de.pfannekuchen.lotas.mixin.render.binds;
 
 import org.spongepowered.asm.mixin.Mixin;
-//#if MC>=10900
 import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
 

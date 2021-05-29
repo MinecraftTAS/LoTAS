@@ -5,6 +5,9 @@ import java.io.IOException;
 import org.lwjgl.glfw.GLFW;
 
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.hud.InGameHud;
+import net.minecraft.client.gui.screen.GameMenuScreen;
 import net.minecraft.client.options.KeyBinding;
 
 public class KeybindsUtils {
@@ -25,13 +28,15 @@ public class KeybindsUtils {
 	public static boolean isFreecaming;
 	public static int savedTickrate;
 
-	public static void keyEvent() throws IOException {
-//		if (saveStateKeybind.isPressed() && ChallengeMap.currentMap == null) {
-//			Minecraft.getMinecraft().displayGuiScreen(new GuiIngameMenu());
-//			shouldSavestate = true;
-//		} else if (loadStateKeybind.isPressed()) {
-//			Minecraft.getMinecraft().displayGuiScreen(new GuiIngameMenu());
-//			shouldLoadstate = true;
+	public static void keyEvent() {
+		while (saveStateKeybind.wasPressed() /*&& ChallengeMap.currentMap == null*/) {
+			MinecraftClient.getInstance().openScreen(new GameMenuScreen(true));
+			shouldSavestate = true;
+		} 
+		while(loadStateKeybind.wasPressed()) {
+			MinecraftClient.getInstance().openScreen(new GameMenuScreen(true));
+			shouldLoadstate = true;
+		}
 //		} else if (loadDupeKeybind.isPressed()) {
 //			DupeMod.loadChests();
 //			DupeMod.loadItems();
@@ -42,8 +47,8 @@ public class KeybindsUtils {
 	}
 
 	public static void registerKeybinds() {
-//		KeyBindingHelper.registerKeyBinding(saveStateKeybind);
-//		KeyBindingHelper.registerKeyBinding(loadStateKeybind);
+		KeyBindingHelper.registerKeyBinding(saveStateKeybind);
+		KeyBindingHelper.registerKeyBinding(loadStateKeybind);
 //		KeyBindingHelper.registerKeyBinding(loadDupeKeybind);
 //		KeyBindingHelper.registerKeyBinding(saveDupeKeybind);
 //		KeyBindingHelper.registerKeyBinding(holdStrafeKeybind);
