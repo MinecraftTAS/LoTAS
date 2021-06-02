@@ -15,7 +15,8 @@
 		"render.binds.MixinTickrateChangerEnchantmentGlimm",
 		"render.binds.MixinTickrateChangerSubtitle",
 		"render.binds.MixinTickrateChangerSubtitleOverlay",
-		"render.binds.MixinTickrateChangerWorldborder"
+		"render.binds.MixinTickrateChangerWorldborder",
+		"render.gui.MixinGuiIngameMenu"
 	],
   	"injectors": {
     	"defaultRequire": 1
