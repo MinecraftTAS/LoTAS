@@ -53,9 +53,9 @@ public abstract class MixinGuiWorldSelection extends GuiScreen {
 				ChallengeMapEntryWidget entry = new ChallengeMapEntryWidget(selectionList, map, width);
 				entry.loc = new ResourceLocation("maps", map.resourceLoc);
 				try {
-					java.util.List<GuiListWorldSelectionEntry> i = (java.util.List<GuiListWorldSelectionEntry>) getFinal(selectionList, GuiListWorldSelection.class.getDeclaredField("entries"));
+					java.util.List<GuiListWorldSelectionEntry> i = (java.util.List<GuiListWorldSelectionEntry>) getFinal(selectionList, GuiListWorldSelection.class.getDeclaredField("field_186799_w"));
 					i.add(entry);
-					setFinal(selectionList, GuiListWorldSelection.class.getDeclaredField("entries"), i);
+					setFinal(selectionList, GuiListWorldSelection.class.getDeclaredField("field_186799_w"), i);
 				} catch (Exception e) { }
 			}
 			//#else
@@ -108,17 +108,17 @@ public abstract class MixinGuiWorldSelection extends GuiScreen {
 				ConfigUtils.save();
 				//#if MC>=10900
 				try {
-					java.util.List<GuiListWorldSelectionEntry> i = (java.util.List<GuiListWorldSelectionEntry>) getFinal(selectionList, GuiListWorldSelection.class.getDeclaredField("entries"));
+					java.util.List<GuiListWorldSelectionEntry> i = (java.util.List<GuiListWorldSelectionEntry>) getFinal(selectionList, GuiListWorldSelection.class.getDeclaredField("field_186799_w"));
 					i.clear();
-					setFinal(selectionList, GuiListWorldSelection.class.getDeclaredField("entries"), i);
+					setFinal(selectionList, GuiListWorldSelection.class.getDeclaredField("field_186799_w"), i);
 					if (((GuiCheckBox) button).isChecked()) {
 						selectionList.refreshList();
 						for (ChallengeMap map : LoTASModContainer.maps) {
 							ChallengeMapEntryWidget entry = new ChallengeMapEntryWidget(selectionList, map, width);
 							entry.loc = new ResourceLocation("maps", map.resourceLoc);
-							i = (java.util.List<GuiListWorldSelectionEntry>) getFinal(selectionList, GuiListWorldSelection.class.getDeclaredField("entries"));
+							i = (java.util.List<GuiListWorldSelectionEntry>) getFinal(selectionList, GuiListWorldSelection.class.getDeclaredField("field_186799_w"));
 							i.add(entry);
-							setFinal(selectionList, GuiListWorldSelection.class.getDeclaredField("entries"), i);
+							setFinal(selectionList, GuiListWorldSelection.class.getDeclaredField("field_186799_w"), i);
 						}
 					} else {
 						selectionList.refreshList();
