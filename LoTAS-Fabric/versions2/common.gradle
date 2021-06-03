@@ -1,0 +1,65 @@
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+version = "1.1.0"
+group = "de.pfannekuchen.lotas"
+archivesBaseName = "lotas"
+
+repositories {
+	maven { url 'https://mgnet.work/repo' }
+	maven { url 'https://jitpack.io' }
+}
+
+dependencies {
+    implementation 'org.projectlombok:lombok:1.16.4'
+	implementation 'work.mgnet:identifier:1.0'
+    implementation 'net.bramp.ffmpeg:ffmpeg:2.8.0-21.0'
+    modImplementation "net.fabricmc:fabric-loader:0.11.3"
+}
+
+processResources {
+	inputs.property "version", project.version
+
+	filesMatching("fabric.mod.json") {
+		expand "version": project.version
+	}
+}
+
+build.dependsOn processResources
+defaultTasks 'build'
+
+if (project.name != 'fabric') {
+    apply from: '../preprocessor.gradle'
+
+    def preprocessedSrc = 'build/preprocessed/src'
+    def preprocessedRes = 'build/preprocessed/res'
+    def originalSrc = '../../src/main/java'
+    def originalRes = '../../src/main/resources'
+    def (major, minor, patch) = project.name.tokenize('.')
+    def mcVersion = "${major}${minor.padLeft(2, '0')}${(patch ?: '').padLeft(2, '0')}"
+    def vars = [MC: mcVersion as int]
+
+    sourceSets {
+        main.java.srcDir preprocessedSrc
+        main.resources.srcDir preprocessedRes
+    }
+
+    task preprocessJava {
+        inputs.dir(originalSrc)
+        outputs.dir(preprocessedSrc)
+        doLast {
+            project.convertTree(vars, originalSrc, preprocessedSrc)
+        }
+    }
+
+    task preprocessResources {
+        inputs.dir(originalRes)
+        outputs.dir(preprocessedRes)
+        doLast {
+            project.convertTree(vars, originalRes, preprocessedRes)
+        }
+    }
+
+    compileJava.dependsOn preprocessJava
+    processResources.dependsOn preprocessResources
+}

@@ -1,0 +1,17 @@
+pluginManagement {
+    repositories {
+        maven {
+            name = 'Fabric'
+            url = 'https://maven.fabricmc.net/'
+        }
+        gradlePluginPortal()
+    }
+}
+
+def versions2 = [
+        'fabric',
+        '1.14.4'
+]
+versions2.collect {":versions2:$it"}.each {
+    include it
+}

@@ -1,0 +1,24 @@
+{
+    "required": true,
+    "minVersion": "0.8",
+    "package": "de.pfannekuchen.lotas.mixin",
+    "compatibilityLevel": "JAVA_8",
+    "mixins": [
+    	"MixinMinecraftServer"
+    ],
+    "client": [
+    	"MixinMinecraftClient",
+    	"accessors.AccessorMinecraftClient",
+    	"accessors.AccessorTimer",
+    	"render.binds.MixinTickrateChangerAchievement",
+		"render.binds.MixinTickrateChangerAudioPitch",
+		"render.binds.MixinTickrateChangerEnchantmentGlimm",
+		"render.binds.MixinTickrateChangerSubtitle",
+		"render.binds.MixinTickrateChangerSubtitleOverlay",
+		"render.binds.MixinTickrateChangerWorldborder",
+		"render.gui.MixinGuiIngameMenu"
+	],
+  	"injectors": {
+    	"defaultRequire": 1
+  	}
+}
