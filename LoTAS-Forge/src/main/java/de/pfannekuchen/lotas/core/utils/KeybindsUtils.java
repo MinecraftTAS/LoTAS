@@ -30,6 +30,8 @@ public class KeybindsUtils {
 	public static boolean isFreecaming;
 	public static int savedTickrate;
 	
+	public static boolean wasPressed = false;
+	
 	public static void keyEvent() throws IOException {
 		if (saveStateKeybind.isPressed() && ChallengeMap.currentMap == null) {
 			Minecraft.getMinecraft().displayGuiScreen(new GuiIngameMenu());
@@ -44,6 +46,12 @@ public class KeybindsUtils {
 			DupeMod.saveChests();
 			DupeMod.saveItems();
 		}
+		if (wasPressed != holdStrafeKeybind.isKeyDown() && wasPressed == true) {
+			KeyBinding.setKeyBindState(32, false);
+		} else if (wasPressed != holdStrafeKeybind.isKeyDown() && wasPressed == false) {
+			MCVer.player(Minecraft.getMinecraft()).rotationYaw -= 45;
+		}
+		wasPressed = holdStrafeKeybind.isKeyDown();
 	}
 	
 	public static void registerKeybinds() {
