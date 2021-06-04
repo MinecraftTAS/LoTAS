@@ -199,25 +199,12 @@ public abstract class MixinGuiIngameMenu extends GuiScreen {
 	
 	@Override
 	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
-		
 		if (savestateName != null) {
 			savestateName.mouseClicked(mouseX, mouseY, mouseButton);
 		}
 		if (tickrateField != null) {
 			tickrateField.mouseClicked(mouseX, mouseY, mouseButton);
 		}
-		
-		for (int i = 0; i < this.buttonList.size(); ++i)
-        {
-            GuiButton guibutton = this.buttonList.get(i);
-
-            if (guibutton.mousePressed(this.mc, mouseX, mouseY))
-            {
-            	int id = guibutton.id;
-            	if (!ConfigUtils.getBoolean("ui", "glitchedMode") && glitchedButtons.contains((Integer) id)) return;
-            	if (!ConfigUtils.getBoolean("ui", "advancedMode") && advancedButtons.contains((Integer) id)) return;
-            }
-        }
 		super.mouseClicked(mouseX, mouseY, mouseButton);
 	}
 	
@@ -251,7 +238,6 @@ public abstract class MixinGuiIngameMenu extends GuiScreen {
 	
 	@Inject(method = "actionPerformed", at = @At("HEAD"))
 	public void redoactionPerformed(GuiButton button, CallbackInfo ci) {
-		
 		if (button.id == 13) {
 			if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
 				savestateName = new GuiTextField(93, MCVer.getFontRenderer(mc), this.width / 2 - 100, this.height / 4 + 96 + -16, 98, 20);
