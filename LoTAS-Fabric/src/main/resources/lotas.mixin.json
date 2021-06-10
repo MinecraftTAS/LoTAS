@@ -10,13 +10,16 @@
     	"MixinMinecraftClient",
     	"accessors.AccessorMinecraftClient",
     	"accessors.AccessorTimer",
+    	"accessors.AccessorTextFieldWidget",
+    	"accessors.AccessorCreateWorldScreen",
     	"render.binds.MixinTickrateChangerAchievement",
 		"render.binds.MixinTickrateChangerAudioPitch",
 		"render.binds.MixinTickrateChangerEnchantmentGlimm",
 		"render.binds.MixinTickrateChangerSubtitle",
 		"render.binds.MixinTickrateChangerSubtitleOverlay",
 		"render.binds.MixinTickrateChangerWorldborder",
-		"render.gui.MixinGuiIngameMenu"
+		"render.gui.MixinGuiIngameMenu",
+		"render.gui.MixinGuiMainMenu"
 	],
   	"injectors": {
     	"defaultRequire": 1

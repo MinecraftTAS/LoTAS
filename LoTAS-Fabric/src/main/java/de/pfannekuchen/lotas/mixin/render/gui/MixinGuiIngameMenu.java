@@ -1,128 +1,214 @@
 package de.pfannekuchen.lotas.mixin.render.gui;
 
+import java.awt.Color;
+import java.time.Duration;
+
 import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import com.google.common.collect.ImmutableList;
-
-import de.pfannekuchen.lotas.core.MCVer;
+import de.pfannekuchen.lotas.core.utils.ConfigUtils;
+import de.pfannekuchen.lotas.core.utils.EventUtils.Timer;
 import de.pfannekuchen.lotas.core.utils.Keyboard;
+import de.pfannekuchen.lotas.gui.AIManipulationScreen;
+import de.pfannekuchen.lotas.gui.DragonManipulationScreen;
+import de.pfannekuchen.lotas.gui.LoadstateScreen;
+import de.pfannekuchen.lotas.gui.LootManipulationScreen;
+import de.pfannekuchen.lotas.gui.SpawnManipulationScreen;
+import de.pfannekuchen.lotas.gui.widgets.SmallCheckboxWidget;
+import de.pfannekuchen.lotas.mods.DupeMod;
 import de.pfannekuchen.lotas.mods.SavestateMod;
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.GameMenuScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.AbstractButtonWidget;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.resource.language.I18n;
-import net.minecraft.client.sound.SoundManager;
 import net.minecraft.text.Text;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.dimension.DimensionType;
 
 @Mixin(GameMenuScreen.class)
 public abstract class MixinGuiIngameMenu extends Screen {
+	protected MixinGuiIngameMenu(Text title) { super(title); }
 
-	/*	
-	 * Adds a few utility buttons
-	 */
-	
-	protected MixinGuiIngameMenu(Text title) {
-		super(title);
-	}
-
-	@Unique
-	private static ImmutableList<Integer> glitchedButtons = ImmutableList.of(17, 18, 22);
-	@Unique
-	private static ImmutableList<Integer> advancedButtons = ImmutableList.of(21, 22, 30, 28, 27, 26, 29, 24, 23);
-	
 	public TextFieldWidget savestateName;
-	public TextFieldWidget tickrateField;
 	
-	@Inject(method = "initWidgets", at = @At("RETURN"))
-	public void injectinitGui(CallbackInfo ci) {
-		
-		ButtonWidget customReturnToGameButton=new ButtonWidget(this.width / 2 - 102, this.height / 4 + 24 + -16, 204, 20, I18n.translate("menu.returnToGame"), (buttonWidgetx) -> {
-	         this.minecraft.openScreen((Screen)null);
-	         this.minecraft.mouse.lockCursor();
-	      }) {
-			
-			@Override
-			public void playDownSound(SoundManager soundManager) {
-			}
-		};
-		this.buttons.set(0, customReturnToGameButton);
-		this.children.set(0, customReturnToGameButton);
-		
+	 SmallCheckboxWidget fw = null; // do not pay attention
+	
+	@Inject(at = @At("RETURN"), method = "init")
+	public void addCustomButtons(CallbackInfo ci) {
+		// Move Buttons higher
 		for (AbstractButtonWidget guiButton : buttons) {
-			guiButton.y -= 24;	
+			guiButton.y -= 24;
 		}
 		
-		buttons.get(7).y +=24;
+		buttons.get(7).y += 24;
 		
-		this.addButton(new ButtonWidget(this.width / 2 - 102, this.height / 4 + 96 + -16, 98, 20, I18n.translate("Savestate"), (buttonWidgetx)->{
-			if (Keyboard.isKeyDown(GLFW.GLFW_KEY_LEFT_SHIFT)) {
-				//No idea
-//				savestateName = new TextFieldWidget(this.minecraft.textRenderer, this.width / 2 - 100, this.height / 4 + 96 + -16, 98, 20);
-//				button.enabled = false;
-//				savestateName.setFocused(true);
+		this.addButton(new ButtonWidget(this.width / 2 - 102, this.height / 4 + 48 + -16 +24 +24, 98, 20, "Savestate", btn -> {
+			if (Keyboard.isPressed(GLFW.GLFW_KEY_LEFT_SHIFT)) {
+				savestateName = new TextFieldWidget(minecraft.textRenderer, this.width / 2 - 100, this.height / 4 + 96 + -16, 98, 20, "");
+				btn.active = false;
+				setFocused(savestateName);
 			} else SavestateMod.savestate(null);
 		}));
-    	
-		ButtonWidget loadstate = new ButtonWidget(this.width / 2 + 4, this.height / 4 + 96 + -16, 98, 20, I18n.translate("Loadstate"), (buttonWidgetx)->{
-			if (Keyboard.isKeyDown(GLFW.GLFW_KEY_LEFT_SHIFT)) {
-				/*mc.displayGuiScreen(new GuiLoadstateMenu());*/
-			}
+    	this.addButton(new ButtonWidget(this.width / 2 + 4, this.height / 4 + 48 + -16+24+24, 98, 20, "Loadstate", btn -> {
+    		if (Keyboard.isPressed(GLFW.GLFW_KEY_LEFT_SHIFT)) minecraft.openScreen(new LoadstateScreen());
 			else SavestateMod.loadstate(-1);
-		});
-    	loadstate.active = SavestateMod.hasSavestate();
-    	this.addButton(loadstate);
-		/*
-		double pX = MCVer.player(Minecraft.getMinecraft()).posX;
-		double pY = MCVer.player(Minecraft.getMinecraft()).posY;
-		double pZ = MCVer.player(Minecraft.getMinecraft()).posZ;
-		DupeMod.trackedObjects = new ArrayList<EntityItem>();
-        for (EntityItem item : MCVer.world(Minecraft.getMinecraft().getIntegratedServer(), MCVer.player(Minecraft.getMinecraft()).dimension).getEntitiesWithinAABB(EntityItem.class, MCVer.aabb(pX - 16, pY - 16, pZ - 16, pX + 16, pY + 16, pZ + 16))) {
-        	DupeMod.trackedObjects.add(item);
-        }
-        */
+    	})).active = SavestateMod.hasSavestate();
 		
-    	addButton(new ButtonWidget(5, 15, 48, 20, "+", buttonWidgetx -> {
-    		if (Keyboard.isKeyDown(GLFW.GLFW_KEY_LEFT_SHIFT)) {
-//				tickrateField = new GuiTextField(0, MCVer.getFontRenderer(Minecraft.getMinecraft()), 4, 15, 103, 20);
-//    			buttonWidgetx.active = false;
-//				tickrateField.setFocused(true);
-			} else {
-				TickrateChangerMod.index++;
-				TickrateChangerMod.index = MCVer.clamp(TickrateChangerMod.index, 0, 11);
-				TickrateChangerMod.updateTickrate(TickrateChangerMod.ticks[TickrateChangerMod.index]);
-			}
+		this.addButton(new ButtonWidget((width / 4) * 0 + 1, height - 20, width / 4 - 2, 20, "Manipulate Drops", btn -> {
+			this.minecraft.openScreen(new LootManipulationScreen((GameMenuScreen) (Object) this));
+		}));
+		this.addButton(new ButtonWidget((width / 4) * 1 + 2, height - 20, width / 4 - 2, 20, "Manipulate Dragon", btn -> {
+			this.minecraft.openScreen(new DragonManipulationScreen((GameMenuScreen) (Object) this));
+		})).active = MinecraftClient.getInstance().getServer().getWorld(DimensionType.THE_END).getAliveEnderDragons().size() >= 1;
+		this.addButton(new ButtonWidget((width / 4) * 2 + 3, height - 20, width / 4 - 2, 20, "Manipulate Spawning", btn -> {
+			this.minecraft.openScreen(new SpawnManipulationScreen());
+		}));
+		this.addButton(new ButtonWidget((width / 4) * 3 + 4, height - 20, width / 4 - 4, 20, "Manipulate AI", btn -> {
+			this.minecraft.openScreen(new AIManipulationScreen());
+		}));
+		this.addButton(new ButtonWidget(5, 55, 98, 20, "Save Items",btn -> {
+			DupeMod.save(minecraft);
+			btn.active = false;
+		}));
+		this.addButton(new ButtonWidget(5, 75, 98, 20, "Load Items", btn -> {
+			DupeMod.load(minecraft);
+			btn.active = false;
+		}));
+		
+        addButton(new ButtonWidget(5, 15, 48, 20, "+", b -> {
+            TickrateChangerMod.index++;
+            TickrateChangerMod.index = MathHelper.clamp(TickrateChangerMod.index, 1, 10);
+            TickrateChangerMod.updateTickrate(TickrateChangerMod.ticks[TickrateChangerMod.index]);
         }));
-        addButton(new ButtonWidget( 55, 15, 48, 20, "-", buttonWidgetx -> {
-        	if (Keyboard.isKeyDown(GLFW.GLFW_KEY_LEFT_SHIFT)) {
-//				tickrateField = new GuiTextField(0, MCVer.getFontRenderer(Minecraft.getMinecraft()), 4, 15, 103, 20);
-//				buttonWidgetx.active = false;
-//				tickrateField.setFocused(true);
-			} else {
-				TickrateChangerMod.index--;
-				TickrateChangerMod.index = MCVer.clamp(TickrateChangerMod.index, 0, 11);
-				TickrateChangerMod.updateTickrate(TickrateChangerMod.ticks[TickrateChangerMod.index]);
-			}
+        addButton(new ButtonWidget( 55, 15, 48, 20, "-", b -> {
+            TickrateChangerMod.index--;
+            TickrateChangerMod.index = MathHelper.clamp(TickrateChangerMod.index, 1, 10);
+            TickrateChangerMod.updateTickrate(TickrateChangerMod.ticks[TickrateChangerMod.index]);
+        }));
+        addButton(new ButtonWidget(37, 115, 66, 20, "Jump ticks", btn -> {
+			TickrateChangerMod.ticksToJump = (int) TickrateChangerMod.ticks[TickrateChangerMod.ji];
+			btn.active = false;
+			btn.setMessage("Jumping...");
+        }));
+        addButton(new ButtonWidget(5, 115, 30, 20, TickrateChangerMod.ticks[TickrateChangerMod.ji] + "t", btn -> {
+        	TickrateChangerMod.ji++;
+			if (TickrateChangerMod.ji > 10) TickrateChangerMod.ji = 1;
+			buttons.clear();
+			init();
+        }));
+        addButton(new SmallCheckboxWidget(2, height - 20 - 15, "Avoid taking damage", !ConfigUtils.getBoolean("tools", "takeDamage"), b -> {
+            ConfigUtils.setBoolean("tools", "takeDamage", !b.isChecked());
+            ConfigUtils.save();
+        }));
+       
+        final SmallCheckboxWidget tw = addButton(new SmallCheckboxWidget(2, height - 32 - 15, "Drop towards me", ConfigUtils.getBoolean("tools", "manipulateVelocityTowards"), b -> {
+            ConfigUtils.setBoolean("tools", "manipulateVelocityTowards", b.isChecked());
+            if (b.isChecked()) {
+                ConfigUtils.setBoolean("tools", "manipulateVelocityAway", false);
+                fw.silentPress(false);
+            }
+            ConfigUtils.save();
+        }));
+        fw = addButton(new SmallCheckboxWidget(2, height - 44 - 15, "Drop away from me", ConfigUtils.getBoolean("tools", "manipulateVelocityAway"), b -> {
+            ConfigUtils.setBoolean("tools", "manipulateVelocityAway", b.isChecked());
+            if (b.isChecked()) {
+                ConfigUtils.setBoolean("tools", "manipulateVelocityTowards", false);
+                tw.silentPress(false);
+            }
+            ConfigUtils.save();
+        }));
+        addButton(new SmallCheckboxWidget(2, height - 56 - 15 , "Optimize Explosions", ConfigUtils.getBoolean("tools", "manipulateExplosionDropChance"), b -> {
+            ConfigUtils.setBoolean("tools", "manipulateExplosionDropChance", b.isChecked());
+            ConfigUtils.save();
+        }));
+        addButton(new SmallCheckboxWidget(2, height - 68 - 15 , "Left Auto Clicker", ConfigUtils.getBoolean("tools", "lAutoClicker"), b -> {
+            ConfigUtils.setBoolean("tools", "lAutoClicker", b.isChecked());
+            ConfigUtils.save();
+        }));
+        
+        addButton(new ButtonWidget(this.width / 2 - 100, this.height / 4 + 144 + -16, 200, 20, "Reset Timer", btn -> {
+        	Timer.ticks = -1;
+			Timer.startTime = Duration.ofMillis(System.currentTimeMillis());
         }));
 	}
 	
-	@ModifyConstant(method = "render", constant = @Constant(intValue = 40))
-	public int moveTextUp(int ignored) {
-		return 15;
-	}
+	@Inject(method = "render", at = @At("TAIL"))
+	public void drawScreen(int mouseX, int mouseY, float partialTicks, CallbackInfo ci) {
+		
+		if (getClass().getSimpleName().contains("GameMenuScreen")) {
+			if (Keyboard.isKeyDown(GLFW.GLFW_KEY_LEFT_SHIFT)) {
+				this.buttons.get(8).setMessage("\u00A76Name Savestate");
+				this.buttons.get(9).setMessage("\u00A76Choose State");
+			} else {
+				this.buttons.get(8).setMessage("Savestate");
+				this.buttons.get(9).setMessage("Loadstate");
+			}	
+		}
+		
+		drawCenteredString(minecraft.textRenderer, "Hold Shift to access more features", width / 2, this.height / 4 + 152, 0xFFFFFF);
 	
-	@Inject(method = "render", at = @At(value = "RETURN"))
-	public void injectRender(CallbackInfo ci) {
+		if (savestateName != null) savestateName.render(mouseX, mouseX, partialTicks);
+		
+		if (SavestateMod.showSavestateDone) {
+			long timeSince = System.currentTimeMillis() - SavestateMod.timeTitle;
+			if (timeSince >= 1800) {
+				SavestateMod.showSavestateDone = false;
+				return;
+			}
+			drawCenteredString(minecraft.textRenderer, "\u00A76Savestate successful...", width / 2, 20, new Color(1F, 1F, 1F, 1F - (timeSince / 2000F)).getRGB());
+		} else if (SavestateMod.showLoadstateDone) {
+			long timeSince = System.currentTimeMillis() - SavestateMod.timeTitle;
+			if (timeSince >= 1800) {
+				SavestateMod.showLoadstateDone = false;
+				return;
+			}
+			drawCenteredString(minecraft.textRenderer, "\u00A76Loadstate successful...", width / 2, 20, new Color(1F, 1F, 1F, 1F - (timeSince / 2000F)).getRGB());
+		}
+		
 		drawString(minecraft.textRenderer, "Tickrate Changer (" + TickrateChangerMod.tickrate + ")", 5, 5, 0xFFFFFF);
+		minecraft.textRenderer.drawWithShadow("Tickjump", 10, 105, 0xFFFFFF);
+		if(buttons.get(18).active==false) {
+			minecraft.textRenderer.drawWithShadow("Tickjump is ready,", 8, 137, 0xFFFFFF);
+			minecraft.textRenderer.drawWithShadow("press ESC to continue", 8, 147, 0xFFFFFF);
+		}
+		minecraft.textRenderer.drawWithShadow("Duping", 10, 45, 0xFFFFFF);
+	}
+	
+	
+	@Override
+	public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
+		if (savestateName != null) {
+			savestateName.mouseClicked(mouseX, mouseY, mouseButton);
+		}
+		return super.mouseClicked(mouseX, mouseY, mouseButton);
+	}
+	
+	@Override
+	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+		if (savestateName != null) {
+			boolean focused = savestateName.isFocused();
+			if (keyCode == GLFW.GLFW_KEY_ENTER && focused) {
+				if (savestateName.getText().isEmpty()) 
+					SavestateMod.savestate(null);
+				else 
+					SavestateMod.savestate(savestateName.getText());
+			}
+		}
+		return super.keyPressed(keyCode, scanCode, modifiers);
+	}
+	
+	@Override
+	public boolean charTyped(char typedChar, int keyCode) {
+		if (savestateName != null) 
+			savestateName.charTyped(typedChar, keyCode);
+		
+		return super.charTyped(typedChar, keyCode);
 	}
 	
 }
