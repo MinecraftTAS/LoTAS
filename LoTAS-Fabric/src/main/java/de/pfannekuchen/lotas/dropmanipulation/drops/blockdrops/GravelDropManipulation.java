@@ -5,7 +5,7 @@ import java.util.List;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.platform.GlStateManager;
 
-import de.pfannekuchen.lotas.gui.LootManipulationScreen;
+import de.pfannekuchen.lotas.gui.GuiDropChanceManipulation;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
@@ -17,7 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.Identifier;
 
-public class GravelDropManipulation extends LootManipulationScreen.DropManipulation {
+public class GravelDropManipulation extends GuiDropChanceManipulation.DropManipulation {
 
     public static boolean flint = false;
 

@@ -29,7 +29,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.LiteralText;
 
-public class LootManipulationScreen extends Screen {
+public class GuiDropChanceManipulation extends Screen {
 
     public static ArrayList<DropManipulation> manipulations;
     public static int selected = 0;
@@ -51,7 +51,7 @@ public class LootManipulationScreen extends Screen {
         manipulations.add(new FishDropManipulation(0, 0, 0, 0));
     }
 
-    public LootManipulationScreen(GameMenuScreen gameMenuScreen) {
+    public GuiDropChanceManipulation(GameMenuScreen gameMenuScreen) {
         super(new LiteralText("Drop Manipulation Screen"));
     }
 

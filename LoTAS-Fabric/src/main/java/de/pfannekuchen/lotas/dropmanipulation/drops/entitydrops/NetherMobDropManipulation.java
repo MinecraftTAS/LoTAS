@@ -5,7 +5,7 @@ import java.util.List;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.platform.GlStateManager;
 
-import de.pfannekuchen.lotas.gui.LootManipulationScreen;
+import de.pfannekuchen.lotas.gui.GuiDropChanceManipulation;
 import de.pfannekuchen.lotas.gui.widgets.SmallCheckboxWidget;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
@@ -21,7 +21,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.Identifier;
 
-public class NetherMobDropManipulation extends LootManipulationScreen.DropManipulation {
+public class NetherMobDropManipulation extends GuiDropChanceManipulation.DropManipulation {
 
     public static SmallCheckboxWidget optimizeBlaze = new SmallCheckboxWidget(0, 0, "Optimize Blaze Drops", false);
     public static SmallCheckboxWidget optimizeGhast = new SmallCheckboxWidget(0, 0, "Optimize Ghast Drops", false);

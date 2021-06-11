@@ -15,7 +15,7 @@ import de.pfannekuchen.lotas.core.utils.Keyboard;
 import de.pfannekuchen.lotas.gui.AIManipulationScreen;
 import de.pfannekuchen.lotas.gui.DragonManipulationScreen;
 import de.pfannekuchen.lotas.gui.LoadstateScreen;
-import de.pfannekuchen.lotas.gui.LootManipulationScreen;
+import de.pfannekuchen.lotas.gui.GuiDropChanceManipulation;
 import de.pfannekuchen.lotas.gui.SpawnManipulationScreen;
 import de.pfannekuchen.lotas.gui.widgets.SmallCheckboxWidget;
 import de.pfannekuchen.lotas.mods.DupeMod;
@@ -61,7 +61,7 @@ public abstract class MixinGuiIngameMenu extends Screen {
     	})).active = SavestateMod.hasSavestate();
 		
 		this.addButton(new ButtonWidget((width / 4) * 0 + 1, height - 20, width / 4 - 2, 20, "Manipulate Drops", btn -> {
-			this.minecraft.openScreen(new LootManipulationScreen((GameMenuScreen) (Object) this));
+			this.minecraft.openScreen(new GuiDropChanceManipulation((GameMenuScreen) (Object) this));
 		}));
 		this.addButton(new ButtonWidget((width / 4) * 1 + 2, height - 20, width / 4 - 2, 20, "Manipulate Dragon", btn -> {
 			this.minecraft.openScreen(new DragonManipulationScreen((GameMenuScreen) (Object) this));

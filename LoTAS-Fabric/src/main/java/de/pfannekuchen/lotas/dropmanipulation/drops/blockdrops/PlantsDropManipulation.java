@@ -5,7 +5,7 @@ import java.util.List;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.platform.GlStateManager;
 
-import de.pfannekuchen.lotas.gui.LootManipulationScreen;
+import de.pfannekuchen.lotas.gui.GuiDropChanceManipulation;
 import de.pfannekuchen.lotas.gui.widgets.SmallCheckboxWidget;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -19,7 +19,7 @@ import net.minecraft.item.Items;
 import net.minecraft.state.property.IntProperty;
 import net.minecraft.util.Identifier;
 
-public class PlantsDropManipulation extends LootManipulationScreen.DropManipulation {
+public class PlantsDropManipulation extends GuiDropChanceManipulation.DropManipulation {
 
     public static SmallCheckboxWidget optimizeCarrots = new SmallCheckboxWidget(0, 0, "Optimize Carrot Drops", false);
     public static SmallCheckboxWidget optimizePotato = new SmallCheckboxWidget(0, 0, "Optimize Potato Drops", false);
