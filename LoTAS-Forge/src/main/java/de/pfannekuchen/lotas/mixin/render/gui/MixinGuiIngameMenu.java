@@ -50,7 +50,7 @@ public abstract class MixinGuiIngameMenu extends GuiScreen {
 	@Unique
 	private static ImmutableList<Integer> glitchedButtons = ImmutableList.of(17, 18, 22);
 	@Unique
-	private static ImmutableList<Integer> advancedButtons = ImmutableList.of(21, 22, 30, 28, 27, 26, 29, 24, 23);
+	private static ImmutableList<Integer> advancedButtons = ImmutableList.of(21, 22, 23, 24, 26, 27, 28, 29, 30);
 	
 	public GuiTextField savestateName;
 	public GuiTextField tickrateField;

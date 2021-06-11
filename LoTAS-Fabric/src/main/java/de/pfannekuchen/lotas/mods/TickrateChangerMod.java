@@ -2,10 +2,12 @@ package de.pfannekuchen.lotas.mods;
 
 import java.time.Duration;
 
+import de.pfannekuchen.lotas.core.utils.ConfigUtils;
 import de.pfannekuchen.lotas.mixin.accessors.AccessorMinecraftClient;
 import de.pfannekuchen.lotas.mixin.accessors.AccessorTimer;
 import net.fabricmc.fabric.mixin.resource.loader.MixinMinecraftServer;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.text.LiteralText;
 
 /**
  * Here is the basic Tickrate Changer Management.
@@ -66,8 +68,8 @@ public class TickrateChangerMod {
 		updateClientTickrate(tickrateIn);
 		updateServerTickrate(tickrateIn);
 		
-		//ConfigUtils.setInt("hidden", "tickrate", index);
-		//ConfigUtils.save();
+		ConfigUtils.setInt("hidden", "tickrate", index);
+		ConfigUtils.save();
 	}
 	
 	public static long getMilliseconds() {
@@ -90,7 +92,7 @@ public class TickrateChangerMod {
 			((AccessorTimer) ((AccessorMinecraftClient) MinecraftClient.getInstance()).getRenderTickCounter()).setTickTime(Float.MAX_VALUE);
 		}
 		tickrate = tickrateIn;
-		//if (!ConfigUtils.getBoolean("ui", "hideTickrateMessages") && Minecraft.getMinecraft().ingameGUI != null) Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(new TextComponentString("Updated Tickrate to \u00A7b" + tickrateIn));
+		if (!ConfigUtils.getBoolean("ui", "hideTickrateMessages") && MinecraftClient.getInstance().inGameHud != null) MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(new LiteralText("Updated Tickrate to \u00A7b" + tickrateIn));
 	}
 	
 	/**

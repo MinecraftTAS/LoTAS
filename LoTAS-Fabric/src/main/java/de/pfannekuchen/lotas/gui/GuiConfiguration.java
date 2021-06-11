@@ -24,7 +24,10 @@ public class GuiConfiguration extends Screen {
 			"B:tools:showTickIndicator:INSERT",
 			"B:ui:hideRTATimer:INSERT",
 			"B:tools:removePearlDelay:INSERT",
-			"B:tools:noDamageUnbreaking:INSERT"
+			"B:tools:noDamageUnbreaking:INSERT",
+			"B:tools:showSpeedometer:INSERT",
+			"B:ui:advancedMode:INSERT",
+			"B:ui:glitchedMode:INSERT"
 	};
 
 	public static String[] optionsInteger = new String[] {

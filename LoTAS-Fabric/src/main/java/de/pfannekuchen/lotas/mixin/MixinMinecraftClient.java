@@ -55,6 +55,14 @@ public class MixinMinecraftClient {
 		if (TickrateChangerMod.advanceClient) {
 			TickrateChangerMod.resetAdvanceClient();
 		}
+		
+		if (TickrateChangerMod.ticksToJump != -1 && MinecraftClient.getInstance().currentScreen instanceof GameMenuScreen == false) {
+			TickrateChangerMod.ticksToJump--;
+			if (TickrateChangerMod.ticksToJump == 0) {
+				TickrateChangerMod.ticksToJump = -1;
+				if (currentScreen == null && MinecraftClient.getInstance().player != null) MinecraftClient.getInstance().openScreen(new GameMenuScreen(true));
+			}
+		}
 	}
 	
 	
