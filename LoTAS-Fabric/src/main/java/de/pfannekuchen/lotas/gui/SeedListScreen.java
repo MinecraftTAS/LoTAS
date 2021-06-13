@@ -1,5 +1,6 @@
 package de.pfannekuchen.lotas.gui;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -72,13 +73,13 @@ public class SeedListScreen extends Screen {
      * @param seed
      */
     public Identifier downloadSeed(String seed) throws IOException {
-        if (seedsId.containsKey(seed + "")) return seedsId.get(seed + "");
-        URL url = new URL("http://mgnet.work/seeds/" + seed + ".png");
-        NativeImage image = NativeImage.read(url.openStream());
-        NativeImageBackedTexture txt = new NativeImageBackedTexture(image);
-        Identifier iff =  MinecraftClient.getInstance().getTextureManager().registerDynamicTexture(seed + "", txt);
-        seedsId.put(seed + "", iff);
-        return iff;
+		if (seedsId.containsKey(seed + "")) return seedsId.get(seed + "");
+		URL url = new URL("http://mgnet.work/seeds/" + seed + ".png");
+		NativeImage image = NativeImage.read(url.openStream());
+		NativeImageBackedTexture txt = new NativeImageBackedTexture(image);
+		Identifier iff = MinecraftClient.getInstance().getTextureManager().registerDynamicTexture(seed + "", txt);
+		seedsId.put(seed + "", iff);
+		return iff;
     }
 
     /**
@@ -154,8 +155,12 @@ public class SeedListScreen extends Screen {
             this.minecraft.textRenderer.draw(seed.description,  x + 35, y + 14, 8421504);
             this.minecraft.textRenderer.draw(seed.seed,  x + 35, y + 24, 8421504);
             GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-            this.minecraft.getTextureManager().bindTexture(downloadSeed(seed.seed));
-            DrawableHelper.blit(x+1, y, 0.0F, 0.0F, 32, 32, 32, 32);
+            try {
+            	this.minecraft.getTextureManager().bindTexture(downloadSeed(seed.seed));
+            	DrawableHelper.blit(x+1, y, 0.0F, 0.0F, 32, 32, 32, 32);
+            } catch (Exception e) {
+
+            }
             y += 40;
         }
     }

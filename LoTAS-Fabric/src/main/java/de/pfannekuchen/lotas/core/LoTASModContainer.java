@@ -5,10 +5,16 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.net.URLConnection;
+import java.nio.file.Files;
+import java.util.List;
+
+import org.apache.commons.io.FileUtils;
 
 import de.pfannekuchen.lotas.core.utils.ConfigUtils;
 import de.pfannekuchen.lotas.core.utils.KeybindsUtils;
 import de.pfannekuchen.lotas.core.utils.TextureYoinker;
+import de.pfannekuchen.lotas.gui.SeedListScreen;
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.client.MinecraftClient;
@@ -21,6 +27,11 @@ public class LoTASModContainer implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		KeybindsUtils.registerKeybinds();
+		try {
+			loadSeeds();
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
 		try {
 			ConfigUtils.init(new File(MinecraftClient.getInstance().runDirectory, "lotas.properties"));
 			if (ConfigUtils.getBoolean("tools", "saveTickrate")) TickrateChangerMod.updateTickrate(ConfigUtils.getInt("hidden", "tickrate"));
@@ -48,5 +59,30 @@ public class LoTASModContainer implements ModInitializer {
 			e.printStackTrace();
 		}
 	}
+    
+    /**
+     * Loads a list of seeds together with preview images from <a href="http://mgnet.work/seeds/">mgnet.work/seeds/seeds1.14.4.txt</a> and creates a List
+     * @throws IOException
+     */
+    public void loadSeeds() throws Exception {
+        File file = new File("seeddata.txt");
+        try {
+            URL url = new URL("http://mgnet.work/seeds/seeds1.14.4.txt");
+            URLConnection conn = url.openConnection();
+            conn.setReadTimeout(5000);
+            file.createNewFile();
+            FileUtils.copyInputStreamToFile(conn.getInputStream(), file);
+        } catch (Exception e) {
+        	e.printStackTrace();
+        }
+        List<String> strings = Files.readAllLines(file.toPath());
+        for (String line : strings) {
+            String seed = line.split(":")[0];
+            String name = line.split(":")[1];
+            String description = line.split(":")[2];
+
+            SeedListScreen.seeds.add(new SeedListScreen.Seed(seed, name, description));
+        }
+    }
     
 }
