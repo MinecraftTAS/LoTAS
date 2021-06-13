@@ -47,11 +47,14 @@ public class MixinMinecraftClient {
 	private GameOptions options;
 
 	@Unique
-	public boolean wasOnGround = false;
+	public boolean wasOnGround;
+	
+	@Unique
+	public boolean isLoadingWorld;
 	
 	@Inject(method = "joinWorld", at = @At("HEAD"))
 	public void injectloadWorld(ClientWorld worldClientIn, CallbackInfo ci) {
-		
+		isLoadingWorld = ConfigUtils.getBoolean("tools", "hitEscape") && worldClientIn != null;
 	}
 	
 	@Inject(method = "init", at = @At("TAIL"))
@@ -200,7 +203,7 @@ public class MixinMinecraftClient {
 		}
 	}
 	
-	@Inject(method = "handleInputEvents", at = @At("RETURN"))
+	@Inject(method = "handleInputEvents", at = @At("RETURN"), cancellable = true)
 	public void keyInputEvent(CallbackInfo ci) {
 		KeybindsUtils.keyEvent();
 	}
@@ -211,6 +214,11 @@ public class MixinMinecraftClient {
 			SavestateMod.isLoading = false;
 	        SavestateMod.showLoadstateDone = true;
 	        SavestateMod.timeTitle = System.currentTimeMillis();
+		}
+		if (isLoadingWorld && guiScreenIn == null) {
+			isLoadingWorld = false;
+			MinecraftClient.getInstance().openScreen(new GameMenuScreen(true));
+			ci.cancel();
 		}
 		if (guiScreenIn == null && (((MinecraftClient) (Object) this).player != null)) {
 			if (SavestateMod.applyVelocity) {

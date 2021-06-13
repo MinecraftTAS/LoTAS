@@ -21,6 +21,7 @@
 		"render.binds.MixinTickrateChangerWorldborder",
 		"render.gui.MixinGuiIngameMenu",
 		"render.gui.MixinGuiMainMenu",
+		"render.gui.MixinGuiSelectWorldScreen",
 		"render.MixinOverlayEvent",
 		"render.MixinRenderEvent",
 		"render.MixinPotionRenderer",
