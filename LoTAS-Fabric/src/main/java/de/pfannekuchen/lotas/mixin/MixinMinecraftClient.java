@@ -3,12 +3,14 @@ package de.pfannekuchen.lotas.mixin;
 import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.core.utils.ConfigUtils;
+import de.pfannekuchen.lotas.core.utils.EventUtils.Timer;
 import de.pfannekuchen.lotas.core.utils.KeybindsUtils;
 import de.pfannekuchen.lotas.core.utils.Keyboard;
 import de.pfannekuchen.lotas.mods.SavestateMod;
@@ -17,8 +19,10 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.GameMenuScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.options.GameOptions;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.world.ClientWorld;
+import net.minecraft.util.math.MathHelper;
 
 @Mixin(MinecraftClient.class)
 public class MixinMinecraftClient {
@@ -34,6 +38,11 @@ public class MixinMinecraftClient {
 	@Shadow
 	private int itemUseCooldown;
 
+	@Shadow
+	private ClientPlayerEntity player;
+
+	@Shadow
+	private GameOptions options;
 
 	@Inject(method = "joinWorld", at = @At("HEAD"))
 	public void injectloadWorld(ClientWorld worldClientIn, CallbackInfo ci) {
@@ -43,6 +52,9 @@ public class MixinMinecraftClient {
 	@Inject(method = "tick", at = @At(value="HEAD"))
 	public void injectrunTick(CallbackInfo ci) {
 		if (ConfigUtils.getBoolean("tools", "rAutoClicker")) itemUseCooldown = 0;
+		
+		TickrateChangerMod.show = !TickrateChangerMod.show;
+		if ((currentScreen == null ? true : Timer.allowed.contains(currentScreen.getClass().getSimpleName().toLowerCase())) && Timer.running) Timer.ticks++;
 		
 		if (KeybindsUtils.shouldSavestate) {
 			KeybindsUtils.shouldSavestate = false;
@@ -71,6 +83,24 @@ public class MixinMinecraftClient {
 		}
 	}
 	
+	@Unique
+	private void move(float strafe, float up, float forward, float friction) {
+        float f = strafe * strafe + up * up + forward * forward;
+        if (f >= 1.0E-4F)
+        {
+            f = MathHelper.sqrt(f);
+            if (f < 1.0F) f = 1.0F;
+            f = friction / f;
+            strafe = strafe * f;
+            up = up * f;
+            forward = forward * f;
+            float f1 = MathHelper.sin(player.yaw * 0.017453292F);
+            float f2 = MathHelper.cos(player.yaw * 0.017453292F);
+            player.x += (double)(strafe * f2 - forward * f1);
+            player.y += (double)up;
+            player.z += (double)(forward * f2 + strafe * f1);
+        }
+	}
 	
 	@Inject(method = "render", at = @At(value = "HEAD"))
 	public void injectrunGameLoop(CallbackInfo ci) {
@@ -91,7 +121,7 @@ public class MixinMinecraftClient {
     		}
     	}
 		
-		if (TickrateChangerMod.tickrate == 0 && KeybindsUtils.advanceTicksKeybind.wasPressed() /* && !KeybindsUtils.isFreecaming */) {
+		if (TickrateChangerMod.tickrate == 0 && KeybindsUtils.advanceTicksKeybind.wasPressed() && !KeybindsUtils.isFreecaming) {
 			TickrateChangerMod.advanceTick();
 		}
 		boolean flag = false;
@@ -110,8 +140,42 @@ public class MixinMinecraftClient {
 		if (TickrateChangerMod.tickrate == 0 && currentScreen == null && Keyboard.isKeyDown(GLFW.GLFW_KEY_ESCAPE)) {
 			((MinecraftClient) (Object) this).openScreen(new GameMenuScreen(true));
 			TickrateChangerMod.updateTickrate(KeybindsUtils.savedTickrate);
-//    		KeybindsUtils.isFreecaming = false; MCVer.player((Minecraft) (Object) this).noClip = false;
+    		KeybindsUtils.isFreecaming = false; MinecraftClient.getInstance().player.noClip = false;
 			worldRenderer.reload();
+		}
+		
+		//Controls for freecam
+    	if (KeybindsUtils.isFreecaming) {
+    		if (options.keyForward.isPressed()) {
+    			move(0.0F, 0.0F, 0.91F, 1.0F);
+    		} 
+    		if (options.keyBack.isPressed()) {
+    			move(0.0F, 0.0F, -0.91F, 1.0F);
+	   		} 
+    		if (options.keyLeft.isPressed()) {
+    			move(0.91F, 0.0F, 0.0F, 1.0F);
+			} 
+    		if (options.keyRight.isPressed()) {
+    			move(-0.91F, 0.0F, 0.0F, 1.0F);
+			} 
+    		if (options.keyJump.isPressed()) {
+    			move(0.0F, 0.92F, 0.0F, 1.0F);
+			} 
+    		if (options.keySneak.isPressed()) {
+    			move(0.0F, -0.92F, 0.0F, 1.0F);
+			}
+    	}
+    	
+    	if (KeybindsUtils.toggleFreecamKeybind.wasPressed() && MinecraftClient.getInstance().currentScreen == null) {
+    		if (KeybindsUtils.isFreecaming) {
+    			KeybindsUtils.isFreecaming = false; MinecraftClient.getInstance().player.noClip = false;
+    			worldRenderer.reload();
+				TickrateChangerMod.updateTickrate(KeybindsUtils.savedTickrate);
+			} else {
+				KeybindsUtils.isFreecaming = true; MinecraftClient.getInstance().player.noClip = true;
+				KeybindsUtils.savedTickrate = (int)TickrateChangerMod.tickrate;
+				TickrateChangerMod.updateTickrate(0);
+			}
 		}
 	}
 	

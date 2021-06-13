@@ -21,10 +21,14 @@
 		"render.binds.MixinTickrateChangerWorldborder",
 		"render.gui.MixinGuiIngameMenu",
 		"render.gui.MixinGuiMainMenu",
+		"render.MixinOverlayEvent",
+		"render.MixinRenderEvent",
 		"patches.MixinBlockPatch",
 		"patches.MixinEntityPatch",
 		"patches.MixinExplosionPatch",
-		"patches.MixinServerPlayerEntityPatch"
+		"patches.MixinServerPlayerEntityPatch",
+		"patches.MixinEnderPearlPatch",
+		"patches.MixinUnbreakingPatch"
 	],
   	"injectors": {
     	"defaultRequire": 1
