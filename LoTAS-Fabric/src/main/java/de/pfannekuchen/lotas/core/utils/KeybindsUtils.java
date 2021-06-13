@@ -29,6 +29,8 @@ public class KeybindsUtils {
 	public static boolean isFreecaming;
 	public static int savedTickrate;
 
+	public static boolean wasPressed = false;
+	
 	public static void keyEvent() {
 		while (saveStateKeybind.wasPressed() /*&& ChallengeMap.currentMap == null*/) {
 			MinecraftClient.getInstance().openScreen(new GameMenuScreen(true));
@@ -51,6 +53,13 @@ public class KeybindsUtils {
 			}
 			Timer.running = !Timer.running;
 		}
+		
+		if (wasPressed != holdStrafeKeybind.isPressed() && wasPressed == true) {
+			KeyBinding.setKeyPressed(MinecraftClient.getInstance().options.keyRight.getDefaultKeyCode(), false);
+		} else if (wasPressed != holdStrafeKeybind.isPressed() && wasPressed == false) {
+			MinecraftClient.getInstance().player.yaw -= 45;
+		}
+		wasPressed = holdStrafeKeybind.isPressed();
 	}
 
 	public static void registerKeybinds() {

@@ -21,6 +21,7 @@ import net.minecraft.client.gui.screen.GameMenuScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.options.GameOptions;
+import net.minecraft.client.options.KeyBinding;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.math.MathHelper;
@@ -45,6 +46,9 @@ public class MixinMinecraftClient {
 	@Shadow
 	private GameOptions options;
 
+	@Unique
+	public boolean wasOnGround = false;
+	
 	@Inject(method = "joinWorld", at = @At("HEAD"))
 	public void injectloadWorld(ClientWorld worldClientIn, CallbackInfo ci) {
 		
@@ -65,6 +69,17 @@ public class MixinMinecraftClient {
 		if (KeybindsUtils.shouldSavestate) {
 			KeybindsUtils.shouldSavestate = false;
 			SavestateMod.savestate(null);
+		}
+		
+		if (player != null) {
+			if (player.onGround && !wasOnGround && KeybindsUtils.holdStrafeKeybind.isPressed()) {
+				 player.yaw += 45;
+				 KeyBinding.setKeyPressed(options.keyRight.getDefaultKeyCode(), false);
+			} else if (!player.onGround && wasOnGround && KeybindsUtils.holdStrafeKeybind.isPressed()) {
+				player.yaw -= 45;
+				KeyBinding.setKeyPressed(options.keyRight.getDefaultKeyCode(), true);
+			}
+			wasOnGround = player.onGround;
 		}
 		
 		if (KeybindsUtils.shouldLoadstate) {
