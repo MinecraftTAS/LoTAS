@@ -6,7 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Properties;
 
-import de.pfannekuchen.lotas.gui.GuiConfiguration;
+import de.pfannekuchen.lotas.gui.ConfigurationScreen;
 
 public class ConfigUtils {
 
@@ -61,20 +61,20 @@ public class ConfigUtils {
 		if (ConfigUtils.getInt("hidden", "explosionoptimization") <= 0) ConfigUtils.setInt("hidden", "explosionoptimization", 100);
 		ConfigUtils.save();
 		
-		for (int i = 0; i < GuiConfiguration.optionsBoolean.length; i++) {
-			String cat = GuiConfiguration.optionsBoolean[i].split(":")[1];
-			String title = GuiConfiguration.optionsBoolean[i].split(":")[2];
-			GuiConfiguration.optionsBoolean[i] = GuiConfiguration.optionsBoolean[i].replaceFirst("INSERT", getBoolean(cat, title) + "");
+		for (int i = 0; i < ConfigurationScreen.optionsBoolean.length; i++) {
+			String cat = ConfigurationScreen.optionsBoolean[i].split(":")[1];
+			String title = ConfigurationScreen.optionsBoolean[i].split(":")[2];
+			ConfigurationScreen.optionsBoolean[i] = ConfigurationScreen.optionsBoolean[i].replaceFirst("INSERT", getBoolean(cat, title) + "");
 		}
-		for (int i = 0; i < GuiConfiguration.optionsString.length; i++) {
-			String cat = GuiConfiguration.optionsString[i].split(":")[1];
-			String title = GuiConfiguration.optionsString[i].split(":")[2];
-			GuiConfiguration.optionsString[i] = GuiConfiguration.optionsString[i].replaceFirst("INSERT", getString(cat, title) + "");
+		for (int i = 0; i < ConfigurationScreen.optionsString.length; i++) {
+			String cat = ConfigurationScreen.optionsString[i].split(":")[1];
+			String title = ConfigurationScreen.optionsString[i].split(":")[2];
+			ConfigurationScreen.optionsString[i] = ConfigurationScreen.optionsString[i].replaceFirst("INSERT", getString(cat, title) + "");
 		}
-		for (int i = 0; i < GuiConfiguration.optionsInteger.length; i++) {
-			String cat = GuiConfiguration.optionsInteger[i].split(":")[1];
-			String title = GuiConfiguration.optionsInteger[i].split(":")[2];
-			GuiConfiguration.optionsInteger[i] = GuiConfiguration.optionsInteger[i].replaceFirst("INSERT", getInt(cat, title) + "");
+		for (int i = 0; i < ConfigurationScreen.optionsInteger.length; i++) {
+			String cat = ConfigurationScreen.optionsInteger[i].split(":")[1];
+			String title = ConfigurationScreen.optionsInteger[i].split(":")[2];
+			ConfigurationScreen.optionsInteger[i] = ConfigurationScreen.optionsInteger[i].replaceFirst("INSERT", getInt(cat, title) + "");
 		}
     }
 }

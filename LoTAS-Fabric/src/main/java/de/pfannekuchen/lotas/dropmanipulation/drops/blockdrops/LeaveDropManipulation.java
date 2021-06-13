@@ -6,7 +6,7 @@ import java.util.List;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.platform.GlStateManager;
 
-import de.pfannekuchen.lotas.gui.GuiDropChanceManipulation;
+import de.pfannekuchen.lotas.gui.DropManipulationScreen;
 import de.pfannekuchen.lotas.gui.widgets.ImageButton;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -18,7 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.Identifier;
 
-public class LeaveDropManipulation extends GuiDropChanceManipulation.DropManipulation {
+public class LeaveDropManipulation extends DropManipulationScreen.DropManipulation {
 
     public static ImageButton dropApple = new ImageButton(x, y, c -> {LeaveDropManipulation.dropApple.setToggled(!LeaveDropManipulation.dropApple.isToggled());}, new Identifier("lotas", "drops/apple.png"));
     public static ImageButton dropStick = new ImageButton(x, y, c -> {LeaveDropManipulation.dropStick.setToggled(!LeaveDropManipulation.dropStick.isToggled());}, new Identifier("lotas", "drops/stick.png"));

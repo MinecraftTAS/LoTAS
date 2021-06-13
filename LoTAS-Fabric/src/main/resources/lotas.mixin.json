@@ -12,6 +12,7 @@
     	"accessors.AccessorTimer",
     	"accessors.AccessorTextFieldWidget",
     	"accessors.AccessorCreateWorldScreen",
+    	"accessors.AccessorServerPlayerEntity",
     	"render.binds.MixinTickrateChangerAchievement",
 		"render.binds.MixinTickrateChangerAudioPitch",
 		"render.binds.MixinTickrateChangerEnchantmentGlimm",
@@ -20,8 +21,10 @@
 		"render.binds.MixinTickrateChangerWorldborder",
 		"render.gui.MixinGuiIngameMenu",
 		"render.gui.MixinGuiMainMenu",
-		"server.MixinDropBlock",
-		"server.MixinDropEntity"
+		"patches.MixinBlockPatch",
+		"patches.MixinEntityPatch",
+		"patches.MixinExplosionPatch",
+		"patches.MixinServerPlayerEntityPatch"
 	],
   	"injectors": {
     	"defaultRequire": 1

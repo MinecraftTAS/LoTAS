@@ -1,4 +1,4 @@
-package de.pfannekuchen.lotas.mixin.server;
+package de.pfannekuchen.lotas.mixin.patches;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import de.pfannekuchen.lotas.core.utils.ConfigUtils;
-import de.pfannekuchen.lotas.gui.GuiDropChanceManipulation;
+import de.pfannekuchen.lotas.gui.DropManipulationScreen;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
@@ -18,11 +18,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 @Mixin(LivingEntity.class)
-public class MixinDropEntity {
+public class MixinEntityPatch {
 
     @Inject(method = "dropLoot", at = @At("HEAD"), cancellable = true)
     public void redodrop(DamageSource source, boolean causedByPlayer, CallbackInfo ci) {
-        for (GuiDropChanceManipulation.DropManipulation man : GuiDropChanceManipulation.manipulations) {
+        for (DropManipulationScreen.DropManipulation man : DropManipulationScreen.manipulations) {
             if (!man.enabled.isChecked()) continue;
             List<ItemStack> list = man.redirectDrops((LivingEntity) (Object) this);
             if (!list.isEmpty()) {

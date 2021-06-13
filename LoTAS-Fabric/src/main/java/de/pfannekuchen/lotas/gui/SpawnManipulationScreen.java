@@ -127,26 +127,24 @@ public class SpawnManipulationScreen extends Screen {
 		yText.mouseClicked(mouseX, mouseY, mouseButton);
 		zText.mouseClicked(mouseX, mouseY, mouseButton);
 		boolean b = super.mouseClicked(mouseX, mouseY, mouseButton);
+		canSpawn();
+		return b;
+	}
+	
+	public void canSpawn() {
 		e = entity.getEntity(minecraft.getServer().getWorld(minecraft.player.dimension));
 		e.updatePositionAndAngles(spawnX, spawnY, spawnZ, 0, 0);
 		if (e instanceof MobEntity) {
-			buttons.get(buttons.size() - 2).active = ((MobEntity) e).canSpawn(minecraft.getServer().getWorld(minecraft.player.dimension), SpawnType.NATURAL);
+			buttons.get(buttons.size() - 2).active = ((MobEntity) e).canSpawn(minecraft.getServer().getWorld(minecraft.player.dimension), SpawnType.NATURAL) && minecraft.getServer().getWorld(minecraft.player.dimension).doesNotCollide(e.getBoundingBox());
 		} else {
-			buttons.get(buttons.size() - 2).active = true;
+			buttons.get(buttons.size() - 2).active = minecraft.getServer().getWorld(minecraft.player.dimension).doesNotCollide(e.getBoundingBox());
 		}
-		return b;
 	}
 	
 	@Override
 	public boolean mouseReleased(double mouseX, double mouseY, int state) {
 		boolean b = super.mouseReleased(mouseX, mouseY, state);
-		e = entity.getEntity(minecraft.getServer().getWorld(minecraft.player.dimension));
-		e.updatePositionAndAngles(spawnX, spawnY, spawnZ, 0, 0);
-		if (e instanceof MobEntity) {
-			buttons.get(buttons.size() - 2).active = ((MobEntity) e).canSpawn(minecraft.getServer().getWorld(minecraft.player.dimension), SpawnType.NATURAL);
-		} else {
-			buttons.get(buttons.size() - 2).active = true;
-		}
+		canSpawn();
 		return b;
 	}
 	

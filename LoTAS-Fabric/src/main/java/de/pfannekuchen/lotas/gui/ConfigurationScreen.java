@@ -12,9 +12,9 @@ import net.minecraft.client.gui.widget.ButtonWidget.PressAction;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.text.LiteralText;
 
-public class GuiConfiguration extends Screen {
+public class ConfigurationScreen extends Screen {
 	
-	public GuiConfiguration() {
+	public ConfigurationScreen() {
 		super(new LiteralText("Configuration"));
 	}
 	

@@ -8,6 +8,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import de.pfannekuchen.lotas.core.MCVer;
+import de.pfannekuchen.lotas.core.utils.ConfigUtils;
 import de.pfannekuchen.lotas.core.utils.KeybindsUtils;
 import de.pfannekuchen.lotas.core.utils.Keyboard;
 import de.pfannekuchen.lotas.mods.SavestateMod;
@@ -29,6 +30,9 @@ public class MixinMinecraftClient {
 	private WorldRenderer worldRenderer;
 
 	private int save;
+	
+	@Shadow
+	private int itemUseCooldown;
 
 
 	@Inject(method = "joinWorld", at = @At("HEAD"))
@@ -38,6 +42,8 @@ public class MixinMinecraftClient {
 	
 	@Inject(method = "tick", at = @At(value="HEAD"))
 	public void injectrunTick(CallbackInfo ci) {
+		if (ConfigUtils.getBoolean("tools", "rAutoClicker")) itemUseCooldown = 0;
+		
 		if (KeybindsUtils.shouldSavestate) {
 			KeybindsUtils.shouldSavestate = false;
 			SavestateMod.savestate(null);

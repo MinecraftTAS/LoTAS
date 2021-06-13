@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import com.mojang.blaze3d.platform.GlStateManager;
 
 import de.pfannekuchen.lotas.core.utils.ConfigUtils;
-import de.pfannekuchen.lotas.gui.GuiConfiguration;
+import de.pfannekuchen.lotas.gui.ConfigurationScreen;
 import de.pfannekuchen.lotas.gui.VideoUpspeederScreen;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.screen.Screen;
@@ -100,7 +100,7 @@ public abstract class MixinGuiMainMenu extends Screen {
 			this.minecraft.openScreen(new VideoUpspeederScreen());
 		}));
 		this.addButton(new ButtonWidget(this.width / 2 - 100, y + spacingY * 2, 200, 20, I18n.translate("Configuration"), (buttonWidget) -> {
-			this.minecraft.openScreen(new GuiConfiguration());
+			this.minecraft.openScreen(new ConfigurationScreen());
 		}));
 	}
 	

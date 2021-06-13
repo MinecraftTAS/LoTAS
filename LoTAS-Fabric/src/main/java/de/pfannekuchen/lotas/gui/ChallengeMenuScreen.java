@@ -101,7 +101,7 @@ public class ChallengeMenuScreen extends GameMenuScreen {
 		}));
         
 		this.addButton(new ButtonWidget((width / 4) * 0 + 1, height - 20, width / 4 - 2, 20, "Manipulate Drops", btn -> {
-			this.minecraft.openScreen(new GuiDropChanceManipulation((GameMenuScreen) (Object) this));
+			this.minecraft.openScreen(new DropManipulationScreen((GameMenuScreen) (Object) this));
 		}));
 		this.addButton(new ButtonWidget((width / 4) * 1 + 2, height - 20, width / 4 - 2, 20, "Manipulate Dragon", btn -> {
 			this.minecraft.openScreen(new DragonManipulationScreen((GameMenuScreen) (Object) this));

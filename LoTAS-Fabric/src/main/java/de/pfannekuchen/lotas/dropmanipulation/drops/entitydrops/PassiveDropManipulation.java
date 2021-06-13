@@ -5,7 +5,7 @@ import java.util.List;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.platform.GlStateManager;
 
-import de.pfannekuchen.lotas.gui.GuiDropChanceManipulation;
+import de.pfannekuchen.lotas.gui.DropManipulationScreen;
 import de.pfannekuchen.lotas.gui.widgets.SmallCheckboxWidget;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
@@ -38,7 +38,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.Identifier;
 
-public class PassiveDropManipulation extends GuiDropChanceManipulation.DropManipulation {
+public class PassiveDropManipulation extends DropManipulationScreen.DropManipulation {
 
     public static SmallCheckboxWidget optimizeChicken = new SmallCheckboxWidget(0, 0, "Optimize Chicken Drops", false);
     public static SmallCheckboxWidget optimizeCow = new SmallCheckboxWidget(0, 0, "Optimize Cow Drops", false);

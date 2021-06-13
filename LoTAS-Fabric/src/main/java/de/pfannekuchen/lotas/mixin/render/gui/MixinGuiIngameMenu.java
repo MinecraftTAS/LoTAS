@@ -15,7 +15,7 @@ import de.pfannekuchen.lotas.core.utils.Keyboard;
 import de.pfannekuchen.lotas.gui.AIManipulationScreen;
 import de.pfannekuchen.lotas.gui.DragonManipulationScreen;
 import de.pfannekuchen.lotas.gui.LoadstateScreen;
-import de.pfannekuchen.lotas.gui.GuiDropChanceManipulation;
+import de.pfannekuchen.lotas.gui.DropManipulationScreen;
 import de.pfannekuchen.lotas.gui.SpawnManipulationScreen;
 import de.pfannekuchen.lotas.gui.widgets.SmallCheckboxWidget;
 import de.pfannekuchen.lotas.mods.DupeMod;
@@ -66,7 +66,7 @@ public abstract class MixinGuiIngameMenu extends Screen {
 		
     	
 		this.addButton(new ButtonWidget((width / 4) * 0 + 1, height - 20, width / 4 - 2, 20, "Manipulate Drops", btn -> {
-			this.minecraft.openScreen(new GuiDropChanceManipulation((GameMenuScreen) (Object) this));
+			this.minecraft.openScreen(new DropManipulationScreen((GameMenuScreen) (Object) this));
 		}));
 		
 		if (advanced) {
@@ -145,8 +145,8 @@ public abstract class MixinGuiIngameMenu extends Screen {
 	            ConfigUtils.setBoolean("tools", "manipulateExplosionDropChance", b.isChecked());
 	            ConfigUtils.save();
 	        }));
-	        addButton(new SmallCheckboxWidget(2, height - 68 - 15 , "Left Auto Clicker", ConfigUtils.getBoolean("tools", "lAutoClicker"), b -> {
-	            ConfigUtils.setBoolean("tools", "lAutoClicker", b.isChecked());
+	        addButton(new SmallCheckboxWidget(2, height - 68 - 15 , "Right Auto Clicker", ConfigUtils.getBoolean("tools", "rAutoClicker"), b -> {
+	            ConfigUtils.setBoolean("tools", "rAutoClicker", b.isChecked());
 	            ConfigUtils.save();
 	        }));
         }
