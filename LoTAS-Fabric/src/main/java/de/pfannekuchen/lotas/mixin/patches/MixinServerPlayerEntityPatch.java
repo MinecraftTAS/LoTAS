@@ -30,15 +30,10 @@ public abstract class MixinServerPlayerEntityPatch extends PlayerEntity {
 	@Final @Shadow
     public MinecraftServer server;
 	
-    @Shadow
-    private boolean method_14230() {
-        return this.server.isPvpEnabled();
-    }
-
     @Inject(method = "damage(Lnet/minecraft/entity/damage/DamageSource;F)Z", at = @At("HEAD"), cancellable = true)
     void damage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> returnable) {
         if (ConfigUtils.getBoolean("tools", "takeDamage")) return;
-        boolean bl = this.server.isDedicated() && this.method_14230() && "fall".equals(source.name);
+        boolean bl = this.server.isDedicated() && this.server.isPvpEnabled() && "fall".equals(source.name);
         AtomicBoolean flag = new AtomicBoolean(false);
         server.getPlayerManager().getPlayerList().forEach(player -> {
             if (((AccessorServerPlayerEntity) player).getField_13998() <= 0) {

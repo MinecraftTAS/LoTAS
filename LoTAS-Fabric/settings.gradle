@@ -10,7 +10,8 @@ pluginManagement {
 
 def versions2 = [
         'fabric',
-        '1.14.4'
+        '1.14.4',
+        '1.15.2'
 ]
 versions2.collect {":versions2:$it"}.each {
     include it

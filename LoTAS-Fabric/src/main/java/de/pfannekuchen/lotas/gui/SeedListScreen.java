@@ -111,10 +111,10 @@ public class SeedListScreen extends Screen {
         this.minecraft.getTextureManager().bindTexture(DrawableHelper.BACKGROUND_LOCATION);
         GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         bufferBuilder.begin(7, VertexFormats.POSITION_TEXTURE_COLOR);
-        bufferBuilder.vertex((double)0, (double)bottom, 0.0D).texture(0.0D, (double)((float)bottom / 32.0F)).color(64, 64, 64, alphaBottom).next();
-        bufferBuilder.vertex((double)(0 + this.width), (double)bottom, 0.0D).texture((double)((float)this.width / 32.0F), (double)((float)bottom / 32.0F)).color(64, 64, 64, alphaBottom).next();
-        bufferBuilder.vertex((double)(0 + this.width), (double)top, 0.0D).texture((double)((float)this.width / 32.0F), (double)((float)top / 32.0F)).color(64, 64, 64, alphaTop).next();
-        bufferBuilder.vertex((double)0, (double)top, 0.0D).texture(0.0D, (double)((float)top / 32.0F)).color(64, 64, 64, alphaTop).next();
+        bufferBuilder.vertex((double)0, (double)bottom, 0.0D).texture(0.0F, ((float)bottom / 32.0F)).color(64, 64, 64, alphaBottom).next();
+        bufferBuilder.vertex((double)(0 + this.width), (double)bottom, 0.0D).texture(((float)this.width / 32.0F), ((float)bottom / 32.0F)).color(64, 64, 64, alphaBottom).next();
+        bufferBuilder.vertex((double)(0 + this.width), (double)top, 0.0D).texture(((float)this.width / 32.0F), ((float)top / 32.0F)).color(64, 64, 64, alphaTop).next();
+        bufferBuilder.vertex((double)0, (double)top, 0.0D).texture(0.0F, ((float)top / 32.0F)).color(64, 64, 64, alphaTop).next();
         tessellator.draw();
     }
 
@@ -183,10 +183,10 @@ public class SeedListScreen extends Screen {
         this.minecraft.getTextureManager().bindTexture(DrawableHelper.BACKGROUND_LOCATION);
         GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         bufferBuilder.begin(7, VertexFormats.POSITION_TEXTURE_COLOR);
-        bufferBuilder.vertex((double)left, (double)bottom, 0.0D).texture((double)((float)left / 32.0F), (double)((float)(bottom + (int)1) / 32.0F)).color(32, 32, 32, 255).next();
-        bufferBuilder.vertex((double)right, (double)bottom, 0.0D).texture((double)((float)right / 32.0F), (double)((float)(bottom + (int)1) / 32.0F)).color(32, 32, 32, 255).next();
-        bufferBuilder.vertex((double)right, (double)top, 0.0D).texture((double)((float)right / 32.0F), (double)((float)(top + (int)1) / 32.0F)).color(32, 32, 32, 255).next();
-        bufferBuilder.vertex((double)left, (double)top, 0.0D).texture((double)((float)left / 32.0F), (double)((float)(top + (int)1) / 32.0F)).color(32, 32, 32, 255).next();
+        bufferBuilder.vertex((double)left, (double)bottom, 0.0D).texture(((float)left / 32.0F), ((float)(bottom + (int)1) / 32.0F)).color(32, 32, 32, 255).next();
+        bufferBuilder.vertex((double)right, (double)bottom, 0.0D).texture(((float)right / 32.0F), ((float)(bottom + (int)1) / 32.0F)).color(32, 32, 32, 255).next();
+        bufferBuilder.vertex((double)right, (double)top, 0.0D).texture(((float)right / 32.0F), ((float)(top + (int)1) / 32.0F)).color(32, 32, 32, 255).next();
+        bufferBuilder.vertex((double)left, (double)top, 0.0D).texture(((float)left / 32.0F), ((float)(top + (int)1) / 32.0F)).color(32, 32, 32, 255).next();
         tessellator.draw();
 
         // OpenGL Stuff
@@ -194,25 +194,29 @@ public class SeedListScreen extends Screen {
         this.renderHoleBackground(0, top, 255, 255);
         this.renderHoleBackground(bottom, this.height, 255, 255);
         GlStateManager.enableBlend();
+        //#if MC>=11502
+        //$$ GlStateManager.blendFuncSeparate(GlStateManager.SrcFactor.SRC_ALPHA.value, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA.value, GlStateManager.SrcFactor.ZERO.value, GlStateManager.DstFactor.ONE.value);
+        //#else
         GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ONE);
+        //#endif
         GlStateManager.disableAlphaTest();
         GlStateManager.shadeModel(7425);
         GlStateManager.disableTexture();
 
         // Draw top gradient
         bufferBuilder.begin(7, VertexFormats.POSITION_TEXTURE_COLOR);
-        bufferBuilder.vertex(left, top + 4, 0.0D).texture(0.0D, 1.0D).color(0, 0, 0, 0).next();
-        bufferBuilder.vertex(right, top + 4, 0.0D).texture(1.0D, 1.0D).color(0, 0, 0, 0).next();
-        bufferBuilder.vertex(right, top, 0.0D).texture(1.0D, 0.0D).color(0, 0, 0, 255).next();
-        bufferBuilder.vertex(left, top, 0.0D).texture(0.0D, 0.0D).color(0, 0, 0, 255).next();
+        bufferBuilder.vertex(left, top + 4, 0.0D).texture(0.0F, 1.0F).color(0, 0, 0, 0).next();
+        bufferBuilder.vertex(right, top + 4, 0.0D).texture(1.0F, 1.0F).color(0, 0, 0, 0).next();
+        bufferBuilder.vertex(right, top, 0.0D).texture(1.0F, 0.0F).color(0, 0, 0, 255).next();
+        bufferBuilder.vertex(left, top, 0.0D).texture(0.0F, 0.0F).color(0, 0, 0, 255).next();
         tessellator.draw();
 
         // Draw bottom gradient
         bufferBuilder.begin(7, VertexFormats.POSITION_TEXTURE_COLOR);
-        bufferBuilder.vertex(left, bottom, 0.0D).texture(0.0D, 1.0D).color(0, 0, 0, 255).next();
-        bufferBuilder.vertex(right, bottom, 0.0D).texture(1.0D, 1.0D).color(0, 0, 0, 255).next();
-        bufferBuilder.vertex(right, bottom - 4, 0.0D).texture(1.0D, 0.0D).color(0, 0, 0, 0).next();
-        bufferBuilder.vertex(left, bottom - 4, 0.0D).texture(0.0D, 0.0D).color(0, 0, 0, 0).next();
+        bufferBuilder.vertex(left, bottom, 0.0D).texture(0.0F, 1.0F).color(0, 0, 0, 255).next();
+        bufferBuilder.vertex(right, bottom, 0.0D).texture(1.0F, 1.0F).color(0, 0, 0, 255).next();
+        bufferBuilder.vertex(right, bottom - 4, 0.0D).texture(1.0F, 0.0F).color(0, 0, 0, 0).next();
+        bufferBuilder.vertex(left, bottom - 4, 0.0D).texture(0.0F, 0.0F).color(0, 0, 0, 0).next();
         tessellator.draw();
 
         GlStateManager.enableTexture();

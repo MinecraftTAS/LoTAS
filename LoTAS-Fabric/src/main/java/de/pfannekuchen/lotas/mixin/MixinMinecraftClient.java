@@ -54,7 +54,7 @@ public class MixinMinecraftClient {
 	private ClientPlayerEntity player;
 
 	@Shadow
-	private GameOptions options;
+	private GameOptions options; 
 
 	@Unique
 	public boolean wasOnGround;
@@ -74,7 +74,11 @@ public class MixinMinecraftClient {
 		}
 	}
 	
+	//#if MC>=11502
+//$$ 	@Inject(method = "run", at = @At("HEAD"))
+	//#else
 	@Inject(method = "init", at = @At("TAIL"))
+	//#endif
 	public void loadRenderingLate(CallbackInfo ci) {
 		LoTASModContainer.loadShields();
 		try {

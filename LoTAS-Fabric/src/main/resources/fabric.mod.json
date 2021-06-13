@@ -30,7 +30,7 @@
   "depends": {
     "fabricloader": ">=0.7.4",
     "fabric": "*",
-    "minecraft": "1.14.x"
+    "minecraft": "1.x.x"
   },
   "suggests": {
     "another-mod": "*"
