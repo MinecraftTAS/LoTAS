@@ -12,6 +12,7 @@ import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.lwjgl.glfw.GLFW;
 
+import de.pfannekuchen.lotas.mixin.render.gui.MixinGuiIngameMenu;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.server.MinecraftServer;

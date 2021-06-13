@@ -33,6 +33,10 @@ public class LoadstateScreen extends Screen {
 		addButton(new ButtonWidget(width / 2 - 102, height - 52, 204, 20, "Loadstate", btn -> {
 			SavestateMod.loadstate(list.getSelected().index + 1);
 		}));
+		addButton(new ButtonWidget(width / 2 - 102, height - 31, 204, 20, "Delete State", btn -> {
+			SavestateMod.yeet(list.getSelected().index + 1);
+			MinecraftClient.getInstance().openScreen(new LoadstateScreen());
+		}));
 		super.init();
 	}
 	
