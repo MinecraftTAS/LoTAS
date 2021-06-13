@@ -14,8 +14,8 @@ import de.pfannekuchen.lotas.core.utils.EventUtils.Timer;
 import de.pfannekuchen.lotas.core.utils.Keyboard;
 import de.pfannekuchen.lotas.gui.AIManipulationScreen;
 import de.pfannekuchen.lotas.gui.DragonManipulationScreen;
-import de.pfannekuchen.lotas.gui.LoadstateScreen;
 import de.pfannekuchen.lotas.gui.DropManipulationScreen;
+import de.pfannekuchen.lotas.gui.LoadstateScreen;
 import de.pfannekuchen.lotas.gui.SpawnManipulationScreen;
 import de.pfannekuchen.lotas.gui.widgets.SmallCheckboxWidget;
 import de.pfannekuchen.lotas.mods.DupeMod;
@@ -36,6 +36,7 @@ public abstract class MixinGuiIngameMenu extends Screen {
 	protected MixinGuiIngameMenu(Text title) { super(title); }
 
 	public TextFieldWidget savestateName;
+	public TextFieldWidget tickrateField;
 	
 	 SmallCheckboxWidget fw = null; // do not pay attention
 	
@@ -63,8 +64,28 @@ public abstract class MixinGuiIngameMenu extends Screen {
     		if (Keyboard.isPressed(GLFW.GLFW_KEY_LEFT_SHIFT)) minecraft.openScreen(new LoadstateScreen());
 			else SavestateMod.loadstate(-1);
     	})).active = SavestateMod.hasSavestate();
-		
-    	
+        addButton(new ButtonWidget(5, 15, 48, 20, "+", b -> {
+        	if (Keyboard.isPressed(GLFW.GLFW_KEY_LEFT_SHIFT)) {
+				tickrateField = new TextFieldWidget(minecraft.textRenderer, 4, 15, 103, 20, "");
+				b.active = false;
+				setFocused(b);
+			} else {
+	            TickrateChangerMod.index++;
+	            TickrateChangerMod.index = MathHelper.clamp(TickrateChangerMod.index, 1, 10);
+	            TickrateChangerMod.updateTickrate(TickrateChangerMod.ticks[TickrateChangerMod.index]);
+			}
+        }));
+        addButton(new ButtonWidget( 55, 15, 48, 20, "-", b -> {
+        	if (Keyboard.isPressed(GLFW.GLFW_KEY_LEFT_SHIFT)) {
+				tickrateField = new TextFieldWidget(minecraft.textRenderer, 4, 15, 103, 20, "");
+				b.active = false;
+				setFocused(b);
+			} else {
+	            TickrateChangerMod.index--;
+	            TickrateChangerMod.index = MathHelper.clamp(TickrateChangerMod.index, 1, 10);
+	            TickrateChangerMod.updateTickrate(TickrateChangerMod.ticks[TickrateChangerMod.index]);
+			}
+        }));
 		this.addButton(new ButtonWidget((width / 4) * 0 + 1, height - 20, width / 4 - 2, 20, "Manipulate Drops", btn -> {
 			this.minecraft.openScreen(new DropManipulationScreen((GameMenuScreen) (Object) this));
 		}));
@@ -91,17 +112,6 @@ public abstract class MixinGuiIngameMenu extends Screen {
 				btn.active = false;
 			}));
 		}
-		
-        addButton(new ButtonWidget(5, 15, 48, 20, "+", b -> {
-            TickrateChangerMod.index++;
-            TickrateChangerMod.index = MathHelper.clamp(TickrateChangerMod.index, 1, 10);
-            TickrateChangerMod.updateTickrate(TickrateChangerMod.ticks[TickrateChangerMod.index]);
-        }));
-        addButton(new ButtonWidget( 55, 15, 48, 20, "-", b -> {
-            TickrateChangerMod.index--;
-            TickrateChangerMod.index = MathHelper.clamp(TickrateChangerMod.index, 1, 10);
-            TickrateChangerMod.updateTickrate(TickrateChangerMod.ticks[TickrateChangerMod.index]);
-        }));
         if(advanced) {
 	        addButton(new ButtonWidget(37, 115, 66, 20, "Jump ticks", btn -> {
 				TickrateChangerMod.ticksToJump = (int) TickrateChangerMod.ticks[TickrateChangerMod.ji];
@@ -164,18 +174,21 @@ public abstract class MixinGuiIngameMenu extends Screen {
 		
 		boolean advanced=ConfigUtils.getBoolean("ui", "advancedMode");
 		
-		if (getClass().getSimpleName().contains("GameMenuScreen")) {
-			if (Keyboard.isKeyDown(GLFW.GLFW_KEY_LEFT_SHIFT)) {
-				this.buttons.get(8).setMessage("\u00A76Name Savestate");
-				this.buttons.get(9).setMessage("\u00A76Choose State");
-			} else {
-				this.buttons.get(8).setMessage("Savestate");
-				this.buttons.get(9).setMessage("Loadstate");
-			}	
+		if (Keyboard.isPressed(GLFW.GLFW_KEY_LEFT_SHIFT)) {
+			this.buttons.get(8).setMessage("\u00A76Name Savestate");
+			this.buttons.get(9).setMessage("\u00A76Choose State");
+			this.buttons.get(10).setMessage("\u00A76Custom");
+			this.buttons.get(11).setMessage("\u00A76Tickrate");
+		} else {
+			this.buttons.get(8).setMessage("Savestate");
+			this.buttons.get(9).setMessage("Loadstate");
+			this.buttons.get(10).setMessage("+");
+			this.buttons.get(11).setMessage("-");
 		}
 		if(advanced) drawCenteredString(minecraft.textRenderer, "Hold Shift to access more features", width / 2, this.height / 4 + 152, 0xFFFFFF);
 	
 		if (savestateName != null) savestateName.render(mouseX, mouseX, partialTicks);
+		if (tickrateField != null) tickrateField.render(mouseX, mouseX, partialTicks);
 		
 		if (SavestateMod.showSavestateDone) {
 			long timeSince = System.currentTimeMillis() - SavestateMod.timeTitle;
@@ -209,21 +222,31 @@ public abstract class MixinGuiIngameMenu extends Screen {
 	
 	@Override
 	public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
-		if (savestateName != null) {
+		if (savestateName != null) 
 			savestateName.mouseClicked(mouseX, mouseY, mouseButton);
-		}
+		if (tickrateField != null) 
+			tickrateField.mouseClicked(mouseX, mouseY, mouseButton);
 		return super.mouseClicked(mouseX, mouseY, mouseButton);
 	}
 	
 	@Override
 	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
 		if (savestateName != null) {
+			savestateName.keyPressed(keyCode, scanCode, modifiers);
 			boolean focused = savestateName.isFocused();
 			if (keyCode == GLFW.GLFW_KEY_ENTER && focused) {
 				if (savestateName.getText().isEmpty()) 
 					SavestateMod.savestate(null);
 				else 
 					SavestateMod.savestate(savestateName.getText());
+			}
+		}
+		if (tickrateField != null) {
+			tickrateField.keyPressed(keyCode, scanCode, modifiers);
+			boolean focused = tickrateField.isFocused();
+			if (keyCode == GLFW.GLFW_KEY_ENTER && focused) {
+				if (!tickrateField.getText().isEmpty()) 
+					TickrateChangerMod.updateTickrate(Float.parseFloat(tickrateField.getText()));
 			}
 		}
 		return super.keyPressed(keyCode, scanCode, modifiers);
@@ -233,7 +256,8 @@ public abstract class MixinGuiIngameMenu extends Screen {
 	public boolean charTyped(char typedChar, int keyCode) {
 		if (savestateName != null) 
 			savestateName.charTyped(typedChar, keyCode);
-		
+		if (tickrateField != null) 
+			tickrateField.charTyped(typedChar, keyCode);
 		return super.charTyped(typedChar, keyCode);
 	}
 	

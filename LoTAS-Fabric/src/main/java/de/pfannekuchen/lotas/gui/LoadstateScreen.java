@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
 
 import com.google.common.io.Files;
 import com.mojang.blaze3d.platform.GlStateManager;
@@ -33,7 +31,7 @@ public class LoadstateScreen extends Screen {
 			e.printStackTrace();
 		}
 		addButton(new ButtonWidget(width / 2 - 102, height - 52, 204, 20, "Loadstate", btn -> {
-			SavestateMod.loadstate(list.selectedIndex + 1);
+			SavestateMod.loadstate(list.getSelected().index + 1);
 		}));
 		super.init();
 	}
@@ -46,9 +44,33 @@ public class LoadstateScreen extends Screen {
 	}
 	
 	@Override
-	public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
-		list.mouseClicked((int) mouseX, (int) mouseY, mouseButton);
-		return super.mouseClicked(mouseX, mouseY, mouseButton);
+	public boolean mouseClicked(double mouseX, double mouseY, int button) {
+		list.mouseClicked(mouseX, mouseY, button);
+		return super.mouseClicked(mouseX, mouseY, button);
+	}
+	
+	@Override
+	public boolean mouseReleased(double mouseX, double mouseY, int button) {
+		list.mouseReleased(mouseX, mouseY, button);
+		return super.mouseReleased(mouseX, mouseY, button);
+	}
+	
+	@Override
+	public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
+		list.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
+		return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
+	}
+	
+	@Override
+	public void mouseMoved(double mouseX, double mouseY) {
+		list.mouseMoved(mouseX, mouseY);
+		super.mouseMoved(mouseX, mouseY);
+	}
+	
+	@Override
+	public boolean mouseScrolled(double d, double e, double amount) {
+		list.mouseScrolled(d, e, amount);
+		return super.mouseScrolled(d, e, amount);
 	}
 	
 	public static class GuiLoadstateList extends AlwaysSelectedEntryListWidget<GuiLoadstateList.StateEntry> {
@@ -64,9 +86,8 @@ public class LoadstateScreen extends Screen {
 				}
 			});
 			for (File file : f) {
-				states.add(new StateEntry(Files.readLines(new File(file, "lotas.dat"), StandardCharsets.UTF_8).get(0), "Savestate " + file.getName().split("-Savestate")[1], Integer.parseInt(file.getName().split("-Savestate")[1]) - 1));
+				addEntry(new StateEntry(Files.readLines(new File(file, "lotas.dat"), StandardCharsets.UTF_8).get(0), "Savestate " + file.getName().split("-Savestate")[1], Integer.parseInt(file.getName().split("-Savestate")[1]) - 1));
 			}
-			
 		}
 
 		public final class StateEntry extends AlwaysSelectedEntryListWidget.Entry<GuiLoadstateList.StateEntry> {
@@ -82,8 +103,7 @@ public class LoadstateScreen extends Screen {
 			}
 			
 			@Override
-			public void render(int slotIndex, int x, int y, int listWidth, int slotHeight, int mouseX, int mouseY, boolean isSelected, float partialTicks) {
-				
+			public void render(int slotIndex, int y, int x, int listWidth, int slotHeight, int mouseX, int mouseY, boolean isSelected, float partialTicks) {
 				String s = name;
 				String s1 = description;
 				
@@ -93,34 +113,20 @@ public class LoadstateScreen extends Screen {
 				GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 			}
 
-		    public boolean mousePressed(int slotIndex, int mouseX, int mouseY, int mouseEvent, int relativeX, int relativeY) {
-		    	GuiLoadstateList.this.selectedIndex = index;
-		        return false;
-		    }
-
+			@Override
+			public boolean mouseClicked(double mouseX, double mouseY, int button) {
+				GuiLoadstateList.this.setSelected(this);
+				return super.mouseClicked(mouseX, mouseY, button);
+			}
+			
+			@Override
+			public boolean mouseReleased(double mouseX, double mouseY, int button) {
+				GuiLoadstateList.this.setSelected(this);
+				return super.mouseReleased(mouseX, mouseY, button);
+			}
+			
 		}
 		
-		public int selectedIndex = -1;
-		public List<StateEntry> states = new ArrayList<>();
-		
-		@Override
-		protected boolean isSelectedItem(int index) {
-			return selectedIndex == index;
-		}
-		
-		@Override
-		protected StateEntry getEntry(int index) {
-			return states.get(index);
-		}
-		
-		@Override
-		protected int getItemCount() {
-			return states.size();
-		}
-		
-		public List<StateEntry> getStates() {
-			return states;
-		}
 	}
 	
 }
