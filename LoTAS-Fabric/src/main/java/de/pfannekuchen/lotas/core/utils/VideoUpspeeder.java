@@ -41,12 +41,33 @@ public class VideoUpspeeder {
 	private static FFprobe ffprobe;
 	private static FFmpeg ffmpeg; 
 	
+	public static boolean isWindows() {
+        return System.getProperty("os.name").toLowerCase().contains("win");
+    }
+
+    public static boolean isMac() {
+    	return System.getProperty("os.name").toLowerCase().contains("mac");
+    }
+
+    public static boolean isUnix() {
+    	String OS = System.getProperty("os.name").toLowerCase();
+        return (OS.contains("nix") || OS.contains("nux") || OS.contains("aix"));
+    }
+	
 	/** Setup FFprobe and FFmpeg */
 	public final static boolean instantiate(final File bin) {
 		if (ffmpeg != null) return true;
 		try {
-			ffprobe = new FFprobe(new File(bin, "bin/ffprobe.exe").getAbsolutePath());
-			ffmpeg = new FFmpeg(new File(bin, "bin/ffmpeg.exe").getAbsolutePath());
+			if (isWindows()) {
+				ffprobe = new FFprobe(new File(bin, "bin/ffprobe.exe").getAbsolutePath());
+				ffmpeg = new FFmpeg(new File(bin, "bin/ffmpeg.exe").getAbsolutePath());
+			} else if (isMac()) {
+				ffprobe = new FFprobe(new File(bin, "bin/macos/ffprobe").getAbsolutePath());
+				ffmpeg = new FFmpeg(new File(bin, "bin/macos/ffmpeg").getAbsolutePath());
+			} else if (isUnix()) {
+				ffprobe = new FFprobe(new File(bin, "bin/linux/ffprobe").getAbsolutePath());
+				ffmpeg = new FFmpeg(new File(bin, "bin/linux/ffmpeg").getAbsolutePath());
+			}
 		} catch (Exception e) {
 			return false;
 		}
