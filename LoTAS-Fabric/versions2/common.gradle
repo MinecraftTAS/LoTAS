@@ -42,6 +42,10 @@ processResources {
 build.dependsOn processResources
 defaultTasks 'build'
 
+minecraft {
+	accessWidener '../../src/main/resources/lotas.accesswidener'
+}
+
 if (project.name != 'fabric') {
     apply from: '../preprocessor.gradle'
 

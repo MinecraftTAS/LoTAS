@@ -1,5 +1,11 @@
 package de.pfannekuchen.lotas.mixin;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.time.Duration;
+
 import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -14,8 +20,12 @@ import de.pfannekuchen.lotas.core.utils.ConfigUtils;
 import de.pfannekuchen.lotas.core.utils.EventUtils.Timer;
 import de.pfannekuchen.lotas.core.utils.KeybindsUtils;
 import de.pfannekuchen.lotas.core.utils.Keyboard;
+import de.pfannekuchen.lotas.core.utils.TextureYoinker;
+import de.pfannekuchen.lotas.gui.ChallengeMenuScreen;
 import de.pfannekuchen.lotas.mods.SavestateMod;
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;
+import de.pfannekuchen.lotas.taschallenges.ChallengeLoader;
+import de.pfannekuchen.lotas.taschallenges.ChallengeMap;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.GameMenuScreen;
 import net.minecraft.client.gui.screen.Screen;
@@ -55,11 +65,44 @@ public class MixinMinecraftClient {
 	@Inject(method = "joinWorld", at = @At("HEAD"))
 	public void injectloadWorld(ClientWorld worldClientIn, CallbackInfo ci) {
 		isLoadingWorld = ConfigUtils.getBoolean("tools", "hitEscape") && worldClientIn != null;
+		
+		if (ChallengeLoader.startTimer) {
+			ChallengeLoader.startTimer = false;
+			Timer.startTime = Duration.ofMillis(System.currentTimeMillis());
+			Timer.ticks = 1;
+			Timer.running = true;
+		}
 	}
 	
 	@Inject(method = "init", at = @At("TAIL"))
 	public void loadRenderingLate(CallbackInfo ci) {
 		LoTASModContainer.loadShields();
+		try {
+			BufferedReader stream = new BufferedReader(new InputStreamReader(new URL("http://mgnet.work/taschallenges/maps1.14.4.txt").openStream()));
+			int maps = Integer.parseInt(stream.readLine().charAt(0) + "");
+			for (int i = 0; i < maps; i++) {
+				ChallengeMap map = new ChallengeMap();
+
+				map.displayName = stream.readLine();
+				map.name = stream.readLine();
+				map.description = stream.readLine();
+				map.map = new URL("http://mgnet.work/taschallenges/" + stream.readLine());
+				int board = Integer.parseInt(stream.readLine().charAt(0) + "");
+				map.leaderboard = new String[board];
+				for (int j = 0; j < board; j++) {
+					map.leaderboard[j] = stream.readLine();
+				}
+
+				map.resourceLoc = TextureYoinker.download(map.name, new URL("http://mgnet.work/taschallenges/" + map.name + ".png").openStream());
+
+				LoTASModContainer.maps.add(map);
+
+				stream.readLine(); // Empty
+			}
+			stream.close();
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
 	}
 	
 	@Inject(method = "tick", at = @At(value="HEAD"))
@@ -71,7 +114,14 @@ public class MixinMinecraftClient {
 		
 		if (KeybindsUtils.shouldSavestate) {
 			KeybindsUtils.shouldSavestate = false;
-			SavestateMod.savestate(null);
+			try {
+				if (ChallengeLoader.map == null)
+					SavestateMod.savestate(null);
+				else 
+					ChallengeLoader.reload();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		
 		if (player != null) {
@@ -217,7 +267,7 @@ public class MixinMinecraftClient {
 		}
 		if (isLoadingWorld && guiScreenIn == null) {
 			isLoadingWorld = false;
-			MinecraftClient.getInstance().openScreen(new GameMenuScreen(true));
+			MinecraftClient.getInstance().openScreen(ChallengeLoader.map == null ? new GameMenuScreen(true) : new ChallengeMenuScreen());
 			ci.cancel();
 		}
 		if (guiScreenIn == null && (((MinecraftClient) (Object) this).player != null)) {

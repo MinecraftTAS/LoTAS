@@ -6,6 +6,7 @@ import org.lwjgl.glfw.GLFW;
 
 import de.pfannekuchen.lotas.core.utils.EventUtils.Timer;
 import de.pfannekuchen.lotas.mods.DupeMod;
+import de.pfannekuchen.lotas.taschallenges.ChallengeLoader;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.GameMenuScreen;
@@ -32,7 +33,7 @@ public class KeybindsUtils {
 	public static boolean wasPressed = false;
 	
 	public static void keyEvent() {
-		while (saveStateKeybind.wasPressed() /*&& ChallengeMap.currentMap == null*/) {
+		while (saveStateKeybind.wasPressed() && ChallengeLoader.map == null) {
 			MinecraftClient.getInstance().openScreen(new GameMenuScreen(true));
 			shouldSavestate = true;
 		} 
@@ -46,7 +47,7 @@ public class KeybindsUtils {
 		while(saveDupeKeybind.wasPressed()) {
 			DupeMod.save(MinecraftClient.getInstance());
 		}
-		while(toggleTimerKeybind.wasPressed()) {
+		while(toggleTimerKeybind.wasPressed() && ChallengeLoader.map == null) {
 			if (Timer.ticks < 1 || Timer.startTime == null) {
 				Timer.startTime = Duration.ofMillis(System.currentTimeMillis());
 				Timer.ticks = 1;

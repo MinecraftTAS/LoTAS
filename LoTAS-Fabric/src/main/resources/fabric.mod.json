@@ -17,6 +17,7 @@
   "license": "GPTv3",
   "icon": "assets/lotas/potion.png",
   "environment": "*",
+  "accessWidener": "lotas.accesswidener",
   "entrypoints": {
     "main": [
       "de.pfannekuchen.lotas.core.LoTASModContainer"

@@ -31,7 +31,9 @@
 		"patches.MixinExplosionPatch",
 		"patches.MixinServerPlayerEntityPatch",
 		"patches.MixinEnderPearlPatch",
-		"patches.MixinUnbreakingPatch"
+		"patches.MixinUnbreakingPatch",
+		"patches.MixinIntegratedServerPatch",
+		"patches.MixinEndPortalPatch"
 	],
   	"injectors": {
     	"defaultRequire": 1
