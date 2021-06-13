@@ -82,7 +82,11 @@ public class MixinMinecraftClient {
 	public void loadRenderingLate(CallbackInfo ci) {
 		LoTASModContainer.loadShields();
 		try {
+			//#if MC>=11502
+			//$$ BufferedReader stream = new BufferedReader(new InputStreamReader(new URL("http://mgnet.work/taschallenges/maps1.15.2.txt").openStream()));
+			//#else
 			BufferedReader stream = new BufferedReader(new InputStreamReader(new URL("http://mgnet.work/taschallenges/maps1.14.4.txt").openStream()));
+			//#endif
 			int maps = Integer.parseInt(stream.readLine().charAt(0) + "");
 			for (int i = 0; i < maps; i++) {
 				ChallengeMap map = new ChallengeMap();
