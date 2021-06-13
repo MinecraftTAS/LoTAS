@@ -83,7 +83,7 @@ public class MixinMinecraftClient {
 		LoTASModContainer.loadShields();
 		try {
 			//#if MC>=11502
-			//$$ BufferedReader stream = new BufferedReader(new InputStreamReader(new URL("http://mgnet.work/taschallenges/maps1.15.2.txt").openStream()));
+//$$ 			BufferedReader stream = new BufferedReader(new InputStreamReader(new URL("http://mgnet.work/taschallenges/maps1.15.2.txt").openStream()));
 			//#else
 			BufferedReader stream = new BufferedReader(new InputStreamReader(new URL("http://mgnet.work/taschallenges/maps1.14.4.txt").openStream()));
 			//#endif

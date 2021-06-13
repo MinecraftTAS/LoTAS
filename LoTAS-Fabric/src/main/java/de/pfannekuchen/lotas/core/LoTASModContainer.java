@@ -71,7 +71,7 @@ public class LoTASModContainer implements ModInitializer {
         File file = new File("seeddata.txt");
         try {
         	//#if MC>=11502
-        	//$$ URL url = new URL("http://mgnet.work/seeds/seeds1.15.2.txt");
+        //$$ 	URL url = new URL("http://mgnet.work/seeds/seeds1.15.2.txt");
         	//#else
             URL url = new URL("http://mgnet.work/seeds/seeds1.14.4.txt");
             //#endif
