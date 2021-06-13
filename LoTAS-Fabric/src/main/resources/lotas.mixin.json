@@ -23,6 +23,8 @@
 		"render.gui.MixinGuiMainMenu",
 		"render.MixinOverlayEvent",
 		"render.MixinRenderEvent",
+		"render.MixinPotionRenderer",
+		"render.MixinRenderShield",
 		"patches.MixinBlockPatch",
 		"patches.MixinEntityPatch",
 		"patches.MixinExplosionPatch",

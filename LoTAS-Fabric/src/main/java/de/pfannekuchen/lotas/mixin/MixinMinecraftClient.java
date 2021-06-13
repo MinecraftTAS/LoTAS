@@ -8,6 +8,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import de.pfannekuchen.lotas.core.LoTASModContainer;
 import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.core.utils.ConfigUtils;
 import de.pfannekuchen.lotas.core.utils.EventUtils.Timer;
@@ -47,6 +48,11 @@ public class MixinMinecraftClient {
 	@Inject(method = "joinWorld", at = @At("HEAD"))
 	public void injectloadWorld(ClientWorld worldClientIn, CallbackInfo ci) {
 		
+	}
+	
+	@Inject(method = "init", at = @At("TAIL"))
+	public void loadRenderingLate(CallbackInfo ci) {
+		LoTASModContainer.loadShields();
 	}
 	
 	@Inject(method = "tick", at = @At(value="HEAD"))
