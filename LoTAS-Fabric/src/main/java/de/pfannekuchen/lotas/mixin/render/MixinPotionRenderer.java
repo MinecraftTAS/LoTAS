@@ -39,8 +39,10 @@ public abstract class MixinPotionRenderer {
 //$$ 	@Inject(method = "Lnet/minecraft/client/render/item/HeldItemRenderer;renderItem(FLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider$Immediate;Lnet/minecraft/client/network/ClientPlayerEntity;I)V", at = @At(value = "INVOKE", shift = At.Shift.BEFORE, target = "Lnet/minecraft/util/math/MathHelper;lerp(FFF)F", ordinal = 1))
 //$$ 	public void drawPotionAfter(float tickDelta, MatrixStack matrices, Immediate vertexConsumers, ClientPlayerEntity player, int light, CallbackInfo ci) {
 //$$ 		GlStateManager.pushMatrix();
-//$$ 		ItemStack stack2 = PotionRenderer.render();
+//$$ 		matrices.push();
+//$$ 		ItemStack stack2 = PotionRenderer.render(matrices);
 //$$ 		renderFirstPersonItem(player, tickDelta, player.pitch, Hand.MAIN_HAND, 0f, stack2, 0f, matrices, vertexConsumers, light);
+//$$ 		matrices.pop();
 //$$ 		GlStateManager.popMatrix();
 //$$ 	}
 	//#endif
