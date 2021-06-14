@@ -29,6 +29,9 @@ public class MixinRenderEvent {
 			GL11.glEnable(GL11.GL_LINE_SMOOTH);
 			GL11.glLineWidth(2);
 			
+			//#if MC>=11502
+//$$ 			RenderUtils.applyCameraRotationOnly();
+			//#endif
 			RenderUtils.applyRenderOffset();
 			
 			double renderX = ((double) ((SpawnManipulationScreen) gui).spawnX - 0.5f);
@@ -56,6 +59,10 @@ public class MixinRenderEvent {
 			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 			GL11.glEnable(GL11.GL_LINE_SMOOTH);
 			GL11.glLineWidth(2);
+			
+			//#if MC>=11502
+//$$ 			RenderUtils.applyCameraRotationOnly();
+			//#endif
 			RenderUtils.applyRenderOffset();
 			
 			double renderX = ((double) AIManipulationScreen.entities.get(AIManipulationScreen.selectedIndex).x - 0.5f);
