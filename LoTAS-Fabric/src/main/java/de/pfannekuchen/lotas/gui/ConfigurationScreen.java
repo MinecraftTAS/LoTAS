@@ -11,6 +11,9 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.ButtonWidget.PressAction;
+//#if MC>=11601
+//$$ import net.minecraft.client.util.math.MatrixStack;
+//#endif
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.text.LiteralText;
 
@@ -52,7 +55,11 @@ public class ConfigurationScreen extends Screen {
 			String title = option.split(":")[2];
 			if (option.split(":")[0].equalsIgnoreCase("S")) {
 				String v = option.split(":")[3];
+				//#if MC>=11601
+//$$ 				strings.add(new TextFieldWidget(MinecraftClient.getInstance().textRenderer, width / 2 - 100, y, 200, 20, new LiteralText(v)));
+				//#else
 				strings.add(new TextFieldWidget(MinecraftClient.getInstance().textRenderer, width / 2 - 100, y, 200, 20, v));
+				//#endif
 				strings.get(strings.size() - 1).setText(v);
 				strings.get(strings.size() - 1).setUneditableColor(i++);
 				messages.put(y, title);
@@ -64,7 +71,11 @@ public class ConfigurationScreen extends Screen {
 			String title = option.split(":")[2];
 			if (option.split(":")[0].equalsIgnoreCase("I")) {
 				String v = option.split(":")[3];
-				ints.add(new TextFieldWidget(MinecraftClient.getInstance().textRenderer, width / 2 - 100, y, 200, 20, v));
+				//#if MC>=11601
+//$$ 				strings.add(new TextFieldWidget(MinecraftClient.getInstance().textRenderer, width / 2 - 100, y, 200, 20, new LiteralText(v)));
+				//#else
+				strings.add(new TextFieldWidget(MinecraftClient.getInstance().textRenderer, width / 2 - 100, y, 200, 20, v));
+				//#endif
 				ints.get(ints.size() - 1).setText(v);
 				ints.get(ints.size() - 1).setUneditableColor(i++);
 				messages.put(y, title);
@@ -185,6 +196,23 @@ public class ConfigurationScreen extends Screen {
 		return super.charTyped(typedChar, keyCode);
 	}
 
+	//#if MC>=11601
+//$$ 	@Override
+//$$ 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+//$$ 		renderBackground(matrices, 0);
+//$$ 		drawCenteredString(matrices, MinecraftClient.getInstance().textRenderer, "Configuration Menu", width / 2, 5, 0xFFFFFFFF);
+//$$ 		for (Entry<Integer, String> entry : messages.entrySet()) {
+//$$ 			drawStringWithShadow(matrices, MinecraftClient.getInstance().textRenderer, entry.getValue(), 35, entry.getKey() + 5, 0xFFFFFFFF);
+//$$ 		}
+//$$ 		for (TextFieldWidget field : strings) {
+//$$ 			field.render(matrices, mouseX, mouseY, delta);
+//$$ 		}
+//$$ 		for (TextFieldWidget field : ints) {
+//$$ 			field.render(matrices, mouseX, mouseY, delta);
+//$$ 		}
+//$$ 		super.render(matrices, mouseX, mouseY, delta);
+//$$ 	}
+	//#else
 	@Override
 	public void render(int mouseX, int mouseY, float delta) {
 		renderBackground(0);
@@ -200,6 +228,7 @@ public class ConfigurationScreen extends Screen {
 		}
 		super.render(mouseX, mouseY, delta);
 	}
+	//#endif
 
 	public static String getTitle(String line) {
 		return line.split(":")[2];

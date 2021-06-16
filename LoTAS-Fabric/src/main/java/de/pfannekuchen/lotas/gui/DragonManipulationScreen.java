@@ -22,6 +22,7 @@ import net.minecraft.entity.boss.dragon.phase.PhaseType;
 import net.minecraft.entity.boss.dragon.phase.StrafePlayerPhase;
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.Identifier;
+import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 
 /**
@@ -63,7 +64,11 @@ public class DragonManipulationScreen extends Screen {
 
 	public DragonManipulationScreen(Screen screen) {
 		super(new LiteralText("Dragon Manipulator Screen"));
+		//#if MC>=11601
+//$$ 		EnderDragonEntity dragon = MinecraftClient.getInstance().getServer().getWorld(World.END).getAliveEnderDragons().get(0);
+		//#else
 		EnderDragonEntity dragon = MinecraftClient.getInstance().getServer().getWorld(DimensionType.THE_END).getAliveEnderDragons().get(0);
+		//#endif
 		dragonPhase = dragon.getPhaseManager().getCurrent();
 		here = screen;
 
@@ -85,7 +90,11 @@ public class DragonManipulationScreen extends Screen {
 			action2.active = false;
 			action3.active = false;
 
+			//#if MC>=11601
+//$$ 			EnderDragonEntity dragon = MinecraftClient.getInstance().getServer().getWorld(World.END).getAliveEnderDragons().get(0);
+			//#else
 			EnderDragonEntity dragon = MinecraftClient.getInstance().getServer().getWorld(DimensionType.THE_END).getAliveEnderDragons().get(0);
+			//#endif
 			dragon.getPhaseManager().setPhase(phases.get(btn.getMessage()));
 			dragonPhase = dragon.getPhaseManager().getCurrent();
 		});
@@ -94,7 +103,11 @@ public class DragonManipulationScreen extends Screen {
 			action2.active = false;
 			action3.active = false;
 
+			//#if MC>=11601
+//$$ 			EnderDragonEntity dragon = MinecraftClient.getInstance().getServer().getWorld(World.END).getAliveEnderDragons().get(0);
+			//#else
 			EnderDragonEntity dragon = MinecraftClient.getInstance().getServer().getWorld(DimensionType.THE_END).getAliveEnderDragons().get(0);
+			//#endif
 			dragon.getPhaseManager().setPhase(phases.get(btn.getMessage()));
 			dragonPhase = dragon.getPhaseManager().getCurrent();
 		});
@@ -103,43 +116,77 @@ public class DragonManipulationScreen extends Screen {
 			action2.active = false;
 			action3.active = false;
 
+			//#if MC>=11601
+//$$ 			EnderDragonEntity dragon = MinecraftClient.getInstance().getServer().getWorld(World.END).getAliveEnderDragons().get(0);
+			//#else
 			EnderDragonEntity dragon = MinecraftClient.getInstance().getServer().getWorld(DimensionType.THE_END).getAliveEnderDragons().get(0);
+			//#endif
 			dragon.getPhaseManager().setPhase(phases.get(btn.getMessage()));
 			dragonPhase = dragon.getPhaseManager().getCurrent();
 		});
 
 		if (dragonPhase instanceof HoldingPatternPhase) {
+			//#if MC>=11601
+//$$ 			action1.setMessage(new LiteralText("Try to land"));
+//$$ 			action2.setMessage(new LiteralText("Shoot at the Player"));
+//$$ 			action3.setMessage(new LiteralText(""));
+			//#else
 			action1.setMessage("Try to land");
 			action2.setMessage("Shoot at the Player");
 			action3.setMessage("");
+			//#endif
 			action1.active = true;
 			action2.active = true;
 			action3.active = false;
 		} else if (dragonPhase instanceof LandingApproachPhase) {
+			//#if MC>=11601
+//$$ 			action1.setMessage(new LiteralText("Cancel Landing"));
+//$$ 			action2.setMessage(new LiteralText("Cancel Landing and shoot at Player"));
+//$$ 			action3.setMessage(new LiteralText(""));
+			//#else
 			action1.setMessage("Cancel Landing");
 			action2.setMessage("Cancel Landing and shoot at Player");
 			action3.setMessage("");
+			//#endif
 			action1.active = true;
 			action2.active = true;
 			action3.active = false;
 		} else if (dragonPhase instanceof StrafePlayerPhase) {
+			//#if MC>=11601
+//$$ 			action1.setMessage(new LiteralText("Stop shooting at the Player"));
+//$$ 			action2.setMessage(new LiteralText("Try to land"));
+//$$ 			action3.setMessage(new LiteralText(""));
+			//#else
 			action1.setMessage("Stop shooting at the Player");
 			action2.setMessage("Try to land");
 			action3.setMessage("");
+			//#endif
 			action1.active = true;
 			action2.active = true;
 			action3.active = false;
 		} else if (dragonPhase instanceof AbstractSittingPhase) {
+			//#if MC>=11601
+//$$ 			action1.setMessage(new LiteralText("Takeoff"));
+//$$ 			action2.setMessage(new LiteralText("Turn"));
+//$$ 			action3.setMessage(new LiteralText("Start Flaming"));
+			//#else
 			action1.setMessage("Takeoff");
 			action2.setMessage("Turn");
 			action3.setMessage("Start Flaming");
+			//#endif
 			action1.active = true;
 			action2.active = true;
 			action3.active = true;
 		} else {
+			//#if MC>=11601
+//$$ 			action1.setMessage(new LiteralText(""));
+//$$ 			action2.setMessage(new LiteralText(""));
+//$$ 			action3.setMessage(new LiteralText(""));
+			//#else
 			action1.setMessage("");
 			action2.setMessage("");
 			action3.setMessage("");
+			//#endif
 			action1.active = false;
 			action2.active = false;
 			action3.active = false;
@@ -149,7 +196,7 @@ public class DragonManipulationScreen extends Screen {
 		addButton(action2);
 		addButton(action3);
 		addButton(new NewButtonWidget(this.width / 2 - 155, this.height - 29, 300, 20, I18n.translate("gui.done"), btn -> {
-			minecraft.openScreen(here);
+			MinecraftClient.getInstance().openScreen(here);
 		}));
 		super.init();
 	}
