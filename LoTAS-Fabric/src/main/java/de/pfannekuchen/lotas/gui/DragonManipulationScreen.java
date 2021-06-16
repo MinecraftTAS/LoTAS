@@ -10,6 +10,9 @@ import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.resource.language.I18n;
+//#if MC>=11601
+//$$ import net.minecraft.client.util.math.MatrixStack;
+//#endif
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.boss.dragon.phase.AbstractSittingPhase;
 import net.minecraft.entity.boss.dragon.phase.HoldingPatternPhase;
@@ -151,6 +154,19 @@ public class DragonManipulationScreen extends Screen {
 		super.init();
 	}
 
+	//#if MC>=11601
+//$$ 	@Override
+//$$ 	public void render(MatrixStack matrices, int mouseX, int mouseY, float partialTicks) {
+//$$ 		renderBackground(matrices);
+//$$ 		GlStateManager.enableTexture();
+//$$
+//$$ 		drawCenteredString(matrices, MinecraftClient.getInstance().textRenderer, translation.get(dragonPhase.getClass().getSimpleName()), width / 2, 10, 0xFFFFFF);
+//$$
+//$$ 		MinecraftClient.getInstance().getTextureManager().bindTexture(DRAGONGIF);
+//$$ 		DrawableHelper.drawTexture(matrices, width / 28 * 3, height / 19 * 2, 0, 0, width / 28 * 23, height / 19 * 17, width / 28 * 23, height / 19 * 17);
+//$$ 		super.render(matrices, mouseX, mouseY, partialTicks);
+//$$ 	}
+	//#else
 	@Override
 	public void render(int mouseX, int mouseY, float partialTicks) {
 		renderBackground();
@@ -162,5 +178,6 @@ public class DragonManipulationScreen extends Screen {
 		DrawableHelper.blit(width / 28 * 3, height / 19 * 2, 0, 0, width / 28 * 23, height / 19 * 17, width / 28 * 23, height / 19 * 17);
 		super.render(mouseX, mouseY, partialTicks);
 	}
+	//#endif
 
 }

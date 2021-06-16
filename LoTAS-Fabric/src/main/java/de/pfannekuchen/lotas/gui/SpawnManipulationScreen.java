@@ -10,12 +10,13 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 //#if MC>=11601
 //$$ import net.minecraft.client.util.math.MatrixStack;
-//#endif
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.Enchantments;
+//$$ import net.minecraft.entity.SpawnReason;
+//$$ import net.minecraft.enchantment.Enchantment;
+//#else
 import net.minecraft.enchantment.InfoEnchantment;
+//#endif
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SpawnType;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.text.LiteralText;
 import net.minecraft.world.Difficulty;
@@ -169,12 +170,16 @@ public class SpawnManipulationScreen extends Screen {
 	}
 
 	public void canSpawn() {
-		e = entity.getEntity(MinecraftClient.getInstance().getServer().getWorld(MinecraftClient.getInstance().player.dimension));
+		e = entity.getEntity(MinecraftClient.getInstance().getServer().getPlayerManager().getPlayerList().get(0).getServerWorld());
 		e.updatePositionAndAngles(spawnX, spawnY, spawnZ, 0, 0);
 		if (e instanceof MobEntity) {
-			buttons.get(buttons.size() - 2).active = ((MobEntity) e).canSpawn(MinecraftClient.getInstance().getServer().getWorld(MinecraftClient.getInstance().player.dimension), SpawnType.NATURAL) && minecraft.getServer().getWorld(MinecraftClient.getInstance().player.dimension).doesNotCollide(e.getBoundingBox());
+			//#if MC>=11601
+//$$ 			buttons.get(buttons.size() - 2).active = ((MobEntity) e).canSpawn(MinecraftClient.getInstance().getServer().getPlayerManager().getPlayerList().get(0).getServerWorld(), SpawnReason.NATURAL) && MinecraftClient.getInstance().getServer().getPlayerManager().getPlayerList().get(0).getServerWorld().doesNotCollide(e.getBoundingBox());
+			//#else
+			buttons.get(buttons.size() - 2).active = ((MobEntity) e).canSpawn(MinecraftClient.getInstance().getServer().getPlayerManager().getPlayerList().get(0).getServerWorld(), net.minecraft.entity.SpawnType.NATURAL) && MinecraftClient.getInstance().getServer().getPlayerManager().getPlayerList().get(0).getServerWorld().doesNotCollide(e.getBoundingBox());
+			//#endif
 		} else {
-			buttons.get(buttons.size() - 2).active = minecraft.getServer().getWorld(MinecraftClient.getInstance().player.dimension).doesNotCollide(e.getBoundingBox());
+			buttons.get(buttons.size() - 2).active = MinecraftClient.getInstance().getServer().getPlayerManager().getPlayerList().get(0).getServerWorld().doesNotCollide(e.getBoundingBox());
 		}
 	}
 

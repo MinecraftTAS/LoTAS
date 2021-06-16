@@ -23,6 +23,9 @@ import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.texture.NativeImage;
 import net.minecraft.client.texture.NativeImageBackedTexture;
+//#if MC>=11601
+//$$ import net.minecraft.client.util.math.MatrixStack;
+//#endif
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.Identifier;
 
@@ -101,15 +104,15 @@ public class SeedListScreen extends Screen {
 	@Override
 	protected void init() {
 		this.addButton(new NewButtonWidget(width / 2 - 100, height - 28, 200, 20, "Done", button -> {
-			this.minecraft.openScreen(new SelectWorldScreen(new TitleScreen()));
+			MinecraftClient.getInstance().openScreen(new SelectWorldScreen(new TitleScreen()));
 		}));
 		ButtonWidget create = new NewButtonWidget(width / 2 - 100, height - 52, 200, 20, "Create World", button -> {
-			this.minecraft.openScreen(new ProgressScreen());
+			MinecraftClient.getInstance().openScreen(new ProgressScreen());
 			CreateWorldScreen createWorldScreen = new CreateWorldScreen(this);
 			AccessorCreateWorldScreen accessorCWS = (AccessorCreateWorldScreen) createWorldScreen;
 			accessorCWS.setSeed(selectedSeed.seed);
 			accessorCWS.setCheatsEnabled(true);
-			this.minecraft.openScreen(createWorldScreen);
+			MinecraftClient.getInstance().openScreen(createWorldScreen);
 		});
 		create.active = false;
 		this.addButton(create);
@@ -122,7 +125,11 @@ public class SeedListScreen extends Screen {
 	protected void renderHoleBackground(int top, int bottom, int alphaTop, int alphaBottom) {
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferBuilder = tessellator.getBuffer();
-		this.minecraft.getTextureManager().bindTexture(DrawableHelper.BACKGROUND_LOCATION);
+		//#if MC>=11601
+//$$ 		MinecraftClient.getInstance().getTextureManager().bindTexture(DrawableHelper.BACKGROUND_TEXTURE);
+		//#else
+		MinecraftClient.getInstance().getTextureManager().bindTexture(DrawableHelper.BACKGROUND_LOCATION);
+		//#endif
 		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		bufferBuilder.begin(7, VertexFormats.POSITION_TEXTURE_COLOR);
 		bufferBuilder.vertex((double) 0, (double) bottom, 0.0D).texture(0.0F, ((float) bottom / 32.0F)).color(64, 64, 64, alphaBottom).next();
@@ -145,7 +152,11 @@ public class SeedListScreen extends Screen {
 		for (Seed seed : seeds) {
 			if (selectedSeed == seed) {
 				double r = x;
-				int q = x + this.minecraft.textRenderer.getStringWidth(seed.description) + 38;
+				//#if MC>=11601
+//$$ 				int q = x + MinecraftClient.getInstance().textRenderer.getWidth(seed.description) + 38;
+				//#else
+				int q = x + MinecraftClient.getInstance().textRenderer.getStringWidth(seed.description) + 38;
+				//#endif
 				GlStateManager.disableTexture();
 				float f = 1.0F;
 				GlStateManager.color4f(f, f, f, 0.5F);
@@ -164,13 +175,23 @@ public class SeedListScreen extends Screen {
 				tessellator.draw();
 				GlStateManager.enableTexture();
 			}
-			this.minecraft.textRenderer.draw(seed.name, x + 35, y + 3, 16777215);
-			this.minecraft.textRenderer.draw(seed.description, x + 35, y + 14, 8421504);
-			this.minecraft.textRenderer.draw(seed.seed, x + 35, y + 24, 8421504);
+			//#if MC>=11601
+//$$ 			MinecraftClient.getInstance().textRenderer.draw(null, seed.name, x + 35, y + 3, 16777215);
+//$$ 			MinecraftClient.getInstance().textRenderer.draw(null, seed.description, x + 35, y + 14, 8421504);
+//$$ 			MinecraftClient.getInstance().textRenderer.draw(null, seed.seed, x + 35, y + 24, 8421504);
+			//#else
+			MinecraftClient.getInstance().textRenderer.draw(seed.name, x + 35, y + 3, 16777215);
+			MinecraftClient.getInstance().textRenderer.draw(seed.description, x + 35, y + 14, 8421504);
+			MinecraftClient.getInstance().textRenderer.draw(seed.seed, x + 35, y + 24, 8421504);
+			//#endif
 			GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 			try {
-				this.minecraft.getTextureManager().bindTexture(downloadSeed(seed.seed));
+				MinecraftClient.getInstance().getTextureManager().bindTexture(downloadSeed(seed.seed));
+				//#if MC>=11601
+//$$ 				DrawableHelper.drawTexture(null, x + 1, y, 0.0F, 0.0F, 32, 32, 32, 32);
+				//#else
 				DrawableHelper.blit(x + 1, y, 0.0F, 0.0F, 32, 32, 32, 32);
+				//#endif
 			} catch (Exception e) {
 
 			}
@@ -178,23 +199,31 @@ public class SeedListScreen extends Screen {
 		}
 	}
 
-	/**
-	 * Render UI.
-	 */
-	@Override
-	public void render(int mouseX, int mouseY, float delta) {
+	//#if MC>=11601
+//$$ 	@Override public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+	//#else
+	@Override public void render(int mouseX, int mouseY, float delta) {
+	//#endif
 		int left = 0;
 		int right = width;
 		int top = 48;
 		int bottom = height - 64;
 
+		//#if MC>=11601
+//$$ 		renderBackground(matrices);
+		//#else
 		renderBackground();
+		//#endif
 
 		GlStateManager.disableLighting();
 		GlStateManager.disableFog();
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferBuilder = tessellator.getBuffer();
-		this.minecraft.getTextureManager().bindTexture(DrawableHelper.BACKGROUND_LOCATION);
+		//#if MC>=11601
+//$$ 		MinecraftClient.getInstance().getTextureManager().bindTexture(DrawableHelper.BACKGROUND_TEXTURE);
+		//#else
+		MinecraftClient.getInstance().getTextureManager().bindTexture(DrawableHelper.BACKGROUND_LOCATION);
+		//#endif
 		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		bufferBuilder.begin(7, VertexFormats.POSITION_TEXTURE_COLOR);
 		bufferBuilder.vertex((double) left, (double) bottom, 0.0D).texture(((float) left / 32.0F), ((float) (bottom + (int) 1) / 32.0F)).color(32, 32, 32, 255).next();
@@ -209,7 +238,11 @@ public class SeedListScreen extends Screen {
 		this.renderHoleBackground(bottom, this.height, 255, 255);
 		GlStateManager.enableBlend();
 		//#if MC>=11502
-//$$ 		GlStateManager.blendFuncSeparate(GlStateManager.SrcFactor.SRC_ALPHA.value, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA.value, GlStateManager.SrcFactor.ZERO.value, GlStateManager.DstFactor.ONE.value);
+		//#if MC>=11601
+//$$ 		GlStateManager.blendFuncSeparate(GlStateManager.SrcFactor.SRC_ALPHA.field_22545, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA.field_22528, GlStateManager.SrcFactor.ZERO.field_22545, GlStateManager.DstFactor.ONE.field_22528);
+		//#else
+		//$$ GlStateManager.blendFuncSeparate(GlStateManager.SrcFactor.SRC_ALPHA.value, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA.value, GlStateManager.SrcFactor.ZERO.value, GlStateManager.DstFactor.ONE.value);
+		//#endif
 		//#else
 		GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ONE);
 		//#endif
@@ -238,13 +271,21 @@ public class SeedListScreen extends Screen {
 		GlStateManager.enableAlphaTest();
 		GlStateManager.disableBlend();
 
+		//#if MC>=11601
+//$$ 		drawCenteredString(matrices, MinecraftClient.getInstance().textRenderer, "Seeds", width / 2, 8, 0xFFFFFF);
+		//#else
 		drawCenteredString(MinecraftClient.getInstance().textRenderer, "Seeds", width / 2, 8, 0xFFFFFF);
+		//#endif
 
 		try {
 			drawSeeds();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		//#if MC>=11601
+//$$ 		super.render(matrices, mouseX, mouseY, delta);
+		//#else
 		super.render(mouseX, mouseY, delta);
+		//#endif
 	}
 }

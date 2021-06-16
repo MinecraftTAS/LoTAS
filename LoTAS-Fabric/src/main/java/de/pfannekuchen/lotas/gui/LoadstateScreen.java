@@ -14,6 +14,9 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.AlwaysSelectedEntryListWidget;
 import net.minecraft.client.gui.widget.ButtonWidget;
+//#if MC>=11601
+//$$ import net.minecraft.client.util.math.MatrixStack;
+//#endif
 import net.minecraft.text.LiteralText;
 
 public class LoadstateScreen extends Screen {
@@ -41,12 +44,19 @@ public class LoadstateScreen extends Screen {
 		super.init();
 	}
 
-	@Override
-	public void render(int mouseX, int mouseY, float partialTicks) {
+	//#if MC>=11601
+//$$ 	@Override public void render(MatrixStack stack, int mouseX, int mouseY, float partialTicks) {
+//$$ 		list.render(stack, mouseX, mouseY, partialTicks);
+//$$ 		drawCenteredString(stack, MinecraftClient.getInstance().textRenderer, "Select State to load", width / 2, 16, 0xFFFFFF);
+//$$ 		super.render(stack, mouseX, mouseY, partialTicks);
+//$$ 	}
+	//#else
+	@Override public void render(int mouseX, int mouseY, float partialTicks) {
 		list.render(mouseX, mouseY, partialTicks);
 		drawCenteredString(MinecraftClient.getInstance().textRenderer, "Select State to load", width / 2, 16, 0xFFFFFF);
 		super.render(mouseX, mouseY, partialTicks);
 	}
+	//#endif
 
 	@Override
 	public boolean mouseClicked(double mouseX, double mouseY, int button) {
@@ -87,7 +97,11 @@ public class LoadstateScreen extends Screen {
 
 				@Override
 				public boolean accept(File dir, String name) {
+					//#if MC>=11601
+//$$ 					return name.startsWith(MinecraftClient.getInstance().getServer().getSaveProperties().getLevelName() + "-Savestate");
+					//#else
 					return name.startsWith(MinecraftClient.getInstance().getServer().getLevelName() + "-Savestate");
+					//#endif
 				}
 			});
 			for (File file : f) {
@@ -107,13 +121,21 @@ public class LoadstateScreen extends Screen {
 				this.index = index;
 			}
 
-			@Override
-			public void render(int slotIndex, int y, int x, int listWidth, int slotHeight, int mouseX, int mouseY, boolean isSelected, float partialTicks) {
+			//#if MC>=11601
+//$$ 			@Override public void render(MatrixStack matrices, int slotIndex, int y, int x, int listWidth, int slotHeight, int mouseX, int mouseY, boolean isSelected, float partialTicks) {
+			//#else
+			@Override public void render(int slotIndex, int y, int x, int listWidth, int slotHeight, int mouseX, int mouseY, boolean isSelected, float partialTicks) {
+			//#endif
 				String s = name;
 				String s1 = description;
 
+				//#if MC>=11601
+//$$ 				MinecraftClient.getInstance().textRenderer.draw(matrices, s, x + 32 + 3, y + 1, 16777215);
+//$$ 				MinecraftClient.getInstance().textRenderer.draw(matrices, s1, x + 32 + 3, y + MinecraftClient.getInstance().textRenderer.fontHeight + 3, 8421504);
+				//#else
 				MinecraftClient.getInstance().textRenderer.draw(s, x + 32 + 3, y + 1, 16777215);
 				MinecraftClient.getInstance().textRenderer.draw(s1, x + 32 + 3, y + MinecraftClient.getInstance().textRenderer.fontHeight + 3, 8421504);
+				//#endif
 				GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 			}
 
