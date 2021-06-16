@@ -7,7 +7,11 @@ import de.pfannekuchen.lotas.gui.SpawnManipulationScreen;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.AbstractButtonWidget;
 import net.minecraft.client.gui.widget.ButtonWidget.PressAction;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.enchantment.Enchantment;
+//#if MC<=11502
 import net.minecraft.enchantment.InfoEnchantment;
+//#endif
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
@@ -29,6 +33,7 @@ import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.LiteralText;
 import net.minecraft.util.Hand;
 import net.minecraft.world.Difficulty;
 
@@ -43,13 +48,21 @@ public class EntitySliderWidget extends AbstractButtonWidget {
 	private final float max;
 
 	public EntitySliderWidget(int xPos, int yPos, HashMap<Integer, String> ent, int width, int height, PressAction c) {
+	    //#if MC>=11601
+//$$ 		super(xPos, yPos, width, height, new LiteralText(""));
+		//#else
 		super(xPos, yPos, width, height, "");
+		//#endif
 		this.name = "Entity";
 		this.entities = ent;
 		this.min = 0;
 		this.max = ent.size() - 1;
 		this.sliderPosition = -min / (max - min);
+		//#if MC>=11601
+//$$ 		this.setMessage(new LiteralText("Entity: " + ent.get(0)));
+		//#else
 		this.setMessage("Entity: " + ent.get(0));
+		//#endif
 	}
 
 	/**
@@ -69,7 +82,11 @@ public class EntitySliderWidget extends AbstractButtonWidget {
 	 */
 	public void setSliderValue(float value) {
 		this.sliderPosition = (value - this.min) / (this.max - this.min);
+		//#if MC>=11601
+//$$ 	    this.setMessage(new LiteralText(this.getDisplayString()));
+	    //#else
 		this.setMessage(this.getDisplayString());
+        //#endif
 	}
 
 	/**
@@ -86,6 +103,17 @@ public class EntitySliderWidget extends AbstractButtonWidget {
 		return this.name + ": " + this.getSliderValue();
 	}
 
+    //#if MC>=11601
+	@Override
+	public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+	    MinecraftClient.getInstance().getTextureManager().bindTexture(WIDGETS_LOCATION);
+    //$$     GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+    //$$     int i = (this.isHovered() ? 2 : 1) * 20;
+    //$$     this.drawTexture(matrices, this.x + (int) (this.sliderPosition * (double) (this.width - 8)), this.y, 0, 46 + i, 4, 20);
+    //$$     this.drawTexture(matrices, this.x + (int) (this.sliderPosition * (double) (this.width - 8)), this.y, 0, 46 + i, 4, 20);
+	    super.renderButton(matrices, mouseX, mouseY, delta);
+	}
+	//#else
 	@Override
 	protected void renderBg(MinecraftClient client, int mouseX, int mouseY) {
 		client.getTextureManager().bindTexture(WIDGETS_LOCATION);
@@ -94,6 +122,7 @@ public class EntitySliderWidget extends AbstractButtonWidget {
 		this.blit(this.x + (int) (this.sliderPosition * (double) (this.width - 8)), this.y, 0, 46 + i, 4, 20);
 		this.blit(this.x + (int) (this.sliderPosition * (double) (this.width - 8)) + 4, this.y, 196, 46 + i, 4, 20);
 	}
+	//#endif
 
 	/**
 	 * Fired when the mouse button is dragged. Equivalent of
@@ -112,13 +141,21 @@ public class EntitySliderWidget extends AbstractButtonWidget {
 				if (this.sliderPosition > 1.0F) {
 					this.sliderPosition = 1.0F;
 				}
-
+			    //#if MC>=11601
+//$$ 				setMessage(new LiteralText("Entity: " + entities.get((int) Math.round(sliderPosition * (max - min) + min))));
+				//#else
 				setMessage("Entity: " + entities.get((int) Math.round(sliderPosition * (max - min) + min)));
+				//#endif
 			}
 
 			GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+			//#if MC>=11601
+//$$ 			this.drawTexture(null, this.x + (int) (this.sliderPosition * (float) (this.width - 8)), this.y, 0, 66, 4, 20);
+//$$ 			this.drawTexture(null, this.x + (int) (this.sliderPosition * (float) (this.width - 8)) + 4, this.y, 196, 66, 4, 20);
+			//#else
 			blit(this.x + (int) (this.sliderPosition * (float) (this.width - 8)), this.y, 0, 66, 4, 20);
 			blit(this.x + (int) (this.sliderPosition * (float) (this.width - 8)) + 4, this.y, 196, 66, 4, 20);
+			//#endif
 		}
 		return true;
 	}
@@ -134,7 +171,11 @@ public class EntitySliderWidget extends AbstractButtonWidget {
 	 */
 	public void setSliderPosition(float position) {
 		this.sliderPosition = position;
-		this.setMessage(this.getDisplayString());
+		//#if MC>=11601
+//$$ 		this.setMessage(new LiteralText(this.getDisplayString()));
+	    //#else
+	    this.setMessage(this.getDisplayString());
+		//#endif
 	}
 
 	/**
@@ -153,8 +194,11 @@ public class EntitySliderWidget extends AbstractButtonWidget {
 			if (this.sliderPosition > 1.0F) {
 				this.sliderPosition = 1.0F;
 			}
-
+			//#if MC>=11601
+//$$ 			this.setMessage(new LiteralText("Entity: " + entities.get((int) Math.round(sliderPosition * (max - min) + min))));
+	        //#else
 			this.setMessage("Entity: " + entities.get((int) Math.round(sliderPosition * (max - min) + min)));
+			//#endif
 			this.isMouseDown = true;
 			return true;
 		} else {
@@ -309,12 +353,21 @@ public class EntitySliderWidget extends AbstractButtonWidget {
 		return entity;
 	}
 	
+	//#if MC>=11601
+//$$ 	public ItemStack addEnchants(ItemStack item,  HashMap<Enchantment, Integer> enchs) {
+//$$ 	    enchs.entrySet().forEach(entry->{
+//$$ 	        item.addEnchantment(entry.getKey(), entry.getValue());
+//$$ 	    });;
+//$$ 		return item;
+//$$ 	}
+	//#else
 	public ItemStack addEnchants(ItemStack item,  InfoEnchantment[] enchants) {
-		for (InfoEnchantment enchantmentData : enchants) {
-			item.addEnchantment(enchantmentData.enchantment, enchantmentData.level);
-		}
-		return item;
-	}
+        for (InfoEnchantment enchantmentData : enchants) {
+            item.addEnchantment(enchantmentData.enchantment, enchantmentData.level);
+        }
+        return item;
+    }
+	//#endif
 	
 	/**
 	 * Fired when the mouse button is released. Equivalent of

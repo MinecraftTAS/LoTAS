@@ -8,6 +8,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.GameMenuScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.enchantment.InfoEnchantment;
 import net.minecraft.entity.LivingEntity;
@@ -33,9 +34,19 @@ public class SpawnManipulationScreen extends Screen {
 	public static TextFieldWidget zText;
 	
 	public static LivingEntity e;
+	//#if MC>=11601
+//$$ 	@SuppressWarnings("serial")
+//$$     public static HashMap<Enchantment, Integer> skelBow = new HashMap<Enchantment, Integer>() {{
+//$$ 	    put(Enchantments.UNBREAKING, 1);
+//$$ 	    put(Enchantments.POWER, 1);}};
+//$$ 	@SuppressWarnings("serial")
+//$$     public static HashMap<Enchantment, Integer> zombieSword = new HashMap<Enchantment, Integer>() {{
+//$$ 	   put(Enchantments.SHARPNESS, 2);
+//$$ 	   put(Enchantments.UNBREAKING, 2);}};
+	//#else
 	public static InfoEnchantment[] skelBow = new InfoEnchantment[] {new InfoEnchantment(Enchantments.UNBREAKING, 1), new InfoEnchantment(Enchantments.POWER, 1)};
 	public static InfoEnchantment[] zombieSword = new InfoEnchantment[] {new InfoEnchantment(Enchantments.SHARPNESS, 2), new InfoEnchantment(Enchantments.UNBREAKING, 2)};
-	
+	//#endif
 	public int spawnX = (int) MinecraftClient.getInstance().player.x;
 	public int spawnY = (int) MinecraftClient.getInstance().player.y;
 	public int spawnZ = (int) MinecraftClient.getInstance().player.z;
