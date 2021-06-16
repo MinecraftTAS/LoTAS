@@ -18,6 +18,8 @@ import de.pfannekuchen.lotas.gui.SeedListScreen;
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.render.model.ModelLoader;
+import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.util.Identifier;
 
 public class LoTASModContainer implements ModInitializer {
@@ -51,13 +53,14 @@ public class LoTASModContainer implements ModInitializer {
 			while (line != null) {
 				if (line.split(":")[0].equalsIgnoreCase(uuid)) {
 					LoTASModContainer.shield = TextureYoinker.downloadShield(uuid, new URL("https://raw.githubusercontent.com/ScribbleLP/MC-TASTools/1.12.2/shields/" + line.split(":")[1]).openStream());
-					return;
+					break;
 				}
 				line = reader.readLine();
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+//		AccessorModelLoader.setShieldBase(new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEX, new Identifier("lotas","pan_cake")));
 	}
     
     /**

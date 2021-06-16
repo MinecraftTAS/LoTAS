@@ -17,7 +17,9 @@ public class TextureYoinker {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        NativeImageBackedTexture nIBT = new NativeImageBackedTexture(parseImage(img));
+        
+        NativeImageBackedTexture nIBT = new NativeImageBackedTexture(img);
+        nIBT.bindTexture();
         return MinecraftClient.getInstance().getTextureManager().registerDynamicTexture(uuid.replace("-", ""), nIBT);
     }
 

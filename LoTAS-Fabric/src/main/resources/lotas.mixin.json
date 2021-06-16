@@ -14,6 +14,9 @@
     	"accessors.AccessorTextFieldWidget",
     	"accessors.AccessorCreateWorldScreen",
     	"accessors.AccessorServerPlayerEntity",
+    	//#if MC>=11502
+    //$$ 	"accessors.AccessorModelLoader",
+    	//#endif
     	"render.binds.MixinTickrateChangerAchievement",
 		"render.binds.MixinTickrateChangerAudioPitch",
 		"render.binds.MixinTickrateChangerEnchantmentGlimm",
