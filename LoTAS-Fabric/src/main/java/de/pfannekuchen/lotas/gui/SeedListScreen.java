@@ -7,6 +7,7 @@ import java.util.Map;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 
+import de.pfannekuchen.lotas.gui.widgets.NewButtonWidget;
 import de.pfannekuchen.lotas.mixin.accessors.AccessorCreateWorldScreen;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
@@ -86,10 +87,10 @@ public class SeedListScreen extends Screen {
      */
     @Override
     protected void init() {
-        this.addButton(new ButtonWidget(width / 2 - 100, height - 28, 200,20, "Done", button -> {
+        this.addButton(new NewButtonWidget(width / 2 - 100, height - 28, 200,20, "Done", button -> {
             this.minecraft.openScreen(new SelectWorldScreen(new TitleScreen()));
         }));
-        ButtonWidget create = new ButtonWidget(width / 2 - 100, height - 52, 200,20, "Create World", button -> {
+        ButtonWidget create = new NewButtonWidget(width / 2 - 100, height - 52, 200,20, "Create World", button -> {
             this.minecraft.openScreen(new ProgressScreen());
             CreateWorldScreen createWorldScreen = new CreateWorldScreen(this);
             AccessorCreateWorldScreen accessorCWS=(AccessorCreateWorldScreen) createWorldScreen;
@@ -224,7 +225,7 @@ public class SeedListScreen extends Screen {
         GlStateManager.enableAlphaTest();
         GlStateManager.disableBlend();
 
-        drawCenteredString(minecraft.textRenderer, "Seeds", width / 2, 8, 0xFFFFFF);
+        drawCenteredString(MinecraftClient.getInstance().textRenderer, "Seeds", width / 2, 8, 0xFFFFFF);
 
         try {
             drawSeeds();

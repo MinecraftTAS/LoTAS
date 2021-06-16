@@ -36,13 +36,13 @@ public class TextureYoinker {
 
         NativeImage imgNew = new NativeImage(imageWidth, imageHeight, true);
         for (int x = 0; x < imageSrcWidth; x++) {
-            for (int y = 0; y < srcHeight; y++) {
-            	//#if MC>=11601
-            //$$ 	imgNew.setPixelColor(x, y, image.getPixelColor(x, y));
-                //#else
-            	imgNew.setPixelRgba(x, y, image.getPixelRgba(x, y));
-                //#endif
-            }
+        	for (int y = 0; y < srcHeight; y++) {
+        		//#if MC>=11601
+        //$$ 		imgNew.setPixelColor(x, y, image.getPixelColor(x, y));
+        		//#else
+        		imgNew.setPixelRgba(x, y, image.getPixelRgba(x, y));
+        		//#endif
+        	}
         }
         image.close();
         return imgNew;

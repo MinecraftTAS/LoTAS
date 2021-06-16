@@ -11,6 +11,9 @@ import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.widget.CheckboxWidget;
+//#if MC>=11601
+//$$ import net.minecraft.client.util.math.MatrixStack;
+//#endif
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.CaveSpiderEntity;
@@ -27,6 +30,7 @@ import net.minecraft.entity.mob.VindicatorEntity;
 import net.minecraft.entity.mob.WitchEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.text.LiteralText;
 import net.minecraft.util.Identifier;
 
 public class MonsterDropManipulation extends DropManipulationScreen.DropManipulation {
@@ -48,7 +52,11 @@ public class MonsterDropManipulation extends DropManipulationScreen.DropManipula
     	MonsterDropManipulation.y = y;
     	MonsterDropManipulation.width = width;
         MonsterDropManipulation.height = height;
+        //#if MC>=11601
+        //$$ enabled = new CheckboxWidget(x, y, 150, 20, new LiteralText("Override Monster Drops"), false);
+        //#else
         enabled = new CheckboxWidget(x, y, 150, 20, "Override Monster Drops", false);
+        //#endif
     }
 
     @Override
@@ -137,27 +145,49 @@ public class MonsterDropManipulation extends DropManipulationScreen.DropManipula
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float delta) {
+    public void render(Object matrices, int mouseX, int mouseY, float delta) {
+        //#if MC>=11601
+        //$$ enabled.render((MatrixStack) matrices, mouseX, mouseY, delta);
+        //#else
         enabled.render(mouseX, mouseY, delta);
+        //#endif
 
         if (!enabled.isChecked()) {
             GlStateManager.color4f(.5f, .5f, .5f, .4f);
         } else {
-            optimizeCaveSpider.render(mouseX, mouseY, delta);
-            optimizeEnderman.render(mouseX, mouseY, delta);
-            optimizeCreeper.render(mouseX, mouseY, delta);
-            optimizeElderGuardian.render(mouseX, mouseY, delta);
-            optimizePhantom.render(mouseX, mouseY, delta);
-            optimizeSlime.render(mouseX, mouseY, delta);
-            optimizeVindicator.render(mouseX, mouseY, delta);
-            optimizeSkeleton.render(mouseX, mouseY, delta);
-            optimizeShulker.render(mouseX, mouseY, delta);
-            optimizeGuardian.render(mouseX, mouseY, delta);
-            optimizeWitch.render(mouseX, mouseY, delta);
+            //#if MC>=11601
+            //$$ optimizeCaveSpider.render((MatrixStack) matrices, mouseX, mouseY, delta);
+            //$$ optimizeEnderman.render((MatrixStack) matrices, mouseX, mouseY, delta);
+            //$$ optimizeCreeper.render((MatrixStack) matrices, mouseX, mouseY, delta);
+            //$$ optimizeElderGuardian.render((MatrixStack) matrices, mouseX, mouseY, delta);
+            //$$ optimizePhantom.render((MatrixStack) matrices, mouseX, mouseY, delta);
+            //$$ optimizeSlime.render((MatrixStack) matrices, mouseX, mouseY, delta);
+            //$$ optimizeVindicator.render((MatrixStack) matrices, mouseX, mouseY, delta);
+            //$$ optimizeSkeleton.render((MatrixStack) matrices, mouseX, mouseY, delta);
+            //$$ optimizeShulker.render((MatrixStack) matrices, mouseX, mouseY, delta);
+            //$$ optimizeGuardian.render((MatrixStack) matrices, mouseX, mouseY, delta);
+            //$$ optimizeWitch.render((MatrixStack) matrices, mouseX, mouseY, delta);
+            //#else
+           optimizeCaveSpider.render(mouseX, mouseY, delta);
+           optimizeEnderman.render(mouseX, mouseY, delta);
+           optimizeCreeper.render(mouseX, mouseY, delta);
+           optimizeElderGuardian.render(mouseX, mouseY, delta);
+           optimizePhantom.render(mouseX, mouseY, delta);
+           optimizeSlime.render(mouseX, mouseY, delta);
+           optimizeVindicator.render(mouseX, mouseY, delta);
+           optimizeSkeleton.render(mouseX, mouseY, delta);
+           optimizeShulker.render(mouseX, mouseY, delta);
+           optimizeGuardian.render(mouseX, mouseY, delta);
+           optimizeWitch.render(mouseX, mouseY, delta);
+            //#endif
         }
 
         MinecraftClient.getInstance().getTextureManager().bindTexture(new Identifier("lotas", "drops/spider.png"));
+        //#if MC>=11601
+        //$$ DrawableHelper.drawTexture((MatrixStack) matrices, width - 128, y + 24, 0.0F, 0.0F, 109, 85, 109, 85);
+        //#else
         DrawableHelper.blit(width - 128, y + 24, 0.0F, 0.0F, 109, 85, 109, 85);
+        //#endif
     }
 
 }

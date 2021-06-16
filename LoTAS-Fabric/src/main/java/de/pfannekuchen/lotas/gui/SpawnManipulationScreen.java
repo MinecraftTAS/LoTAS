@@ -3,10 +3,10 @@ package de.pfannekuchen.lotas.gui;
 import java.util.HashMap;
 
 import de.pfannekuchen.lotas.gui.widgets.EntitySliderWidget;
+import de.pfannekuchen.lotas.gui.widgets.NewButtonWidget;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.GameMenuScreen;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.enchantment.InfoEnchantment;
@@ -85,7 +85,7 @@ public class SpawnManipulationScreen extends Screen {
 		entities.put(13, "Zombie");
 		entities.put(14, "Zombievillager");
 		
-		if (minecraft.world.getDifficulty() == Difficulty.HARD) {
+		if (MinecraftClient.getInstance().world.getDifficulty() == Difficulty.HARD) {
 			entities.put(15, "Skeleton with Enchanted Bow");
 			entities.put(16, "Zombie with Enchanted Sword");
 			
@@ -105,19 +105,19 @@ public class SpawnManipulationScreen extends Screen {
 			
 		});
 		addButton(entity);
-		addButton(new ButtonWidget(width / 9 * 3 + 6, height - 24, width / 9 - 4, 20, "X++", btn -> spawnX++));
-		addButton(new ButtonWidget(width / 9 * 4 + 6, height - 24, width / 9 - 4, 20, "X--", btn -> spawnX--));
-		addButton(new ButtonWidget(width / 9 * 5 + 3, height - 24, width / 9 - 4, 20, "Y++", btn -> spawnY++));
-		addButton(new ButtonWidget(width / 9 * 6 + 3, height - 24, width / 9 - 4, 20, "Y--", btn -> spawnY--));
-		addButton(new ButtonWidget(width / 9 * 7 + 1, height - 24, width / 9 - 4, 20, "Z++", btn -> spawnZ++));
-		addButton(new ButtonWidget(width / 9 * 8 + 1, height - 24, width / 9 - 4, 20, "Z--", btn -> spawnZ--));
+		addButton(new NewButtonWidget(width / 9 * 3 + 6, height - 24, width / 9 - 4, 20, "X++", btn -> spawnX++));
+		addButton(new NewButtonWidget(width / 9 * 4 + 6, height - 24, width / 9 - 4, 20, "X--", btn -> spawnX--));
+		addButton(new NewButtonWidget(width / 9 * 5 + 3, height - 24, width / 9 - 4, 20, "Y++", btn -> spawnY++));
+		addButton(new NewButtonWidget(width / 9 * 6 + 3, height - 24, width / 9 - 4, 20, "Y--", btn -> spawnY--));
+		addButton(new NewButtonWidget(width / 9 * 7 + 1, height - 24, width / 9 - 4, 20, "Z++", btn -> spawnZ++));
+		addButton(new NewButtonWidget(width / 9 * 8 + 1, height - 24, width / 9 - 4, 20, "Z--", btn -> spawnZ--));
 		
 		xText = new TextFieldWidget(MinecraftClient.getInstance().textRenderer, width / 9 * 3 + 6, height - 46, (int) (width / 4.5) - 6, 20, spawnX + "");
 		yText = new TextFieldWidget(MinecraftClient.getInstance().textRenderer, width / 9 * 5 + 4, height - 46, (int) (width/ 4.5) - 6, 20, spawnY + "");
 		zText = new TextFieldWidget(MinecraftClient.getInstance().textRenderer, width / 9 * 7 + 2, height - 46, (int) (width/ 4.5) - 6, 20, spawnZ + "");
 		
-		addButton(new ButtonWidget(5, height - 24, width / 3, 20, "Spawn Entity", btn -> MinecraftClient.getInstance().getServer().getWorld(minecraft.player.dimension).spawnEntity(e)));
-		addButton(new ButtonWidget(5, height - 46, width / 3, 20, "Done", btn -> minecraft.openScreen(new GameMenuScreen(true))));
+		addButton(new NewButtonWidget(5, height - 24, width / 3, 20, "Spawn Entity", btn -> MinecraftClient.getInstance().getServer().getWorld(MinecraftClient.getInstance().player.dimension).spawnEntity(e)));
+		addButton(new NewButtonWidget(5, height - 46, width / 3, 20, "Done", btn -> minecraft.openScreen(new GameMenuScreen(true))));
 		
 	}
 	
@@ -132,12 +132,12 @@ public class SpawnManipulationScreen extends Screen {
 	}
 	
 	public void canSpawn() {
-		e = entity.getEntity(minecraft.getServer().getWorld(minecraft.player.dimension));
+		e = entity.getEntity(MinecraftClient.getInstance().getServer().getWorld(MinecraftClient.getInstance().player.dimension));
 		e.updatePositionAndAngles(spawnX, spawnY, spawnZ, 0, 0);
 		if (e instanceof MobEntity) {
-			buttons.get(buttons.size() - 2).active = ((MobEntity) e).canSpawn(minecraft.getServer().getWorld(minecraft.player.dimension), SpawnType.NATURAL) && minecraft.getServer().getWorld(minecraft.player.dimension).doesNotCollide(e.getBoundingBox());
+			buttons.get(buttons.size() - 2).active = ((MobEntity) e).canSpawn(MinecraftClient.getInstance().getServer().getWorld(MinecraftClient.getInstance().player.dimension), SpawnType.NATURAL) && minecraft.getServer().getWorld(MinecraftClient.getInstance().player.dimension).doesNotCollide(e.getBoundingBox());
 		} else {
-			buttons.get(buttons.size() - 2).active = minecraft.getServer().getWorld(minecraft.player.dimension).doesNotCollide(e.getBoundingBox());
+			buttons.get(buttons.size() - 2).active = minecraft.getServer().getWorld(MinecraftClient.getInstance().player.dimension).doesNotCollide(e.getBoundingBox());
 		}
 	}
 	

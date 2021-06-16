@@ -13,10 +13,14 @@ import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.widget.CheckboxWidget;
+//#if MC>=11601
+//$$ import net.minecraft.client.util.math.MatrixStack;
+//#endif
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.state.property.IntProperty;
+import net.minecraft.text.LiteralText;
 import net.minecraft.util.Identifier;
 
 public class PlantsDropManipulation extends DropManipulationScreen.DropManipulation {
@@ -37,7 +41,12 @@ public class PlantsDropManipulation extends DropManipulationScreen.DropManipulat
         PlantsDropManipulation.y = y;
         PlantsDropManipulation.width = width;
         PlantsDropManipulation.height = height;
+        //#if MC>=11601
+        //$$ enabled = new CheckboxWidget(x, y, 150, 20, new LiteralText("Override Plant Drops"), false);
+        //#else
         enabled = new CheckboxWidget(x, y, 150, 20, "Override Plant Drops", false);
+        //#endif
+        
     }
 
     @Override
@@ -124,12 +133,28 @@ public class PlantsDropManipulation extends DropManipulationScreen.DropManipulat
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float delta) {
+    public void render(Object matrices, int mouseX, int mouseY, float delta) {
+        //#if MC>=11601
+        //$$ enabled.render((MatrixStack) matrices, mouseX, mouseY, delta);
+        //#else
         enabled.render(mouseX, mouseY, delta);
+        //#endif
 
         if (!enabled.isChecked()) {
             GlStateManager.color4f(.5f, .5f, .5f, .4f);
         } else {
+            //#if MC>=11601
+            //$$ optimizeCarrots.render((MatrixStack) matrices, mouseX, mouseY, delta);
+            //$$ optimizeBeetroot.render((MatrixStack) matrices, mouseX, mouseY, delta);
+            //$$ optimizeMelons.render((MatrixStack) matrices, mouseX, mouseY, delta);
+            //$$ optimizePotato.render((MatrixStack) matrices, mouseX, mouseY, delta);
+            //$$ optimizeWheat.render((MatrixStack) matrices, mouseX, mouseY, delta);
+            //$$ optimizeCocoa.render((MatrixStack) matrices, mouseX, mouseY, delta);
+            //$$ optimizeChorus.render((MatrixStack) matrices, mouseX, mouseY, delta);
+            //$$ optimizeSweetBerry.render((MatrixStack) matrices, mouseX, mouseY, delta);
+            //$$ optimizeMushroom.render((MatrixStack) matrices, mouseX, mouseY, delta);
+            //$$ optimizeNetherwart.render((MatrixStack) matrices, mouseX, mouseY, delta);
+            //#else
             optimizeCarrots.render(mouseX, mouseY, delta);
             optimizeBeetroot.render(mouseX, mouseY, delta);
             optimizeMelons.render(mouseX, mouseY, delta);
@@ -140,10 +165,16 @@ public class PlantsDropManipulation extends DropManipulationScreen.DropManipulat
             optimizeSweetBerry.render(mouseX, mouseY, delta);
             optimizeMushroom.render(mouseX, mouseY, delta);
             optimizeNetherwart.render(mouseX, mouseY, delta);
+            //#endif
         }
 
         MinecraftClient.getInstance().getTextureManager().bindTexture(new Identifier("lotas", "drops/plants.png"));
+        //#if MC>=11601
+        //$$ DrawableHelper.drawTexture((MatrixStack) matrices, width - 128, y + 24, 0.0F, 0.0F, 96, 96, 96, 96);
+        //#else
         DrawableHelper.blit(width - 128, y + 24, 0.0F, 0.0F, 96, 96, 96, 96);
+        //#endif
+        
     }
 
 }

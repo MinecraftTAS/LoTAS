@@ -11,6 +11,9 @@ import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.widget.CheckboxWidget;
+//#if MC>=11601
+//$$ import net.minecraft.client.util.math.MatrixStack;
+//#endif
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.SkeletonHorseEntity;
@@ -36,6 +39,7 @@ import net.minecraft.entity.passive.TurtleEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.text.LiteralText;
 import net.minecraft.util.Identifier;
 
 public class PassiveDropManipulation extends DropManipulationScreen.DropManipulation {
@@ -62,7 +66,11 @@ public class PassiveDropManipulation extends DropManipulationScreen.DropManipula
     	PassiveDropManipulation.y = y;
     	PassiveDropManipulation.width = width;
         PassiveDropManipulation.height = height;
+        //#if MC>=11601
+        //$$ enabled = new CheckboxWidget(x, y, 150, 20, new LiteralText("Override Passive Mob Drops"), false);
+        //#else
         enabled = new CheckboxWidget(x, y, 150, 20, "Override Passive Mob Drops", false);
+        //#endif
     }
 
     @Override
@@ -193,31 +201,57 @@ public class PassiveDropManipulation extends DropManipulationScreen.DropManipula
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float delta) {
+    public void render(Object matrices, int mouseX, int mouseY, float delta) {
+        //#if MC>=11601
+        //$$ enabled.render((MatrixStack) matrices, mouseX, mouseY, delta);
+        //#else
         enabled.render(mouseX, mouseY, delta);
+        //#endif
 
         if (!enabled.isChecked()) {
             GlStateManager.color4f(.5f, .5f, .5f, .4f);
         } else {
-            optimizeChicken.render(mouseX, mouseY, delta);
-            optimizeSkeletonhorse.render(mouseX, mouseY, delta);
-            optimizeCat.render(mouseX, mouseY, delta);
-            optimizeCow.render(mouseX, mouseY, delta);
-            optimizeMooshroom.render(mouseX, mouseY, delta);
-            optimizePig.render(mouseX, mouseY, delta);
-            optimizeParrot.render(mouseX, mouseY, delta);
-            optimizeSnowgolem.render(mouseX, mouseY, delta);
-            optimizeSheep.render(mouseX, mouseY, delta);
-            optimizeRabbit.render(mouseX, mouseY, delta);
-            optimizeSquid.render(mouseX, mouseY, delta);
-            optimizeTurtle.render(mouseX, mouseY, delta);
-            optimizeIronGolem.render(mouseX, mouseY, delta);
-            optimizePolarbear.render(mouseX, mouseY, delta);
-            optimizeHorses.render(mouseX, mouseY, delta);
+            //#if MC>=11601
+            //$$ optimizeChicken.render((MatrixStack) matrices, mouseX, mouseY, delta);
+            //$$ optimizeSkeletonhorse.render((MatrixStack) matrices, mouseX, mouseY, delta);
+            //$$ optimizeCat.render((MatrixStack) matrices, mouseX, mouseY, delta);
+            //$$ optimizeCow.render((MatrixStack) matrices, mouseX, mouseY, delta);
+            //$$ optimizeMooshroom.render((MatrixStack) matrices, mouseX, mouseY, delta);
+            //$$ optimizePig.render((MatrixStack) matrices, mouseX, mouseY, delta);
+            //$$ optimizeParrot.render((MatrixStack) matrices, mouseX, mouseY, delta);
+            //$$ optimizeSnowgolem.render((MatrixStack) matrices, mouseX, mouseY, delta);
+            //$$ optimizeSheep.render((MatrixStack) matrices, mouseX, mouseY, delta);
+            //$$ optimizeRabbit.render((MatrixStack) matrices, mouseX, mouseY, delta);
+            //$$ optimizeSquid.render((MatrixStack) matrices, mouseX, mouseY, delta);
+            //$$ optimizeTurtle.render((MatrixStack) matrices, mouseX, mouseY, delta);
+            //$$ optimizeIronGolem.render((MatrixStack) matrices, mouseX, mouseY, delta);
+            //$$ optimizePolarbear.render((MatrixStack) matrices, mouseX, mouseY, delta);
+            //$$ optimizeHorses.render((MatrixStack) matrices, mouseX, mouseY, delta);
+            //#else
+           optimizeChicken.render(mouseX, mouseY, delta);
+           optimizeSkeletonhorse.render(mouseX, mouseY, delta);
+           optimizeCat.render(mouseX, mouseY, delta);
+           optimizeCow.render(mouseX, mouseY, delta);
+           optimizeMooshroom.render(mouseX, mouseY, delta);
+           optimizePig.render(mouseX, mouseY, delta);
+           optimizeParrot.render(mouseX, mouseY, delta);
+           optimizeSnowgolem.render(mouseX, mouseY, delta);
+           optimizeSheep.render(mouseX, mouseY, delta);
+           optimizeRabbit.render(mouseX, mouseY, delta);
+           optimizeSquid.render(mouseX, mouseY, delta);
+           optimizeTurtle.render(mouseX, mouseY, delta);
+           optimizeIronGolem.render(mouseX, mouseY, delta);
+           optimizePolarbear.render(mouseX, mouseY, delta);
+           optimizeHorses.render(mouseX, mouseY, delta);
+            //#endif
         }
 
         MinecraftClient.getInstance().getTextureManager().bindTexture(new Identifier("lotas", "drops/sheep.png"));
+        //#if MC>=11601
+        //$$ DrawableHelper.drawTexture((MatrixStack) matrices, width - 128, y + 24, 0.0F, 0.0F, 102, 120, 102, 120);
+        //#else
         DrawableHelper.blit(width - 128, y + 24, 0.0F, 0.0F, 102, 120, 102, 120);
+        //#endif
     }
 
 }

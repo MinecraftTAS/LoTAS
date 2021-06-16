@@ -8,6 +8,7 @@ import java.nio.charset.StandardCharsets;
 import com.google.common.io.Files;
 import com.mojang.blaze3d.platform.GlStateManager;
 
+import de.pfannekuchen.lotas.gui.widgets.NewButtonWidget;
 import de.pfannekuchen.lotas.mods.SavestateMod;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
@@ -30,10 +31,10 @@ public class LoadstateScreen extends Screen {
 		} catch (NumberFormatException | IOException e) {
 			e.printStackTrace();
 		}
-		addButton(new ButtonWidget(width / 2 - 102, height - 52, 204, 20, "Loadstate", btn -> {
+		addButton(new NewButtonWidget(width / 2 - 102, height - 52, 204, 20, "Loadstate", btn -> {
 			SavestateMod.loadstate(list.getSelected().index + 1);
 		}));
-		addButton(new ButtonWidget(width / 2 - 102, height - 31, 204, 20, "Delete State", btn -> {
+		addButton(new NewButtonWidget(width / 2 - 102, height - 31, 204, 20, "Delete State", btn -> {
 			SavestateMod.yeet(list.getSelected().index + 1);
 			MinecraftClient.getInstance().openScreen(new LoadstateScreen());
 		}));
@@ -43,7 +44,7 @@ public class LoadstateScreen extends Screen {
 	@Override
 	public void render(int mouseX, int mouseY, float partialTicks) {
 		list.render(mouseX, mouseY, partialTicks);
-		drawCenteredString(minecraft.textRenderer, "Select State to load", width / 2, 16, 0xFFFFFF);
+		drawCenteredString(MinecraftClient.getInstance().textRenderer, "Select State to load", width / 2, 16, 0xFFFFFF);
 		super.render(mouseX, mouseY, partialTicks);
 	}
 	

@@ -49,7 +49,7 @@ public class SmallCheckboxWidget extends AbstractPressableButtonWidget {
     	//#if MC>=11502
     	//#if MC>=11601
     //$$ 	GlStateManager.blendFuncSeparate(GlStateManager.SrcFactor.SRC_ALPHA.field_22545, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA.field_22528, GlStateManager.SrcFactor.ONE.field_22545, GlStateManager.DstFactor.ZERO.field_22528);
-    	//$$ GlStateManager.blendFunc(GlStateManager.SrcFactor.SRC_ALPHA.field_22545, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA.field_22528);
+    //$$ 	GlStateManager.blendFunc(GlStateManager.SrcFactor.SRC_ALPHA.field_22545, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA.field_22528);
     	//#else
     	//$$ GlStateManager.blendFuncSeparate(GlStateManager.SrcFactor.SRC_ALPHA.value, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA.value, GlStateManager.SrcFactor.ONE.value, GlStateManager.DstFactor.ZERO.value);
     	//$$ GlStateManager.blendFunc(GlStateManager.SrcFactor.SRC_ALPHA.value, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA.value);
@@ -59,10 +59,10 @@ public class SmallCheckboxWidget extends AbstractPressableButtonWidget {
     	GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
     	//#endif
     	//#if MC>=11601
-    	//$$ drawTexture(matrices, this.x, this.y, 0.0F, 0.0F, 11, this.height, 11, 11);
-    	//$$ this.renderBg(matrices, minecraftClient, mouseX, mouseY);
-    	//$$ this.drawStringWithShadow(matrices, textRenderer, this.getMessage().getString(), this.x + 16, this.y + (this.height - 8) / 2, 14737632 | MathHelper.ceil(this.alpha * 255.0F) << 24);
-    	//$$ if (isChecked()) this.drawStringWithShadow(matrices, textRenderer, "x", this.x + 3, this.y + 1, 0xFFFFFF);
+    //$$ 	drawTexture(matrices, this.x, this.y, 0.0F, 0.0F, 11, this.height, 11, 11);
+    //$$ 	this.renderBg(matrices, minecraftClient, mouseX, mouseY);
+    //$$ 	this.drawStringWithShadow(matrices, textRenderer, this.getMessage().getString(), this.x + 16, this.y + (this.height - 8) / 2, 14737632 | MathHelper.ceil(this.alpha * 255.0F) << 24);
+    //$$ 	if (isChecked()) this.drawStringWithShadow(matrices, textRenderer, "x", this.x + 3, this.y + 1, 0xFFFFFF);
     	//#else
     	blit(this.x, this.y, 0.0F, 0.0F, 11, this.height, 11, 11);
     	this.renderBg(minecraftClient, mouseX, mouseY);

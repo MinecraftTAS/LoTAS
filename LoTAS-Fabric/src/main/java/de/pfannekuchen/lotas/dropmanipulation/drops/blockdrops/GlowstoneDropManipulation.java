@@ -6,28 +6,33 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.platform.GlStateManager;
 
 import de.pfannekuchen.lotas.gui.DropManipulationScreen;
+import de.pfannekuchen.lotas.gui.widgets.NewButtonWidget;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.CheckboxWidget;
+//#if MC>=11601
+//$$ import net.minecraft.client.util.math.MatrixStack;
+//#endif
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.text.LiteralText;
 import net.minecraft.util.Identifier;
 
 public class GlowstoneDropManipulation extends DropManipulationScreen.DropManipulation {
 
     public static int dust = 2;
 
-    public static ButtonWidget drop2Glowstonedust = new ButtonWidget(x, y, 98, 20, "2 Glowstone Dust", button -> {
+    public static ButtonWidget drop2Glowstonedust = new NewButtonWidget(x, y, 98, 20, "2 Glowstone Dust", button -> {
         press2Glowstonedust();
     });
-    public static ButtonWidget drop3Glowstonedust = new ButtonWidget(x, y, 98, 20, "3 Glowstone Dust", button -> {
+    public static ButtonWidget drop3Glowstonedust = new NewButtonWidget(x, y, 98, 20, "3 Glowstone Dust", button -> {
         press3Glowstonedust();
     });
-    public static ButtonWidget drop4Glowstonedust = new ButtonWidget(x, y, 98, 20, "4 Glowstone Dust", button -> {
+    public static ButtonWidget drop4Glowstonedust = new NewButtonWidget(x, y, 98, 20, "4 Glowstone Dust", button -> {
         press4Glowstonedust();
     });
 
@@ -57,7 +62,11 @@ public class GlowstoneDropManipulation extends DropManipulationScreen.DropManipu
         GlowstoneDropManipulation.y = y;
         GlowstoneDropManipulation.width = width;
         GlowstoneDropManipulation.height = height;
+        //#if MC>=11601
+        //$$ enabled = new CheckboxWidget(x, y, 150, 20, new LiteralText("Override Glowstone Drops"), false);
+        //#else
         enabled = new CheckboxWidget(x, y, 150, 20, "Override Glowstone Drops", false);
+        //#endif
         drop2Glowstonedust.active = false;
     }
 
@@ -105,20 +114,35 @@ public class GlowstoneDropManipulation extends DropManipulationScreen.DropManipu
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float delta) {
+    public void render(Object matrices, int mouseX, int mouseY, float delta) {
+        //#if MC>=11601
+        //$$ enabled.render((MatrixStack) matrices, mouseX, mouseY, delta);
+        //#else
         enabled.render(mouseX, mouseY, delta);
-
+        //#endif
+        
         if (!enabled.isChecked()) {
             GlStateManager.color4f(.5f, .5f, .5f, .4f);
         } else {
+            //#if MC>=11601
+            //$$ MinecraftClient.getInstance().textRenderer.drawWithShadow((MatrixStack) matrices, "Drop " + dust + " Glowstone Dust when breaking Glowstone", x, y + 64, 0xFFFFFF);
+            //$$ drop4Glowstonedust.render((MatrixStack) matrices, mouseX, mouseY, delta);
+            //$$ drop3Glowstonedust.render((MatrixStack) matrices, mouseX, mouseY, delta);
+            //$$ drop2Glowstonedust.render((MatrixStack) matrices, mouseX, mouseY, delta);
+            //#else
             MinecraftClient.getInstance().textRenderer.drawWithShadow("Drop " + dust + " Glowstone Dust when breaking Glowstone", x, y + 64, 0xFFFFFF);
             drop4Glowstonedust.render(mouseX, mouseY, delta);
             drop3Glowstonedust.render(mouseX, mouseY, delta);
             drop2Glowstonedust.render(mouseX, mouseY, delta);
+            //#endif
         }
 
         MinecraftClient.getInstance().getTextureManager().bindTexture(new Identifier("lotas", "drops/glowstone.png"));
+        //#if MC>=11601
+        //$$ DrawableHelper.drawTexture((MatrixStack) matrices, width - 128, y + 24, 0.0F, 0.0F, 96, 96, 96, 96);
+        //#else
         DrawableHelper.blit(width - 128, y + 24, 0.0F, 0.0F, 96, 96, 96, 96);
+        //#endif
     }
 
 }

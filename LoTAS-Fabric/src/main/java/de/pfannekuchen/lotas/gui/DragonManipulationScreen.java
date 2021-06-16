@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 
+import de.pfannekuchen.lotas.gui.widgets.NewButtonWidget;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.Screen;
@@ -76,7 +77,7 @@ public class DragonManipulationScreen extends Screen {
 	
 	@Override
 	public void init() {
-		action1 = new ButtonWidget(this.width / 3 * 0 + 5, height / 8, this.width / 3 - 10, 20, "Phase1", btn -> {
+		action1 = new NewButtonWidget(this.width / 3 * 0 + 5, height / 8, this.width / 3 - 10, 20, "Phase1", btn -> {
 			action1.active = false;
 			action2.active = false;
 			action3.active = false;
@@ -85,7 +86,7 @@ public class DragonManipulationScreen extends Screen {
 			dragon.getPhaseManager().setPhase(phases.get(btn.getMessage()));
 			dragonPhase = dragon.getPhaseManager().getCurrent();
 		});
-		action2 = new ButtonWidget(this.width / 3 * 1 + 5, height / 8, this.width / 3 - 10, 20, "Phase2", btn -> {
+		action2 = new NewButtonWidget(this.width / 3 * 1 + 5, height / 8, this.width / 3 - 10, 20, "Phase2", btn -> {
 			action1.active = false;
 			action2.active = false;
 			action3.active = false;
@@ -94,7 +95,7 @@ public class DragonManipulationScreen extends Screen {
 			dragon.getPhaseManager().setPhase(phases.get(btn.getMessage()));
 			dragonPhase = dragon.getPhaseManager().getCurrent();
 		});
-		action3 = new ButtonWidget(this.width / 3 * 2 + 5, height / 8, this.width / 3 - 10, 20, "Phase3", btn -> {
+		action3 = new NewButtonWidget(this.width / 3 * 2 + 5, height / 8, this.width / 3 - 10, 20, "Phase3", btn -> {
 			action1.active = false;
 			action2.active = false;
 			action3.active = false;
@@ -144,7 +145,7 @@ public class DragonManipulationScreen extends Screen {
 		addButton(action1);
 		addButton(action2);
 		addButton(action3);
-		addButton(new ButtonWidget(this.width / 2 - 155, this.height - 29, 300, 20, I18n.translate("gui.done"), btn -> {
+		addButton(new NewButtonWidget(this.width / 2 - 155, this.height - 29, 300, 20, I18n.translate("gui.done"), btn -> {
 			minecraft.openScreen(here);
 		}));
         super.init();
@@ -155,7 +156,7 @@ public class DragonManipulationScreen extends Screen {
         renderBackground();
         GlStateManager.enableTexture();
         
-        drawCenteredString(minecraft.textRenderer, translation.get(dragonPhase.getClass().getSimpleName()), width / 2, 10, 0xFFFFFF);
+        drawCenteredString(MinecraftClient.getInstance().textRenderer, translation.get(dragonPhase.getClass().getSimpleName()), width / 2, 10, 0xFFFFFF);
         
 		minecraft.getTextureManager().bindTexture(DRAGONGIF);
 		DrawableHelper.blit(width / 28 * 3, height / 19 * 2, 0, 0, width / 28 * 23, height / 19 * 17, width / 28 * 23, height / 19 * 17);

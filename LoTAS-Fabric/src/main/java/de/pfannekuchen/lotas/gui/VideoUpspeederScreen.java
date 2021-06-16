@@ -9,6 +9,7 @@ import java.time.Duration;
 import org.lwjgl.opengl.GL11;
 
 import de.pfannekuchen.lotas.core.utils.VideoUpspeeder;
+import de.pfannekuchen.lotas.gui.widgets.NewButtonWidget;
 import net.bramp.ffmpeg.probe.FFmpegProbeResult;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
@@ -71,14 +72,14 @@ public class VideoUpspeederScreen extends Screen {
 	@Override
 	protected void init() {
 		if (isEncoding) {
-			addButton(new ButtonWidget(width / 2 - 153, height - 40, 306, 20, "Continue encoding in the background >>", (b) -> {
+			addButton(new NewButtonWidget(width / 2 - 153, height - 40, 306, 20, "Continue encoding in the background >>", (b) -> {
 				MinecraftClient.getInstance().openScreen(new TitleScreen	());
 			}));
 			return;
 		}
 		
 		addButton(new TextFieldWidget(client.textRenderer, (width / 12) * 1 - (width / 24), (height / 8), (width / 12) * 9, 20, "")).setMaxLength(999);
-		addButton(new ButtonWidget((width / 12) * 10 + 5 - (width / 24), (height / 8), (width / 12) * 2, 20, "Select File", (b) -> {
+		addButton(new NewButtonWidget((width / 12) * 10 + 5 - (width / 24), (height / 8), (width / 12) * 2, 20, "Select File", (b) -> {
 			if (client.window.isFullscreen()) client.window.toggleFullscreen();
 			new Thread(new Runnable() {
 				
@@ -107,15 +108,15 @@ public class VideoUpspeederScreen extends Screen {
 				}
 			}).start();
 		}));
-		addButton(new ButtonWidget((width / 2) - 70, (height / 8) * 2 + 20, 20, 20, "-", (b) -> {
+		addButton(new NewButtonWidget((width / 2) - 70, (height / 8) * 2 + 20, 20, 20, "-", (b) -> {
 			if (tickrate != 1) tickrate--;
 			((TextFieldWidget) buttons.get(buttons.size() - 1)).setText(tickrate + "");
 		}));
-		addButton(new ButtonWidget((width / 2) + 50, (height / 8) * 2 + 20, 20, 20, "+", (b) -> {
+		addButton(new NewButtonWidget((width / 2) + 50, (height / 8) * 2 + 20, 20, 20, "+", (b) -> {
 			tickrate++;
 			((TextFieldWidget) buttons.get(buttons.size() - 1)).setText(tickrate + "");
 		}));
-		addButton(new ButtonWidget((width / 2) - 98, this.height - (this.height / 10) - 15 - 20 - 5, 204, 20, "Speed up video", (b) -> {
+		addButton(new NewButtonWidget((width / 2) - 98, this.height - (this.height / 10) - 15 - 20 - 5, 204, 20, "Speed up video", (b) -> {
 			b.active = false;
 			isEncoding = true;
 			VideoUpspeeder.speedup(tickrate, bitrate(), codecFFmpeg, (long) ((lengthInMilliseconds / 16L) * (tickrate / 20F)));

@@ -19,12 +19,16 @@ import de.pfannekuchen.lotas.dropmanipulation.drops.entitydrops.NetherMobDropMan
 import de.pfannekuchen.lotas.dropmanipulation.drops.entitydrops.PassiveDropManipulation;
 import de.pfannekuchen.lotas.dropmanipulation.drops.entitydrops.ZombieDropManipulation;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.GameMenuScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.CheckboxWidget;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexFormats;
+//#if MC>=11601
+//$$ import net.minecraft.client.util.math.MatrixStack;
+//#endif
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.LiteralText;
@@ -79,10 +83,13 @@ public class DropManipulationScreen extends Screen {
         return false;
     }
 
-    @Override
-    public void render(int mouseX, int mouseY, float delta) {
-        renderBackground();
-
+    //#if MC>=11601
+    //$$ @Override public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+    //$$     renderBackground(matrices);
+    //#else
+    @Override public void render(int mouseX, int mouseY, float delta) {
+       renderBackground();
+    //#endif
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferBuilder = tessellator.getBuffer();
 
@@ -122,12 +129,20 @@ public class DropManipulationScreen extends Screen {
         GlStateManager.enableTexture();
         int y = 30;
         for (DropManipulation m : manipulations) {
-            drawString(minecraft.textRenderer, m.getName(), 32, y, 0xFFFFFF);
+            //#if MC>=11601
+            //$$ drawStringWithShadow(matrices, MinecraftClient.getInstance().textRenderer, m.getName(), 32, y, 0xFFFFFF);
+            //#else
+            drawString(MinecraftClient.getInstance().textRenderer, m.getName(), 32, y, 0xFFFFFF);
+            //#endif
             y += 15;
         }
-        manipulations.get(selected).render(mouseX, mouseY, delta);
-
+        //#if MC>=11601
+        //$$ manipulations.get(selected).render(matrices, mouseX, mouseY, delta);
+        //$$ super.render(matrices, mouseX, mouseY, delta);
+        //#else
+        manipulations.get(selected).render(null, mouseX, mouseY, delta);
         super.render(mouseX, mouseY, delta);
+        //#endif
     }
 
     public static abstract class DropManipulation {
@@ -141,6 +156,6 @@ public class DropManipulationScreen extends Screen {
         public abstract List<ItemStack> redirectDrops(Entity entity);
         public abstract void update();
         public abstract void mouseAction(double mouseX, double mouseY, int button);
-        public abstract void render(int mouseX, int mouseY, float delta);
+        public abstract void render(Object matrices, int mouseX, int mouseY, float delta);
     }
 }

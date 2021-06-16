@@ -5,7 +5,9 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 import de.pfannekuchen.lotas.core.utils.ConfigUtils;
+import de.pfannekuchen.lotas.gui.widgets.NewButtonWidget;
 import de.pfannekuchen.lotas.mixin.accessors.AccessorTextFieldWidget;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.ButtonWidget.PressAction;
@@ -55,7 +57,7 @@ public class ConfigurationScreen extends Screen {
 			String title = option.split(":")[2];
 			if (option.split(":")[0].equalsIgnoreCase("B")) {
 				boolean v = Boolean.parseBoolean(option.split(":")[3]);
-				addButton(new ButtonWidget(width / 2 - 100, y, 200, 20, title + ": " + (v ? "\u00A7atrue" : "\u00A7cfalse"), actionPerformed(i++)));
+				addButton(new NewButtonWidget(width / 2 - 100, y, 200, 20, title + ": " + (v ? "\u00A7atrue" : "\u00A7cfalse"), actionPerformed(i++)));
 			}
 			y += 25;
 		}
@@ -64,7 +66,7 @@ public class ConfigurationScreen extends Screen {
 			String title = option.split(":")[2];
 			if (option.split(":")[0].equalsIgnoreCase("S")) {
 				String v = option.split(":")[3];
-				strings.add(new TextFieldWidget(minecraft.textRenderer, width / 2 - 100, y, 200, 20, v));
+				strings.add(new TextFieldWidget(MinecraftClient.getInstance().textRenderer, width / 2 - 100, y, 200, 20, v));
 				strings.get(strings.size() - 1).setText(v);
 				strings.get(strings.size() - 1).setUneditableColor(i++);
 				messages.put(y, title);
@@ -76,7 +78,7 @@ public class ConfigurationScreen extends Screen {
 			String title = option.split(":")[2];
 			if (option.split(":")[0].equalsIgnoreCase("I")) {
 				String v = option.split(":")[3];
-				ints.add(new TextFieldWidget(minecraft.textRenderer, width / 2 - 100, y, 200, 20, v));
+				ints.add(new TextFieldWidget(MinecraftClient.getInstance().textRenderer, width / 2 - 100, y, 200, 20, v));
 				ints.get(ints.size() - 1).setText(v);
 				ints.get(ints.size() - 1).setUneditableColor(i++);
 				messages.put(y, title);
@@ -196,9 +198,9 @@ public class ConfigurationScreen extends Screen {
 	@Override
 	public void render(int mouseX, int mouseY, float delta) {
 		renderBackground(0);
-		drawCenteredString(minecraft.textRenderer, "Configuration Menu", width / 2, 5, 0xFFFFFFFF);
+		drawCenteredString(MinecraftClient.getInstance().textRenderer, "Configuration Menu", width / 2, 5, 0xFFFFFFFF);
 		for (Entry<Integer, String> entry : messages.entrySet()) {
-			drawString(minecraft.textRenderer, entry.getValue(), 35, entry.getKey() + 5, 0xFFFFFFFF);
+			drawString(MinecraftClient.getInstance().textRenderer, entry.getValue(), 35, entry.getKey() + 5, 0xFFFFFFFF);
 		}
 		for (TextFieldWidget field : strings) {
 			field.render(mouseX, mouseY, delta);

@@ -12,6 +12,7 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import de.pfannekuchen.lotas.core.utils.ConfigUtils;
 import de.pfannekuchen.lotas.gui.ConfigurationScreen;
 import de.pfannekuchen.lotas.gui.VideoUpspeederScreen;
+import de.pfannekuchen.lotas.gui.widgets.NewButtonWidget;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
@@ -82,12 +83,12 @@ public abstract class MixinGuiMainMenu extends Screen {
 	public void redirectInit(CallbackInfo ci) {
         if (!ConfigUtils.getBoolean("hidden", "acceptedDataSending")) {
         	isAcceptance = true;
-        	addButton(new ButtonWidget(width / 2 - 116, height / 2 + 62 + -16, 114, 20, "Accept", c1 -> {
+        	addButton(new NewButtonWidget(width / 2 - 116, height / 2 + 62 + -16, 114, 20, "Accept", c1 -> {
 				ConfigUtils.setBoolean("hidden", "acceptedDataSending", true);
 				ConfigUtils.save();
 				this.minecraft.openScreen(new TitleScreen());
 			}));
-			addButton(new ButtonWidget(width / 2 + 2, height / 2 + 62 + -16, 114, 20, "Decline", c2 -> {
+			addButton(new NewButtonWidget(width / 2 + 2, height / 2 + 62 + -16, 114, 20, "Decline", c2 -> {
 				System.exit(29);
 			}));
 			ci.cancel();
@@ -111,13 +112,13 @@ public abstract class MixinGuiMainMenu extends Screen {
      */
 	@Overwrite
 	private void initWidgetsNormal(int y, int spacingY) {
-		this.addButton(new ButtonWidget(this.width / 2 - 100, y, 200, 20, I18n.translate("menu.singleplayer"), (buttonWidget) -> {
+		this.addButton(new NewButtonWidget(this.width / 2 - 100, y, 200, 20, I18n.translate("menu.singleplayer"), (buttonWidget) -> {
 			this.minecraft.openScreen(new SelectWorldScreen(this));
 		}));
-		this.addButton(new ButtonWidget(this.width / 2 - 100, y + spacingY * 1, 200, 20, I18n.translate("Video Upspeeder"), (buttonWidget) -> {
+		this.addButton(new NewButtonWidget(this.width / 2 - 100, y + spacingY * 1, 200, 20, I18n.translate("Video Upspeeder"), (buttonWidget) -> {
 			this.minecraft.openScreen(new VideoUpspeederScreen());
 		}));
-		this.addButton(new ButtonWidget(this.width / 2 - 100, y + spacingY * 2, 200, 20, I18n.translate("Configuration"), (buttonWidget) -> {
+		this.addButton(new NewButtonWidget(this.width / 2 - 100, y + spacingY * 2, 200, 20, I18n.translate("Configuration"), (buttonWidget) -> {
 			this.minecraft.openScreen(new ConfigurationScreen());
 		}));
 	}
