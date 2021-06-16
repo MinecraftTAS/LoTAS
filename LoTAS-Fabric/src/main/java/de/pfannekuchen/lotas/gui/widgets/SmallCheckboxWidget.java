@@ -7,6 +7,10 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.widget.AbstractPressableButtonWidget;
+//#if MC>=11601
+//$$ import net.minecraft.client.util.math.MatrixStack;
+//#endif
+import net.minecraft.text.LiteralText;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 
@@ -16,12 +20,20 @@ public class SmallCheckboxWidget extends AbstractPressableButtonWidget {
     Consumer<SmallCheckboxWidget> action;
 
     public SmallCheckboxWidget(int x, int y, String message, boolean checked) {
+        //#if MC>=11601
+        //$$ super(x, y, 11, 11, new LiteralText(message));
+        //#else
         super(x, y, 11, 11, message);
+        //#endif
         this.checked = checked;
     }
 
     public SmallCheckboxWidget(int x, int y, String message, boolean checked, Consumer<SmallCheckboxWidget> action) {
+        //#if MC>=11601
+        //$$ super(x, y, 11, 11, new LiteralText(message));
+        //#else
         super(x, y, 11, 11, message);
+        //#endif
         this.checked = checked;
         this.action = action;
     }

@@ -7,7 +7,9 @@ import de.pfannekuchen.lotas.gui.SpawnManipulationScreen;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.AbstractButtonWidget;
 import net.minecraft.client.gui.widget.ButtonWidget.PressAction;
-import net.minecraft.client.util.math.MatrixStack;
+//#if MC>=11601
+//$$ import net.minecraft.client.util.math.MatrixStack;
+//#endif
 import net.minecraft.enchantment.Enchantment;
 //#if MC<=11502
 import net.minecraft.enchantment.InfoEnchantment;
@@ -103,16 +105,16 @@ public class EntitySliderWidget extends AbstractButtonWidget {
 		return this.name + ": " + this.getSliderValue();
 	}
 
-    //#if MC>=11601
-	@Override
-	public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-	    MinecraftClient.getInstance().getTextureManager().bindTexture(WIDGETS_LOCATION);
-    //$$     GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-    //$$     int i = (this.isHovered() ? 2 : 1) * 20;
-    //$$     this.drawTexture(matrices, this.x + (int) (this.sliderPosition * (double) (this.width - 8)), this.y, 0, 46 + i, 4, 20);
-    //$$     this.drawTexture(matrices, this.x + (int) (this.sliderPosition * (double) (this.width - 8)), this.y, 0, 46 + i, 4, 20);
-	    super.renderButton(matrices, mouseX, mouseY, delta);
-	}
+	//#if MC>=11601
+//$$ 	@Override
+//$$ 	public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+//$$ 	         MinecraftClient.getInstance().getTextureManager().bindTexture(WIDGETS_LOCATION);
+//$$         GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+//$$         int i = (this.isHovered() ? 2 : 1) * 20;
+//$$         this.drawTexture(matrices, this.x + (int) (this.sliderPosition * (double) (this.width - 8)), this.y, 0, 46 + i, 4, 20);
+//$$         this.drawTexture(matrices, this.x + (int) (this.sliderPosition * (double) (this.width - 8)), this.y, 0, 46 + i, 4, 20);
+//$$ 	    super.renderButton(matrices, mouseX, mouseY, delta);
+//$$ 	}
 	//#else
 	@Override
 	protected void renderBg(MinecraftClient client, int mouseX, int mouseY) {

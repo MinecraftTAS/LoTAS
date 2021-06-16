@@ -55,8 +55,8 @@ public class MixinOverlayEvent {
 		}
 		if (ConfigUtils.getBoolean("tools", "showSpeedometer")) {
 		    //#if MC>=11601
-		    //$$ double distTraveledLastTickX = MinecraftClient.getInstance().player.getX() - MinecraftClient.getInstance().player.prevX;
-            //$$ double distTraveledLastTickZ = MinecraftClient.getInstance().player.getZ() - MinecraftClient.getInstance().player.prevZ;
+//$$ 		    double distTraveledLastTickX = MinecraftClient.getInstance().player.getX() - MinecraftClient.getInstance().player.prevX;
+//$$             double distTraveledLastTickZ = MinecraftClient.getInstance().player.getZ() - MinecraftClient.getInstance().player.prevZ;
             //#else
             double distTraveledLastTickX = MinecraftClient.getInstance().player.x - MinecraftClient.getInstance().player.prevX;
             double distTraveledLastTickZ = MinecraftClient.getInstance().player.z - MinecraftClient.getInstance().player.prevZ;
