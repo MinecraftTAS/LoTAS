@@ -10,6 +10,7 @@ import de.pfannekuchen.lotas.core.utils.ConfigUtils;
 import de.pfannekuchen.lotas.gui.SeedListScreen;
 import de.pfannekuchen.lotas.gui.widgets.NewButtonWidget;
 import de.pfannekuchen.lotas.gui.widgets.SmallCheckboxWidget;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.world.SelectWorldScreen;
 import net.minecraft.client.gui.screen.world.WorldListWidget;
@@ -30,7 +31,7 @@ public abstract class MixinGuiSelectWorldScreen extends Screen {
 	@Inject(at = @At("TAIL"), method = "init")
     public void injectinit(CallbackInfo ci) {
         this.addButton(new NewButtonWidget(2, 2, 98, 20, "Seed List", button -> {
-            this.minecraft.openScreen(new SeedListScreen());
+            MinecraftClient.getInstance().openScreen(new SeedListScreen());
         }));
         this.addButton(widget = new SmallCheckboxWidget(width - 160, 4, "Open ESC when joining world", ConfigUtils.getBoolean("tools", "hitEscape"), b -> {
         	ConfigUtils.setBoolean("tools", "hitEscape", widget.isChecked());

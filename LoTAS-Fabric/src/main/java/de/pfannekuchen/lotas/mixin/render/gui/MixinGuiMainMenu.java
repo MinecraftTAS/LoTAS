@@ -13,13 +13,17 @@ import de.pfannekuchen.lotas.core.utils.ConfigUtils;
 import de.pfannekuchen.lotas.gui.ConfigurationScreen;
 import de.pfannekuchen.lotas.gui.VideoUpspeederScreen;
 import de.pfannekuchen.lotas.gui.widgets.NewButtonWidget;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.screen.world.SelectWorldScreen;
-import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.options.GameOptions;
 import net.minecraft.client.resource.language.I18n;
+//#if MC>=11601
+//$$ import net.minecraft.client.util.math.MatrixStack;
+//$$ import net.minecraft.text.StringRenderable;
+//#endif
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import work.mgnet.identifier.Client;
@@ -86,7 +90,7 @@ public abstract class MixinGuiMainMenu extends Screen {
         	addButton(new NewButtonWidget(width / 2 - 116, height / 2 + 62 + -16, 114, 20, "Accept", c1 -> {
 				ConfigUtils.setBoolean("hidden", "acceptedDataSending", true);
 				ConfigUtils.save();
-				this.minecraft.openScreen(new TitleScreen());
+				MinecraftClient.getInstance().openScreen(new TitleScreen());
 			}));
 			addButton(new NewButtonWidget(width / 2 + 2, height / 2 + 62 + -16, 114, 20, "Decline", c2 -> {
 				System.exit(29);
@@ -101,10 +105,17 @@ public abstract class MixinGuiMainMenu extends Screen {
         }
 	}
 	
-    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/TitleScreen;drawCenteredString(Lnet/minecraft/client/font/TextRenderer;Ljava/lang/String;III)V"))
-    private void redirectdrawSplash(TitleScreen titleScreen, TextRenderer textRenderer, String str, int centerX, int y, int color) {
-        titleScreen.drawCenteredString(textRenderer, "TaS iS cHeAtInG !!1", centerX, y, color);
-    }
+	//#if MC>=11601
+//$$     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/TitleScreen;drawCenteredString(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/client/util/math/MatrixStack;Ljava/lang/String;III)V"))
+//$$     private void redirectdrawSplash(TitleScreen titleScreen, MatrixStack matrices, TextRenderer textRenderer, String str, int centerX, int y, int color) {
+//$$         titleScreen.drawCenteredString(matrices, textRenderer, "TaS iS cHeAtInG !!1", centerX, y, color);
+//$$     }
+    //#else
+   @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/TitleScreen;drawCenteredString(Lnet/minecraft/client/font/TextRenderer;Ljava/lang/String;III)V"))
+   private void redirectdrawSplash(TitleScreen titleScreen, TextRenderer textRenderer, String str, int centerX, int y, int color) {
+       titleScreen.drawCenteredString(textRenderer, "TaS iS cHeAtInG !!1", centerX, y, color);
+   }
+    //#endif
 
     /**
      * @reason Why do you want me to put this here javac
@@ -113,13 +124,13 @@ public abstract class MixinGuiMainMenu extends Screen {
 	@Overwrite
 	private void initWidgetsNormal(int y, int spacingY) {
 		this.addButton(new NewButtonWidget(this.width / 2 - 100, y, 200, 20, I18n.translate("menu.singleplayer"), (buttonWidget) -> {
-			this.minecraft.openScreen(new SelectWorldScreen(this));
+		    MinecraftClient.getInstance().openScreen(new SelectWorldScreen(this));
 		}));
 		this.addButton(new NewButtonWidget(this.width / 2 - 100, y + spacingY * 1, 200, 20, I18n.translate("Video Upspeeder"), (buttonWidget) -> {
-			this.minecraft.openScreen(new VideoUpspeederScreen());
+		    MinecraftClient.getInstance().openScreen(new VideoUpspeederScreen());
 		}));
 		this.addButton(new NewButtonWidget(this.width / 2 - 100, y + spacingY * 2, 200, 20, I18n.translate("Configuration"), (buttonWidget) -> {
-			this.minecraft.openScreen(new ConfigurationScreen());
+		    MinecraftClient.getInstance().openScreen(new ConfigurationScreen());
 		}));
 	}
 	

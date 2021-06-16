@@ -18,16 +18,19 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 @Mixin(ServerPlayerEntity.class)
 public abstract class MixinServerPlayerEntityPatch extends PlayerEntity {
 
-	public MixinServerPlayerEntityPatch(World world, GameProfile profile) {
-		super(world, profile);
-	}
+    //#if MC>=11601
+    //$$ public MixinServerPlayerEntityPatch(World world, BlockPos blockPos, GameProfile gameProfile) { super(world, blockPos, gameProfile); }
+    //#else
+    public MixinServerPlayerEntityPatch(World world, GameProfile profile) { super(world, profile); }
+    //#endif
 
-	@Final @Shadow
+    @Final @Shadow
     public MinecraftServer server;
 	
     @Inject(method = "damage(Lnet/minecraft/entity/damage/DamageSource;F)Z", at = @At("HEAD"), cancellable = true)
@@ -45,9 +48,15 @@ public abstract class MixinServerPlayerEntityPatch extends PlayerEntity {
             if (flag.get()) {
                 MinecraftClient.getInstance().player.setVelocity(0, 0, 0);
                 MinecraftClient.getInstance().player.velocityModified = true;
+                //#if MC>=11601
+                //$$ MinecraftClient.getInstance().player.prevX = this.getX();
+                //$$ MinecraftClient.getInstance().player.prevY = this.getY();
+                //$$ MinecraftClient.getInstance().player.prevZ = this.getZ();
+                //#else
                 MinecraftClient.getInstance().player.prevX = this.x;
                 MinecraftClient.getInstance().player.prevY = this.y;
                 MinecraftClient.getInstance().player.prevZ = this.z;
+                //#endif
             }
             returnable.setReturnValue(false);
             returnable.cancel();

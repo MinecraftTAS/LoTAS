@@ -33,7 +33,7 @@ public class OreDropManipulation extends DropManipulationScreen.DropManipulation
     	OreDropManipulation.width = width;
     	OreDropManipulation.height = height;
     	//#if MC>=11601
-    	//$$ enabled = new CheckboxWidget(x, y, 150, 20, new LiteralText("Override Ore Drops"), false);
+    //$$ 	enabled = new CheckboxWidget(x, y, 150, 20, new LiteralText("Override Ore Drops"), false);
         //#else
         enabled = new CheckboxWidget(x, y, 150, 20, "Override Ore Drops", false);
         //#endif

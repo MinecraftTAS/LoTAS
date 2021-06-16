@@ -9,6 +9,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import com.mojang.realmsclient.dto.RealmsServer.WorldType;
+
 import de.pfannekuchen.lotas.core.utils.ConfigUtils;
 import de.pfannekuchen.lotas.core.utils.EventUtils.Timer;
 import de.pfannekuchen.lotas.core.utils.Keyboard;
@@ -28,8 +30,14 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.AbstractButtonWidget;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
+//#if MC>=11601
+//$$ import net.minecraft.client.util.math.MatrixStack;
+//$$ import net.minecraft.util.registry.RegistryKey;
+//#endif
+import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 
 @Mixin(GameMenuScreen.class)
@@ -56,18 +64,26 @@ public abstract class MixinGuiIngameMenu extends Screen {
 		
 		this.addButton(new NewButtonWidget(this.width / 2 - 102, this.height / 4 + 48 + -16 +24 +24, 98, 20, "Savestate", btn -> {
 			if (Keyboard.isPressed(GLFW.GLFW_KEY_LEFT_SHIFT)) {
-				savestateName = new TextFieldWidget(MinecraftClient.getInstance().textRenderer, this.width / 2 - 100, this.height / 4 + 96 + -16, 98, 20, "");
+			    //#if MC>=11601
+//$$ 			    savestateName = new TextFieldWidget(MinecraftClient.getInstance().textRenderer, this.width / 2 - 100, this.height / 4 + 96 + -16, 98, 20, LiteralText.EMPTY);
+                //#else
+                savestateName = new TextFieldWidget(MinecraftClient.getInstance().textRenderer, this.width / 2 - 100, this.height / 4 + 96 + -16, 98, 20, "");
+                //#endif
 				btn.active = false;
 				setFocused(savestateName);
 			} else SavestateMod.savestate(null);
 		}));
     	this.addButton(new NewButtonWidget(this.width / 2 + 4, this.height / 4 + 48 + -16+24+24, 98, 20, "Loadstate", btn -> {
-    		if (Keyboard.isPressed(GLFW.GLFW_KEY_LEFT_SHIFT)) minecraft.openScreen(new LoadstateScreen());
+    		if (Keyboard.isPressed(GLFW.GLFW_KEY_LEFT_SHIFT)) MinecraftClient.getInstance().openScreen(new LoadstateScreen());
 			else SavestateMod.loadstate(-1);
     	})).active = SavestateMod.hasSavestate();
         addButton(new NewButtonWidget(5, 15, 48, 20, "+", b -> {
         	if (Keyboard.isPressed(GLFW.GLFW_KEY_LEFT_SHIFT)) {
-				tickrateField = new TextFieldWidget(MinecraftClient.getInstance().textRenderer, 4, 15, 103, 20, "");
+        	    //#if MC>=11601
+        //$$ 	    tickrateField = new TextFieldWidget(MinecraftClient.getInstance().textRenderer, 4, 15, 103, 20, LiteralText.EMPTY);
+                //#else
+                tickrateField = new TextFieldWidget(MinecraftClient.getInstance().textRenderer, 4, 15, 103, 20, "");
+                //#endif
 				b.active = false;
 				setFocused(b);
 			} else {
@@ -78,7 +94,11 @@ public abstract class MixinGuiIngameMenu extends Screen {
         }));
         addButton(new NewButtonWidget( 55, 15, 48, 20, "-", b -> {
         	if (Keyboard.isPressed(GLFW.GLFW_KEY_LEFT_SHIFT)) {
-				tickrateField = new TextFieldWidget(MinecraftClient.getInstance().textRenderer, 4, 15, 103, 20, "");
+        	    //#if MC>=11601
+        //$$ 	    tickrateField = new TextFieldWidget(MinecraftClient.getInstance().textRenderer, 4, 15, 103, 20, LiteralText.EMPTY);
+                //#else
+                tickrateField = new TextFieldWidget(MinecraftClient.getInstance().textRenderer, 4, 15, 103, 20, "");
+                //#endif
 				b.active = false;
 				setFocused(b);
 			} else {
@@ -88,28 +108,32 @@ public abstract class MixinGuiIngameMenu extends Screen {
 			}
         }));
 		this.addButton(new NewButtonWidget((width / 4) * 0 + 1, height - 20, width / 4 - 2, 20, "Manipulate Drops", btn -> {
-			this.minecraft.openScreen(new DropManipulationScreen((GameMenuScreen) (Object) this));
+			MinecraftClient.getInstance().openScreen(new DropManipulationScreen((GameMenuScreen) (Object) this));
 		}));
 		
 		if (advanced) {
-			this.addButton(new NewButtonWidget((width / 4) * 1 + 2, height - 20, width / 4 - 2, 20, "Manipulate Dragon", btn -> {
-				this.minecraft.openScreen(new DragonManipulationScreen((GameMenuScreen) (Object) this));
-			})).active = MinecraftClient.getInstance().getServer().getWorld(DimensionType.THE_END).getAliveEnderDragons().size() >= 1;
+		    //#if MC>=11601
+//$$             this.addButton(new NewButtonWidget((width / 4) * 1 + 2, height - 20, width / 4 - 2, 20, "Manipulate Dragon", btn -> {
+//$$                 MinecraftClient.getInstance().openScreen(new DragonManipulationScreen((GameMenuScreen) (Object) this));
+//$$             })).active = MinecraftClient.getInstance().getServer().getWorld(World.END).getAliveEnderDragons().size() >= 1;
+            //#else
+                       this.addButton(new NewButtonWidget((width / 4) * 1 + 2, height - 20, width / 4 - 2, 20, "Manipulate Dragon", btn -> { MinecraftClient.getInstance().openScreen(new DragonManipulationScreen((GameMenuScreen) (Object) this)); })).active = MinecraftClient.getInstance().getServer().getWorld(DimensionType.THE_END).getAliveEnderDragons().size() >= 1;
+            //#endif
 			this.addButton(new NewButtonWidget((width / 4) * 2 + 3, height - 20, width / 4 - 2, 20, "Manipulate Spawning", btn -> {
-				this.minecraft.openScreen(new SpawnManipulationScreen());
+			    MinecraftClient.getInstance().openScreen(new SpawnManipulationScreen());
 			}));
 
 			this.addButton(new NewButtonWidget((width / 4) * 3 + 4, height - 20, width / 4 - 4, 20, "Manipulate AI", btn -> {
-				this.minecraft.openScreen(new AIManipulationScreen());
+			    MinecraftClient.getInstance().openScreen(new AIManipulationScreen());
 			}));
 		}
 		if(glitched) {
 			this.addButton(new NewButtonWidget(5, 55, 98, 20, "Save Items",btn -> {
-				DupeMod.save(minecraft);
+				DupeMod.save(MinecraftClient.getInstance());
 				btn.active = false;
 			}));
 			this.addButton(new NewButtonWidget(5, 75, 98, 20, "Load Items", btn -> {
-				DupeMod.load(minecraft);
+				DupeMod.load(MinecraftClient.getInstance());
 				btn.active = false;
 			}));
 		}
@@ -117,7 +141,11 @@ public abstract class MixinGuiIngameMenu extends Screen {
 	        addButton(new NewButtonWidget(37, 115, 66, 20, "Jump ticks", btn -> {
 				TickrateChangerMod.ticksToJump = (int) TickrateChangerMod.ticks[TickrateChangerMod.ji];
 				btn.active = false;
-				btn.setMessage("Jumping...");
+				//#if MC>=11601
+//$$ 				btn.setMessage(new LiteralText("Jumping..."));
+                //#else
+                btn.setMessage("Jumping...");
+                //#endif
 	        }));
         
 			addButton(new NewButtonWidget(5, 115, 30, 20, TickrateChangerMod.ticks[TickrateChangerMod.ji] + "t", btn -> {
@@ -168,28 +196,47 @@ public abstract class MixinGuiIngameMenu extends Screen {
         
 	}
 	
-	@Inject(method = "render", at = @At("TAIL"))
-	public void drawScreen(int mouseX, int mouseY, float partialTicks, CallbackInfo ci) {
-		
+	@Inject(method = "render", at = @At("TAIL")) 
+	//#if MC>=11601
+//$$ 	public void drawScreen(MatrixStack matrices, int mouseX, int mouseY, float partialTicks, CallbackInfo ci) {
+    //#else
+    public void drawScreen(int mouseX, int mouseY, float partialTicks, CallbackInfo ci) {
+    //#endif
 		boolean glitched=ConfigUtils.getBoolean("ui", "glitchedMode");
 		
 		boolean advanced=ConfigUtils.getBoolean("ui", "advancedMode");
 		
-		if (Keyboard.isPressed(GLFW.GLFW_KEY_LEFT_SHIFT)) {
-			this.buttons.get(8).setMessage("\u00A76Name Savestate");
-			this.buttons.get(9).setMessage("\u00A76Choose State");
-			this.buttons.get(10).setMessage("\u00A76Custom");
-			this.buttons.get(11).setMessage("\u00A76Tickrate");
-		} else {
-			this.buttons.get(8).setMessage("Savestate");
-			this.buttons.get(9).setMessage("Loadstate");
-			this.buttons.get(10).setMessage("+");
-			this.buttons.get(11).setMessage("-");
-		}
-		if(advanced) drawCenteredString(MinecraftClient.getInstance().textRenderer, "Hold Shift to access more features", width / 2, this.height / 4 + 152, 0xFFFFFF);
-	
-		if (savestateName != null) savestateName.render(mouseX, mouseX, partialTicks);
-		if (tickrateField != null) tickrateField.render(mouseX, mouseX, partialTicks);
+		//#if MC>=11601
+//$$         if (Keyboard.isPressed(GLFW.GLFW_KEY_LEFT_SHIFT)) {
+//$$             this.buttons.get(8).setMessage(new LiteralText("\u00A76Name Savestate"));
+//$$             this.buttons.get(9).setMessage(new LiteralText("\u00A76Choose State"));
+//$$             this.buttons.get(10).setMessage(new LiteralText("\u00A76Custom"));
+//$$             this.buttons.get(11).setMessage(new LiteralText("\u00A76Tickrate"));
+//$$         } else {
+//$$             this.buttons.get(8).setMessage(new LiteralText("Savestate"));
+//$$             this.buttons.get(9).setMessage(new LiteralText("Loadstate"));
+//$$             this.buttons.get(10).setMessage(new LiteralText("+"));
+//$$             this.buttons.get(11).setMessage(new LiteralText("-"));
+//$$         }
+//$$         if(advanced) drawCenteredString(matrices, MinecraftClient.getInstance().textRenderer, "Hold Shift to access more features", width / 2, this.height / 4 + 152, 0xFFFFFF);
+//$$         if (savestateName != null) savestateName.render(matrices, mouseX, mouseX, partialTicks);
+//$$         if (tickrateField != null) tickrateField.render(matrices, mouseX, mouseX, partialTicks);
+        //#else
+       if (Keyboard.isPressed(GLFW.GLFW_KEY_LEFT_SHIFT)) {
+           this.buttons.get(8).setMessage("\u00A76Name Savestate");
+           this.buttons.get(9).setMessage("\u00A76Choose State");
+           this.buttons.get(10).setMessage("\u00A76Custom");
+           this.buttons.get(11).setMessage("\u00A76Tickrate");
+       } else {
+           this.buttons.get(8).setMessage("Savestate");
+           this.buttons.get(9).setMessage("Loadstate");
+           this.buttons.get(10).setMessage("+");
+           this.buttons.get(11).setMessage("-");
+       }
+       if(advanced) drawCenteredString(MinecraftClient.getInstance().textRenderer, "Hold Shift to access more features", width / 2, this.height / 4 + 152, 0xFFFFFF);
+       if (savestateName != null) savestateName.render(mouseX, mouseX, partialTicks);
+       if (tickrateField != null) tickrateField.render(mouseX, mouseX, partialTicks);
+        //#endif
 		
 		if (SavestateMod.showSavestateDone) {
 			long timeSince = System.currentTimeMillis() - SavestateMod.timeTitle;
@@ -197,27 +244,46 @@ public abstract class MixinGuiIngameMenu extends Screen {
 				SavestateMod.showSavestateDone = false;
 				return;
 			}
-			drawCenteredString(MinecraftClient.getInstance().textRenderer, "\u00A76Savestate successful...", width / 2, 20, new Color(1F, 1F, 1F, 1F - (timeSince / 2000F)).getRGB());
+			//#if MC>=11601
+//$$ 			drawCenteredString(matrices, MinecraftClient.getInstance().textRenderer, "\u00A76Savestate successful...", width / 2, 20, new Color(1F, 1F, 1F, 1F - (timeSince / 2000F)).getRGB());
+            //#else
+            drawCenteredString(MinecraftClient.getInstance().textRenderer, "\u00A76Savestate successful...", width / 2, 20, new Color(1F, 1F, 1F, 1F - (timeSince / 2000F)).getRGB());
+            //#endif
 		} else if (SavestateMod.showLoadstateDone) {
 			long timeSince = System.currentTimeMillis() - SavestateMod.timeTitle;
 			if (timeSince >= 1800) {
 				SavestateMod.showLoadstateDone = false;
 				return;
 			}
-			drawCenteredString(MinecraftClient.getInstance().textRenderer, "\u00A76Loadstate successful...", width / 2, 20, new Color(1F, 1F, 1F, 1F - (timeSince / 2000F)).getRGB());
+			//#if MC>=11601
+//$$ 			drawCenteredString(matrices, MinecraftClient.getInstance().textRenderer, "\u00A76Loadstate successful...", width / 2, 20, new Color(1F, 1F, 1F, 1F - (timeSince / 2000F)).getRGB());
+            //#else
+            drawCenteredString(MinecraftClient.getInstance().textRenderer, "\u00A76Loadstate successful...", width / 2, 20, new Color(1F, 1F, 1F, 1F - (timeSince / 2000F)).getRGB());
+            //#endif
 		}
-		
-		drawString(MinecraftClient.getInstance().textRenderer, "Tickrate Changer (" + TickrateChangerMod.tickrate + ")", 5, 5, 0xFFFFFF);
-		
-		if (advanced) {
-			int i=glitched? 18 : 16;
-			minecraft.textRenderer.drawWithShadow("Tickjump", 10, 105, 0xFFFFFF);
-			if (buttons.get(i).active == false) {
-				minecraft.textRenderer.drawWithShadow("Tickjump is ready,", 8, 137, 0xFFFFFF);
-				minecraft.textRenderer.drawWithShadow("press ESC to continue", 8, 147, 0xFFFFFF);
-			}
-		}
-		if (glitched) minecraft.textRenderer.drawWithShadow("Duping", 10, 45, 0xFFFFFF);
+		//#if MC>=11601
+//$$         drawStringWithShadow(matrices, MinecraftClient.getInstance().textRenderer, "Tickrate Changer (" + TickrateChangerMod.tickrate + ")", 5, 5, 0xFFFFFF);
+//$$         if (advanced) {
+//$$             int i=glitched? 18 : 16;
+//$$             MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, "Tickjump", 10, 105, 0xFFFFFF);
+//$$             if (buttons.get(i).active == false) {
+//$$                 MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, "Tickjump is ready,", 8, 137, 0xFFFFFF);
+//$$                 MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, "press ESC to continue", 8, 147, 0xFFFFFF);
+//$$             }
+//$$         }
+//$$         if (glitched) MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, "Duping", 10, 45, 0xFFFFFF);
+        //#else
+       drawString(MinecraftClient.getInstance().textRenderer, "Tickrate Changer (" + TickrateChangerMod.tickrate + ")", 5, 5, 0xFFFFFF);
+       if (advanced) {
+           int i=glitched? 18 : 16;
+           MinecraftClient.getInstance().textRenderer.drawWithShadow("Tickjump", 10, 105, 0xFFFFFF);
+           if (buttons.get(i).active == false) {
+               MinecraftClient.getInstance().textRenderer.drawWithShadow("Tickjump is ready,", 8, 137, 0xFFFFFF);
+               MinecraftClient.getInstance().textRenderer.drawWithShadow("press ESC to continue", 8, 147, 0xFFFFFF);
+           }
+       }
+       if (glitched) MinecraftClient.getInstance().textRenderer.drawWithShadow("Duping", 10, 45, 0xFFFFFF);
+        //#endif
 	}
 	
 	

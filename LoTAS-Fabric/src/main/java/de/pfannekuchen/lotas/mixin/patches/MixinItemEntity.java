@@ -20,8 +20,13 @@ public abstract class MixinItemEntity extends Entity {
  	@Inject(at = @At("TAIL"), method = "Lnet/minecraft/entity/ItemEntity;<init>(Lnet/minecraft/world/World;DDD)V")
  	public void hackVelocity(CallbackInfo ci) {
  		try {
- 			double pX = MinecraftClient.getInstance().player.x - x;
-			double pZ = MinecraftClient.getInstance().player.z - z;
+ 		    //#if MC>=11601
+ //$$            double pX = MinecraftClient.getInstance().player.getX() - getX();
+ //$$            double pZ = MinecraftClient.getInstance().player.getZ() - getZ();
+            //#else
+            double pX = MinecraftClient.getInstance().player.x - x;
+            double pZ = MinecraftClient.getInstance().player.z - z;
+            //#endif
 			if (pX > 0) pX = 1;
 			if (pX < 0) pX = -1;
 			if (pZ > 0) pZ = 1;

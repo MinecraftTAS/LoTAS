@@ -39,7 +39,7 @@ public class FishDropManipulation extends DropManipulationScreen.DropManipulatio
     	FishDropManipulation.width = width;
     	FishDropManipulation.height = height;
     	//#if MC>=11601
-    	//$$ enabled = new CheckboxWidget(x, y, 150, 20, new LiteralText("Override Fish Drops"), false);
+    //$$ 	enabled = new CheckboxWidget(x, y, 150, 20, new LiteralText("Override Fish Drops"), false);
         //#else
         enabled = new CheckboxWidget(x, y, 150, 20, "Override Fish Drops", false);
         //#endif

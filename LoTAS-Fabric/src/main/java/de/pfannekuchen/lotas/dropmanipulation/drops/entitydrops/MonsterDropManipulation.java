@@ -168,17 +168,17 @@ public class MonsterDropManipulation extends DropManipulationScreen.DropManipula
             //$$ optimizeGuardian.render((MatrixStack) matrices, mouseX, mouseY, delta);
             //$$ optimizeWitch.render((MatrixStack) matrices, mouseX, mouseY, delta);
             //#else
-           optimizeCaveSpider.render(mouseX, mouseY, delta);
-           optimizeEnderman.render(mouseX, mouseY, delta);
-           optimizeCreeper.render(mouseX, mouseY, delta);
-           optimizeElderGuardian.render(mouseX, mouseY, delta);
-           optimizePhantom.render(mouseX, mouseY, delta);
-           optimizeSlime.render(mouseX, mouseY, delta);
-           optimizeVindicator.render(mouseX, mouseY, delta);
-           optimizeSkeleton.render(mouseX, mouseY, delta);
-           optimizeShulker.render(mouseX, mouseY, delta);
-           optimizeGuardian.render(mouseX, mouseY, delta);
-           optimizeWitch.render(mouseX, mouseY, delta);
+          optimizeCaveSpider.render(mouseX, mouseY, delta);
+          optimizeEnderman.render(mouseX, mouseY, delta);
+          optimizeCreeper.render(mouseX, mouseY, delta);
+          optimizeElderGuardian.render(mouseX, mouseY, delta);
+          optimizePhantom.render(mouseX, mouseY, delta);
+          optimizeSlime.render(mouseX, mouseY, delta);
+          optimizeVindicator.render(mouseX, mouseY, delta);
+          optimizeSkeleton.render(mouseX, mouseY, delta);
+          optimizeShulker.render(mouseX, mouseY, delta);
+          optimizeGuardian.render(mouseX, mouseY, delta);
+          optimizeWitch.render(mouseX, mouseY, delta);
             //#endif
         }
 

@@ -44,7 +44,7 @@ public class NetherMobDropManipulation extends DropManipulationScreen.DropManipu
     	NetherMobDropManipulation.width = width;
     	NetherMobDropManipulation.height = height;
     	//#if MC>=11601
-    	//$$ enabled = new CheckboxWidget(x, y, 150, 20, new LiteralText("Override Nether Mob Drops"), false);
+    //$$ 	enabled = new CheckboxWidget(x, y, 150, 20, new LiteralText("Override Nether Mob Drops"), false);
         //#else
         enabled = new CheckboxWidget(x, y, 150, 20, "Override Nether Mob Drops", false);
         //#endif

@@ -65,9 +65,15 @@ public class MixinRenderEvent {
 			//#endif
 			RenderUtils.applyRenderOffset();
 			
-			double renderX = ((double) AIManipulationScreen.entities.get(AIManipulationScreen.selectedIndex).x - 0.5f);
-			double renderY = ((double) AIManipulationScreen.entities.get(AIManipulationScreen.selectedIndex).y);
-			double renderZ = ((double) AIManipulationScreen.entities.get(AIManipulationScreen.selectedIndex).z - 0.5F);
+			//#if MC>=11601
+            //$$ double renderX = ((double) AIManipulationScreen.entities.get(AIManipulationScreen.selectedIndex).getX() - 0.5f);
+			//$$ double renderY = ((double) AIManipulationScreen.entities.get(AIManipulationScreen.selectedIndex).getY());
+			//$$ double renderZ = ((double) AIManipulationScreen.entities.get(AIManipulationScreen.selectedIndex).getZ() - 0.5F);
+            //#else
+            double renderX = ((double) AIManipulationScreen.entities.get(AIManipulationScreen.selectedIndex).x - 0.5f);
+            double renderY = ((double) AIManipulationScreen.entities.get(AIManipulationScreen.selectedIndex).y);
+            double renderZ = ((double) AIManipulationScreen.entities.get(AIManipulationScreen.selectedIndex).z - 0.5F);
+            //#endif
 			
 			GL11.glTranslated(renderX, renderY, renderZ);
 			GL11.glScalef(1, 2, 1);

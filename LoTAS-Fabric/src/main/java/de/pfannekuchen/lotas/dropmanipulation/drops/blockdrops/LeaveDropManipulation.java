@@ -112,10 +112,10 @@ public class LeaveDropManipulation extends DropManipulationScreen.DropManipulati
             //$$ dropStick.render((MatrixStack) matrices, mouseX, mouseY, delta);
             //$$ dropSapling.render((MatrixStack) matrices, mouseX, mouseY, delta);
             //#else
-           MinecraftClient.getInstance().textRenderer.drawWithShadow("Leaves drop:" + (dropApple.isToggled() ? " 1 Apple" : "") + (dropStick.isToggled() ? " 1 Stick" : "") + (dropSapling.isToggled() ? " 1 Sapling" : ""), x, y + 64, 0xFFFFFF);
-           dropApple.render(mouseX, mouseY, delta);
-           dropStick.render(mouseX, mouseY, delta);
-           dropSapling.render(mouseX, mouseY, delta);
+          MinecraftClient.getInstance().textRenderer.drawWithShadow("Leaves drop:" + (dropApple.isToggled() ? " 1 Apple" : "") + (dropStick.isToggled() ? " 1 Stick" : "") + (dropSapling.isToggled() ? " 1 Sapling" : ""), x, y + 64, 0xFFFFFF);
+          dropApple.render(mouseX, mouseY, delta);
+          dropStick.render(mouseX, mouseY, delta);
+          dropSapling.render(mouseX, mouseY, delta);
             //#endif
         }
 
