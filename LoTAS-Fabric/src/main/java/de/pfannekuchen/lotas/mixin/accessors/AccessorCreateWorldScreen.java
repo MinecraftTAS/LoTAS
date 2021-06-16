@@ -9,7 +9,7 @@ import net.minecraft.client.gui.screen.world.CreateWorldScreen;
 public interface AccessorCreateWorldScreen {
 	@Accessor("seed")
 	void setSeed(String seed);
-	
+
 	@Accessor("cheatsEnabled")
 	void setCheatsEnabled(boolean cheatsEnabled);
 }

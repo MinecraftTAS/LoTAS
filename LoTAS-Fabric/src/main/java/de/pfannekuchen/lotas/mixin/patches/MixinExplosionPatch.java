@@ -17,5 +17,5 @@ public class MixinExplosionPatch {
 	public Random stupid(Random random) {
 		return ConfigUtils.getBoolean("tools", "manipulateExplosionDropChance") ? new FakeRandom() : random;
 	}
-	
+
 }

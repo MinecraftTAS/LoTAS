@@ -20,6 +20,6 @@ public class MixinUnbreakingPatch {
 			bool.setReturnValue(true);
 			bool.cancel();
 		}
-	}	
-	
+	}
+
 }

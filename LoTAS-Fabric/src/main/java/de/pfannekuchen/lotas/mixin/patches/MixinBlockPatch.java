@@ -16,16 +16,17 @@ import net.minecraft.loot.context.LootContext;
 @Mixin(Block.class)
 public class MixinBlockPatch {
 
-    @Inject(method = "getDroppedStacks(Lnet/minecraft/block/BlockState;Lnet/minecraft/loot/context/LootContext$Builder;)Ljava/util/List;", at = @At("HEAD"), cancellable = true)
-    public void redodrop(BlockState state, LootContext.Builder builder, CallbackInfoReturnable<List<ItemStack>> drops) {
-        for (DropManipulationScreen.DropManipulation man : DropManipulationScreen.manipulations) {
-            if (!man.enabled.isChecked()) continue;
-            List<ItemStack> list = man.redirectDrops(state);
-            if (!list.isEmpty()) {
-                drops.setReturnValue(list);
-                drops.cancel();
-            }
-        }
-    }
+	@Inject(method = "getDroppedStacks(Lnet/minecraft/block/BlockState;Lnet/minecraft/loot/context/LootContext$Builder;)Ljava/util/List;", at = @At("HEAD"), cancellable = true)
+	public void redodrop(BlockState state, LootContext.Builder builder, CallbackInfoReturnable<List<ItemStack>> drops) {
+		for (DropManipulationScreen.DropManipulation man : DropManipulationScreen.manipulations) {
+			if (!man.enabled.isChecked())
+				continue;
+			List<ItemStack> list = man.redirectDrops(state);
+			if (!list.isEmpty()) {
+				drops.setReturnValue(list);
+				drops.cancel();
+			}
+		}
+	}
 
 }

@@ -30,33 +30,33 @@ public class KeybindsUtils {
 	public static int savedTickrate;
 
 	public static boolean wasPressed = false;
-	
+
 	public static void keyEvent() {
 		while (saveStateKeybind.wasPressed()) {
 			MinecraftClient.getInstance().openScreen(new GameMenuScreen(true));
 			shouldSavestate = true;
-		} 
-		while(loadStateKeybind.wasPressed()) {
+		}
+		while (loadStateKeybind.wasPressed()) {
 			MinecraftClient.getInstance().openScreen(new GameMenuScreen(true));
 			shouldLoadstate = true;
 		}
 		while (loadDupeKeybind.wasPressed()) {
 			DupeMod.load(MinecraftClient.getInstance());
 		}
-		while(saveDupeKeybind.wasPressed()) {
+		while (saveDupeKeybind.wasPressed()) {
 			DupeMod.save(MinecraftClient.getInstance());
 		}
-		while(toggleTimerKeybind.wasPressed()) {
+		while (toggleTimerKeybind.wasPressed()) {
 			if (Timer.ticks < 1 || Timer.startTime == null) {
 				Timer.startTime = Duration.ofMillis(System.currentTimeMillis());
 				Timer.ticks = 1;
 			}
 			Timer.running = !Timer.running;
 		}
-		
+
 		if (wasPressed != holdStrafeKeybind.isPressed() && wasPressed == true) {
 			//#if MC>=11601
-//$$ 			KeyBinding.setKeyPressed(MinecraftClient.getInstance().options.keyRight.getDefaultKey(), false);
+//$$ 						KeyBinding.setKeyPressed(MinecraftClient.getInstance().options.keyRight.getDefaultKey(), false);
 			//#else
 			KeyBinding.setKeyPressed(MinecraftClient.getInstance().options.keyRight.getDefaultKeyCode(), false);
 			//#endif

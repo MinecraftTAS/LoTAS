@@ -20,15 +20,15 @@ public class AIManipulationScreen extends Screen {
 
 	public static int selectedIndex = 0;
 	public static List<MobEntity> entities;
-	
+
 	public TextFieldWidget xText;
 	public TextFieldWidget yText;
 	public TextFieldWidget zText;
-	
+
 	public static int spawnX = (int) MinecraftClient.getInstance().player.x;
 	public static int spawnY = (int) MinecraftClient.getInstance().player.y;
 	public static int spawnZ = (int) MinecraftClient.getInstance().player.z;
-	
+
 	@Override
 	public void init() {
 		addButton(new NewButtonWidget(5, 5, 98, 20, "<", btn -> {
@@ -41,15 +41,15 @@ public class AIManipulationScreen extends Screen {
 			button.active = selectedIndex != entities.size() - 1;
 			buttons.get(0).active = selectedIndex != 0;
 		}));
-		
+
 		xText = new TextFieldWidget(MinecraftClient.getInstance().textRenderer, width / 2 - 100, height - 50, 60, 20, spawnX + "");
 		yText = new TextFieldWidget(MinecraftClient.getInstance().textRenderer, width / 2 - 30, height - 50, 60, 20, spawnY + "");
 		zText = new TextFieldWidget(MinecraftClient.getInstance().textRenderer, width / 2 + 40, height - 50, 60, 20, spawnZ + "");
-		
+
 		addButton(new NewButtonWidget(width / 2 - 100, height - 25, 200, 20, "Change Target", button -> {
 			button.active = !entities.get(selectedIndex).getNavigation().startMovingTo(spawnX, spawnY, spawnZ, 1.0f);
 		}));
-		
+
 		addButton(new NewButtonWidget(width / 2 - 100, height - 72, 60, 20, "X++", btn -> spawnX++));
 		addButton(new NewButtonWidget(width / 2 - 100, height - 94, 60, 20, "X--", btn -> spawnX--));
 		addButton(new NewButtonWidget(width / 2 - 30, height - 72, 60, 20, "Y++", btn -> spawnY++));
@@ -78,13 +78,13 @@ public class AIManipulationScreen extends Screen {
 		}));
 		entities = minecraft.getServer().getWorld(MinecraftClient.getInstance().player.dimension).getEntities(MobEntity.class, minecraft.player.getBoundingBox().expand(32, 32, 32), Predicates.alwaysTrue());
 		selectedIndex = 0;
-		
+
 		if (selectedIndex + 2 > entities.size()) {
 			buttons.get(1).active = false;
 		} else {
 			buttons.get(1).active = true;
 		}
-		
+
 		if (selectedIndex - 1 < 0) {
 			buttons.get(0).active = false;
 		} else {
@@ -92,25 +92,25 @@ public class AIManipulationScreen extends Screen {
 		}
 		super.init();
 	}
-	
+
 	@Override
 	public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
 		int prev = selectedIndex;
-		
+
 		buttons.get(2).active = true;
-		
+
 		boolean i = super.mouseClicked(mouseX, mouseY, mouseButton);
-		
+
 		xText.setText(spawnX + "");
 		yText.setText(spawnY + "");
 		zText.setText(spawnZ + "");
-		
+
 		if (prev != selectedIndex) {
 			try {
 				spawnX = entities.get(selectedIndex).getNavigation().getCurrentPath().getEnd().x;
 				spawnY = entities.get(selectedIndex).getNavigation().getCurrentPath().getEnd().y;
 				spawnZ = entities.get(selectedIndex).getNavigation().getCurrentPath().getEnd().z;
-				
+
 				xText.setText(spawnX + "");
 				yText.setText(spawnY + "");
 				zText.setText(spawnZ + "");
@@ -118,25 +118,25 @@ public class AIManipulationScreen extends Screen {
 				e.printStackTrace();
 			}
 		}
-		
+
 		if (selectedIndex + 2 > entities.size()) {
 			buttons.get(1).active = false;
 		} else {
 			buttons.get(1).active = true;
 		}
-		
-		if (selectedIndex - 1  < 0) {
+
+		if (selectedIndex - 1 < 0) {
 			buttons.get(0).active = false;
 		} else {
 			buttons.get(0).active = true;
 		}
-		
+
 		xText.mouseClicked(mouseX, mouseY, mouseButton);
 		yText.mouseClicked(mouseX, mouseY, mouseButton);
 		zText.mouseClicked(mouseX, mouseY, mouseButton);
 		return i;
 	}
-	
+
 	@Override
 	public boolean charTyped(char typedChar, int keyCode) {
 		if (Character.isDigit(typedChar) || !Character.isLetter(typedChar)) {
@@ -154,15 +154,16 @@ public class AIManipulationScreen extends Screen {
 		}
 		return super.charTyped(typedChar, keyCode);
 	}
-	
+
 	@Override
 	public void render(int mouseX, int mouseY, float partialTicks) {
 		super.render(mouseX, mouseY, partialTicks);
-		if (entities.size() == 0) return;
+		if (entities.size() == 0)
+			return;
 		xText.render(mouseX, mouseY, partialTicks);
 		yText.render(mouseX, mouseY, partialTicks);
 		zText.render(mouseX, mouseY, partialTicks);
 		drawCenteredString(MinecraftClient.getInstance().textRenderer, entities.get(selectedIndex).getClass().getSimpleName().replaceFirst("Entity", "") + " (" + entities.get(selectedIndex).x + ", " + entities.get(selectedIndex).y + ", " + entities.get(selectedIndex).z + ")", width / 2, 5, 0xFFFFFF);
 	}
-	
+
 }

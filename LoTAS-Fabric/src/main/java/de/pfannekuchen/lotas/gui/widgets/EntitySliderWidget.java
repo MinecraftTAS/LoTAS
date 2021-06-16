@@ -1,4 +1,5 @@
 package de.pfannekuchen.lotas.gui.widgets;
+
 import java.util.HashMap;
 
 import com.mojang.blaze3d.platform.GlStateManager;
@@ -50,8 +51,8 @@ public class EntitySliderWidget extends AbstractButtonWidget {
 	private final float max;
 
 	public EntitySliderWidget(int xPos, int yPos, HashMap<Integer, String> ent, int width, int height, PressAction c) {
-	    //#if MC>=11601
-//$$ 		super(xPos, yPos, width, height, new LiteralText(""));
+		//#if MC>=11601
+//$$ 				super(xPos, yPos, width, height, new LiteralText(""));
 		//#else
 		super(xPos, yPos, width, height, "");
 		//#endif
@@ -61,7 +62,7 @@ public class EntitySliderWidget extends AbstractButtonWidget {
 		this.max = ent.size() - 1;
 		this.sliderPosition = -min / (max - min);
 		//#if MC>=11601
-//$$ 		this.setMessage(new LiteralText("Entity: " + ent.get(0)));
+//$$ 				this.setMessage(new LiteralText("Entity: " + ent.get(0)));
 		//#else
 		this.setMessage("Entity: " + ent.get(0));
 		//#endif
@@ -85,10 +86,10 @@ public class EntitySliderWidget extends AbstractButtonWidget {
 	public void setSliderValue(float value) {
 		this.sliderPosition = (value - this.min) / (this.max - this.min);
 		//#if MC>=11601
-//$$ 	    this.setMessage(new LiteralText(this.getDisplayString()));
-	    //#else
+//$$ 			    this.setMessage(new LiteralText(this.getDisplayString()));
+		//#else
 		this.setMessage(this.getDisplayString());
-        //#endif
+		//#endif
 	}
 
 	/**
@@ -106,23 +107,23 @@ public class EntitySliderWidget extends AbstractButtonWidget {
 	}
 
 	//#if MC>=11601
-//$$ 	@Override
-//$$ 	public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-//$$ 	         MinecraftClient.getInstance().getTextureManager().bindTexture(WIDGETS_LOCATION);
-//$$         GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-//$$         int i = (this.isHovered() ? 2 : 1) * 20;
-//$$         this.drawTexture(matrices, this.x + (int) (this.sliderPosition * (double) (this.width - 8)), this.y, 0, 46 + i, 4, 20);
-//$$         this.drawTexture(matrices, this.x + (int) (this.sliderPosition * (double) (this.width - 8)), this.y, 0, 46 + i, 4, 20);
-//$$ 	    super.renderButton(matrices, mouseX, mouseY, delta);
-//$$ 	}
+//$$ 		@Override
+//$$ 		public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+//$$ 		         MinecraftClient.getInstance().getTextureManager().bindTexture(WIDGETS_LOCATION);
+//$$ 	        GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+//$$ 	        int i = (this.isHovered() ? 2 : 1) * 20;
+//$$ 	        this.drawTexture(matrices, this.x + (int) (this.sliderPosition * (double) (this.width - 8)), this.y, 0, 46 + i, 4, 20);
+//$$ 	        this.drawTexture(matrices, this.x + (int) (this.sliderPosition * (double) (this.width - 8)), this.y, 0, 46 + i, 4, 20);
+//$$ 		    super.renderButton(matrices, mouseX, mouseY, delta);
+//$$ 		}
 	//#else
 	@Override
 	protected void renderBg(MinecraftClient client, int mouseX, int mouseY) {
-	    client.getTextureManager().bindTexture(WIDGETS_LOCATION);
-	    GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-	    int i = (this.isHovered() ? 2 : 1) * 20;
-	    this.blit(this.x + (int) (this.sliderPosition * (double) (this.width - 8)), this.y, 0, 46 + i, 4, 20);
-	    this.blit(this.x + (int) (this.sliderPosition * (double) (this.width - 8)) + 4, this.y, 196, 46 + i, 4, 20);
+		client.getTextureManager().bindTexture(WIDGETS_LOCATION);
+		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		int i = (this.isHovered() ? 2 : 1) * 20;
+		this.blit(this.x + (int) (this.sliderPosition * (double) (this.width - 8)), this.y, 0, 46 + i, 4, 20);
+		this.blit(this.x + (int) (this.sliderPosition * (double) (this.width - 8)) + 4, this.y, 196, 46 + i, 4, 20);
 	}
 	//#endif
 
@@ -143,8 +144,8 @@ public class EntitySliderWidget extends AbstractButtonWidget {
 				if (this.sliderPosition > 1.0F) {
 					this.sliderPosition = 1.0F;
 				}
-			    //#if MC>=11601
-//$$ 				setMessage(new LiteralText("Entity: " + entities.get((int) Math.round(sliderPosition * (max - min) + min))));
+				//#if MC>=11601
+//$$ 								setMessage(new LiteralText("Entity: " + entities.get((int) Math.round(sliderPosition * (max - min) + min))));
 				//#else
 				setMessage("Entity: " + entities.get((int) Math.round(sliderPosition * (max - min) + min)));
 				//#endif
@@ -152,8 +153,8 @@ public class EntitySliderWidget extends AbstractButtonWidget {
 
 			GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 			//#if MC>=11601
-//$$ 			this.drawTexture(null, this.x + (int) (this.sliderPosition * (float) (this.width - 8)), this.y, 0, 66, 4, 20);
-//$$ 			this.drawTexture(null, this.x + (int) (this.sliderPosition * (float) (this.width - 8)) + 4, this.y, 196, 66, 4, 20);
+//$$ 						this.drawTexture(null, this.x + (int) (this.sliderPosition * (float) (this.width - 8)), this.y, 0, 66, 4, 20);
+//$$ 						this.drawTexture(null, this.x + (int) (this.sliderPosition * (float) (this.width - 8)) + 4, this.y, 196, 66, 4, 20);
 			//#else
 			blit(this.x + (int) (this.sliderPosition * (float) (this.width - 8)), this.y, 0, 66, 4, 20);
 			blit(this.x + (int) (this.sliderPosition * (float) (this.width - 8)) + 4, this.y, 196, 66, 4, 20);
@@ -174,9 +175,9 @@ public class EntitySliderWidget extends AbstractButtonWidget {
 	public void setSliderPosition(float position) {
 		this.sliderPosition = position;
 		//#if MC>=11601
-//$$ 		this.setMessage(new LiteralText(this.getDisplayString()));
-	    //#else
-	    this.setMessage(this.getDisplayString());
+//$$ 				this.setMessage(new LiteralText(this.getDisplayString()));
+		//#else
+		this.setMessage(this.getDisplayString());
 		//#endif
 	}
 
@@ -197,8 +198,8 @@ public class EntitySliderWidget extends AbstractButtonWidget {
 				this.sliderPosition = 1.0F;
 			}
 			//#if MC>=11601
-//$$ 			this.setMessage(new LiteralText("Entity: " + entities.get((int) Math.round(sliderPosition * (max - min) + min))));
-	        //#else
+//$$ 						this.setMessage(new LiteralText("Entity: " + entities.get((int) Math.round(sliderPosition * (max - min) + min))));
+			//#else
 			this.setMessage("Entity: " + entities.get((int) Math.round(sliderPosition * (max - min) + min)));
 			//#endif
 			this.isMouseDown = true;
@@ -207,7 +208,7 @@ public class EntitySliderWidget extends AbstractButtonWidget {
 			return false;
 		}
 	}
-	
+
 	public LivingEntity getEntity(ServerWorld world) {
 		LivingEntity entity = new BlazeEntity(EntityType.BLAZE, world);
 		switch ((int) Math.round(sliderPosition * (max - min) + min)) {
@@ -350,27 +351,27 @@ public class EntitySliderWidget extends AbstractButtonWidget {
 				break;
 			}
 		}
-//		entity.inventoryArmorDropChances = new float[] { 1.0f, 1.0f, 1.0f, 1.0f };
-//		entity.inventoryHandsDropChances = new float[] { 1.0f, 1.0f };
+		//		entity.inventoryArmorDropChances = new float[] { 1.0f, 1.0f, 1.0f, 1.0f };
+		//		entity.inventoryHandsDropChances = new float[] { 1.0f, 1.0f };
 		return entity;
 	}
-	
+
 	//#if MC>=11601
-//$$ 	public ItemStack addEnchants(ItemStack item,  HashMap<Enchantment, Integer> enchs) {
-//$$ 	    enchs.entrySet().forEach(entry->{
-//$$ 	        item.addEnchantment(entry.getKey(), entry.getValue());
-//$$ 	    });;
-//$$ 		return item;
-//$$ 	}
+//$$ 		public ItemStack addEnchants(ItemStack item,  HashMap<Enchantment, Integer> enchs) {
+//$$ 		    enchs.entrySet().forEach(entry->{
+//$$ 		        item.addEnchantment(entry.getKey(), entry.getValue());
+//$$ 		    });;
+//$$ 			return item;
+//$$ 		}
 	//#else
-	public ItemStack addEnchants(ItemStack item,  InfoEnchantment[] enchants) {
-        for (InfoEnchantment enchantmentData : enchants) {
-            item.addEnchantment(enchantmentData.enchantment, enchantmentData.level);
-        }
-        return item;
-    }
+	public ItemStack addEnchants(ItemStack item, InfoEnchantment[] enchants) {
+		for (InfoEnchantment enchantmentData : enchants) {
+			item.addEnchantment(enchantmentData.enchantment, enchantmentData.level);
+		}
+		return item;
+	}
 	//#endif
-	
+
 	/**
 	 * Fired when the mouse button is released. Equivalent of
 	 * MouseListener.mouseReleased(MouseEvent e).

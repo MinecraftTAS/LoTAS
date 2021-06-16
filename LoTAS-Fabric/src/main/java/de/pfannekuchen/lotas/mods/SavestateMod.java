@@ -32,7 +32,7 @@ public class SavestateMod {
 	public static double motionX;
 	public static double motionY;
 	public static double motionZ;
-	
+
 	public static boolean showSavestateDone;
 	public static boolean showLoadstateDone;
 	public static long timeTitle;
@@ -45,7 +45,7 @@ public class SavestateMod {
 	 */
 	public static final String generateSavestateFile() {
 		final ClientPlayerEntity p = MinecraftClient.getInstance().player;
-		final Vec3d velocity= p.getVelocity();
+		final Vec3d velocity = p.getVelocity();
 		return velocity.x + ":" + velocity.y + ":" + velocity.z + ":" /*+ Timer.ticks*/;
 	}
 
@@ -54,7 +54,7 @@ public class SavestateMod {
 	 * @throws IOException
 	 */
 	public static void savestate(String name) {
-		
+
 		final String data = generateSavestateFile();
 		final MinecraftClient mc = MinecraftClient.getInstance();
 
@@ -63,20 +63,20 @@ public class SavestateMod {
 		for (final ServerWorld worldserver : server.getWorlds()) {
 			worldserver.savingDisabled = true;
 		}
-		
+
 		server.save(false, true, false);
-		
 
 		new Thread(() -> {
 			//#if MC>=11601
-//$$ 			final String worldName = server.getSaveProperties().getLevelName();
+//$$ 						final String worldName = server.getSaveProperties().getLevelName();
 			//#else
 			final String worldName = server.getLevelName();
 			//#endif
 			final File worldDir = new File(mc.runDirectory, "saves/" + worldName);
 			final File savestatesDir = new File(mc.runDirectory, "saves/savestates/");
 
-			if (!savestatesDir.exists()) savestatesDir.mkdir();
+			if (!savestatesDir.exists())
+				savestatesDir.mkdir();
 
 			final int existingSavestates = savestatesDir.listFiles((d, s) -> {
 				return s.startsWith(worldName + "-Savestate");
@@ -112,18 +112,17 @@ public class SavestateMod {
 	 * @throws IOException
 	 */
 	public static void loadstate(int number) {
-		if (!hasSavestate()) return;
+		if (!hasSavestate())
+			return;
 
 		final MinecraftClient mc = MinecraftClient.getInstance();
-		
-		double x=mc.mouse.getX();
-		double y=mc.mouse.getY();; 
-		
-		
+
+		double x = mc.mouse.getX();
+		double y = mc.mouse.getY();
+		;
 
 		isLoading = true;
 
-		
 		final IntegratedServer server = mc.getServer();
 
 		for (ServerWorld worldserver : server.getWorlds()) {
@@ -133,7 +132,7 @@ public class SavestateMod {
 		mc.getServer().stop(true);
 
 		//#if MC>=11601
-//$$ 		final String worldName = server.getSaveProperties().getLevelName();
+//$$ 				final String worldName = server.getSaveProperties().getLevelName();
 		//#else
 		final String worldName = server.getLevelName();
 		//#endif
@@ -144,7 +143,8 @@ public class SavestateMod {
 			return s.startsWith(worldName + "-Savestate");
 		}).length;
 
-		if (number != -1) existingSavestates = number;
+		if (number != -1)
+			existingSavestates = number;
 
 		final File savestateDir = new File(savestatesDir, worldName + "-Savestate" + (existingSavestates));
 		try {
@@ -167,7 +167,7 @@ public class SavestateMod {
 		mc.mouse.updateMouse();
 
 		//#if MC>=11601
-//$$ 		mc.startIntegratedServer(worldName);
+//$$ 				mc.startIntegratedServer(worldName);
 		//#else
 		mc.startIntegratedServer(worldName, worldName, null);
 		//#endif
@@ -184,12 +184,13 @@ public class SavestateMod {
 	 */
 	public static boolean hasSavestate() {
 		//#if MC>=11601
-//$$ 		final String worldName = MinecraftClient.getInstance().getServer().getSaveProperties().getLevelName();
+//$$ 				final String worldName = MinecraftClient.getInstance().getServer().getSaveProperties().getLevelName();
 		//#else
 		final String worldName = MinecraftClient.getInstance().getServer().getLevelName();
 		//#endif
 		File savestatesDir = new File(MinecraftClient.getInstance().runDirectory, "saves/savestates/");
-		if (!savestatesDir.exists()) return false;
+		if (!savestatesDir.exists())
+			return false;
 		int existingSavestates = savestatesDir.listFiles((d, s) -> {
 			return s.startsWith(worldName + "-Savestate");
 		}).length;
@@ -251,12 +252,12 @@ public class SavestateMod {
 		final MinecraftClient mc = MinecraftClient.getInstance();
 		final IntegratedServer server = mc.getServer();
 		//#if MC>=11601
-//$$ 		final String worldName = server.getSaveProperties().getLevelName();
+//$$ 				final String worldName = server.getSaveProperties().getLevelName();
 		//#else
 		final String worldName = server.getServerName();
 		//#endif
 		final File savestatesDir = new File(mc.runDirectory, "saves/savestates/");
-		
+
 		final File savestateDir = new File(savestatesDir, worldName + "-Savestate" + (i));
 		try {
 			FileUtils.deleteDirectory(savestateDir);
@@ -266,12 +267,12 @@ public class SavestateMod {
 		int existingSavestates = savestatesDir.listFiles((d, s) -> {
 			return s.startsWith(worldName + "-Savestate");
 		}).length;
-		
+
 		// Re Number all of the rest
 		for (int j = i; j < existingSavestates + 1; j++) {
 			new File(savestatesDir, worldName + "-Savestate" + (j + 1)).renameTo(new File(savestatesDir, worldName + "-Savestate" + (j)));
 		}
-		
+
 	}
 
 }

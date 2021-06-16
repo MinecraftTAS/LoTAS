@@ -27,43 +27,43 @@ import net.minecraft.world.dimension.DimensionType;
  */
 @SuppressWarnings("serial")
 public class DragonManipulationScreen extends Screen {
-	
-    Screen here;
-    
-    static final Identifier DRAGONGIF = new Identifier("lotas", "dragon/flying.png");
-    static final Identifier DRAGONGIF2 = new Identifier("lotas", "dragon/breath.png");
-    static final Identifier DRAGONGIF3 = new Identifier("lotas", "dragon/shooting.png");
-    
-    static HashMap<String, PhaseType<?>> phases = new HashMap<String, PhaseType<?>>();
-    
-    static HashMap<String, String> translation = new HashMap<String, String>() {
-    	{
-    		put("HoldingPatternPhase", "Ender Dragon is flying through the air");
-    		put("StrafePlayerPhase", "Ender Dragon is shooting at you");	
-    		put("LandingApproachPhase", "Ender Dragon trying to land");
-    		put("LandingPhase", "Ender Dragon is landing");
-    		put("TakeoffPhase", "Ender Dragon is taking off from the Portal");
-    		put("SittingFlamingPhase", "Ender Dragon is flaming at the Portal");
-    		put("SittingScanningPhase", "Ender Dragon is turning at the Portal");
-    		put("SittingAttackingPhase", "Ender Dragon is attacking you at the Portal");
-    		put("ChargingPlayerPhase", "Ender Dragon currently charging you");
-    		put("DyingPhase", "Ender Dragon is dying");
-    		put("HoverPhase", "Ender Dragon is hovering over the Portal");
-    	}
-    };
-    		
-    Phase dragonPhase;
-    
-    ButtonWidget action1;
-    ButtonWidget action2;
-    ButtonWidget action3;
-    
+
+	Screen here;
+
+	static final Identifier DRAGONGIF = new Identifier("lotas", "dragon/flying.png");
+	static final Identifier DRAGONGIF2 = new Identifier("lotas", "dragon/breath.png");
+	static final Identifier DRAGONGIF3 = new Identifier("lotas", "dragon/shooting.png");
+
+	static HashMap<String, PhaseType<?>> phases = new HashMap<String, PhaseType<?>>();
+
+	static HashMap<String, String> translation = new HashMap<String, String>() {
+		{
+			put("HoldingPatternPhase", "Ender Dragon is flying through the air");
+			put("StrafePlayerPhase", "Ender Dragon is shooting at you");
+			put("LandingApproachPhase", "Ender Dragon trying to land");
+			put("LandingPhase", "Ender Dragon is landing");
+			put("TakeoffPhase", "Ender Dragon is taking off from the Portal");
+			put("SittingFlamingPhase", "Ender Dragon is flaming at the Portal");
+			put("SittingScanningPhase", "Ender Dragon is turning at the Portal");
+			put("SittingAttackingPhase", "Ender Dragon is attacking you at the Portal");
+			put("ChargingPlayerPhase", "Ender Dragon currently charging you");
+			put("DyingPhase", "Ender Dragon is dying");
+			put("HoverPhase", "Ender Dragon is hovering over the Portal");
+		}
+	};
+
+	Phase dragonPhase;
+
+	ButtonWidget action1;
+	ButtonWidget action2;
+	ButtonWidget action3;
+
 	public DragonManipulationScreen(Screen screen) {
 		super(new LiteralText("Dragon Manipulator Screen"));
 		EnderDragonEntity dragon = MinecraftClient.getInstance().getServer().getWorld(DimensionType.THE_END).getAliveEnderDragons().get(0);
 		dragonPhase = dragon.getPhaseManager().getCurrent();
 		here = screen;
-		
+
 		phases = new HashMap<String, PhaseType<?>>();
 		phases.put("Stop shooting at the Player", PhaseType.HOLDING_PATTERN);
 		phases.put("Shoot at the Player", PhaseType.STRAFE_PLAYER);
@@ -74,14 +74,14 @@ public class DragonManipulationScreen extends Screen {
 		phases.put("Cancel Landing", PhaseType.HOLDING_PATTERN);
 		phases.put("Cancel Landing and shoot at Player", PhaseType.STRAFE_PLAYER);
 	}
-	
+
 	@Override
 	public void init() {
 		action1 = new NewButtonWidget(this.width / 3 * 0 + 5, height / 8, this.width / 3 - 10, 20, "Phase1", btn -> {
 			action1.active = false;
 			action2.active = false;
 			action3.active = false;
-		
+
 			EnderDragonEntity dragon = MinecraftClient.getInstance().getServer().getWorld(DimensionType.THE_END).getAliveEnderDragons().get(0);
 			dragon.getPhaseManager().setPhase(phases.get(btn.getMessage()));
 			dragonPhase = dragon.getPhaseManager().getCurrent();
@@ -90,7 +90,7 @@ public class DragonManipulationScreen extends Screen {
 			action1.active = false;
 			action2.active = false;
 			action3.active = false;
-		
+
 			EnderDragonEntity dragon = MinecraftClient.getInstance().getServer().getWorld(DimensionType.THE_END).getAliveEnderDragons().get(0);
 			dragon.getPhaseManager().setPhase(phases.get(btn.getMessage()));
 			dragonPhase = dragon.getPhaseManager().getCurrent();
@@ -99,12 +99,12 @@ public class DragonManipulationScreen extends Screen {
 			action1.active = false;
 			action2.active = false;
 			action3.active = false;
-		
+
 			EnderDragonEntity dragon = MinecraftClient.getInstance().getServer().getWorld(DimensionType.THE_END).getAliveEnderDragons().get(0);
 			dragon.getPhaseManager().setPhase(phases.get(btn.getMessage()));
 			dragonPhase = dragon.getPhaseManager().getCurrent();
 		});
-		
+
 		if (dragonPhase instanceof HoldingPatternPhase) {
 			action1.setMessage("Try to land");
 			action2.setMessage("Shoot at the Player");
@@ -141,26 +141,26 @@ public class DragonManipulationScreen extends Screen {
 			action2.active = false;
 			action3.active = false;
 		}
-		
+
 		addButton(action1);
 		addButton(action2);
 		addButton(action3);
 		addButton(new NewButtonWidget(this.width / 2 - 155, this.height - 29, 300, 20, I18n.translate("gui.done"), btn -> {
 			minecraft.openScreen(here);
 		}));
-        super.init();
+		super.init();
 	}
-	
+
 	@Override
 	public void render(int mouseX, int mouseY, float partialTicks) {
-        renderBackground();
-        GlStateManager.enableTexture();
-        
-        drawCenteredString(MinecraftClient.getInstance().textRenderer, translation.get(dragonPhase.getClass().getSimpleName()), width / 2, 10, 0xFFFFFF);
-        
+		renderBackground();
+		GlStateManager.enableTexture();
+
+		drawCenteredString(MinecraftClient.getInstance().textRenderer, translation.get(dragonPhase.getClass().getSimpleName()), width / 2, 10, 0xFFFFFF);
+
 		minecraft.getTextureManager().bindTexture(DRAGONGIF);
 		DrawableHelper.blit(width / 28 * 3, height / 19 * 2, 0, 0, width / 28 * 23, height / 19 * 17, width / 28 * 23, height / 19 * 17);
 		super.render(mouseX, mouseY, partialTicks);
 	}
-	
+
 }

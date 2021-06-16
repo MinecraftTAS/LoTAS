@@ -17,5 +17,5 @@ public class MixinRenderShield {
 		return LoTASModContainer.shield == null ? original : LoTASModContainer.shield;
 	}
 	//#endif
-	
+
 }

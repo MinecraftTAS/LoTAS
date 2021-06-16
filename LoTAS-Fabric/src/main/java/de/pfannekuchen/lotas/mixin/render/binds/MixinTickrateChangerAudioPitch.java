@@ -12,12 +12,11 @@ import net.minecraft.util.math.MathHelper;
 
 @Mixin(SoundSystem.class)
 public abstract class MixinTickrateChangerAudioPitch {
-	
-	
+
 	@Inject(method = "getAdjustedPitch", at = @At(value = "HEAD"), cancellable = true)
 	public void redosetPitch(SoundInstance soundInstance, CallbackInfoReturnable<Float> ci) {
 		ci.setReturnValue(MathHelper.clamp(soundInstance.getPitch(), 0.5F, 2.0F) * (TickrateChangerMod.tickrate / 20F));
 		ci.cancel();
 	}
-	
+
 }

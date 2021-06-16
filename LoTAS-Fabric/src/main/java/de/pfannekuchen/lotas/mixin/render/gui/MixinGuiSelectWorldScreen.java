@@ -19,24 +19,24 @@ import net.minecraft.text.Text;
 
 @Mixin(SelectWorldScreen.class)
 public abstract class MixinGuiSelectWorldScreen extends Screen {
-	
-    protected MixinGuiSelectWorldScreen(Text title) {
+
+	protected MixinGuiSelectWorldScreen(Text title) {
 		super(title);
 	}
 
-    private SmallCheckboxWidget widget;
-    @Shadow
-    private WorldListWidget levelList;
-    
+	private SmallCheckboxWidget widget;
+	@Shadow
+	private WorldListWidget levelList;
+
 	@Inject(at = @At("TAIL"), method = "init")
-    public void injectinit(CallbackInfo ci) {
-        this.addButton(new NewButtonWidget(2, 2, 98, 20, "Seed List", button -> {
-            MinecraftClient.getInstance().openScreen(new SeedListScreen());
-        }));
-        this.addButton(widget = new SmallCheckboxWidget(width - 160, 4, "Open ESC when joining world", ConfigUtils.getBoolean("tools", "hitEscape"), b -> {
-        	ConfigUtils.setBoolean("tools", "hitEscape", widget.isChecked());
-        	ConfigUtils.save();
-        }));
+	public void injectinit(CallbackInfo ci) {
+		this.addButton(new NewButtonWidget(2, 2, 98, 20, "Seed List", button -> {
+			MinecraftClient.getInstance().openScreen(new SeedListScreen());
+		}));
+		this.addButton(widget = new SmallCheckboxWidget(width - 160, 4, "Open ESC when joining world", ConfigUtils.getBoolean("tools", "hitEscape"), b -> {
+			ConfigUtils.setBoolean("tools", "hitEscape", widget.isChecked());
+			ConfigUtils.save();
+		}));
 	}
-	
+
 }

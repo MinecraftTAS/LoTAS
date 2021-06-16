@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 public class DefaultedList<E> extends AbstractList<E> {
 	private final List<E> delegate;
 	private final E initialElement;
-	
+
 	public static <E> DefaultedList<E> ofSize(int size, E defaultValue) {
 		Validate.notNull(defaultValue);
 		Object[] objects = new Object[size];
@@ -24,7 +24,7 @@ public class DefaultedList<E> extends AbstractList<E> {
 	public static <E> DefaultedList<E> copyOf(E defaultValue, E... values) {
 		return new DefaultedList(Arrays.asList(values), defaultValue);
 	}
-	
+
 	protected DefaultedList(List<E> delegate, @Nullable E initialElement) {
 		this.delegate = delegate;
 		this.initialElement = initialElement;

@@ -15,35 +15,21 @@ import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.text.LiteralText;
 
 public class ConfigurationScreen extends Screen {
-	
+
 	public ConfigurationScreen() {
 		super(new LiteralText("Configuration"));
 	}
-	
-	public static String[] optionsBoolean = new String[] {
-			"B:tools:saveTickrate:INSERT",
-			"B:ui:hideTickrateMessages:INSERT",
-			"B:tools:showTickIndicator:INSERT",
-			"B:ui:hideRTATimer:INSERT",
-			"B:tools:removePearlDelay:INSERT",
-			"B:tools:noDamageUnbreaking:INSERT",
-			"B:tools:showSpeedometer:INSERT",
-			"B:ui:advancedMode:INSERT",
-			"B:ui:glitchedMode:INSERT"
-	};
 
-	public static String[] optionsInteger = new String[] {
-			"I:hidden:explosionoptimization:INSERT"
-	};
+	public static String[] optionsBoolean = new String[] { "B:tools:saveTickrate:INSERT", "B:ui:hideTickrateMessages:INSERT", "B:tools:showTickIndicator:INSERT", "B:ui:hideRTATimer:INSERT", "B:tools:removePearlDelay:INSERT", "B:tools:noDamageUnbreaking:INSERT", "B:tools:showSpeedometer:INSERT", "B:ui:advancedMode:INSERT", "B:ui:glitchedMode:INSERT" };
 
-	public static String[] optionsString = new String[] {
-			"S:ui:runner:INSERT"
-	};
-	
+	public static String[] optionsInteger = new String[] { "I:hidden:explosionoptimization:INSERT" };
+
+	public static String[] optionsString = new String[] { "S:ui:runner:INSERT" };
+
 	public ArrayList<TextFieldWidget> strings = new ArrayList<TextFieldWidget>();
 	public ArrayList<TextFieldWidget> ints = new ArrayList<TextFieldWidget>();
 	public HashMap<Integer, String> messages = new HashMap<Integer, String>();
-	
+
 	@Override
 	public void init() {
 		strings.clear();
@@ -86,7 +72,7 @@ public class ConfigurationScreen extends Screen {
 			y += 25;
 		}
 	}
-	
+
 	protected PressAction actionPerformed(int id) {
 		return b -> {
 			if (optionsBoolean[id].startsWith("B:")) {
@@ -108,27 +94,29 @@ public class ConfigurationScreen extends Screen {
 		}
 		return super.mouseClicked(mouseX, mouseY, mouseButton);
 	}
-	
+
 	@Override
 	public boolean keyReleased(int keyCode, int scanCode, int modifiers) {
 		for (TextFieldWidget field : strings) {
 			if (field.keyReleased(keyCode, scanCode, modifiers)) {
-				String line = optionsString[((AccessorTextFieldWidget)field).getUneditableColor() - 20];
+				String line = optionsString[((AccessorTextFieldWidget) field).getUneditableColor() - 20];
 				ConfigUtils.setString(line.split(":")[1], line.split(":")[2], field.getText());
 				ConfigUtils.save();
-				optionsString[((AccessorTextFieldWidget)field).getUneditableColor() - 20] = setString(line.split(":")[1], line.split(":")[2], field.getText());
+				optionsString[((AccessorTextFieldWidget) field).getUneditableColor() - 20] = setString(line.split(":")[1], line.split(":")[2], field.getText());
 			}
 		}
 		for (TextFieldWidget field : ints) {
 			String textBefore = field.getText();
 			if (field.keyReleased(keyCode, scanCode, modifiers)) {
-				String line = optionsInteger[((AccessorTextFieldWidget)field).getUneditableColor() - 40];
+				String line = optionsInteger[((AccessorTextFieldWidget) field).getUneditableColor() - 40];
 				try {
-					if (field.getText().isEmpty()) field.setText("0");
-					if (field.getText().startsWith("0") && field.getText().length() != 1) field.setText(field.getText().substring(1));
+					if (field.getText().isEmpty())
+						field.setText("0");
+					if (field.getText().startsWith("0") && field.getText().length() != 1)
+						field.setText(field.getText().substring(1));
 					ConfigUtils.setInt(line.split(":")[1], line.split(":")[2], Integer.parseInt(field.getText()));
 					ConfigUtils.save();
-					optionsInteger[((AccessorTextFieldWidget)field).getUneditableColor() - 40] = setInt(line.split(":")[1], line.split(":")[2], Integer.parseInt(field.getText()));
+					optionsInteger[((AccessorTextFieldWidget) field).getUneditableColor() - 40] = setInt(line.split(":")[1], line.split(":")[2], Integer.parseInt(field.getText()));
 				} catch (Exception e) {
 					field.setText(textBefore);
 				}
@@ -136,27 +124,29 @@ public class ConfigurationScreen extends Screen {
 		}
 		return super.keyReleased(keyCode, scanCode, modifiers);
 	}
-	
+
 	@Override
 	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
 		for (TextFieldWidget field : strings) {
 			if (field.keyPressed(keyCode, scanCode, modifiers)) {
-				String line = optionsString[((AccessorTextFieldWidget)field).getUneditableColor() - 20];
+				String line = optionsString[((AccessorTextFieldWidget) field).getUneditableColor() - 20];
 				ConfigUtils.setString(line.split(":")[1], line.split(":")[2], field.getText());
 				ConfigUtils.save();
-				optionsString[((AccessorTextFieldWidget)field).getUneditableColor() - 20] = setString(line.split(":")[1], line.split(":")[2], field.getText());
+				optionsString[((AccessorTextFieldWidget) field).getUneditableColor() - 20] = setString(line.split(":")[1], line.split(":")[2], field.getText());
 			}
 		}
 		for (TextFieldWidget field : ints) {
 			String textBefore = field.getText();
 			if (field.keyPressed(keyCode, scanCode, modifiers)) {
-				String line = optionsInteger[((AccessorTextFieldWidget)field).getUneditableColor() - 40];
+				String line = optionsInteger[((AccessorTextFieldWidget) field).getUneditableColor() - 40];
 				try {
-					if (field.getText().isEmpty()) field.setText("0");
-					if (field.getText().startsWith("0") && field.getText().length() != 1) field.setText(field.getText().substring(1));
+					if (field.getText().isEmpty())
+						field.setText("0");
+					if (field.getText().startsWith("0") && field.getText().length() != 1)
+						field.setText(field.getText().substring(1));
 					ConfigUtils.setInt(line.split(":")[1], line.split(":")[2], Integer.parseInt(field.getText()));
 					ConfigUtils.save();
-					optionsInteger[((AccessorTextFieldWidget)field).getUneditableColor() - 40] = setInt(line.split(":")[1], line.split(":")[2], Integer.parseInt(field.getText()));
+					optionsInteger[((AccessorTextFieldWidget) field).getUneditableColor() - 40] = setInt(line.split(":")[1], line.split(":")[2], Integer.parseInt(field.getText()));
 				} catch (Exception e) {
 					field.setText(textBefore);
 				}
@@ -164,27 +154,29 @@ public class ConfigurationScreen extends Screen {
 		}
 		return super.keyPressed(keyCode, scanCode, modifiers);
 	}
-	
+
 	@Override
 	public boolean charTyped(char typedChar, int keyCode) {
 		for (TextFieldWidget field : strings) {
 			if (field.charTyped(typedChar, keyCode)) {
-				String line = optionsString[((AccessorTextFieldWidget)field).getUneditableColor() - 20];
+				String line = optionsString[((AccessorTextFieldWidget) field).getUneditableColor() - 20];
 				ConfigUtils.setString(line.split(":")[1], line.split(":")[2], field.getText());
 				ConfigUtils.save();
-				optionsString[((AccessorTextFieldWidget)field).getUneditableColor() - 20] = setString(line.split(":")[1], line.split(":")[2], field.getText());
+				optionsString[((AccessorTextFieldWidget) field).getUneditableColor() - 20] = setString(line.split(":")[1], line.split(":")[2], field.getText());
 			}
 		}
 		for (TextFieldWidget field : ints) {
 			String textBefore = field.getText();
 			if (field.charTyped(typedChar, keyCode)) {
-				String line = optionsInteger[((AccessorTextFieldWidget)field).getUneditableColor() - 40];
+				String line = optionsInteger[((AccessorTextFieldWidget) field).getUneditableColor() - 40];
 				try {
-					if (field.getText().isEmpty()) field.setText("0");
-					if (field.getText().startsWith("0") && field.getText().length() != 1) field.setText(field.getText().substring(1));
+					if (field.getText().isEmpty())
+						field.setText("0");
+					if (field.getText().startsWith("0") && field.getText().length() != 1)
+						field.setText(field.getText().substring(1));
 					ConfigUtils.setInt(line.split(":")[1], line.split(":")[2], Integer.parseInt(field.getText()));
 					ConfigUtils.save();
-					optionsInteger[((AccessorTextFieldWidget)field).getUneditableColor() - 40] = setInt(line.split(":")[1], line.split(":")[2], Integer.parseInt(field.getText()));
+					optionsInteger[((AccessorTextFieldWidget) field).getUneditableColor() - 40] = setInt(line.split(":")[1], line.split(":")[2], Integer.parseInt(field.getText()));
 				} catch (Exception e) {
 					field.setText(textBefore);
 				}
@@ -192,9 +184,7 @@ public class ConfigurationScreen extends Screen {
 		}
 		return super.charTyped(typedChar, keyCode);
 	}
-	
 
-	
 	@Override
 	public void render(int mouseX, int mouseY, float delta) {
 		renderBackground(0);
@@ -210,26 +200,25 @@ public class ConfigurationScreen extends Screen {
 		}
 		super.render(mouseX, mouseY, delta);
 	}
-	
+
 	public static String getTitle(String line) {
 		return line.split(":")[2];
 	}
-	
+
 	public static String getCategory(String line) {
 		return line.split(":")[1];
 	}
-	
+
 	public static String setString(String cat, String title, String val) {
 		return "S:" + cat + ":" + title + ":" + val;
 	}
-	
+
 	public static String setInt(String cat, String title, int val) {
 		return "I:" + cat + ":" + title + ":" + val;
 	}
-	
-	
+
 	public static String setBoolean(String line, boolean value) {
 		return line.endsWith("true") ? line.replaceFirst("true", value + "") : line.replaceFirst("false", value + "").replaceFirst("INSERT", value + "");
 	}
-	
+
 }

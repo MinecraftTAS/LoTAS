@@ -7,8 +7,10 @@ public class FakeRandom extends Random {
 
 	@Override
 	public float nextFloat() {
-		if (new Random().nextFloat() < (ConfigUtils.getInt("hidden", "explosionoptimization") / 100F)) return 0;
-		else return 1;
+		if (new Random().nextFloat() < (ConfigUtils.getInt("hidden", "explosionoptimization") / 100F))
+			return 0;
+		else
+			return 1;
 	}
-	
+
 }

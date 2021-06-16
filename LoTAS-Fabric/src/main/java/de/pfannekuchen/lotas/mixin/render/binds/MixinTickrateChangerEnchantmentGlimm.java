@@ -10,7 +10,6 @@ import de.pfannekuchen.lotas.mods.TickrateChangerMod;
 //#endif
 import net.minecraft.client.render.item.ItemRenderer;
 
-
 //#if MC<=11404
 @Mixin(ItemRenderer.class)
 //#endif
@@ -31,9 +30,9 @@ public abstract class MixinTickrateChangerEnchantmentGlimm {
 	}
 	//#endif
 	//#if MC>=11502
-//$$ 	@ModifyVariable(method = "setupGlintTexturing", at = @At(value = "STORE"), index = 1, ordinal = 0)
-//$$ 	private static long modifyrenderEffect(long ignored) {
-//$$ 		return TickrateChangerMod.getMilliseconds()*8L;
-//$$ 	}
+//$$ 		@ModifyVariable(method = "setupGlintTexturing", at = @At(value = "STORE"), index = 1, ordinal = 0)
+//$$ 		private static long modifyrenderEffect(long ignored) {
+//$$ 			return TickrateChangerMod.getMilliseconds()*8L;
+//$$ 		}
 	//#endif
 }
