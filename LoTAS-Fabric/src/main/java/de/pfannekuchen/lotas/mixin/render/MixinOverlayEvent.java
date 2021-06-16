@@ -67,7 +67,7 @@ public class MixinOverlayEvent {
 //$$             DrawableHelper.fill(matrices, 4, 4, 4 + width + 2 * 2, 4 + MinecraftClient.getInstance().textRenderer.fontHeight + 2 + 2 - 1, 0xAA000000);
 //$$             MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, message, 6, 6, 14737632);
             //#else
-			int width = MinecraftClient.getInstance().textRenderer.getStringWidth(message);
+            int width = MinecraftClient.getInstance().textRenderer.getStringWidth(message);
             DrawableHelper.fill(4, 4, 4 + width + 2 * 2, 4 + MinecraftClient.getInstance().textRenderer.fontHeight + 2 + 2 - 1, 0xAA000000);
             MinecraftClient.getInstance().textRenderer.drawWithShadow(message, 6, 6, 14737632);
             //#endif

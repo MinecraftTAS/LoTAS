@@ -205,40 +205,40 @@ public abstract class MixinGuiIngameMenu extends Screen {
 		boolean glitched=ConfigUtils.getBoolean("ui", "glitchedMode");
 		
 		boolean advanced=ConfigUtils.getBoolean("ui", "advancedMode");
-		
+
 		//#if MC>=11601
-//$$         if (Keyboard.isPressed(GLFW.GLFW_KEY_LEFT_SHIFT)) {
-//$$             this.buttons.get(8).setMessage(new LiteralText("\u00A76Name Savestate"));
-//$$             this.buttons.get(9).setMessage(new LiteralText("\u00A76Choose State"));
-//$$             this.buttons.get(10).setMessage(new LiteralText("\u00A76Custom"));
-//$$             this.buttons.get(11).setMessage(new LiteralText("\u00A76Tickrate"));
-//$$         } else {
-//$$             this.buttons.get(8).setMessage(new LiteralText("Savestate"));
-//$$             this.buttons.get(9).setMessage(new LiteralText("Loadstate"));
-//$$             this.buttons.get(10).setMessage(new LiteralText("+"));
-//$$             this.buttons.get(11).setMessage(new LiteralText("-"));
-//$$         }
-//$$         if(advanced) drawCenteredString(matrices, MinecraftClient.getInstance().textRenderer, "Hold Shift to access more features", width / 2, this.height / 4 + 152, 0xFFFFFF);
-//$$         if (savestateName != null) savestateName.render(matrices, mouseX, mouseX, partialTicks);
-//$$         if (tickrateField != null) tickrateField.render(matrices, mouseX, mouseX, partialTicks);
-        //#else
-       if (Keyboard.isPressed(GLFW.GLFW_KEY_LEFT_SHIFT)) {
-           this.buttons.get(8).setMessage("\u00A76Name Savestate");
-           this.buttons.get(9).setMessage("\u00A76Choose State");
-           this.buttons.get(10).setMessage("\u00A76Custom");
-           this.buttons.get(11).setMessage("\u00A76Tickrate");
-       } else {
-           this.buttons.get(8).setMessage("Savestate");
-           this.buttons.get(9).setMessage("Loadstate");
-           this.buttons.get(10).setMessage("+");
-           this.buttons.get(11).setMessage("-");
-       }
-       if(advanced) drawCenteredString(MinecraftClient.getInstance().textRenderer, "Hold Shift to access more features", width / 2, this.height / 4 + 152, 0xFFFFFF);
-       if (savestateName != null) savestateName.render(mouseX, mouseX, partialTicks);
-       if (tickrateField != null) tickrateField.render(mouseX, mouseX, partialTicks);
-        //#endif
-		
-		if (SavestateMod.showSavestateDone) {
+//$$ 		if (Keyboard.isPressed(GLFW.GLFW_KEY_LEFT_SHIFT)) {
+//$$ 		    this.buttons.get(8).setMessage(new LiteralText("\u00A76Name Savestate"));
+//$$ 		    this.buttons.get(9).setMessage(new LiteralText("\u00A76Choose State"));
+//$$ 		    this.buttons.get(10).setMessage(new LiteralText("\u00A76Custom"));
+//$$ 		    this.buttons.get(11).setMessage(new LiteralText("\u00A76Tickrate"));
+//$$ 		} else {
+//$$ 		    this.buttons.get(8).setMessage(new LiteralText("Savestate"));
+//$$ 		    this.buttons.get(9).setMessage(new LiteralText("Loadstate"));
+//$$ 		    this.buttons.get(10).setMessage(new LiteralText("+"));
+//$$ 		    this.buttons.get(11).setMessage(new LiteralText("-"));
+//$$ 		}
+//$$ 		if(advanced) drawCenteredString(matrices, MinecraftClient.getInstance().textRenderer, "Hold Shift to access more features", width / 2, this.height / 4 + 152, 0xFFFFFF);
+//$$ 		if (savestateName != null) savestateName.render(matrices, mouseX, mouseX, partialTicks);
+//$$ 		if (tickrateField != null) tickrateField.render(matrices, mouseX, mouseX, partialTicks);
+		//#else
+		if (Keyboard.isPressed(GLFW.GLFW_KEY_LEFT_SHIFT)) {
+		       this.buttons.get(8).setMessage("\u00A76Name Savestate");
+		       this.buttons.get(9).setMessage("\u00A76Choose State");
+		       this.buttons.get(10).setMessage("\u00A76Custom");
+		       this.buttons.get(11).setMessage("\u00A76Tickrate");
+		} else {
+		       this.buttons.get(8).setMessage("Savestate");
+		       this.buttons.get(9).setMessage("Loadstate");
+		       this.buttons.get(10).setMessage("+");
+		       this.buttons.get(11).setMessage("-");
+		}
+		if(advanced) drawCenteredString(MinecraftClient.getInstance().textRenderer, "Hold Shift to access more features", width / 2, this.height / 4 + 152, 0xFFFFFF);
+		if (savestateName != null) savestateName.render(mouseX, mouseX, partialTicks);
+		if (tickrateField != null) tickrateField.render(mouseX, mouseX, partialTicks);
+		//#endif
+
+       if (SavestateMod.showSavestateDone) {
 			long timeSince = System.currentTimeMillis() - SavestateMod.timeTitle;
 			if (timeSince >= 1800) {
 				SavestateMod.showSavestateDone = false;
@@ -273,20 +273,20 @@ public abstract class MixinGuiIngameMenu extends Screen {
 //$$         }
 //$$         if (glitched) MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, "Duping", 10, 45, 0xFFFFFF);
         //#else
-       drawString(MinecraftClient.getInstance().textRenderer, "Tickrate Changer (" + TickrateChangerMod.tickrate + ")", 5, 5, 0xFFFFFF);
-       if (advanced) {
-           int i=glitched? 18 : 16;
-           MinecraftClient.getInstance().textRenderer.drawWithShadow("Tickjump", 10, 105, 0xFFFFFF);
-           if (buttons.get(i).active == false) {
-               MinecraftClient.getInstance().textRenderer.drawWithShadow("Tickjump is ready,", 8, 137, 0xFFFFFF);
-               MinecraftClient.getInstance().textRenderer.drawWithShadow("press ESC to continue", 8, 147, 0xFFFFFF);
-           }
-       }
-       if (glitched) MinecraftClient.getInstance().textRenderer.drawWithShadow("Duping", 10, 45, 0xFFFFFF);
+        drawString(MinecraftClient.getInstance().textRenderer, "Tickrate Changer (" + TickrateChangerMod.tickrate + ")", 5, 5, 0xFFFFFF);
+        if (advanced) {
+               int i=glitched? 18 : 16;
+               MinecraftClient.getInstance().textRenderer.drawWithShadow("Tickjump", 10, 105, 0xFFFFFF);
+               if (buttons.get(i).active == false) {
+                   MinecraftClient.getInstance().textRenderer.drawWithShadow("Tickjump is ready,", 8, 137, 0xFFFFFF);
+                   MinecraftClient.getInstance().textRenderer.drawWithShadow("press ESC to continue", 8, 147, 0xFFFFFF);
+               }
+        }
+        if (glitched) MinecraftClient.getInstance().textRenderer.drawWithShadow("Duping", 10, 45, 0xFFFFFF);
         //#endif
 	}
-	
-	
+
+
 	@Override
 	public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
 		if (savestateName != null) 

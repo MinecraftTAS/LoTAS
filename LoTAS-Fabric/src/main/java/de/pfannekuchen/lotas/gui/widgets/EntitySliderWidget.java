@@ -118,11 +118,11 @@ public class EntitySliderWidget extends AbstractButtonWidget {
 	//#else
 	@Override
 	protected void renderBg(MinecraftClient client, int mouseX, int mouseY) {
-		client.getTextureManager().bindTexture(WIDGETS_LOCATION);
-		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-		int i = (this.isHovered() ? 2 : 1) * 20;
-		this.blit(this.x + (int) (this.sliderPosition * (double) (this.width - 8)), this.y, 0, 46 + i, 4, 20);
-		this.blit(this.x + (int) (this.sliderPosition * (double) (this.width - 8)) + 4, this.y, 196, 46 + i, 4, 20);
+	    client.getTextureManager().bindTexture(WIDGETS_LOCATION);
+	    GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+	    int i = (this.isHovered() ? 2 : 1) * 20;
+	    this.blit(this.x + (int) (this.sliderPosition * (double) (this.width - 8)), this.y, 0, 46 + i, 4, 20);
+	    this.blit(this.x + (int) (this.sliderPosition * (double) (this.width - 8)) + 4, this.y, 196, 46 + i, 4, 20);
 	}
 	//#endif
 

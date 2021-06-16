@@ -228,21 +228,21 @@ public class PassiveDropManipulation extends DropManipulationScreen.DropManipula
             //$$ optimizePolarbear.render((MatrixStack) matrices, mouseX, mouseY, delta);
             //$$ optimizeHorses.render((MatrixStack) matrices, mouseX, mouseY, delta);
             //#else
-          optimizeChicken.render(mouseX, mouseY, delta);
-          optimizeSkeletonhorse.render(mouseX, mouseY, delta);
-          optimizeCat.render(mouseX, mouseY, delta);
-          optimizeCow.render(mouseX, mouseY, delta);
-          optimizeMooshroom.render(mouseX, mouseY, delta);
-          optimizePig.render(mouseX, mouseY, delta);
-          optimizeParrot.render(mouseX, mouseY, delta);
-          optimizeSnowgolem.render(mouseX, mouseY, delta);
-          optimizeSheep.render(mouseX, mouseY, delta);
-          optimizeRabbit.render(mouseX, mouseY, delta);
-          optimizeSquid.render(mouseX, mouseY, delta);
-          optimizeTurtle.render(mouseX, mouseY, delta);
-          optimizeIronGolem.render(mouseX, mouseY, delta);
-          optimizePolarbear.render(mouseX, mouseY, delta);
-          optimizeHorses.render(mouseX, mouseY, delta);
+            optimizeChicken.render(mouseX, mouseY, delta);
+            optimizeSkeletonhorse.render(mouseX, mouseY, delta);
+            optimizeCat.render(mouseX, mouseY, delta);
+            optimizeCow.render(mouseX, mouseY, delta);
+            optimizeMooshroom.render(mouseX, mouseY, delta);
+            optimizePig.render(mouseX, mouseY, delta);
+            optimizeParrot.render(mouseX, mouseY, delta);
+            optimizeSnowgolem.render(mouseX, mouseY, delta);
+            optimizeSheep.render(mouseX, mouseY, delta);
+            optimizeRabbit.render(mouseX, mouseY, delta);
+            optimizeSquid.render(mouseX, mouseY, delta);
+            optimizeTurtle.render(mouseX, mouseY, delta);
+            optimizeIronGolem.render(mouseX, mouseY, delta);
+            optimizePolarbear.render(mouseX, mouseY, delta);
+            optimizeHorses.render(mouseX, mouseY, delta);
             //#endif
         }
 

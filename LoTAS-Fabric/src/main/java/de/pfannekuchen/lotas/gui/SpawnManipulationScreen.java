@@ -8,6 +8,9 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.GameMenuScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
+//#if MC>=11601
+//$$ import net.minecraft.client.util.math.MatrixStack;
+//#endif
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.enchantment.InfoEnchantment;
@@ -47,18 +50,35 @@ public class SpawnManipulationScreen extends Screen {
 	public static InfoEnchantment[] skelBow = new InfoEnchantment[] {new InfoEnchantment(Enchantments.UNBREAKING, 1), new InfoEnchantment(Enchantments.POWER, 1)};
 	public static InfoEnchantment[] zombieSword = new InfoEnchantment[] {new InfoEnchantment(Enchantments.SHARPNESS, 2), new InfoEnchantment(Enchantments.UNBREAKING, 2)};
 	//#endif
-	public int spawnX = (int) MinecraftClient.getInstance().player.x;
+	   
+	//#if MC>=11601
+//$$ 	public int spawnX = (int) MinecraftClient.getInstance().player.getX();
+//$$ 	public int spawnY = (int) MinecraftClient.getInstance().player.getY();
+//$$ 	public int spawnZ = (int) MinecraftClient.getInstance().player.getZ();
+    //#else
+    public int spawnX = (int) MinecraftClient.getInstance().player.x;
 	public int spawnY = (int) MinecraftClient.getInstance().player.y;
-	public int spawnZ = (int) MinecraftClient.getInstance().player.z;
+	public int spawnZ = (int) MinecraftClient.getInstance().player.z; 
+    //#endif
 	public EntitySliderWidget entity;
 	
-	@Override
-	public void render(int mouseX, int mouseY, float partialTicks) {
-		super.render(mouseX, mouseY, partialTicks);
-		xText.render(mouseX, mouseY, partialTicks);
-		yText.render(mouseX, mouseY, partialTicks);
-		zText.render(mouseX, mouseY, partialTicks);
-	}
+	//#if MC>=11601
+//$$     @Override
+//$$     public void render(MatrixStack matrices, int mouseX, int mouseY, float partialTicks) {
+//$$         super.render(matrices, mouseX, mouseY, partialTicks);
+//$$         xText.render(matrices, mouseX, mouseY, partialTicks);
+//$$         yText.render(matrices, mouseX, mouseY, partialTicks);
+//$$         zText.render(matrices, mouseX, mouseY, partialTicks);
+//$$     }
+    //#else
+   @Override
+   public void render(int mouseX, int mouseY, float partialTicks) {
+       super.render(mouseX, mouseY, partialTicks);
+       xText.render(mouseX, mouseY, partialTicks);
+       yText.render(mouseX, mouseY, partialTicks);
+       zText.render(mouseX, mouseY, partialTicks);
+   }
+    //#endif
 	
 	@Override
 	public boolean charTyped(char typedChar, int keyCode) {
@@ -123,13 +143,19 @@ public class SpawnManipulationScreen extends Screen {
 		addButton(new NewButtonWidget(width / 9 * 7 + 1, height - 24, width / 9 - 4, 20, "Z++", btn -> spawnZ++));
 		addButton(new NewButtonWidget(width / 9 * 8 + 1, height - 24, width / 9 - 4, 20, "Z--", btn -> spawnZ--));
 		
+		//#if MC>=11601
+//$$         xText = new TextFieldWidget(MinecraftClient.getInstance().textRenderer, width / 9 * 3 + 6, height - 46, (int) (width / 4.5) - 6, 20, new LiteralText(spawnX + ""));
+//$$         yText = new TextFieldWidget(MinecraftClient.getInstance().textRenderer, width / 9 * 5 + 4, height - 46, (int) (width/ 4.5) - 6, 20, new LiteralText(spawnY + ""));
+//$$         zText = new TextFieldWidget(MinecraftClient.getInstance().textRenderer, width / 9 * 7 + 2, height - 46, (int) (width/ 4.5) - 6, 20, new LiteralText(spawnZ + ""));
+//$$         addButton(new NewButtonWidget(5, height - 24, width / 3, 20, "Spawn Entity", btn -> MinecraftClient.getInstance().getServer().getPlayerManager().getPlayer(MinecraftClient.getInstance().getName()).world.spawnEntity(e)));
+//$$         addButton(new NewButtonWidget(5, height - 46, width / 3, 20, "Done", btn -> MinecraftClient.getInstance().openScreen(new GameMenuScreen(true))));
+        //#else
 		xText = new TextFieldWidget(MinecraftClient.getInstance().textRenderer, width / 9 * 3 + 6, height - 46, (int) (width / 4.5) - 6, 20, spawnX + "");
 		yText = new TextFieldWidget(MinecraftClient.getInstance().textRenderer, width / 9 * 5 + 4, height - 46, (int) (width/ 4.5) - 6, 20, spawnY + "");
 		zText = new TextFieldWidget(MinecraftClient.getInstance().textRenderer, width / 9 * 7 + 2, height - 46, (int) (width/ 4.5) - 6, 20, spawnZ + "");
-		
 		addButton(new NewButtonWidget(5, height - 24, width / 3, 20, "Spawn Entity", btn -> MinecraftClient.getInstance().getServer().getWorld(MinecraftClient.getInstance().player.dimension).spawnEntity(e)));
 		addButton(new NewButtonWidget(5, height - 46, width / 3, 20, "Done", btn -> minecraft.openScreen(new GameMenuScreen(true))));
-		
+        //#endif
 	}
 	
 	@Override
