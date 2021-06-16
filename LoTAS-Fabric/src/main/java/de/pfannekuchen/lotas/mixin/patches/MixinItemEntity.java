@@ -17,24 +17,23 @@ public abstract class MixinItemEntity extends Entity {
 
 	public MixinItemEntity(EntityType<?> type, World world) { super(type, world); }
 
-	//#if MC>=11502
-//$$ 	//ItemEntity(World world, double x, double y, double z)
-//$$ 	@Inject(at = @At("TAIL"), method = "Lnet/minecraft/entity/ItemEntity;<init>(Lnet/minecraft/world/World;DDD)V")
-//$$ 	public void hackVelocity(CallbackInfo ci) {
-//$$ 		try {
-//$$ 			if (ConfigUtils.getBoolean("tools", "manipulateVelocityTowards")) {
-//$$ 				double pX = MinecraftClient.getInstance().player.x - x;
-//$$ 				double pZ = MinecraftClient.getInstance().player.z - z;
-//$$ 				setVelocity(Math.min(Math.max(Math.round(pX), 1), -1) * 0.03f, getVelocity().y, Math.max(Math.round(pZ), 1) * 0.03f);
-//$$ 			} else if (ConfigUtils.getBoolean("tools", "manipulateVelocityAway")) {
-//$$ 				double pX = MinecraftClient.getInstance().player.x - x;
-//$$ 				double pZ = MinecraftClient.getInstance().player.z - z;
-//$$ 				setVelocity(Math.min(Math.max(Math.round(pX), 1), -1) * -0.03f, getVelocity().y, Math.max(Math.round(pZ), 1) * -0.03f);
-//$$ 			}
-//$$ 		} catch (Exception e) {
-//$$ 			// Ignore this Error
-//$$ 		}
-//$$ 	}
-	//#endif
+ 	@Inject(at = @At("TAIL"), method = "Lnet/minecraft/entity/ItemEntity;<init>(Lnet/minecraft/world/World;DDD)V")
+ 	public void hackVelocity(CallbackInfo ci) {
+ 		try {
+ 			double pX = MinecraftClient.getInstance().player.x - x;
+			double pZ = MinecraftClient.getInstance().player.z - z;
+			if (pX > 0) pX = 1;
+			if (pX < 0) pX = -1;
+			if (pZ > 0) pZ = 1;
+			if (pZ < 0) pZ = -1;
+ 			if (ConfigUtils.getBoolean("tools", "manipulateVelocityTowards")) {
+ 				setVelocity(pX * 0.1D, .2F, pZ * 0.1D);
+ 			} else if (ConfigUtils.getBoolean("tools", "manipulateVelocityAway")) {
+ 				setVelocity(pX * -0.1D, .2F, pZ * -0.1D);
+ 			}
+ 		} catch (Exception e) {
+ 			// Ignore this Error
+ 		}
+ 	}
 	
 }

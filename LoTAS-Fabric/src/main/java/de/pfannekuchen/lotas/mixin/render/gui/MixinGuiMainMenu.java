@@ -31,8 +31,31 @@ public abstract class MixinGuiMainMenu extends Screen {
 	private final Identifier DEMO_BG = new Identifier("textures/gui/demo_background.png");
 	
 	@Inject(at = @At("HEAD"), method = "render", cancellable = true)
+	//#if MC>=11601
+//$$ 	public void redirectRender(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+	//#else 
 	public void redirectRender(CallbackInfo ci) {
+	//#endif 
 		if (isAcceptance) {
+			//#if MC>=11601
+//$$ 			renderBackground(matrices);
+//$$ 			GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+//$$ 			MinecraftClient.getInstance().getTextureManager().bindTexture(DEMO_BG);
+//$$ 			int i = (this.width - 248) / 2;
+//$$ 			int j = (this.height - 166) / 2;
+//$$ 			this.drawTexture(matrices, i, j, 0, 0, 248, 166);
+//$$ 			i += 10;
+//$$ 			j += 8;
+//$$ 			this.textRenderer.draw(matrices, "LoTAS Cheat prevention", (float) i, (float) j, 2039583);
+//$$ 			j += 12;
+//$$ 			GameOptions gameOptions = MinecraftClient.getInstance().options;
+//$$ 			this.textRenderer.draw(matrices, I18n.translate("This mod collects a bit of data", gameOptions.keyForward.getBoundKeyLocalizedText(), gameOptions.keyLeft.getBoundKeyLocalizedText(), gameOptions.keyBack.getBoundKeyLocalizedText(), gameOptions.keyRight.getBoundKeyLocalizedText()), (float) i, (float) j, 5197647);
+//$$ 			this.textRenderer.draw(matrices, I18n.translate("to prevent cheating."), (float) i, (float) (j + 12), 5197647);
+//$$ 			this.textRenderer.draw(matrices, I18n.translate("Your data will be hashed and encrypted.", gameOptions.keyJump.getBoundKeyLocalizedText()), (float) i, (float) (j + 24), 5197647);
+//$$ 			this.textRenderer.draw(matrices, I18n.translate("\u00A7cYour Data is unreadable to anyone!", gameOptions.keyInventory.getBoundKeyLocalizedText()), (float) i, (float) (j + 36), 5197647);
+//$$ 			this.textRenderer.drawTrimmed(StringRenderable.plain("If you are confused or worried, pm me on discord: MCPfannkuchenYT#9745."), i, j + 68, 218, 2039583);
+//$$ 			super.render(matrices, mouseX, mouseY, delta);
+			//#else
 			renderBackground();
 			GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 			this.minecraft.getTextureManager().bindTexture(DEMO_BG);
@@ -44,18 +67,13 @@ public abstract class MixinGuiMainMenu extends Screen {
 			this.font.draw("LoTAS Cheat prevention", (float) i, (float) j, 2039583);
 			j += 12;
 			GameOptions gameOptions = this.minecraft.options;
-			this.font.draw(I18n.translate("This mod collects a bit of data", gameOptions.keyForward.getLocalizedName(),
-					gameOptions.keyLeft.getLocalizedName(), gameOptions.keyBack.getLocalizedName(),
-					gameOptions.keyRight.getLocalizedName()), (float) i, (float) j, 5197647);
+			this.font.draw(I18n.translate("This mod collects a bit of data", gameOptions.keyForward.getLocalizedName(), gameOptions.keyLeft.getLocalizedName(), gameOptions.keyBack.getLocalizedName(), gameOptions.keyRight.getLocalizedName()), (float) i, (float) j, 5197647);
 			this.font.draw(I18n.translate("to prevent cheating."), (float) i, (float) (j + 12), 5197647);
-			this.font.draw(
-					I18n.translate("Your data will be hashed and encrypted.", gameOptions.keyJump.getLocalizedName()),
-					(float) i, (float) (j + 24), 5197647);
-			this.font.draw(I18n.translate("\u00A7cYour Data is unreadable to anyone!",
-					gameOptions.keyInventory.getLocalizedName()), (float) i, (float) (j + 36), 5197647);
-			this.font.drawTrimmed(I18n.translate("If you are confused or worried, pm me on discord: MCPfannkuchenYT#9745."),
-					i, j + 68, 218, 2039583);
+			this.font.draw(I18n.translate("Your data will be hashed and encrypted.", gameOptions.keyJump.getLocalizedName()), (float) i, (float) (j + 24), 5197647);
+			this.font.draw(I18n.translate("\u00A7cYour Data is unreadable to anyone!", gameOptions.keyInventory.getLocalizedName()), (float) i, (float) (j + 36), 5197647);
+			this.font.drawTrimmed(I18n.translate("If you are confused or worried, pm me on discord: MCPfannkuchenYT#9745."), i, j + 68, 218, 2039583);
 			super.render(0, 0, 0f);
+			//#endif
 			ci.cancel();
 		}
 	}

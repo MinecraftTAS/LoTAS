@@ -1,9 +1,9 @@
 package de.pfannekuchen.lotas.mods;
 
+import de.pfannekuchen.lotas.core.utils.DefaultedList;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.DefaultedList;
 
 public class DupeMod {
     private static DefaultedList<ItemStack> main = DefaultedList.ofSize(36, ItemStack.EMPTY);

@@ -32,8 +32,6 @@
 		"patches.MixinServerPlayerEntityPatch",
 		"patches.MixinEnderPearlPatch",
 		"patches.MixinUnbreakingPatch",
-		"patches.MixinIntegratedServerPatch",
-		"patches.MixinEndPortalPatch",
 		"patches.MixinItemEntity"
 	],
   	"injectors": {

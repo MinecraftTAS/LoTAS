@@ -5,7 +5,6 @@ import java.time.Duration;
 import de.pfannekuchen.lotas.core.utils.ConfigUtils;
 import de.pfannekuchen.lotas.mixin.accessors.AccessorMinecraftClient;
 import de.pfannekuchen.lotas.mixin.accessors.AccessorTimer;
-import net.fabricmc.fabric.mixin.resource.loader.MixinMinecraftServer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.LiteralText;
 

@@ -68,8 +68,11 @@ public class SavestateMod {
 		
 
 		new Thread(() -> {
-			
+			//#if MC>=11601
+//$$ 			final String worldName = server.getSaveProperties().getLevelName();
+			//#else
 			final String worldName = server.getLevelName();
+			//#endif
 			final File worldDir = new File(mc.runDirectory, "saves/" + worldName);
 			final File savestatesDir = new File(mc.runDirectory, "saves/savestates/");
 
@@ -129,7 +132,11 @@ public class SavestateMod {
 
 		mc.getServer().stop(true);
 
+		//#if MC>=11601
+//$$ 		final String worldName = server.getSaveProperties().getLevelName();
+		//#else
 		final String worldName = server.getLevelName();
+		//#endif
 		final File worldDir = new File(mc.runDirectory, "saves/" + worldName);
 		final File savestatesDir = new File(mc.runDirectory, "saves/savestates/");
 
@@ -159,7 +166,11 @@ public class SavestateMod {
 		GLFW.glfwSetCursorPos(mc.window.getHandle(), x, y);
 		mc.mouse.updateMouse();
 
+		//#if MC>=11601
+//$$ 		mc.startIntegratedServer(worldName);
+		//#else
 		mc.startIntegratedServer(worldName, worldName, null);
+		//#endif
 
 		GLFW.glfwSetCursorPos(mc.window.getHandle(), x, y);
 		mc.mouse.updateMouse();
@@ -172,7 +183,11 @@ public class SavestateMod {
 	 * @see MixinGuiIngameMenu#injectinitGui(org.spongepowered.asm.mixin.injection.callback.CallbackInfo)
 	 */
 	public static boolean hasSavestate() {
-		String worldName = MinecraftClient.getInstance().getServer().getLevelName();
+		//#if MC>=11601
+//$$ 		final String worldName = MinecraftClient.getInstance().getServer().getSaveProperties().getLevelName();
+		//#else
+		final String worldName = MinecraftClient.getInstance().getServer().getLevelName();
+		//#endif
 		File savestatesDir = new File(MinecraftClient.getInstance().runDirectory, "saves/savestates/");
 		if (!savestatesDir.exists()) return false;
 		int existingSavestates = savestatesDir.listFiles((d, s) -> {
@@ -235,8 +250,11 @@ public class SavestateMod {
 	public static void yeet(int i) {
 		final MinecraftClient mc = MinecraftClient.getInstance();
 		final IntegratedServer server = mc.getServer();
-		
+		//#if MC>=11601
+//$$ 		final String worldName = server.getSaveProperties().getLevelName();
+		//#else
 		final String worldName = server.getServerName();
+		//#endif
 		final File savestatesDir = new File(mc.runDirectory, "saves/savestates/");
 		
 		final File savestateDir = new File(savestatesDir, worldName + "-Savestate" + (i));

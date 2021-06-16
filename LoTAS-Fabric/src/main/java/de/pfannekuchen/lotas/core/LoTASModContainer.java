@@ -7,7 +7,6 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.file.Files;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
@@ -17,14 +16,12 @@ import de.pfannekuchen.lotas.core.utils.KeybindsUtils;
 import de.pfannekuchen.lotas.core.utils.TextureYoinker;
 import de.pfannekuchen.lotas.gui.SeedListScreen;
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;
-import de.pfannekuchen.lotas.taschallenges.ChallengeMap;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.Identifier;
 
 public class LoTASModContainer implements ModInitializer {
 
-	public static final List<ChallengeMap> maps = new ArrayList<>();
 	public static Identifier shield;
 	
 	@Override
