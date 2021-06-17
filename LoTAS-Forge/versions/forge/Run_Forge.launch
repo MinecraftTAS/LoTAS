@@ -10,7 +10,6 @@
     <booleanAttribute key="org.eclipse.jdt.launching.ATTR_SHOW_CODEDETAILS_IN_EXCEPTION_MESSAGES" value="true"/>
     <booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_CLASSPATH_ONLY_JAR" value="false"/>
     <stringAttribute key="org.eclipse.jdt.launching.CLASSPATH_PROVIDER" value="org.eclipse.buildship.core.classpathprovider"/>
-    <stringAttribute key="org.eclipse.jdt.launching.JRE_CONTAINER" value="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk-8.0.275.1-openj9"/>
     <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="GradleStart"/>
     <stringAttribute key="org.eclipse.jdt.launching.MODULE_NAME" value="forge"/>
     <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="--mixin lotas.mixin.json --tweakClass org.spongepowered.asm.launch.MixinTweaker"/>

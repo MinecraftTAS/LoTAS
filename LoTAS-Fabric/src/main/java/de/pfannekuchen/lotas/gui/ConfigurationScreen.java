@@ -9,7 +9,6 @@ import de.pfannekuchen.lotas.gui.widgets.NewButtonWidget;
 import de.pfannekuchen.lotas.mixin.accessors.AccessorTextFieldWidget;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.ButtonWidget.PressAction;
 //#if MC>=11601
 //$$ import net.minecraft.client.util.math.MatrixStack;
@@ -23,7 +22,7 @@ public class ConfigurationScreen extends Screen {
 		super(new LiteralText("Configuration"));
 	}
 
-	public static String[] optionsBoolean = new String[] { "B:tools:saveTickrate:INSERT", "B:ui:hideTickrateMessages:INSERT", "B:tools:showTickIndicator:INSERT", "B:ui:hideRTATimer:INSERT", "B:tools:removePearlDelay:INSERT", "B:tools:noDamageUnbreaking:INSERT", "B:tools:showSpeedometer:INSERT", "B:ui:advancedMode:INSERT", "B:ui:glitchedMode:INSERT" };
+	public static String[] optionsBoolean = new String[] { "B:tools:saveTickrate:INSERT", "B:ui:hideTickrateMessages:INSERT", "B:tools:showTickIndicator:INSERT", "B:ui:hideRTATimer:INSERT", "B:tools:removePearlDelay:INSERT", "B:tools:noDamageUnbreaking:INSERT", "B:tools:showSpeedometer:INSERT" };
 
 	public static String[] optionsInteger = new String[] { "I:hidden:explosionoptimization:INSERT" };
 

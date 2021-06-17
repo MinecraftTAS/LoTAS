@@ -123,18 +123,8 @@ public abstract class MixinGuiIngameMenu extends GuiScreen {
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		this.drawDefaultBackground();
 		this.drawCenteredString(MCVer.getFontRenderer(mc), I18n.format("menu.game"), this.width / 2, 15, 16777215);
-	        
-        for (int i = 0; i < this.buttonList.size(); ++i) {
-        	// Advanced and non-advanced buttons
-        	int id = ((GuiButton) this.buttonList.get(i)).id;
-        	if (!ConfigUtils.getBoolean("ui", "glitchedMode") && glitchedButtons.contains((Integer) id)) continue;
-        	if (!ConfigUtils.getBoolean("ui", "advancedMode") && advancedButtons.contains((Integer) id)) continue;
-    		//#if MC>=11200
-        	((GuiButton)this.buttonList.get(i)).drawButton(Minecraft.getMinecraft(), mouseX, mouseY, partialTicks);
-        	//#else
-        //$$ 	((GuiButton)this.buttonList.get(i)).drawButton(Minecraft.getMinecraft(), mouseX, mouseY);
-        	//#endif
-        }   
+        super.drawScreen(mouseX, mouseY, partialTicks);
+	    
 	    
 		if (getClass().getSimpleName().contains("GuiIngameMenu")) {
 			if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
@@ -154,7 +144,7 @@ public abstract class MixinGuiIngameMenu extends GuiScreen {
 		}	
 		
 		drawString(MCVer.getFontRenderer(mc), "Tickrate Changer (" + TickrateChangerMod.tickrate + ")", 5, 5, 0xFFFFFF);
-		if (ConfigUtils.getBoolean("ui", "advancedMode")) drawCenteredString(MCVer.getFontRenderer(mc), "Hold Shift to access more features", width / 2, this.height / 4 + 150, 0xFFFFFF);
+		drawCenteredString(MCVer.getFontRenderer(mc), "Hold Shift to access more features", width / 2, this.height / 4 + 150, 0xFFFFFF);
 		
 		if (savestateName != null) savestateName.drawTextBox();
 		if (tickrateField != null) tickrateField.drawTextBox();
@@ -175,16 +165,16 @@ public abstract class MixinGuiIngameMenu extends GuiScreen {
 			drawCenteredString(MCVer.getFontRenderer(mc), "\u00A76Loadstate successful...", width / 2, 40, new Color(1F, 1F, 1F, 1F - (timeSince / 2000F)).getRGB());
 		}
 		
-		if (ConfigUtils.getBoolean("ui", "advancedMode")) MCVer.getFontRenderer(mc).drawStringWithShadow("Tickjump", 10, 105, 0xFFFFFF);
+		MCVer.getFontRenderer(mc).drawStringWithShadow("Tickjump", 10, 105, 0xFFFFFF);
 		if(buttonList.get(17).enabled==false) {
 			MCVer.getFontRenderer(mc).drawStringWithShadow("Tickjump is ready,", 8, 137, 0xFFFFFF);
 			MCVer.getFontRenderer(mc).drawStringWithShadow("press ESC to continue", 8, 147, 0xFFFFFF);
 		}
-		if (ConfigUtils.getBoolean("ui", "glitchedMode")) MCVer.getFontRenderer(mc).drawStringWithShadow("Duping", 10, 45, 0xFFFFFF);
+		MCVer.getFontRenderer(mc).drawStringWithShadow("Duping", 10, 45, 0xFFFFFF);
 		int w = width - 5;
-		if (ConfigUtils.getBoolean("ui", "advancedMode")) MCVer.getFontRenderer(mc).drawStringWithShadow("Tracked Items Delay: ", w - MCVer.getFontRenderer(mc).getStringWidth("Tracked Items Delay: ") - 1, 10, 0xFFFFFFFF);
+		MCVer.getFontRenderer(mc).drawStringWithShadow("Tracked Items Delay: ", w - MCVer.getFontRenderer(mc).getStringWidth("Tracked Items Delay: ") - 1, 10, 0xFFFFFFFF);
 		/*int h = 22;
-		if (ConfigUtils.getBoolean("ui", "advancedMode")) for (EntityItem item : DupeMod.trackedObjects) {
+		for (EntityItem item : DupeMod.trackedObjects) {
 			
 			Temporary removed as to Mixin Bug, that is patched in 0.8, but 0.8 doesn't work with 1.8
 			//#if MC>=11200
