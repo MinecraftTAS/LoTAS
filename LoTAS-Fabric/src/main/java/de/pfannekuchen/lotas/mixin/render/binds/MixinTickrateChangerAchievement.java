@@ -9,9 +9,11 @@ import de.pfannekuchen.lotas.mods.TickrateChangerMod;
 @Mixin(targets = "net/minecraft/client/toast/ToastManager$Entry")
 public abstract class MixinTickrateChangerAchievement {
 
-	@ModifyVariable(method = "draw(II)Z", at = @At(value = "STORE", ordinal = 0))
+	//#if MC<=11502
+	@ModifyVariable(method = "draw", at = @At(value = "STORE", ordinal = 0))
 	public long modifyAnimationTime(long animationTimer) {
 		return TickrateChangerMod.getMilliseconds();
 	}
+	//#endif
 
 }
