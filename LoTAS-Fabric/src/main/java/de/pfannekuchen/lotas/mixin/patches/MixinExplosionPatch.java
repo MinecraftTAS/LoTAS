@@ -13,7 +13,11 @@ import net.minecraft.world.explosion.Explosion;
 @Mixin(Explosion.class)
 public class MixinExplosionPatch {
 
+	//#if MC>=11601
+//$$ 	@ModifyArg(method = "affectWorld", at = @At(value = "INVOKE", target = "Lnet/minecraft/loot/context/LootContext$Builder;random(Ljava/util/Random;)Lnet/minecraft/loot/context/LootContext$Builder;"), index = 0)
+	//#else
 	@ModifyArg(method = "affectWorld", at = @At(value = "INVOKE", target = "Lnet/minecraft/loot/context/LootContext$Builder;setRandom(Ljava/util/Random;)Lnet/minecraft/loot/context/LootContext$Builder;"), index = 0)
+	//#endif
 	public Random stupid(Random random) {
 		return ConfigUtils.getBoolean("tools", "manipulateExplosionDropChance") ? new FakeRandom() : random;
 	}

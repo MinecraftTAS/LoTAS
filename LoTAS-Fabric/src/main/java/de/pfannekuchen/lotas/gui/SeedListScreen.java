@@ -25,9 +25,17 @@ import net.minecraft.client.texture.NativeImage;
 import net.minecraft.client.texture.NativeImageBackedTexture;
 //#if MC>=11601
 //$$ import net.minecraft.client.util.math.MatrixStack;
+//$$ import net.minecraft.resource.DataPackSettings;
+//$$ import net.minecraft.util.registry.RegistryTracker;
+//$$ import net.minecraft.world.gen.GeneratorOptions;
 //#endif
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.Identifier;
+import net.minecraft.world.Difficulty;
+import net.minecraft.world.GameMode;
+import net.minecraft.world.GameRules;
+import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.level.LevelInfo;
 
 public class SeedListScreen extends Screen {
 
@@ -108,10 +116,15 @@ public class SeedListScreen extends Screen {
 		}));
 		ButtonWidget create = new NewButtonWidget(width / 2 - 100, height - 52, 200, 20, "Create World", button -> {
 			MinecraftClient.getInstance().openScreen(new ProgressScreen());
+			//#if MC>=11601
+//$$ 			LevelInfo levelInfo = new LevelInfo(selectedSeed.name, GameMode.SURVIVAL, false, Difficulty.NORMAL, true, new GameRules(), new DataPackSettings(new ArrayList<>(), new ArrayList<>()));
+//$$ 			CreateWorldScreen createWorldScreen = new CreateWorldScreen(this, levelInfo, new GeneratorOptions(Long.parseLong(selectedSeed.seed), true, false, GeneratorOptions.method_28608(DimensionType.method_28517(Long.parseLong(selectedSeed.seed)), GeneratorOptions.createOverworldGenerator(Long.parseLong(selectedSeed.seed)))), null, RegistryTracker.create());
+			//#else
 			CreateWorldScreen createWorldScreen = new CreateWorldScreen(this);
 			AccessorCreateWorldScreen accessorCWS = (AccessorCreateWorldScreen) createWorldScreen;
 			accessorCWS.setSeed(selectedSeed.seed);
 			accessorCWS.setCheatsEnabled(true);
+			//#endif
 			MinecraftClient.getInstance().openScreen(createWorldScreen);
 		});
 		create.active = false;
@@ -142,7 +155,7 @@ public class SeedListScreen extends Screen {
 	/**
 	 * Draw all Seed Entries from seeds
 	 */
-	public void drawSeeds() throws IOException {
+	public void drawSeeds(Object obj) throws IOException {
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferBuilder = tessellator.getBuffer();
 
@@ -176,9 +189,9 @@ public class SeedListScreen extends Screen {
 				GlStateManager.enableTexture();
 			}
 			//#if MC>=11601
-//$$ 			MinecraftClient.getInstance().textRenderer.draw(null, seed.name, x + 35, y + 3, 16777215);
-//$$ 			MinecraftClient.getInstance().textRenderer.draw(null, seed.description, x + 35, y + 14, 8421504);
-//$$ 			MinecraftClient.getInstance().textRenderer.draw(null, seed.seed, x + 35, y + 24, 8421504);
+//$$ 			MinecraftClient.getInstance().textRenderer.draw((MatrixStack) obj, seed.name, x + 35, y + 3, 16777215);
+//$$ 			MinecraftClient.getInstance().textRenderer.draw((MatrixStack) obj, seed.description, x + 35, y + 14, 8421504);
+//$$ 			MinecraftClient.getInstance().textRenderer.draw((MatrixStack) obj, seed.seed, x + 35, y + 24, 8421504);
 			//#else
 			MinecraftClient.getInstance().textRenderer.draw(seed.name, x + 35, y + 3, 16777215);
 			MinecraftClient.getInstance().textRenderer.draw(seed.description, x + 35, y + 14, 8421504);
@@ -188,7 +201,7 @@ public class SeedListScreen extends Screen {
 			try {
 				MinecraftClient.getInstance().getTextureManager().bindTexture(downloadSeed(seed.seed));
 				//#if MC>=11601
-//$$ 				DrawableHelper.drawTexture(null, x + 1, y, 0.0F, 0.0F, 32, 32, 32, 32);
+//$$ 				DrawableHelper.drawTexture((MatrixStack) obj, x + 1, y, 0.0F, 0.0F, 32, 32, 32, 32);
 				//#else
 				DrawableHelper.blit(x + 1, y, 0.0F, 0.0F, 32, 32, 32, 32);
 				//#endif
@@ -241,7 +254,7 @@ public class SeedListScreen extends Screen {
 		//#if MC>=11601
 //$$ 		GlStateManager.blendFuncSeparate(GlStateManager.SrcFactor.SRC_ALPHA.field_22545, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA.field_22528, GlStateManager.SrcFactor.ZERO.field_22545, GlStateManager.DstFactor.ONE.field_22528);
 		//#else
-		//$$ GlStateManager.blendFuncSeparate(GlStateManager.SrcFactor.SRC_ALPHA.value, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA.value, GlStateManager.SrcFactor.ZERO.value, GlStateManager.DstFactor.ONE.value);
+//$$ 		GlStateManager.blendFuncSeparate(GlStateManager.SrcFactor.SRC_ALPHA.value, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA.value, GlStateManager.SrcFactor.ZERO.value, GlStateManager.DstFactor.ONE.value);
 		//#endif
 		//#else
 		GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ONE);
@@ -278,7 +291,11 @@ public class SeedListScreen extends Screen {
 		//#endif
 
 		try {
-			drawSeeds();
+			 //#if MC>=11601
+//$$ 			drawSeeds(matrices);
+			//#else
+			drawSeeds(null);
+			//#endif
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

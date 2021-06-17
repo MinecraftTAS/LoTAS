@@ -237,7 +237,7 @@ public class MixinMinecraftClient {
 		KeybindsUtils.keyEvent();
 	}
 
-	@Inject(method = "openScreen", at = @At(value = "HEAD"))
+	@Inject(method = "openScreen", at = @At(value = "HEAD"), cancellable = true)
 	public void injectdisplayGuiScreen(Screen guiScreenIn, CallbackInfo ci) {
 		if (((guiScreenIn == null) ? true : guiScreenIn instanceof GameMenuScreen) && SavestateMod.isLoading) {
 			SavestateMod.isLoading = false;

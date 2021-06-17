@@ -109,12 +109,14 @@ public class EntitySliderWidget extends AbstractButtonWidget {
 	//#if MC>=11601
 //$$ 		@Override
 //$$ 		public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-//$$ 		         MinecraftClient.getInstance().getTextureManager().bindTexture(WIDGETS_LOCATION);
-//$$ 	        GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-//$$ 	        int i = (this.isHovered() ? 2 : 1) * 20;
-//$$ 	        this.drawTexture(matrices, this.x + (int) (this.sliderPosition * (double) (this.width - 8)), this.y, 0, 46 + i, 4, 20);
-//$$ 	        this.drawTexture(matrices, this.x + (int) (this.sliderPosition * (double) (this.width - 8)), this.y, 0, 46 + i, 4, 20);
 //$$ 		    super.renderButton(matrices, mouseX, mouseY, delta);
+//$$ 	         MinecraftClient.getInstance().getTextureManager().bindTexture(WIDGETS_LOCATION);
+//$$ 	         GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+//$$ 	         int i = (this.isHovered() ? 2 : 1) * 20;
+	         //#if MC>=11601
+//$$ 	         this.drawTexture(matrices, this.x + (int) (this.sliderPosition * (double) (this.width - 8)), this.y, 0, 46 + i, 4, 20);
+//$$ 	         this.drawTexture(matrices, this.x + (int) (this.sliderPosition * (double) (this.width - 8)) + 4, this.y, 196, 46 + i, 4, 20);
+	         //#endif
 //$$ 		}
 	//#else
 	@Override
@@ -152,10 +154,7 @@ public class EntitySliderWidget extends AbstractButtonWidget {
 			}
 
 			GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-			//#if MC>=11601
-//$$ 						this.drawTexture(null, this.x + (int) (this.sliderPosition * (float) (this.width - 8)), this.y, 0, 66, 4, 20);
-//$$ 						this.drawTexture(null, this.x + (int) (this.sliderPosition * (float) (this.width - 8)) + 4, this.y, 196, 66, 4, 20);
-			//#else
+			//#if MC<=11502
 			blit(this.x + (int) (this.sliderPosition * (float) (this.width - 8)), this.y, 0, 66, 4, 20);
 			blit(this.x + (int) (this.sliderPosition * (float) (this.width - 8)) + 4, this.y, 196, 66, 4, 20);
 			//#endif

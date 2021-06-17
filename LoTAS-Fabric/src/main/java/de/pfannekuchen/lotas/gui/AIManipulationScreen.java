@@ -63,6 +63,7 @@ public class AIManipulationScreen extends Screen {
 		
 		addButton(new NewButtonWidget(width / 2 - 100, height - 25, 200, 20, "Change Target", button -> {
 			button.active = !entities.get(selectedIndex).getNavigation().startMovingTo(spawnX, spawnY, spawnZ, 1.0f);
+			entities.get(selectedIndex).getMoveControl().moveTo(spawnX, spawnY, spawnZ, 1.0F);
 		}));
 
 		addButton(new NewButtonWidget(width / 2 - 100, height - 72, 60, 20, "X++", btn -> spawnX++));

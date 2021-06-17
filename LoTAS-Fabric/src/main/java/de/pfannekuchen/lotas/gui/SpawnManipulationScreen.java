@@ -148,7 +148,7 @@ public class SpawnManipulationScreen extends Screen {
 //$$ 		        xText = new TextFieldWidget(MinecraftClient.getInstance().textRenderer, width / 9 * 3 + 6, height - 46, (int) (width / 4.5) - 6, 20, new LiteralText(spawnX + ""));
 //$$ 		        yText = new TextFieldWidget(MinecraftClient.getInstance().textRenderer, width / 9 * 5 + 4, height - 46, (int) (width/ 4.5) - 6, 20, new LiteralText(spawnY + ""));
 //$$ 		        zText = new TextFieldWidget(MinecraftClient.getInstance().textRenderer, width / 9 * 7 + 2, height - 46, (int) (width/ 4.5) - 6, 20, new LiteralText(spawnZ + ""));
-//$$ 		        addButton(new NewButtonWidget(5, height - 24, width / 3, 20, "Spawn Entity", btn -> MinecraftClient.getInstance().getServer().getPlayerManager().getPlayer(MinecraftClient.getInstance().getName()).world.spawnEntity(e)));
+//$$ 		        addButton(new NewButtonWidget(5, height - 24, width / 3, 20, "Spawn Entity", btn -> MinecraftClient.getInstance().getServer().getPlayerManager().getPlayer(MinecraftClient.getInstance().player.getUuid()).world.spawnEntity(e)));
 //$$ 		        addButton(new NewButtonWidget(5, height - 46, width / 3, 20, "Done", btn -> MinecraftClient.getInstance().openScreen(new GameMenuScreen(true))));
 		//#else
 		xText = new TextFieldWidget(MinecraftClient.getInstance().textRenderer, width / 9 * 3 + 6, height - 46, (int) (width / 4.5) - 6, 20, spawnX + "");

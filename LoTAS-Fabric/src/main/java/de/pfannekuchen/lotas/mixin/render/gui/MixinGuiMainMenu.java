@@ -108,7 +108,7 @@ public abstract class MixinGuiMainMenu extends Screen {
 	}
 
 	//#if MC>=11601
-//$$ 	    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/TitleScreen;drawCenteredString(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/client/util/math/MatrixStack;Ljava/lang/String;III)V"))
+//$$ 	    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/TitleScreen;drawCenteredString(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/font/TextRenderer;Ljava/lang/String;III)V"))
 //$$ 	    private void redirectdrawSplash(TitleScreen titleScreen, MatrixStack matrices, TextRenderer textRenderer, String str, int centerX, int y, int color) {
 //$$ 	        titleScreen.drawCenteredString(matrices, textRenderer, "TaS iS cHeAtInG !!1", centerX, y, color);
 //$$ 	    }

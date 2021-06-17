@@ -23,10 +23,12 @@ import net.minecraft.util.Identifier;
 @Mixin(InGameHud.class)
 public class MixinOverlayEvent {
 
-	@Inject(at = @At(value = "INVOKE", shift = At.Shift.AFTER, target = "Lnet/minecraft/client/gui/hud/InGameHud;renderStatusEffectOverlay()V"), method = "render")
+	
 	//#if MC>=11601
+//$$ 	@Inject(at = @At(value = "INVOKE", shift = At.Shift.AFTER, target = "Lnet/minecraft/client/gui/hud/InGameHud;renderStatusEffectOverlay(Lnet/minecraft/client/util/math/MatrixStack;)V"), method = "render")
 //$$ 	public void injectrender(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
 	//#else
+	@Inject(at = @At(value = "INVOKE", shift = At.Shift.AFTER, target = "Lnet/minecraft/client/gui/hud/InGameHud;renderStatusEffectOverlay()V"), method = "render")
 	public void injectrender(float tickDelta, CallbackInfo ci) {
 		//#endif
 		if (Timer.ticks != -1) {

@@ -72,9 +72,9 @@ public class ConfigurationScreen extends Screen {
 			if (option.split(":")[0].equalsIgnoreCase("I")) {
 				String v = option.split(":")[3];
 				//#if MC>=11601
-//$$ 				strings.add(new TextFieldWidget(MinecraftClient.getInstance().textRenderer, width / 2 - 100, y, 200, 20, new LiteralText(v)));
+//$$ 				ints.add(new TextFieldWidget(MinecraftClient.getInstance().textRenderer, width / 2 - 100, y, 200, 20, new LiteralText(v)));
 				//#else
-				strings.add(new TextFieldWidget(MinecraftClient.getInstance().textRenderer, width / 2 - 100, y, 200, 20, v));
+				ints.add(new TextFieldWidget(MinecraftClient.getInstance().textRenderer, width / 2 - 100, y, 200, 20, v));
 				//#endif
 				ints.get(ints.size() - 1).setText(v);
 				ints.get(ints.size() - 1).setUneditableColor(i++);
