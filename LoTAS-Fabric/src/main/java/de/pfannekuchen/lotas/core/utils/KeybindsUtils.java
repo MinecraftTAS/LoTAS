@@ -5,6 +5,7 @@ import java.time.Duration;
 import org.lwjgl.glfw.GLFW;
 
 import de.pfannekuchen.lotas.core.utils.EventUtils.Timer;
+import de.pfannekuchen.lotas.gui.HudSettings;
 import de.pfannekuchen.lotas.mods.DupeMod;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.MinecraftClient;
@@ -24,6 +25,7 @@ public class KeybindsUtils {
 	public static final KeyBinding advanceTicksKeybind = new KeyBinding("Advance Tick", GLFW.GLFW_KEY_F9, "Tickrate Changer");
 	public static final KeyBinding toggleAdvanceKeybind = new KeyBinding("Tickrate Zero Toggle", GLFW.GLFW_KEY_F8, "Tickrate Changer");
 	public static final KeyBinding toggleTimerKeybind = new KeyBinding("Start/Stop Timer", GLFW.GLFW_KEY_KP_5, "Tickrate Changer");
+	public static final KeyBinding openInfoHud = new KeyBinding("Open InfoGui Editor", GLFW.GLFW_KEY_F6, "Misc");
 	public static boolean shouldSavestate;
 	public static boolean shouldLoadstate;
 	public static boolean isFreecaming;
@@ -53,6 +55,10 @@ public class KeybindsUtils {
 			}
 			Timer.running = !Timer.running;
 		}
+		
+		while (openInfoHud.wasPressed()) {
+			MinecraftClient.getInstance().openScreen(new HudSettings());
+		}
 
 		if (wasPressed != holdStrafeKeybind.isPressed() && wasPressed == true) {
 			//#if MC>=11601
@@ -78,5 +84,6 @@ public class KeybindsUtils {
 		KeyBindingHelper.registerKeyBinding(advanceTicksKeybind);
 		KeyBindingHelper.registerKeyBinding(toggleAdvanceKeybind);
 		KeyBindingHelper.registerKeyBinding(toggleTimerKeybind);
+		KeyBindingHelper.registerKeyBinding(openInfoHud);
 	}
 }

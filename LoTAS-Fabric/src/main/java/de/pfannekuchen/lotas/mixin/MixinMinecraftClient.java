@@ -1,5 +1,7 @@
 package de.pfannekuchen.lotas.mixin;
 
+import java.io.File;
+
 import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -55,6 +57,16 @@ public class MixinMinecraftClient {
 	@Inject(method = "joinWorld", at = @At("HEAD"))
 	public void injectloadWorld(ClientWorld worldClientIn, CallbackInfo ci) {
 		isLoadingWorld = ConfigUtils.getBoolean("tools", "hitEscape") && worldClientIn != null;
+		try {
+			//#if MC<=11502
+			SavestateMod.TrackerFile.readLoadstates(new File(MinecraftClient.getInstance().runDirectory, "saves/savestates/"), worldClientIn.getLevelProperties().getLevelName());
+			SavestateMod.TrackerFile.readSavestates(new File(MinecraftClient.getInstance().runDirectory, "saves/savestates/"), worldClientIn.getLevelProperties().getLevelName());
+			//#endif
+		} catch (Exception e) {
+			SavestateMod.TrackerFile.loadstateCount = 0;
+			SavestateMod.TrackerFile.savestateCount = 1;
+			// Don't catch this error
+		}
 	}
 
 	//#if MC>=11502

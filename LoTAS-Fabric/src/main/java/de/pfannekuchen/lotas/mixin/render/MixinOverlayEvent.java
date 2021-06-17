@@ -11,6 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.core.utils.ConfigUtils;
 import de.pfannekuchen.lotas.core.utils.EventUtils.Timer;
+import de.pfannekuchen.lotas.gui.HudSettings;
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
@@ -31,6 +32,7 @@ public class MixinOverlayEvent {
 	@Inject(at = @At(value = "INVOKE", shift = At.Shift.AFTER, target = "Lnet/minecraft/client/gui/hud/InGameHud;renderStatusEffectOverlay()V"), method = "render")
 	public void injectrender(float tickDelta, CallbackInfo ci) {
 		//#endif
+		HudSettings.drawOverlay();
 		if (Timer.ticks != -1) {
 			//#if MC>=11601
 //$$ 				    DrawableHelper.fill(matrices, 0, 0, 75, ConfigUtils.getBoolean("ui", "hideRTATimer") ? 13 : 24, new Color(0, 0, 0, 175).getRGB());
