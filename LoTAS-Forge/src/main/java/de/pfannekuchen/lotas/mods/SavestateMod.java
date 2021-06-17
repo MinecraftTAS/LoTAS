@@ -207,15 +207,19 @@ public class SavestateMod {
 	public static class TrackerFile {
 
 		// This is the worst Code I have ever written.
-
+		public static int savestateCount = -1;
+		public static int loadstateCount = -1;
+		
 		public static void increaseSavestates(final File savestateDir, final String worldName) throws IOException {
 			final File infoFile = new File(savestateDir, worldName + "-info.txt");
 			generateFile(infoFile, readSavestates(savestateDir, worldName) + 1, readLoadstates(savestateDir, worldName));
+			savestateCount++;
 		}
 
 		public static void increaseLoadstates(final File savestateDir, final String worldName) throws IOException {
 			final File infoFile = new File(savestateDir, worldName + "-info.txt");
 			generateFile(infoFile, readSavestates(savestateDir, worldName), readLoadstates(savestateDir, worldName) + 1);
+			loadstateCount++;
 		}
 
 		public static int readSavestates(final File savestateDir, final String worldName) throws IOException {
@@ -226,7 +230,7 @@ public class SavestateMod {
 				return -1;
 			}
 			List<String> lines = Files.readAllLines(infoFile.toPath());
-			return Integer.parseInt(lines.get(3).split("=")[1]);
+			return savestateCount = Integer.parseInt(lines.get(3).split("=")[1]);
 		}
 
 		public static int readLoadstates(final File savestateDir, final String worldName) throws IOException {
@@ -237,7 +241,7 @@ public class SavestateMod {
 				return -1;
 			}
 			List<String> lines = Files.readAllLines(infoFile.toPath());
-			return Integer.parseInt(lines.get(4).split("=")[1]);
+			return loadstateCount = Integer.parseInt(lines.get(4).split("=")[1]);
 		}
 
 		private static void generateFile(final File file, final int savestates, final int loadstates) throws FileNotFoundException {

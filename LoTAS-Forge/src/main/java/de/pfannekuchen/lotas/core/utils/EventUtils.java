@@ -13,6 +13,7 @@ import com.google.common.collect.ImmutableList;
 import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.gui.GuiAiManipulation;
 import de.pfannekuchen.lotas.gui.GuiEntitySpawnManipulation;
+import de.pfannekuchen.lotas.gui.HudSettings;
 import de.pfannekuchen.lotas.mixin.accessors.AccessorRenderManager;
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;
 import de.pfannekuchen.lotas.taschallenges.ChallengeMap;
@@ -36,6 +37,7 @@ public class EventUtils {
 	@SubscribeEvent
 	public void onDraw(RenderGameOverlayEvent.Post e) {
 		if (checkNonText(e)) return;
+		HudSettings.drawOverlay();
 		
 		if (Timer.ticks != -1) {
 			Gui.drawRect(0, 0, 75, ConfigUtils.getBoolean("ui", "hideRTATimer") ? 13 : 24, new Color(0, 0, 0, 175).getRGB());

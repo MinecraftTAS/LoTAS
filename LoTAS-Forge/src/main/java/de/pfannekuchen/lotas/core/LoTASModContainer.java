@@ -24,12 +24,14 @@ import de.pfannekuchen.lotas.core.utils.EventUtils;
 import de.pfannekuchen.lotas.core.utils.KeybindsUtils;
 import de.pfannekuchen.lotas.gui.GuiSeedList.SeedListExtended;
 import de.pfannekuchen.lotas.gui.GuiSeedList.SeedListExtended.SeedEntry;
+import de.pfannekuchen.lotas.gui.HudSettings;
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;
 import de.pfannekuchen.lotas.taschallenges.ChallengeMap;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.ForgeVersion;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.common.property.Properties;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -50,6 +52,71 @@ public class LoTASModContainer {
 	public void onInit(FMLInitializationEvent e) {
 		loadShields();
 		KeybindsUtils.registerKeybinds();
+		try {
+			HudSettings.load(); // This goes first.. muhahahahaha
+			Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+				
+				@Override
+				public void run() {
+					try {
+						HudSettings.save();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}));
+		} catch (IOException e3) {
+			HudSettings.p = new java.util.Properties();
+			HudSettings.p.setProperty("XYZ_visible", "true");
+			HudSettings.p.setProperty("XYZPRECISE_visible", "false");
+			HudSettings.p.setProperty("CXZ_visible", "false");
+			HudSettings.p.setProperty("WORLDSEED_visible", "false");
+			HudSettings.p.setProperty("RNGSEEDS_visible", "false");
+			HudSettings.p.setProperty("FACING_visible", "false");
+			HudSettings.p.setProperty("TICKS_visible", "false");
+			HudSettings.p.setProperty("TICKRATE_visible", "false");
+			HudSettings.p.setProperty("SAVESTATECOUNT_visible", "false");
+			HudSettings.p.setProperty("TRAJECTORIES_visible", "false");
+			
+			HudSettings.p.setProperty("XYZ_x", "0");
+			HudSettings.p.setProperty("XYZPRECISE_x", "0");
+			HudSettings.p.setProperty("CXZ_x", "0");
+			HudSettings.p.setProperty("WORLDSEED_x", "0");
+			HudSettings.p.setProperty("RNGSEEDS_x", "0");
+			HudSettings.p.setProperty("FACING_x", "0");
+			HudSettings.p.setProperty("TICKS_x", "0");
+			HudSettings.p.setProperty("TICKRATE_x", "0");
+			HudSettings.p.setProperty("SAVESTATECOUNT_x", "0");
+			HudSettings.p.setProperty("TRAJECTORIES_x", "0");
+			
+			HudSettings.p.setProperty("XYZ_y", "0");
+			HudSettings.p.setProperty("XYZPRECISE_y", "0");
+			HudSettings.p.setProperty("CXZ_y", "0");
+			HudSettings.p.setProperty("WORLDSEED_y", "0");
+			HudSettings.p.setProperty("RNGSEEDS_y", "0");
+			HudSettings.p.setProperty("FACING_y", "0");
+			HudSettings.p.setProperty("TICKS_y", "0");
+			HudSettings.p.setProperty("TICKRATE_y", "0");
+			HudSettings.p.setProperty("SAVESTATECOUNT_y", "0");
+			HudSettings.p.setProperty("TRAJECTORIES_y", "0");
+			
+			HudSettings.p.setProperty("XYZ_hideRect", "false");
+			HudSettings.p.setProperty("XYZPRECISE_hideRect", "false");
+			HudSettings.p.setProperty("CXZ_hideRect", "false");
+			HudSettings.p.setProperty("WORLDSEED_hideRect", "false");
+			HudSettings.p.setProperty("RNGSEEDS_hideRect", "false");
+			HudSettings.p.setProperty("FACING_hideRect", "false");
+			HudSettings.p.setProperty("TICKS_hideRect", "false");
+			HudSettings.p.setProperty("TICKRATE_hideRect", "false");
+			HudSettings.p.setProperty("SAVESTATECOUNT_hideRect", "false");
+			HudSettings.p.setProperty("TRAJECTORIES_hideRect", "false");
+			
+			try {
+				HudSettings.save();
+			} catch (IOException e420) {
+				e420.printStackTrace();
+			}
+		}
 	}
 	
 	@EventHandler

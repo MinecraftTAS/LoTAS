@@ -1,5 +1,6 @@
 package de.pfannekuchen.lotas.mixin;
 
+import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
 
@@ -29,6 +30,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.client.settings.KeyBinding;
+import scala.collection.parallel.ParIterableLike.Min;
 
 @Mixin(Minecraft.class)
 public class MixinMinecraft {
@@ -61,6 +63,15 @@ public class MixinMinecraft {
 	@Inject(method = "Lnet/minecraft/client/Minecraft;loadWorld(Lnet/minecraft/client/multiplayer/WorldClient;Ljava/lang/String;)V", at = @At("HEAD"))
 	public void injectloadWorld(WorldClient worldClientIn, String loadingMessage, CallbackInfo ci) {
 		isLoadingWorld = ConfigUtils.getBoolean("tools", "hitEscape") && worldClientIn != null;
+		
+		try {
+			SavestateMod.TrackerFile.readLoadstates(new File(Minecraft.getMinecraft().mcDataDir, "saves/savestates/"), worldClientIn.getWorldInfo().getWorldName());
+			SavestateMod.TrackerFile.readSavestates(new File(Minecraft.getMinecraft().mcDataDir, "saves/savestates/"), worldClientIn.getWorldInfo().getWorldName());
+		} catch (Exception e) {
+			SavestateMod.TrackerFile.loadstateCount = 0;
+			SavestateMod.TrackerFile.savestateCount = 1;
+			// Don't catch this error
+		}
 		
 		if (ChallengeLoader.startTimer) {
 			ChallengeLoader.startTimer = false;

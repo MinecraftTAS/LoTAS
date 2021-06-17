@@ -6,6 +6,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.lwjgl.input.Keyboard;
 
 import de.pfannekuchen.lotas.core.MCVer;
+import de.pfannekuchen.lotas.gui.HudSettings;
 import de.pfannekuchen.lotas.mods.DupeMod;
 import de.pfannekuchen.lotas.taschallenges.ChallengeMap;
 import net.minecraft.client.Minecraft;
@@ -25,6 +26,7 @@ public class KeybindsUtils {
 	public static final KeyBinding advanceTicksKeybind = new KeyBinding("Advance Tick", Keyboard.KEY_F9, "Tickrate Changer");
 	public static final KeyBinding toggleAdvanceKeybind = new KeyBinding("Tickrate Zero Toggle", Keyboard.KEY_F8, "Tickrate Changer");
 	public static final KeyBinding toggleTimerKeybind = new KeyBinding("Start/Stop Timer", Keyboard.KEY_NUMPAD5, "Tickrate Changer");
+	public static final KeyBinding openInfoHud = new KeyBinding("Open InfoGui Editor", Keyboard.KEY_F6, "Misc");
 	public static boolean shouldSavestate;
 	public static boolean shouldLoadstate;
 	public static boolean isFreecaming;
@@ -50,12 +52,15 @@ public class KeybindsUtils {
 			KeyBinding.setKeyBindState(32, false);
 		} else if (wasPressed != holdStrafeKeybind.isKeyDown() && wasPressed == false) {
 			MCVer.player(Minecraft.getMinecraft()).rotationYaw -= 45;
+		} 
+		if (openInfoHud.isPressed()) {
+			Minecraft.getMinecraft().displayGuiScreen(new HudSettings());
 		}
 		wasPressed = holdStrafeKeybind.isKeyDown();
 	}
 	
 	public static void registerKeybinds() {
-		Minecraft.getMinecraft().gameSettings.keyBindings = ArrayUtils.addAll(Minecraft.getMinecraft().gameSettings.keyBindings, saveStateKeybind, loadStateKeybind, loadDupeKeybind, saveDupeKeybind, holdStrafeKeybind, toggleFreecamKeybind, increaseTickrateKeybind, decreaseTickrateKeybind, advanceTicksKeybind, toggleAdvanceKeybind, toggleTimerKeybind);
+		Minecraft.getMinecraft().gameSettings.keyBindings = ArrayUtils.addAll(Minecraft.getMinecraft().gameSettings.keyBindings, saveStateKeybind, loadStateKeybind, loadDupeKeybind, saveDupeKeybind, holdStrafeKeybind, toggleFreecamKeybind, increaseTickrateKeybind, decreaseTickrateKeybind, advanceTicksKeybind, toggleAdvanceKeybind, toggleTimerKeybind, openInfoHud);
 	}
 	
 }
