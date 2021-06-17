@@ -4,19 +4,38 @@
     "package": "de.pfannekuchen.lotas.mixin",
     "compatibilityLevel": "JAVA_8",
     "mixins": [
-    	"MixinMinecraftServer"
+    	
     ],
     "client": [
     	"MixinMinecraftClient",
+    	"MixinMinecraftServer",
     	"accessors.AccessorMinecraftClient",
     	"accessors.AccessorTimer",
+    	"accessors.AccessorTextFieldWidget",
+    	"accessors.AccessorCreateWorldScreen",
+    	"accessors.AccessorServerPlayerEntity",
+    	//#if MC>=11502
+    //$$ 	"accessors.AccessorModelLoader",
+    	//#endif
     	"render.binds.MixinTickrateChangerAchievement",
 		"render.binds.MixinTickrateChangerAudioPitch",
 		"render.binds.MixinTickrateChangerEnchantmentGlimm",
-		"render.binds.MixinTickrateChangerSubtitle",
 		"render.binds.MixinTickrateChangerSubtitleOverlay",
 		"render.binds.MixinTickrateChangerWorldborder",
-		"render.gui.MixinGuiIngameMenu"
+		"render.gui.MixinGuiIngameMenu",
+		"render.gui.MixinGuiMainMenu",
+		"render.gui.MixinGuiSelectWorldScreen",
+		"render.MixinOverlayEvent",
+		"render.MixinRenderEvent",
+		"render.MixinPotionRenderer",
+		"render.MixinRenderShield",
+		"patches.MixinBlockPatch",
+		"patches.MixinEntityPatch",
+		"patches.MixinExplosionPatch",
+		"patches.MixinServerPlayerEntityPatch",
+		"patches.MixinEnderPearlPatch",
+		"patches.MixinUnbreakingPatch",
+		"patches.MixinItemEntity"
 	],
   	"injectors": {
     	"defaultRequire": 1

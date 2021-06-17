@@ -6,6 +6,7 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
 
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;
 import net.minecraft.client.gui.hud.SubtitlesHud;
+
 @Mixin(SubtitlesHud.class)
 public abstract class MixinTickrateChangerSubtitleOverlay {
 

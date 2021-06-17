@@ -20,31 +20,35 @@ import net.minecraft.util.Util;
  * @author ScribbleLP
  */
 @Mixin(MinecraftServer.class)
-public abstract class MixinMinecraftServer{
-	
+public abstract class MixinMinecraftServer {
+
 	@Shadow
 	private long timeReference;
 
 	private long offset = 0;
 	private long currentTime = 0;
-	
+
 	//================Tickrates other than 0================
 	/**
 	 * Replaces all 50L values in MinecraftServer.run() to the desired milliseconds per tick which is obtained by
 	 * @param ignored the value that was originally used, in this case 50L
 	 * @return Milliseconds per tick
 	 */
+	//#if MC>=11601
+//$$ 	@ModifyConstant(method = "runServer", constant = @Constant(longValue = 50L))
+	//#else
 	@ModifyConstant(method = "run", constant = @Constant(longValue = 50L))
-    private long serverTickWaitTime(long ignored) {
+	//#endif
+	private long serverTickWaitTime(long ignored) {
 		if (!isTickrateZero()) {
 			return (long) (1000 / TickrateChangerMod.tickrateServer);
 		} else {
 			return 50L;
 		}
-    }
-	
+	}
+
 	//================Tickrate 0================
-	
+
 	/*
 	 * These mixins exploit some weirdness in the run() method of the MinecraftServer. (As always,) I don't fully understand it, or if there is a better way,
 	 * but this code is probably the least intrusive way of making tickrate 0 work.
@@ -67,16 +71,20 @@ public abstract class MixinMinecraftServer{
 	 * Problem: Idk about you, but I don't like screwing with the system time, in the following mixins, I am redirecting all Util.getMeasuringTimeMs() in the run() and shouldKeepTicking() and return the things I want
 	 * 
 	 */
-	
-	
+
 	/**
 	 * Redirects all Util.getMeasureTimeMs() in the run method of the minecraft server and returns {@link #getCurrentTime()}
 	 * @return
 	 */
+	//#if MC>=11601
+//$$ 	@Redirect(method = "runServer", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/Util;getMeasuringTimeMs()J"))
+	//#else
 	@Redirect(method = "run", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/Util;getMeasuringTimeMs()J"))
+	//#endif
 	public long redirectGetMeasuringTimeMsInRun() {
 		return getCurrentTime();
 	}
+
 	/**
 	 * Redirects all Util.getMeasureTimeMs() in the shouldKeepTicking method of the minecraft server and returns {@link #getCurrentTime()}
 	 * @return
@@ -85,36 +93,36 @@ public abstract class MixinMinecraftServer{
 	public long redirectGetMeasuringTimeMsInShouldKeepTicking() {
 		return getCurrentTime();
 	}
-	
+
 	/**
 	 * After a while i hated writing TickrateChanger.tickrate==0...
 	 * @return
 	 */
 	private boolean isTickrateZero() {
-		return TickrateChangerMod.tickrateServer==0;
+		return TickrateChangerMod.tickrateServer == 0;
 	}
-	
+
 	/**
 	 * Returns the time dependant on if the current tickrate is tickrate 0
 	 * @return In tickrates>0 the vanilla time - offset or the current time in tickrate 0
 	 */
 	private long getCurrentTime() {
-		if (!isTickrateZero()||TickrateChangerMod.advanceClient) {
+		if (!isTickrateZero() || TickrateChangerMod.advanceClient) {
 			currentTime = Util.getMeasuringTimeMs(); //Set the current time that will be returned if the player decides to activate tickrate 0
-			return Util.getMeasuringTimeMs() - offset;	//Returns the Current time - offset which was set while tickrate 0 was active
+			return Util.getMeasuringTimeMs() - offset; //Returns the Current time - offset which was set while tickrate 0 was active
 		} else {
-			offset = Util.getMeasuringTimeMs() - currentTime;	//Creating the offset from the measured time and the stopped time
+			offset = Util.getMeasuringTimeMs() - currentTime; //Creating the offset from the measured time and the stopped time
 			this.timeReference = currentTime + 50L;
 			/* Without this, the time reference would still increase by every tick in vanilla, 
 			meaning that if you stop tickrate 0, the time reference would be like nothing ever happened. 
 			The server realises this and just catches up with the ticks.
 			Now the time reference is always one tick ahead of the current time, tricking shouldKeepTicking in forever catching up to one tick, creating a loop.
 			And if we unpause this, the offset is applied  */
-			
+
 			return currentTime;
 		}
 	}
-	
+
 	@Inject(method = "tick", at = @At("HEAD"))
 	public void injectrunTick(BooleanSupplier supplier, CallbackInfo ci) {
 		TickrateChangerMod.ticksPassedServer++;

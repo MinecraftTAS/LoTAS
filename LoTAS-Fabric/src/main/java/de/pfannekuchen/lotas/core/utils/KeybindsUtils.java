@@ -1,12 +1,13 @@
 package de.pfannekuchen.lotas.core.utils;
 
-import java.io.IOException;
+import java.time.Duration;
 
 import org.lwjgl.glfw.GLFW;
 
+import de.pfannekuchen.lotas.core.utils.EventUtils.Timer;
+import de.pfannekuchen.lotas.mods.DupeMod;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.gui.screen.GameMenuScreen;
 import net.minecraft.client.options.KeyBinding;
 
@@ -28,35 +29,54 @@ public class KeybindsUtils {
 	public static boolean isFreecaming;
 	public static int savedTickrate;
 
+	public static boolean wasPressed = false;
+
 	public static void keyEvent() {
-		while (saveStateKeybind.wasPressed() /*&& ChallengeMap.currentMap == null*/) {
+		while (saveStateKeybind.wasPressed()) {
 			MinecraftClient.getInstance().openScreen(new GameMenuScreen(true));
 			shouldSavestate = true;
-		} 
-		while(loadStateKeybind.wasPressed()) {
+		}
+		while (loadStateKeybind.wasPressed()) {
 			MinecraftClient.getInstance().openScreen(new GameMenuScreen(true));
 			shouldLoadstate = true;
 		}
-//		} else if (loadDupeKeybind.isPressed()) {
-//			DupeMod.loadChests();
-//			DupeMod.loadItems();
-//		} else if (saveDupeKeybind.isPressed()) {
-//			DupeMod.saveChests();
-//			DupeMod.saveItems();
-//		}
+		while (loadDupeKeybind.wasPressed()) {
+			DupeMod.load(MinecraftClient.getInstance());
+		}
+		while (saveDupeKeybind.wasPressed()) {
+			DupeMod.save(MinecraftClient.getInstance());
+		}
+		while (toggleTimerKeybind.wasPressed()) {
+			if (Timer.ticks < 1 || Timer.startTime == null) {
+				Timer.startTime = Duration.ofMillis(System.currentTimeMillis());
+				Timer.ticks = 1;
+			}
+			Timer.running = !Timer.running;
+		}
+
+		if (wasPressed != holdStrafeKeybind.isPressed() && wasPressed == true) {
+			//#if MC>=11601
+//$$ 						KeyBinding.setKeyPressed(MinecraftClient.getInstance().options.keyRight.getDefaultKey(), false);
+			//#else
+			KeyBinding.setKeyPressed(MinecraftClient.getInstance().options.keyRight.getDefaultKeyCode(), false);
+			//#endif
+		} else if (wasPressed != holdStrafeKeybind.isPressed() && wasPressed == false) {
+			MinecraftClient.getInstance().player.yaw -= 45;
+		}
+		wasPressed = holdStrafeKeybind.isPressed();
 	}
 
 	public static void registerKeybinds() {
 		KeyBindingHelper.registerKeyBinding(saveStateKeybind);
 		KeyBindingHelper.registerKeyBinding(loadStateKeybind);
-//		KeyBindingHelper.registerKeyBinding(loadDupeKeybind);
-//		KeyBindingHelper.registerKeyBinding(saveDupeKeybind);
-//		KeyBindingHelper.registerKeyBinding(holdStrafeKeybind);
-//		KeyBindingHelper.registerKeyBinding(toggleFreecamKeybind);
+		KeyBindingHelper.registerKeyBinding(loadDupeKeybind);
+		KeyBindingHelper.registerKeyBinding(saveDupeKeybind);
+		KeyBindingHelper.registerKeyBinding(holdStrafeKeybind);
+		KeyBindingHelper.registerKeyBinding(toggleFreecamKeybind);
 		KeyBindingHelper.registerKeyBinding(increaseTickrateKeybind);
 		KeyBindingHelper.registerKeyBinding(decreaseTickrateKeybind);
 		KeyBindingHelper.registerKeyBinding(advanceTicksKeybind);
 		KeyBindingHelper.registerKeyBinding(toggleAdvanceKeybind);
-//		KeyBindingHelper.registerKeyBinding(toggleTimerKeybind);
+		KeyBindingHelper.registerKeyBinding(toggleTimerKeybind);
 	}
 }

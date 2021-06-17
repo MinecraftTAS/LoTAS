@@ -9,7 +9,6 @@ task setCoreVersion() {
         11404
         
         
-        
         , DEV_ENV: 1]
         project.convertTree(vars, 'src/main/java')
         project.convertTree(vars, 'src/main/resources')
