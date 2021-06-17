@@ -21,6 +21,7 @@ import net.minecraft.server.world.ServerWorld;
 //$$ import net.minecraft.loot.context.LootContextParameters;
 //#endif
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 
 @Mixin(Block.class)
 public class MixinBlockPatch {
@@ -36,10 +37,11 @@ public class MixinBlockPatch {
 //$$  				return list;
 //$$
 //$$  		}
-//$$ 		net.minecraft.loot.context.LootContext.Builder builder = (new net.minecraft.loot.context.LootContext.Builder(
-//$$ 				world)).random(world.random).parameter(LootContextParameters.POSITION, pos)
-//$$ 						.parameter(LootContextParameters.TOOL, ItemStack.EMPTY)
-//$$ 						.optionalParameter(LootContextParameters.BLOCK_ENTITY, blockEntity);
+ 		//#if MC>=11605
+//$$  		net.minecraft.loot.context.LootContext.Builder builder = (new net.minecraft.loot.context.LootContext.Builder(world)).random(world.random).parameter(LootContextParameters.ORIGIN, Vec3d.ofCenter(pos)).parameter(LootContextParameters.TOOL, ItemStack.EMPTY).optionalParameter(LootContextParameters.BLOCK_ENTITY, blockEntity);
+		//#else
+//$$ 		net.minecraft.loot.context.LootContext.Builder builder = (new net.minecraft.loot.context.LootContext.Builder(world)).random(world.random).parameter(LootContextParameters.POSITION, pos).parameter(LootContextParameters.TOOL, ItemStack.EMPTY).optionalParameter(LootContextParameters.BLOCK_ENTITY, blockEntity);
+		//#endif
 //$$ 		return state.getDroppedStacks(builder);
 //$$ 	}
 //$$ 	@Overwrite
@@ -50,12 +52,12 @@ public class MixinBlockPatch {
 //$$  			List<ItemStack> list = man.redirectDrops(state);
 //$$  			if (!list.isEmpty()) 
 //$$  				return list;
-//$$
 //$$  		}
-//$$ 		net.minecraft.loot.context.LootContext.Builder builder = (new net.minecraft.loot.context.LootContext.Builder(
-//$$ 				world)).random(world.random).parameter(LootContextParameters.POSITION, pos)
-//$$ 						.parameter(LootContextParameters.TOOL, ItemStack.EMPTY)
-//$$ 						.optionalParameter(LootContextParameters.BLOCK_ENTITY, blockEntity);
+ 		//#if MC>=11605
+//$$  		net.minecraft.loot.context.LootContext.Builder builder = (new net.minecraft.loot.context.LootContext.Builder(world)).random(world.random).parameter(LootContextParameters.ORIGIN, Vec3d.ofCenter(pos)).parameter(LootContextParameters.TOOL, ItemStack.EMPTY).optionalParameter(LootContextParameters.BLOCK_ENTITY, blockEntity);
+		//#else
+//$$ 		net.minecraft.loot.context.LootContext.Builder builder = (new net.minecraft.loot.context.LootContext.Builder(world)).random(world.random).parameter(LootContextParameters.POSITION, pos).parameter(LootContextParameters.TOOL, ItemStack.EMPTY).optionalParameter(LootContextParameters.BLOCK_ENTITY, blockEntity);
+		//#endif
 //$$ 		return state.getDroppedStacks(builder);
 //$$ 	}
 	//#else

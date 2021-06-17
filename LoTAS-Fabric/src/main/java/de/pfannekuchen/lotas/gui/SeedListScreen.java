@@ -26,7 +26,6 @@ import net.minecraft.client.texture.NativeImageBackedTexture;
 //#if MC>=11601
 //$$ import net.minecraft.client.util.math.MatrixStack;
 //$$ import net.minecraft.resource.DataPackSettings;
-//$$ import net.minecraft.util.registry.RegistryTracker;
 //$$ import net.minecraft.world.gen.GeneratorOptions;
 //#endif
 import net.minecraft.text.LiteralText;
@@ -116,16 +115,13 @@ public class SeedListScreen extends Screen {
 		}));
 		ButtonWidget create = new NewButtonWidget(width / 2 - 100, height - 52, 200, 20, "Create World", button -> {
 			MinecraftClient.getInstance().openScreen(new ProgressScreen());
-			//#if MC>=11601
-//$$ 			LevelInfo levelInfo = new LevelInfo(selectedSeed.name, GameMode.SURVIVAL, false, Difficulty.NORMAL, true, new GameRules(), new DataPackSettings(new ArrayList<>(), new ArrayList<>()));
-//$$ 			CreateWorldScreen createWorldScreen = new CreateWorldScreen(this, levelInfo, new GeneratorOptions(Long.parseLong(selectedSeed.seed), true, false, GeneratorOptions.method_28608(DimensionType.method_28517(Long.parseLong(selectedSeed.seed)), GeneratorOptions.createOverworldGenerator(Long.parseLong(selectedSeed.seed)))), null, RegistryTracker.create());
-			//#else
+			//#if MC<=11502
 			CreateWorldScreen createWorldScreen = new CreateWorldScreen(this);
 			AccessorCreateWorldScreen accessorCWS = (AccessorCreateWorldScreen) createWorldScreen;
 			accessorCWS.setSeed(selectedSeed.seed);
 			accessorCWS.setCheatsEnabled(true);
-			//#endif
 			MinecraftClient.getInstance().openScreen(createWorldScreen);
+			//#endif
 		});
 		create.active = false;
 		this.addButton(create);
@@ -139,7 +135,11 @@ public class SeedListScreen extends Screen {
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferBuilder = tessellator.getBuffer();
 		//#if MC>=11601
+		//#if MC>=11605
+//$$ 		MinecraftClient.getInstance().getTextureManager().bindTexture(DrawableHelper.OPTIONS_BACKGROUND_TEXTURE);
+		//#else
 //$$ 		MinecraftClient.getInstance().getTextureManager().bindTexture(DrawableHelper.BACKGROUND_TEXTURE);
+		//#endif
 		//#else
 		MinecraftClient.getInstance().getTextureManager().bindTexture(DrawableHelper.BACKGROUND_LOCATION);
 		//#endif
@@ -233,7 +233,11 @@ public class SeedListScreen extends Screen {
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferBuilder = tessellator.getBuffer();
 		//#if MC>=11601
+		//#if MC>=11605
+//$$ 		MinecraftClient.getInstance().getTextureManager().bindTexture(DrawableHelper.OPTIONS_BACKGROUND_TEXTURE);
+		//#else
 //$$ 		MinecraftClient.getInstance().getTextureManager().bindTexture(DrawableHelper.BACKGROUND_TEXTURE);
+		//#endif
 		//#else
 		MinecraftClient.getInstance().getTextureManager().bindTexture(DrawableHelper.BACKGROUND_LOCATION);
 		//#endif

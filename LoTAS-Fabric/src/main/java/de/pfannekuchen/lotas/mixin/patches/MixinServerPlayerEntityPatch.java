@@ -25,7 +25,11 @@ import net.minecraft.world.World;
 public abstract class MixinServerPlayerEntityPatch extends PlayerEntity {
 
 	//#if MC>=11601
+	//#if MC>=11605
+//$$ 	public MixinServerPlayerEntityPatch(World world, BlockPos pos, float yaw, GameProfile profile) { super(world, pos, yaw, profile); }
+	//#else
 //$$ 	public MixinServerPlayerEntityPatch(World world, BlockPos blockPos, GameProfile gameProfile) { super(world, blockPos, gameProfile); }
+	//#endif
 	//#else
 	public MixinServerPlayerEntityPatch(World world, GameProfile profile) {
 		super(world, profile);

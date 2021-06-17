@@ -174,12 +174,20 @@ public class SpawnManipulationScreen extends Screen {
 		e.updatePositionAndAngles(spawnX, spawnY, spawnZ, 0, 0);
 		if (e instanceof MobEntity) {
 			//#if MC>=11601
+			//#if MC>=11605
+//$$ 			buttons.get(buttons.size() - 2).active = ((MobEntity) e).canSpawn(MinecraftClient.getInstance().getServer().getPlayerManager().getPlayerList().get(0).getServerWorld(), SpawnReason.NATURAL) && MinecraftClient.getInstance().getServer().getPlayerManager().getPlayerList().get(0).getServerWorld().getBlockCollisions(e, e.getBoundingBox()).count() == 0;
+			//#else
 //$$ 			buttons.get(buttons.size() - 2).active = ((MobEntity) e).canSpawn(MinecraftClient.getInstance().getServer().getPlayerManager().getPlayerList().get(0).getServerWorld(), SpawnReason.NATURAL) && MinecraftClient.getInstance().getServer().getPlayerManager().getPlayerList().get(0).getServerWorld().doesNotCollide(e.getBoundingBox());
+			//#endif
 			//#else
 			buttons.get(buttons.size() - 2).active = ((MobEntity) e).canSpawn(MinecraftClient.getInstance().getServer().getPlayerManager().getPlayerList().get(0).getServerWorld(), net.minecraft.entity.SpawnType.NATURAL) && MinecraftClient.getInstance().getServer().getPlayerManager().getPlayerList().get(0).getServerWorld().doesNotCollide(e.getBoundingBox());
 			//#endif
 		} else {
+			//#if MC>=11605
+//$$ 			buttons.get(buttons.size() - 2).active = MinecraftClient.getInstance().getServer().getPlayerManager().getPlayerList().get(0).getServerWorld().getBlockCollisions(e, e.getBoundingBox()).count() == 0;
+			//#else
 			buttons.get(buttons.size() - 2).active = MinecraftClient.getInstance().getServer().getPlayerManager().getPlayerList().get(0).getServerWorld().doesNotCollide(e.getBoundingBox());
+			//#endif
 		}
 	}
 

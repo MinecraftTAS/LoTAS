@@ -22,7 +22,7 @@ import net.minecraft.client.options.GameOptions;
 import net.minecraft.client.resource.language.I18n;
 //#if MC>=11601
 //$$ import net.minecraft.client.util.math.MatrixStack;
-//$$ import net.minecraft.text.StringRenderable;
+//$$ import net.minecraft.text.LiteralText;
 //#endif
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -60,7 +60,7 @@ public abstract class MixinGuiMainMenu extends Screen {
 //$$ 						this.textRenderer.draw(matrices, I18n.translate("to prevent cheating."), (float) i, (float) (j + 12), 5197647);
 //$$ 						this.textRenderer.draw(matrices, I18n.translate("Your data will be hashed and encrypted.", gameOptions.keyJump.getBoundKeyLocalizedText()), (float) i, (float) (j + 24), 5197647);
 //$$ 						this.textRenderer.draw(matrices, I18n.translate("\u00A7cYour Data is unreadable to anyone!", gameOptions.keyInventory.getBoundKeyLocalizedText()), (float) i, (float) (j + 36), 5197647);
-//$$ 						this.textRenderer.drawTrimmed(StringRenderable.plain("If you are confused or worried, pm me on discord: MCPfannkuchenYT#9745."), i, j + 68, 218, 2039583);
+//$$ 						this.textRenderer.drawTrimmed(new LiteralText("If you are confused or worried, pm me on discord: MCPfannkuchenYT#9745."), i, j + 68, 218, 2039583);
 //$$ 						super.render(matrices, mouseX, mouseY, delta);
 			//#else
 			renderBackground();
@@ -108,10 +108,17 @@ public abstract class MixinGuiMainMenu extends Screen {
 	}
 
 	//#if MC>=11601
-//$$ 	    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/TitleScreen;drawCenteredString(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/font/TextRenderer;Ljava/lang/String;III)V"))
-//$$ 	    private void redirectdrawSplash(TitleScreen titleScreen, MatrixStack matrices, TextRenderer textRenderer, String str, int centerX, int y, int color) {
-//$$ 	        titleScreen.drawCenteredString(matrices, textRenderer, "TaS iS cHeAtInG !!1", centerX, y, color);
-//$$ 	    }
+	//#if MC>=11605
+//$$ 	@Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/TitleScreen;drawCenteredString(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/font/TextRenderer;Ljava/lang/String;III)V"))
+//$$ 	private void redirectdrawSplash(MatrixStack matrices, TextRenderer textRenderer, String str, int centerX, int y, int color) {
+//$$ 		TitleScreen.drawCenteredString(matrices, textRenderer, "TaS iS cHeAtInG !!1", centerX, y, color);
+//$$ 	}
+	//#else
+//$$ 	@Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/TitleScreen;drawCenteredString(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/font/TextRenderer;Ljava/lang/String;III)V"))
+//$$ 	private void redirectdrawSplash(TitleScreen titleScreen, MatrixStack matrices, TextRenderer textRenderer, String str, int centerX, int y, int color) {
+//$$ 		titleScreen.drawCenteredString(matrices, textRenderer, "TaS iS cHeAtInG !!1", centerX, y, color);
+//$$ 	} 
+	//#endif    
 	//#else
 	@Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/TitleScreen;drawCenteredString(Lnet/minecraft/client/font/TextRenderer;Ljava/lang/String;III)V"))
 	private void redirectdrawSplash(TitleScreen titleScreen, TextRenderer textRenderer, String str, int centerX, int y, int color) {

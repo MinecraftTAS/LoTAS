@@ -9,8 +9,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import com.mojang.realmsclient.dto.RealmsServer.WorldType;
-
 import de.pfannekuchen.lotas.core.utils.ConfigUtils;
 import de.pfannekuchen.lotas.core.utils.EventUtils.Timer;
 import de.pfannekuchen.lotas.core.utils.Keyboard;

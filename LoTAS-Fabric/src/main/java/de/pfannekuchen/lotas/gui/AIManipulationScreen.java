@@ -105,7 +105,11 @@ public class AIManipulationScreen extends Screen {
 			}
 		}));
 		//#if MC>=11601
-//$$ 		entities = MinecraftClient.getInstance().getServer().getPlayerManager().getPlayerList().get(0).getServerWorld().getEntities(MobEntity.class, MinecraftClient.getInstance().player.getBoundingBox().expand(32, 32, 32), Predicates.alwaysTrue());
+		//#if MC>=11605
+//$$ 		entities = MinecraftClient.getInstance().getServer().getPlayerManager().getPlayerList().get(0).getServerWorld().getEntitiesByClass(MobEntity.class, MinecraftClient.getInstance().player.getBoundingBox().expand(32, 32, 32), Predicates.alwaysTrue());
+		//#else
+//$$ 		entities = MinecraftClient.getInstance().getServer().getPlayerManager().getPlayerList().get(0).getServerWorld().getEntities(MobEntity.class, MinecraftClient.getInstance().player.getBoundingBox().expand(32, 32, 32), Predicates.alwaysTrue()); 
+		//#endif
 		//#else
 		entities = minecraft.getServer().getWorld(MinecraftClient.getInstance().player.dimension).getEntities(MobEntity.class, minecraft.player.getBoundingBox().expand(32, 32, 32), Predicates.alwaysTrue());
 		//#endif
