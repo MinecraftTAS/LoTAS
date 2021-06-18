@@ -50,9 +50,13 @@ public class PotionRenderer {
 
 		float f3 = 1.0F - (float) Math.pow((double) f1, 27.0D);
 		int i = 1;
+		if(entityplayersp.isSubmergedInWater()) {
+			GlStateManager.translatef(0,0.2F,-1.1F);
+		}
 		GlStateManager.translatef(f3 * 0.6F * (float) i, f3 - 0.5f, f3 * 0.0F - 3F);
 		GlStateManager.rotatef((float) i * f3 * 90.0F, 0.0F, 2.0F, 0.0F);
 		GlStateManager.rotatef(45, 2.0F, -0.5F, -1.0F);
+
 		return stack;
 	}
 	//#else
@@ -78,6 +82,9 @@ public class PotionRenderer {
 //$$
 //$$ 			float f2 = MathHelper.abs(MathHelper.cos(f / 4.0F * (float) Math.PI) * 0.1F);
 //$$
+//$$ 			if(entityplayersp.isSubmergedInWater()) {
+//$$ 				matrices.translate(0,0.2F,-1.1F);
+//$$ 			}
 //$$ 			matrices.translate(0.75, -3.6, -6);
 //$$ 			matrices.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(90.0F));
 //$$ 			matrices.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion(40.0F));
