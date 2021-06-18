@@ -6,9 +6,10 @@ import com.mojang.blaze3d.platform.GlStateManager;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.widget.AbstractButtonWidget;
 //#if MC>=11700
 //$$ import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
+//#else
+import net.minecraft.client.gui.widget.AbstractPressableButtonWidget;
 //#endif
 //#if MC<=11605
 import net.minecraft.client.gui.widget.AbstractButtonWidget;
@@ -25,7 +26,7 @@ import net.minecraft.util.math.MathHelper;
 //#if MC>=11700
 //$$ public class SmallCheckboxWidget extends PressableWidget {
 //#else
-public class SmallCheckboxWidget extends AbstractButtonWidget {
+public class SmallCheckboxWidget extends AbstractPressableButtonWidget {
 //#endif
 	private static final Identifier TEXTURE = new Identifier("textures/gui/small_checkbox.png");
 	boolean checked;
@@ -50,6 +51,7 @@ public class SmallCheckboxWidget extends AbstractButtonWidget {
 		this.action = action;
 	}
 
+	@Override
 	public void onPress() {
 		this.checked = !this.checked;
 		if (action != null)

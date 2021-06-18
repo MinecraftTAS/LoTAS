@@ -133,7 +133,7 @@ public class ZombieDropManipulation extends DropManipulationScreen.DropManipulat
 
 		MinecraftClient.getInstance().getTextureManager().bindTexture(new Identifier("lotas", "drops/zombie.png"));
 		//#if MC>=11601
-//$$ 		DrawableHelper.drawTexture((MatrixStack) matrices, x - 228, y + 24, 0.0F, 0.0F, 118, 198, 118, 198);
+//$$ 		DrawableHelper.drawTexture((MatrixStack) matrices, width - 228, y + 24, 0.0F, 0.0F, 118, 198, 118, 198);
 		//#else
 		DrawableHelper.blit(width - 228, y + 24, 0.0F, 0.0F, 118, 198, 118, 198);
 		//#endif
