@@ -25,6 +25,9 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.CheckboxWidget;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.Tessellator;
+//#if MC>=11700
+//$$ import net.minecraft.client.render.VertexFormat.DrawMode;
+//#endif
 import net.minecraft.client.render.VertexFormats;
 //#if MC>=11601
 //$$ import net.minecraft.client.util.math.MatrixStack;
@@ -95,18 +98,29 @@ public class DropManipulationScreen extends Screen {
 		//#endif
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferBuilder = tessellator.getBuffer();
-
+		
+		//#if MC>=11700
+//$$ 		GlStateManager._disableTexture();
+//$$ 		com.mojang.blaze3d.systems.RenderSystem.setShaderColor(.5f, .5f, .5f, 0.5F);
+//$$ 		bufferBuilder.begin(DrawMode.QUADS, VertexFormats.POSITION);
+		//#else
 		GlStateManager.disableTexture();
 		GlStateManager.color4f(.5f, .5f, .5f, 0.5F);
 		bufferBuilder.begin(7, VertexFormats.POSITION);
+		//#endif
 		bufferBuilder.vertex(24, 24, 0).next();
 		bufferBuilder.vertex(24, height - 24, 0).next();
 		bufferBuilder.vertex(width / 3.5f + 1, height - 24, 0).next();
 		bufferBuilder.vertex(width / 3.5f + 1, 24, 0).next();
 		tessellator.draw();
 
+		//#if MC>=11700
+//$$ 		com.mojang.blaze3d.systems.RenderSystem.setShaderColor(0, 0, 0, 0.5F);
+//$$ 		bufferBuilder.begin(DrawMode.QUADS, VertexFormats.POSITION);
+		//#else
 		GlStateManager.color4f(0, 0, 0, 0.5F);
 		bufferBuilder.begin(7, VertexFormats.POSITION);
+		//#endif
 		bufferBuilder.vertex(25, 25, 0).next();
 		bufferBuilder.vertex(25, height - 25, 0).next();
 		bufferBuilder.vertex(width / 3.5f, height - 25, 0).next();
@@ -114,22 +128,36 @@ public class DropManipulationScreen extends Screen {
 		tessellator.draw();
 
 		int boxY = 30 + selected * 15;
+		//#if MC>=11700
+//$$ 		com.mojang.blaze3d.systems.RenderSystem.setShaderColor(1f, 1f, 1f, 1F);
+//$$ 		bufferBuilder.begin(DrawMode.QUADS, VertexFormats.POSITION);
+		//#else
 		GlStateManager.color4f(1f, 1f, 1f, 1F);
 		bufferBuilder.begin(7, VertexFormats.POSITION);
+		//#endif
 		bufferBuilder.vertex(27, boxY - 4, 0).next();
 		bufferBuilder.vertex(27, boxY + 11, 0).next();
 		bufferBuilder.vertex(width / 3.5f - 2, boxY + 11, 0).next();
 		bufferBuilder.vertex(width / 3.5f - 2, boxY - 4, 0).next();
 		tessellator.draw();
-		GlStateManager.color4f(0f, 0f, 0f, .5F);
+		//#if MC>=11700
+//$$ 		com.mojang.blaze3d.systems.RenderSystem.setShaderColor(0, 0, 0, .5F);
+//$$ 		bufferBuilder.begin(DrawMode.QUADS, VertexFormats.POSITION);
+		//#else
+		GlStateManager.color4f(0, 0, 0, 0.5F);
 		bufferBuilder.begin(7, VertexFormats.POSITION);
+		//#endif
 		bufferBuilder.vertex(28, boxY - 3, 0).next();
 		bufferBuilder.vertex(28, boxY + 10, 0).next();
 		bufferBuilder.vertex(width / 3.5f - 3, boxY + 10, 0).next();
 		bufferBuilder.vertex(width / 3.5f - 3, boxY - 3, 0).next();
 		tessellator.draw();
 
+		//#if MC>=11700
+//$$ 		GlStateManager._enableTexture();
+		//#else
 		GlStateManager.enableTexture();
+		//#endif
 		int y = 30;
 		for (DropManipulation m : manipulations) {
 			//#if MC>=11601

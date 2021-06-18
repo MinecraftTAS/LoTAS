@@ -18,6 +18,7 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 //$$ import net.minecraft.client.util.math.MatrixStack;
 //#endif
 import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 
 public class LoadstateScreen extends Screen {
 
@@ -34,6 +35,15 @@ public class LoadstateScreen extends Screen {
 		} catch (NumberFormatException | IOException e) {
 			e.printStackTrace();
 		}
+		//#if MC>=11700
+//$$ 		addDrawable(new NewButtonWidget(width / 2 - 102, height - 52, 204, 20, "Loadstate", btn -> {
+//$$ 			SavestateMod.loadstate(list.getSelectedOrNull().index + 1);
+//$$ 		}));
+//$$ 		addDrawable(new NewButtonWidget(width / 2 - 102, height - 31, 204, 20, "Delete State", btn -> {
+//$$ 			SavestateMod.yeet(list.getSelectedOrNull().index + 1);
+//$$ 			MinecraftClient.getInstance().openScreen(new LoadstateScreen());
+//$$ 		}));
+		//#else
 		addButton(new NewButtonWidget(width / 2 - 102, height - 52, 204, 20, "Loadstate", btn -> {
 			SavestateMod.loadstate(list.getSelected().index + 1);
 		}));
@@ -41,13 +51,18 @@ public class LoadstateScreen extends Screen {
 			SavestateMod.yeet(list.getSelected().index + 1);
 			MinecraftClient.getInstance().openScreen(new LoadstateScreen());
 		}));
+		//#endif
 		super.init();
 	}
 
 	//#if MC>=11601
 //$$ 	@Override public void render(MatrixStack stack, int mouseX, int mouseY, float partialTicks) {
 //$$ 		list.render(stack, mouseX, mouseY, partialTicks);
+		//#if MC>=11700
+//$$ 		drawCenteredText(stack, MinecraftClient.getInstance().textRenderer, "Select State to load", width / 2, 16, 0xFFFFFF);
+		//#else
 //$$ 		drawCenteredString(stack, MinecraftClient.getInstance().textRenderer, "Select State to load", width / 2, 16, 0xFFFFFF);
+		//#endif
 //$$ 		super.render(stack, mouseX, mouseY, partialTicks);
 //$$ 	}
 	//#else
@@ -136,7 +151,11 @@ public class LoadstateScreen extends Screen {
 				MinecraftClient.getInstance().textRenderer.draw(s, x + 32 + 3, y + 1, 16777215);
 				MinecraftClient.getInstance().textRenderer.draw(s1, x + 32 + 3, y + MinecraftClient.getInstance().textRenderer.fontHeight + 3, 8421504);
 				//#endif
+				//#if MC>=11700
+//$$ 				com.mojang.blaze3d.systems.RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+				//#else
 				GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+				//#endif
 			}
 
 			@Override
@@ -150,7 +169,13 @@ public class LoadstateScreen extends Screen {
 				GuiLoadstateList.this.setSelected(this);
 				return super.mouseReleased(mouseX, mouseY, button);
 			}
-
+			//#if MC>=11700
+//$$ 			@Override
+//$$ 			public Text method_37006() {
+//$$ 				// TODO Auto-generated method stub
+//$$ 				return null;
+//$$ 			}
+			//#endif
 		}
 
 	}

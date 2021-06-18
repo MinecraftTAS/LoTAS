@@ -39,8 +39,11 @@ public class ImageButton extends ButtonWidget {
 		super.renderButton(mouseX, mouseY, delta);
 		//#endif
 		MinecraftClient.getInstance().getTextureManager().bindTexture(pic);
+		//#if MC>=11700
+//$$ 		com.mojang.blaze3d.systems.RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+		//#else
 		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-
+		//#endif
 		//#if MC>=11601
 //$$ 		drawTexture(null, x, y, 0.0F, 0.0F, 20, 20, 20, 20);
 		//#else

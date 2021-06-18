@@ -6,12 +6,20 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 //#if MC>=11502
 //$$ import net.minecraft.client.util.math.MatrixStack;
+//#if MC<=11605
 //$$ import net.minecraft.client.util.math.Vector3f;
+//#else
+//$$ import net.minecraft.util.math.Vec3f;
+//#endif
 //#endif
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.PotionItem;
+//#if MC<=11605
 import net.minecraft.nbt.CompoundTag;
+//#else
+//$$ import net.minecraft.nbt.NbtCompound;
+//#endif
 import net.minecraft.util.math.MathHelper;
 
 public class PotionRenderer {
@@ -70,10 +78,13 @@ public class PotionRenderer {
 //$$ 			lerpX = lerp(f22, lerpX, .8f);
 //$$ 			lerpY = lerp(f221, lerpY, .8f);
 //$$
-//$$ 			GlStateManager.disableLighting();
 //$$ 			ItemStack stack = new ItemStack(Items.POTION);
 //$$ 			if (stack.getItem() instanceof PotionItem) {
+				//#if MC<=11700
+//$$ 				NbtCompound cp = new NbtCompound();
+				//#else
 //$$ 				CompoundTag cp = new CompoundTag();
+				//#endif
 //$$ 				cp.putInt("CustomPotionColor", 0x4672A3);
 //$$ 				stack.setTag(cp);
 //$$ 			}
@@ -86,8 +97,8 @@ public class PotionRenderer {
 //$$ 				matrices.translate(0,0.2F,-1.1F);
 //$$ 			}
 //$$ 			matrices.translate(0.75, -3.6, -6);
-//$$ 			matrices.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(90.0F));
-//$$ 			matrices.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion(40.0F));
+//$$ 			matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(90.0F));
+//$$ 			matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(40.0F));
 //$$
 //$$ 			return stack;
 //$$ 		}

@@ -112,7 +112,11 @@ public class ZombieDropManipulation extends DropManipulationScreen.DropManipulat
 		//#endif
 
 		if (!enabled.isChecked()) {
+			//#if MC>=11700
+//$$ 			com.mojang.blaze3d.systems.RenderSystem.setShaderColor(.5f, .5f, .5f, .4f);
+			//#else
 			GlStateManager.color4f(.5f, .5f, .5f, .4f);
+			//#endif
 		} else {
 			//#if MC>=11601
 //$$ 			MinecraftClient.getInstance().textRenderer.drawWithShadow((MatrixStack) matrices, "Zombies drop: 2 Rotten Flesh" + (dropIron.isToggled() ? ", 1 Iron Ingot" : "") + (dropPotato.isToggled() ? ", 1 Potato" : "") + (dropCarrot.isToggled() ? ", 1 Carrot" : ""), x, y + 64, 0xFFFFFF);

@@ -40,6 +40,18 @@ public class AIManipulationScreen extends Screen {
 	
 	@Override
 	public void init() {
+		//#if MC>=11700
+//$$ 		addDrawable(new NewButtonWidget(5, 5, 98, 20, "<", btn -> {
+//$$ 			selectedIndex--;
+//$$ 			btn.active = selectedIndex != 0;
+//$$ 			((ButtonWidget)drawables.get(1)).active = selectedIndex != entities.size() - 1;
+//$$ 		}));
+//$$ 		addDrawable(new NewButtonWidget(width - 5 - 98, 5, 98, 20, ">", button -> {
+//$$ 			selectedIndex++;
+//$$ 			button.active = selectedIndex != entities.size() - 1;
+//$$ 			((ButtonWidget)drawables.get(0)).active = selectedIndex != 0;
+//$$ 		}));
+		//#else
 		addButton(new NewButtonWidget(5, 5, 98, 20, "<", btn -> {
 			selectedIndex--;
 			btn.active = selectedIndex != 0;
@@ -50,6 +62,7 @@ public class AIManipulationScreen extends Screen {
 			button.active = selectedIndex != entities.size() - 1;
 			buttons.get(0).active = selectedIndex != 0;
 		}));
+		//#endif
 		
 		//#if MC>=11601
 //$$ 		xText = new TextFieldWidget(MinecraftClient.getInstance().textRenderer, width / 2 - 100, height - 50, 60, 20, new LiteralText(spawnX + ""));
@@ -61,6 +74,39 @@ public class AIManipulationScreen extends Screen {
         zText = new TextFieldWidget(MinecraftClient.getInstance().textRenderer, width / 2 + 40, height - 50, 60, 20, spawnZ + "");
 		//#endif
 		
+		//#if MC>=11700
+//$$ 		addDrawable(new NewButtonWidget(width / 2 - 100, height - 25, 200, 20, "Change Target", button -> {
+//$$ 			button.active = !entities.get(selectedIndex).getNavigation().startMovingTo(spawnX, spawnY, spawnZ, 1.0f);
+//$$ 			entities.get(selectedIndex).getMoveControl().moveTo(spawnX, spawnY, spawnZ, 1.0F);
+//$$ 		}));
+//$$
+//$$ 		addDrawable(new NewButtonWidget(width / 2 - 100, height - 72, 60, 20, "X++", btn -> spawnX++));
+//$$ 		addDrawable(new NewButtonWidget(width / 2 - 100, height - 94, 60, 20, "X--", btn -> spawnX--));
+//$$ 		addDrawable(new NewButtonWidget(width / 2 - 30, height - 72, 60, 20, "Y++", btn -> spawnY++));
+//$$ 		addDrawable(new NewButtonWidget(width / 2 - 30, height - 94, 60, 20, "Y--", btn -> spawnY--));
+//$$ 		addDrawable(new NewButtonWidget(width / 2 + 40, height - 72, 60, 20, "Z++", btn -> spawnZ++));
+//$$ 		addDrawable(new NewButtonWidget(width / 2 + 40, height - 94, 60, 20, "Z--", btn -> spawnZ--));
+//$$ 		addDrawable(new NewButtonWidget(width / 2 - 100, height - 116, 200, 20, "Move to me", btn -> {
+//$$ 		    MinecraftClient.getInstance().player.getX();
+//$$ 		    MinecraftClient.getInstance().player.getY();
+//$$ 		    MinecraftClient.getInstance().player.getZ();
+//$$ 			xText.setText(spawnX + "");
+//$$ 			yText.setText(spawnY + "");
+//$$ 			zText.setText(spawnZ + "");
+//$$ 		}));
+//$$ 		addDrawable(new NewButtonWidget(width / 2 - 100, height - 138, 200, 20, "Move to entity", btn -> {
+//$$ 			try {
+//$$ 			    spawnX = (int) entities.get(selectedIndex).getX();  
+//$$ 			    spawnY = (int) entities.get(selectedIndex).getY();  
+//$$ 			    spawnZ = (int) entities.get(selectedIndex).getZ();  
+//$$ 				xText.setText(spawnX + "");
+//$$ 				yText.setText(spawnY + "");
+//$$ 				zText.setText(spawnZ + "");
+//$$ 			} catch (Exception e1) {
+//$$ 				e1.printStackTrace();
+//$$ 			}
+//$$ 		}));
+		//#else
 		addButton(new NewButtonWidget(width / 2 - 100, height - 25, 200, 20, "Change Target", button -> {
 			button.active = !entities.get(selectedIndex).getNavigation().startMovingTo(spawnX, spawnY, spawnZ, 1.0f);
 			entities.get(selectedIndex).getMoveControl().moveTo(spawnX, spawnY, spawnZ, 1.0F);
@@ -104,6 +150,7 @@ public class AIManipulationScreen extends Screen {
 				e1.printStackTrace();
 			}
 		}));
+		//#endif
 		//#if MC>=11601
 		//#if MC>=11605
 //$$ 		entities = MinecraftClient.getInstance().getServer().getPlayerManager().getPlayerList().get(0).getServerWorld().getEntitiesByClass(MobEntity.class, MinecraftClient.getInstance().player.getBoundingBox().expand(32, 32, 32), Predicates.alwaysTrue());
@@ -115,6 +162,19 @@ public class AIManipulationScreen extends Screen {
 		//#endif
 		selectedIndex = 0;
 
+		//#if MC>=11700
+//$$ 		if (selectedIndex + 2 > entities.size()) {
+//$$ 			((ButtonWidget)drawables.get(1)).active = false;
+//$$ 		} else {
+//$$ 			((ButtonWidget)drawables.get(1)).active = true;
+//$$ 		}
+//$$
+//$$ 		if (selectedIndex - 1 < 0) {
+//$$ 			((ButtonWidget)drawables.get(0)).active = false;
+//$$ 		} else {
+//$$ 			((ButtonWidget)drawables.get(0)).active = true;
+//$$ 		}
+		//#else
 		if (selectedIndex + 2 > entities.size()) {
 			buttons.get(1).active = false;
 		} else {
@@ -126,6 +186,8 @@ public class AIManipulationScreen extends Screen {
 		} else {
 			buttons.get(0).active = true;
 		}
+		//#endif
+		
 		super.init();
 	}
 
@@ -133,8 +195,12 @@ public class AIManipulationScreen extends Screen {
 	public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
 		int prev = selectedIndex;
 
+		//#if MC>=11700
+//$$ 		((ButtonWidget)drawables.get(2)).active = true;
+		//#else
 		buttons.get(2).active = true;
-
+		//#endif
+		
 		boolean i = super.mouseClicked(mouseX, mouseY, mouseButton);
 
 		xText.setText(spawnX + "");
@@ -154,7 +220,19 @@ public class AIManipulationScreen extends Screen {
 				e.printStackTrace();
 			}
 		}
-
+		//#if MC>=11700
+//$$ 		if (selectedIndex + 2 > entities.size()) {
+//$$ 			((ButtonWidget)drawables.get(1)).active = false;
+//$$ 		} else {
+//$$ 			((ButtonWidget)drawables.get(1)).active = true;
+//$$ 		}
+//$$
+//$$ 		if (selectedIndex - 1 < 0) {
+//$$ 			((ButtonWidget)drawables.get(0)).active = false;
+//$$ 		} else {
+//$$ 			((ButtonWidget)drawables.get(0)).active = true;
+//$$ 		}
+		//#else
 		if (selectedIndex + 2 > entities.size()) {
 			buttons.get(1).active = false;
 		} else {
@@ -166,7 +244,7 @@ public class AIManipulationScreen extends Screen {
 		} else {
 			buttons.get(0).active = true;
 		}
-
+		//#endif
 		xText.mouseClicked(mouseX, mouseY, mouseButton);
 		yText.mouseClicked(mouseX, mouseY, mouseButton);
 		zText.mouseClicked(mouseX, mouseY, mouseButton);
@@ -184,7 +262,11 @@ public class AIManipulationScreen extends Screen {
 			spawnX = Integer.parseInt(xText.getText());
 			spawnY = Integer.parseInt(yText.getText());
 			spawnZ = Integer.parseInt(zText.getText());
+			//#if MC>=11700
+//$$ 			((ButtonWidget)drawables.get(2)).active = true;
+			//#else
 			buttons.get(2).active = true;
+			//#endif
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -198,7 +280,11 @@ public class AIManipulationScreen extends Screen {
 //$$ 		xText.render(matrices, mouseX, mouseY, delta);
 //$$ 		yText.render(matrices, mouseX, mouseY, delta);
 //$$ 		zText.render(matrices, mouseX, mouseY, delta);
+		//#if MC>=11700
+//$$ 		drawCenteredText(matrices, MinecraftClient.getInstance().textRenderer, entities.get(selectedIndex).getClass().getSimpleName().replaceFirst("Entity", "") + " (" + entities.get(selectedIndex).getX() + ", " + entities.get(selectedIndex).getY() + ", " + entities.get(selectedIndex).getZ() + ")", width / 2, 5, 0xFFFFFF);
+		//#else
 //$$ 		drawCenteredString(matrices, MinecraftClient.getInstance().textRenderer, entities.get(selectedIndex).getClass().getSimpleName().replaceFirst("Entity", "") + " (" + entities.get(selectedIndex).getX() + ", " + entities.get(selectedIndex).getY() + ", " + entities.get(selectedIndex).getZ() + ")", width / 2, 5, 0xFFFFFF);
+		//#endif
 //$$ 	}
 	//#else
 	@Override

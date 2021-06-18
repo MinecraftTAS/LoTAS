@@ -10,7 +10,11 @@ import de.pfannekuchen.lotas.mods.DupeMod;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.GameMenuScreen;
+//#if MC>=11700
+//$$ import net.minecraft.client.option.KeyBinding;
+//#else
 import net.minecraft.client.options.KeyBinding;
+//#endif
 
 public class KeybindsUtils {
 
@@ -67,7 +71,12 @@ public class KeybindsUtils {
 			KeyBinding.setKeyPressed(MinecraftClient.getInstance().options.keyRight.getDefaultKeyCode(), false);
 			//#endif
 		} else if (wasPressed != holdStrafeKeybind.isPressed() && wasPressed == false) {
+			//#if MC>=11700
+//$$ 			float newyaw=MinecraftClient.getInstance().player.getYaw()-45;
+//$$ 			MinecraftClient.getInstance().player.setYaw(newyaw);
+			//#else
 			MinecraftClient.getInstance().player.yaw -= 45;
+			//#endif
 		}
 		wasPressed = holdStrafeKeybind.isPressed();
 	}

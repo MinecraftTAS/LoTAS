@@ -98,6 +98,16 @@ public class HudSettings extends Screen {
 		int index = 0;
 		for (Settings s : Settings.values()) {
 			final int value = index;
+			//#if MC>=11700
+//$$ 			addDrawable(new SmallCheckboxWidget(1, y -= 13, s.name().toLowerCase(), Boolean.parseBoolean(p.getProperty(s.name() + "_visible")), b -> {
+//$$ 				p.setProperty(Settings.values()[value].name() + "_visible", b.isChecked() + "");
+//$$ 				try {
+//$$ 					save();
+//$$ 				} catch (IOException e) {
+//$$ 					e.printStackTrace();
+//$$ 				}
+//$$ 			}));
+			//#else
 			addButton(new SmallCheckboxWidget(1, y -= 13, s.name().toLowerCase(), Boolean.parseBoolean(p.getProperty(s.name() + "_visible")), b -> {
 				p.setProperty(Settings.values()[value].name() + "_visible", b.isChecked() + "");
 				try {
@@ -106,6 +116,7 @@ public class HudSettings extends Screen {
 					e.printStackTrace();
 				}
 			}));
+			//#endif
 			index++;
 		}
 		super.init();
@@ -172,7 +183,11 @@ public class HudSettings extends Screen {
 			int x = Integer.parseInt(p.getProperty("CXZ_x"));
 			int y = Integer.parseInt(p.getProperty("CXZ_y"));
 			//#if MC>=11601
+			//#if MC>=11700
+//$$ 			widths.replace(Settings.CXZ, drawRectWithText(matrices, String.format("%d %d", MinecraftClient.getInstance().player.getChunkPos().x, MinecraftClient.getInstance().player.getChunkPos().z), x, y, Boolean.parseBoolean(p.getProperty("CXZ_hideRect"))));
+			//#else
 //$$ 			widths.replace(Settings.CXZ, drawRectWithText(matrices, String.format("%d %d", MinecraftClient.getInstance().player.chunkX, MinecraftClient.getInstance().player.chunkZ), x, y, Boolean.parseBoolean(p.getProperty("CXZ_hideRect"))));
+			//#endif
 			//#else
 			widths.replace(Settings.CXZ, drawRectWithText(String.format("%d %d", MinecraftClient.getInstance().player.chunkX, MinecraftClient.getInstance().player.chunkZ), x, y, Boolean.parseBoolean(p.getProperty("CXZ_hideRect"))));
 			//#endif
