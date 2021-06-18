@@ -231,7 +231,7 @@ public class HudSettings extends GuiScreen {
 				//#endif
 			}
 			//#else
-			message = "Unable to calculate Trajectories on 1.8.x :(";
+//$$ 			message = "Unable to calculate Trajectories on 1.8.x :(";
 			//#endif
 			widths.replace(Settings.TRAJECTORIES, drawRectWithText("Trajectories: " + message, x, y, Boolean.parseBoolean(p.getProperty("TRAJECTORIES_hideRect"))));
 		}
