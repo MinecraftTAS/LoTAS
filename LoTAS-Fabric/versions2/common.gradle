@@ -19,16 +19,11 @@ dependencies {
     implementation 'org.projectlombok:lombok:1.16.4'
 	include 'work.mgnet:identifier:1.0'
     include 'net.bramp.ffmpeg:ffmpeg:2.8.0-21.0'
+    include 'org.slf4j:slf4j-api:1.7.25'
+    include 'com.google.code.findbugs:annotations:3.0.1u2'
+    include 'com.google.errorprone:error_prone_annotations:2.0.19'
+    include 'org.modelmapper:modelmapper:0.7.7'
     modImplementation "net.fabricmc:fabric-loader:0.11.3"
-}
-
-jar {
-	from (configurations.include.collect { entry -> zipTree(entry) }) {
-        exclude 'META-INF/MANIFEST.MF'
-        exclude 'META-INF/*.SF'
-        exclude 'META-INF/*.DSA'
-        exclude 'META-INF/*.RSA'
-    }
 }
 
 processResources {
@@ -44,6 +39,13 @@ defaultTasks 'build'
 
 minecraft {
 	accessWidener '../../src/main/resources/lotas.accesswidener'
+}
+
+jar {
+	from {
+    	configurations.include.collect { it.isDirectory() ? it : zipTree(it) }
+  	}
+  	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
 if (project.name != 'fabric') {

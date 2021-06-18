@@ -119,7 +119,6 @@ public class SavestateMod {
 
 		double x = mc.mouse.getX();
 		double y = mc.mouse.getY();
-		;
 
 		isLoading = true;
 
@@ -167,7 +166,7 @@ public class SavestateMod {
 		mc.mouse.updateMouse();
 
 		//#if MC>=11601
-//$$ 				mc.startIntegratedServer(worldName);
+//$$ 			mc.startIntegratedServer(worldName);
 		//#else
 		mc.startIntegratedServer(worldName, worldName, null);
 		//#endif
