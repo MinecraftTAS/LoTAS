@@ -15,6 +15,9 @@ import de.pfannekuchen.lotas.mods.SavestateMod;
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
+//#if MC>=11601
+//$$ import net.minecraft.client.util.math.MatrixStack;
+//#endif
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.world.World;
@@ -137,26 +140,42 @@ public class HudSettings extends Screen {
 		p.load(new FileInputStream(new File(MinecraftClient.getInstance().runDirectory, "ingameGui.data")));
 	}
 	
+	//#if MC>=11601
+//$$ 	public static void drawOverlay(MatrixStack matrices) {
+	//#else
 	public static void drawOverlay() {
+	//#endif
 		boolean showXYZ = Boolean.parseBoolean(p.getProperty("XYZ_visible"));
 		if (showXYZ) {
 			int x = Integer.parseInt(p.getProperty("XYZ_x"));
 			int y = Integer.parseInt(p.getProperty("XYZ_y"));
+			//#if MC>=11601
+//$$ 			widths.replace(Settings.XYZ, drawRectWithText(matrices, String.format("%.2f %.2f %.2f", MinecraftClient.getInstance().player.getPos().getX(), MinecraftClient.getInstance().player.getPos().getY(), MinecraftClient.getInstance().player.getPos().getZ()), x, y, Boolean.parseBoolean(p.getProperty("XYZ_hideRect"))));
+			//#else
 			widths.replace(Settings.XYZ, drawRectWithText(String.format("%.2f %.2f %.2f", MinecraftClient.getInstance().player.getPos().getX(), MinecraftClient.getInstance().player.getPos().getY(), MinecraftClient.getInstance().player.getPos().getZ()), x, y, Boolean.parseBoolean(p.getProperty("XYZ_hideRect"))));
+			//#endif
 		}
 		
 		boolean showXYZPRECISE = Boolean.parseBoolean(p.getProperty("XYZPRECISE_visible"));
 		if (showXYZPRECISE) {
 			int x = Integer.parseInt(p.getProperty("XYZPRECISE_x"));
 			int y = Integer.parseInt(p.getProperty("XYZPRECISE_y"));
+			//#if MC>=11601
+//$$ 			widths.replace(Settings.XYZPRECISE, drawRectWithText(matrices, String.format("%f %f %f", MinecraftClient.getInstance().player.getPos().getX(), MinecraftClient.getInstance().player.getPos().getY(), MinecraftClient.getInstance().player.getPos().getZ()), x, y, Boolean.parseBoolean(p.getProperty("XYZPRECISE_hideRect"))));
+			//#else
 			widths.replace(Settings.XYZPRECISE, drawRectWithText(String.format("%f %f %f", MinecraftClient.getInstance().player.getPos().getX(), MinecraftClient.getInstance().player.getPos().getY(), MinecraftClient.getInstance().player.getPos().getZ()), x, y, Boolean.parseBoolean(p.getProperty("XYZPRECISE_hideRect"))));
+			//#endif
 		}
 		
 		boolean showCXZ = Boolean.parseBoolean(p.getProperty("CXZ_visible"));
 		if (showCXZ) {
 			int x = Integer.parseInt(p.getProperty("CXZ_x"));
 			int y = Integer.parseInt(p.getProperty("CXZ_y"));
+			//#if MC>=11601
+//$$ 			widths.replace(Settings.CXZ, drawRectWithText(matrices, String.format("%d %d", MinecraftClient.getInstance().player.chunkX, MinecraftClient.getInstance().player.chunkZ), x, y, Boolean.parseBoolean(p.getProperty("CXZ_hideRect"))));
+			//#else
 			widths.replace(Settings.CXZ, drawRectWithText(String.format("%d %d", MinecraftClient.getInstance().player.chunkX, MinecraftClient.getInstance().player.chunkZ), x, y, Boolean.parseBoolean(p.getProperty("CXZ_hideRect"))));
+			//#endif
 		}
 		
 		boolean showWORLDSEED = Boolean.parseBoolean(p.getProperty("WORLDSEED_visible"));
@@ -164,7 +183,7 @@ public class HudSettings extends Screen {
 			int x = Integer.parseInt(p.getProperty("WORLDSEED_x"));
 			int y = Integer.parseInt(p.getProperty("WORLDSEED_y"));
 			//#if MC>=11601
-//$$ 			widths.replace(Settings.WORLDSEED, drawRectWithText("World Seed: " + MinecraftClient.getInstance().getServer().getWorld(World.OVERWORLD).getSeed(), x, y, Boolean.parseBoolean(p.getProperty("WORLDSEED_hideRect"))));
+//$$ 			widths.replace(Settings.WORLDSEED, drawRectWithText(matrices, "World Seed: " + MinecraftClient.getInstance().getServer().getWorld(World.OVERWORLD).getSeed(), x, y, Boolean.parseBoolean(p.getProperty("WORLDSEED_hideRect"))));
 			//#else
 			widths.replace(Settings.WORLDSEED, drawRectWithText("World Seed: " + MinecraftClient.getInstance().getServer().getWorld(DimensionType.OVERWORLD).getSeed(), x, y, Boolean.parseBoolean(p.getProperty("WORLDSEED_hideRect"))));
 			//#endif
@@ -174,44 +193,60 @@ public class HudSettings extends Screen {
 		if (showTICKS) {
 			int x = Integer.parseInt(p.getProperty("TICKS_x"));
 			int y = Integer.parseInt(p.getProperty("TICKS_y"));
+			//#if MC>=11601
+//$$ 			int i = widths.replace(Settings.TICKS, drawRectWithText(matrices, "Server Ticks: " + TickrateChangerMod.ticksPassedServer, x, y + 14, Boolean.parseBoolean(p.getProperty("TICKS_hideRect"))));
+//$$ 			drawRectWithTextFixedWidth(matrices, "Client Ticks: " + TickrateChangerMod.ticksPassed, x, y, Boolean.parseBoolean(p.getProperty("TICKS_hideRect")), i);
+			//#else
 			int i = widths.replace(Settings.TICKS, drawRectWithText("Server Ticks: " + TickrateChangerMod.ticksPassedServer, x, y + 14, Boolean.parseBoolean(p.getProperty("TICKS_hideRect"))));
 			drawRectWithTextFixedWidth("Client Ticks: " + TickrateChangerMod.ticksPassed, x, y, Boolean.parseBoolean(p.getProperty("TICKS_hideRect")), i);
+			//#endif
 		}
 		
 		boolean showTICKRATE= Boolean.parseBoolean(p.getProperty("TICKRATE_visible"));
 		if (showTICKRATE) {
 			int x = Integer.parseInt(p.getProperty("TICKRATE_x"));
 			int y = Integer.parseInt(p.getProperty("TICKRATE_y"));
+			//#if MC>=11601
+//$$ 			widths.replace(Settings.TICKRATE, drawRectWithText(matrices, "Tickrate: " + (int) (TickrateChangerMod.tickrate), x, y, Boolean.parseBoolean(p.getProperty("TICKRATE_hideRect"))));
+			//#else
 			widths.replace(Settings.TICKRATE, drawRectWithText("Tickrate: " + (int) (TickrateChangerMod.tickrate), x, y, Boolean.parseBoolean(p.getProperty("TICKRATE_hideRect"))));
+			//#endif
 		}
 		
 		boolean showSAVESTATECOUNT = Boolean.parseBoolean(p.getProperty("SAVESTATECOUNT_visible"));
 		if (showSAVESTATECOUNT) {
 			int x = Integer.parseInt(p.getProperty("SAVESTATECOUNT_x"));
 			int y = Integer.parseInt(p.getProperty("SAVESTATECOUNT_y"));
+			//#if MC>=11601
+//$$ 			int i = widths.replace(Settings.SAVESTATECOUNT, drawRectWithText(matrices, "Savestates: " + SavestateMod.TrackerFile.savestateCount, x, y, Boolean.parseBoolean(p.getProperty("SAVESTATECOUNT_hideRect"))));
+//$$ 			drawRectWithTextFixedWidth(matrices, "Loadstates: " + SavestateMod.TrackerFile.loadstateCount, x, y + 14, Boolean.parseBoolean(p.getProperty("SAVESTATECOUNT_hideRect")), i);
+			//#else
 			int i = widths.replace(Settings.SAVESTATECOUNT, drawRectWithText("Savestates: " + SavestateMod.TrackerFile.savestateCount, x, y, Boolean.parseBoolean(p.getProperty("SAVESTATECOUNT_hideRect"))));
-			drawRectWithTextFixedWidth("Loadstates: " + SavestateMod.TrackerFile.loadstateCount, x, y + 14, Boolean.parseBoolean(p.getProperty("SAVESTATECOUNT_hideRect")), i);
+			drawRectWithTextFixedWidth( "Loadstates: " + SavestateMod.TrackerFile.loadstateCount, x, y + 14, Boolean.parseBoolean(p.getProperty("SAVESTATECOUNT_hideRect")), i);
+			//#endif
 		}
 	}
 	
-	private static int drawRectWithTextFixedWidth(String text, int x, int y, boolean rect, int w) {
 		//#if MC>=11601
-//$$ 		if (!rect) fill(null, x, y, x + w, y + 14, -2147483648);
-//$$ 		MinecraftClient.getInstance().textRenderer.drawWithShadow(null, text, x + 2, y + 3, 0xFFFFFF);
+//$$ 	private static int drawRectWithTextFixedWidth(MatrixStack matrices, String text, int x, int y, boolean rect, int w) {
+//$$ 		if (!rect) fill(matrices, x, y, x + w, y + 14, -2147483648);
+//$$ 		MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, text, x + 2, y + 3, 0xFFFFFF);
 //$$ 		return MinecraftClient.getInstance().textRenderer.getWidth(text) + 4;
 		//#else
+	private static int drawRectWithTextFixedWidth(String text, int x, int y, boolean rect, int w) {
 		if (!rect) fill(x, y, x + w, y + 14, -2147483648);
 		MinecraftClient.getInstance().textRenderer.drawWithShadow(text, x + 2, y + 3, 0xFFFFFF);
 		return MinecraftClient.getInstance().textRenderer.getStringWidth(text) + 4;
 		//#endif
 	}
 	
-	private static int drawRectWithText(String text, int x, int y, boolean rect) {
-		//#if MC>=11601
-//$$ 		if (!rect) fill(null, x, y, x + MinecraftClient.getInstance().textRenderer.getWidth(text) + 4, y + 14, -2147483648);
-//$$ 		MinecraftClient.getInstance().textRenderer.drawWithShadow(null, text, x + 2, y + 3, 0xFFFFFF);
+	//#if MC>=11601
+//$$ 	private static int drawRectWithText(MatrixStack matrices, String text, int x, int y, boolean rect) {
+//$$ 		if (!rect) fill(matrices, x, y, x + MinecraftClient.getInstance().textRenderer.getWidth(text) + 4, y + 14, -2147483648);
+//$$ 		MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, text, x + 2, y + 3, 0xFFFFFF);
 //$$ 		return MinecraftClient.getInstance().textRenderer.getWidth(text) + 4;
 		//#else
+	private static int drawRectWithText(String text, int x, int y, boolean rect) {
 		if (!rect) fill(x, y, x + MinecraftClient.getInstance().textRenderer.getStringWidth(text) + 4, y + 14, -2147483648);
 		MinecraftClient.getInstance().textRenderer.drawWithShadow(text, x + 2, y + 3, 0xFFFFFF);
 		return MinecraftClient.getInstance().textRenderer.getStringWidth(text) + 4;

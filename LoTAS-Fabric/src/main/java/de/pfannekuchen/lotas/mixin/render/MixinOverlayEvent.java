@@ -28,11 +28,12 @@ public class MixinOverlayEvent {
 	//#if MC>=11601
 //$$ 	@Inject(at = @At(value = "INVOKE", shift = At.Shift.AFTER, target = "Lnet/minecraft/client/gui/hud/InGameHud;renderStatusEffectOverlay(Lnet/minecraft/client/util/math/MatrixStack;)V"), method = "render")
 //$$ 	public void injectrender(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
+//$$ 		HudSettings.drawOverlay(matrices);
 	//#else
 	@Inject(at = @At(value = "INVOKE", shift = At.Shift.AFTER, target = "Lnet/minecraft/client/gui/hud/InGameHud;renderStatusEffectOverlay()V"), method = "render")
 	public void injectrender(float tickDelta, CallbackInfo ci) {
-		//#endif
 		HudSettings.drawOverlay();
+		//#endif
 		if (Timer.ticks != -1) {
 			//#if MC>=11601
 //$$ 				    DrawableHelper.fill(matrices, 0, 0, 75, ConfigUtils.getBoolean("ui", "hideRTATimer") ? 13 : 24, new Color(0, 0, 0, 175).getRGB());
