@@ -6,9 +6,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
@@ -29,20 +27,26 @@ import net.minecraft.world.chunk.storage.AnvilChunkLoader;
 /**
  * Saves the player velocity and makes a copy of the world in a seperate folder.
  * That world can also be loaded again
- * 
+ * @since v1.0
+ * @version v1.1 Added loadless savestates and multithreading
  * @author Pancake
  */
 public class SavestateMod {
 
+	/** Temporary Variable to request loading the velocity */
 	public static boolean applyVelocity;
 	public static double motionX;
 	public static double motionY;
 	public static double motionZ;
 
+	/** Temporary variable to indicate that the "Savestate Done" Label should show up */
 	public static boolean showSavestateDone;
+	/** Temporary variable to indicate that the "Loadstate Done" Label should show up */
 	public static boolean showLoadstateDone;
+	/** Temporary variable to indicate that the Labels above should fade out */
 	public static long timeTitle;
 
+	/** Turns off rendering to fake loadless savestates */
 	public static boolean isLoading;
 
 	/**
@@ -55,14 +59,15 @@ public class SavestateMod {
 	}
 
 	/**
-	 * Closes the server and creates a savestate in .minecraft/savestates/
-	 * @throws IOException
+	 * Creates a savestate in .minecraft/savestates/
+	 * @throws IOException Throws when the World was locked
 	 */
 	public static void savestate(String name) {
 		final String data = generateSavestateFile();
 		final Minecraft mc = Minecraft.getMinecraft();
 
 		final MinecraftServer server = mc.getIntegratedServer();
+		// save the world
 		//#if MC>=10900
 		server.getPlayerList().saveAllPlayerData();
 		server.saveAllWorlds(false);
@@ -77,10 +82,10 @@ public class SavestateMod {
 			}
 		}
 		
+		// don't save the world
 		for (final WorldServer worldserver : MCVer.getWorlds(server)) {
 			worldserver.disableLevelSaving = true;
 		}
-
 		for(WorldServer world:MCVer.getWorlds(server)) {
 			AnvilChunkLoader chunkloader=(AnvilChunkLoader) ((ChunkProviderServer) world.getChunkProvider()).chunkLoader;
 			while(((AccessorAnvilChunkLoader) chunkloader).chunksToSave().size() > 0) {
@@ -88,7 +93,9 @@ public class SavestateMod {
 			}
 		}
 
+		// create a new thread that copies the world
 		new Thread(() -> {
+			// find next savestate directory
 			final String worldName = server.getFolderName();
 			final File worldDir = new File(mc.mcDataDir, "saves/" + worldName);
 			final File savestatesDir = new File(mc.mcDataDir, "saves/savestates/");
@@ -101,6 +108,7 @@ public class SavestateMod {
 
 			File savestateDir = new File(savestatesDir, worldName + "-Savestate" + (existingSavestates + 1));
 
+			// copy the world
 			try {
 				FileUtils.copyDirectory(worldDir, savestateDir);
 				com.google.common.io.Files.write(data.getBytes(), new File(savestateDir, "savestate.dat"));
@@ -109,42 +117,46 @@ public class SavestateMod {
 				e.printStackTrace();
 			}
 
+			// update the tracking file
 			try {
 				TrackerFile.increaseSavestates(savestatesDir, worldName);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 
+			// save worlds again
 			for (WorldServer worldserver : MCVer.getWorlds(server)) {
 				worldserver.disableLevelSaving = false;
 			}
 		}).start();
 
+		// show the label, that the savestates is done.
 		showSavestateDone = true;
 		timeTitle = System.currentTimeMillis();
 	}
 
 	/**
 	 * Closes the server and loads the latest savestate in .minecraft/savestates/
-	 * @throws IOException
+	 * @throws IOException Throws when the World was locked
 	 */
 	public static void loadstate(int number) {
-		if (!hasSavestate()) return;
+		if (!hasSavestate()) return; // check for a savestates
 
+		// save mouse coordinates to avoid mouse madness when not in fullscreen
 		int x = Mouse.getX();
 		int y = Mouse.getY();
 
-		isLoading = true;
-
+		isLoading = true; // turn off rendering
+		
+		// stop the server without saving the world
 		final Minecraft mc = Minecraft.getMinecraft();
 		final IntegratedServer server = mc.getIntegratedServer();
-
 		for (WorldServer worldserver : MCVer.getWorlds(server)) {
 			worldserver.disableLevelSaving = true;
 		}
-
 		Minecraft.stopIntegratedServer();
 
+		// load the world
 		final String worldName = server.getFolderName();
 		final File worldDir = new File(mc.mcDataDir, "saves/" + worldName);
 		final File savestatesDir = new File(mc.mcDataDir, "saves/savestates/");
@@ -161,6 +173,7 @@ public class SavestateMod {
 			FileUtils.deleteDirectory(worldDir);
 			FileUtils.copyDirectory(savestateDir, worldDir);
 
+			// re apply the velocity to make a seamless transition
 			motionX = Double.parseDouble(data.split(":")[0]);
 			motionY = Double.parseDouble(data.split(":")[1]);
 			motionZ = Double.parseDouble(data.split(":")[2]);
@@ -170,18 +183,22 @@ public class SavestateMod {
 		} catch (NumberFormatException | IOException e) {
 			e.printStackTrace();
 		}
+		// clear chat messages because of leftover messages
 		//#if MC>=11100
 		mc.ingameGUI.getChatGUI().clearChatMessages(true);
 		//#else
 //$$ 		mc.ingameGUI.getChatGUI().clearChatMessages();
 		//#endif
 
+		// reset the mouse position
 		Mouse.setCursorPosition(x, y);
 		Mouse.getDX();
 		Mouse.getDY();
 
+		// start the server
 		mc.launchIntegratedServer(worldName, worldName, null);
 
+		// reset the mouse position again
 		Mouse.setCursorPosition(x, y);
 		Mouse.getDX();
 		Mouse.getDY();
@@ -210,18 +227,36 @@ public class SavestateMod {
 		public static int savestateCount = -1;
 		public static int loadstateCount = -1;
 		
+		/**
+		 * Increases the amount of savestates in the File
+		 * @param savestateDir Savestate Directory
+		 * @param worldName World Name
+		 * @throws IOException File not found
+		 */
 		public static void increaseSavestates(final File savestateDir, final String worldName) throws IOException {
 			final File infoFile = new File(savestateDir, worldName + "-info.txt");
 			generateFile(infoFile, readSavestates(savestateDir, worldName) + 1, readLoadstates(savestateDir, worldName));
 			savestateCount++;
 		}
 
+		/**
+		 * Increases the amount of loadstates in the File
+		 * @param savestateDir Savestate Directory
+		 * @param worldName World Name
+		 * @throws IOException File not found
+		 */
 		public static void increaseLoadstates(final File savestateDir, final String worldName) throws IOException {
 			final File infoFile = new File(savestateDir, worldName + "-info.txt");
 			generateFile(infoFile, readSavestates(savestateDir, worldName), readLoadstates(savestateDir, worldName) + 1);
 			loadstateCount++;
 		}
 
+		/**
+		 * Reads the amount of savestates in the File
+		 * @param savestateDir Savestate Directory
+		 * @param worldName World Name
+		 * @throws IOException File not found
+		 */
 		public static int readSavestates(final File savestateDir, final String worldName) throws IOException {
 			final File infoFile = new File(savestateDir, worldName + "-info.txt");
 			if (!infoFile.exists()) {
@@ -233,6 +268,12 @@ public class SavestateMod {
 			return savestateCount = Integer.parseInt(lines.get(3).split("=")[1]);
 		}
 
+		/**
+		 * Reads the amount of loadstates in the File
+		 * @param savestateDir Savestate Directory
+		 * @param worldName World Name
+		 * @throws IOException File not found
+		 */
 		public static int readLoadstates(final File savestateDir, final String worldName) throws IOException {
 			final File infoFile = new File(savestateDir, worldName + "-info.txt");
 			if (!infoFile.exists()) {
@@ -244,6 +285,12 @@ public class SavestateMod {
 			return loadstateCount = Integer.parseInt(lines.get(4).split("=")[1]);
 		}
 
+		/**
+		 * Creates a new file for tracking savestates and loadstates
+		 * @param file Tracker File
+		 * @param savestates Amount of savestates
+		 * @param loadstates Amount of loadstate
+		 */
 		private static void generateFile(final File file, final int savestates, final int loadstates) throws FileNotFoundException {
 			PrintWriter writer = new PrintWriter(file); // Empty File
 			writer.println("");
@@ -258,7 +305,10 @@ public class SavestateMod {
 
 	}
 
-	// Delete
+	/**
+	 * Delete a savestates and re-enumerate the rest
+	 * @param i Index of savestate to delete
+	 */
 	public static void yeet(int i) {
 		final Minecraft mc = Minecraft.getMinecraft();
 		final IntegratedServer server = mc.getIntegratedServer();
@@ -276,7 +326,7 @@ public class SavestateMod {
 			return s.startsWith(worldName + "-Savestate");
 		}).length;
 		
-		// Re Number all of the rest
+		// Re-enumerate all of the savestates
 		for (int j = i; j < existingSavestates + 1; j++) {
 			new File(savestatesDir, worldName + "-Savestate" + (j + 1)).renameTo(new File(savestatesDir, worldName + "-Savestate" + (j)));
 		}

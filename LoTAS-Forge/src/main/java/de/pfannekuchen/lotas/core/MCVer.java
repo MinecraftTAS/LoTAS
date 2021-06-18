@@ -26,6 +26,12 @@ import net.minecraft.network.login.client.CPacketLoginStart;
 //$$ import net.minecraft.network.login.client.C00PacketLoginStart;
 //#endif
 
+/**
+ * Class that preprocesses a lot of stuff
+ * @author Pancake
+ * @since v1.2
+ * @version v1.2
+ */
 public class MCVer {
 	
 	public static int clamp(int num, int min, int max) {

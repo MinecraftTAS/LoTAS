@@ -18,8 +18,15 @@ import net.minecraft.world.storage.WorldInfo;
 import net.minecraft.world.storage.WorldSummary;
 //#endif
 
+/**
+ * TAS Challenge struct
+ * @since v1.1
+ * @version v1.1
+ * @author Pancake
+ */
 public class ChallengeMap {
 	
+	/** Map that is currently loaded or null */
 	public static ChallengeMap currentMap;
 	
 	public URL map;
@@ -30,6 +37,10 @@ public class ChallengeMap {
 	public String resourceLoc;
 	
 	//#if MC>=10900
+	/**
+	 * Get the world data from the entry
+	 * @return Returns a summary of all data saved in the world (names, gamemodes, etc.)
+	 */
 	public WorldSummary getSummary() {
 		WorldSettings settings = new WorldSettings(0L, GameType.ADVENTURE, false, true, WorldType.FLAT);
 		WorldInfo info = new WorldInfo(settings, displayName);
@@ -38,6 +49,10 @@ public class ChallengeMap {
 	}
 	//#endif
 
+	/** 
+	 * Creates a Save Loader for the Challenge map
+	 * @return Save Loader for the TAS Challenge map.
+	 */
 	public ISaveFormat getSaveLoader() {
 		new File(Minecraft.getMinecraft().mcDataDir, "challenges").mkdir();
 		//#if MC>=10900
