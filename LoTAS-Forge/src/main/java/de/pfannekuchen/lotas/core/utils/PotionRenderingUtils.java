@@ -4,31 +4,42 @@ import de.pfannekuchen.lotas.core.MCVer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemPotion;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-//#if MC<=10809
+//#if MC>=10809
 //$$ import net.minecraft.util.MathHelper;
+//$$ import net.minecraft.init.Items;
 //#endif
 
 /**
  * Draws a potion in the gui hud that is moving with the camera
- * 
- * @see MixinPotionRenderer
  * @author Pancake
- *
+ * @since v1.0
+ * @version v1.2
  */
 public class PotionRenderingUtils {
 
+	/** Temporary variable used for lerping */
 	private static float lerpX = 0f;
+	/** Temporary variable used for lerping */
 	private static float lerpY = 0f;
-	
+	/**
+	 * Linear Interpolation between two points using alpha
+	 * @param point1 Starting point
+	 * @param point2 Target point
+	 * @param alpha Lerp-factor
+	 * @return Returns a Lerp'ed string
+	 */
 	private static float lerp(float point1, float point2, float alpha){ return point1 + alpha * (point2 - point1);}
 	
+	/**
+	 * Moves the potion over the hotbar to then render it
+	 * @return ItemStack to render over the hotbar
+	 */
 	public static ItemStack renderPotion() {
 		//#if MC>=10900
-		  EntityPlayerSP entityplayersp = MCVer.player(Minecraft.getMinecraft());
+		EntityPlayerSP entityplayersp = MCVer.player(Minecraft.getMinecraft());
         float f22 = entityplayersp.prevRenderArmPitch - entityplayersp.renderArmPitch;
         float f221 = entityplayersp.prevRenderArmYaw - entityplayersp.renderArmYaw;
         f22 = MCVer.clamp(f22, -16, 16);

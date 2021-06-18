@@ -1,5 +1,7 @@
 package de.pfannekuchen.lotas.core.utils;
 
+//#if MC>=10900
+import net.minecraft.util.math.Vec3d;
 import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.mixin.accessors.AccessorMinecraftClient;
 import net.minecraft.client.Minecraft;
@@ -8,13 +10,21 @@ import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemFishingRod;
 import net.minecraft.item.ItemPotion;
 import net.minecraft.item.ItemStack;
-//#if MC>=10900
-import net.minecraft.util.math.Vec3d;
 //#endif
 
+/**
+ * Calculation Utils for calculating projectile trails
+ * @author Wurstv7
+ * @since v2.0
+ * @version v2.0
+ */
 public class TrajectoriesCalculator {
 
 	//#if MC>=10900
+	/**
+	 * Method that calculates where a projectile is going to land.
+	 * @return Returns a Vector3 where the Projectile will land
+	 */
 	public static Vec3d calculate() {
 		
 		EntityPlayerSP player = MCVer.player(Minecraft.getMinecraft());
