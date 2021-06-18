@@ -8,7 +8,7 @@ import net.minecraft.item.ItemPotion;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 //#if MC<=10809
-//$$ import net.minecraft.util.math.MathHelper;
+//$$ import net.minecraft.util.MathHelper;
 //$$ import net.minecraft.init.Items;
 //#endif
 
