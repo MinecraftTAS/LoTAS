@@ -124,8 +124,8 @@ public class HudSettings extends Screen {
 	}
 	
 	//#if MC>=11601
-	//$$ @Override public void render(net.minecraft.client.util.math.MatrixStack matrices, int mouseX, int mouseY, float partialTicks) {
-	//$$ 	if (dragging == null) super.render(matrices, mouseX, mouseY, partialTicks);
+//$$ 	@Override public void render(net.minecraft.client.util.math.MatrixStack matrices, int mouseX, int mouseY, float partialTicks) {
+//$$ 		if (dragging == null) super.render(matrices, mouseX, mouseY, partialTicks);
 	//#else
 	@Override public void render(int mouseX, int mouseY, float partialTicks) {
 		if (dragging == null) super.render(mouseX, mouseY, partialTicks);
@@ -164,7 +164,7 @@ public class HudSettings extends Screen {
 			int x = Integer.parseInt(p.getProperty("WORLDSEED_x"));
 			int y = Integer.parseInt(p.getProperty("WORLDSEED_y"));
 			//#if MC>=11601
-			//$$ widths.replace(Settings.WORLDSEED, drawRectWithText("World Seed: " + MinecraftClient.getInstance().getServer().getWorld(World.OVERWORLD).getSeed(), x, y, Boolean.parseBoolean(p.getProperty("WORLDSEED_hideRect"))));
+//$$ 			widths.replace(Settings.WORLDSEED, drawRectWithText("World Seed: " + MinecraftClient.getInstance().getServer().getWorld(World.OVERWORLD).getSeed(), x, y, Boolean.parseBoolean(p.getProperty("WORLDSEED_hideRect"))));
 			//#else
 			widths.replace(Settings.WORLDSEED, drawRectWithText("World Seed: " + MinecraftClient.getInstance().getServer().getWorld(DimensionType.OVERWORLD).getSeed(), x, y, Boolean.parseBoolean(p.getProperty("WORLDSEED_hideRect"))));
 			//#endif
@@ -196,9 +196,9 @@ public class HudSettings extends Screen {
 	
 	private static int drawRectWithTextFixedWidth(String text, int x, int y, boolean rect, int w) {
 		//#if MC>=11601
-		//$$ if (!rect) fill(null, x, y, x + w, y + 14, -2147483648);
-		//$$ MinecraftClient.getInstance().textRenderer.drawWithShadow(null, text, x + 2, y + 3, 0xFFFFFF);
-		//$$ return MinecraftClient.getInstance().textRenderer.getWidth(text) + 4;
+//$$ 		if (!rect) fill(null, x, y, x + w, y + 14, -2147483648);
+//$$ 		MinecraftClient.getInstance().textRenderer.drawWithShadow(null, text, x + 2, y + 3, 0xFFFFFF);
+//$$ 		return MinecraftClient.getInstance().textRenderer.getWidth(text) + 4;
 		//#else
 		if (!rect) fill(x, y, x + w, y + 14, -2147483648);
 		MinecraftClient.getInstance().textRenderer.drawWithShadow(text, x + 2, y + 3, 0xFFFFFF);
@@ -208,9 +208,9 @@ public class HudSettings extends Screen {
 	
 	private static int drawRectWithText(String text, int x, int y, boolean rect) {
 		//#if MC>=11601
-		//$$ if (!rect) fill(null, x, y, x + MinecraftClient.getInstance().textRenderer.getWidth(text) + 4, y + 14, -2147483648);
-		//$$ MinecraftClient.getInstance().textRenderer.drawWithShadow(null, text, x + 2, y + 3, 0xFFFFFF);
-		//$$ return MinecraftClient.getInstance().textRenderer.getWidth(text) + 4;
+//$$ 		if (!rect) fill(null, x, y, x + MinecraftClient.getInstance().textRenderer.getWidth(text) + 4, y + 14, -2147483648);
+//$$ 		MinecraftClient.getInstance().textRenderer.drawWithShadow(null, text, x + 2, y + 3, 0xFFFFFF);
+//$$ 		return MinecraftClient.getInstance().textRenderer.getWidth(text) + 4;
 		//#else
 		if (!rect) fill(x, y, x + MinecraftClient.getInstance().textRenderer.getStringWidth(text) + 4, y + 14, -2147483648);
 		MinecraftClient.getInstance().textRenderer.drawWithShadow(text, x + 2, y + 3, 0xFFFFFF);

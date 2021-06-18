@@ -251,14 +251,14 @@ public abstract class MixinGuiIngameMenu extends Screen {
 			//#endif
 		}
 		//#if MC>=11601
-		//$$ drawStringWithShadow(matrices, MinecraftClient.getInstance().textRenderer, "Tickrate Changer (" + TickrateChangerMod.tickrate + ")", 5, 5, 0xFFFFFF);
-		//$$ int i= 18;
-		//$$ MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, "Tickjump", 10, 105, 0xFFFFFF);
-		//$$ if (buttons.get(i).active == false) {
-		//$$ 	MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, "Tickjump is ready,", 8, 137, 0xFFFFFF);
-		//$$ 	MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, "press ESC to continue", 8, 147, 0xFFFFFF);
-		//$$ }
-		//$$ MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, "Duping", 10, 45, 0xFFFFFF);
+//$$ 		drawStringWithShadow(matrices, MinecraftClient.getInstance().textRenderer, "Tickrate Changer (" + TickrateChangerMod.tickrate + ")", 5, 5, 0xFFFFFF);
+//$$ 		int i= 18;
+//$$ 		MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, "Tickjump", 10, 105, 0xFFFFFF);
+//$$ 		if (buttons.get(i).active == false) {
+//$$ 			MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, "Tickjump is ready,", 8, 137, 0xFFFFFF);
+//$$ 			MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, "press ESC to continue", 8, 147, 0xFFFFFF);
+//$$ 		}
+//$$ 		MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, "Duping", 10, 45, 0xFFFFFF);
 		//#else
 		drawString(MinecraftClient.getInstance().textRenderer, "Tickrate Changer (" + TickrateChangerMod.tickrate + ")", 5, 5, 0xFFFFFF);
 		int i = 18;

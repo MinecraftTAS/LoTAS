@@ -36,6 +36,8 @@ public class SavestateMod {
 	public static boolean showSavestateDone;
 	public static boolean showLoadstateDone;
 	public static long timeTitle;
+	
+	public static boolean stillSaving;
 
 	public static boolean isLoading;
 
@@ -60,12 +62,13 @@ public class SavestateMod {
 
 		final MinecraftServer server = mc.getServer();
 		server.getPlayerManager().saveAllPlayerData();
-		for (final ServerWorld worldserver : server.getWorlds()) {
-			worldserver.savingDisabled = true;
+		
+		if(!stillSaving) {
+			server.save(false, true, false);
 		}
-
-		server.save(false, true, false);
-
+		
+		while (stillSaving) {
+		}
 		new Thread(() -> {
 			//#if MC>=11601
 //$$ 						final String worldName = server.getSaveProperties().getLevelName();
@@ -98,9 +101,6 @@ public class SavestateMod {
 				e.printStackTrace();
 			}
 
-			for (final ServerWorld worldserver : server.getWorlds()) {
-				worldserver.savingDisabled = false;
-			}
 		}).start();
 
 		showSavestateDone = true;

@@ -9,6 +9,7 @@
     "client": [
     	"MixinMinecraftClient",
     	"MixinMinecraftServer",
+    	"MixinThreadedAnvilChunkStorage",
     	"accessors.AccessorMinecraftClient",
     	"accessors.AccessorTimer",
     	"accessors.AccessorTextFieldWidget",
