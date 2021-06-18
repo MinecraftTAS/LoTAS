@@ -8,6 +8,12 @@ import de.pfannekuchen.lotas.core.LoTASModContainer;
 import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
 import net.minecraft.util.ResourceLocation;
 
+/**
+ * This Mixin replaces the shield texture to a custom one
+ * @author Pancake
+ * @since v1.2
+ * @version v1.2
+ */
 @Mixin(TileEntityItemStackRenderer.class)
 public abstract class MixinShieldRenderer {
 	

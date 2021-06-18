@@ -1,7 +1,6 @@
 package de.pfannekuchen.lotas.mixin.patches;
 
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
@@ -17,6 +16,12 @@ import net.minecraft.world.WorldProvider;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.WorldType;
 
+/**
+ * This Mixin redirects the spawn point to a custom set one.
+ * @author Pancake
+ * @version v1.2
+ * @since v1.2
+ */
 @Mixin(WorldProvider.class)
 public class MixinWorldProviderPatch {
 	

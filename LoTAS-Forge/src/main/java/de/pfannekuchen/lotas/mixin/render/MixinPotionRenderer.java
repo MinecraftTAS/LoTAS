@@ -11,13 +11,21 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.core.utils.PotionRenderingUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
+//#if MC<=10809
+//$$ import net.minecraft.client.entity.EntityPlayerSP;
+//#endif
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 
+/**
+ * This Mixin adds a potion to the hotbar
+ * @author Pancake
+ * @version v1.0
+ * @since v1.0
+ */
 @Mixin(ItemRenderer.class)
 public abstract class MixinPotionRenderer {
 

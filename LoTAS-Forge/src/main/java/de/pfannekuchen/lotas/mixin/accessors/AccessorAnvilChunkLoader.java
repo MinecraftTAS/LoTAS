@@ -6,8 +6,11 @@ import net.minecraft.util.math.ChunkPos;
 //$$ import net.minecraft.world.ChunkCoordIntPair;
 //#endif
 
+//#if MC<=11102
+//$$ import java.util.Set;
+//#endif
+
 import java.util.Map;
-import java.util.Set;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 

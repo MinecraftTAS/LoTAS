@@ -8,6 +8,12 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+/**
+ * This mixin reimplements Dragon-Skip, which was patched in newer versions of MinecraftForge
+ * @author Pancake
+ * @since v1.1
+ * @version v1.1
+ */
 @Mixin(DragonFightManager.class)
 public abstract class MixinDragonSkipPatch {
 

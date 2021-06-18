@@ -6,8 +6,11 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+//#if MC<=11201
+//$$  import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+//#else
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+//#endif
 
 import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.core.utils.ConfigUtils;
@@ -28,9 +31,19 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+/**
+ * This mixin alters the behaviour whenever a block is being destroyed
+ * @author Pancake
+ * @since v1.0
+ * @version v1.1
+ */
 @Mixin(Block.class)
 public class MixinBlockPatch {
-
+	
+	/**
+	 * Changes the velocity of a dropped item when wanted
+	 * @return A Hijacked EntityItem
+	 */
 	@Redirect(method = "spawnAsEntity", at = @At(value = "NEW", target = "Lnet/minecraft/entity/item/EntityItem;<init>(Lnet/minecraft/world/World;DDDLnet/minecraft/item/ItemStack;)Lnet/minecraft/entity/item/EntityItem;"))
 	private static EntityItem moveItem(World w, double x, double y, double z, ItemStack stack) {
 		EntityItem it = new EntityItem(w, x, y, z, stack);
@@ -54,6 +67,9 @@ public class MixinBlockPatch {
 		return it;
 	}
 
+	/**
+	 * Changes the items dropped when breaking a block to the best possible ones if wanted.
+	 */
 	//#if MC>=11202
 	@Inject(at = @At("HEAD"), remap = false, method = "Lnet/minecraft/block/Block;getDrops(Lnet/minecraft/util/NonNullList;Lnet/minecraft/world/IBlockAccess;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;I)V", cancellable = true)
 	public void getDropsInject(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune, CallbackInfo ci) {

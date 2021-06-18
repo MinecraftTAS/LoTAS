@@ -21,7 +21,6 @@ import net.minecraft.entity.monster.EntityPolarBear;
 import net.minecraft.entity.monster.EntitySnowman;
 import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.passive.EntityCow;
-import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.passive.EntityMooshroom;
 //#if MC>=11200
 import net.minecraft.entity.passive.EntityParrot;

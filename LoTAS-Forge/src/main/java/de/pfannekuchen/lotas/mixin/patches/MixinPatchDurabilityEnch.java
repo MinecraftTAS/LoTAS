@@ -11,6 +11,12 @@ import de.pfannekuchen.lotas.core.utils.ConfigUtils;
 import net.minecraft.enchantment.EnchantmentDurability;
 import net.minecraft.item.ItemStack;
 
+/**
+ * This Mixin makes items with unbreaking unbreakable. silly me
+ * @author Pancake
+ * @version v1.1
+ * @since v1.1
+ */
 @Mixin(EnchantmentDurability.class)
 public class MixinPatchDurabilityEnch {
 

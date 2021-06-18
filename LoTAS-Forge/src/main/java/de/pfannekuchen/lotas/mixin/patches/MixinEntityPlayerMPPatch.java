@@ -8,7 +8,9 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.At.Shift;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+//#if MC<=10809
+//$$ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+//#endif
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.mojang.authlib.GameProfile;
@@ -39,6 +41,12 @@ import net.minecraft.world.GameType;
 //#endif
 import net.minecraft.world.chunk.storage.AnvilSaveConverter;
 
+/**
+ * This Mixin makes Players invulnerable if they want to be
+ * @author Pancake
+ * @since v1.1
+ * @version v1.1
+ */
 @Mixin(EntityPlayerMP.class)
 public abstract class MixinEntityPlayerMPPatch extends EntityPlayer {
 	public MixinEntityPlayerMPPatch(World worldIn, GameProfile gameProfileIn) { super(worldIn, gameProfileIn); }
