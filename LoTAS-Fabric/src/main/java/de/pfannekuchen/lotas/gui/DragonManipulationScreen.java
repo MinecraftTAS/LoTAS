@@ -96,7 +96,7 @@ public class DragonManipulationScreen extends Screen {
 			EnderDragonEntity dragon = MinecraftClient.getInstance().getServer().getWorld(DimensionType.THE_END).getAliveEnderDragons().get(0);
 			//#endif
 			//#if MC>=11601
-//$$ 			dragon.getPhaseManager().setPhase(phases.get(btn.getMessage()));
+//$$ 			dragon.getPhaseManager().setPhase(phases.get(btn.getMessage().asString()));
 			//#else
 			dragon.getPhaseManager().setPhase(phases.get(btn.getMessage()));
 			//#endif
@@ -112,7 +112,11 @@ public class DragonManipulationScreen extends Screen {
 			//#else
 			EnderDragonEntity dragon = MinecraftClient.getInstance().getServer().getWorld(DimensionType.THE_END).getAliveEnderDragons().get(0);
 			//#endif
+			//#if MC>=11601
+//$$ 			dragon.getPhaseManager().setPhase(phases.get(btn.getMessage().asString()));
+			//#else
 			dragon.getPhaseManager().setPhase(phases.get(btn.getMessage()));
+			//#endif
 			dragonPhase = dragon.getPhaseManager().getCurrent();
 		});
 		action3 = new NewButtonWidget(this.width / 3 * 2 + 5, height / 8, this.width / 3 - 10, 20, "Phase3", btn -> {
@@ -125,7 +129,11 @@ public class DragonManipulationScreen extends Screen {
 			//#else
 			EnderDragonEntity dragon = MinecraftClient.getInstance().getServer().getWorld(DimensionType.THE_END).getAliveEnderDragons().get(0);
 			//#endif
+			//#if MC>=11601
+//$$ 			dragon.getPhaseManager().setPhase(phases.get(btn.getMessage().asString()));
+			//#else
 			dragon.getPhaseManager().setPhase(phases.get(btn.getMessage()));
+			//#endif
 			dragonPhase = dragon.getPhaseManager().getCurrent();
 		});
 

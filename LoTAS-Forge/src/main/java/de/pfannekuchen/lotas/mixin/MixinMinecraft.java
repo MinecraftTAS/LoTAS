@@ -64,15 +64,6 @@ public class MixinMinecraft {
 	public void injectloadWorld(WorldClient worldClientIn, String loadingMessage, CallbackInfo ci) {
 		isLoadingWorld = ConfigUtils.getBoolean("tools", "hitEscape") && worldClientIn != null;
 		
-		try {
-			SavestateMod.TrackerFile.readLoadstates(new File(Minecraft.getMinecraft().mcDataDir, "saves/savestates/"), worldClientIn.getWorldInfo().getWorldName());
-			SavestateMod.TrackerFile.readSavestates(new File(Minecraft.getMinecraft().mcDataDir, "saves/savestates/"), worldClientIn.getWorldInfo().getWorldName());
-		} catch (Exception e) {
-			SavestateMod.TrackerFile.loadstateCount = 0;
-			SavestateMod.TrackerFile.savestateCount = 1;
-			// Don't catch this error
-		}
-		
 		if (ChallengeLoader.startTimer) {
 			ChallengeLoader.startTimer = false;
 			EventUtils.Timer.startTime = Duration.ofMillis(System.currentTimeMillis());
