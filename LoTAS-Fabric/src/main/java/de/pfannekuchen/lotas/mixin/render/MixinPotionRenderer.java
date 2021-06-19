@@ -42,12 +42,20 @@ public abstract class MixinPotionRenderer {
 //$$ 		@Shadow protected abstract void renderFirstPersonItem(AbstractClientPlayerEntity player, float tickDelta, float pitch, Hand hand, float swingProgress, ItemStack item, float equipProgress, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light);
 //$$ 		@Inject(method = "Lnet/minecraft/client/render/item/HeldItemRenderer;renderItem(FLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider$Immediate;Lnet/minecraft/client/network/ClientPlayerEntity;I)V", at = @At(value = "INVOKE", shift = At.Shift.BEFORE, target = "Lnet/minecraft/util/math/MathHelper;lerp(FFF)F", ordinal = 1))
 //$$ 		public void drawPotionAfter(float tickDelta, MatrixStack matrices, Immediate vertexConsumers, ClientPlayerEntity player, int light, CallbackInfo ci) {
+			//#if MC<=11605
 //$$ 			GlStateManager.pushMatrix();
+			//#endif
 //$$ 			matrices.push();
 //$$ 			ItemStack stack2 = PotionRenderer.render(matrices);
+			//#if MC>=11700
+//$$ 			renderFirstPersonItem(player, tickDelta, player.getPitch(), Hand.MAIN_HAND, 0f, stack2, 0f, matrices, vertexConsumers, light);
+			//#else
 //$$ 			renderFirstPersonItem(player, tickDelta, player.pitch, Hand.MAIN_HAND, 0f, stack2, 0f, matrices, vertexConsumers, light);
+			//#endif
 //$$ 			matrices.pop();
+			//#if MC<=11605
 //$$ 			GlStateManager.popMatrix();
+			//#endif
 //$$ 		}
 	//#endif
 

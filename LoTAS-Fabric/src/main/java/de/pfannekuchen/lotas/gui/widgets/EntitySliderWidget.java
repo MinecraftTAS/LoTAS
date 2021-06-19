@@ -171,9 +171,9 @@ public class EntitySliderWidget extends AbstractButtonWidget {
 			}
 
 			//#if MC>=11700
-//$$          	com.mojang.blaze3d.systems.RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+//$$ 			com.mojang.blaze3d.systems.RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
          	//#else
-			GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+         	GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
          	//#endif
 			//#if MC<=11502
 			blit(this.x + (int) (this.sliderPosition * (float) (this.width - 8)), this.y, 0, 66, 4, 20);

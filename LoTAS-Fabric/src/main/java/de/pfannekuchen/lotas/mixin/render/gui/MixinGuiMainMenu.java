@@ -19,7 +19,11 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.screen.world.SelectWorldScreen;
+//#if MC>=11700
+//$$ import net.minecraft.client.option.GameOptions;
+//#else
 import net.minecraft.client.options.GameOptions;
+//#endif
 import net.minecraft.client.resource.language.I18n;
 //#if MC>=11601
 //$$ import net.minecraft.client.util.math.MatrixStack;
@@ -46,7 +50,11 @@ public abstract class MixinGuiMainMenu extends Screen {
 		if (isAcceptance) {
 			//#if MC>=11601
 //$$ 						renderBackground(matrices);
+						//#if MC>=11700
+//$$ 						com.mojang.blaze3d.systems.RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+						//#else 
 //$$ 						GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+						//#endif 
 //$$ 						MinecraftClient.getInstance().getTextureManager().bindTexture(DEMO_BG);
 //$$ 						int i = (this.width - 248) / 2;
 //$$ 						int j = (this.height - 166) / 2;
@@ -89,12 +97,20 @@ public abstract class MixinGuiMainMenu extends Screen {
 	public void redirectInit(CallbackInfo ci) {
 		if (!ConfigUtils.getBoolean("hidden", "acceptedDataSending")) {
 			isAcceptance = true;
+			//#if MC>=11700
+//$$ 			addDrawable(new NewButtonWidget(width / 2 - 116, height / 2 + 62 + -16, 114, 20, "Accept", c1 -> {
+			//#else
 			addButton(new NewButtonWidget(width / 2 - 116, height / 2 + 62 + -16, 114, 20, "Accept", c1 -> {
+			//#endif
 				ConfigUtils.setBoolean("hidden", "acceptedDataSending", true);
 				ConfigUtils.save();
 				MinecraftClient.getInstance().openScreen(new TitleScreen());
 			}));
+			//#if MC>=11700
+//$$ 			addDrawable(new NewButtonWidget(width / 2 + 2, height / 2 + 62 + -16, 114, 20, "Decline", c2 -> {
+			//#else
 			addButton(new NewButtonWidget(width / 2 + 2, height / 2 + 62 + -16, 114, 20, "Decline", c2 -> {
+			//#endif
 				System.exit(29);
 			}));
 			ci.cancel();
@@ -113,7 +129,11 @@ public abstract class MixinGuiMainMenu extends Screen {
 	//#if MC>=11605
 //$$ 	@Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/TitleScreen;drawCenteredString(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/font/TextRenderer;Ljava/lang/String;III)V"))
 //$$ 	private void redirectdrawSplash(MatrixStack matrices, TextRenderer textRenderer, String str, int centerX, int y, int color) {
+		//#if MC>=11700
+//$$ 		TitleScreen.drawCenteredText(matrices, textRenderer, "TaS iS cHeAtInG !!1", centerX, y, color);
+		//#else
 //$$ 		TitleScreen.drawCenteredString(matrices, textRenderer, "TaS iS cHeAtInG !!1", centerX, y, color);
+		//#endif
 //$$ 	}
 	//#else
 //$$ 	@Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/TitleScreen;drawCenteredString(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/font/TextRenderer;Ljava/lang/String;III)V"))
@@ -134,6 +154,17 @@ public abstract class MixinGuiMainMenu extends Screen {
 	 */
 	@Overwrite
 	private void initWidgetsNormal(int y, int spacingY) {
+		//#if MC>=11700
+//$$ 		this.addDrawable(new NewButtonWidget(this.width / 2 - 100, y, 200, 20, I18n.translate("menu.singleplayer"), (buttonWidget) -> {
+//$$ 			MinecraftClient.getInstance().openScreen(new SelectWorldScreen(this));
+//$$ 		}));
+//$$ 		this.addDrawable(new NewButtonWidget(this.width / 2 - 100, y + spacingY * 1, 200, 20, I18n.translate("Video Upspeeder"), (buttonWidget) -> {
+//$$ 			MinecraftClient.getInstance().openScreen(new VideoUpspeederScreen());
+//$$ 		}));
+//$$ 		this.addDrawable(new NewButtonWidget(this.width / 2 - 100, y + spacingY * 2, 200, 20, I18n.translate("Configuration"), (buttonWidget) -> {
+//$$ 			MinecraftClient.getInstance().openScreen(new ConfigurationScreen());
+//$$ 		}));
+		//#else
 		this.addButton(new NewButtonWidget(this.width / 2 - 100, y, 200, 20, I18n.translate("menu.singleplayer"), (buttonWidget) -> {
 			MinecraftClient.getInstance().openScreen(new SelectWorldScreen(this));
 		}));
@@ -143,6 +174,7 @@ public abstract class MixinGuiMainMenu extends Screen {
 		this.addButton(new NewButtonWidget(this.width / 2 - 100, y + spacingY * 2, 200, 20, I18n.translate("Configuration"), (buttonWidget) -> {
 			MinecraftClient.getInstance().openScreen(new ConfigurationScreen());
 		}));
+		//#endif
 	}
 
 	protected abstract void switchToRealms();

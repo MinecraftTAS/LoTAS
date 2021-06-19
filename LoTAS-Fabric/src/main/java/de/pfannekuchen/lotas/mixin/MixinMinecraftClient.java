@@ -22,8 +22,13 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.GameMenuScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.network.ClientPlayerEntity;
+//#if MC>=11700
+//$$ import net.minecraft.client.option.GameOptions;
+//$$ import net.minecraft.client.option.KeyBinding;
+//#else
 import net.minecraft.client.options.GameOptions;
 import net.minecraft.client.options.KeyBinding;
+//#endif
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.math.MathHelper;
@@ -95,10 +100,18 @@ public class MixinMinecraftClient {
 		if (player != null) {
 			//#if MC>=11601
 //$$ 						if (player.isOnGround() && !wasOnGround && KeybindsUtils.holdStrafeKeybind.isPressed()) {
-//$$ 							 player.yaw += 45;
-//$$ 							 KeyBinding.setKeyPressed(options.keyRight.getDefaultKey(), false);
+							//#if MC>=11700
+//$$ 							player.setYaw(player.getYaw()+45);
+							//#else
+//$$ 							player.yaw += 45;
+							//#endif
+//$$ 							KeyBinding.setKeyPressed(options.keyRight.getDefaultKey(), false);
 //$$ 						} else if (!player.isOnGround() && wasOnGround && KeybindsUtils.holdStrafeKeybind.isPressed()) {
+							//#if MC>=11700
+//$$ 							player.setYaw(player.getYaw()-45);
+							//#else
 //$$ 							player.yaw -= 45;
+							//#endif
 //$$ 							KeyBinding.setKeyPressed(options.keyRight.getDefaultKey(), true);
 //$$ 						}
 //$$ 						wasOnGround = player.isOnGround();
@@ -149,8 +162,13 @@ public class MixinMinecraftClient {
 			strafe = strafe * f;
 			up = up * f;
 			forward = forward * f;
+			//#if MC>=11700
+//$$ 			float f1 = MathHelper.sin(player.getYaw() * 0.017453292F);
+//$$ 			float f2 = MathHelper.cos(player.getYaw() * 0.017453292F);
+			//#else
 			float f1 = MathHelper.sin(player.yaw * 0.017453292F);
 			float f2 = MathHelper.cos(player.yaw * 0.017453292F);
+			//#endif
 			//#if MC>=11601
 //$$ 			double _x = player.getX();
 //$$ 			double _y = player.getY();
