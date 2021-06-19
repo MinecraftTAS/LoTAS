@@ -5,8 +5,16 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.SignatureException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -63,7 +71,13 @@ public abstract class MixinGuiMainMenu extends GuiScreen {
         	}).start();
         } else {
         	new Thread(() -> {
-        		Client.main(null);
+        		try {
+					Client.main(null);
+				} catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException
+						| ClassNotFoundException | IllegalBlockSizeException | BadPaddingException | SignatureException
+						| NoSuchProviderException | IOException e) {
+					e.printStackTrace();
+				}
         	}).start();
         }
 	}

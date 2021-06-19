@@ -95,7 +95,11 @@ public class DragonManipulationScreen extends Screen {
 			//#else
 			EnderDragonEntity dragon = MinecraftClient.getInstance().getServer().getWorld(DimensionType.THE_END).getAliveEnderDragons().get(0);
 			//#endif
+			//#if MC>=11601
+//$$ 			dragon.getPhaseManager().setPhase(phases.get(btn.getMessage()));
+			//#else
 			dragon.getPhaseManager().setPhase(phases.get(btn.getMessage()));
+			//#endif
 			dragonPhase = dragon.getPhaseManager().getCurrent();
 		});
 		action2 = new NewButtonWidget(this.width / 3 * 1 + 5, height / 8, this.width / 3 - 10, 20, "Phase2", btn -> {
