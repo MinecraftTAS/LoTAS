@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.Comparator;
 
 import com.google.common.io.Files;
 import com.mojang.blaze3d.platform.GlStateManager;
@@ -117,6 +119,15 @@ public class LoadstateScreen extends Screen {
 					//#else
 					return name.startsWith(MinecraftClient.getInstance().getServer().getLevelName() + "-Savestate");
 					//#endif
+				}
+			});
+			Arrays.sort(f, new Comparator<File>() {
+
+				@Override
+				public int compare(File o1, File o2) {
+					Integer o1N = Integer.parseInt(o1.getName().split("-Savestate")[1]);
+					Integer o2N = Integer.parseInt(o2.getName().split("-Savestate")[1]);
+					return o1N - o2N;
 				}
 			});
 			for (File file : f) {
