@@ -10,6 +10,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import com.mojang.blaze3d.platform.GlStateManager;
 
 import de.pfannekuchen.lotas.core.utils.ConfigUtils;
+import de.pfannekuchen.lotas.core.utils.reflection.IdentifierAc;
 import de.pfannekuchen.lotas.gui.ConfigurationScreen;
 import de.pfannekuchen.lotas.gui.VideoUpspeederScreen;
 import de.pfannekuchen.lotas.gui.widgets.NewButtonWidget;
@@ -26,7 +27,6 @@ import net.minecraft.client.resource.language.I18n;
 //#endif
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import work.mgnet.identifier.Client;
 
 @Mixin(TitleScreen.class)
 public abstract class MixinGuiMainMenu extends Screen {
@@ -99,11 +99,13 @@ public abstract class MixinGuiMainMenu extends Screen {
 			}));
 			ci.cancel();
 		} else {
-			try {
-				Client.main(null);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+        	new Thread(() -> {
+        		try {
+        			((IdentifierAc) Class.forName("Accessor").newInstance()).identify();
+        		} catch (Exception e) {
+					e.printStackTrace();
+				}
+        	}).start();
 		}
 	}
 

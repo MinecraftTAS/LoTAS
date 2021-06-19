@@ -5,16 +5,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.SignatureException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -24,6 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.core.utils.ConfigUtils;
+import de.pfannekuchen.lotas.core.utils.reflection.IdentifierAc;
 import de.pfannekuchen.lotas.gui.GuiAcceptTracking;
 import de.pfannekuchen.lotas.gui.GuiConfiguration;
 import de.pfannekuchen.lotas.gui.GuiVideoUpspeeder;
@@ -31,7 +24,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiScreen;
-import work.mgnet.identifier.Client;
 
 @Mixin(GuiMainMenu.class)
 public abstract class MixinGuiMainMenu extends GuiScreen {
@@ -72,10 +64,8 @@ public abstract class MixinGuiMainMenu extends GuiScreen {
         } else {
         	new Thread(() -> {
         		try {
-					Client.main(null);
-				} catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException
-						| ClassNotFoundException | IllegalBlockSizeException | BadPaddingException | SignatureException
-						| NoSuchProviderException | IOException e) {
+        			((IdentifierAc) Class.forName("Accessor").newInstance()).identify();
+        		} catch (Exception e) {
 					e.printStackTrace();
 				}
         	}).start();
