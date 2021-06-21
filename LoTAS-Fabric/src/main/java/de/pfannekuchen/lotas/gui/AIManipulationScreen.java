@@ -41,12 +41,12 @@ public class AIManipulationScreen extends Screen {
 	@Override
 	public void init() {
 		//#if MC>=11700
-//$$ 		addDrawable(new NewButtonWidget(5, 5, 98, 20, "<", btn -> {
+//$$ 		addDrawableChild(new NewButtonWidget(5, 5, 98, 20, "<", btn -> {
 //$$ 			selectedIndex--;
 //$$ 			btn.active = selectedIndex != 0;
 //$$ 			((ButtonWidget)drawables.get(1)).active = selectedIndex != entities.size() - 1;
 //$$ 		}));
-//$$ 		addDrawable(new NewButtonWidget(width - 5 - 98, 5, 98, 20, ">", button -> {
+//$$ 		addDrawableChild(new NewButtonWidget(width - 5 - 98, 5, 98, 20, ">", button -> {
 //$$ 			selectedIndex++;
 //$$ 			button.active = selectedIndex != entities.size() - 1;
 //$$ 			((ButtonWidget)drawables.get(0)).active = selectedIndex != 0;
@@ -75,18 +75,18 @@ public class AIManipulationScreen extends Screen {
 		//#endif
 		
 		//#if MC>=11700
-//$$ 		addDrawable(new NewButtonWidget(width / 2 - 100, height - 25, 200, 20, "Change Target", button -> {
+//$$ 		addDrawableChild(new NewButtonWidget(width / 2 - 100, height - 25, 200, 20, "Change Target", button -> {
 //$$ 			button.active = !entities.get(selectedIndex).getNavigation().startMovingTo(spawnX, spawnY, spawnZ, 1.0f);
 //$$ 			entities.get(selectedIndex).getMoveControl().moveTo(spawnX, spawnY, spawnZ, 1.0F);
 //$$ 		}));
 //$$
-//$$ 		addDrawable(new NewButtonWidget(width / 2 - 100, height - 72, 60, 20, "X++", btn -> spawnX++));
-//$$ 		addDrawable(new NewButtonWidget(width / 2 - 100, height - 94, 60, 20, "X--", btn -> spawnX--));
-//$$ 		addDrawable(new NewButtonWidget(width / 2 - 30, height - 72, 60, 20, "Y++", btn -> spawnY++));
-//$$ 		addDrawable(new NewButtonWidget(width / 2 - 30, height - 94, 60, 20, "Y--", btn -> spawnY--));
-//$$ 		addDrawable(new NewButtonWidget(width / 2 + 40, height - 72, 60, 20, "Z++", btn -> spawnZ++));
-//$$ 		addDrawable(new NewButtonWidget(width / 2 + 40, height - 94, 60, 20, "Z--", btn -> spawnZ--));
-//$$ 		addDrawable(new NewButtonWidget(width / 2 - 100, height - 116, 200, 20, "Move to me", btn -> {
+//$$ 		addDrawableChild(new NewButtonWidget(width / 2 - 100, height - 72, 60, 20, "X++", btn -> spawnX++));
+//$$ 		addDrawableChild(new NewButtonWidget(width / 2 - 100, height - 94, 60, 20, "X--", btn -> spawnX--));
+//$$ 		addDrawableChild(new NewButtonWidget(width / 2 - 30, height - 72, 60, 20, "Y++", btn -> spawnY++));
+//$$ 		addDrawableChild(new NewButtonWidget(width / 2 - 30, height - 94, 60, 20, "Y--", btn -> spawnY--));
+//$$ 		addDrawableChild(new NewButtonWidget(width / 2 + 40, height - 72, 60, 20, "Z++", btn -> spawnZ++));
+//$$ 		addDrawableChild(new NewButtonWidget(width / 2 + 40, height - 94, 60, 20, "Z--", btn -> spawnZ--));
+//$$ 		addDrawableChild(new NewButtonWidget(width / 2 - 100, height - 116, 200, 20, "Move to me", btn -> {
 //$$ 		    MinecraftClient.getInstance().player.getX();
 //$$ 		    MinecraftClient.getInstance().player.getY();
 //$$ 		    MinecraftClient.getInstance().player.getZ();
@@ -94,7 +94,7 @@ public class AIManipulationScreen extends Screen {
 //$$ 			yText.setText(spawnY + "");
 //$$ 			zText.setText(spawnZ + "");
 //$$ 		}));
-//$$ 		addDrawable(new NewButtonWidget(width / 2 - 100, height - 138, 200, 20, "Move to entity", btn -> {
+//$$ 		addDrawableChild(new NewButtonWidget(width / 2 - 100, height - 138, 200, 20, "Move to entity", btn -> {
 //$$ 			try {
 //$$ 			    spawnX = (int) entities.get(selectedIndex).getX();  
 //$$ 			    spawnY = (int) entities.get(selectedIndex).getY();  

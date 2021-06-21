@@ -26,7 +26,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.screen.GameMenuScreen;
 import net.minecraft.client.gui.screen.Screen;
-//#if MC<=11601
+//#if MC<=11605
 import net.minecraft.client.gui.widget.AbstractButtonWidget;
 //#endif
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -71,7 +71,7 @@ public abstract class MixinGuiIngameMenu extends Screen {
 		//#endif 
 		
 		//#if MC>=11700
-//$$ 		this.addDrawable(new NewButtonWidget(this.width / 2 - 102, this.height / 4 + 48 + -16 + 24 + 24, 98, 20, "Savestate", btn -> {
+//$$ 		this.addDrawableChild(new NewButtonWidget(this.width / 2 - 102, this.height / 4 + 48 + -16 + 24 + 24, 98, 20, "Savestate", btn -> {
 		//#else 
 		this.addButton(new NewButtonWidget(this.width / 2 - 102, this.height / 4 + 48 + -16 + 24 + 24, 98, 20, "Savestate", btn -> {
 		//#endif 
@@ -87,7 +87,7 @@ public abstract class MixinGuiIngameMenu extends Screen {
 				SavestateMod.savestate(null);
 		}));
 		//#if MC>=11700
-//$$ 		this.addDrawable(new NewButtonWidget(this.width / 2 + 4, this.height / 4 + 48 + -16 + 24 + 24, 98, 20, "Loadstate", btn -> {
+//$$ 		this.addDrawableChild(new NewButtonWidget(this.width / 2 + 4, this.height / 4 + 48 + -16 + 24 + 24, 98, 20, "Loadstate", btn -> {
 		//#else
 		this.addButton(new NewButtonWidget(this.width / 2 + 4, this.height / 4 + 48 + -16 + 24 + 24, 98, 20, "Loadstate", btn -> {
 		//#endif
@@ -97,7 +97,7 @@ public abstract class MixinGuiIngameMenu extends Screen {
 				SavestateMod.loadstate(-1);
 		})).active = SavestateMod.hasSavestate();
 		//#if MC>=11700
-//$$ 		addDrawable(new NewButtonWidget(5, 15, 48, 20, "+", b -> {
+//$$ 		addDrawableChild(new NewButtonWidget(5, 15, 48, 20, "+", b -> {
 		//#else
 		addButton(new NewButtonWidget(5, 15, 48, 20, "+", b -> {
 		//#endif
@@ -116,7 +116,7 @@ public abstract class MixinGuiIngameMenu extends Screen {
 			}
 		}));
 		//#if MC>=11700
-//$$ 		addDrawable(new NewButtonWidget(55, 15, 48, 20, "-", b -> {
+//$$ 		addDrawableChild(new NewButtonWidget(55, 15, 48, 20, "-", b -> {
 		//#else
 		addButton(new NewButtonWidget(55, 15, 48, 20, "-", b -> {
 		//#endif
@@ -135,7 +135,7 @@ public abstract class MixinGuiIngameMenu extends Screen {
 			}
 		}));
 		//#if MC>=11700
-//$$ 		this.addDrawable(new NewButtonWidget((width / 4) * 0 + 1, height - 20, width / 4 - 2, 20, "Manipulate Drops", btn -> {
+//$$ 		this.addDrawableChild(new NewButtonWidget((width / 4) * 0 + 1, height - 20, width / 4 - 2, 20, "Manipulate Drops", btn -> {
 		//#else
 		this.addButton(new NewButtonWidget((width / 4) * 0 + 1, height - 20, width / 4 - 2, 20, "Manipulate Drops", btn -> {
 		//#endif
@@ -144,7 +144,7 @@ public abstract class MixinGuiIngameMenu extends Screen {
 
 		//#if MC>=11601
 		//#if MC>=11700
-//$$ 			this.addDrawable(new NewButtonWidget((width / 4) * 1 + 2, height - 20, width / 4 - 2, 20, "Manipulate Dragon", btn -> {
+//$$ 			this.addDrawableChild(new NewButtonWidget((width / 4) * 1 + 2, height - 20, width / 4 - 2, 20, "Manipulate Dragon", btn -> {
 		//#else
 //$$ 			this.addButton(new NewButtonWidget((width / 4) * 1 + 2, height - 20, width / 4 - 2, 20, "Manipulate Dragon", btn -> {
 		//#endif
@@ -156,21 +156,21 @@ public abstract class MixinGuiIngameMenu extends Screen {
 		})).active = MinecraftClient.getInstance().getServer().getWorld(DimensionType.THE_END).getAliveEnderDragons().size() >= 1;
 		//#endif
 		//#if MC>=11700
-//$$ 		this.addDrawable(new NewButtonWidget((width / 4) * 2 + 3, height - 20, width / 4 - 2, 20, "Manipulate Spawning", btn -> {
+//$$ 		this.addDrawableChild(new NewButtonWidget((width / 4) * 2 + 3, height - 20, width / 4 - 2, 20, "Manipulate Spawning", btn -> {
 		//#else
 		this.addButton(new NewButtonWidget((width / 4) * 2 + 3, height - 20, width / 4 - 2, 20, "Manipulate Spawning", btn -> {
 		//#endif
 			MinecraftClient.getInstance().openScreen(new SpawnManipulationScreen());
 		}));
 		//#if MC>=11700
-//$$ 		this.addDrawable(new NewButtonWidget((width / 4) * 3 + 4, height - 20, width / 4 - 4, 20, "Manipulate AI", btn -> {
+//$$ 		this.addDrawableChild(new NewButtonWidget((width / 4) * 3 + 4, height - 20, width / 4 - 4, 20, "Manipulate AI", btn -> {
 		//#else
 		this.addButton(new NewButtonWidget((width / 4) * 3 + 4, height - 20, width / 4 - 4, 20, "Manipulate AI", btn -> {
 		//#endif
 			MinecraftClient.getInstance().openScreen(new AIManipulationScreen());
 		}));
 		//#if MC>=11700
-//$$ 		this.addDrawable(new NewButtonWidget(5, 55, 98, 20, "Save Items", btn -> {
+//$$ 		this.addDrawableChild(new NewButtonWidget(5, 55, 98, 20, "Save Items", btn -> {
 		//#else
 		this.addButton(new NewButtonWidget(5, 55, 98, 20, "Save Items", btn -> {
 		//#endif
@@ -178,7 +178,7 @@ public abstract class MixinGuiIngameMenu extends Screen {
 			btn.active = false;
 		}));
 		//#if MC>=11700
-//$$ 		this.addDrawable(new NewButtonWidget(5, 75, 98, 20, "Load Items", btn -> {
+//$$ 		this.addDrawableChild(new NewButtonWidget(5, 75, 98, 20, "Load Items", btn -> {
 		//#else
 		this.addButton(new NewButtonWidget(5, 75, 98, 20, "Load Items", btn -> {
 		//#endif
@@ -186,7 +186,7 @@ public abstract class MixinGuiIngameMenu extends Screen {
 			btn.active = false;
 		}));
 		//#if MC>=11700
-//$$ 		addDrawable(new NewButtonWidget(37, 115, 66, 20, "Jump ticks", btn -> {
+//$$ 		addDrawableChild(new NewButtonWidget(37, 115, 66, 20, "Jump ticks", btn -> {
 		//#else
 		addButton(new NewButtonWidget(37, 115, 66, 20, "Jump ticks", btn -> {
 		//#endif
@@ -200,7 +200,7 @@ public abstract class MixinGuiIngameMenu extends Screen {
 		}));
 
 		//#if MC>=11700
-//$$ 		addDrawable(new NewButtonWidget(5, 115, 30, 20, TickrateChangerMod.ticks[TickrateChangerMod.ji] + "t", btn -> {
+//$$ 		addDrawableChild(new NewButtonWidget(5, 115, 30, 20, TickrateChangerMod.ticks[TickrateChangerMod.ji] + "t", btn -> {
 		//#else
 		addButton(new NewButtonWidget(5, 115, 30, 20, TickrateChangerMod.ticks[TickrateChangerMod.ji] + "t", btn -> {
 		//#endif
@@ -215,7 +215,7 @@ public abstract class MixinGuiIngameMenu extends Screen {
 			init();
 		}));
 		//#if MC>=11700
-//$$ 		addDrawable(new SmallCheckboxWidget(2, height - 20 - 15, "Avoid taking damage", !ConfigUtils.getBoolean("tools", "takeDamage"), b -> {
+//$$ 		addDrawableChild(new SmallCheckboxWidget(2, height - 20 - 15, "Avoid taking damage", !ConfigUtils.getBoolean("tools", "takeDamage"), b -> {
 		//#else
 		addButton(new SmallCheckboxWidget(2, height - 20 - 15, "Avoid taking damage", !ConfigUtils.getBoolean("tools", "takeDamage"), b -> {
 		//#endif
@@ -224,7 +224,7 @@ public abstract class MixinGuiIngameMenu extends Screen {
 		}));
 
 		//#if MC>=11700
-//$$ 		final SmallCheckboxWidget tw = addDrawable(new SmallCheckboxWidget(2, height - 32 - 15, "Drop towards me", ConfigUtils.getBoolean("tools", "manipulateVelocityTowards"), b -> {
+//$$ 		final SmallCheckboxWidget tw = addDrawableChild(new SmallCheckboxWidget(2, height - 32 - 15, "Drop towards me", ConfigUtils.getBoolean("tools", "manipulateVelocityTowards"), b -> {
 		//#else
 		final SmallCheckboxWidget tw = addButton(new SmallCheckboxWidget(2, height - 32 - 15, "Drop towards me", ConfigUtils.getBoolean("tools", "manipulateVelocityTowards"), b -> {
 		//#endif
@@ -236,7 +236,7 @@ public abstract class MixinGuiIngameMenu extends Screen {
 			ConfigUtils.save();
 		}));
 		//#if MC>=11700
-//$$ 		fw = addDrawable(new SmallCheckboxWidget(2, height - 44 - 15, "Drop away from me", ConfigUtils.getBoolean("tools", "manipulateVelocityAway"), b -> {
+//$$ 		fw = addDrawableChild(new SmallCheckboxWidget(2, height - 44 - 15, "Drop away from me", ConfigUtils.getBoolean("tools", "manipulateVelocityAway"), b -> {
 		//#else
 		fw = addButton(new SmallCheckboxWidget(2, height - 44 - 15, "Drop away from me", ConfigUtils.getBoolean("tools", "manipulateVelocityAway"), b -> {
 		//#endif
@@ -248,7 +248,7 @@ public abstract class MixinGuiIngameMenu extends Screen {
 			ConfigUtils.save();
 		}));
 		//#if MC>=11700
-//$$ 		addDrawable(new SmallCheckboxWidget(2, height - 56 - 15, "Optimize Explosions", ConfigUtils.getBoolean("tools", "manipulateExplosionDropChance"), b -> {
+//$$ 		addDrawableChild(new SmallCheckboxWidget(2, height - 56 - 15, "Optimize Explosions", ConfigUtils.getBoolean("tools", "manipulateExplosionDropChance"), b -> {
 		//#else
 		addButton(new SmallCheckboxWidget(2, height - 56 - 15, "Optimize Explosions", ConfigUtils.getBoolean("tools", "manipulateExplosionDropChance"), b -> {
 		//#endif
@@ -256,7 +256,7 @@ public abstract class MixinGuiIngameMenu extends Screen {
 			ConfigUtils.save();
 		}));
 		//#if MC>=11700
-//$$ 		addDrawable(new SmallCheckboxWidget(2, height - 68 - 15, "Right Auto Clicker", ConfigUtils.getBoolean("tools", "rAutoClicker"), b -> {
+//$$ 		addDrawableChild(new SmallCheckboxWidget(2, height - 68 - 15, "Right Auto Clicker", ConfigUtils.getBoolean("tools", "rAutoClicker"), b -> {
 		//#else
 		addButton(new SmallCheckboxWidget(2, height - 68 - 15, "Right Auto Clicker", ConfigUtils.getBoolean("tools", "rAutoClicker"), b -> {
 		//#endif
@@ -264,7 +264,7 @@ public abstract class MixinGuiIngameMenu extends Screen {
 			ConfigUtils.save();
 		}));
 		//#if MC>=11700
-//$$ 		addDrawable(new NewButtonWidget(this.width / 2 - 102, this.height / 4 + 144 + -16, 204, 20, "Reset Timer", btn -> {
+//$$ 		addDrawableChild(new NewButtonWidget(this.width / 2 - 102, this.height / 4 + 144 + -16, 204, 20, "Reset Timer", btn -> {
 		//#else
 		addButton(new NewButtonWidget(this.width / 2 - 102, this.height / 4 + 144 + -16, 204, 20, "Reset Timer", btn -> {
 		//#endif

@@ -38,10 +38,10 @@ public class LoadstateScreen extends Screen {
 			e.printStackTrace();
 		}
 		//#if MC>=11700
-//$$ 		addDrawable(new NewButtonWidget(width / 2 - 102, height - 52, 204, 20, "Loadstate", btn -> {
+//$$ 		addDrawableChild(new NewButtonWidget(width / 2 - 102, height - 52, 204, 20, "Loadstate", btn -> {
 //$$ 			SavestateMod.loadstate(list.getSelectedOrNull().index + 1);
 //$$ 		}));
-//$$ 		addDrawable(new NewButtonWidget(width / 2 - 102, height - 31, 204, 20, "Delete State", btn -> {
+//$$ 		addDrawableChild(new NewButtonWidget(width / 2 - 102, height - 31, 204, 20, "Delete State", btn -> {
 //$$ 			SavestateMod.yeet(list.getSelectedOrNull().index + 1);
 //$$ 			MinecraftClient.getInstance().openScreen(new LoadstateScreen());
 //$$ 		}));

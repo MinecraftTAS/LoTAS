@@ -4,6 +4,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
@@ -98,7 +99,7 @@ public abstract class MixinGuiMainMenu extends Screen {
 		if (!ConfigUtils.getBoolean("hidden", "acceptedDataSending")) {
 			isAcceptance = true;
 			//#if MC>=11700
-//$$ 			addDrawable(new NewButtonWidget(width / 2 - 116, height / 2 + 62 + -16, 114, 20, "Accept", c1 -> {
+//$$ 			addDrawableChild(new NewButtonWidget(width / 2 - 116, height / 2 + 62 + -16, 114, 20, "Accept", c1 -> {
 			//#else
 			addButton(new NewButtonWidget(width / 2 - 116, height / 2 + 62 + -16, 114, 20, "Accept", c1 -> {
 			//#endif
@@ -107,7 +108,7 @@ public abstract class MixinGuiMainMenu extends Screen {
 				MinecraftClient.getInstance().openScreen(new TitleScreen());
 			}));
 			//#if MC>=11700
-//$$ 			addDrawable(new NewButtonWidget(width / 2 + 2, height / 2 + 62 + -16, 114, 20, "Decline", c2 -> {
+//$$ 			addDrawableChild(new NewButtonWidget(width / 2 + 2, height / 2 + 62 + -16, 114, 20, "Decline", c2 -> {
 			//#else
 			addButton(new NewButtonWidget(width / 2 + 2, height / 2 + 62 + -16, 114, 20, "Decline", c2 -> {
 			//#endif
@@ -127,11 +128,13 @@ public abstract class MixinGuiMainMenu extends Screen {
 
 	//#if MC>=11601
 	//#if MC>=11605
-//$$ 	@Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/TitleScreen;drawCenteredString(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/font/TextRenderer;Ljava/lang/String;III)V"))
-//$$ 	private void redirectdrawSplash(MatrixStack matrices, TextRenderer textRenderer, String str, int centerX, int y, int color) {
-		//#if MC>=11700
-//$$ 		TitleScreen.drawCenteredText(matrices, textRenderer, "TaS iS cHeAtInG !!1", centerX, y, color);
+	//#if MC>=11700
+//$$ 	@ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/TitleScreen;drawCenteredText(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/font/TextRenderer;Ljava/lang/String;III)V"))
+//$$     private String modifyText(String original) {
+//$$         return "TaS iS cHeAtInG !!1";
 		//#else
+//$$ 		@Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/TitleScreen;drawCenteredString(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/font/TextRenderer;Ljava/lang/String;III)V"))
+//$$ 	private void redirectdrawSplash(MatrixStack matrices, TextRenderer textRenderer, String str, int centerX, int y, int color) {
 //$$ 		TitleScreen.drawCenteredString(matrices, textRenderer, "TaS iS cHeAtInG !!1", centerX, y, color);
 		//#endif
 //$$ 	}
@@ -155,13 +158,13 @@ public abstract class MixinGuiMainMenu extends Screen {
 	@Overwrite
 	private void initWidgetsNormal(int y, int spacingY) {
 		//#if MC>=11700
-//$$ 		this.addDrawable(new NewButtonWidget(this.width / 2 - 100, y, 200, 20, I18n.translate("menu.singleplayer"), (buttonWidget) -> {
+//$$ 		this.addDrawableChild(new NewButtonWidget(this.width / 2 - 100, y, 200, 20, I18n.translate("menu.singleplayer"), (buttonWidget) -> {
 //$$ 			MinecraftClient.getInstance().openScreen(new SelectWorldScreen(this));
 //$$ 		}));
-//$$ 		this.addDrawable(new NewButtonWidget(this.width / 2 - 100, y + spacingY * 1, 200, 20, I18n.translate("Video Upspeeder"), (buttonWidget) -> {
+//$$ 		this.addDrawableChild(new NewButtonWidget(this.width / 2 - 100, y + spacingY * 1, 200, 20, I18n.translate("Video Upspeeder"), (buttonWidget) -> {
 //$$ 			MinecraftClient.getInstance().openScreen(new VideoUpspeederScreen());
 //$$ 		}));
-//$$ 		this.addDrawable(new NewButtonWidget(this.width / 2 - 100, y + spacingY * 2, 200, 20, I18n.translate("Configuration"), (buttonWidget) -> {
+//$$ 		this.addDrawableChild(new NewButtonWidget(this.width / 2 - 100, y + spacingY * 2, 200, 20, I18n.translate("Configuration"), (buttonWidget) -> {
 //$$ 			MinecraftClient.getInstance().openScreen(new ConfigurationScreen());
 //$$ 		}));
 		//#else

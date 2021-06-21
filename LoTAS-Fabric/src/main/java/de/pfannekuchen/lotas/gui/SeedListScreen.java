@@ -118,7 +118,7 @@ public class SeedListScreen extends Screen {
 	@Override
 	protected void init() {
 		//#if MC>=11700
-//$$ 		this.addDrawable(new NewButtonWidget(width / 2 - 100, height - 28, 200, 20, "Done", button -> {
+//$$ 		this.addDrawableChild(new NewButtonWidget(width / 2 - 100, height - 28, 200, 20, "Done", button -> {
 //$$ 			MinecraftClient.getInstance().openScreen(new SelectWorldScreen(new TitleScreen()));
 //$$ 		}));
 //$$ 		ButtonWidget create = new NewButtonWidget(width / 2 - 100, height - 52, 200, 20, "Create World", button -> {
@@ -140,7 +140,7 @@ public class SeedListScreen extends Screen {
 		});
 		create.active = false;
 		//#if MC>=11700
-//$$ 		this.addDrawable(create);
+//$$ 		this.addDrawableChild(create);
 		//#else
 		this.addButton(create);
 		//#endif

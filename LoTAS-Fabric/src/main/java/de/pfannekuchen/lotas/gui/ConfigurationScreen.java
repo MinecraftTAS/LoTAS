@@ -51,7 +51,7 @@ public class ConfigurationScreen extends Screen {
 			if (option.split(":")[0].equalsIgnoreCase("B")) {
 				boolean v = Boolean.parseBoolean(option.split(":")[3]);
 				//#if MC>=11700
-//$$ 				addDrawable(new NewButtonWidget(width / 2 - 100, y, 200, 20, title + ": " + (v ? "\u00A7atrue" : "\u00A7cfalse"), actionPerformed(i++)));
+//$$ 				addDrawableChild(new NewButtonWidget(width / 2 - 100, y, 200, 20, title + ": " + (v ? "\u00A7atrue" : "\u00A7cfalse"), actionPerformed(i++)));
 				//#else
 				addButton(new NewButtonWidget(width / 2 - 100, y, 200, 20, title + ": " + (v ? "\u00A7atrue" : "\u00A7cfalse"), actionPerformed(i++)));
 				//#endif

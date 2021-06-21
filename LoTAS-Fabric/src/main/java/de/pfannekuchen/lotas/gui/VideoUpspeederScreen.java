@@ -82,7 +82,7 @@ public class VideoUpspeederScreen extends Screen {
 	protected void init() {
 		if (isEncoding) {
 			//#if MC>=11700
-//$$ 			addDrawable(new NewButtonWidget(width / 2 - 153, height - 40, 306, 20, "Continue encoding in the background >>", (b) -> {
+//$$ 			addDrawableChild(new NewButtonWidget(width / 2 - 153, height - 40, 306, 20, "Continue encoding in the background >>", (b) -> {
 //$$ 				MinecraftClient.getInstance().openScreen(new TitleScreen());
 //$$ 			}));
 			//#else
@@ -95,7 +95,7 @@ public class VideoUpspeederScreen extends Screen {
 
 		//#if MC>=11601
 		//#if MC>=11700
-//$$ 		addDrawable(new TextFieldWidget(client.textRenderer, (width / 12) * 1 - (width / 24), (height / 8), (width / 12) * 9, 20, LiteralText.EMPTY)).setMaxLength(999);
+//$$ 		addDrawableChild(new TextFieldWidget(client.textRenderer, (width / 12) * 1 - (width / 24), (height / 8), (width / 12) * 9, 20, LiteralText.EMPTY)).setMaxLength(999);
 		//#else
 //$$ 			addButton(new TextFieldWidget(client.textRenderer, (width / 12) * 1 - (width / 24), (height / 8), (width / 12) * 9, 20, LiteralText.EMPTY)).setMaxLength(999);
 		//#endif
@@ -103,7 +103,7 @@ public class VideoUpspeederScreen extends Screen {
 		addButton(new TextFieldWidget(client.textRenderer, (width / 12) * 1 - (width / 24), (height / 8), (width / 12) * 9, 20, "")).setMaxLength(999);
 		//#endif
 		//#if MC>=11700
-//$$ 		addDrawable(new NewButtonWidget((width / 12) * 10 + 5 - (width / 24), (height / 8), (width / 12) * 2, 20, "Select File", (b) -> {
+//$$ 		addDrawableChild(new NewButtonWidget((width / 12) * 10 + 5 - (width / 24), (height / 8), (width / 12) * 2, 20, "Select File", (b) -> {
 		//#else
 		addButton(new NewButtonWidget((width / 12) * 10 + 5 - (width / 24), (height / 8), (width / 12) * 2, 20, "Select File", (b) -> {
 		//#endif
@@ -145,18 +145,18 @@ public class VideoUpspeederScreen extends Screen {
 			}).start();
 		}));
 		//#if MC>=11700
-//$$ 		addDrawable(new NewButtonWidget((width / 2) - 70, (height / 8) * 2 + 20, 20, 20, "-", (b) -> {
+//$$ 		addDrawableChild(new NewButtonWidget((width / 2) - 70, (height / 8) * 2 + 20, 20, 20, "-", (b) -> {
 //$$ 			if (tickrate != 1)
 //$$ 				tickrate--;
 //$$ 			TextFieldWidget buttons=(TextFieldWidget) drawables.get(drawables.size() - 1);
 //$$ 			buttons.setText(tickrate + "");
 //$$ 		}));
-//$$ 		addDrawable(new NewButtonWidget((width / 2) + 50, (height / 8) * 2 + 20, 20, 20, "+", (b) -> {
+//$$ 		addDrawableChild(new NewButtonWidget((width / 2) + 50, (height / 8) * 2 + 20, 20, 20, "+", (b) -> {
 //$$ 			tickrate++;
 //$$ 			TextFieldWidget buttons=(TextFieldWidget) drawables.get(drawables.size() - 1);
 //$$ 			buttons.setText(tickrate + "");
 //$$ 		}));
-//$$ 		addDrawable(new NewButtonWidget((width / 2) - 98, this.height - (this.height / 10) - 15 - 20 - 5, 204, 20, "Speed up video", (b) -> {
+//$$ 		addDrawableChild(new NewButtonWidget((width / 2) - 98, this.height - (this.height / 10) - 15 - 20 - 5, 204, 20, "Speed up video", (b) -> {
 //$$ 			b.active = false;
 //$$ 			isEncoding = true;
 //$$ 			VideoUpspeeder.speedup(tickrate, bitrate(), codecFFmpeg, (long) ((lengthInMilliseconds / 16L) * (tickrate / 20F)));
@@ -179,8 +179,8 @@ public class VideoUpspeederScreen extends Screen {
 		//#endif
 		//#if MC>=11601
 		//#if MC>=11700
-//$$ 		    addDrawable(new CheckboxWidget(2, this.height - 22, 20, 20, new LiteralText("High Quality"), false));
-//$$ 		    addDrawable(new TextFieldWidget(client.textRenderer, (width / 2) - 45, (height / 8) * 2 + 23, 90, 14, new LiteralText("20"))).setText("20");
+//$$ 		    addDrawableChild(new CheckboxWidget(2, this.height - 22, 20, 20, new LiteralText("High Quality"), false));
+//$$ 		    addDrawableChild(new TextFieldWidget(client.textRenderer, (width / 2) - 45, (height / 8) * 2 + 23, 90, 14, new LiteralText("20"))).setText("20");
 		//#else
 //$$ 		    addButton(new CheckboxWidget(2, this.height - 22, 20, 20, new LiteralText("High Quality"), false));
 //$$ 		    addButton(new TextFieldWidget(client.textRenderer, (width / 2) - 45, (height / 8) * 2 + 23, 90, 14, new LiteralText("20"))).setText("20");

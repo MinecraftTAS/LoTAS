@@ -204,10 +204,10 @@ public class DragonManipulationScreen extends Screen {
 			action3.active = false;
 		}
 		//#if MC>=11700
-//$$ 		addDrawable(action1);
-//$$ 		addDrawable(action2);
-//$$ 		addDrawable(action3);
-//$$ 		addDrawable(new NewButtonWidget(this.width / 2 - 155, this.height - 29, 300, 20, I18n.translate("gui.done"), btn -> {
+//$$ 		addDrawableChild(action1);
+//$$ 		addDrawableChild(action2);
+//$$ 		addDrawableChild(action3);
+//$$ 		addDrawableChild(new NewButtonWidget(this.width / 2 - 155, this.height - 29, 300, 20, I18n.translate("gui.done"), btn -> {
 //$$ 			MinecraftClient.getInstance().openScreen(here);
 //$$ 		}));
 		//#else

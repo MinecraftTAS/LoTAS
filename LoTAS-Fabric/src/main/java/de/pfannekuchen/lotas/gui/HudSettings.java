@@ -99,7 +99,7 @@ public class HudSettings extends Screen {
 		for (Settings s : Settings.values()) {
 			final int value = index;
 			//#if MC>=11700
-//$$ 			addDrawable(new SmallCheckboxWidget(1, y -= 13, s.name().toLowerCase(), Boolean.parseBoolean(p.getProperty(s.name() + "_visible")), b -> {
+//$$ 			addDrawableChild(new SmallCheckboxWidget(1, y -= 13, s.name().toLowerCase(), Boolean.parseBoolean(p.getProperty(s.name() + "_visible")), b -> {
 //$$ 				p.setProperty(Settings.values()[value].name() + "_visible", b.isChecked() + "");
 //$$ 				try {
 //$$ 					save();

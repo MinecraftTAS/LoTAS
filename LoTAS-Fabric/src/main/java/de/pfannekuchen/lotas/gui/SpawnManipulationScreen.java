@@ -138,13 +138,13 @@ public class SpawnManipulationScreen extends Screen {
 
 		});
 		//#if MC>=11700
-//$$ 		addDrawable(entity);
-//$$ 		addDrawable(new NewButtonWidget(width / 9 * 3 + 6, height - 24, width / 9 - 4, 20, "X++", btn -> spawnX++));
-//$$ 		addDrawable(new NewButtonWidget(width / 9 * 4 + 6, height - 24, width / 9 - 4, 20, "X--", btn -> spawnX--));
-//$$ 		addDrawable(new NewButtonWidget(width / 9 * 5 + 3, height - 24, width / 9 - 4, 20, "Y++", btn -> spawnY++));
-//$$ 		addDrawable(new NewButtonWidget(width / 9 * 6 + 3, height - 24, width / 9 - 4, 20, "Y--", btn -> spawnY--));
-//$$ 		addDrawable(new NewButtonWidget(width / 9 * 7 + 1, height - 24, width / 9 - 4, 20, "Z++", btn -> spawnZ++));
-//$$ 		addDrawable(new NewButtonWidget(width / 9 * 8 + 1, height - 24, width / 9 - 4, 20, "Z--", btn -> spawnZ--));
+//$$ 		addDrawableChild(entity);
+//$$ 		addDrawableChild(new NewButtonWidget(width / 9 * 3 + 6, height - 24, width / 9 - 4, 20, "X++", btn -> spawnX++));
+//$$ 		addDrawableChild(new NewButtonWidget(width / 9 * 4 + 6, height - 24, width / 9 - 4, 20, "X--", btn -> spawnX--));
+//$$ 		addDrawableChild(new NewButtonWidget(width / 9 * 5 + 3, height - 24, width / 9 - 4, 20, "Y++", btn -> spawnY++));
+//$$ 		addDrawableChild(new NewButtonWidget(width / 9 * 6 + 3, height - 24, width / 9 - 4, 20, "Y--", btn -> spawnY--));
+//$$ 		addDrawableChild(new NewButtonWidget(width / 9 * 7 + 1, height - 24, width / 9 - 4, 20, "Z++", btn -> spawnZ++));
+//$$ 		addDrawableChild(new NewButtonWidget(width / 9 * 8 + 1, height - 24, width / 9 - 4, 20, "Z--", btn -> spawnZ--));
 		//#else
 		addButton(entity);
 		addButton(new NewButtonWidget(width / 9 * 3 + 6, height - 24, width / 9 - 4, 20, "X++", btn -> spawnX++));
@@ -160,8 +160,8 @@ public class SpawnManipulationScreen extends Screen {
 //$$ 		        yText = new TextFieldWidget(MinecraftClient.getInstance().textRenderer, width / 9 * 5 + 4, height - 46, (int) (width/ 4.5) - 6, 20, new LiteralText(spawnY + ""));
 //$$ 		        zText = new TextFieldWidget(MinecraftClient.getInstance().textRenderer, width / 9 * 7 + 2, height - 46, (int) (width/ 4.5) - 6, 20, new LiteralText(spawnZ + ""));
 		        //#if MC>=11700
-//$$ 		        addDrawable(new NewButtonWidget(5, height - 24, width / 3, 20, "Spawn Entity", btn -> MinecraftClient.getInstance().getServer().getPlayerManager().getPlayer(MinecraftClient.getInstance().player.getUuid()).world.spawnEntity(e)));
-//$$ 		        addDrawable(new NewButtonWidget(5, height - 46, width / 3, 20, "Done", btn -> MinecraftClient.getInstance().openScreen(new GameMenuScreen(true))));
+//$$ 		        addDrawableChild(new NewButtonWidget(5, height - 24, width / 3, 20, "Spawn Entity", btn -> MinecraftClient.getInstance().getServer().getPlayerManager().getPlayer(MinecraftClient.getInstance().player.getUuid()).world.spawnEntity(e)));
+//$$ 		        addDrawableChild(new NewButtonWidget(5, height - 46, width / 3, 20, "Done", btn -> MinecraftClient.getInstance().openScreen(new GameMenuScreen(true))));
 		        //#else
 //$$ 		        addButton(new NewButtonWidget(5, height - 24, width / 3, 20, "Spawn Entity", btn -> MinecraftClient.getInstance().getServer().getPlayerManager().getPlayer(MinecraftClient.getInstance().player.getUuid()).world.spawnEntity(e)));
 //$$ 		        addButton(new NewButtonWidget(5, height - 46, width / 3, 20, "Done", btn -> MinecraftClient.getInstance().openScreen(new GameMenuScreen(true))));
