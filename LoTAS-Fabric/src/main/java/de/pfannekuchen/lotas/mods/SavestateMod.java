@@ -63,9 +63,7 @@ public class SavestateMod {
 		final MinecraftServer server = mc.getServer();
 		server.getPlayerManager().saveAllPlayerData();
 		
-		if(!stillSaving) {
-			server.save(false, true, false);
-		}
+		server.save(false, true, false);
 		
 		while (stillSaving) {
 		}

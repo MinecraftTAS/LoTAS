@@ -39,8 +39,8 @@ public class KeybindsUtils {
 
 	public static void keyEvent() {
 		while (saveStateKeybind.wasPressed()) {
-			MinecraftClient.getInstance().openScreen(new GameMenuScreen(true));
 			shouldSavestate = true;
+			MinecraftClient.getInstance().openScreen(new GameMenuScreen(true));
 		}
 		while (loadStateKeybind.wasPressed()) {
 			MinecraftClient.getInstance().openScreen(new GameMenuScreen(true));
