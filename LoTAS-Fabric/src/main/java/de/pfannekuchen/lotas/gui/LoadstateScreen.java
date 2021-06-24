@@ -130,8 +130,15 @@ public class LoadstateScreen extends Screen {
 					return o1N - o2N;
 				}
 			});
+			int fallbackentry=0;
 			for (File file : f) {
+				fallbackentry++;
+				try {
 				addEntry(new StateEntry(Files.readLines(new File(file, "lotas.dat"), StandardCharsets.UTF_8).get(0), "Savestate " + file.getName().split("-Savestate")[1], Integer.parseInt(file.getName().split("-Savestate")[1]) - 1));
+				} catch(Exception e) {
+					addEntry(new StateEntry("Error while reading the file", "responsible for this text", fallbackentry));
+					e.printStackTrace();
+				}
 			}
 		}
 
