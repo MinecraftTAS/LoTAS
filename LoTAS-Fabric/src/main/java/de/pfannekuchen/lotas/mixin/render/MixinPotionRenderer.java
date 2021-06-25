@@ -2,7 +2,9 @@ package de.pfannekuchen.lotas.mixin.render;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.gen.AccessorInfo;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.At.Shift;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import net.minecraft.item.ItemStack;
@@ -10,32 +12,39 @@ import net.minecraft.util.Hand;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import de.pfannekuchen.lotas.core.utils.PotionRenderer;
+import de.pfannekuchen.lotas.mixin.accessors.AccessorItemRenderer;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.item.HeldItemRenderer;
+import net.minecraft.client.render.item.ItemRenderer;
 //#if MC>=11502
 //$$ import net.minecraft.client.network.ClientPlayerEntity;
 //$$ import net.minecraft.client.render.VertexConsumerProvider;
 //$$ import net.minecraft.client.render.VertexConsumerProvider.Immediate;
 //$$ import net.minecraft.client.util.math.MatrixStack;
 //#endif
+import net.minecraft.client.render.model.ModelRotation;
+import net.minecraft.client.render.model.json.ModelTransformation;
 
-@Mixin(HeldItemRenderer.class)
+@Mixin(GameRenderer.class)
 public abstract class MixinPotionRenderer {
 
 	//#if MC<=11404
-	@Shadow
-	public abstract void renderFirstPersonItem(AbstractClientPlayerEntity player, float tickDelta, float pitch, Hand hand, float f, ItemStack item, float equipProgress);
 
 	@Shadow
-	public abstract void applyLightmap();
+	HeldItemRenderer firstPersonRenderer;
 
-	@Inject(method = "rotate", at = @At("TAIL"))
-	public void drawPotionAfter(float x, float y, CallbackInfo ci) {
+
+	@Inject(method = "renderHand", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/GameRenderer;disableLightmap()V", shift = Shift.AFTER))
+	public void drawPotionAfter(CallbackInfo ci) {
+		GlStateManager.matrixMode(5888);
+        GlStateManager.loadIdentity();
 		GlStateManager.pushMatrix();
 		ItemStack stack2 = PotionRenderer.render();
 		MinecraftClient mc = MinecraftClient.getInstance();
-		applyLightmap();
-		renderFirstPersonItem(mc.player, mc.getTickDelta(), mc.player.pitch, Hand.MAIN_HAND, 0f, stack2, 0f);
+		GlStateManager.disableLighting();
+		((AccessorItemRenderer)firstPersonRenderer).getItemRenderer().renderItem(stack2, ModelTransformation.Type.FIXED);
+		GlStateManager.enableLighting();
 		GlStateManager.popMatrix();
 	}
 	//#else

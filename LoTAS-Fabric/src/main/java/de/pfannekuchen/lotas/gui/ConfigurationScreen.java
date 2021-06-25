@@ -26,7 +26,7 @@ public class ConfigurationScreen extends Screen {
 
 	public static String[] optionsInteger = new String[] { "I:hidden:explosionoptimization:INSERT" };
 
-	public static String[] optionsString = new String[] { "S:ui:runner:INSERT" };
+	public static String[] optionsString = new String[] {  };
 
 	public ArrayList<TextFieldWidget> strings = new ArrayList<TextFieldWidget>();
 	public ArrayList<TextFieldWidget> ints = new ArrayList<TextFieldWidget>();

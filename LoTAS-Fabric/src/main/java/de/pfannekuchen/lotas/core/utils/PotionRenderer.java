@@ -4,6 +4,7 @@ import com.mojang.blaze3d.platform.GlStateManager;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.util.Window;
 //#if MC>=11502
 //$$ import net.minecraft.client.util.math.MatrixStack;
 //#if MC>=11700
@@ -33,17 +34,6 @@ public class PotionRenderer {
 
 	//#if MC<=11404
 	public static ItemStack render() {
-		ClientPlayerEntity entityplayersp = MinecraftClient.getInstance().player;
-		float f22 = entityplayersp.prevPitch - entityplayersp.prevPitch;
-		float f221 = entityplayersp.prevYaw - entityplayersp.prevYaw;
-		f22 = MathHelper.clamp(f22, -16, 16);
-		f221 = MathHelper.clamp(f221, -16, 16);
-
-		lerpX = lerp(f22, lerpX, .8f);
-		lerpY = lerp(f221, lerpY, .8f);
-
-		GlStateManager.translated(lerpY * .025, lerpX * -.025, 0);
-
 		ItemStack stack = new ItemStack(Items.POTION);
 		if (stack.getItem() instanceof PotionItem) {
 			CompoundTag cp = new CompoundTag();
@@ -53,30 +43,41 @@ public class PotionRenderer {
 		float f = (float) 1.0F;
 		float f1 = f / (float) stack.getMaxUseTime();
 
-		float f2 = MathHelper.abs(MathHelper.cos(f / 4.0F * (float) Math.PI) * 0.1F);
-		GlStateManager.translatef(0.12F, f2 - 4.5f, -4.0F);
+		Window window= MinecraftClient.getInstance().window;
 
-		float f3 = 1.0F - (float) Math.pow((double) f1, 27.0D);
-		int i = 1;
-		if(entityplayersp.isSubmergedInWater()) {
-			GlStateManager.translatef(0,0.2F,-1.1F);
+		double scale=window.getScaleFactor()/3;
+		int height=window.getHeight();
+
+		GlStateManager.translated(0, 0, -13);
+		
+		double skla=4.1;
+		if(scale==1D) {
+			skla=4.85;
 		}
-		GlStateManager.translatef(f3 * 0.6F * (float) i, f3 - 0.5f, f3 * 0.0F - 3F);
-		GlStateManager.rotatef((float) i * f3 * 90.0F, 0.0F, 2.0F, 0.0F);
-		GlStateManager.rotatef(45, 2.0F, -0.5F, -1.0F);
+		else if(scale<1&&scale>0.4) {
+			skla=5.6;
+		}
+		else if(scale<0.4&&scale>0.1) {
+			skla=6.6;
+		}
+		double height2=(height/2*-0.004)-skla;
 
+		
+		GlStateManager.translated(0, height2, 0);
+		GlStateManager.scaled(scale, scale, scale);
+
+		double scale2=1+(1080-height)*0.0015;
+		GlStateManager.scaled(scale2, scale2, scale2);
+
+		if(MinecraftClient.getInstance().player.isSubmergedInWater()) {
+			GlStateManager.translated(0, 0, -2.5);
+		}
+		GlStateManager.rotated(180, 0, 1 ,0);
+		GlStateManager.rotated(10, 0, 0 ,1);
 		return stack;
 	}
 	//#else
 //$$ 		public static ItemStack render(MatrixStack matrices) {
-//$$ 			ClientPlayerEntity entityplayersp = MinecraftClient.getInstance().player;
-//$$ 			float f22 = entityplayersp.prevPitch - entityplayersp.prevPitch;
-//$$ 			float f221 = entityplayersp.prevYaw - entityplayersp.prevYaw;
-//$$ 			f22 = MathHelper.clamp(f22, -16, 16);
-//$$ 			f221 = MathHelper.clamp(f221, -16, 16);
-//$$
-//$$ 			lerpX = lerp(f22, lerpX, .8f);
-//$$ 			lerpY = lerp(f221, lerpY, .8f);
 //$$
 //$$ 			ItemStack stack = new ItemStack(Items.POTION);
 //$$ 			if (stack.getItem() instanceof PotionItem) {
@@ -88,15 +89,7 @@ public class PotionRenderer {
 //$$ 				cp.putInt("CustomPotionColor", 0x4672A3);
 //$$ 				stack.setTag(cp);
 //$$ 			}
-//$$ 			float f = (float) 1.0F;
-//$$ 			float f1 = f / (float) stack.getMaxUseTime();
 //$$
-//$$ 			float f2 = MathHelper.abs(MathHelper.cos(f / 4.0F * (float) Math.PI) * 0.1F);
-//$$
-//$$ 			if(entityplayersp.isSubmergedInWater()) {
-//$$ 				matrices.translate(0,0.2F,-1.1F);
-//$$ 			}
-//$$ 			matrices.translate(0.75, -3.6, -6);
 			//#if MC>=11700
 //$$ 			matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(90.0F));
 //$$ 			matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(40.0F));
