@@ -8,4 +8,5 @@ accessible    field    net/minecraft/entity/Entity    z    D
 ##endif
 ##if MC>=11700
 accessible    field    net/minecraft/client/gui/screen/Screen    drawables    Ljava/util/List;
+mutable    field    net/minecraft/client/render/RenderTickCounter    tickTime    F
 ##endif
