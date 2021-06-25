@@ -90,17 +90,12 @@ public class PotionRenderer {
 //$$ 				stack.setTag(cp);
 //$$ 			}
 //$$
-			//#if MC>=11700
-//$$ 			matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(90.0F));
-//$$ 			matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(40.0F));
-			//#else
-//$$
 //$$ 			Window window= MinecraftClient.getInstance().window;           
 //$$
-//$$ 			float scale=(float) (window.getScaleFactor()/3);                        
+//$$ 			float scale=(float) (window.getScaleFactor()/3);               
 //$$ 			int height=window.getHeight();                                 
 //$$
-//$$ 			matrices.translate(0, 0, -13);                          
+//$$ 			matrices.translate(0, 0, -13);                                 
 //$$
 //$$ 			double skla=4.1;                                               
 //$$ 			if(scale==1D) {                                                
@@ -115,19 +110,22 @@ public class PotionRenderer {
 //$$ 			double height2=(height/2*-0.004)-skla;                         
 //$$
 //$$
-//$$ 			matrices.translate(0, height2, 0);                      
-//$$ 			matrices.scale(scale, scale, scale);                    
+//$$ 			matrices.translate(0, height2, 0);                             
+//$$ 			matrices.scale(scale, scale, scale);                           
 //$$
-//$$ 			float scale2=(float) (1+(1080-height)*0.0015);                          
-//$$ 			matrices.scale(scale2, scale2, scale2);                 
+//$$ 			float scale2=(float) (1+(1080-height)*0.0015);                 
+//$$ 			matrices.scale(scale2, scale2, scale2);                        
 //$$
 //$$ 			if(MinecraftClient.getInstance().player.isSubmergedInWater()) {
-//$$ 				GlStateManager.translated(0, 0, -2.5);                     
+//$$ 				matrices.translate(0, 0, -2.5);                     
 //$$ 			}                                                              
+//$$
+			//#if MC>=11700
+//$$ 			matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(180));
+//$$ 			matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(10)); 
+			//#else
 //$$ 			matrices.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(180));                        
 //$$ 			matrices.multiply(Vector3f.POSITIVE_Z.getDegreesQuaternion(10));                           
-//$$ //			matrices.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(90.0F));
-//$$ //			matrices.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion(40.0F));
 			//#endif
 //$$
 //$$ 			return stack;

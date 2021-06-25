@@ -27,7 +27,6 @@ import net.minecraft.client.render.item.ItemRenderer;
 //$$ import net.minecraft.client.render.VertexConsumerProvider;
 //$$ import net.minecraft.client.render.VertexConsumerProvider.Immediate;
 //$$ import net.minecraft.client.util.math.MatrixStack;
-//$$ import net.minecraft.client.util.math.Vector3f;
 //$$ import net.minecraft.client.render.OverlayTexture;
 //$$ import net.minecraft.client.render.BufferBuilderStorage;
 //$$ import com.mojang.blaze3d.systems.RenderSystem;
@@ -69,15 +68,18 @@ public abstract class MixinPotionRenderer {
 //$$ 			RenderSystem.matrixMode(5888);
 //$$ 			RenderSystem.loadIdentity();
 //$$ 			GlStateManager.pushMatrix();
-//$$ 			matrices.push();
-//$$ //			matrices.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion(-camera.getPitch()));
-//$$ //		    matrices.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(-camera.getYaw() + 180.0F));
-			//#endif
-//$$ 			ItemStack stack2 = PotionRenderer.render(matrices);
-			//#if MC>=11700
-//$$ 			renderFirstPersonItem(player, tickDelta, player.getPitch(), Hand.MAIN_HAND, 0f, stack2, 0f, matrices, vertexConsumers, light);
 			//#else
+//$$ 			MatrixStack.Entry entry = matrices.peek();
+//$$ 	        entry.getModel().loadIdentity();
+//$$ 	        entry.getNormal().loadIdentity();
+			//#endif
+//$$ 	        matrices.push();
+//$$ 			ItemStack stack2 = PotionRenderer.render(matrices);
 //$$
+			//#if MC>=11700
+//$$ 			VertexConsumerProvider.Immediate immediate = this.buffers.getEntityVertexConsumers();
+//$$ 			MinecraftClient.getInstance().getItemRenderer().renderItem(stack2, ModelTransformation.Mode.FIXED, 15728880, OverlayTexture.DEFAULT_UV, matrices, immediate, 0);
+			//#else
 //$$ 			VertexConsumerProvider.Immediate immediate = this.buffers.getEntityVertexConsumers();
 //$$ 			MinecraftClient.getInstance().getItemRenderer().renderItem(stack2, ModelTransformation.Mode.FIXED, 15728880, OverlayTexture.DEFAULT_UV, matrices, immediate);
 			//#endif
