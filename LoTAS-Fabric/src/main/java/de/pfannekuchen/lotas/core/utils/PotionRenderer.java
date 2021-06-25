@@ -49,7 +49,7 @@ public class PotionRenderer {
 		int height=window.getHeight();
 
 		GlStateManager.translated(0, 0, -13);
-		
+
 		double skla=4.1;
 		if(scale==1D) {
 			skla=4.85;
@@ -62,7 +62,7 @@ public class PotionRenderer {
 		}
 		double height2=(height/2*-0.004)-skla;
 
-		
+
 		GlStateManager.translated(0, height2, 0);
 		GlStateManager.scaled(scale, scale, scale);
 
@@ -94,8 +94,40 @@ public class PotionRenderer {
 //$$ 			matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(90.0F));
 //$$ 			matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(40.0F));
 			//#else
-//$$ 			matrices.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(90.0F));
-//$$ 			matrices.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion(40.0F));
+//$$
+//$$ 			Window window= MinecraftClient.getInstance().window;           
+//$$
+//$$ 			float scale=(float) (window.getScaleFactor()/3);                        
+//$$ 			int height=window.getHeight();                                 
+//$$
+//$$ 			matrices.translate(0, 0, -13);                          
+//$$
+//$$ 			double skla=4.1;                                               
+//$$ 			if(scale==1D) {                                                
+//$$ 				skla=4.85;                                                 
+//$$ 			}                                                              
+//$$ 			else if(scale<1&&scale>0.4) {                                  
+//$$ 				skla=5.6;                                                  
+//$$ 			}                                                              
+//$$ 			else if(scale<0.4&&scale>0.1) {                                
+//$$ 				skla=6.6;                                                  
+//$$ 			}                                                              
+//$$ 			double height2=(height/2*-0.004)-skla;                         
+//$$
+//$$
+//$$ 			matrices.translate(0, height2, 0);                      
+//$$ 			matrices.scale(scale, scale, scale);                    
+//$$
+//$$ 			float scale2=(float) (1+(1080-height)*0.0015);                          
+//$$ 			matrices.scale(scale2, scale2, scale2);                 
+//$$
+//$$ 			if(MinecraftClient.getInstance().player.isSubmergedInWater()) {
+//$$ 				GlStateManager.translated(0, 0, -2.5);                     
+//$$ 			}                                                              
+//$$ 			matrices.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(180));                        
+//$$ 			matrices.multiply(Vector3f.POSITIVE_Z.getDegreesQuaternion(10));                           
+//$$ //			matrices.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(90.0F));
+//$$ //			matrices.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion(40.0F));
 			//#endif
 //$$
 //$$ 			return stack;
