@@ -20,16 +20,8 @@ import net.minecraft.entity.monster.EntitySlime;
 import net.minecraft.entity.monster.EntitySpider;
 import net.minecraft.entity.monster.EntityWitch;
 import net.minecraft.entity.monster.EntityZombie;
-//#if MC>=11100
-import net.minecraft.entity.monster.EntityHusk;
-import net.minecraft.entity.monster.EntityWitherSkeleton;
-import net.minecraft.entity.monster.EntityZombieVillager;
-//#endif
 
 import net.minecraft.init.Items;
-//#if MC>=10900
-import net.minecraft.inventory.EntityEquipmentSlot;
-//#endif
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.EnumDifficulty;
@@ -67,7 +59,7 @@ public class EntitySliderWidget extends GuiSlider {
 			break;
 		case 5:
 			//#if MC>=11100
-			entity = new EntityHusk(world);
+			entity = new net.minecraft.entity.monster.EntityHusk(world);
 			//#else
 //$$ 			entity = new EntityZombie(world);
 			//#endif
@@ -92,13 +84,13 @@ public class EntitySliderWidget extends GuiSlider {
 			break;
 		//#if MC>=11100
 		case 12:
-			entity = new EntityWitherSkeleton(world);
+			entity = new net.minecraft.entity.monster.EntityWitherSkeleton(world);
 			break;
 		case 13:
 			entity = new EntityZombie(world);
 			break;
 		case 14:
-			entity = new EntityZombieVillager(world);
+			entity = new net.minecraft.entity.monster.EntityZombieVillager(world);
 			break;
 		//#endif
 		}
@@ -152,92 +144,92 @@ public class EntitySliderWidget extends GuiSlider {
 			switch (getValueInt()) {
 			case 15:
 				entity = new EntitySkeleton(world);
-				entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, addEnchants(new ItemStack(Items.BOW), GuiEntitySpawnManipulation.skelBow));
+				entity.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.MAINHAND, addEnchants(new ItemStack(Items.BOW), GuiEntitySpawnManipulation.skelBow));
 				break;
 			case 17:
 				entity = new EntitySkeleton(world);
-				entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, addEnchants(new ItemStack(Items.BOW), GuiEntitySpawnManipulation.skelBow));
-				entity.setItemStackToSlot(EntityEquipmentSlot.FEET, new ItemStack(Items.LEATHER_BOOTS));
-				entity.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(Items.LEATHER_CHESTPLATE));
-				entity.setItemStackToSlot(EntityEquipmentSlot.LEGS, new ItemStack(Items.LEATHER_LEGGINGS));
-				entity.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(Items.LEATHER_HELMET));
+				entity.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.MAINHAND, addEnchants(new ItemStack(Items.BOW), GuiEntitySpawnManipulation.skelBow));
+				entity.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.FEET, new ItemStack(Items.LEATHER_BOOTS));
+				entity.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.CHEST, new ItemStack(Items.LEATHER_CHESTPLATE));
+				entity.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.LEGS, new ItemStack(Items.LEATHER_LEGGINGS));
+				entity.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.HEAD, new ItemStack(Items.LEATHER_HELMET));
 				break;
 			case 19:
 				entity = new EntitySkeleton(world);
-				entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, addEnchants(new ItemStack(Items.BOW), GuiEntitySpawnManipulation.skelBow));
-				entity.setItemStackToSlot(EntityEquipmentSlot.FEET, new ItemStack(Items.GOLDEN_BOOTS));
-				entity.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(Items.GOLDEN_CHESTPLATE));
-				entity.setItemStackToSlot(EntityEquipmentSlot.LEGS, new ItemStack(Items.GOLDEN_LEGGINGS));
-				entity.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(Items.GOLDEN_HELMET));
+				entity.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.MAINHAND, addEnchants(new ItemStack(Items.BOW), GuiEntitySpawnManipulation.skelBow));
+				entity.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.FEET, new ItemStack(Items.GOLDEN_BOOTS));
+				entity.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.CHEST, new ItemStack(Items.GOLDEN_CHESTPLATE));
+				entity.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.LEGS, new ItemStack(Items.GOLDEN_LEGGINGS));
+				entity.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.HEAD, new ItemStack(Items.GOLDEN_HELMET));
 				break;
 			case 21:
 				entity = new EntitySkeleton(world);
-				entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, addEnchants(new ItemStack(Items.BOW), GuiEntitySpawnManipulation.skelBow));
-				entity.setItemStackToSlot(EntityEquipmentSlot.FEET, new ItemStack(Items.CHAINMAIL_BOOTS));
-				entity.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(Items.CHAINMAIL_CHESTPLATE));
-				entity.setItemStackToSlot(EntityEquipmentSlot.LEGS, new ItemStack(Items.CHAINMAIL_LEGGINGS));
-				entity.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(Items.CHAINMAIL_HELMET));
+				entity.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.MAINHAND, addEnchants(new ItemStack(Items.BOW), GuiEntitySpawnManipulation.skelBow));
+				entity.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.FEET, new ItemStack(Items.CHAINMAIL_BOOTS));
+				entity.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.CHEST, new ItemStack(Items.CHAINMAIL_CHESTPLATE));
+				entity.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.LEGS, new ItemStack(Items.CHAINMAIL_LEGGINGS));
+				entity.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.HEAD, new ItemStack(Items.CHAINMAIL_HELMET));
 				break;
 			case 23:
 				entity = new EntitySkeleton(world);
-				entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, addEnchants(new ItemStack(Items.BOW), GuiEntitySpawnManipulation.skelBow));
-				entity.setItemStackToSlot(EntityEquipmentSlot.FEET, new ItemStack(Items.IRON_BOOTS));
-				entity.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(Items.IRON_CHESTPLATE));
-				entity.setItemStackToSlot(EntityEquipmentSlot.LEGS, new ItemStack(Items.IRON_LEGGINGS));
-				entity.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(Items.IRON_HELMET));
+				entity.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.MAINHAND, addEnchants(new ItemStack(Items.BOW), GuiEntitySpawnManipulation.skelBow));
+				entity.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.FEET, new ItemStack(Items.IRON_BOOTS));
+				entity.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.CHEST, new ItemStack(Items.IRON_CHESTPLATE));
+				entity.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.LEGS, new ItemStack(Items.IRON_LEGGINGS));
+				entity.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.HEAD, new ItemStack(Items.IRON_HELMET));
 				break;
 			case 25:
 				entity = new EntitySkeleton(world);
-				entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, addEnchants(new ItemStack(Items.BOW), GuiEntitySpawnManipulation.skelBow));
-				entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.BOW));
-				entity.setItemStackToSlot(EntityEquipmentSlot.FEET, new ItemStack(Items.DIAMOND_BOOTS));
-				entity.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(Items.DIAMOND_CHESTPLATE));
-				entity.setItemStackToSlot(EntityEquipmentSlot.LEGS, new ItemStack(Items.DIAMOND_LEGGINGS));
-				entity.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(Items.DIAMOND_HELMET));
+				entity.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.MAINHAND, addEnchants(new ItemStack(Items.BOW), GuiEntitySpawnManipulation.skelBow));
+				entity.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.MAINHAND, new ItemStack(Items.BOW));
+				entity.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.FEET, new ItemStack(Items.DIAMOND_BOOTS));
+				entity.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.CHEST, new ItemStack(Items.DIAMOND_CHESTPLATE));
+				entity.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.LEGS, new ItemStack(Items.DIAMOND_LEGGINGS));
+				entity.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.HEAD, new ItemStack(Items.DIAMOND_HELMET));
 				break;
 			case 16:
 				entity = new EntityZombie(world);
-				entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, addEnchants(new ItemStack(Items.IRON_SWORD), GuiEntitySpawnManipulation.zombieSword));
+				entity.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.MAINHAND, addEnchants(new ItemStack(Items.IRON_SWORD), GuiEntitySpawnManipulation.zombieSword));
 				break;
 			case 18:
 			entity = new EntityZombie(world);
-			entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, addEnchants(new ItemStack(Items.IRON_SWORD), GuiEntitySpawnManipulation.zombieSword));
-				entity.setItemStackToSlot(EntityEquipmentSlot.FEET, new ItemStack(Items.LEATHER_BOOTS));
-			entity.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(Items.LEATHER_CHESTPLATE));
-			entity.setItemStackToSlot(EntityEquipmentSlot.LEGS, new ItemStack(Items.LEATHER_LEGGINGS));
-			entity.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(Items.LEATHER_HELMET));
+			entity.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.MAINHAND, addEnchants(new ItemStack(Items.IRON_SWORD), GuiEntitySpawnManipulation.zombieSword));
+				entity.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.FEET, new ItemStack(Items.LEATHER_BOOTS));
+			entity.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.CHEST, new ItemStack(Items.LEATHER_CHESTPLATE));
+			entity.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.LEGS, new ItemStack(Items.LEATHER_LEGGINGS));
+			entity.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.HEAD, new ItemStack(Items.LEATHER_HELMET));
 			break;
 		case 20:
 			entity = new EntityZombie(world);
-			entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, addEnchants(new ItemStack(Items.IRON_SWORD), GuiEntitySpawnManipulation.zombieSword));
-			entity.setItemStackToSlot(EntityEquipmentSlot.FEET, new ItemStack(Items.GOLDEN_BOOTS));
-			entity.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(Items.GOLDEN_CHESTPLATE));
-			entity.setItemStackToSlot(EntityEquipmentSlot.LEGS, new ItemStack(Items.GOLDEN_LEGGINGS));
-			entity.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(Items.GOLDEN_HELMET));
+			entity.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.MAINHAND, addEnchants(new ItemStack(Items.IRON_SWORD), GuiEntitySpawnManipulation.zombieSword));
+			entity.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.FEET, new ItemStack(Items.GOLDEN_BOOTS));
+			entity.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.CHEST, new ItemStack(Items.GOLDEN_CHESTPLATE));
+			entity.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.LEGS, new ItemStack(Items.GOLDEN_LEGGINGS));
+			entity.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.HEAD, new ItemStack(Items.GOLDEN_HELMET));
 			break;
 		case 22:
 				entity = new EntityZombie(world);
-				entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, addEnchants(new ItemStack(Items.IRON_SWORD), GuiEntitySpawnManipulation.zombieSword));
-				entity.setItemStackToSlot(EntityEquipmentSlot.FEET, new ItemStack(Items.CHAINMAIL_BOOTS));
-				entity.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(Items.CHAINMAIL_CHESTPLATE));
-				entity.setItemStackToSlot(EntityEquipmentSlot.LEGS, new ItemStack(Items.CHAINMAIL_LEGGINGS));
-				entity.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(Items.CHAINMAIL_HELMET));
+				entity.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.MAINHAND, addEnchants(new ItemStack(Items.IRON_SWORD), GuiEntitySpawnManipulation.zombieSword));
+				entity.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.FEET, new ItemStack(Items.CHAINMAIL_BOOTS));
+				entity.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.CHEST, new ItemStack(Items.CHAINMAIL_CHESTPLATE));
+				entity.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.LEGS, new ItemStack(Items.CHAINMAIL_LEGGINGS));
+				entity.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.HEAD, new ItemStack(Items.CHAINMAIL_HELMET));
 				break;
 			case 24:
 				entity = new EntityZombie(world);
-				entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, addEnchants(new ItemStack(Items.IRON_SWORD), GuiEntitySpawnManipulation.zombieSword));
-				entity.setItemStackToSlot(EntityEquipmentSlot.FEET, new ItemStack(Items.IRON_BOOTS));
-				entity.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(Items.IRON_CHESTPLATE));
-				entity.setItemStackToSlot(EntityEquipmentSlot.LEGS, new ItemStack(Items.IRON_LEGGINGS));
-				entity.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(Items.IRON_HELMET));
+				entity.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.MAINHAND, addEnchants(new ItemStack(Items.IRON_SWORD), GuiEntitySpawnManipulation.zombieSword));
+				entity.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.FEET, new ItemStack(Items.IRON_BOOTS));
+				entity.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.CHEST, new ItemStack(Items.IRON_CHESTPLATE));
+				entity.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.LEGS, new ItemStack(Items.IRON_LEGGINGS));
+				entity.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.HEAD, new ItemStack(Items.IRON_HELMET));
 				break;
 			case 26:
 				entity = new EntityZombie(world);
-				entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, addEnchants(new ItemStack(Items.IRON_SWORD), GuiEntitySpawnManipulation.zombieSword));
-				entity.setItemStackToSlot(EntityEquipmentSlot.FEET, new ItemStack(Items.DIAMOND_BOOTS));
-				entity.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(Items.DIAMOND_CHESTPLATE));
-				entity.setItemStackToSlot(EntityEquipmentSlot.LEGS, new ItemStack(Items.DIAMOND_LEGGINGS));
-				entity.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(Items.DIAMOND_HELMET));
+				entity.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.MAINHAND, addEnchants(new ItemStack(Items.IRON_SWORD), GuiEntitySpawnManipulation.zombieSword));
+				entity.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.FEET, new ItemStack(Items.DIAMOND_BOOTS));
+				entity.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.CHEST, new ItemStack(Items.DIAMOND_CHESTPLATE));
+				entity.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.LEGS, new ItemStack(Items.DIAMOND_LEGGINGS));
+				entity.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.HEAD, new ItemStack(Items.DIAMOND_HELMET));
 				break;
 			}
 		}

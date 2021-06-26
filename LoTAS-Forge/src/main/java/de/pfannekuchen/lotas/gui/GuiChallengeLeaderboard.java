@@ -5,7 +5,6 @@ import java.time.Duration;
 import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.core.utils.EventUtils.Timer;
 import de.pfannekuchen.lotas.gui.widgets.ButtonWidget;
-import de.pfannekuchen.lotas.taschallenges.ChallengeLoader;
 import de.pfannekuchen.lotas.taschallenges.ChallengeMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiMainMenu;

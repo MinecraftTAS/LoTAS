@@ -210,7 +210,11 @@ public class PassiveDropManipulation extends DropManipulationScreen.DropManipula
 		//#endif
 
 		if (!enabled.isChecked()) {
+			//#if MC>=11700
+//$$ 			com.mojang.blaze3d.systems.RenderSystem.setShaderColor(.5f, .5f, .5f, .4f);
+			//#else
 			GlStateManager.color4f(.5f, .5f, .5f, .4f);
+			//#endif
 		} else {
 			//#if MC>=11601
 //$$ 			optimizeChicken.render((MatrixStack) matrices, mouseX, mouseY, delta);

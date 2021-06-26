@@ -11,7 +11,11 @@ public class DupeMod {
 	private static DefaultedList<ItemStack> offHand = DefaultedList.ofSize(1, ItemStack.EMPTY);
 
 	public static void save(MinecraftClient client) {
+		//#if MC>=11700
+//$$ 		PlayerInventory inventory = client.getServer().getPlayerManager().getPlayer(client.player.getUuid()).getInventory();
+		//#else
 		PlayerInventory inventory = client.getServer().getPlayerManager().getPlayer(client.player.getUuid()).inventory;
+		//#endif
 		for (int i = 0; i < inventory.main.size(); i++) {
 			main.set(i, inventory.main.get(i).copy());
 		}
@@ -24,7 +28,11 @@ public class DupeMod {
 	}
 
 	public static void load(MinecraftClient client) {
+		//#if MC>=11700
+//$$ 				PlayerInventory inventory = client.getServer().getPlayerManager().getPlayer(client.player.getUuid()).getInventory();
+		//#else
 		PlayerInventory inventory = client.getServer().getPlayerManager().getPlayer(client.player.getUuid()).inventory;
+		//#endif
 		for (int i = 0; i < main.size(); i++) {
 			inventory.main.set(i, main.get(i));
 		}

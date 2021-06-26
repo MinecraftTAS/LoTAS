@@ -20,6 +20,13 @@ import net.minecraft.util.math.AxisAlignedBB;
 //$$ import net.minecraft.util.AxisAlignedBB;
 //#endif
 
+/**
+ * Rendering Utils to render boxes.
+ * Not commented.
+ * @since v1.0
+ * @version v1.0
+ * @author Wurstv6
+ */
 public class RenderUtils {
 	private static final AxisAlignedBB DEFAULT_AABB = new AxisAlignedBB(0, 0, 0, 1, 1, 1);
 	

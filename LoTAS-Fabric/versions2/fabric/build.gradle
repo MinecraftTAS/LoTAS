@@ -10,6 +10,11 @@ sourceSets {
 }
 
 dependencies {
+	//#if MC>=11700
+//$$ 	minecraft "com.mojang:minecraft:1.17"
+//$$ 	mappings "net.fabricmc:yarn:1.17+build.13:v2"
+//$$ 	modImplementation "net.fabricmc.fabric-api:fabric-api:0.35.2+1.17"
+	//#else
 	//#if MC>=11605
 //$$ 	minecraft "com.mojang:minecraft:1.16.5"
 //$$ 	mappings "net.fabricmc:yarn:1.16.5+build.9:v2"
@@ -31,5 +36,5 @@ dependencies {
 	//#endif
 	//#endif
 	//#endif
-	
+	//#endif
 }

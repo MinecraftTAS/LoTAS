@@ -7,15 +7,13 @@ import de.pfannekuchen.lotas.mixin.accessors.AccessorMinecraftClient;
 import de.pfannekuchen.lotas.mixin.accessors.AccessorTimer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
-//#if MC>=10900
-import net.minecraft.util.text.TextComponentString;
-//#else
-//$$ import net.minecraft.util.ChatComponentText;
-//#endif
 
 /**
  * Here is the basic Tickrate Changer Management.
  * It contains the Hotkeys, Ticksync, Tickrate and the ticks passed
+ * @author Scribble
+ * @version v2.0
+ * @since v1.0
  */
 public class TickrateChangerMod {
 	/**
@@ -105,9 +103,9 @@ public class TickrateChangerMod {
 		}
 		tickrate = tickrateIn;
 		//#if MC>=10900
-		if (!ConfigUtils.getBoolean("ui", "hideTickrateMessages") && Minecraft.getMinecraft().ingameGUI != null) Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(new TextComponentString("Updated Tickrate to \u00A7b" + tickrateIn));
+		if (!ConfigUtils.getBoolean("ui", "hideTickrateMessages") && Minecraft.getMinecraft().ingameGUI != null) Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(new net.minecraft.util.text.TextComponentString("Updated Tickrate to \u00A7b" + tickrateIn));
 		//#else
-//$$ 		if (!ConfigUtils.getBoolean("ui", "hideTickrateMessages") && Minecraft.getMinecraft().ingameGUI != null) Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(new ChatComponentText("Updated Tickrate to \u00A7b" + tickrateIn));
+//$$ 		if (!ConfigUtils.getBoolean("ui", "hideTickrateMessages") && Minecraft.getMinecraft().ingameGUI != null) Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(new net.minecraft.util.ChatComponentText("Updated Tickrate to \u00A7b" + tickrateIn));
 		//#endif
 	}
 	

@@ -17,6 +17,10 @@ import net.minecraft.util.math.BlockPos;
 //#endif
 import net.minecraft.world.World;
 
+/**
+ * Extension to {@link MixinBlockPatch}
+ * @author Scribble
+ */
 @Mixin(BlockLeaves.class)
 public abstract class MixinLeavesPatch {
 	

@@ -13,6 +13,12 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
+/**
+ * This Mixin alters the drops of an entity when it dies
+ * @author Pancake
+ * @since v1.0
+ * @version v1.0
+ */
 @Mixin(Entity.class)
 public class MixinEntityPatch {
 
@@ -23,6 +29,10 @@ public class MixinEntityPatch {
 	@Shadow
 	private double posZ;
 	
+	/**
+	 * Changes the velocity of a item dropped from an entity
+	 * @return Returns a new modified EntityItem with a custom velocity
+	 */
 	@Redirect(method = "entityDropItem", at = @At(value = "NEW", target = "Lnet/minecraft/entity/item/EntityItem;<init>(Lnet/minecraft/world/World;DDDLnet/minecraft/item/ItemStack;)Lnet/minecraft/entity/item/EntityItem;"))
 	public EntityItem moveItem(World w, double x, double y, double z, ItemStack stack) {
 		EntityItem it = new EntityItem(w, posX, posY, posZ, stack);

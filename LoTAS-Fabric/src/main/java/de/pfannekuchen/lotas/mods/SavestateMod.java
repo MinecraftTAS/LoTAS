@@ -36,6 +36,8 @@ public class SavestateMod {
 	public static boolean showSavestateDone;
 	public static boolean showLoadstateDone;
 	public static long timeTitle;
+	
+	public static boolean stillSaving;
 
 	public static boolean isLoading;
 
@@ -60,12 +62,11 @@ public class SavestateMod {
 
 		final MinecraftServer server = mc.getServer();
 		server.getPlayerManager().saveAllPlayerData();
-		for (final ServerWorld worldserver : server.getWorlds()) {
-			worldserver.savingDisabled = true;
-		}
-
+		
 		server.save(false, true, false);
-
+		
+		while (stillSaving) {
+		}
 		new Thread(() -> {
 			//#if MC>=11601
 //$$ 						final String worldName = server.getSaveProperties().getLevelName();
@@ -98,9 +99,6 @@ public class SavestateMod {
 				e.printStackTrace();
 			}
 
-			for (final ServerWorld worldserver : server.getWorlds()) {
-				worldserver.savingDisabled = false;
-			}
 		}).start();
 
 		showSavestateDone = true;
@@ -119,7 +117,6 @@ public class SavestateMod {
 
 		double x = mc.mouse.getX();
 		double y = mc.mouse.getY();
-		;
 
 		isLoading = true;
 
@@ -167,7 +164,7 @@ public class SavestateMod {
 		mc.mouse.updateMouse();
 
 		//#if MC>=11601
-//$$ 				mc.startIntegratedServer(worldName);
+//$$ 			mc.startIntegratedServer(worldName);
 		//#else
 		mc.startIntegratedServer(worldName, worldName, null);
 		//#endif
@@ -200,15 +197,19 @@ public class SavestateMod {
 	public static class TrackerFile {
 
 		// This is the worst Code I have ever written.
-
+		public static int savestateCount = -1;
+		public static int loadstateCount = -1;
+		
 		public static void increaseSavestates(final File savestateDir, final String worldName) throws IOException {
 			final File infoFile = new File(savestateDir, worldName + "-info.txt");
 			generateFile(infoFile, readSavestates(savestateDir, worldName) + 1, readLoadstates(savestateDir, worldName));
+			savestateCount++;
 		}
 
 		public static void increaseLoadstates(final File savestateDir, final String worldName) throws IOException {
 			final File infoFile = new File(savestateDir, worldName + "-info.txt");
 			generateFile(infoFile, readSavestates(savestateDir, worldName), readLoadstates(savestateDir, worldName) + 1);
+			loadstateCount++;
 		}
 
 		public static int readSavestates(final File savestateDir, final String worldName) throws IOException {
@@ -219,7 +220,7 @@ public class SavestateMod {
 				return -1;
 			}
 			List<String> lines = Files.readAllLines(infoFile.toPath());
-			return Integer.parseInt(lines.get(3).split("=")[1]);
+			return savestateCount = Integer.parseInt(lines.get(3).split("=")[1]);
 		}
 
 		public static int readLoadstates(final File savestateDir, final String worldName) throws IOException {
@@ -230,7 +231,7 @@ public class SavestateMod {
 				return -1;
 			}
 			List<String> lines = Files.readAllLines(infoFile.toPath());
-			return Integer.parseInt(lines.get(4).split("=")[1]);
+			return loadstateCount = Integer.parseInt(lines.get(4).split("=")[1]);
 		}
 
 		private static void generateFile(final File file, final int savestates, final int loadstates) throws FileNotFoundException {

@@ -20,12 +20,6 @@ import javax.annotation.Nullable;
 
 import org.apache.commons.io.FileUtils;
 
-//#if MC>=10900
-import com.mojang.authlib.GameProfileRepository;
-import com.mojang.authlib.minecraft.MinecraftSessionService;
-import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
-//#endif
-
 import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.mixin.accessors.AccessorMinecraftClient;
 import de.pfannekuchen.lotas.mods.SavestateMod;
@@ -56,28 +50,49 @@ import net.minecraft.world.WorldType;
 import net.minecraft.world.storage.ISaveHandler;
 import net.minecraft.world.storage.WorldInfo;
 
+/**
+ * Loader for all TAS Challenges. Manages loading and saving the world
+ * @author Pancake
+ * @since v1.1
+ * @version v1.1
+ */
 public class ChallengeLoader {
 
+	/** Temporary variable whether the timer should start */
 	public static boolean startTimer;
+	/** Session saved from the launcher whilst playing as 'TAS Battle' */
 	public static Session cachedSession;
 	
+	/**
+	 * Reloads the TAS Map again to reset it.
+	 * @throws IOException Throws when the world didn't exist before
+	 */
 	public static void reload() throws IOException {
 		Minecraft.getMinecraft().displayGuiScreen(null);
-		SavestateMod.isLoading = true;
+		SavestateMod.isLoading = true; // turn off rendering
 		
+		// don't save the world
 		for (WorldServer w : MCVer.getWorlds(Minecraft.getMinecraft().getIntegratedServer())) {
 			w.disableLevelSaving = true;
 		}
 		
+		// quit the world
         MCVer.world(Minecraft.getMinecraft()).sendQuittingDisconnectingPacket();
         Minecraft.getMinecraft().loadWorld((WorldClient)null);
+        // load the new world
         load(false);
 	}
 	
+	/**
+	 * Loads the TAS Challenge map from a backup
+	 * @param reload Whether a new Thread should be used to download a unmodifid map or not
+	 * @throws IOException Throws when the world didn't exist before
+	 */
 	public static void load(boolean reload) throws IOException {
 		final File worldDir = new File(Minecraft.getMinecraft().mcDataDir, "challenges" + File.separator + "");
-		if (worldDir.exists()) FileUtils.deleteDirectory(worldDir);
+		if (worldDir.exists()) FileUtils.deleteDirectory(worldDir); // deletes the world
 		
+		// download the world
 		if (reload) {
 			final URL url = ChallengeMap.currentMap.map;
 			ReadableByteChannel readableByteChannel = Channels.newChannel(url.openStream());
@@ -90,8 +105,10 @@ public class ChallengeLoader {
 			fileOutputStream.close();
 			fileChannel.close();
 		}
+		// unzip the map
 		unzip("ChallengeMap.currentMap.zip", "challenges/" + ChallengeMap.currentMap.name);
 		
+		// create a new thread to download the world again
 		new Thread(() -> {
 			try {
 				// Download
@@ -112,13 +129,19 @@ public class ChallengeLoader {
 			}
 		}).start();
 		
-		// Load World
-		startTimer = true;
+		// load the world again
+		startTimer = true; // request timer start
 		launchIntegratedServer(ChallengeMap.currentMap.name, ChallengeMap.currentMap.name, new WorldSettings(0L, GameType.ADVENTURE, false, true, WorldType.FLAT));
 	}
 	
 	private static final int BUFFER_SIZE = 4096;
 
+	/**
+	 * Unzips a .zip file to a folder 
+	 * @param zipFilePath Path to the Zip File
+	 * @param destDirectory Path to the destination directory
+	 * @throws IOException Throws whenever the folder does not exist
+	 */
 	private static void unzip(String zipFilePath, String destDirectory) throws IOException {
         File destDir = new File(destDirectory);
         if (!destDir.exists()) {
@@ -143,6 +166,12 @@ public class ChallengeLoader {
         zipIn.close();
     }
     
+	/**
+	 * Extracts a single file from a zip stream
+	 * @param zipIn zip stream to read file from
+	 * @param filePath path of file in file system
+	 * @throws IOException zip reading error
+	 */
     private static void extractFile(ZipInputStream zipIn, String filePath) throws IOException {
         BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(filePath));
         byte[] bytesIn = new byte[BUFFER_SIZE];
@@ -153,13 +182,21 @@ public class ChallengeLoader {
         bos.close();
     }
     
+    /**
+     * Launch the integrated server with the TAS-Challenge Map 
+     * @param folderName Name of the world
+     * @param worldName Name of the world pt. 2
+     * @param worldSettingsIn Settings of the world
+     */
     private static void launchIntegratedServer(String folderName, String worldName, @Nullable WorldSettings worldSettingsIn) {
-        if (cachedSession == null) {
+        // save session and play as tasbot
+    	if (cachedSession == null) {
         	cachedSession = Minecraft.getMinecraft().getSession();
         	System.out.println(Minecraft.getMinecraft().getSession().getPlayerID());
         	System.out.println(Minecraft.getMinecraft().getSession().getToken());
         	((AccessorMinecraftClient) Minecraft.getMinecraft()).session(new Session("TASBot", "b8abdafc-5002-40df-ab68-63206ea4c7e8", "b8abdafc-5002-40df-ab68-63206ea4c7e8", "MOJANG"));
         }
+        // overwrite the save loader to the second directory
         try {
         	Field h = Minecraft.getMinecraft().getClass().getDeclaredField("field_71469_aa");
         	h.setAccessible(true);
@@ -168,6 +205,7 @@ public class ChallengeLoader {
 			e.printStackTrace();
 		}
         
+        // start the server
     	net.minecraftforge.fml.client.FMLClientHandler.instance().startIntegratedServer(folderName, worldName, worldSettingsIn);
         //#if MC>=10900
     	Minecraft.getMinecraft().loadWorld((WorldClient)null);
@@ -192,9 +230,9 @@ public class ChallengeLoader {
         try
         {
         	//#if MC>=10900
-            YggdrasilAuthenticationService yggdrasilauthenticationservice = new YggdrasilAuthenticationService(Minecraft.getMinecraft().getProxy(), UUID.randomUUID().toString());
-            MinecraftSessionService minecraftsessionservice = yggdrasilauthenticationservice.createMinecraftSessionService();
-            GameProfileRepository gameprofilerepository = yggdrasilauthenticationservice.createProfileRepository();
+        	com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService yggdrasilauthenticationservice = new com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService(Minecraft.getMinecraft().getProxy(), UUID.randomUUID().toString());
+        	com.mojang.authlib.minecraft.MinecraftSessionService minecraftsessionservice = yggdrasilauthenticationservice.createMinecraftSessionService();
+        	com.mojang.authlib.GameProfileRepository gameprofilerepository = yggdrasilauthenticationservice.createProfileRepository();
             PlayerProfileCache playerprofilecache = new PlayerProfileCache(gameprofilerepository, new File(Minecraft.getMinecraft().mcDataDir, MinecraftServer.USER_CACHE_FILE.getName()));
             TileEntitySkull.setProfileCache(playerprofilecache);
             TileEntitySkull.setSessionService(minecraftsessionservice);
@@ -268,6 +306,9 @@ public class ChallengeLoader {
 		}
     }
 
+    /**
+     * Reloads a Session from overwriting it with TASbot
+     */
 	public static void backupSession() {
 		if (ChallengeLoader.cachedSession != null) {
     		((AccessorMinecraftClient) Minecraft.getMinecraft()).session(ChallengeLoader.cachedSession);

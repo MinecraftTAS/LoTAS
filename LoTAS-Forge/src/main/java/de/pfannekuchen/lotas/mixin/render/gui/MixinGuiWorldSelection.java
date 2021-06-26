@@ -2,7 +2,6 @@ package de.pfannekuchen.lotas.mixin.render.gui;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -53,6 +52,7 @@ public abstract class MixinGuiWorldSelection extends GuiScreen {
 				ChallengeMapEntryWidget entry = new ChallengeMapEntryWidget(selectionList, map, width);
 				entry.loc = new ResourceLocation("maps", map.resourceLoc);
 				try {
+					@SuppressWarnings("unchecked")
 					java.util.List<GuiListWorldSelectionEntry> i = (java.util.List<GuiListWorldSelectionEntry>) getFinal(selectionList, GuiListWorldSelection.class.getDeclaredField("field_186799_w"));
 					i.add(entry);
 					setFinal(selectionList, GuiListWorldSelection.class.getDeclaredField("field_186799_w"), i);
@@ -93,6 +93,7 @@ public abstract class MixinGuiWorldSelection extends GuiScreen {
 	}
 	
 	
+	@SuppressWarnings("unchecked")
 	@Inject(at = @At("HEAD"), method = "actionPerformed")
 	public void injectactionPerformed(GuiButton button, CallbackInfo ci) {
 		switch (button.id) {

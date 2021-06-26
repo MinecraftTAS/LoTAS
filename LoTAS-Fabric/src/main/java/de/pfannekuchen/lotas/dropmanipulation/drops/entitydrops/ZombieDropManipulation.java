@@ -112,7 +112,11 @@ public class ZombieDropManipulation extends DropManipulationScreen.DropManipulat
 		//#endif
 
 		if (!enabled.isChecked()) {
+			//#if MC>=11700
+//$$ 			com.mojang.blaze3d.systems.RenderSystem.setShaderColor(.5f, .5f, .5f, .4f);
+			//#else
 			GlStateManager.color4f(.5f, .5f, .5f, .4f);
+			//#endif
 		} else {
 			//#if MC>=11601
 //$$ 			MinecraftClient.getInstance().textRenderer.drawWithShadow((MatrixStack) matrices, "Zombies drop: 2 Rotten Flesh" + (dropIron.isToggled() ? ", 1 Iron Ingot" : "") + (dropPotato.isToggled() ? ", 1 Potato" : "") + (dropCarrot.isToggled() ? ", 1 Carrot" : ""), x, y + 64, 0xFFFFFF);
@@ -129,7 +133,7 @@ public class ZombieDropManipulation extends DropManipulationScreen.DropManipulat
 
 		MinecraftClient.getInstance().getTextureManager().bindTexture(new Identifier("lotas", "drops/zombie.png"));
 		//#if MC>=11601
-//$$ 		DrawableHelper.drawTexture((MatrixStack) matrices, x - 228, y + 24, 0.0F, 0.0F, 118, 198, 118, 198);
+//$$ 		DrawableHelper.drawTexture((MatrixStack) matrices, width - 228, y + 24, 0.0F, 0.0F, 118, 198, 118, 198);
 		//#else
 		DrawableHelper.blit(width - 228, y + 24, 0.0F, 0.0F, 118, 198, 118, 198);
 		//#endif

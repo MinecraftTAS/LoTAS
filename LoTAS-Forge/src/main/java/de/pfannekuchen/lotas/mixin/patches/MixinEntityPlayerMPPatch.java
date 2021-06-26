@@ -8,8 +8,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.At.Shift;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.mojang.authlib.GameProfile;
 
@@ -27,11 +25,6 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
-//#if MC>=10900
-import net.minecraft.util.text.TextComponentString;
-//#else
-//$$ import net.minecraft.util.ChatComponentText;
-//#endif
 //#if MC>=11000
 import net.minecraft.world.GameType;
 //#else
@@ -39,6 +32,12 @@ import net.minecraft.world.GameType;
 //#endif
 import net.minecraft.world.chunk.storage.AnvilSaveConverter;
 
+/**
+ * This Mixin makes Players invulnerable if they want to be
+ * @author Pancake
+ * @since v1.1
+ * @version v1.1
+ */
 @Mixin(EntityPlayerMP.class)
 public abstract class MixinEntityPlayerMPPatch extends EntityPlayer {
 	public MixinEntityPlayerMPPatch(World worldIn, GameProfile gameProfileIn) { super(worldIn, gameProfileIn); }
@@ -55,7 +54,7 @@ public abstract class MixinEntityPlayerMPPatch extends EntityPlayer {
 	public abstract boolean canPlayersAttack();
 
 	@Inject(method = "attackEntityFrom", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/MinecraftServer;isDedicatedServer()Z", shift = At.Shift.AFTER))
-	public void injectAfterFlag(DamageSource source, float amount, CallbackInfoReturnable<Boolean> ci) {
+	public void injectAfterFlag(DamageSource source, float amount, org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable<Boolean> ci) {
 		boolean flag = this.mcServer.isDedicatedServer() && this.canPlayersAttack() && "fall".equals(source.damageType);
 		
 		if (!ConfigUtils.getBoolean("tools", "takeDamage"))
@@ -87,14 +86,14 @@ public abstract class MixinEntityPlayerMPPatch extends EntityPlayer {
 
 	//#if MC>=11202
 	@Inject(remap = false, at = @At(value = "INVOKE", remap = false, shift = Shift.BEFORE, target = "Lnet/minecraft/server/management/PlayerList;transferPlayerToDimension(Lnet/minecraft/entity/player/EntityPlayerMP;ILnet/minecraftforge/common/util/ITeleporter;)V"), method = "changeDimension", cancellable = true)
-	public void injectHere(int dimensionIn, net.minecraftforge.common.util.ITeleporter teleporter, CallbackInfoReturnable<Entity> ci) {
+	public void injectHere(int dimensionIn, net.minecraftforge.common.util.ITeleporter teleporter, org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable<Entity> ci) {
 	//#else
 	//#if MC>=10900
 //$$ 	@Inject(at = @At(value = "INVOKE", shift = Shift.BEFORE, target = "Lnet/minecraft/server/management/PlayerList;changePlayerDimension(Lnet/minecraft/entity/player/EntityPlayerMP;I)V", remap = false), method = "changeDimension", cancellable = true)
-//$$ 	public void injectHere(int dimensionIn, CallbackInfoReturnable<Entity> ci) {
+//$$ 	public void injectHere(int dimensionIn, org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable<Entity> ci) {
 	//#else
 //$$ 	@Inject(at = @At(value = "INVOKE", shift = Shift.BEFORE, target = "Lnet/minecraft/server/management/ServerConfigurationManager;transferPlayerToDimension(Lnet/minecraft/entity/player/EntityPlayerMP;I)V"), method = "travelToDimension", cancellable = true)
-//$$ 	public void injectHere(int dimensionIn, CallbackInfo ci) {
+//$$ 	public void injectHere(int dimensionIn, org.spongepowered.asm.mixin.injection.callback.CallbackInfo ci) {
 	//#endif
 	//#endif
 		if (dimensionIn == 1 && ChallengeMap.currentMap != null) {
@@ -107,11 +106,11 @@ public abstract class MixinEntityPlayerMPPatch extends EntityPlayer {
 //$$ 			chat.getChatGUI().clearChatMessages();
 			//#endif
 			//#if MC>=10900
-			chat.getChatGUI().printChatMessage(new TextComponentString("You have completed: \u00A76" + ChallengeMap.currentMap.displayName + "\u00A7f! Your Time is: " + Timer.getCurrentTimerFormatted()));
-			chat.getChatGUI().printChatMessage(new TextComponentString("Please submit your \u00A7craw \u00A7fvideo to \u00A77#new-misc-things \u00A7f on the Minecraft TAS Discord Server."));
+			chat.getChatGUI().printChatMessage(new net.minecraft.util.text.TextComponentString("You have completed: \u00A76" + ChallengeMap.currentMap.displayName + "\u00A7f! Your Time is: " + Timer.getCurrentTimerFormatted()));
+			chat.getChatGUI().printChatMessage(new net.minecraft.util.text.TextComponentString("Please submit your \u00A7craw \u00A7fvideo to \u00A77#new-misc-things \u00A7f on the Minecraft TAS Discord Server."));
 			//#else
-//$$ 			chat.getChatGUI().printChatMessage(new ChatComponentText("You have completed: \u00A76" + ChallengeMap.currentMap.displayName + "\u00A7f! Your Time is: " + Timer.getCurrentTimerFormatted()));
-//$$ 			chat.getChatGUI().printChatMessage(new ChatComponentText("Please submit your \u00A7craw \u00A7fvideo to \u00A77#new-misc-things \u00A7f on the Minecraft TAS Discord Server."));
+//$$ 			chat.getChatGUI().printChatMessage(new net.minecraft.util.ChatComponentText("You have completed: \u00A76" + ChallengeMap.currentMap.displayName + "\u00A7f! Your Time is: " + Timer.getCurrentTimerFormatted()));
+//$$ 			chat.getChatGUI().printChatMessage(new net.minecraft.util.ChatComponentText("Please submit your \u00A7craw \u00A7fvideo to \u00A77#new-misc-things \u00A7f on the Minecraft TAS Discord Server."));
 			//#endif
 			ChallengeMap.currentMap = null;
         	ChallengeLoader.backupSession();

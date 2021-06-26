@@ -2,6 +2,7 @@ package de.pfannekuchen.lotas.core.utils;
 
 import org.lwjgl.opengl.GL11;
 
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.block.entity.BlockEntityRenderDispatcher;
 import net.minecraft.util.math.BlockPos;
@@ -44,17 +45,27 @@ public enum RenderUtils {
 	}
 
 	public static void applyCameraRotationOnly() {
+		//#if MC<=11605
 		Camera camera = BlockEntityRenderDispatcher.INSTANCE.camera;
 		GL11.glRotated(MathHelper.wrapDegrees(camera.getPitch()), 1, 0, 0);
 		GL11.glRotated(MathHelper.wrapDegrees(camera.getYaw() + 180.0), 0, 1, 0);
+		//#endif
 	}
 
 	public static Vec3d getCameraPos() {
+		//#if MC>=11700
+//$$ 		return MinecraftClient.getInstance().getBlockEntityRenderDispatcher().camera.getPos();
+		//#else
 		return BlockEntityRenderDispatcher.INSTANCE.camera.getPos();
+		//#endif
 	}
 
 	public static BlockPos getCameraBlockPos() {
+		//#if MC>=11700
+//$$ 		return MinecraftClient.getInstance().getBlockEntityRenderDispatcher().camera.getBlockPos();
+		//#else
 		return BlockEntityRenderDispatcher.INSTANCE.camera.getBlockPos();
+		//#endif
 	}
 
 	public static void drawSolidBox() {

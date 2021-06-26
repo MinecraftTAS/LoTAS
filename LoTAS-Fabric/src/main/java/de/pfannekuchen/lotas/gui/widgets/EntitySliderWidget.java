@@ -6,8 +6,16 @@ import com.mojang.blaze3d.platform.GlStateManager;
 
 import de.pfannekuchen.lotas.gui.SpawnManipulationScreen;
 import net.minecraft.client.MinecraftClient;
+//#if MC>=11700
+//$$ import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
+//#endif
+//#if MC<=11605
 import net.minecraft.client.gui.widget.AbstractButtonWidget;
+//#endif
 import net.minecraft.client.gui.widget.ButtonWidget.PressAction;
+//#if MC>=11700
+//$$ import net.minecraft.client.gui.widget.PressableWidget;
+//#endif
 //#if MC>=11601
 //$$ import net.minecraft.client.util.math.MatrixStack;
 //#endif
@@ -40,7 +48,11 @@ import net.minecraft.text.LiteralText;
 import net.minecraft.util.Hand;
 import net.minecraft.world.Difficulty;
 
+//#if MC>=11700
+//$$ public class EntitySliderWidget extends PressableWidget {
+//#else
 public class EntitySliderWidget extends AbstractButtonWidget {
+//#endif
 
 	public HashMap<Integer, String> entities;
 
@@ -107,17 +119,22 @@ public class EntitySliderWidget extends AbstractButtonWidget {
 	}
 
 	//#if MC>=11601
-//$$ 		@Override
-//$$ 		public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-//$$ 		    super.renderButton(matrices, mouseX, mouseY, delta);
-//$$ 	         MinecraftClient.getInstance().getTextureManager().bindTexture(WIDGETS_LOCATION);
-//$$ 	         GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-//$$ 	         int i = (this.isHovered() ? 2 : 1) * 20;
-	         //#if MC>=11601
-//$$ 	         this.drawTexture(matrices, this.x + (int) (this.sliderPosition * (double) (this.width - 8)), this.y, 0, 46 + i, 4, 20);
-//$$ 	         this.drawTexture(matrices, this.x + (int) (this.sliderPosition * (double) (this.width - 8)) + 4, this.y, 196, 46 + i, 4, 20);
-	         //#endif
-//$$ 		}
+//$$ 	@Override
+//$$ 	public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+//$$ 		super.renderButton(matrices, mouseX, mouseY, delta);
+		//#if MC>=11700
+//$$ 		MinecraftClient.getInstance().getTextureManager().bindTexture(WIDGETS_TEXTURE);
+//$$ 		com.mojang.blaze3d.systems.RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+		//#else
+//$$ 		MinecraftClient.getInstance().getTextureManager().bindTexture(WIDGETS_LOCATION);
+//$$ 		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		//#endif
+//$$ 		int i = (this.isHovered() ? 2 : 1) * 20;
+		//#if MC>=11601
+//$$ 		this.drawTexture(matrices, this.x + (int) (this.sliderPosition * (double) (this.width - 8)), this.y, 0, 46 + i, 4, 20);
+//$$ 		this.drawTexture(matrices, this.x + (int) (this.sliderPosition * (double) (this.width - 8)) + 4, this.y, 196, 46 + i, 4, 20);
+		//#endif
+//$$ 	}
 	//#else
 	@Override
 	protected void renderBg(MinecraftClient client, int mouseX, int mouseY) {
@@ -147,13 +164,17 @@ public class EntitySliderWidget extends AbstractButtonWidget {
 					this.sliderPosition = 1.0F;
 				}
 				//#if MC>=11601
-//$$ 								setMessage(new LiteralText("Entity: " + entities.get((int) Math.round(sliderPosition * (max - min) + min))));
+//$$ 					setMessage(new LiteralText("Entity: " + entities.get((int) Math.round(sliderPosition * (max - min) + min))));
 				//#else
 				setMessage("Entity: " + entities.get((int) Math.round(sliderPosition * (max - min) + min)));
 				//#endif
 			}
 
-			GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+			//#if MC>=11700
+//$$ 			com.mojang.blaze3d.systems.RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+         	//#else
+         	GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+         	//#endif
 			//#if MC<=11502
 			blit(this.x + (int) (this.sliderPosition * (float) (this.width - 8)), this.y, 0, 66, 4, 20);
 			blit(this.x + (int) (this.sliderPosition * (float) (this.width - 8)) + 4, this.y, 196, 66, 4, 20);
@@ -371,14 +392,27 @@ public class EntitySliderWidget extends AbstractButtonWidget {
 	}
 	//#endif
 
-	/**
-	 * Fired when the mouse button is released. Equivalent of
-	 * MouseListener.mouseReleased(MouseEvent e).
-	 */
-	@Override
-	public boolean mouseReleased(double mouseX, double mouseY, int button) {
-		this.isMouseDown = false;
-		return super.mouseReleased(mouseX, mouseY, button);
-	}
-
+	//#if MC>=11700
+//$$ 	/**
+//$$ 	 * Fired when the mouse button is released. Equivalent of
+//$$ 	 * MouseListener.mouseReleased(MouseEvent e).
+//$$ 	 */
+//$$ 	@Override
+//$$ 	public boolean mouseReleased(double mouseX, double mouseY, int button) {
+//$$ 		this.isMouseDown = false;
+//$$ 		return super.mouseReleased(mouseX, mouseY, button);
+//$$ 	}
+//$$
+//$$ 	@Override
+//$$ 	public void appendNarrations(NarrationMessageBuilder builder) {
+//$$ 		// TODO Auto-generated method stub
+//$$
+//$$ 	}
+//$$
+//$$ 	@Override
+//$$ 	public void onPress() {
+//$$ 		// TODO Auto-generated method stub
+//$$
+//$$ 	}
+	//#endif
 }

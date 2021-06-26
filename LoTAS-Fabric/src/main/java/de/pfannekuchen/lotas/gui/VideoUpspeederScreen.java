@@ -14,6 +14,7 @@ import net.bramp.ffmpeg.probe.FFmpegProbeResult;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
+import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.CheckboxWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 //#if MC>=11601
@@ -61,7 +62,12 @@ public class VideoUpspeederScreen extends Screen {
 	public boolean charTyped(char chr, int modifiers) {
 		super.charTyped(chr, modifiers);
 		try {
+			//#if MC>=11700
+//$$ 			TextFieldWidget buttons = (TextFieldWidget) drawables.get(drawables.size() - 1);
+//$$ 			tickrate = Integer.parseInt(buttons.getText());
+			//#else
 			tickrate = Integer.parseInt(((TextFieldWidget) buttons.get(buttons.size() - 1)).getText());
+			//#endif
 		} catch (Exception e) {
 
 		}
@@ -75,18 +81,32 @@ public class VideoUpspeederScreen extends Screen {
 	@Override
 	protected void init() {
 		if (isEncoding) {
+			//#if MC>=11700
+//$$ 			addDrawableChild(new NewButtonWidget(width / 2 - 153, height - 40, 306, 20, "Continue encoding in the background >>", (b) -> {
+//$$ 				MinecraftClient.getInstance().openScreen(new TitleScreen());
+//$$ 			}));
+			//#else
 			addButton(new NewButtonWidget(width / 2 - 153, height - 40, 306, 20, "Continue encoding in the background >>", (b) -> {
 				MinecraftClient.getInstance().openScreen(new TitleScreen());
 			}));
+			//#endif
 			return;
 		}
 
 		//#if MC>=11601
-//$$ 				addButton(new TextFieldWidget(client.textRenderer, (width / 12) * 1 - (width / 24), (height / 8), (width / 12) * 9, 20, LiteralText.EMPTY)).setMaxLength(999);
+		//#if MC>=11700
+//$$ 		addDrawableChild(new TextFieldWidget(client.textRenderer, (width / 12) * 1 - (width / 24), (height / 8), (width / 12) * 9, 20, LiteralText.EMPTY)).setMaxLength(999);
+		//#else
+//$$ 			addButton(new TextFieldWidget(client.textRenderer, (width / 12) * 1 - (width / 24), (height / 8), (width / 12) * 9, 20, LiteralText.EMPTY)).setMaxLength(999);
+		//#endif
 		//#else
 		addButton(new TextFieldWidget(client.textRenderer, (width / 12) * 1 - (width / 24), (height / 8), (width / 12) * 9, 20, "")).setMaxLength(999);
 		//#endif
+		//#if MC>=11700
+//$$ 		addDrawableChild(new NewButtonWidget((width / 12) * 10 + 5 - (width / 24), (height / 8), (width / 12) * 2, 20, "Select File", (b) -> {
+		//#else
 		addButton(new NewButtonWidget((width / 12) * 10 + 5 - (width / 24), (height / 8), (width / 12) * 2, 20, "Select File", (b) -> {
+		//#endif
 			if (client.window.isFullscreen())
 				client.window.toggleFullscreen();
 			new Thread(new Runnable() {
@@ -99,7 +119,11 @@ public class VideoUpspeederScreen extends Screen {
 					dialog.setVisible(true);
 					try {
 						selectedFile = dialog.getFiles()[0];
-						((TextFieldWidget) buttons.get(0)).setText(selectedFile.getAbsolutePath());
+						//#if MC>=11700
+//$$ 						((TextFieldWidget) drawables.get(0)).setText(selectedFile.getAbsolutePath());
+						//#else
+						((TextFieldWidget)buttons).setText(selectedFile.getAbsolutePath());
+						//#endif
 						FFmpegProbeResult result = VideoUpspeeder.ffprobe(selectedFile);
 
 						videoFormat = result.format.format_name.split(",")[0];
@@ -108,14 +132,36 @@ public class VideoUpspeederScreen extends Screen {
 						resolution = result.streams.get(0).width + "x" + result.streams.get(0).height;
 						filesize = (Files.size(selectedFile.toPath()) / 1024 / 1024) + " MB";
 						lengthInMilliseconds = (long) (result.format.duration * 1000);
-
+						//#if MC>=11700
+//$$ 						ButtonWidget buttons=(ButtonWidget) drawables.get(4);
+//$$ 						buttons.active = true;
+						//#else
 						buttons.get(4).active = true;
+						//#endif
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
 				}
 			}).start();
 		}));
+		//#if MC>=11700
+//$$ 		addDrawableChild(new NewButtonWidget((width / 2) - 70, (height / 8) * 2 + 20, 20, 20, "-", (b) -> {
+//$$ 			if (tickrate != 1)
+//$$ 				tickrate--;
+//$$ 			TextFieldWidget buttons=(TextFieldWidget) drawables.get(drawables.size() - 1);
+//$$ 			buttons.setText(tickrate + "");
+//$$ 		}));
+//$$ 		addDrawableChild(new NewButtonWidget((width / 2) + 50, (height / 8) * 2 + 20, 20, 20, "+", (b) -> {
+//$$ 			tickrate++;
+//$$ 			TextFieldWidget buttons=(TextFieldWidget) drawables.get(drawables.size() - 1);
+//$$ 			buttons.setText(tickrate + "");
+//$$ 		}));
+//$$ 		addDrawableChild(new NewButtonWidget((width / 2) - 98, this.height - (this.height / 10) - 15 - 20 - 5, 204, 20, "Speed up video", (b) -> {
+//$$ 			b.active = false;
+//$$ 			isEncoding = true;
+//$$ 			VideoUpspeeder.speedup(tickrate, bitrate(), codecFFmpeg, (long) ((lengthInMilliseconds / 16L) * (tickrate / 20F)));
+//$$ 		})).active = selectedFile == null ? false : selectedFile.exists();
+		//#else
 		addButton(new NewButtonWidget((width / 2) - 70, (height / 8) * 2 + 20, 20, 20, "-", (b) -> {
 			if (tickrate != 1)
 				tickrate--;
@@ -130,9 +176,15 @@ public class VideoUpspeederScreen extends Screen {
 			isEncoding = true;
 			VideoUpspeeder.speedup(tickrate, bitrate(), codecFFmpeg, (long) ((lengthInMilliseconds / 16L) * (tickrate / 20F)));
 		})).active = selectedFile == null ? false : selectedFile.exists();
+		//#endif
 		//#if MC>=11601
-//$$ 		        addButton(new CheckboxWidget(2, this.height - 22, 20, 20, new LiteralText("High Quality"), false));
-//$$ 		        addButton(new TextFieldWidget(client.textRenderer, (width / 2) - 45, (height / 8) * 2 + 23, 90, 14, new LiteralText("20"))).setText("20");
+		//#if MC>=11700
+//$$ 		    addDrawableChild(new CheckboxWidget(2, this.height - 22, 20, 20, new LiteralText("High Quality"), false));
+//$$ 		    addDrawableChild(new TextFieldWidget(client.textRenderer, (width / 2) - 45, (height / 8) * 2 + 23, 90, 14, new LiteralText("20"))).setText("20");
+		//#else
+//$$ 		    addButton(new CheckboxWidget(2, this.height - 22, 20, 20, new LiteralText("High Quality"), false));
+//$$ 		    addButton(new TextFieldWidget(client.textRenderer, (width / 2) - 45, (height / 8) * 2 + 23, 90, 14, new LiteralText("20"))).setText("20");
+		//#endif
 		//#else
 		addButton(new CheckboxWidget(2, this.height - 22, 20, 20, "High Quality", false));
 		addButton(new TextFieldWidget(client.textRenderer, (width / 2) - 45, (height / 8) * 2 + 23, 90, 14, "20")).setText("20");
@@ -161,27 +213,46 @@ public class VideoUpspeederScreen extends Screen {
 //$$ 		        drawStringWithShadow(matrices, client.textRenderer, "Est: " + getDuration(est), i, 40 + (9 + 3) * 2, 10526880);
 //$$ 		        drawStringWithShadow(matrices, client.textRenderer, bitrate + "", i, 40 + 9 + 3, 10526880);
 //$$
+		        //#if MC>=11700
+//$$ 		        drawCenteredText(matrices, client.textRenderer, framesDone + " / " + (long) ((lengthInMilliseconds / 16L) * (tickrate / 20F)) + " Frames", width / 2, var10004 - 9 / 2, 0xFFFFFF);
+		        //#else
 //$$ 		        drawCenteredString(matrices, client.textRenderer, framesDone + " / " + (long) ((lengthInMilliseconds / 16L) * (tickrate / 20F)) + " Frames", width / 2, var10004 - 9 / 2, 0xFFFFFF);
+		        //#endif
 //$$
 //$$ 		        return;
 //$$ 		    }
 //$$
 //$$ 		    if (VideoUpspeederScreen.downloadingFFmpeg) {
 //$$ 		        this.renderBackground(matrices);
+		        //#if MC>=11700
+//$$ 		        drawCenteredText(matrices, client.textRenderer, installingProgress, this.width / 2, this.height / 2, 16777215);
+		        //#else
 //$$ 		        drawCenteredString(matrices, client.textRenderer, installingProgress, this.width / 2, this.height / 2, 16777215);
+		        //#endif
 //$$ 		        String var10002 = PROGRESS_BAR_STAGES[(int) (Util.getMeasuringTimeMs() / 150L % (long) PROGRESS_BAR_STAGES.length)];
 //$$ 		        int var10003 = this.width / 2;
 //$$ 		        int var10004 = this.height / 2;
+		        //#if MC>=11700
+//$$ 		        drawCenteredText(matrices, client.textRenderer, var10002, var10003, var10004 + 9 * 2, 16777215);
+		        //#else
 //$$ 		        drawCenteredString(matrices, client.textRenderer, var10002, var10003, var10004 + 9 * 2, 16777215);
+		        //#endif
 //$$ 		        return;
 //$$ 		    }
-//$$
+		    //#if MC>=11700
+//$$ 		    drawCenteredText(matrices, client.textRenderer, "Tickrate", (width / 2), (height / 8) * 2, 0xFFFFFF);
+		    //#else
 //$$ 		    drawCenteredString(matrices, client.textRenderer, "Tickrate", (width / 2), (height / 8) * 2, 0xFFFFFF);
-//$$
+		    //#endif
 //$$ 		    if (selectedFile != null) drawStringWithShadow(matrices, client.textRenderer, selectedFile.getAbsolutePath(), (width / 12) * 1 - (width / 24) + 4, (height / 8) + 6, 0xFFFFFF);
 //$$
+		    //#if MC>=11700
+//$$ 		    drawCenteredText(matrices, client.textRenderer, "Input File", (width / 4), (height / 8) * 3 + 10, 0x808080);
+//$$ 		    drawCenteredText(matrices, client.textRenderer, "Output File", (width / 4) * 3, (height / 8) * 3 + 10, 0x808080);
+		    //#else
 //$$ 		    drawCenteredString(matrices, client.textRenderer, "Input File", (width / 4), (height / 8) * 3 + 10, 0x808080);
 //$$ 		    drawCenteredString(matrices, client.textRenderer, "Output File", (width / 4) * 3, (height / 8) * 3 + 10, 0x808080);
+		    //#endif
 //$$
 //$$ 		    drawStringWithShadow(matrices, client.textRenderer, "Format: " + videoFormat, (width / 4) - (width / 12), (height / 8) * 4, 0xFFFFFF);
 //$$ 		    drawStringWithShadow(matrices, client.textRenderer, "Codec: " + codec, (width / 4) - (width / 12), (height / 8) * 4 + 10, 0xFFFFFF);
@@ -270,7 +341,11 @@ public class VideoUpspeederScreen extends Screen {
 
 	/* Gets the Bitrate from the button */
 	private int bitrate() {
+		//#if MC>=11700
+//$$ 		return ((CheckboxWidget) drawables.get(5)).isChecked() ? 20000000 : 8000000;
+		//#else
 		return ((CheckboxWidget) buttons.get(5)).isChecked() ? 20000000 : 8000000;
+		//#endif
 	}
 
 	/* Calculates the Size if the Video with a max bitrate: bitrate * frames */

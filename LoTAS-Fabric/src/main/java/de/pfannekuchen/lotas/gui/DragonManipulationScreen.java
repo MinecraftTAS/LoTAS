@@ -95,7 +95,11 @@ public class DragonManipulationScreen extends Screen {
 			//#else
 			EnderDragonEntity dragon = MinecraftClient.getInstance().getServer().getWorld(DimensionType.THE_END).getAliveEnderDragons().get(0);
 			//#endif
+			//#if MC>=11601
+//$$ 			dragon.getPhaseManager().setPhase(phases.get(btn.getMessage().asString()));
+			//#else
 			dragon.getPhaseManager().setPhase(phases.get(btn.getMessage()));
+			//#endif
 			dragonPhase = dragon.getPhaseManager().getCurrent();
 		});
 		action2 = new NewButtonWidget(this.width / 3 * 1 + 5, height / 8, this.width / 3 - 10, 20, "Phase2", btn -> {
@@ -108,7 +112,11 @@ public class DragonManipulationScreen extends Screen {
 			//#else
 			EnderDragonEntity dragon = MinecraftClient.getInstance().getServer().getWorld(DimensionType.THE_END).getAliveEnderDragons().get(0);
 			//#endif
+			//#if MC>=11601
+//$$ 			dragon.getPhaseManager().setPhase(phases.get(btn.getMessage().asString()));
+			//#else
 			dragon.getPhaseManager().setPhase(phases.get(btn.getMessage()));
+			//#endif
 			dragonPhase = dragon.getPhaseManager().getCurrent();
 		});
 		action3 = new NewButtonWidget(this.width / 3 * 2 + 5, height / 8, this.width / 3 - 10, 20, "Phase3", btn -> {
@@ -121,7 +129,11 @@ public class DragonManipulationScreen extends Screen {
 			//#else
 			EnderDragonEntity dragon = MinecraftClient.getInstance().getServer().getWorld(DimensionType.THE_END).getAliveEnderDragons().get(0);
 			//#endif
+			//#if MC>=11601
+//$$ 			dragon.getPhaseManager().setPhase(phases.get(btn.getMessage().asString()));
+			//#else
 			dragon.getPhaseManager().setPhase(phases.get(btn.getMessage()));
+			//#endif
 			dragonPhase = dragon.getPhaseManager().getCurrent();
 		});
 
@@ -191,13 +203,21 @@ public class DragonManipulationScreen extends Screen {
 			action2.active = false;
 			action3.active = false;
 		}
-
+		//#if MC>=11700
+//$$ 		addDrawableChild(action1);
+//$$ 		addDrawableChild(action2);
+//$$ 		addDrawableChild(action3);
+//$$ 		addDrawableChild(new NewButtonWidget(this.width / 2 - 155, this.height - 29, 300, 20, I18n.translate("gui.done"), btn -> {
+//$$ 			MinecraftClient.getInstance().openScreen(here);
+//$$ 		}));
+		//#else
 		addButton(action1);
 		addButton(action2);
 		addButton(action3);
 		addButton(new NewButtonWidget(this.width / 2 - 155, this.height - 29, 300, 20, I18n.translate("gui.done"), btn -> {
 			MinecraftClient.getInstance().openScreen(here);
 		}));
+		//#endif
 		super.init();
 	}
 
@@ -205,10 +225,15 @@ public class DragonManipulationScreen extends Screen {
 //$$ 	@Override
 //$$ 	public void render(MatrixStack matrices, int mouseX, int mouseY, float partialTicks) {
 //$$ 		renderBackground(matrices);
+		//#if MC>=11700
+//$$ 		GlStateManager._enableTexture();
+//$$
+//$$ 		drawCenteredText(matrices, MinecraftClient.getInstance().textRenderer, translation.get(dragonPhase.getClass().getSimpleName()), width / 2, 10, 0xFFFFFF);
+		//#else
 //$$ 		GlStateManager.enableTexture();
 //$$
 //$$ 		drawCenteredString(matrices, MinecraftClient.getInstance().textRenderer, translation.get(dragonPhase.getClass().getSimpleName()), width / 2, 10, 0xFFFFFF);
-//$$
+		//#endif
 //$$ 		MinecraftClient.getInstance().getTextureManager().bindTexture(DRAGONGIF);
 //$$ 		DrawableHelper.drawTexture(matrices, width / 28 * 3, height / 19 * 2, 0, 0, width / 28 * 23, height / 19 * 17, width / 28 * 23, height / 19 * 17);
 //$$ 		super.render(matrices, mouseX, mouseY, partialTicks);

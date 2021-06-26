@@ -3,7 +3,6 @@ package de.pfannekuchen.lotas.gui.widgets;
 import java.io.IOException;
 import java.time.Duration;
 
-import de.pfannekuchen.lotas.core.LoTASModContainer;
 import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.core.utils.EventUtils.Timer;
 import de.pfannekuchen.lotas.gui.GuiChallengeLeaderboard;
@@ -11,43 +10,34 @@ import de.pfannekuchen.lotas.taschallenges.ChallengeLoader;
 import de.pfannekuchen.lotas.taschallenges.ChallengeMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
-//#if MC>=10900
-import net.minecraft.client.gui.GuiListWorldSelection;
-import net.minecraft.client.gui.GuiListWorldSelectionEntry;
-//#else
-//$$ import net.minecraft.client.gui.GuiSelectWorld;
-//$$ import net.minecraft.client.gui.GuiSelectWorld.List;
-//#endif
+
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 
 //#if MC>=10900
-public class ChallengeMapEntryWidget extends GuiListWorldSelectionEntry {
+public class ChallengeMapEntryWidget extends net.minecraft.client.gui.GuiListWorldSelectionEntry {
 //#else
-//$$ public class ChallengeMapEntryWidget extends List {
+//$$ public class ChallengeMapEntryWidget extends net.minecraft.client.gui.GuiSelectWorld.List {
 //#endif
 	
 	
 	public ResourceLocation loc = null;
 	int width;
 	
+	// Different to 1.8, instead of having a single instance per element, this is just a full list.
 	//#if MC>=10900
 	public ChallengeMap map;
-	public ChallengeMapEntryWidget(GuiListWorldSelection listWorldSelIn, ChallengeMap map, int width) {
+	public ChallengeMapEntryWidget(net.minecraft.client.gui.GuiListWorldSelection listWorldSelIn, ChallengeMap map, int width) {
 		super(listWorldSelIn, map.getSummary(), map.getSaveLoader());
 		this.map = map;
 		this.width = width;
 	//#else
-//$$ 	public ChallengeMapEntryWidget(GuiSelectWorld guiSelectWorld, int width) {
+//$$ 	public ChallengeMapEntryWidget(net.minecraft.client.gui.GuiSelectWorld guiSelectWorld, int width) {
 //$$ 		guiSelectWorld.super(Minecraft.getMinecraft());
 //$$ 		this.width = width;
 	//#endif
 	}
 
-	//#if MC>=10900
-	private static final ResourceLocation ICON_OVERLAY_LOCATION = new ResourceLocation("textures/gui/world_selection.png");
-	//#endif
-	
 	public void deleteWorld() {}
 	public void editWorld() {}
 	public void recreateWorld() {}
@@ -56,7 +46,7 @@ public class ChallengeMapEntryWidget extends GuiListWorldSelectionEntry {
 		//#if MC>=10900
 		ChallengeMap.currentMap = map;
 		//#else
-//$$ 		ChallengeMap.currentMap = LoTASModContainer.maps.get(selectedElement);
+//$$ 		ChallengeMap.currentMap = de.pfannekuchen.lotas.core.LoTASModContainer.maps.get(selectedElement);
 		//#endif
 		try {
 			ChallengeLoader.load(true);
@@ -68,7 +58,7 @@ public class ChallengeMapEntryWidget extends GuiListWorldSelectionEntry {
 	//#if MC<=10809
 //$$ 	@Override
 //$$ 	protected int getSize() {
-//$$ 		return LoTASModContainer.maps.size();
+//$$ 		return de.pfannekuchen.lotas.core.LoTASModContainer.maps.size();
 //$$ 	}
 //$$
 //$$ 	@Override
@@ -78,9 +68,7 @@ public class ChallengeMapEntryWidget extends GuiListWorldSelectionEntry {
 //$$             joinWorld();
 //$$         }
 //$$ 	}
-	//#endif
-	
-	//#if MC>=10900
+	//#else
 	@Override
 	public boolean mousePressed(int slotIndex, int mouseX, int mouseY, int mouseEvent, int relativeX, int relativeY) {
         int posX = width - x - 80;
@@ -99,13 +87,13 @@ public class ChallengeMapEntryWidget extends GuiListWorldSelectionEntry {
 	@Override
 	//#if MC>=11200
 	public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, int mouseX, int mouseY, boolean isSelected, float partialTicks) {
-		//#else
-		//#if MC>=10900
+	//#else
+	//#if MC>=10900
 //$$ 		public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, int mouseX, int mouseY, boolean isSelected) {
-		//#else
+	//#else
 //$$ 		public void drawSlot(int slotIndex, int x, int y, int p_180791_4_, int mouseXIn, int mouseYIn) {
-			//#endif
-			//#endif
+	//#endif
+	//#endif
 		
 		//#if MC>=10900
 		this.x = x;
@@ -114,9 +102,9 @@ public class ChallengeMapEntryWidget extends GuiListWorldSelectionEntry {
     	String s1 = map.description;
         String s2 = "WR: " + map.leaderboard[0].split(";")[0] + " - " + Timer.getDuration(Duration.ofMillis(Integer.parseInt(map.leaderboard[0].split(";")[1])));
         //#else
-        //$$ String s = "\u00A76TAS Challenge Map - \u00A7f" + LoTASModContainer.maps.get(selectedElement).displayName;
-        //$$ String s1 = LoTASModContainer.maps.get(selectedElement).description;
-        //$$ String s2 = "WR: " + LoTASModContainer.maps.get(selectedElement).leaderboard[0].split(";")[0] + " - " + Timer.getDuration(Duration.ofMillis(Integer.parseInt(LoTASModContainer.maps.get(selectedElement).leaderboard[0].split(";")[1])));
+        //$$ String s = "\u00A76TAS Challenge Map - \u00A7f" + de.pfannekuchen.lotas.core.LoTASModContainer.maps.get(selectedElement).displayName;
+        //$$ String s1 = de.pfannekuchen.lotas.core.LoTASModContainer.maps.get(selectedElement).description;
+        //$$ String s2 = "WR: " + de.pfannekuchen.lotas.core.LoTASModContainer.maps.get(selectedElement).leaderboard[0].split(";")[0] + " - " + Timer.getDuration(Duration.ofMillis(Integer.parseInt(de.pfannekuchen.lotas.core.LoTASModContainer.maps.get(selectedElement).leaderboard[0].split(";")[1])));
         //$$
         //#endif
         
@@ -131,7 +119,7 @@ public class ChallengeMapEntryWidget extends GuiListWorldSelectionEntry {
 		Gui.drawModalRectWithCustomSizedTexture(x, y, 0, 0, 32, 32, 32.0F, 32.0F);
 		GlStateManager.disableBlend();
         if (Minecraft.getMinecraft().gameSettings.touchscreen || isSelected) {
-        	Minecraft.getMinecraft().getTextureManager().bindTexture(ICON_OVERLAY_LOCATION);
+        	Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation("textures/gui/world_selection.png"));
         	Gui.drawRect(x, y, x + 32, y + 32, -1601138544);
             GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
             int j = mouseX - x;

@@ -7,6 +7,7 @@ import de.pfannekuchen.lotas.gui.widgets.NewButtonWidget;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.GameMenuScreen;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 //#if MC>=11601
 //$$ import net.minecraft.client.util.math.MatrixStack;
@@ -136,6 +137,15 @@ public class SpawnManipulationScreen extends Screen {
 		entity = new EntitySliderWidget(width / 2 - 102, 2, entities, 204, 20, btn -> {
 
 		});
+		//#if MC>=11700
+//$$ 		addDrawableChild(entity);
+//$$ 		addDrawableChild(new NewButtonWidget(width / 9 * 3 + 6, height - 24, width / 9 - 4, 20, "X++", btn -> spawnX++));
+//$$ 		addDrawableChild(new NewButtonWidget(width / 9 * 4 + 6, height - 24, width / 9 - 4, 20, "X--", btn -> spawnX--));
+//$$ 		addDrawableChild(new NewButtonWidget(width / 9 * 5 + 3, height - 24, width / 9 - 4, 20, "Y++", btn -> spawnY++));
+//$$ 		addDrawableChild(new NewButtonWidget(width / 9 * 6 + 3, height - 24, width / 9 - 4, 20, "Y--", btn -> spawnY--));
+//$$ 		addDrawableChild(new NewButtonWidget(width / 9 * 7 + 1, height - 24, width / 9 - 4, 20, "Z++", btn -> spawnZ++));
+//$$ 		addDrawableChild(new NewButtonWidget(width / 9 * 8 + 1, height - 24, width / 9 - 4, 20, "Z--", btn -> spawnZ--));
+		//#else
 		addButton(entity);
 		addButton(new NewButtonWidget(width / 9 * 3 + 6, height - 24, width / 9 - 4, 20, "X++", btn -> spawnX++));
 		addButton(new NewButtonWidget(width / 9 * 4 + 6, height - 24, width / 9 - 4, 20, "X--", btn -> spawnX--));
@@ -143,13 +153,19 @@ public class SpawnManipulationScreen extends Screen {
 		addButton(new NewButtonWidget(width / 9 * 6 + 3, height - 24, width / 9 - 4, 20, "Y--", btn -> spawnY--));
 		addButton(new NewButtonWidget(width / 9 * 7 + 1, height - 24, width / 9 - 4, 20, "Z++", btn -> spawnZ++));
 		addButton(new NewButtonWidget(width / 9 * 8 + 1, height - 24, width / 9 - 4, 20, "Z--", btn -> spawnZ--));
-
+		//#endif
+		
 		//#if MC>=11601
 //$$ 		        xText = new TextFieldWidget(MinecraftClient.getInstance().textRenderer, width / 9 * 3 + 6, height - 46, (int) (width / 4.5) - 6, 20, new LiteralText(spawnX + ""));
 //$$ 		        yText = new TextFieldWidget(MinecraftClient.getInstance().textRenderer, width / 9 * 5 + 4, height - 46, (int) (width/ 4.5) - 6, 20, new LiteralText(spawnY + ""));
 //$$ 		        zText = new TextFieldWidget(MinecraftClient.getInstance().textRenderer, width / 9 * 7 + 2, height - 46, (int) (width/ 4.5) - 6, 20, new LiteralText(spawnZ + ""));
+		        //#if MC>=11700
+//$$ 		        addDrawableChild(new NewButtonWidget(5, height - 24, width / 3, 20, "Spawn Entity", btn -> MinecraftClient.getInstance().getServer().getPlayerManager().getPlayer(MinecraftClient.getInstance().player.getUuid()).world.spawnEntity(e)));
+//$$ 		        addDrawableChild(new NewButtonWidget(5, height - 46, width / 3, 20, "Done", btn -> MinecraftClient.getInstance().openScreen(new GameMenuScreen(true))));
+		        //#else
 //$$ 		        addButton(new NewButtonWidget(5, height - 24, width / 3, 20, "Spawn Entity", btn -> MinecraftClient.getInstance().getServer().getPlayerManager().getPlayer(MinecraftClient.getInstance().player.getUuid()).world.spawnEntity(e)));
 //$$ 		        addButton(new NewButtonWidget(5, height - 46, width / 3, 20, "Done", btn -> MinecraftClient.getInstance().openScreen(new GameMenuScreen(true))));
+		        //#endif
 		//#else
 		xText = new TextFieldWidget(MinecraftClient.getInstance().textRenderer, width / 9 * 3 + 6, height - 46, (int) (width / 4.5) - 6, 20, spawnX + "");
 		yText = new TextFieldWidget(MinecraftClient.getInstance().textRenderer, width / 9 * 5 + 4, height - 46, (int) (width / 4.5) - 6, 20, spawnY + "");
@@ -175,7 +191,12 @@ public class SpawnManipulationScreen extends Screen {
 		if (e instanceof MobEntity) {
 			//#if MC>=11601
 			//#if MC>=11605
+			//#if MC>=11700
+//$$ 			ButtonWidget buttons = (ButtonWidget) drawables.get(drawables.size() - 2);
+//$$ 			buttons.active = ((MobEntity) e).canSpawn(MinecraftClient.getInstance().getServer().getPlayerManager().getPlayerList().get(0).getServerWorld(), SpawnReason.NATURAL) && MinecraftClient.getInstance().getServer().getPlayerManager().getPlayerList().get(0).getServerWorld().getBlockCollisions(e, e.getBoundingBox()).count() == 0;
+			//#else
 //$$ 			buttons.get(buttons.size() - 2).active = ((MobEntity) e).canSpawn(MinecraftClient.getInstance().getServer().getPlayerManager().getPlayerList().get(0).getServerWorld(), SpawnReason.NATURAL) && MinecraftClient.getInstance().getServer().getPlayerManager().getPlayerList().get(0).getServerWorld().getBlockCollisions(e, e.getBoundingBox()).count() == 0;
+			//#endif
 			//#else
 //$$ 			buttons.get(buttons.size() - 2).active = ((MobEntity) e).canSpawn(MinecraftClient.getInstance().getServer().getPlayerManager().getPlayerList().get(0).getServerWorld(), SpawnReason.NATURAL) && MinecraftClient.getInstance().getServer().getPlayerManager().getPlayerList().get(0).getServerWorld().doesNotCollide(e.getBoundingBox());
 			//#endif
@@ -184,7 +205,12 @@ public class SpawnManipulationScreen extends Screen {
 			//#endif
 		} else {
 			//#if MC>=11605
+			//#if MC>=11700
+//$$ 			ButtonWidget buttons = (ButtonWidget) drawables.get(drawables.size() - 2);
+//$$ 			buttons.active = MinecraftClient.getInstance().getServer().getPlayerManager().getPlayerList().get(0).getServerWorld().getBlockCollisions(e, e.getBoundingBox()).count() == 0;
+			//#else
 //$$ 			buttons.get(buttons.size() - 2).active = MinecraftClient.getInstance().getServer().getPlayerManager().getPlayerList().get(0).getServerWorld().getBlockCollisions(e, e.getBoundingBox()).count() == 0;
+			//#endif
 			//#else
 			buttons.get(buttons.size() - 2).active = MinecraftClient.getInstance().getServer().getPlayerManager().getPlayerList().get(0).getServerWorld().doesNotCollide(e.getBoundingBox());
 			//#endif

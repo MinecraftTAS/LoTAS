@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 import com.google.common.io.Files;
@@ -53,6 +55,12 @@ public class GuiLoadstateMenu extends GuiScreen {
 	}
 	
 	@Override
+	public void handleMouseInput() throws IOException {
+		list.handleMouseInput();
+		super.handleMouseInput();
+	}
+	
+	@Override
 	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
 		list.mouseClicked(mouseX, mouseY, mouseButton);
 		super.mouseClicked(mouseX, mouseY, mouseButton);
@@ -73,7 +81,17 @@ public class GuiLoadstateMenu extends GuiScreen {
 				
 				@Override
 				public boolean accept(File dir, String name) {	
+					System.out.println(name);
 					return name.startsWith(Minecraft.getMinecraft().getIntegratedServer().getFolderName() + "-Savestate");
+				}
+			});
+			Arrays.sort(f, new Comparator<File>() {
+
+				@Override
+				public int compare(File o1, File o2) {
+					Integer o1N = Integer.parseInt(o1.getName().split("-Savestate")[1]);
+					Integer o2N = Integer.parseInt(o2.getName().split("-Savestate")[1]);
+					return o1N - o2N;
 				}
 			});
 			for (File file : f) {

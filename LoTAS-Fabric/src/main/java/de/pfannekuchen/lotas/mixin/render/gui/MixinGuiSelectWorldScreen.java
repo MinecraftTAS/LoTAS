@@ -30,10 +30,18 @@ public abstract class MixinGuiSelectWorldScreen extends Screen {
 
 	@Inject(at = @At("TAIL"), method = "init")
 	public void injectinit(CallbackInfo ci) {
+		//#if MC>=11700
+//$$ 		this.addDrawableChild(new NewButtonWidget(2, 2, 98, 20, "Seed List", button -> {
+		//#else
 		this.addButton(new NewButtonWidget(2, 2, 98, 20, "Seed List", button -> {
+		//#endif
 			MinecraftClient.getInstance().openScreen(new SeedListScreen());
 		}));
+		//#if MC>=11700
+//$$ 		this.addDrawableChild(widget = new SmallCheckboxWidget(width - 160, 4, "Open ESC when joining world", ConfigUtils.getBoolean("tools", "hitEscape"), b -> {
+		//#else
 		this.addButton(widget = new SmallCheckboxWidget(width - 160, 4, "Open ESC when joining world", ConfigUtils.getBoolean("tools", "hitEscape"), b -> {
+		//#endif
 			ConfigUtils.setBoolean("tools", "hitEscape", widget.isChecked());
 			ConfigUtils.save();
 		}));

@@ -12,6 +12,12 @@ import org.spongepowered.asm.mixin.Mixins;
 import net.minecraftforge.fml.relauncher.CoreModManager;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 
+/**
+ * Core Plugin for the Forge Modloader that loads Mixin for versions that don't automatically
+ * @author Jonas Herzig
+ * @since v1.2
+ * @version v1.2
+ */
 public class LoadingPlugin implements IFMLLoadingPlugin {
 
 	public LoadingPlugin() {

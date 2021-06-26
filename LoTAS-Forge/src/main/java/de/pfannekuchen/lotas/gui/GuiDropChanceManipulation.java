@@ -1,6 +1,5 @@
 package de.pfannekuchen.lotas.gui;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,23 +17,12 @@ import de.pfannekuchen.lotas.dropmanipulation.drops.entitydrops.PassiveDropManip
 import de.pfannekuchen.lotas.dropmanipulation.drops.entitydrops.ZombieDropManipulation;
 import de.pfannekuchen.lotas.gui.widgets.ButtonWidget;
 import de.pfannekuchen.lotas.gui.widgets.CheckboxWidget;
-import de.pfannekuchen.lotas.taschallenges.ChallengeLoader;
 import de.pfannekuchen.lotas.taschallenges.ChallengeMap;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiIngameMenu;
-import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiScreen;
-//#if MC>=11200
-import net.minecraft.client.renderer.BufferBuilder;
-//#else
-//#if MC>=10900
-//$$ import net.minecraft.client.renderer.VertexBuffer;
-//#else
-//$$ import net.minecraft.client.renderer.WorldRenderer;
-//#endif
-//#endif
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -101,12 +89,12 @@ public class GuiDropChanceManipulation extends GuiScreen {
 
 		Tessellator tessellator = Tessellator.getInstance();
 		//#if MC>=11200
-		BufferBuilder bufferBuilder = tessellator.getBuffer();
+		net.minecraft.client.renderer.BufferBuilder bufferBuilder = tessellator.getBuffer();
 		//#else
 		//#if MC>=10900
-//$$ 		VertexBuffer bufferBuilder = tessellator.getBuffer();
+//$$ 		net.minecraft.client.renderer.VertexBuffer bufferBuilder = tessellator.getBuffer();
 		//#else
-//$$ 		WorldRenderer bufferBuilder = tessellator.getWorldRenderer();
+//$$ 		net.minecraft.client.renderer.WorldRenderer bufferBuilder = tessellator.getWorldRenderer();
 		//#endif
 		//#endif
 		

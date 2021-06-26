@@ -1,65 +1,74 @@
 package de.pfannekuchen.lotas.core.utils;
 
-import java.awt.Color;
-import java.io.IOException;
 import java.time.Duration;
 import java.util.List;
 
-import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
-
-import com.google.common.collect.ImmutableList;
 
 import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.gui.GuiAiManipulation;
 import de.pfannekuchen.lotas.gui.GuiEntitySpawnManipulation;
 import de.pfannekuchen.lotas.mixin.accessors.AccessorRenderManager;
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;
-import de.pfannekuchen.lotas.taschallenges.ChallengeMap;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.settings.GameSettings;
-import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
-
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
 
+/**
+ * All events that MinecraftForge provides end up here, excluding the initialization event.
+ * @author Pancake
+ * @since v1.0
+ * @version v1.1
+ */
 public class EventUtils {
 	
-	@SubscribeEvent
-	public void onDraw(RenderGameOverlayEvent.Post e) {
-		if (checkNonText(e)) return;
+	/**
+	 * Event for LoTAS that renders text overlays onto the screen
+	 * @param e RenderEvent provided by MinecraftForge.
+	 */
+	@SubscribeEvent public void onDraw(RenderGameOverlayEvent.Post e) {
+		if (checkNonText(e)) return; // Check whether the event is not a text render event.
+		de.pfannekuchen.lotas.gui.HudSettings.drawOverlay(); // Render the Info-HUD overlay
 		
+		/* Render the Timer and Tick Indicator */
 		if (Timer.ticks != -1) {
-			Gui.drawRect(0, 0, 75, ConfigUtils.getBoolean("ui", "hideRTATimer") ? 13 : 24, new Color(0, 0, 0, 175).getRGB());
+			// Render the timer whenever it is supposed to show up, and hide the RTA-Timer if configuration option is set.
+			Gui.drawRect(0, 0, 75, ConfigUtils.getBoolean("ui", "hideRTATimer") ? 13 : 24, new java.awt.Color(0, 0, 0, 175).getRGB());
 			Duration dur = Duration.ofMillis(Timer.ticks * 50);
 			if (Timer.running) TickrateChangerMod.rta = Duration.ofMillis(System.currentTimeMillis() - Timer.startTime.toMillis());
 			MCVer.getFontRenderer(Minecraft.getMinecraft()).drawStringWithShadow(Timer.getDuration(dur), 1, 3, 0xFFFFFFFF);
 			if (!ConfigUtils.getBoolean("ui", "hideRTATimer")) MCVer.getFontRenderer(Minecraft.getMinecraft()).drawStringWithShadow("RTA: " + Timer.getDuration(TickrateChangerMod.rta), 1, 15, 0xFFFFFFFF);
-		} 
+		}
 		if (ConfigUtils.getBoolean("tools", "showTickIndicator") && TickrateChangerMod.tickrate <= 5F && TickrateChangerMod.show) {
+			// Render the Tick Indicator whenever ever second tick occurs and the Tickrate is below 5
 			Minecraft.getMinecraft().getTextureManager().bindTexture(TickrateChangerMod.streaming);
-			Gui.drawModalRectWithCustomSizedTexture(new ScaledResolution(Minecraft.getMinecraft()).getScaledWidth() - 17, 1, 0, 0, 16, 16, 16, 64);
+			Gui.drawModalRectWithCustomSizedTexture(new net.minecraft.client.gui.ScaledResolution(Minecraft.getMinecraft()).getScaledWidth() - 17, 1, 0, 0, 16, 16, 16, 64);
 		}
 		
+		/* Calculate the players speed and render the Speedometer if wanted */
 		if (ConfigUtils.getBoolean("tools", "showSpeedometer")) {
+			// Dividing the players movement per tick x by z, multiplied by 0.05 will result in the blocks per second. 
 			double distTraveledLastTickX = MCVer.player(Minecraft.getMinecraft()).posX - MCVer.player(Minecraft.getMinecraft()).prevPosX;
 			double distTraveledLastTickZ = MCVer.player(Minecraft.getMinecraft()).posZ - MCVer.player(Minecraft.getMinecraft()).prevPosZ;
-			
 			String message = String.format("%.2f", MCVer.sqrt((distTraveledLastTickX * distTraveledLastTickX + distTraveledLastTickZ * distTraveledLastTickZ)) / 0.05F) + " blocks/sec";
 			int width = MCVer.getFontRenderer(Minecraft.getMinecraft()).getStringWidth(message);
+			// Render the Speedometer to the screen.
 			Gui.drawRect(4, 4, 4 + width + 2 * 2, 4 + MCVer.getFontRenderer(Minecraft.getMinecraft()).FONT_HEIGHT + 2 + 2 - 1, 0xAA000000);
 			MCVer.getFontRenderer(Minecraft.getMinecraft()).drawString(message, 6, 6, 14737632);
 		}
 	}
 	
+	/**
+	 * Pre-processed way, to check whether the current RenderGameOverlayEvent(.Post) is rendering text or not.
+	 * @since v1.1
+	 */
 	private boolean checkNonText(RenderGameOverlayEvent e) {
 		//#if MC>=10900
 		if (e.getType() != ElementType.TEXT) return true;
@@ -69,77 +78,86 @@ public class EventUtils {
 		return false;
 	}
 
-	@SubscribeEvent
-	public void render(RenderGameOverlayEvent e) {
-		if (checkNonText(e)) return;
+	/**
+	 * Event for LoTAS that renders the Keybinds onto the screen
+	 * @param e RenderGameOverlayEvent provided by MinecraftForge.
+	 */
+	@SubscribeEvent public void render(RenderGameOverlayEvent e) {
+		if (checkNonText(e)) return; // Check whether the event is not a text render event.
 		
-		FontRenderer renderer = MCVer.getFontRenderer(Minecraft.getMinecraft());
-    	int height = new ScaledResolution(Minecraft.getMinecraft()).getScaledHeight();
+		/* Render the Keybind Overlay */
+		net.minecraft.client.gui.FontRenderer renderer = MCVer.getFontRenderer(Minecraft.getMinecraft());
+    	int height = new net.minecraft.client.gui.ScaledResolution(Minecraft.getMinecraft()).getScaledHeight();
 		String out1 = "";
         GameSettings gs = Minecraft.getMinecraft().gameSettings;
-		for (KeyBinding binds : gs.keyBindings) {
+        /* Obtain every pressed key and add it to a string */
+		for (net.minecraft.client.settings.KeyBinding binds : gs.keyBindings) {
 			try {
-				if (binds.isKeyDown()) out1 += Keyboard.getKeyName(binds.getKeyCode()) + " ";
+				if (binds.isKeyDown()) out1 += org.lwjgl.input.Keyboard.getKeyName(binds.getKeyCode()) + " ";
 			} catch (Exception e3) {
 				
 			}
 		}
+		// Add left and right-click to the string if pressed.
 		if (gs.keyBindAttack.isKeyDown()) out1 += "LC ";
 		if (gs.keyBindUseItem.isKeyDown()) out1 += "RC ";
+		// Render the Keybinds onto the screen
         renderer.drawStringWithShadow(out1, 5, height - 11, 0xFFFFFF);
 	}
 	
 	/**
-	 * Turn off timer on timer keybinding, and Power Hotkeys
-	 * @param e KeyInputEvent
+	 * Handles the timer and all other keybind events
+	 * @param e KeyInputEvent provided by MinecraftForge
 	 */
 	@SubscribeEvent
 	public void onInput2(KeyInputEvent e) {
+		/* Handle all keybinds */
 		try {
-			KeybindsUtils.keyEvent();
-		} catch (IOException e1) {
+			KeybindsUtils.keyEvent(); // Trigger the KeybindsUtils method to handle most of the keybinds
+		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
 		
-		if (KeybindsUtils.toggleTimerKeybind.isPressed() && ChallengeMap.currentMap == null) {
-			if (Timer.ticks < 0 || Timer.startTime == null) {
+		// Timer keybinds
+		if (KeybindsUtils.toggleTimerKeybind.isPressed() && de.pfannekuchen.lotas.taschallenges.ChallengeMap.currentMap == null) { // Start/Stop the timer if there are no tas challenges running
+			if (Timer.ticks < 0 || Timer.startTime == null) { // Start the timer
 				Timer.startTime = Duration.ofMillis(System.currentTimeMillis());
 				Timer.ticks = 0;
 			}
-			Timer.running = !Timer.running;
+			Timer.running = !Timer.running; // Start/stop the timers state
 		}
-	}
-	
-	/**
-	 * Increasing or decreasing the tickrate
-	 * @param e
-	 */
-	@SubscribeEvent
-	public void onInput(KeyInputEvent e) {
+		
+		// Tickrate keybinds
 		if (KeybindsUtils.increaseTickrateKeybind.isPressed()) TickrateChangerMod.index++;
 		else if (KeybindsUtils.decreaseTickrateKeybind.isPressed()) TickrateChangerMod.index--;
 		else return;
-		TickrateChangerMod.index = MCVer.clamp(TickrateChangerMod.index, 0, 11);
-		TickrateChangerMod.updateTickrate(TickrateChangerMod.ticks[TickrateChangerMod.index]);
+		TickrateChangerMod.index = MCVer.clamp(TickrateChangerMod.index, 0, 11); // Update the index of the recommended Tickrates array
+		TickrateChangerMod.updateTickrate(TickrateChangerMod.ticks[TickrateChangerMod.index]); // Update the Tickrate
 	}
 	
-	@SubscribeEvent
-	public void onRender(RenderWorldLastEvent e) {
+	/**
+	 * Render Event triggered by MinecraftForge that renders all 3D stuff for LoTAS
+	 * @param e RenderWorldLastEvent provided by MinecraftForge.
+	 */
+	@SubscribeEvent public void onRender(RenderWorldLastEvent e) {
 		final GuiScreen gui = Minecraft.getMinecraft().currentScreen;
+		/* Render the Entity Spawn Manipulation or AI Manipulation Outline 3D Box */
 		if (gui instanceof GuiEntitySpawnManipulation) {
 			GL11.glPushMatrix();
 			GL11.glDisable(GL11.GL_TEXTURE_2D);
 			GL11.glEnable(GL11.GL_BLEND);
 			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-			GL11.glEnable(GL11.GL_LINE_SMOOTH);
-			GL11.glLineWidth(2);
+			GL11.glEnable(GL11.GL_LINE_SMOOTH); // enable wireframe mode
+			GL11.glLineWidth(2); // set wireframe line width
 			
+			// offset the view to the cameras perspective
 			final RenderManager renderManager = Minecraft.getMinecraft().getRenderManager();
 			final double renderX = ((double) ((GuiEntitySpawnManipulation) gui).spawnX - 0.5f) - ((AccessorRenderManager) renderManager).renderPosX();
 			final double renderY = ((double) ((GuiEntitySpawnManipulation) gui).spawnY) - ((AccessorRenderManager) renderManager).renderPosY();
 			final double renderZ = ((double) ((GuiEntitySpawnManipulation) gui).spawnZ - 0.5F) - ((AccessorRenderManager) renderManager).renderPosZ();
-			
 			GL11.glTranslated(renderX, renderY, renderZ);
+			
+			// draw a box
 			GL11.glScalef(1, 2, 1);
 			GL11.glColor4f(28, 188, 220, 0.5f);
 			RenderUtils.drawOutlinedBox();
@@ -157,15 +175,17 @@ public class EventUtils {
 			GL11.glDisable(GL11.GL_TEXTURE_2D);
 			GL11.glEnable(GL11.GL_BLEND);
 			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-			GL11.glEnable(GL11.GL_LINE_SMOOTH);
-			GL11.glLineWidth(2);
+			GL11.glEnable(GL11.GL_LINE_SMOOTH); // wireframe mode
+			GL11.glLineWidth(2); // wireframe size
 			
+			// offset the view to the camera perspective
 			final RenderManager renderManager = Minecraft.getMinecraft().getRenderManager();
 			double renderX = ((double) GuiAiManipulation.entities.get(GuiAiManipulation.selectedIndex).posX - 0.5f) - ((AccessorRenderManager) renderManager).renderPosX();
 			double renderY = ((double) GuiAiManipulation.entities.get(GuiAiManipulation.selectedIndex).posY) - ((AccessorRenderManager) renderManager).renderPosY();
 			double renderZ = ((double) GuiAiManipulation.entities.get(GuiAiManipulation.selectedIndex).posZ - 0.5F) - ((AccessorRenderManager) renderManager).renderPosZ();
-			
 			GL11.glTranslated(renderX, renderY, renderZ);
+			
+			// draw first box around the entity
 			GL11.glScalef(1, 2, 1);
 			GL11.glColor4f(28, 188, 220, 0.5f);
 			RenderUtils.drawOutlinedBox();
@@ -185,12 +205,11 @@ public class EventUtils {
 			GL11.glEnable(GL11.GL_LINE_SMOOTH);
 			GL11.glLineWidth(2);
 			
-			// Draw output
-			
 			renderX = GuiAiManipulation.spawnX - ((AccessorRenderManager) renderManager).renderPosX();
 			renderY = GuiAiManipulation.spawnY - ((AccessorRenderManager) renderManager).renderPosY();
 			renderZ = GuiAiManipulation.spawnZ - ((AccessorRenderManager) renderManager).renderPosZ();
 			
+			// render second box around the target
 			GL11.glTranslated(renderX, renderY, renderZ);
 			GL11.glScalef(1, 1, 1);
 			GL11.glColor4f(28, 188, 220, 0.5f);
@@ -206,19 +225,37 @@ public class EventUtils {
 		}
 	}
 	
+	/**
+	 * Timer struct that contains timer data
+	 * @author Pancake
+	 * @since v1.0
+	 * @version v1.1
+	 */
 	public static class Timer {
 
+		/** RTA-Time when the timer was started */
 		public static Duration startTime;
+		/** Amount of Ticks passed since the timer was started */
 		public static int ticks = -1;
+		/** Whether the timer should be counting ticks or not */
 		public static boolean running;
-		
-		public static final List<String> allowed = ImmutableList.of("guichest", "guibeacon", "guibrewingstand", "guichat", "guinewchat", "guicommandblock", "guidispenser",
+		/** List of GuiScreens where the timer should continue running */
+		public static final List<String> allowed = java.util.Arrays.asList("guichest", "guibeacon", "guibrewingstand", "guichat", "guinewchat", "guicommandblock", "guidispenser",
 				"guienchantment", "guifurnace", "guihopper", "guiinventory", "guirecipebook", "guigameover", "guirecipeoverlay", "guimerchant", "guicontainercreative", "guishulkerbox", "guirepair", "guicrafting");
 	    
+		/**
+		 * Formats a Duration to a string with MM:ss:mm format
+		 * @param d Duration to format
+		 * @return Returns a formatted duration string
+		 */
 	    public static String getDuration(Duration d) {
 	        return String.format("%02d", d.toMinutes()) + ":" + String.format("%02d", d.getSeconds() % 60) + "." + (int) ((d.toMillis() % 1000));
 	    }
 		
+		/**
+		 * Formats the current time to a string with MM:ss:mm format
+		 * @return Returns the current timers formatted duration string
+		 */
 		public static String getCurrentTimerFormatted() {
 			Duration d = Duration.ofMillis(ticks * 50);
 			return String.format("%02d", d.toMinutes()) + ":" + String.format("%02d", d.getSeconds() % 60) + "." + (int) ((d.toMillis() % 1000));

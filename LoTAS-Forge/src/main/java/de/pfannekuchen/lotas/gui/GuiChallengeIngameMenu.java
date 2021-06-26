@@ -5,13 +5,10 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
-import org.lwjgl.input.Keyboard;
-
 import com.google.common.base.Predicates;
 
 import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.core.utils.ConfigUtils;
-import de.pfannekuchen.lotas.mixin.accessors.AccessorMinecraftClient;
 import de.pfannekuchen.lotas.mods.DupeMod;
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;
 import de.pfannekuchen.lotas.taschallenges.ChallengeLoader;
@@ -22,7 +19,6 @@ import net.minecraft.client.gui.GuiIngameMenu;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiOptions;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.boss.EntityDragon;

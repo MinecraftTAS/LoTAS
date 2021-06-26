@@ -6,8 +6,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.core.utils.ConfigUtils;
@@ -17,9 +15,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
-//#if MC>=11200
-import net.minecraft.util.NonNullList;
-//#endif
 //#if MC>=10900
 import net.minecraft.util.math.BlockPos;
 //#else
@@ -28,9 +23,19 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+/**
+ * This mixin alters the behaviour whenever a block is being destroyed
+ * @author Pancake
+ * @since v1.0
+ * @version v1.1
+ */
 @Mixin(Block.class)
 public class MixinBlockPatch {
-
+	
+	/**
+	 * Changes the velocity of a dropped item when wanted
+	 * @return A Hijacked EntityItem
+	 */
 	@Redirect(method = "spawnAsEntity", at = @At(value = "NEW", target = "Lnet/minecraft/entity/item/EntityItem;<init>(Lnet/minecraft/world/World;DDDLnet/minecraft/item/ItemStack;)Lnet/minecraft/entity/item/EntityItem;"))
 	private static EntityItem moveItem(World w, double x, double y, double z, ItemStack stack) {
 		EntityItem it = new EntityItem(w, x, y, z, stack);
@@ -54,16 +59,19 @@ public class MixinBlockPatch {
 		return it;
 	}
 
+	/**
+	 * Changes the items dropped when breaking a block to the best possible ones if wanted.
+	 */
 	//#if MC>=11202
 	@Inject(at = @At("HEAD"), remap = false, method = "Lnet/minecraft/block/Block;getDrops(Lnet/minecraft/util/NonNullList;Lnet/minecraft/world/IBlockAccess;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;I)V", cancellable = true)
-	public void getDropsInject(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune, CallbackInfo ci) {
+	public void getDropsInject(net.minecraft.util.NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune, org.spongepowered.asm.mixin.injection.callback.CallbackInfo ci) {
 	//#else
 	//#if MC>=10900
 //$$ 	@Inject(at = @At("HEAD"), remap = false, method = "Lnet/minecraft/block/Block;getDrops(Lnet/minecraft/world/IBlockAccess;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;I)Ljava/util/List;", cancellable = true)
-//$$ 	public void getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune, CallbackInfoReturnable<List<ItemStack>> ci) {
+//$$ 	public void getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune, org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable<List<ItemStack>> ci) {
 	//#else
 //$$ 	@Inject(at = @At("HEAD"), method = "getDrops", cancellable = true, remap = false)
-//$$ 	public void getDropsInject(IBlockAccess world, BlockPos pos, IBlockState state, int fortune, CallbackInfoReturnable<List<ItemStack>> ci) {
+//$$ 	public void getDropsInject(IBlockAccess world, BlockPos pos, IBlockState state, int fortune, org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable<List<ItemStack>> ci) {
 	//#endif
 	//#endif
 		for (GuiDropChanceManipulation.DropManipulation man : GuiDropChanceManipulation .manipulations) {

@@ -4,15 +4,12 @@ import java.util.List;
 import java.util.Random;
 
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 import de.pfannekuchen.lotas.gui.GuiDropChanceManipulation;
 import de.pfannekuchen.lotas.gui.GuiDropChanceManipulation.DropManipulation;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 
 //#if MC>=10900
@@ -36,6 +33,9 @@ public class MixinEntityLivingPatch {
 }
 //#else
 //$$ import net.minecraft.world.World;
+//$$ import net.minecraft.entity.Entity;
+//$$ import net.minecraft.entity.EntityLivingBase;
+//$$ import org.spongepowered.asm.mixin.Shadow;
 //$$ @Mixin(EntityLivingBase.class)
 //$$ public abstract class MixinEntityLivingPatch extends Entity {
 //$$

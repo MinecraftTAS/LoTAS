@@ -13,11 +13,23 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.world.World;
 
+/**
+ * Dupe Mod for Pre 1.14.
+ * @author Pancake
+ * @since v1.0
+ * @version v1.0
+ */
 public class DupeMod {
+	/** List of all items saved */
 	public static List<EntityItem> items;
+	/** List of all tile entities saved */
 	public static List<TileEntity> tileentities;
+	/** List of all tracked items on the floor */
 	public static ArrayList<EntityItem> trackedObjects = new ArrayList<>();
 	
+	/**
+	 * Restores all nearby chests from the list
+	 */
 	public static synchronized void loadChests() {
 		try {
 			Minecraft mc = Minecraft.getMinecraft();
@@ -30,10 +42,14 @@ public class DupeMod {
 		}
 	}
 	
+	/**
+	 * Restores all items on the ground from the list
+	 */
 	public static synchronized void loadItems() {
 		try {
 			Minecraft mc = Minecraft.getMinecraft();
 			
+			// reset motion because we are actually "crashing" the game
 			MCVer.player(mc).motionX = 0;
 			MCVer.player(mc).motionY = 0;
 			MCVer.player(mc).motionZ = 0;
@@ -46,16 +62,7 @@ public class DupeMod {
 						if (entity instanceof EntityItem) MCVer.world(mc.getIntegratedServer(), MCVer.player(mc).dimension).removeEntity(entity);
 					}
 					for (EntityItem item : DupeMod.items) {
-						//#if MC>=11100
-						World w = mc.getIntegratedServer().getPlayerList().getPlayers().get(0).getServerWorld();
-						//#else
-						//#if MC>=10900
-//$$ 						World w = mc.getIntegratedServer().getPlayerList().getPlayerList().get(0).getServerWorld();
-						//#else
-//$$ 						World w = mc.getIntegratedServer().getConfigurationManager().getPlayerList().get(0).worldObj;
-						//#endif
-						//#endif
-						// ===========================================
+						World w = MCVer.world(Minecraft.getMinecraft().getIntegratedServer(), MCVer.player(Minecraft.getMinecraft()).dimension);
 						//#if MC>=11200
 						EntityItem itemDupe = new EntityItem(w, item.posX, item.posY, item.posZ, item.getItem().copy());
 						//#else
@@ -66,7 +73,7 @@ public class DupeMod {
 						itemDupe.motionZ = item.motionZ;
 						itemDupe.setAgeToCreativeDespawnTime();
 						itemDupe.setOwner(MCVer.player(mc).getName());
-						itemDupe.setNoPickupDelay();
+						itemDupe.setNoPickupDelay(); // does not get saved sometimes... very weird
 						itemDupe.rotationYaw = item.rotationYaw;
 						itemDupe.rotationPitch = item.rotationPitch;
 						
@@ -83,12 +90,17 @@ public class DupeMod {
 		}
 	}
 	
+	/** 
+	 * Save all items on the ground to a List
+	 */
 	public static synchronized void saveItems() {
 		try {
 			Minecraft mc = Minecraft.getMinecraft();
 			double pX = MCVer.player(mc).posX;
 			double pY = MCVer.player(mc).posY;
 			double pZ = MCVer.player(mc).posZ;
+			
+			// relog
 			MCVer.player(mc).motionX = 0;
 			MCVer.player(mc).motionY = 0;
 			MCVer.player(mc).motionZ = 0;
@@ -117,6 +129,9 @@ public class DupeMod {
 		}
 	}
 	
+	/**
+	 * Saves all chests around the player to a file
+	 */
 	public static synchronized void saveChests() {
 		try {
 			Minecraft mc = Minecraft.getMinecraft();

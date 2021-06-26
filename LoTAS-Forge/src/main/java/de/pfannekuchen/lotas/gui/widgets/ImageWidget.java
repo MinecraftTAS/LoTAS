@@ -35,6 +35,7 @@ public class ImageWidget extends ButtonWidget {
 		}
 	}
     
+	// This is here to avoid more preprocessing madness
 	//#if MC>=11200
 	public void render(int mouseX, int mouseY, float delta) {
 		drawButton(Minecraft.getMinecraft(), mouseX, mouseY, delta);

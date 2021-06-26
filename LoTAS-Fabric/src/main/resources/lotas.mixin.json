@@ -9,11 +9,14 @@
     "client": [
     	"MixinMinecraftClient",
     	"MixinMinecraftServer",
+    	"MixinIntegratedServer",
+    	"MixinThreadedAnvilChunkStorage",
     	"accessors.AccessorMinecraftClient",
     	"accessors.AccessorTimer",
     	"accessors.AccessorTextFieldWidget",
     	"accessors.AccessorCreateWorldScreen",
     	"accessors.AccessorServerPlayerEntity",
+    	"accessors.AccessorItemRenderer",
     	//#if MC>=11502
     //$$ 	"accessors.AccessorModelLoader",
     	//#endif

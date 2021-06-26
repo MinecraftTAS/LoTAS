@@ -9,7 +9,6 @@ import de.pfannekuchen.lotas.gui.widgets.NewButtonWidget;
 import de.pfannekuchen.lotas.mixin.accessors.AccessorTextFieldWidget;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.ButtonWidget.PressAction;
 //#if MC>=11601
 //$$ import net.minecraft.client.util.math.MatrixStack;
@@ -23,11 +22,11 @@ public class ConfigurationScreen extends Screen {
 		super(new LiteralText("Configuration"));
 	}
 
-	public static String[] optionsBoolean = new String[] { "B:tools:saveTickrate:INSERT", "B:ui:hideTickrateMessages:INSERT", "B:tools:showTickIndicator:INSERT", "B:ui:hideRTATimer:INSERT", "B:tools:removePearlDelay:INSERT", "B:tools:noDamageUnbreaking:INSERT", "B:tools:showSpeedometer:INSERT", "B:ui:advancedMode:INSERT", "B:ui:glitchedMode:INSERT" };
+	public static String[] optionsBoolean = new String[] { "B:tools:saveTickrate:INSERT", "B:ui:hideTickrateMessages:INSERT", "B:tools:showTickIndicator:INSERT", "B:ui:hideRTATimer:INSERT", "B:tools:removePearlDelay:INSERT", "B:tools:noDamageUnbreaking:INSERT", "B:tools:showSpeedometer:INSERT" };
 
 	public static String[] optionsInteger = new String[] { "I:hidden:explosionoptimization:INSERT" };
 
-	public static String[] optionsString = new String[] { "S:ui:runner:INSERT" };
+	public static String[] optionsString = new String[] {  };
 
 	public ArrayList<TextFieldWidget> strings = new ArrayList<TextFieldWidget>();
 	public ArrayList<TextFieldWidget> ints = new ArrayList<TextFieldWidget>();
@@ -38,15 +37,24 @@ public class ConfigurationScreen extends Screen {
 		strings.clear();
 		messages.clear();
 		ints.clear();
+		
+		//#if MC>=11700
+//$$ 		clearChildren();
+		//#else
 		buttons.clear();
 		children.clear();
+		//#endif
 		int y = 25;
 		int i = 0;
 		for (String option : optionsBoolean) {
 			String title = option.split(":")[2];
 			if (option.split(":")[0].equalsIgnoreCase("B")) {
 				boolean v = Boolean.parseBoolean(option.split(":")[3]);
+				//#if MC>=11700
+//$$ 				addDrawableChild(new NewButtonWidget(width / 2 - 100, y, 200, 20, title + ": " + (v ? "\u00A7atrue" : "\u00A7cfalse"), actionPerformed(i++)));
+				//#else
 				addButton(new NewButtonWidget(width / 2 - 100, y, 200, 20, title + ": " + (v ? "\u00A7atrue" : "\u00A7cfalse"), actionPerformed(i++)));
+				//#endif
 			}
 			y += 25;
 		}
@@ -200,7 +208,11 @@ public class ConfigurationScreen extends Screen {
 //$$ 	@Override
 //$$ 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
 //$$ 		renderBackground(matrices, 0);
+		//#if MC>=11700
+//$$ 		drawCenteredText(matrices, MinecraftClient.getInstance().textRenderer, "Configuration Menu", width / 2, 5, 0xFFFFFFFF);
+		//#else
 //$$ 		drawCenteredString(matrices, MinecraftClient.getInstance().textRenderer, "Configuration Menu", width / 2, 5, 0xFFFFFFFF);
+		//#endif
 //$$ 		for (Entry<Integer, String> entry : messages.entrySet()) {
 //$$ 			drawStringWithShadow(matrices, MinecraftClient.getInstance().textRenderer, entry.getValue(), 35, entry.getKey() + 5, 0xFFFFFFFF);
 //$$ 		}
