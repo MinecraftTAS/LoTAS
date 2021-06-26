@@ -1,6 +1,5 @@
 package de.pfannekuchen.lotas.mixin;
 
-import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
 
@@ -30,7 +29,6 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.client.settings.KeyBinding;
-import scala.collection.parallel.ParIterableLike.Min;
 
 @Mixin(Minecraft.class)
 public class MixinMinecraft {

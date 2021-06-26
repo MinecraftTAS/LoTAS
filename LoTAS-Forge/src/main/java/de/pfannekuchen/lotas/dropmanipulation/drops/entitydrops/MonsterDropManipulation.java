@@ -19,11 +19,6 @@ import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.monster.EntityGuardian;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntitySlime;
-//#if MC>=11100
-import net.minecraft.entity.monster.EntityElderGuardian;
-import net.minecraft.entity.monster.EntityShulker;
-import net.minecraft.entity.monster.EntityVindicator;
-//#endif
 import net.minecraft.entity.monster.EntityWitch;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -87,11 +82,11 @@ public class MonsterDropManipulation extends GuiDropChanceManipulation.DropManip
         }
         
         //#if MC>=11100
-        if (entity instanceof EntityVindicator && optimizeVindicator.isChecked())
+        if (entity instanceof net.minecraft.entity.monster.EntityVindicator && optimizeVindicator.isChecked())
             return ImmutableList.of(new ItemStack(Items.EMERALD, 1));
-        if (entity instanceof EntityShulker && optimizeShulker.isChecked())
+        if (entity instanceof net.minecraft.entity.monster.EntityShulker && optimizeShulker.isChecked())
             return ImmutableList.of(new ItemStack(Items.SHULKER_SHELL, 1));
-        if (entity instanceof EntityElderGuardian && optimizeElderGuardian.isChecked())
+        if (entity instanceof net.minecraft.entity.monster.EntityElderGuardian && optimizeElderGuardian.isChecked())
             return ImmutableList.of(new ItemStack(Items.PRISMARINE_CRYSTALS, 1), new ItemStack(Items.PRISMARINE_SHARD, 2), new ItemStack(Blocks.SPONGE), new ItemStack(Item.getItemById(349)));
         //#endif
         return ImmutableList.of();

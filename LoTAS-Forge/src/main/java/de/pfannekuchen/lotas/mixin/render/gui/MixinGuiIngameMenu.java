@@ -11,13 +11,11 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.google.common.base.Predicates;
 import com.google.common.collect.ImmutableList;
 
-import de.pfannekuchen.lotas.core.LoTASModContainer;
 import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.core.utils.ConfigUtils;
 import de.pfannekuchen.lotas.core.utils.EventUtils.Timer;

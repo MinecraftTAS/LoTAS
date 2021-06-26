@@ -1,10 +1,5 @@
 package de.pfannekuchen.lotas.core;
 
-
-//#if MC>=10900
-import net.minecraft.client.renderer.BannerTextures;
-import java.awt.image.BufferedImage;
-//#endif
 import net.minecraft.client.renderer.IImageBuffer;
 import java.io.IOException;
 import net.minecraft.client.renderer.ImageBufferDownload;
@@ -218,7 +213,7 @@ public class LoTASModContainer {
 						}
 
 						@Override
-						public BufferedImage parseUserSkin(BufferedImage image) {
+						public java.awt.image.BufferedImage parseUserSkin(java.awt.image.BufferedImage image) {
 							return image;
 						}
 					});
@@ -232,7 +227,7 @@ public class LoTASModContainer {
 			e.printStackTrace();
 		}
 		// when there is no custom shield, set the texture to the normal one
-		LoTASModContainer.shield = BannerTextures.SHIELD_BASE_TEXTURE;
+		LoTASModContainer.shield = net.minecraft.client.renderer.BannerTextures.SHIELD_BASE_TEXTURE;
 		//#endif
 	}
 

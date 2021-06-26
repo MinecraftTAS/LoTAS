@@ -11,9 +11,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.core.utils.PotionRenderingUtils;
 import net.minecraft.client.Minecraft;
-//#if MC<=10809
-//$$ import net.minecraft.client.entity.EntityPlayerSP;
-//#endif
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
@@ -36,7 +33,7 @@ public abstract class MixinPotionRenderer {
 	public abstract void rotateArm(float partialTicks);
 	@Shadow protected abstract void renderItemSide(EntityLivingBase entitylivingbaseIn, ItemStack heldStack, ItemCameraTransforms.TransformType transform, boolean leftHanded);
 	//#else
-//$$ 	public abstract void rotateWithPlayerRotations(EntityPlayerSP entityplayerspIn, float partialTicks);
+//$$ 	public abstract void rotateWithPlayerRotations(net.minecraft.client.entity.EntityPlayerSP entityplayerspIn, float partialTicks);
 //$$ 	@Shadow public abstract void renderItem(EntityLivingBase entityIn, ItemStack heldStack, ItemCameraTransforms.TransformType transform);
 	//#endif
 	

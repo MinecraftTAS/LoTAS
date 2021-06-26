@@ -1,20 +1,8 @@
 package de.pfannekuchen.lotas.mixin.accessors;
 
-//#if MC>=10900
-import net.minecraft.util.math.ChunkPos;
-//#else
-//$$ import net.minecraft.world.ChunkCoordIntPair;
-//#endif
-
-//#if MC<=11102
-//$$ import java.util.Set;
-//#endif
-
 import java.util.Map;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
-
-import net.minecraft.nbt.NBTTagCompound;
 
 import net.minecraft.world.chunk.storage.AnvilChunkLoader;
 
@@ -23,14 +11,14 @@ public interface AccessorAnvilChunkLoader {
 
 	//#if MC>=11200
 	@Accessor("chunksToSave")
-	public Map<ChunkPos, NBTTagCompound> chunksToSave();
+	public Map<net.minecraft.util.math.ChunkPos, net.minecraft.nbt.NBTTagCompound> chunksToSave();
 	//#else
 	//#if MC>=10900
 //$$ 	@Accessor("pendingAnvilChunksCoordinates")
-//$$ 	public Set<ChunkPos> chunksToSave();
+//$$ 	public java.util.Set<net.minecraft.util.math.ChunkPos> chunksToSave();
 	//#else
 //$$ 	@Accessor("pendingAnvilChunksCoordinates")
-//$$ 	public Set<ChunkCoordIntPair> chunksToSave();
+//$$ 	public java.util.Set<net.minecraft.world.ChunkCoordIntPair> chunksToSave();
 	//#endif
 	//#endif
 	

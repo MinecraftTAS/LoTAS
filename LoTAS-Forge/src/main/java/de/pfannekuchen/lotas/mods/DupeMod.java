@@ -62,16 +62,7 @@ public class DupeMod {
 						if (entity instanceof EntityItem) MCVer.world(mc.getIntegratedServer(), MCVer.player(mc).dimension).removeEntity(entity);
 					}
 					for (EntityItem item : DupeMod.items) {
-						//#if MC>=11100
-						World w = mc.getIntegratedServer().getPlayerList().getPlayers().get(0).getServerWorld();
-						//#else
-						//#if MC>=10900
-//$$ 						World w = mc.getIntegratedServer().getPlayerList().getPlayerList().get(0).getServerWorld();
-						//#else
-//$$ 						World w = mc.getIntegratedServer().getConfigurationManager().getPlayerList().get(0).worldObj;
-						//#endif
-						//#endif
-						// ===========================================
+						World w = MCVer.world(Minecraft.getMinecraft().getIntegratedServer(), MCVer.player(Minecraft.getMinecraft()).dimension);
 						//#if MC>=11200
 						EntityItem itemDupe = new EntityItem(w, item.posX, item.posY, item.posZ, item.getItem().copy());
 						//#else

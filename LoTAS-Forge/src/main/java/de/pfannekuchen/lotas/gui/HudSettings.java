@@ -16,9 +16,6 @@ import de.pfannekuchen.lotas.mods.TickrateChangerMod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
-//#if MC>10900
-import net.minecraft.util.math.Vec3d;
-//#endif
 import net.minecraftforge.fml.client.config.GuiCheckBox;
 
 /**
@@ -222,7 +219,7 @@ public class HudSettings extends GuiScreen {
 			int y = Integer.parseInt(p.getProperty("TRAJECTORIES_y"));
 			String message = "Invalid Item";
 			//#if MC>10900
-			Vec3d vec = TrajectoriesCalculator.calculate();
+			net.minecraft.util.math.Vec3d vec = TrajectoriesCalculator.calculate();
 			if (vec != null) {
 				//#if MC>=11200
 				message = String.format("%.3f %.3f %.3f", vec.x, vec.y, vec.z);

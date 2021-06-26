@@ -6,14 +6,11 @@
     <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
         <listEntry value="4"/>
     </listAttribute>
-    <booleanAttribute key="org.eclipse.jdt.launching.ATTR_ATTR_USE_ARGFILE" value="false"/>
-    <booleanAttribute key="org.eclipse.jdt.launching.ATTR_SHOW_CODEDETAILS_IN_EXCEPTION_MESSAGES" value="true"/>
-    <booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_CLASSPATH_ONLY_JAR" value="false"/>
     <stringAttribute key="org.eclipse.jdt.launching.CLASSPATH_PROVIDER" value="org.eclipse.buildship.core.classpathprovider"/>
     <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="GradleStart"/>
     <stringAttribute key="org.eclipse.jdt.launching.MODULE_NAME" value="forge"/>
     <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="--mixin lotas.mixin.json --tweakClass org.spongepowered.asm.launch.MixinTweaker"/>
     <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="forge"/>
-    <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-DFORGE_FORCE_FRAME_RECALC=true"/>
-    <stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="${workspace_loc:LoTAS-Forge}/versions/forge/run"/>
+    <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Dfml.coreMods.load=de.pfannekuchen.lotas.core.LoadingPlugin -DFORGE_FORCE_FRAME_RECALC=true"/>
+    <stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="C:\Users\games\Desktop\Github\eclipse-2019\LoTAS\LoTAS-Forge\eclipse"/>
 </launchConfiguration>

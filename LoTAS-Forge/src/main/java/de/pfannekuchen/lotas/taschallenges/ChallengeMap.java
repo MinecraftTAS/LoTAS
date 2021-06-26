@@ -11,12 +11,6 @@ import net.minecraft.world.GameType;
 //#endif
 import net.minecraft.world.chunk.storage.AnvilSaveConverter;
 import net.minecraft.world.storage.ISaveFormat;
-//#if MC>=10900
-import net.minecraft.world.WorldSettings;
-import net.minecraft.world.WorldType;
-import net.minecraft.world.storage.WorldInfo;
-import net.minecraft.world.storage.WorldSummary;
-//#endif
 
 /**
  * TAS Challenge struct
@@ -41,10 +35,10 @@ public class ChallengeMap {
 	 * Get the world data from the entry
 	 * @return Returns a summary of all data saved in the world (names, gamemodes, etc.)
 	 */
-	public WorldSummary getSummary() {
-		WorldSettings settings = new WorldSettings(0L, GameType.ADVENTURE, false, true, WorldType.FLAT);
-		WorldInfo info = new WorldInfo(settings, displayName);
-		WorldSummary sum = new WorldSummary(info, name, displayName, 0, false);
+	public net.minecraft.world.storage.WorldSummary getSummary() {
+		net.minecraft.world.WorldSettings settings = new net.minecraft.world.WorldSettings(0L, GameType.ADVENTURE, false, true, net.minecraft.world.WorldType.FLAT);
+		net.minecraft.world.storage.WorldInfo info = new net.minecraft.world.storage.WorldInfo(settings, displayName);
+		net.minecraft.world.storage.WorldSummary sum = new net.minecraft.world.storage.WorldSummary(info, name, displayName, 0, false);
 		return sum;
 	}
 	//#endif

@@ -6,11 +6,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
-//#if MC<=11201
-//$$  import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-//#else
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-//#endif
 
 import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.core.utils.ConfigUtils;
@@ -20,9 +15,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
-//#if MC>=11200
-import net.minecraft.util.NonNullList;
-//#endif
 //#if MC>=10900
 import net.minecraft.util.math.BlockPos;
 //#else
@@ -72,14 +64,14 @@ public class MixinBlockPatch {
 	 */
 	//#if MC>=11202
 	@Inject(at = @At("HEAD"), remap = false, method = "Lnet/minecraft/block/Block;getDrops(Lnet/minecraft/util/NonNullList;Lnet/minecraft/world/IBlockAccess;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;I)V", cancellable = true)
-	public void getDropsInject(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune, CallbackInfo ci) {
+	public void getDropsInject(net.minecraft.util.NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune, org.spongepowered.asm.mixin.injection.callback.CallbackInfo ci) {
 	//#else
 	//#if MC>=10900
 //$$ 	@Inject(at = @At("HEAD"), remap = false, method = "Lnet/minecraft/block/Block;getDrops(Lnet/minecraft/world/IBlockAccess;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;I)Ljava/util/List;", cancellable = true)
-//$$ 	public void getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune, CallbackInfoReturnable<List<ItemStack>> ci) {
+//$$ 	public void getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune, org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable<List<ItemStack>> ci) {
 	//#else
 //$$ 	@Inject(at = @At("HEAD"), method = "getDrops", cancellable = true, remap = false)
-//$$ 	public void getDropsInject(IBlockAccess world, BlockPos pos, IBlockState state, int fortune, CallbackInfoReturnable<List<ItemStack>> ci) {
+//$$ 	public void getDropsInject(IBlockAccess world, BlockPos pos, IBlockState state, int fortune, org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable<List<ItemStack>> ci) {
 	//#endif
 	//#endif
 		for (GuiDropChanceManipulation.DropManipulation man : GuiDropChanceManipulation .manipulations) {

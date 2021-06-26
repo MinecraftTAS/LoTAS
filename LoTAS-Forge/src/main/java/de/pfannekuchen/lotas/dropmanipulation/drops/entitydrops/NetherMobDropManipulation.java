@@ -17,9 +17,6 @@ import net.minecraft.entity.monster.EntityBlaze;
 import net.minecraft.entity.monster.EntityGhast;
 import net.minecraft.entity.monster.EntityMagmaCube;
 import net.minecraft.entity.monster.EntityPigZombie;
-//#if MC>=11100
-import net.minecraft.entity.monster.EntityWitherSkeleton;
-//#endif
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -54,7 +51,7 @@ public class NetherMobDropManipulation extends GuiDropChanceManipulation.DropMan
         if (entity instanceof EntityBlaze && optimizeBlaze.isChecked()) return ImmutableList.of(new ItemStack(MCVer.getItem("BLAZE_ROD")));
         if (entity instanceof EntityGhast && optimizeGhast.isChecked()) return ImmutableList.of(new ItemStack(MCVer.getItem("GHAST_TEAR")), new ItemStack(MCVer.getItem("GUNPOWDER"), 2));
         //#if MC>=11100
-        if (entity instanceof EntityWitherSkeleton && optimizeWitherskeleton.isChecked()) return ImmutableList.of(new ItemStack(Items.COAL, 1), new ItemStack(Items.BONE, 2), new ItemStack(Items.SKULL, 1, 1));
+        if (entity instanceof net.minecraft.entity.monster.EntityWitherSkeleton && optimizeWitherskeleton.isChecked()) return ImmutableList.of(new ItemStack(Items.COAL, 1), new ItemStack(Items.BONE, 2), new ItemStack(Items.SKULL, 1, 1));
         //#endif
         if (entity instanceof EntityPigZombie && optimizePigman.isChecked()) if (!((EntityPigZombie) entity).isChild()) return ImmutableList.of(new ItemStack(MCVer.getItem("ROTTEN_FLESH"), 2), new ItemStack(MCVer.getItem("GOLD_NUGGET")), new ItemStack(MCVer.getItem("GOLD_INGOT")));
         if (entity instanceof EntityMagmaCube && optimizeMagmaCube.isChecked()) if (((EntityMagmaCube) entity).getSlimeSize() != 1) return ImmutableList.of(new ItemStack(MCVer.getItem("MAGMA_CREAM")));

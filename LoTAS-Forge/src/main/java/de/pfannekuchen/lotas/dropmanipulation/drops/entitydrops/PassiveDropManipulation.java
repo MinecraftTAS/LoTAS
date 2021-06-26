@@ -15,16 +15,10 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.monster.EntityIronGolem;
-//#if MC>=11000
-import net.minecraft.entity.monster.EntityPolarBear;
-//#endif
 import net.minecraft.entity.monster.EntitySnowman;
 import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.passive.EntityCow;
 import net.minecraft.entity.passive.EntityMooshroom;
-//#if MC>=11200
-import net.minecraft.entity.passive.EntityParrot;
-//#endif
 import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.passive.EntityRabbit;
 import net.minecraft.entity.passive.EntitySheep;
@@ -82,8 +76,8 @@ public class PassiveDropManipulation extends GuiDropChanceManipulation.DropManip
                 return ImmutableList.of(entity.isBurning() ? new ItemStack(MCVer.getItem("COOKED_PORKCHOP"), 3) : new ItemStack(MCVer.getItem("PORKCHOP"), 3));
         } 
         //#if MC>=11200
-        else if (entity instanceof EntityParrot && optimizeParrot.isChecked()) {
-            if (!((EntityParrot) entity).isChild())
+        else if (entity instanceof net.minecraft.entity.passive.EntityParrot && optimizeParrot.isChecked()) {
+            if (!((net.minecraft.entity.passive.EntityParrot) entity).isChild())
                 return ImmutableList.of(new ItemStack(Items.FEATHER, 2));
         }
         //#endif
@@ -104,8 +98,8 @@ public class PassiveDropManipulation extends GuiDropChanceManipulation.DropManip
                 return ImmutableList.of(new ItemStack(MCVer.getItem("IRON_INGOT"), 5), new ItemStack(MCVer.getBlock("RED_FLOWER")));
         } 
         //#if MC>=11000
-        else if (entity instanceof EntityPolarBear && optimizePolarbear.isChecked()) {
-            if (!((EntityPolarBear) entity).isChild())
+        else if (entity instanceof net.minecraft.entity.monster.EntityPolarBear && optimizePolarbear.isChecked()) {
+            if (!((net.minecraft.entity.monster.EntityPolarBear) entity).isChild())
                 return ImmutableList.of(new ItemStack(Items.FISH, 2));
         }
         //#endif

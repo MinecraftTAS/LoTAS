@@ -20,12 +20,6 @@ import javax.annotation.Nullable;
 
 import org.apache.commons.io.FileUtils;
 
-//#if MC>=10900
-import com.mojang.authlib.GameProfileRepository;
-import com.mojang.authlib.minecraft.MinecraftSessionService;
-import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
-//#endif
-
 import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.mixin.accessors.AccessorMinecraftClient;
 import de.pfannekuchen.lotas.mods.SavestateMod;
@@ -236,9 +230,9 @@ public class ChallengeLoader {
         try
         {
         	//#if MC>=10900
-            YggdrasilAuthenticationService yggdrasilauthenticationservice = new YggdrasilAuthenticationService(Minecraft.getMinecraft().getProxy(), UUID.randomUUID().toString());
-            MinecraftSessionService minecraftsessionservice = yggdrasilauthenticationservice.createMinecraftSessionService();
-            GameProfileRepository gameprofilerepository = yggdrasilauthenticationservice.createProfileRepository();
+        	com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService yggdrasilauthenticationservice = new com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService(Minecraft.getMinecraft().getProxy(), UUID.randomUUID().toString());
+        	com.mojang.authlib.minecraft.MinecraftSessionService minecraftsessionservice = yggdrasilauthenticationservice.createMinecraftSessionService();
+        	com.mojang.authlib.GameProfileRepository gameprofilerepository = yggdrasilauthenticationservice.createProfileRepository();
             PlayerProfileCache playerprofilecache = new PlayerProfileCache(gameprofilerepository, new File(Minecraft.getMinecraft().mcDataDir, MinecraftServer.USER_CACHE_FILE.getName()));
             TileEntitySkull.setProfileCache(playerprofilecache);
             TileEntitySkull.setSessionService(minecraftsessionservice);
