@@ -10,6 +10,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ItemEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 @Mixin(ItemEntity.class)
@@ -18,9 +19,12 @@ public abstract class MixinItemEntity extends Entity {
 	public MixinItemEntity(EntityType<?> type, World world) {
 		super(type, world);
 	}
-
+	//#if MC>=11700
+//$$ 	@Inject(at = @At(value = "TAIL"), method = "Lnet/minecraft/entity/ItemEntity;<init>(Lnet/minecraft/world/World;DDDLnet/minecraft/item/ItemStack;DDD)V")
+	//#else
 	@Inject(at = @At("TAIL"), method = "Lnet/minecraft/entity/ItemEntity;<init>(Lnet/minecraft/world/World;DDD)V")
-	public void hackVelocity(CallbackInfo ci) {
+	//#endif
+		public void hackVelocity(CallbackInfo ci) {
 		try {
 			//#if MC>=11601
 //$$ 			           double pX = MinecraftClient.getInstance().player.getX() - getX();
