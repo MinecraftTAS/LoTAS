@@ -11,6 +11,7 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 //#if MC>=11601
 //$$ import net.minecraft.client.util.math.MatrixStack;
+//$$ import net.minecraft.entity.ai.pathing.Path;
 //#endif
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.text.LiteralText;
@@ -209,9 +210,10 @@ public class AIManipulationScreen extends Screen {
 
 		if (prev != selectedIndex) {
 			try {
-				spawnX = entities.get(selectedIndex).getNavigation().getCurrentPath().getEnd().x;
-				spawnY = entities.get(selectedIndex).getNavigation().getCurrentPath().getEnd().y;
-				spawnZ = entities.get(selectedIndex).getNavigation().getCurrentPath().getEnd().z;
+				Path currentPath = entities.get(selectedIndex).getNavigation().getCurrentPath();
+				spawnX = currentPath.getEnd().x;
+				spawnY = currentPath.getEnd().y;
+				spawnZ = currentPath.getEnd().z;
 
 				xText.setText(spawnX + "");
 				yText.setText(spawnY + "");

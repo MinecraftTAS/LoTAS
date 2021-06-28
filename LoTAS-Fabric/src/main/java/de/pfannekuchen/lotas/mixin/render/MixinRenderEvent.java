@@ -62,14 +62,14 @@ public class MixinRenderEvent {
 			GL11.glLineWidth(2);
 
 			//#if MC>=11502
-//$$ 						RenderUtils.applyCameraRotationOnly();
+//$$ 			RenderUtils.applyCameraRotationOnly();
 			//#endif
 			RenderUtils.applyRenderOffset();
 
 			//#if MC>=11601
-//$$ 			            double renderX = ((double) AIManipulationScreen.entities.get(AIManipulationScreen.selectedIndex).getX() - 0.5f);
-//$$ 						double renderY = ((double) AIManipulationScreen.entities.get(AIManipulationScreen.selectedIndex).getY());
-//$$ 						double renderZ = ((double) AIManipulationScreen.entities.get(AIManipulationScreen.selectedIndex).getZ() - 0.5F);
+//$$ 			double renderX = ((double) AIManipulationScreen.entities.get(AIManipulationScreen.selectedIndex).getX() - 0.5f);
+//$$ 			double renderY = ((double) AIManipulationScreen.entities.get(AIManipulationScreen.selectedIndex).getY());
+//$$ 			double renderZ = ((double) AIManipulationScreen.entities.get(AIManipulationScreen.selectedIndex).getZ() - 0.5F);
 			//#else
 			double renderX = ((double) AIManipulationScreen.entities.get(AIManipulationScreen.selectedIndex).x - 0.5f);
 			double renderY = ((double) AIManipulationScreen.entities.get(AIManipulationScreen.selectedIndex).y);
@@ -97,7 +97,9 @@ public class MixinRenderEvent {
 			GL11.glLineWidth(2);
 
 			// Draw output
-
+			//#if MC>=11502
+//$$ 			RenderUtils.applyCameraRotationOnly();
+			//#endif
 			RenderUtils.applyRenderOffset();
 
 			renderX = AIManipulationScreen.spawnX;
