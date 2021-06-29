@@ -210,7 +210,7 @@ public class AIManipulationScreen extends Screen {
 
 		if (prev != selectedIndex) {
 			try {
-				Path currentPath = entities.get(selectedIndex).getNavigation().getCurrentPath();
+				net.minecraft.entity.ai.pathing.Path currentPath = entities.get(selectedIndex).getNavigation().getCurrentPath();
 				spawnX = currentPath.getEnd().x;
 				spawnY = currentPath.getEnd().y;
 				spawnZ = currentPath.getEnd().z;

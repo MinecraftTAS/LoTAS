@@ -109,8 +109,7 @@ public class EventUtils {
 	 * Handles the timer and all other keybind events
 	 * @param e KeyInputEvent provided by MinecraftForge
 	 */
-	@SubscribeEvent
-	public void onInput2(KeyInputEvent e) {
+	public static void onInput2() {
 		/* Handle all keybinds */
 		try {
 			KeybindsUtils.keyEvent(); // Trigger the KeybindsUtils method to handle most of the keybinds
