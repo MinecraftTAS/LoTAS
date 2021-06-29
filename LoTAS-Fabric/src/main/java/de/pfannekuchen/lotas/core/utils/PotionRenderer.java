@@ -40,8 +40,8 @@ public class PotionRenderer {
 			cp.putInt("CustomPotionColor", 0x4672A3);
 			stack.setTag(cp);
 		}
-		float f = (float) 1.0F;
-		float f1 = f / (float) stack.getMaxUseTime();
+//		float f = (float) 1.0F;
+//		float f1 = f / (float) stack.getMaxUseTime();
 
 		Window window= MinecraftClient.getInstance().window;
 

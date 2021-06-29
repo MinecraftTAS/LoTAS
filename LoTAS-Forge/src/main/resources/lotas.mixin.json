@@ -20,7 +20,7 @@
 		"patches.MixinServerPatch",
 		"patches.MixinEntityPlayerMPPatch",
 		"patches.MixinWorldProviderPatch",
-		"MixinMinecraftServer",
+		"MixinMinecraftServer"
     ],
     "client": [
     	"accessors.AccessorMinecraftClient",
