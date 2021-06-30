@@ -52,42 +52,52 @@ public class PotionRenderingUtils {
 		ItemStack stack = new ItemStack(MCVer.getItem("POTION"));
 		if (stack.getItem() instanceof ItemPotion) {
 			NBTTagCompound cp = new NBTTagCompound();
+			//#if MC>=11102
 			cp.setInteger("CustomPotionColor", 0x546980);
+			//#else
+//$$ 			cp.setString("Potion", "minecraft:slowness");
+//$$ 			cp.setBoolean("enchoff", true);
+			//#endif
 			stack.setTagCompound(cp);
 		}
 		Minecraft mc = Minecraft.getMinecraft();
 		ScaledResolution scaled = new ScaledResolution(mc);
 
-		double scale = scaled.getScaleFactor() / 3;
+		double scale = scaled.getScaleFactor();
 		int height = mc.displayHeight;
 		
 		GlStateManager.translate(0, 0, -13);
 
 		double skla=4.1;
-		if(scale==1D) {
+		if(scale==3) {
 			skla=4.85;
 		}
-		else if(scale<1&&scale>0.4) {
+		else if(scale==2) {
 			skla=5.6;
 		}
-		else if(scale<0.4&&scale>0.1) {
+		else if(scale==1) {
 			skla=6.6;
 		}
 		double height2=(height/2*-0.004)-skla;
 
 
 		GlStateManager.translate(0, height2, 0);
-		GlStateManager.scale(scale, scale, scale);
+		GlStateManager.scale(scale/3, scale/3, scale/3);
 
 		double scale2=1+(1080-height)*0.0015;
 		GlStateManager.scale(scale2, scale2, scale2);
 		
-		IBlockState block = mc.world.getBlockState(mc.player.getPosition().add(0, 1, 0));
+		IBlockState block = MCVer.world(mc).getBlockState(MCVer.player(mc).getPosition().add(0, 1, 0));
 		if (block.getBlock()==Blocks.WATER) {
 			GlStateManager.translate(0, 0, -2.5);
 		}
+		//#if MC>=11102
 		GlStateManager.rotate(180, 0, 1 ,0);
 		GlStateManager.rotate(10, 0, 0 ,1);
+		//#else
+//$$ 		GlStateManager.rotate(10, 0, 0 ,-1);
+		//#endif
+		
         //#if MC>=10900
 //        float f = (float)1.0F;
 //        float f1 = f / (float)stack.getMaxItemUseDuration();
