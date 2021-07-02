@@ -3,23 +3,17 @@ package de.pfannekuchen.lotas.dropmanipulation.drops.blockdrops;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.platform.GlStateManager;
 
+import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.gui.DropManipulationScreen;
 import de.pfannekuchen.lotas.gui.widgets.SmallCheckboxWidget;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawableHelper;
-import net.minecraft.client.gui.widget.CheckboxWidget;
-//#if MC>=11601
-//$$ import net.minecraft.client.util.math.MatrixStack;
-//#endif
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.text.LiteralText;
 import net.minecraft.util.Identifier;
 
 public class OreDropManipulation extends DropManipulationScreen.DropManipulation {
@@ -32,11 +26,7 @@ public class OreDropManipulation extends DropManipulationScreen.DropManipulation
 		OreDropManipulation.y = y;
 		OreDropManipulation.width = width;
 		OreDropManipulation.height = height;
-		//#if MC>=11601
-//$$ 			enabled = new CheckboxWidget(x, y, 150, 20, new LiteralText("Override Ore Drops"), false);
-		//#else
-		enabled = new CheckboxWidget(x, y, 150, 20, "Override Ore Drops", false);
-		//#endif
+		enabled = MCVer.CheckboxWidget(x, y, 150, 20, "Override Ore Drops", false);
 	}
 
 	@Override
@@ -81,36 +71,17 @@ public class OreDropManipulation extends DropManipulationScreen.DropManipulation
 
 	@Override
 	public void render(Object matrices, int mouseX, int mouseY, float delta) {
-		//#if MC>=11601
-//$$ 		enabled.render((MatrixStack) matrices, mouseX, mouseY, delta);
-		//#else
-		enabled.render(mouseX, mouseY, delta);
-		//#endif
+		MCVer.render(enabled, mouseX, mouseY, delta);
 
 		if (!enabled.isChecked()) {
-			//#if MC>=11700
-//$$ 			com.mojang.blaze3d.systems.RenderSystem.setShaderColor(.5f, .5f, .5f, .4f);
-			//#else
-			GlStateManager.color4f(.5f, .5f, .5f, .4f);
-			//#endif
+			MCVer.color(.5f, .5f, .5f, .4f);
 		} else {
-			//#if MC>=11601
-//$$ 			optimizeRedstone.render((MatrixStack) matrices, mouseX, mouseY, delta);
-//$$ 			optimizeLapis.render((MatrixStack) matrices, mouseX, mouseY, delta);
-			//#else
-			optimizeRedstone.render(mouseX, mouseY, delta);
-			optimizeLapis.render(mouseX, mouseY, delta);
-			//#endif
-
+			MCVer.render(optimizeRedstone, mouseX, mouseY, delta);
+			MCVer.render(optimizeLapis, mouseX, mouseY, delta);
 		}
 
 		MinecraftClient.getInstance().getTextureManager().bindTexture(new Identifier("lotas", "drops/diamond_ore.png"));
-		//#if MC>=11601
-//$$ 		DrawableHelper.drawTexture((MatrixStack) matrices, width - 128, y + 24, 0.0F, 0.0F, 96, 96, 96, 96);
-		//#else
-		DrawableHelper.blit(width - 128, y + 24, 0.0F, 0.0F, 96, 96, 96, 96);
-		//#endif
-
+		MCVer.renderImage(width - 128, y + 24, 0.0F, 0.0F, 96, 96, 96, 96);
 	}
 
 }

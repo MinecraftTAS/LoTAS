@@ -1,5 +1,20 @@
 package de.pfannekuchen.lotas.core;
 
+import com.mojang.blaze3d.platform.GlStateManager;
+
+import de.pfannekuchen.lotas.gui.widgets.SmallCheckboxWidget;
+import de.pfannekuchen.lotas.mixin.accessors.AccessorScreen;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.Drawable;
+import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.widget.AbstractButtonWidget;
+import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.widget.CheckboxWidget;
+//#if MC>=11601
+//$$ import net.minecraft.text.LiteralText;
+//#endif
+
 public class MCVer {
 
 	public static int clamp(int num, int min, int max) {
@@ -43,108 +58,81 @@ public class MCVer {
 		return (a <= 0.0F) ? 0.0F - a : a;
 	}
 
-	//	public static int x(GuiButton button) {
-	//        //#if MC>=11200
-	//        return button.x;
-	//        //#else
-	//        //$$ return button.xPosition;
-	//        //#endif
-	//    }
-	//
-	//    public static int y(GuiButton button) {
-	//        //#if MC>=11200
-	//        return button.y;
-	//        //#else
-	//        //$$ return button.yPosition;
-	//        //#endif
-	//    }
-	//	
-	//    public static EntityPlayerSP player(Minecraft mc) {
-	//        //#if MC>=11100
-	//        return mc.player;
-	//        //#else
-	//        //$$ return mc.thePlayer;
-	//        //#endif
-	//    }
-	//
-	//    public static WorldServer world(IntegratedServer mc, int dimension) {
-	//        //#if MC>=11200
-	//        return mc.getWorld(dimension);
-	//        //#else
-	//        //$$ return mc.worldServerForDimension(dimension);
-	//        //#endif
-	//    }
-	//    
-	//    public static WorldClient world(Minecraft mc) {
-	//        //#if MC>=11100
-	//        return mc.world;
-	//        //#else
-	//        //$$ return mc.theWorld;
-	//        //#endif
-	//    }
-	//    
-	//    public static FontRenderer getFontRenderer(Minecraft mc) {
-	//        //#if MC>=11200
-	//        return mc.fontRenderer;
-	//        //#else
-	//        //$$ return mc.fontRendererObj;
-	//        //#endif
-	//    }
-	//    
-	//    public static WorldServer[] getWorlds(MinecraftServer server) {
-	//    	//#if MC>=11100
-	//    	return server.worlds;
-	//    	//#else
-	//    //$$ 	return server.worldServers;
-	//    	//#endif
-	//    }
-	//
-	//	public static World world(EntityLiving entity) {
-	//        //#if MC>=11100
-	//        return entity.getEntityWorld();
-	//        //#else
-	//        //$$ return entity.worldObj;
-	//        //#endif
-	//	}
-	//    
-	//	public static Item getItem(String itemId) {
-	//		int mainVersion = Integer.parseInt(ForgeVersion.mcVersion.split("\\.")[1]);
-	//		if (mainVersion <= 10) {
-	//			return Item.getByNameOrId(itemId.toLowerCase());
-	//		}
-	//		return Item.getByNameOrId(itemId);
-	//	}
-	//	
-	//	public static Block getBlock(String blockId) {
-	//		int mainVersion = Integer.parseInt(ForgeVersion.mcVersion.split("\\.")[1]);
-	//		if (mainVersion <= 8) {
-	//			return Block.getBlockFromName(blockId.toLowerCase());
-	//		}
-	//		return Block.getBlockFromName(blockId);
-	//	}
-	//
-	//	public static AxisAlignedBB aabb(double d, double e, double f, double g, double h, double i) {
-	//		return new AxisAlignedBB(d, e, f, g, h, i);
-	//	}
-	//
-	//	public static Packet<?> loginStart(GameProfile gameProfile) {
-	//        //#if MC>=10900
-	//        return (new CPacketLoginStart(gameProfile));
-	//        //#else
-	//        //$$ return (new C00PacketLoginStart(gameProfile));
-	//        //#endif
-	//	}
-	//
-	//	public static Packet<?> handshake(String string, int i, EnumConnectionState login, boolean b) {
-	//        //#if MC>=11202
-	//        return new C00Handshake(string, i, login, b);
-	//        //#else
-	//        //$$ return new C00Handshake(316, string, i, login, b);
-	//        //#endif
-	//	}
-	//
-	//	public static AxisAlignedBB expandBy32(AxisAlignedBB box) {
-	//		return new AxisAlignedBB(box.minX - 16, box.minY - 16, box.minZ - 16, box.maxX + 16, box.maxY + 16, box.maxZ + 16);
-	//	}
+	public static Object matrixStack;
+	
+	public static CheckboxWidget CheckboxWidget(int x, int y, int width, int height, String title, boolean checked) {
+		//#if MC>=11601
+		//$$ return new CheckboxWidget(x, y, width, height, new LiteralText(title), checked);
+		//#else
+		return new CheckboxWidget(x, y, width, height, title, checked);
+		//#endif
+	}
 
+	public static void render(SmallCheckboxWidget draw, int mouseX, int mouseY, float delta) {
+		//#if MC>=11601
+		//$$ draw.render((net.minecraft.client.util.math.MatrixStack) matrixStack, mouseX, mouseY, delta);
+		//#else
+		draw.render(mouseX, mouseY, delta);
+		//#endif
+	}
+	
+	public static void render(ButtonWidget draw, int mouseX, int mouseY, float delta) {
+		//#if MC>=11601
+		//$$ draw.render((net.minecraft.client.util.math.MatrixStack) matrixStack, mouseX, mouseY, delta);
+		//#else
+		draw.render(mouseX, mouseY, delta);
+		//#endif
+	}
+	
+	public static void render(CheckboxWidget draw, int mouseX, int mouseY, float delta) {
+		//#if MC>=11601
+		//$$ draw.render((net.minecraft.client.util.math.MatrixStack) matrixStack, mouseX, mouseY, delta);
+		//#else
+		draw.render(mouseX, mouseY, delta);
+		//#endif
+	}
+	
+	public static void color(float a, float b, float c, float d) {
+		//#if MC>=11700
+//$$ 			com.mojang.blaze3d.systems.RenderSystem.setShaderColor(a, b, c, d);
+		//#else
+		GlStateManager.color4f(a, b, c, d);
+		//#endif
+	}
+
+	public static void drawStringWithShadow(String message, int x, int y, int color) {
+		//#if MC>=11601
+//$$ 			MinecraftClient.getInstance().textRenderer.drawWithShadow((net.minecraft.client.util.math.MatrixStack) matrixStack, message, x, y, color);
+		//#else
+		MinecraftClient.getInstance().textRenderer.drawWithShadow(message, x, y, color);
+		//#endif
+	}
+	
+	public static void renderImage(int a, int b, float c, float d, int what, int did, int you, int expect) {
+		//#if MC>=11601
+//$$ 		DrawableHelper.drawTexture((net.minecraft.client.util.math.MatrixStack) matrixStack, a, b, c, d, what, did, you, expect);
+		//#else
+		DrawableHelper.blit(a, b, c, d, what, did, you, expect);
+		//#endif
+	}
+	
+	public static void fill(int x, int y, int width, int height, int color) {
+		//#if MC>=11601
+		//$$ DrawableHelper.fill((net.minecraft.client.util.math.MatrixStack) matrixStack, x, y, width, height, color);
+		//#else
+		DrawableHelper.fill(x, y, width, height, color);
+		//#endif
+	}
+	
+	//#if MC>=11700
+	//$$ public static Drawable addButton(Screen obj, Drawable drawable) {
+	//$$ 	return ((AccessorScreen) obj).addDrawable(drawable);
+	//$$ }
+	//#else
+	//#if MC>=11700
+	public static AbstractButtonWidget addButton(Screen obj, AbstractButtonWidget drawable) {
+		return ((AccessorScreen) obj).addButton(drawable);
+	}
+	//#endif
+	
 }

@@ -7,11 +7,11 @@ import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.util.Window;
 //#if MC>=11502
 //$$ import net.minecraft.client.util.math.MatrixStack;
+//#endif
 //#if MC>=11700
 //$$ import net.minecraft.util.math.Vec3f;
 //#else
 //$$ import net.minecraft.client.util.math.Vector3f;
-//#endif
 //#endif
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
