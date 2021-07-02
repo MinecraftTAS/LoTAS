@@ -211,13 +211,15 @@ public class AIManipulationScreen extends Screen {
 		if (prev != selectedIndex) {
 			try {
 				net.minecraft.entity.ai.pathing.Path currentPath = entities.get(selectedIndex).getNavigation().getCurrentPath();
-				spawnX = currentPath.getEnd().x;
-				spawnY = currentPath.getEnd().y;
-				spawnZ = currentPath.getEnd().z;
-
-				xText.setText(spawnX + "");
-				yText.setText(spawnY + "");
-				zText.setText(spawnZ + "");
+				if(currentPath!=null) {
+					spawnX = currentPath.getEnd().x;
+					spawnY = currentPath.getEnd().y;
+					spawnZ = currentPath.getEnd().z;
+	
+					xText.setText(spawnX + "");
+					yText.setText(spawnY + "");
+					zText.setText(spawnZ + "");
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
