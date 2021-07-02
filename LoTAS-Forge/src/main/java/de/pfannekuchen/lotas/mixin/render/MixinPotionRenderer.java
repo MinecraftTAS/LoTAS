@@ -57,12 +57,7 @@ public abstract class MixinPotionRenderer {
         GlStateManager.pushMatrix();
         GlStateManager.disableLighting();
         ItemStack stack2 = PotionRenderingUtils.renderPotion();
-        //#if MC>=10900
         Minecraft.getMinecraft().getRenderItem().renderItem(stack2, ItemCameraTransforms.TransformType.FIXED);
-        
-        //#else
-        //$$ this.renderItem(MCVer.player(mc), stack2, ItemCameraTransforms.TransformType.FIRST_PERSON);
-        //#endif
         GlStateManager.enableLighting();
         GlStateManager.popMatrix();
 	}
