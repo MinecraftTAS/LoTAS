@@ -100,7 +100,7 @@ public class ZombieDropManipulation extends DropManipulationScreen.DropManipulat
 		if (!enabled.isChecked()) {
 			MCVer.color(.5f, .5f, .5f, .4f);
 		} else {
-			MinecraftClient.getInstance().textRenderer.drawWithShadow("Zombies drop: 2 Rotten Flesh" + (dropIron.isToggled() ? ", 1 Iron Ingot" : "") + (dropPotato.isToggled() ? ", 1 Potato" : "") + (dropCarrot.isToggled() ? ", 1 Carrot" : ""), x, y + 64, 0xFFFFFF);
+			MCVer.drawStringWithShadow("Zombies drop: 2 Rotten Flesh" + (dropIron.isToggled() ? ", 1 Iron Ingot" : "") + (dropPotato.isToggled() ? ", 1 Potato" : "") + (dropCarrot.isToggled() ? ", 1 Carrot" : ""), x, y + 64, 0xFFFFFF);
 			MCVer.render(dropIron, mouseX, mouseY, delta);
 			MCVer.render(dropPotato, mouseX, mouseY, delta);
 			MCVer.render(dropCarrot, mouseX, mouseY, delta);

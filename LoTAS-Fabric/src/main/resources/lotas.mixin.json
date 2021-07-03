@@ -4,13 +4,13 @@
     "package": "de.pfannekuchen.lotas.mixin",
     "compatibilityLevel": "JAVA_8",
     "mixins": [
-    	
     ],
     "client": [
     	"MixinMinecraftClient",
     	"MixinMinecraftServer",
     	"MixinIntegratedServer",
     	"MixinThreadedAnvilChunkStorage",
+    	"accessors.AccessorScreen",
     	"accessors.AccessorMinecraftClient",
     	"accessors.AccessorTimer",
     	"accessors.AccessorTextFieldWidget",

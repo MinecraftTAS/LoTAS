@@ -5,15 +5,14 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import de.pfannekuchen.lotas.gui.widgets.SmallCheckboxWidget;
 import de.pfannekuchen.lotas.mixin.accessors.AccessorScreen;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.AbstractButtonWidget;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.CheckboxWidget;
 //#if MC>=11601
 //$$ import net.minecraft.text.LiteralText;
 //#endif
+import net.minecraft.client.gui.widget.TextFieldWidget;
 
 public class MCVer {
 
@@ -62,7 +61,7 @@ public class MCVer {
 	
 	public static CheckboxWidget CheckboxWidget(int x, int y, int width, int height, String title, boolean checked) {
 		//#if MC>=11601
-		//$$ return new CheckboxWidget(x, y, width, height, new LiteralText(title), checked);
+//$$ 		return new CheckboxWidget(x, y, width, height, new LiteralText(title), checked);
 		//#else
 		return new CheckboxWidget(x, y, width, height, title, checked);
 		//#endif
@@ -70,7 +69,7 @@ public class MCVer {
 
 	public static void render(SmallCheckboxWidget draw, int mouseX, int mouseY, float delta) {
 		//#if MC>=11601
-		//$$ draw.render((net.minecraft.client.util.math.MatrixStack) matrixStack, mouseX, mouseY, delta);
+//$$ 		draw.render((net.minecraft.client.util.math.MatrixStack) matrixStack, mouseX, mouseY, delta);
 		//#else
 		draw.render(mouseX, mouseY, delta);
 		//#endif
@@ -78,7 +77,7 @@ public class MCVer {
 	
 	public static void render(ButtonWidget draw, int mouseX, int mouseY, float delta) {
 		//#if MC>=11601
-		//$$ draw.render((net.minecraft.client.util.math.MatrixStack) matrixStack, mouseX, mouseY, delta);
+//$$ 		draw.render((net.minecraft.client.util.math.MatrixStack) matrixStack, mouseX, mouseY, delta);
 		//#else
 		draw.render(mouseX, mouseY, delta);
 		//#endif
@@ -86,7 +85,7 @@ public class MCVer {
 	
 	public static void render(CheckboxWidget draw, int mouseX, int mouseY, float delta) {
 		//#if MC>=11601
-		//$$ draw.render((net.minecraft.client.util.math.MatrixStack) matrixStack, mouseX, mouseY, delta);
+//$$ 		draw.render((net.minecraft.client.util.math.MatrixStack) matrixStack, mouseX, mouseY, delta);
 		//#else
 		draw.render(mouseX, mouseY, delta);
 		//#endif
@@ -118,21 +117,48 @@ public class MCVer {
 	
 	public static void fill(int x, int y, int width, int height, int color) {
 		//#if MC>=11601
-		//$$ DrawableHelper.fill((net.minecraft.client.util.math.MatrixStack) matrixStack, x, y, width, height, color);
+//$$ 		DrawableHelper.fill((net.minecraft.client.util.math.MatrixStack) matrixStack, x, y, width, height, color);
 		//#else
 		DrawableHelper.fill(x, y, width, height, color);
 		//#endif
 	}
 	
 	//#if MC>=11700
-	//$$ public static Drawable addButton(Screen obj, Drawable drawable) {
-	//$$ 	return ((AccessorScreen) obj).addDrawable(drawable);
-	//$$ }
+//$$ 	public static net.minecraft.client.gui.Drawable addButton(Screen obj, net.minecraft.client.gui.Drawable drawable) {
+//$$ 		return ((AccessorScreen) obj).addDrawableChild(drawable);
+//$$ 	}
 	//#else
-	//#if MC>=11700
-	public static AbstractButtonWidget addButton(Screen obj, AbstractButtonWidget drawable) {
-		return ((AccessorScreen) obj).addButton(drawable);
+	public static net.minecraft.client.gui.widget.AbstractButtonWidget addButton(Screen obj, net.minecraft.client.gui.widget.AbstractButtonWidget drawable) {
+		return ((AccessorScreen) obj).invokeaddButton(drawable);
 	}
 	//#endif
+
+	public static void render(TextFieldWidget draw, int mouseX, int mouseY, float delta) {
+		//#if MC>=11601
+//$$ 		draw.render((net.minecraft.client.util.math.MatrixStack) matrixStack, mouseX, mouseY, delta);
+		//#else
+		draw.render(mouseX, mouseY, delta);
+		//#endif
+	}
+	
+	public static void setMessage(ButtonWidget button, String text) {
+		//#if MC>=11601
+//$$ 		button.setMessage(new LiteralText(text));
+		//#else
+		button.setMessage(text);
+		//#endif
+	}
+
+	public static void drawCenteredString(Screen screen, String message, int x, int y, int color) {
+		//#if MC>=11601
+		//#if MC>=11700
+//$$ 		Screen.drawCenteredText((net.minecraft.client.util.math.MatrixStack) matrixStack, MinecraftClient.getInstance().textRenderer, message, x, y, color);
+		//#else
+		//$$ screen.drawCenteredString((net.minecraft.client.util.math.MatrixStack) matrixStack, MinecraftClient.getInstance().textRenderer, message, x, y, color);
+		//#endif
+		//#else
+		screen.drawCenteredString(MinecraftClient.getInstance().textRenderer, message, x, y, color);
+		//#endif
+	}
 	
 }

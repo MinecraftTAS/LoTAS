@@ -51,10 +51,11 @@ public abstract class MixinPotionRenderer {
 //$$ import net.minecraft.client.render.DiffuseLighting;
 //$$ import net.minecraft.util.Hand;
 //$$ import org.spongepowered.asm.mixin.gen.AccessorInfo;
+//$$ import net.minecraft.client.MinecraftClient;
 //$$ import net.minecraft.client.network.AbstractClientPlayerEntity;
 //$$ @Mixin(GameRenderer.class)
 //$$ public abstract class MixinPotionRenderer {
-//$$ 
+//$$
 //$$ 		@Shadow
 //$$ 		HeldItemRenderer firstPersonRenderer;
 //$$

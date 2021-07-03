@@ -9,11 +9,11 @@ import net.minecraft.client.gui.screen.Screen;
 public interface AccessorScreen {
 
 	//#if MC>=11700
-	//$$ @Invoker
-	//$$ public net.minecraft.client.gui.Drawable addDrawableChild(net.minecraft.client.gui.Drawable drawable);
+//$$ 	@Invoker
+//$$ 	public net.minecraft.client.gui.Drawable addDrawableChild(net.minecraft.client.gui.Drawable drawable);
 	//#else
-	@Invoker
-	public net.minecraft.client.gui.widget.AbstractButtonWidget addButton(net.minecraft.client.gui.widget.AbstractButtonWidget drawable);
+	@Invoker("addButton")
+	public net.minecraft.client.gui.widget.AbstractButtonWidget invokeaddButton(net.minecraft.client.gui.widget.AbstractButtonWidget drawable);
 	//#endif
 	
 }

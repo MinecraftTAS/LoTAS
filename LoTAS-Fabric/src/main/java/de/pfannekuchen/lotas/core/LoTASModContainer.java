@@ -135,19 +135,7 @@ public class LoTASModContainer implements ModInitializer {
 	public void loadSeeds() throws Exception {
 		File file = new File("seeddata.txt");
 		try {
-			//#if MC>=11500
-			//#if MC>=11600
-			//#if MC>=11700
-//$$ 				URL url = new URL("http://mgnet.work/seeds/seeds1.17.0.txt");
-			//#else
-//$$ 				URL url = new URL("http://mgnet.work/seeds/seeds1.16.x.txt");
-			//#else
-//$$ 				URL url = new URL("http://mgnet.work/seeds/seeds1.15.2.txt");
-			//#else
 			URL url = new URL("http://mgnet.work/seeds/seeds1.14.4.txt");
-			//#endif
-			//#endif
-			//#endif
 			URLConnection conn = url.openConnection();
 			conn.setReadTimeout(5000);
 			file.createNewFile();

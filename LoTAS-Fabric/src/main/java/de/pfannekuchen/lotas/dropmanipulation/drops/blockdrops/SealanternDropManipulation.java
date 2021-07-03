@@ -96,7 +96,7 @@ public class SealanternDropManipulation extends DropManipulationScreen.DropManip
 		if (!enabled.isChecked()) {
 			MCVer.color(.5f, .5f, .5f, .4f);
 		} else {
-			MinecraftClient.getInstance().textRenderer.drawWithShadow("Drop " + pris + " Prismarine Crystals when breaking Sea Lanterns", x, y + 64, 0xFFFFFF);
+			MCVer.drawStringWithShadow("Drop " + pris + " Prismarine Crystals when breaking Sea Lanterns", x, y + 64, 0xFFFFFF);
 			MCVer.render(drop2Pris, mouseX, mouseY, delta);
 			MCVer.render(drop3Pris, mouseX, mouseY, delta);
 		}

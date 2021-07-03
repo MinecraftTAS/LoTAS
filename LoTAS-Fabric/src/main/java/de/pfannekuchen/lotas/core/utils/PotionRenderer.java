@@ -11,7 +11,7 @@ import net.minecraft.client.util.Window;
 //#if MC>=11700
 //$$ import net.minecraft.util.math.Vec3f;
 //#else
-//$$ import net.minecraft.client.util.math.Vector3f;
+import net.minecraft.client.util.math.Vector3f;
 //#endif
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;

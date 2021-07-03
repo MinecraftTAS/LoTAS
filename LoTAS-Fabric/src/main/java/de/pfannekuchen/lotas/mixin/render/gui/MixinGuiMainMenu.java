@@ -44,12 +44,12 @@ public abstract class MixinGuiMainMenu extends Screen {
 //$$ 	if (isAcceptance) {
 //$$ 		renderBackground(matrices);
 //$$ 		MCVer.color(1.0f, 1.0f, 1.0f, 1.0f);
-//$$	 	MinecraftClient.getInstance().getTextureManager().bindTexture(DEMO_BG);
+//$$ 	 	MinecraftClient.getInstance().getTextureManager().bindTexture(DEMO_BG);
 //$$ 		int i = (this.width - 248) / 2;
 //$$ 		int j = (this.height - 166) / 2;
 //$$ 		this.drawTexture(matrices, i, j, 0, 0, 248, 166);
 //$$ 		i += 10;
-//$$	 	j += 8;
+//$$ 	 	j += 8;
 //$$ 		this.textRenderer.draw(matrices, "LoTAS Cheat prevention", (float) i, (float) j, 2039583);
 //$$ 		j += 12;
 //$$ 		GameOptions gameOptions = MinecraftClient.getInstance().options;
@@ -113,7 +113,7 @@ public abstract class MixinGuiMainMenu extends Screen {
 	//#if MC>=11601
 	//#if MC>=11605
 	//#if MC>=11700
-//$$ 	@ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/TitleScreen;drawCenteredText(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/font/TextRenderer;Ljava/lang/String;III)V"))
+//$$ 	@org.spongepowered.asm.mixin.injection.ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/TitleScreen;drawCenteredText(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/font/TextRenderer;Ljava/lang/String;III)V"))
 //$$     private String modifyText(String original) {
 //$$         return "TaS iS cHeAtInG !!1";
 		//#else
