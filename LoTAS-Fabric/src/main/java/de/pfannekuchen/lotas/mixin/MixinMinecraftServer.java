@@ -11,6 +11,8 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import de.pfannekuchen.lotas.core.LoTASModContainer;
+import de.pfannekuchen.lotas.mods.AIManipMod;
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Util;
@@ -127,5 +129,6 @@ public abstract class MixinMinecraftServer {
 	public void injectrunTick(BooleanSupplier supplier, CallbackInfo ci) {
 		TickrateChangerMod.ticksPassedServer++;
 		TickrateChangerMod.resetAdvanceServer();
+		AIManipMod.tick();
 	}
 }

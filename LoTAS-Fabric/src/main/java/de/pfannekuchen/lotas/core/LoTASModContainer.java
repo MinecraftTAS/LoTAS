@@ -16,6 +16,7 @@ import de.pfannekuchen.lotas.core.utils.KeybindsUtils;
 import de.pfannekuchen.lotas.core.utils.TextureYoinker;
 import de.pfannekuchen.lotas.gui.HudSettings;
 import de.pfannekuchen.lotas.gui.SeedListScreen;
+import de.pfannekuchen.lotas.mods.AIManipMod;
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.client.MinecraftClient;
@@ -24,7 +25,7 @@ import net.minecraft.util.Identifier;
 public class LoTASModContainer implements ModInitializer {
 
 	public static Identifier shield;
-
+	
 	@Override
 	public void onInitialize() {
 		KeybindsUtils.registerKeybinds();

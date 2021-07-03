@@ -5,6 +5,7 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import de.pfannekuchen.lotas.gui.widgets.SmallCheckboxWidget;
 import de.pfannekuchen.lotas.mixin.accessors.AccessorScreen;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -13,6 +14,7 @@ import net.minecraft.client.gui.widget.CheckboxWidget;
 //$$ import net.minecraft.text.LiteralText;
 //#endif
 import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.text.LiteralText;
 
 public class MCVer {
 
@@ -64,6 +66,14 @@ public class MCVer {
 //$$ 		return new CheckboxWidget(x, y, width, height, new LiteralText(title), checked);
 		//#else
 		return new CheckboxWidget(x, y, width, height, title, checked);
+		//#endif
+	}
+	
+	public static TextFieldWidget TextFieldWidget(TextRenderer textRenderer, int x, int y, int width, int height, String message) {
+		//#if MC>=11601
+//$$ 		return new TextFieldWidget(textRenderer, x, y, width, height, new LiteralText(message));
+		//#else
+		return new TextFieldWidget(textRenderer, x, y, width, height, message);
 		//#endif
 	}
 
@@ -154,7 +164,7 @@ public class MCVer {
 		//#if MC>=11700
 //$$ 		Screen.drawCenteredText((net.minecraft.client.util.math.MatrixStack) matrixStack, MinecraftClient.getInstance().textRenderer, message, x, y, color);
 		//#else
-		//$$ screen.drawCenteredString((net.minecraft.client.util.math.MatrixStack) matrixStack, MinecraftClient.getInstance().textRenderer, message, x, y, color);
+//$$ 		screen.drawCenteredString((net.minecraft.client.util.math.MatrixStack) matrixStack, MinecraftClient.getInstance().textRenderer, message, x, y, color);
 		//#endif
 		//#else
 		screen.drawCenteredString(MinecraftClient.getInstance().textRenderer, message, x, y, color);
