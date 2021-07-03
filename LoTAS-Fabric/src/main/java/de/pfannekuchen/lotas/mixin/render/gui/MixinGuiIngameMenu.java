@@ -115,9 +115,9 @@ public abstract class MixinGuiIngameMenu extends Screen {
 		}));
 
 		//#if MC>=11601
-		//$$ ((NewButtonWidget) MCVer.addButton(this, new NewButtonWidget((width / 4) * 1 + 2, height - 20, width / 4 - 2, 20, "Manipulate Dragon", btn -> {
-		//$$ 	MinecraftClient.getInstance().openScreen(new DragonManipulationScreen((GameMenuScreen) (Object) this));
-		//$$ }))).active = MinecraftClient.getInstance().getServer().getWorld(World.END).getAliveEnderDragons().size() >= 1;
+//$$ 		((NewButtonWidget) MCVer.addButton(this, new NewButtonWidget((width / 4) * 1 + 2, height - 20, width / 4 - 2, 20, "Manipulate Dragon", btn -> {
+//$$ 			MinecraftClient.getInstance().openScreen(new DragonManipulationScreen((GameMenuScreen) (Object) this));
+//$$ 		}))).active = MinecraftClient.getInstance().getServer().getWorld(World.END).getAliveEnderDragons().size() >= 1;
 		//#else
 		((NewButtonWidget) MCVer.addButton(this, new NewButtonWidget((width / 4) * 1 + 2, height - 20, width / 4 - 2, 20, "Manipulate Dragon", btn -> {
 			MinecraftClient.getInstance().openScreen(new DragonManipulationScreen((GameMenuScreen) (Object) this));

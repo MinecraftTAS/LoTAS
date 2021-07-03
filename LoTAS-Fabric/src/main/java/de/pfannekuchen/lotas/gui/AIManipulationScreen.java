@@ -9,6 +9,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.entity.ai.pathing.EntityNavigation;
 //#if MC>=11601
 //$$ import net.minecraft.client.util.math.MatrixStack;
 //$$ import net.minecraft.entity.ai.pathing.Path;
@@ -109,8 +110,13 @@ public class AIManipulationScreen extends Screen {
 //$$ 		}));
 		//#else
 		addButton(new NewButtonWidget(width / 2 - 100, height - 25, 200, 20, "Change Target", button -> {
-			button.active = !entities.get(selectedIndex).getNavigation().startMovingTo(spawnX, spawnY, spawnZ, 1.0f);
-			entities.get(selectedIndex).getMoveControl().moveTo(spawnX, spawnY, spawnZ, 1.0F);
+			try {
+				EntityNavigation navigation =entities.get(selectedIndex).getNavigation();
+				boolean flag=navigation.startMovingTo(spawnX, spawnY, spawnZ, 1.0f);
+				button.active = !flag;
+			}catch (Exception e) {
+				e.printStackTrace();
+			}
 		}));
 
 		addButton(new NewButtonWidget(width / 2 - 100, height - 72, 60, 20, "X++", btn -> spawnX++));
@@ -302,4 +308,5 @@ public class AIManipulationScreen extends Screen {
 		drawCenteredString(MinecraftClient.getInstance().textRenderer, entities.get(selectedIndex).getClass().getSimpleName().replaceFirst("Entity", "") + " (" + entities.get(selectedIndex).x + ", " + entities.get(selectedIndex).y + ", " + entities.get(selectedIndex).z + ")", width / 2, 5, 0xFFFFFF);
 	}
 	//#endif
+	
 }

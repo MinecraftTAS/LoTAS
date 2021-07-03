@@ -124,8 +124,8 @@ public class MCVer {
 	}
 	
 	//#if MC>=11700
-//$$ 	public static net.minecraft.client.gui.Drawable addButton(Screen obj, net.minecraft.client.gui.Drawable drawable) {
-//$$ 		return ((AccessorScreen) obj).addDrawableChild(drawable);
+//$$ 	public static <T extends net.minecraft.client.gui.Element & net.minecraft.client.gui.Drawable & net.minecraft.client.gui.Selectable> T  addButton(Screen obj, T drawable) {
+//$$ 		return ((CheekyScreenDuck) obj).addDrawableCheekyChild(drawable);
 //$$ 	}
 	//#else
 	public static net.minecraft.client.gui.widget.AbstractButtonWidget addButton(Screen obj, net.minecraft.client.gui.widget.AbstractButtonWidget drawable) {
