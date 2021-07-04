@@ -81,8 +81,7 @@ public class KeybindsUtils {
 			//#endif
 		}
 		if(test.wasPressed()) {
-//			AIManipMod manip= new AIManipMod();
-//			manip.quickDebug();
+//			MinecraftClient.getInstance().getServer().save(false, false, false);
 		}
 		wasPressed = holdStrafeKeybind.isPressed();
 	}
