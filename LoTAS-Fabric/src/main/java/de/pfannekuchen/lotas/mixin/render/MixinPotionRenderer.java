@@ -2,42 +2,24 @@ package de.pfannekuchen.lotas.mixin.render;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.gen.AccessorInfo;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.At.Shift;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
 import com.mojang.blaze3d.platform.GlStateManager;
 
-import net.minecraft.client.network.AbstractClientPlayerEntity;
 import de.pfannekuchen.lotas.core.utils.PotionRenderer;
 import de.pfannekuchen.lotas.mixin.accessors.AccessorItemRenderer;
-import net.minecraft.client.MinecraftClient;
 
-import net.minecraft.client.render.Camera;
-import net.minecraft.client.render.DiffuseLighting;
 import net.minecraft.client.render.GameRenderer;
 
 import net.minecraft.client.render.item.HeldItemRenderer;
-import net.minecraft.client.render.item.ItemRenderer;
-//#if MC>=11502
-//$$ import net.minecraft.client.network.ClientPlayerEntity;
-//$$ import net.minecraft.client.render.VertexConsumerProvider;
-//$$ import net.minecraft.client.render.VertexConsumerProvider.Immediate;
-//$$ import net.minecraft.client.util.math.MatrixStack;
-//$$ import net.minecraft.client.render.OverlayTexture;
-//$$ import net.minecraft.client.render.BufferBuilderStorage;
-//$$ import com.mojang.blaze3d.systems.RenderSystem;
-//#endif
-import net.minecraft.client.render.model.ModelRotation;
 import net.minecraft.client.render.model.json.ModelTransformation;
 
+//#if MC<=11404
 @Mixin(GameRenderer.class)
 public abstract class MixinPotionRenderer {
-
-	//#if MC<=11404
 
 	@Shadow
 	HeldItemRenderer firstPersonRenderer;
@@ -49,13 +31,31 @@ public abstract class MixinPotionRenderer {
        GlStateManager.loadIdentity();
 		GlStateManager.pushMatrix();
 		ItemStack stack2 = PotionRenderer.render();
-		MinecraftClient mc = MinecraftClient.getInstance();
 		GlStateManager.disableLighting();
 		((AccessorItemRenderer)firstPersonRenderer).getItemRenderer().renderItem(stack2, ModelTransformation.Type.FIXED);
 		GlStateManager.enableLighting();
 		GlStateManager.popMatrix();
 	}
-	//#else
+}
+//#else
+//$$ import net.minecraft.client.network.ClientPlayerEntity;
+//$$ import net.minecraft.client.render.VertexConsumerProvider;
+//$$ import net.minecraft.client.render.VertexConsumerProvider.Immediate;
+//$$ import net.minecraft.client.util.math.MatrixStack;
+//$$ import net.minecraft.client.render.OverlayTexture;
+//$$ import net.minecraft.client.render.BufferBuilderStorage;
+//$$ import com.mojang.blaze3d.systems.RenderSystem;
+//$$ import net.minecraft.client.render.item.ItemRenderer;
+//$$ import net.minecraft.client.render.model.ModelRotation;
+//$$ import net.minecraft.client.render.Camera;
+//$$ import net.minecraft.client.render.DiffuseLighting;
+//$$ import net.minecraft.util.Hand;
+//$$ import org.spongepowered.asm.mixin.gen.AccessorInfo;
+//$$ import net.minecraft.client.MinecraftClient;
+//$$ import net.minecraft.client.network.AbstractClientPlayerEntity;
+//$$ @Mixin(GameRenderer.class)
+//$$ public abstract class MixinPotionRenderer {
+//$$
 //$$ 		@Shadow
 //$$ 		HeldItemRenderer firstPersonRenderer;
 //$$
@@ -89,6 +89,5 @@ public abstract class MixinPotionRenderer {
 //$$ 			GlStateManager.popMatrix();
 			//#endif
 //$$ 		}
-	//#endif
-
-}
+//$$ }
+//#endif

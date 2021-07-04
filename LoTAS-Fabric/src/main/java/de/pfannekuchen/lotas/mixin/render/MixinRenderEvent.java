@@ -9,9 +9,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import de.pfannekuchen.lotas.core.utils.RenderUtils;
 import de.pfannekuchen.lotas.gui.AIManipulationScreen;
 import de.pfannekuchen.lotas.gui.SpawnManipulationScreen;
+import de.pfannekuchen.lotas.mods.AIManipMod;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.render.GameRenderer;
+import net.minecraft.util.math.Vec3d;
 
 @Mixin(GameRenderer.class)
 public class MixinRenderEvent {
@@ -52,7 +54,7 @@ public class MixinRenderEvent {
 			GL11.glDisable(GL11.GL_LINE_SMOOTH);
 			GL11.glPopMatrix();
 		} else if (gui instanceof AIManipulationScreen) {
-			if (AIManipulationScreen.entities.size() == 0)
+			if (AIManipMod.getSelectedEntityPos() == null)
 				return;
 			GL11.glPushMatrix();
 			GL11.glDisable(GL11.GL_TEXTURE_2D);
@@ -62,19 +64,14 @@ public class MixinRenderEvent {
 			GL11.glLineWidth(2);
 
 			//#if MC>=11502
-//$$ 						RenderUtils.applyCameraRotationOnly();
+//$$ 			RenderUtils.applyCameraRotationOnly();
 			//#endif
 			RenderUtils.applyRenderOffset();
 
-			//#if MC>=11601
-//$$ 			            double renderX = ((double) AIManipulationScreen.entities.get(AIManipulationScreen.selectedIndex).getX() - 0.5f);
-//$$ 						double renderY = ((double) AIManipulationScreen.entities.get(AIManipulationScreen.selectedIndex).getY());
-//$$ 						double renderZ = ((double) AIManipulationScreen.entities.get(AIManipulationScreen.selectedIndex).getZ() - 0.5F);
-			//#else
-			double renderX = ((double) AIManipulationScreen.entities.get(AIManipulationScreen.selectedIndex).x - 0.5f);
-			double renderY = ((double) AIManipulationScreen.entities.get(AIManipulationScreen.selectedIndex).y);
-			double renderZ = ((double) AIManipulationScreen.entities.get(AIManipulationScreen.selectedIndex).z - 0.5F);
-			//#endif
+			Vec3d entityPos=AIManipMod.getSelectedEntityPos();
+			double renderX = entityPos.x - 0.5f;
+			double renderY = entityPos.y;
+			double renderZ = entityPos.z - 0.5F;
 
 			GL11.glTranslated(renderX, renderY, renderZ);
 			GL11.glScalef(1, 2, 1);
@@ -97,12 +94,15 @@ public class MixinRenderEvent {
 			GL11.glLineWidth(2);
 
 			// Draw output
-
+			//#if MC>=11502
+//$$ 			RenderUtils.applyCameraRotationOnly();
+			//#endif
 			RenderUtils.applyRenderOffset();
 
-			renderX = AIManipulationScreen.spawnX;
-			renderY = AIManipulationScreen.spawnY;
-			renderZ = AIManipulationScreen.spawnZ;
+			Vec3d targetPos=AIManipMod.getTargetPos();
+			renderX = (int)targetPos.x;
+			renderY = (int)targetPos.y;
+			renderZ = (int)targetPos.z;
 
 			GL11.glTranslated(renderX, renderY, renderZ);
 			GL11.glScalef(1, 1, 1);

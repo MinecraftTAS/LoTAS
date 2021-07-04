@@ -12,3 +12,5 @@ Private.java
 out/
 
 eclipse/
+
+LoTAS-Forge/versions/*/*.launch

@@ -256,4 +256,8 @@ public class MixinMinecraft {
 
 	}
 	
+	@Inject(method = "runTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;runTickMouse()V"))
+	public void injectAtRunTickKebindings(CallbackInfo ci) {
+		EventUtils.onInput2();
+	}
 }

@@ -3,23 +3,17 @@ package de.pfannekuchen.lotas.dropmanipulation.drops.blockdrops;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.platform.GlStateManager;
 
+import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.gui.DropManipulationScreen;
 import de.pfannekuchen.lotas.gui.widgets.NewButtonWidget;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.CheckboxWidget;
-//#if MC>=11601
-//$$ import net.minecraft.client.util.math.MatrixStack;
-//#endif
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.text.LiteralText;
 import net.minecraft.util.Identifier;
 
 public class DeadbushDropManipulation extends DropManipulationScreen.DropManipulation {
@@ -62,11 +56,7 @@ public class DeadbushDropManipulation extends DropManipulationScreen.DropManipul
 		DeadbushDropManipulation.y = y;
 		DeadbushDropManipulation.width = width;
 		DeadbushDropManipulation.height = height;
-		//#if MC>=11601
-//$$ 		enabled = new CheckboxWidget(x, y, 150, 20, new LiteralText("Override Dead Bush Drops"), false);
-		//#else
-		enabled = new CheckboxWidget(x, y, 150, 20, "Override Dead Bush Drops", false);
-		//#endif
+		enabled = MCVer.CheckboxWidget(x, y, 150, 20, "Override Dead Bush Drops", false);
 		drop0Stick.active = false;
 	}
 
@@ -116,39 +106,18 @@ public class DeadbushDropManipulation extends DropManipulationScreen.DropManipul
 
 	@Override
 	public void render(Object matrices, int mouseX, int mouseY, float delta) {
-		//#if MC>=11601
-//$$ 		enabled.render((MatrixStack) matrices, mouseX, mouseY, delta);
-		//#else
-		enabled.render(mouseX, mouseY, delta);
-		//#endif
+		MCVer.matrixStack = matrices;
+		MCVer.render(enabled, mouseX, mouseY, delta);
 
 		if (!enabled.isChecked()) {
-			//#if MC>=11700
-//$$ 			com.mojang.blaze3d.systems.RenderSystem.setShaderColor(.5f, .5f, .5f, .4f);
-			//#else
-			GlStateManager.color4f(.5f, .5f, .5f, .4f);
-			//#endif
+			MCVer.color(.5f, .5f, .5f, .4f);
 		} else {
-			//#if MC>=11601
-//$$ 			MinecraftClient.getInstance().textRenderer.drawWithShadow((MatrixStack) matrices, "Drop " + sticks + " Sticks when breaking Gravel", x, y + 64, 0xFFFFFF);
-//$$ 			drop2Stick.render((MatrixStack) matrices, mouseX, mouseY, delta);
-//$$ 			drop1Stick.render((MatrixStack) matrices, mouseX, mouseY, delta);
-//$$ 			drop0Stick.render((MatrixStack) matrices, mouseX, mouseY, delta);
-			//#else
-			MinecraftClient.getInstance().textRenderer.drawWithShadow("Drop " + sticks + " Sticks when breaking Gravel", x, y + 64, 0xFFFFFF);
-			drop2Stick.render(mouseX, mouseY, delta);
-			drop1Stick.render(mouseX, mouseY, delta);
-			drop0Stick.render(mouseX, mouseY, delta);
-			//#endif
-
+			MCVer.render(drop0Stick, mouseX, mouseY, delta);
+			MCVer.drawStringWithShadow("Drop " + sticks + " Sticks when breaking Gravel", x, y + 64, 0xFFFFFF);
 		}
 
 		MinecraftClient.getInstance().getTextureManager().bindTexture(new Identifier("lotas", "drops/deadbush.png"));
-		//#if MC>=11601
-//$$ 		DrawableHelper.drawTexture((MatrixStack) matrices, width - 128, y + 24, 0.0F, 0.0F, 96, 96, 96, 96);
-		//#else
-		DrawableHelper.blit(width - 128, y + 24, 0.0F, 0.0F, 96, 96, 96, 96);
-		//#endif
+		MCVer.renderImage(width - 128, y + 24, 0.0F, 0.0F, 96, 96, 96, 96);
 
 	}
 

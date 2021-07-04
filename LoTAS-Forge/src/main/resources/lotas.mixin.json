@@ -20,7 +20,7 @@
 		"patches.MixinServerPatch",
 		"patches.MixinEntityPlayerMPPatch",
 		"patches.MixinWorldProviderPatch",
-		"MixinMinecraftServer",
+		"MixinMinecraftServer"
     ],
     "client": [
     	"accessors.AccessorMinecraftClient",
@@ -41,6 +41,9 @@
 		"render.binds.MixinTickrateChangerSubtitle",
 		"render.MixinShieldRenderer",
 		"render.MixinPotionRenderer",
+		//#if MC<=11002
+//$$ 		"render.MixinItemPotion",
+		//#endif
 		"MixinMinecraft"
 	]
 }

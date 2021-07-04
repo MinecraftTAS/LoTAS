@@ -3,17 +3,12 @@ package de.pfannekuchen.lotas.dropmanipulation.drops.entitydrops;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.platform.GlStateManager;
 
+import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.gui.DropManipulationScreen;
 import de.pfannekuchen.lotas.gui.widgets.SmallCheckboxWidget;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawableHelper;
-import net.minecraft.client.gui.widget.CheckboxWidget;
-//#if MC>=11601
-//$$ import net.minecraft.client.util.math.MatrixStack;
-//#endif
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.CodEntity;
 import net.minecraft.entity.passive.DolphinEntity;
@@ -22,7 +17,6 @@ import net.minecraft.entity.passive.SalmonEntity;
 import net.minecraft.entity.passive.TropicalFishEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.text.LiteralText;
 import net.minecraft.util.Identifier;
 
 public class FishDropManipulation extends DropManipulationScreen.DropManipulation {
@@ -38,11 +32,7 @@ public class FishDropManipulation extends DropManipulationScreen.DropManipulatio
 		FishDropManipulation.y = y;
 		FishDropManipulation.width = width;
 		FishDropManipulation.height = height;
-		//#if MC>=11601
-//$$ 			enabled = new CheckboxWidget(x, y, 150, 20, new LiteralText("Override Fish Drops"), false);
-		//#else
-		enabled = new CheckboxWidget(x, y, 150, 20, "Override Fish Drops", false);
-		//#endif
+		enabled = MCVer.CheckboxWidget(x, y, 150, 20, "Override Fish Drops", false);
 	}
 
 	@Override
@@ -100,40 +90,19 @@ public class FishDropManipulation extends DropManipulationScreen.DropManipulatio
 
 	@Override
 	public void render(Object matrices, int mouseX, int mouseY, float delta) {
-		//#if MC>=11601
-//$$ 		enabled.render((MatrixStack) matrices, mouseX, mouseY, delta);
-		//#else
-		enabled.render(mouseX, mouseY, delta);
-		//#endif
+		MCVer.render(enabled, mouseX, mouseY, delta);
 		if (!enabled.isChecked()) {
-			//#if MC>=11700
-//$$ 			com.mojang.blaze3d.systems.RenderSystem.setShaderColor(.5f, .5f, .5f, .4f);
-			//#else
-			GlStateManager.color4f(.5f, .5f, .5f, .4f);
-			//#endif
+			MCVer.color(.5f, .5f, .5f, .4f);
 		} else {
-			//#if MC>=11601
-//$$ 			optimizeCod.render((MatrixStack) matrices, mouseX, mouseY, delta);
-//$$ 			optimizePufferfish.render((MatrixStack) matrices, mouseX, mouseY, delta);
-//$$ 			optimizeSalmon.render((MatrixStack) matrices, mouseX, mouseY, delta);
-//$$ 			optimizeDolphin.render((MatrixStack) matrices, mouseX, mouseY, delta);
-//$$ 			optimizeTropical.render((MatrixStack) matrices, mouseX, mouseY, delta);
-			//#else
-			optimizeCod.render(mouseX, mouseY, delta);
-			optimizePufferfish.render(mouseX, mouseY, delta);
-			optimizeSalmon.render(mouseX, mouseY, delta);
-			optimizeDolphin.render(mouseX, mouseY, delta);
-			optimizeTropical.render(mouseX, mouseY, delta);
-			//#endif
-
+			MCVer.render(optimizeCod, mouseX, mouseY, delta);
+			MCVer.render(optimizePufferfish, mouseX, mouseY, delta);
+			MCVer.render(optimizeSalmon, mouseX, mouseY, delta);
+			MCVer.render(optimizeDolphin, mouseX, mouseY, delta);
+			MCVer.render(optimizeTropical, mouseX, mouseY, delta);
 		}
 
 		MinecraftClient.getInstance().getTextureManager().bindTexture(new Identifier("lotas", "drops/fish.gif"));
-		//#if MC>=11601
-//$$ 		DrawableHelper.drawTexture((MatrixStack) matrices, width - 128, y + 24, 0.0F, 0.0F, 96, 76, 96, 76);
-		//#else
-		DrawableHelper.blit(width - 128, y + 24, 0.0F, 0.0F, 96, 76, 96, 76);
-		//#endif
+		MCVer.renderImage(width - 128, y + 24, 0.0F, 0.0F, 96, 76, 96, 76);
 	}
 
 }

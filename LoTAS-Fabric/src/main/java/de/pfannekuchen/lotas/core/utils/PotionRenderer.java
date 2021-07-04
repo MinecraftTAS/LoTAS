@@ -7,11 +7,11 @@ import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.util.Window;
 //#if MC>=11502
 //$$ import net.minecraft.client.util.math.MatrixStack;
+//#endif
 //#if MC>=11700
 //$$ import net.minecraft.util.math.Vec3f;
 //#else
-//$$ import net.minecraft.client.util.math.Vector3f;
-//#endif
+import net.minecraft.client.util.math.Vector3f;
 //#endif
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -40,8 +40,8 @@ public class PotionRenderer {
 			cp.putInt("CustomPotionColor", 0x4672A3);
 			stack.setTag(cp);
 		}
-		float f = (float) 1.0F;
-		float f1 = f / (float) stack.getMaxUseTime();
+//		float f = (float) 1.0F;
+//		float f1 = f / (float) stack.getMaxUseTime();
 
 		Window window= MinecraftClient.getInstance().window;
 

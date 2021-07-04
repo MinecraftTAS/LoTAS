@@ -3,7 +3,7 @@ plugins {
 }
 
 apply from: '../common.gradle'
-
+archivesBaseName = "LoTAS1.16.1"
 dependencies {
 	minecraft "com.mojang:minecraft:1.16.1"
 	mappings "net.fabricmc:yarn:1.16.1+build.21:v2"

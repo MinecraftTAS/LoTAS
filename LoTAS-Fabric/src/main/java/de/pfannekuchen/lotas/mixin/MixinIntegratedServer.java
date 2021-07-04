@@ -12,8 +12,8 @@ import net.minecraft.server.integrated.IntegratedServer;
 public class MixinIntegratedServer {
 	@Redirect(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/integrated/IntegratedServer;save(ZZZ)Z"))
 	public boolean redirectSave(IntegratedServer server, boolean b1, boolean b2, boolean b3) {
-		if (KeybindsUtils.shouldSavestate) {
-			if (!SavestateMod.showSavestateDone) {
+		if(!SavestateMod.showSavestateDone) {
+			if (KeybindsUtils.shouldSavestate) {
 				KeybindsUtils.shouldSavestate = false;
 				SavestateMod.savestate(null);
 			}

@@ -6,11 +6,13 @@
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
 <listEntry value="4"/>
 </listAttribute>
+<booleanAttribute key="org.eclipse.jdt.launching.ATTR_ATTR_USE_ARGFILE" value="false"/>
+<booleanAttribute key="org.eclipse.jdt.launching.ATTR_SHOW_CODEDETAILS_IN_EXCEPTION_MESSAGES" value="true"/>
 <booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_CLASSPATH_ONLY_JAR" value="false"/>
 <stringAttribute key="org.eclipse.jdt.launching.JRE_CONTAINER" value="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/CDC-1.0%Foundation-1.0"/>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="net.fabricmc.devlaunchinjector.Main"/>
 <stringAttribute key="org.eclipse.jdt.launching.MODULE_NAME" value="fabric"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="--username Pfannekuchen --uuid faed0946-bb7f-4fcc-bff1-5fb9ef75a066"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value=""/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="fabric"/>
 <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Dfabric.dli.config=${workspace_loc:LoTAS-Fabric}/versions2/fabric/.gradle/loom-cache/launch.cfg -Dfabric.dli.env=client -Dfabric.dli.main=net.fabricmc.loader.launch.knot.KnotClient"/>
 <stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="${workspace_loc:LoTAS-Fabric}/versions2/fabric/run"/>

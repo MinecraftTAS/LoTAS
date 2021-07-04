@@ -16,6 +16,7 @@ import de.pfannekuchen.lotas.core.utils.KeybindsUtils;
 import de.pfannekuchen.lotas.core.utils.TextureYoinker;
 import de.pfannekuchen.lotas.gui.HudSettings;
 import de.pfannekuchen.lotas.gui.SeedListScreen;
+import de.pfannekuchen.lotas.mods.AIManipMod;
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.client.MinecraftClient;
@@ -24,7 +25,7 @@ import net.minecraft.util.Identifier;
 public class LoTASModContainer implements ModInitializer {
 
 	public static Identifier shield;
-
+	
 	@Override
 	public void onInitialize() {
 		KeybindsUtils.registerKeybinds();
@@ -135,11 +136,7 @@ public class LoTASModContainer implements ModInitializer {
 	public void loadSeeds() throws Exception {
 		File file = new File("seeddata.txt");
 		try {
-			//#if MC>=11502
-//$$ 				URL url = new URL("http://mgnet.work/seeds/seeds1.15.2.txt");
-			//#else
 			URL url = new URL("http://mgnet.work/seeds/seeds1.14.4.txt");
-			//#endif
 			URLConnection conn = url.openConnection();
 			conn.setReadTimeout(5000);
 			file.createNewFile();

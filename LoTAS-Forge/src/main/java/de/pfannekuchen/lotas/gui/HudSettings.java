@@ -224,7 +224,7 @@ public class HudSettings extends GuiScreen {
 				//#if MC>=11200
 				message = String.format("%.3f %.3f %.3f", vec.x, vec.y, vec.z);
 				//#else
-				//$$ message = String.format("%.3f %.3f %.3f", vec.xCoord, vec.yCoord, vec.zCoord);
+//$$ 				message = String.format("%.3f %.3f %.3f", vec.xCoord, vec.yCoord, vec.zCoord);
 				//#endif
 			}
 			//#else

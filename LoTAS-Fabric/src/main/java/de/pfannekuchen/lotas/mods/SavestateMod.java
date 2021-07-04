@@ -7,11 +7,14 @@ import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.lwjgl.glfw.GLFW;
 
+import de.pfannekuchen.lotas.core.utils.EventUtils.Timer;
+import de.pfannekuchen.lotas.mixin.accessors.AccessorLevelSession;
 import de.pfannekuchen.lotas.mixin.render.gui.MixinGuiIngameMenu;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -37,8 +40,6 @@ public class SavestateMod {
 	public static boolean showLoadstateDone;
 	public static long timeTitle;
 	
-	public static boolean stillSaving;
-
 	public static boolean isLoading;
 
 	/**
@@ -48,7 +49,7 @@ public class SavestateMod {
 	public static final String generateSavestateFile() {
 		final ClientPlayerEntity p = MinecraftClient.getInstance().player;
 		final Vec3d velocity = p.getVelocity();
-		return velocity.x + ":" + velocity.y + ":" + velocity.z + ":" /*+ Timer.ticks*/;
+		return velocity.x + ":" + velocity.y + ":" + velocity.z + ":" + Timer.ticks;
 	}
 
 	/**
@@ -65,11 +66,9 @@ public class SavestateMod {
 		
 		server.save(false, true, false);
 		
-		while (stillSaving) {
-		}
 		new Thread(() -> {
 			//#if MC>=11601
-//$$ 						final String worldName = server.getSaveProperties().getLevelName();
+//$$ 				final String worldName = ((AccessorLevelSession)server).getSession().getDirectoryName();
 			//#else
 			final String worldName = server.getLevelName();
 			//#endif
