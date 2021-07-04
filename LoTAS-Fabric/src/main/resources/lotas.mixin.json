@@ -17,6 +17,7 @@
     	"accessors.AccessorCreateWorldScreen",
     	"accessors.AccessorServerPlayerEntity",
     	"accessors.AccessorItemRenderer",
+    	"accessors.AccessorButtons",
     	//#if MC>=11502
     //$$ 	"accessors.AccessorModelLoader",
     	//#endif

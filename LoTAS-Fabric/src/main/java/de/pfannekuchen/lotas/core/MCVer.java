@@ -3,6 +3,7 @@ package de.pfannekuchen.lotas.core;
 import com.mojang.blaze3d.platform.GlStateManager;
 
 import de.pfannekuchen.lotas.gui.widgets.SmallCheckboxWidget;
+import de.pfannekuchen.lotas.mixin.accessors.AccessorButtons;
 import de.pfannekuchen.lotas.mixin.accessors.AccessorScreen;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
@@ -143,6 +144,15 @@ public class MCVer {
 	}
 	//#endif
 
+	//#if MC>=11700
+//$$ 	public static ButtonWidget getButton(Screen obj, int buttonID) {
+//$$ 		return (ButtonWidget)obj.drawables;
+//$$ 	}
+	//#else
+	public static net.minecraft.client.gui.widget.AbstractButtonWidget getButton(Screen obj, int buttonID){
+		return ((AccessorButtons)obj).getButtons().get(buttonID);
+	}
+	//#endif
 	public static void render(TextFieldWidget draw, int mouseX, int mouseY, float delta) {
 		//#if MC>=11601
 //$$ 		draw.render((net.minecraft.client.util.math.MatrixStack) matrixStack, mouseX, mouseY, delta);
