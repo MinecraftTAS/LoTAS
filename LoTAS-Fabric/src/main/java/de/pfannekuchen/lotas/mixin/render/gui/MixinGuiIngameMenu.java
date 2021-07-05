@@ -228,6 +228,7 @@ public abstract class MixinGuiIngameMenu extends Screen {
 			long timeSince = System.currentTimeMillis() - SavestateMod.timeTitle;
 			if (timeSince >= 1800) {
 				SavestateMod.showSavestateDone = false;
+				MCVer.getButton(this, 9).active=SavestateMod.hasSavestate();
 				return;
 			}
 			MCVer.drawCenteredString(this, "\u00A76Savestate successful...", width / 2, 20, new Color(1F, 1F, 1F, 1F - (timeSince / 2000F)).getRGB());

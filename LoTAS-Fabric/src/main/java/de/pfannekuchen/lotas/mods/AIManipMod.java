@@ -12,9 +12,13 @@ import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 
+/**
+ * Forces a selected entity to walk to a target
+ * @author ScribbleLP
+ *
+ */
 public class AIManipMod {
-	MinecraftClient mc = MinecraftClient.getInstance();
-
+	private MinecraftClient mc = MinecraftClient.getInstance();
 	private static Vec3d target;
 
 	private int selectedIndex = 0;
@@ -30,6 +34,7 @@ public class AIManipMod {
 		orientation =  mc.player.getHorizontalFacing();
 		//#if MC>=11601
 		//#if MC>=11605
+//$$ 		//Getting the entities in the world
 //$$ 		entities = MinecraftClient.getInstance().getServer().getPlayerManager().getPlayerList().get(0).getServerWorld().getEntitiesByClass(MobEntity.class, MinecraftClient.getInstance().player.getBoundingBox().expand(64, 64, 64), Predicates.alwaysTrue()); 
 		//#else
 //$$ 		entities = MinecraftClient.getInstance().getServer().getPlayerManager().getPlayerList().get(0).getServerWorld().getEntities(MobEntity.class, MinecraftClient.getInstance().player.getBoundingBox().expand(64, 64, 64), Predicates.alwaysTrue()); 
@@ -210,6 +215,9 @@ public class AIManipMod {
 		}
 	}
 
+	/**
+	 * Sorts entities by distance from the player
+	 */
 	private void sortEntities() {
 		if(entities.isEmpty()) return;
 		entities.sort(new Comparator<MobEntity>() {
@@ -221,8 +229,8 @@ public class AIManipMod {
 			}
 		});
 	}
-
-	public class AiJob {
+	
+	private class AiJob {
 
 		final MobEntity entity;
 
@@ -237,6 +245,10 @@ public class AIManipMod {
 			this.target=target;
 		}
 
+		/**
+		 * Checks if the entity is at the target or if it's stuck
+		 * @return
+		 */
 		public boolean isFinished() {
 			double distance=target.distanceTo(entity.getPos());
 			if (distance < 1) {
@@ -252,6 +264,9 @@ public class AIManipMod {
 			}
 		}
 		
+		/**
+		 * If an entity is stuck, the timeouttimer will increase
+		 */
 		public void timeoutTick() {
 			if(prevPos==null) {
 				Vec3d pos = entity.getPos();

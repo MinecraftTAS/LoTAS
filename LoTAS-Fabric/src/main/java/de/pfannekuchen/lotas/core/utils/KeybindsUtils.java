@@ -8,6 +8,7 @@ import de.pfannekuchen.lotas.core.utils.EventUtils.Timer;
 import de.pfannekuchen.lotas.gui.HudSettings;
 import de.pfannekuchen.lotas.mods.AIManipMod;
 import de.pfannekuchen.lotas.mods.DupeMod;
+import de.pfannekuchen.lotas.mods.SpawnManipMod;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.GameMenuScreen;
@@ -81,7 +82,8 @@ public class KeybindsUtils {
 			//#endif
 		}
 		if(test.wasPressed()) {
-//			MinecraftClient.getInstance().getServer().save(false, false, false);
+//			SpawnManipMod manip=new SpawnManipMod();
+//			manip.debugSpawn();
 		}
 		wasPressed = holdStrafeKeybind.isPressed();
 	}
