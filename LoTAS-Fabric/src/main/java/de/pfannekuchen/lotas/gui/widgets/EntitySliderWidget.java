@@ -1,10 +1,10 @@
 package de.pfannekuchen.lotas.gui.widgets;
 
-import java.util.HashMap;
+import java.util.List;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 
-import de.pfannekuchen.lotas.gui.SpawnManipulationScreen;
+import de.pfannekuchen.lotas.mods.SpawnManipMod.EntityOptions;
 import net.minecraft.client.MinecraftClient;
 //#if MC>=11700
 //$$ import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
@@ -13,40 +13,11 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.AbstractButtonWidget;
 //#endif
 import net.minecraft.client.gui.widget.ButtonWidget.PressAction;
-//#if MC>=11700
-//$$ import net.minecraft.client.gui.widget.PressableWidget;
-//#endif
-//#if MC>=11601
-//$$ import net.minecraft.client.util.math.MatrixStack;
-//#endif
-import net.minecraft.enchantment.Enchantment;
 //#if MC<=11502
 import net.minecraft.enchantment.InfoEnchantment;
-//#endif
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.mob.BlazeEntity;
-import net.minecraft.entity.mob.CaveSpiderEntity;
-import net.minecraft.entity.mob.CreeperEntity;
-import net.minecraft.entity.mob.EndermanEntity;
-import net.minecraft.entity.mob.GhastEntity;
-import net.minecraft.entity.mob.HuskEntity;
-import net.minecraft.entity.mob.MagmaCubeEntity;
-import net.minecraft.entity.mob.SkeletonEntity;
-import net.minecraft.entity.mob.SlimeEntity;
-import net.minecraft.entity.mob.SpiderEntity;
-import net.minecraft.entity.mob.WitchEntity;
-import net.minecraft.entity.mob.WitherSkeletonEntity;
-import net.minecraft.entity.mob.ZombieEntity;
-import net.minecraft.entity.mob.ZombieVillagerEntity;
-import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.LiteralText;
-import net.minecraft.util.Hand;
-import net.minecraft.world.Difficulty;
 
 //#if MC>=11700
 //$$ public class EntitySliderWidget extends PressableWidget {
@@ -54,15 +25,16 @@ import net.minecraft.world.Difficulty;
 public class EntitySliderWidget extends AbstractButtonWidget {
 //#endif
 
-	public HashMap<Integer, String> entities;
+	public List<EntityOptions> entities;
 
 	private float sliderPosition = 1.0F;
 	public boolean isMouseDown;
 	private final String name;
 	private final float min;
 	private final float max;
+	
 
-	public EntitySliderWidget(int xPos, int yPos, HashMap<Integer, String> ent, int width, int height, PressAction c) {
+	public EntitySliderWidget(int xPos, int yPos, List<EntityOptions> ent, int width, int height, PressAction c) {
 		//#if MC>=11601
 //$$ 				super(xPos, yPos, width, height, new LiteralText(""));
 		//#else
@@ -76,7 +48,7 @@ public class EntitySliderWidget extends AbstractButtonWidget {
 		//#if MC>=11601
 //$$ 				this.setMessage(new LiteralText("Entity: " + ent.get(0)));
 		//#else
-		this.setMessage("Entity: " + ent.get(0));
+		this.setMessage(ent.get(0).title);
 		//#endif
 	}
 
@@ -164,9 +136,9 @@ public class EntitySliderWidget extends AbstractButtonWidget {
 					this.sliderPosition = 1.0F;
 				}
 				//#if MC>=11601
-//$$ 					setMessage(new LiteralText("Entity: " + entities.get((int) Math.round(sliderPosition * (max - min) + min))));
+//$$ 					setMessage(new LiteralText(entities.get((int) Math.round(sliderPosition * (max - min) + min)).title));
 				//#else
-				setMessage("Entity: " + entities.get((int) Math.round(sliderPosition * (max - min) + min)));
+				setMessage(entities.get((int) Math.round(sliderPosition * (max - min) + min)).title);
 				//#endif
 			}
 
@@ -218,9 +190,9 @@ public class EntitySliderWidget extends AbstractButtonWidget {
 				this.sliderPosition = 1.0F;
 			}
 			//#if MC>=11601
-//$$ 						this.setMessage(new LiteralText("Entity: " + entities.get((int) Math.round(sliderPosition * (max - min) + min))));
+//$$ 						this.setMessage(new LiteralText("Entity: " + entities.get((int) Math.round(sliderPosition * (max - min) + min)).title));
 			//#else
-			this.setMessage("Entity: " + entities.get((int) Math.round(sliderPosition * (max - min) + min)));
+			this.setMessage(entities.get((int) Math.round(sliderPosition * (max - min) + min)).title);
 			//#endif
 			this.isMouseDown = true;
 			return true;
@@ -230,150 +202,7 @@ public class EntitySliderWidget extends AbstractButtonWidget {
 	}
 
 	public LivingEntity getEntity(ServerWorld world) {
-		LivingEntity entity = new BlazeEntity(EntityType.BLAZE, world);
-		switch ((int) Math.round(sliderPosition * (max - min) + min)) {
-		case 0:
-			entity = new BlazeEntity(EntityType.BLAZE, world);
-			break;
-		case 1:
-			entity = new CaveSpiderEntity(EntityType.CAVE_SPIDER, world);
-			break;
-		case 2:
-			entity = new CreeperEntity(EntityType.CREEPER, world);
-			break;
-		case 3:
-			entity = new EndermanEntity(EntityType.ENDERMAN, world);
-			break;
-		case 4:
-			entity = new GhastEntity(EntityType.GHAST, world);
-			break;
-		case 5:
-			entity = new HuskEntity(EntityType.HUSK, world);
-			break;
-		case 6:
-			entity = new IronGolemEntity(EntityType.IRON_GOLEM, world);
-			break;
-		case 7:
-			entity = new MagmaCubeEntity(EntityType.MAGMA_CUBE, world);
-			break;
-		case 8:
-			entity = new SkeletonEntity(EntityType.SKELETON, world);
-			break;
-		case 9:
-			entity = new SlimeEntity(EntityType.SLIME, world);
-			break;
-		case 10:
-			entity = new SpiderEntity(EntityType.SPIDER, world);
-			break;
-		case 11:
-			entity = new WitchEntity(EntityType.WITCH, world);
-			break;
-		case 12:
-			entity = new WitherSkeletonEntity(EntityType.WITHER_SKELETON, world);
-			break;
-		case 13:
-			entity = new ZombieEntity(world);
-			break;
-		case 14:
-			entity = new ZombieVillagerEntity(EntityType.ZOMBIE_VILLAGER, world);
-			break;
-		}
-		if (world.getDifficulty() == Difficulty.HARD) {
-			switch ((int) Math.round(sliderPosition * (max - min) + min)) {
-			case 15:
-				entity = new SkeletonEntity(EntityType.SKELETON, world);
-				entity.setStackInHand(Hand.MAIN_HAND, addEnchants(new ItemStack(Items.BOW), SpawnManipulationScreen.skelBow));
-				break;
-			case 17:
-				entity = new SkeletonEntity(EntityType.SKELETON, world);
-				entity.setStackInHand(Hand.MAIN_HAND, addEnchants(new ItemStack(Items.BOW), SpawnManipulationScreen.skelBow));
-				entity.equipStack(EquipmentSlot.FEET, new ItemStack(Items.LEATHER_BOOTS));
-				entity.equipStack(EquipmentSlot.CHEST, new ItemStack(Items.LEATHER_CHESTPLATE));
-				entity.equipStack(EquipmentSlot.LEGS, new ItemStack(Items.LEATHER_LEGGINGS));
-				entity.equipStack(EquipmentSlot.HEAD, new ItemStack(Items.LEATHER_HELMET));
-				break;
-			case 19:
-				entity = new SkeletonEntity(EntityType.SKELETON, world);
-				entity.setStackInHand(Hand.MAIN_HAND, addEnchants(new ItemStack(Items.BOW), SpawnManipulationScreen.skelBow));
-				entity.equipStack(EquipmentSlot.FEET, new ItemStack(Items.GOLDEN_BOOTS));
-				entity.equipStack(EquipmentSlot.CHEST, new ItemStack(Items.GOLDEN_CHESTPLATE));
-				entity.equipStack(EquipmentSlot.LEGS, new ItemStack(Items.GOLDEN_LEGGINGS));
-				entity.equipStack(EquipmentSlot.HEAD, new ItemStack(Items.GOLDEN_HELMET));
-				break;
-			case 21:
-				entity = new SkeletonEntity(EntityType.SKELETON, world);
-				entity.setStackInHand(Hand.MAIN_HAND, addEnchants(new ItemStack(Items.BOW), SpawnManipulationScreen.skelBow));
-				entity.equipStack(EquipmentSlot.FEET, new ItemStack(Items.CHAINMAIL_BOOTS));
-				entity.equipStack(EquipmentSlot.CHEST, new ItemStack(Items.CHAINMAIL_CHESTPLATE));
-				entity.equipStack(EquipmentSlot.LEGS, new ItemStack(Items.CHAINMAIL_LEGGINGS));
-				entity.equipStack(EquipmentSlot.HEAD, new ItemStack(Items.CHAINMAIL_HELMET));
-				break;
-			case 23:
-				entity = new SkeletonEntity(EntityType.SKELETON, world);
-				entity.setStackInHand(Hand.MAIN_HAND, addEnchants(new ItemStack(Items.BOW), SpawnManipulationScreen.skelBow));
-				entity.equipStack(EquipmentSlot.FEET, new ItemStack(Items.IRON_BOOTS));
-				entity.equipStack(EquipmentSlot.CHEST, new ItemStack(Items.IRON_CHESTPLATE));
-				entity.equipStack(EquipmentSlot.LEGS, new ItemStack(Items.IRON_LEGGINGS));
-				entity.equipStack(EquipmentSlot.HEAD, new ItemStack(Items.IRON_HELMET));
-				break;
-			case 25:
-				entity = new SkeletonEntity(EntityType.SKELETON, world);
-				entity.setStackInHand(Hand.MAIN_HAND, addEnchants(new ItemStack(Items.BOW), SpawnManipulationScreen.skelBow));
-				entity.setStackInHand(Hand.MAIN_HAND, new ItemStack(Items.BOW));
-				entity.equipStack(EquipmentSlot.FEET, new ItemStack(Items.DIAMOND_BOOTS));
-				entity.equipStack(EquipmentSlot.CHEST, new ItemStack(Items.DIAMOND_CHESTPLATE));
-				entity.equipStack(EquipmentSlot.LEGS, new ItemStack(Items.DIAMOND_LEGGINGS));
-				entity.equipStack(EquipmentSlot.HEAD, new ItemStack(Items.DIAMOND_HELMET));
-				break;
-			case 16:
-				entity = new ZombieEntity(world);
-				entity.setStackInHand(Hand.MAIN_HAND, addEnchants(new ItemStack(Items.IRON_SWORD), SpawnManipulationScreen.zombieSword));
-				break;
-			case 18:
-				entity = new ZombieEntity(world);
-				entity.setStackInHand(Hand.MAIN_HAND, addEnchants(new ItemStack(Items.IRON_SWORD), SpawnManipulationScreen.zombieSword));
-				entity.equipStack(EquipmentSlot.FEET, new ItemStack(Items.LEATHER_BOOTS));
-				entity.equipStack(EquipmentSlot.CHEST, new ItemStack(Items.LEATHER_CHESTPLATE));
-				entity.equipStack(EquipmentSlot.LEGS, new ItemStack(Items.LEATHER_LEGGINGS));
-				entity.equipStack(EquipmentSlot.HEAD, new ItemStack(Items.LEATHER_HELMET));
-				break;
-			case 20:
-				entity = new ZombieEntity(world);
-				entity.setStackInHand(Hand.MAIN_HAND, addEnchants(new ItemStack(Items.IRON_SWORD), SpawnManipulationScreen.zombieSword));
-				entity.equipStack(EquipmentSlot.FEET, new ItemStack(Items.GOLDEN_BOOTS));
-				entity.equipStack(EquipmentSlot.CHEST, new ItemStack(Items.GOLDEN_CHESTPLATE));
-				entity.equipStack(EquipmentSlot.LEGS, new ItemStack(Items.GOLDEN_LEGGINGS));
-				entity.equipStack(EquipmentSlot.HEAD, new ItemStack(Items.GOLDEN_HELMET));
-				break;
-			case 22:
-				entity = new ZombieEntity(world);
-				entity.setStackInHand(Hand.MAIN_HAND, addEnchants(new ItemStack(Items.IRON_SWORD), SpawnManipulationScreen.zombieSword));
-				entity.equipStack(EquipmentSlot.FEET, new ItemStack(Items.CHAINMAIL_BOOTS));
-				entity.equipStack(EquipmentSlot.CHEST, new ItemStack(Items.CHAINMAIL_CHESTPLATE));
-				entity.equipStack(EquipmentSlot.LEGS, new ItemStack(Items.CHAINMAIL_LEGGINGS));
-				entity.equipStack(EquipmentSlot.HEAD, new ItemStack(Items.CHAINMAIL_HELMET));
-				break;
-			case 24:
-				entity = new ZombieEntity(world);
-				entity.setStackInHand(Hand.MAIN_HAND, addEnchants(new ItemStack(Items.IRON_SWORD), SpawnManipulationScreen.zombieSword));
-				entity.equipStack(EquipmentSlot.FEET, new ItemStack(Items.IRON_BOOTS));
-				entity.equipStack(EquipmentSlot.CHEST, new ItemStack(Items.IRON_CHESTPLATE));
-				entity.equipStack(EquipmentSlot.LEGS, new ItemStack(Items.IRON_LEGGINGS));
-				entity.equipStack(EquipmentSlot.HEAD, new ItemStack(Items.IRON_HELMET));
-				break;
-			case 26:
-				entity = new ZombieEntity(world);
-				entity.setStackInHand(Hand.MAIN_HAND, addEnchants(new ItemStack(Items.IRON_SWORD), SpawnManipulationScreen.zombieSword));
-				entity.equipStack(EquipmentSlot.FEET, new ItemStack(Items.DIAMOND_BOOTS));
-				entity.equipStack(EquipmentSlot.CHEST, new ItemStack(Items.DIAMOND_CHESTPLATE));
-				entity.equipStack(EquipmentSlot.LEGS, new ItemStack(Items.DIAMOND_LEGGINGS));
-				entity.equipStack(EquipmentSlot.HEAD, new ItemStack(Items.DIAMOND_HELMET));
-				break;
-			}
-		}
-		//		entity.inventoryArmorDropChances = new float[] { 1.0f, 1.0f, 1.0f, 1.0f };
-		//		entity.inventoryHandsDropChances = new float[] { 1.0f, 1.0f };
-		return entity;
+		return entities.get((int) Math.round(sliderPosition * (max - min) + min)).entity;
 	}
 
 	//#if MC>=11601

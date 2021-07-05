@@ -22,9 +22,9 @@ public class AIManipulationScreen extends Screen {
 
 	private final AIManipMod manip;
 
-	public TextFieldWidget xText;
-	public TextFieldWidget yText;
-	public TextFieldWidget zText;
+	private TextFieldWidget xText;
+	private TextFieldWidget yText;
+	private TextFieldWidget zText;
 
 	@Override
 	public void init() {

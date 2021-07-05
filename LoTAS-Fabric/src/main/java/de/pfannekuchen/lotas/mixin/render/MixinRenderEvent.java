@@ -10,6 +10,7 @@ import de.pfannekuchen.lotas.core.utils.RenderUtils;
 import de.pfannekuchen.lotas.gui.AIManipulationScreen;
 import de.pfannekuchen.lotas.gui.SpawnManipulationScreen;
 import de.pfannekuchen.lotas.mods.AIManipMod;
+import de.pfannekuchen.lotas.mods.SpawnManipMod;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.render.GameRenderer;
@@ -35,17 +36,23 @@ public class MixinRenderEvent {
 //$$ 						RenderUtils.applyCameraRotationOnly();
 			//#endif
 			RenderUtils.applyRenderOffset();
-
-			double renderX = ((double) ((SpawnManipulationScreen) gui).spawnX - 0.5f);
-			double renderY = ((double) ((SpawnManipulationScreen) gui).spawnY);
-			double renderZ = ((double) ((SpawnManipulationScreen) gui).spawnZ - 0.5F);
+			
+			Vec3d targetPos=SpawnManipMod.getTarget();
+			double renderX =  ((int)targetPos.x);
+			double renderY =  ((int)targetPos.y);
+			double renderZ =  ((int)targetPos.z);
 
 			GL11.glTranslated(renderX, renderY, renderZ);
 			GL11.glScalef(1, 2, 1);
 			GL11.glColor4f(28, 188, 220, 0.5f);
 			RenderUtils.drawOutlinedBox();
 			RenderUtils.drawCrossBox();
-			GL11.glColor4f(0F, 1F, 0F, 0.15F);
+			
+			if(SpawnManipMod.canSpawn()) {
+				GL11.glColor4f(0F, 1F, 0F, 0.15F);
+			}else {
+				GL11.glColor4f(1F, 0F, 0F, 0.15f);
+			}
 			RenderUtils.drawSolidBox();
 
 			GL11.glDisable(GL11.GL_BLEND);
@@ -69,9 +76,9 @@ public class MixinRenderEvent {
 			RenderUtils.applyRenderOffset();
 
 			Vec3d entityPos=AIManipMod.getSelectedEntityPos();
-			double renderX = entityPos.x - 0.5f;
-			double renderY = entityPos.y;
-			double renderZ = entityPos.z - 0.5F;
+			double renderX = ((int)entityPos.x) - 0.5f;
+			double renderY = ((int)entityPos.y);
+			double renderZ = ((int)entityPos.z) - 0.5F;
 
 			GL11.glTranslated(renderX, renderY, renderZ);
 			GL11.glScalef(1, 2, 1);
