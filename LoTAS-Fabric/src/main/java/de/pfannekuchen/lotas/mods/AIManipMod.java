@@ -64,12 +64,12 @@ public class AIManipMod {
 	public void selectNext() {
 		if(hasNext()) {
 			selectedIndex++;
+			
 			selectedEntity=entities.get(selectedIndex);
 		}
 	}
 	
 	public boolean hasNext() {
-		//2 //0
 		return entities.size()>=selectedIndex+2;
 	}
 
@@ -81,7 +81,6 @@ public class AIManipMod {
 	}
 	
 	public boolean hasPrevious() {
-		//2 //1
 		return entities.size()>0&&selectedIndex-1>=0;
 	}
 	

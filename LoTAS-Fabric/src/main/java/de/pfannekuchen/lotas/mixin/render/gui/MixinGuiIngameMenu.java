@@ -9,6 +9,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import com.google.common.base.Predicates;
+
 import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.core.utils.ConfigUtils;
 import de.pfannekuchen.lotas.core.utils.EventUtils.Timer;
@@ -28,6 +30,7 @@ import net.minecraft.client.gui.screen.GameMenuScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
@@ -128,7 +131,7 @@ public abstract class MixinGuiIngameMenu extends Screen {
 		}));
 		MCVer.addButton(this, new NewButtonWidget((width / 4) * 3 + 4, height - 20, width / 4 - 4, 20, "Manipulate AI", btn -> {
 			MinecraftClient.getInstance().openScreen(new AIManipulationScreen());
-		}));
+		})).active=!MinecraftClient.getInstance().getServer().getWorld(MinecraftClient.getInstance().player.dimension).getEntities(MobEntity.class, MinecraftClient.getInstance().player.getBoundingBox().expand(64, 64, 64), Predicates.alwaysTrue()).isEmpty();
 		MCVer.addButton(this, new NewButtonWidget(5, 55, 98, 20, "Save Items", btn -> {
 			DupeMod.save(MinecraftClient.getInstance());
 			btn.active = false;

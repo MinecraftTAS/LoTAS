@@ -37,7 +37,7 @@ public class MixinRenderEvent {
 			//#endif
 			RenderUtils.applyRenderOffset();
 			
-			Vec3d targetPos=SpawnManipMod.getTarget();
+			Vec3d targetPos=SpawnManipMod.getTargetPos();
 			double renderX =  ((int)targetPos.x);
 			double renderY =  ((int)targetPos.y);
 			double renderZ =  ((int)targetPos.z);

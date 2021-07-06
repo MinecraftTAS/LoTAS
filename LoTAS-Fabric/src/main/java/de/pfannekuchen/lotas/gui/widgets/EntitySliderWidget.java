@@ -1,5 +1,6 @@
 package de.pfannekuchen.lotas.gui.widgets;
 
+import java.util.HashMap;
 import java.util.List;
 
 import com.mojang.blaze3d.platform.GlStateManager;
@@ -12,12 +13,20 @@ import net.minecraft.client.MinecraftClient;
 //#if MC<=11605
 import net.minecraft.client.gui.widget.AbstractButtonWidget;
 //#endif
+//#if MC>=11601
+//$$ import net.minecraft.text.LiteralText;
+//$$ import net.minecraft.client.util.math.MatrixStack;
+//#endif
 import net.minecraft.client.gui.widget.ButtonWidget.PressAction;
+import net.minecraft.enchantment.Enchantment;
 //#if MC<=11502
 import net.minecraft.enchantment.InfoEnchantment;
+//#endif
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
+
+
 
 //#if MC>=11700
 //$$ public class EntitySliderWidget extends PressableWidget {
@@ -190,7 +199,7 @@ public class EntitySliderWidget extends AbstractButtonWidget {
 				this.sliderPosition = 1.0F;
 			}
 			//#if MC>=11601
-//$$ 						this.setMessage(new LiteralText("Entity: " + entities.get((int) Math.round(sliderPosition * (max - min) + min)).title));
+//$$ 			this.setMessage(new LiteralText("Entity: " + entities.get((int) Math.round(sliderPosition * (max - min) + min)).title));
 			//#else
 			this.setMessage(entities.get((int) Math.round(sliderPosition * (max - min) + min)).title);
 			//#endif

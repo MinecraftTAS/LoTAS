@@ -17,10 +17,9 @@ public class AIManipulationScreen extends Screen {
 
 	public AIManipulationScreen() {
 		super(new LiteralText(""));
-		manip = new AIManipMod();
 	}
 
-	private final AIManipMod manip;
+	private AIManipMod manip;
 
 	private TextFieldWidget xText;
 	private TextFieldWidget yText;
@@ -28,6 +27,7 @@ public class AIManipulationScreen extends Screen {
 
 	@Override
 	public void init() {
+		manip = new AIManipMod();
 		MCVer.addButton(this, new NewButtonWidget(5, 5, 98, 20, "<", btn -> {
 			manip.selectPrevious();
 			MCVer.getButton(this, 0).active = manip.hasPrevious();
@@ -43,9 +43,9 @@ public class AIManipulationScreen extends Screen {
 		}));
 
 		Vec3d target = AIManipMod.getTargetPos();
-		xText = MCVer.TextFieldWidget(MinecraftClient.getInstance().textRenderer, width / 2 - 100, height - 50, 60, 20, (int) target.x + "");
-		yText = MCVer.TextFieldWidget(MinecraftClient.getInstance().textRenderer, width / 2 - 30, height - 50, 60, 20, (int) target.y + "");
-		zText = MCVer.TextFieldWidget(MinecraftClient.getInstance().textRenderer, width / 2 + 40, height - 50, 60, 20, (int) target.z + "");
+		xText = MCVer.TextFieldWidget(MinecraftClient.getInstance().textRenderer, width / 2 - 98, height - 48, 58, 19, (int) target.x + "");
+		yText = MCVer.TextFieldWidget(MinecraftClient.getInstance().textRenderer, width / 2 - 29, height - 48, 59, 19, (int) target.y + "");
+		zText = MCVer.TextFieldWidget(MinecraftClient.getInstance().textRenderer, width / 2 + 39, height - 48, 59, 19, (int) target.z + "");
 
 		MCVer.addButton(this, new NewButtonWidget(width / 2 - 100, height - 25, 200, 20, "Change Target", button -> {
 			manip.confirm();
@@ -53,17 +53,17 @@ public class AIManipulationScreen extends Screen {
 		}));
 
 		int margin=10;
-		MCVer.addButton(this, new NewButtonWidget(width / 2 +140 - margin, height - 92, 20, 20, "\u2191", btn -> manip.changeTargetForward()));
-		MCVer.addButton(this, new NewButtonWidget(width / 2 +140 - margin, height - 52, 20, 20, "\u2193", btn -> manip.changeTargetBack()));
-		MCVer.addButton(this, new NewButtonWidget(width / 2 +120 - margin, height - 72, 20, 20, "\u2190", btn -> manip.changeTargetLeft()));
-		MCVer.addButton(this, new NewButtonWidget(width / 2 +160 - margin, height - 72, 20, 20, "\u2192", btn -> manip.changeTargetRight()));
-		MCVer.addButton(this, new NewButtonWidget(width / 2 +120 - margin, height - 30, 30, 20, "Up", btn -> manip.changeTargetUp()));
-		MCVer.addButton(this, new NewButtonWidget(width / 2 +151 - margin, height - 30, 30, 20, "Down", btn -> manip.changeTargetDown()));
-		MCVer.addButton(this, new NewButtonWidget(width / 2 - 100, height - 76, 200, 20, "Move to me", btn -> {
+		MCVer.addButton(this, new NewButtonWidget(width / 2 +140 - margin, height - 95, 20, 20, "\u2191", btn -> manip.changeTargetForward()));
+		MCVer.addButton(this, new NewButtonWidget(width / 2 +140 - margin, height - 49, 20, 20, "\u2193", btn -> manip.changeTargetBack()));
+		MCVer.addButton(this, new NewButtonWidget(width / 2 +118 - margin, height - 72, 20, 20, "\u2190", btn -> manip.changeTargetLeft()));
+		MCVer.addButton(this, new NewButtonWidget(width / 2 +162 - margin, height - 72, 20, 20, "\u2192", btn -> manip.changeTargetRight()));
+		MCVer.addButton(this, new NewButtonWidget(width / 2 +118 - margin, height - 25, 30, 20, "Up", btn -> manip.changeTargetUp()));
+		MCVer.addButton(this, new NewButtonWidget(width / 2 +153 - margin, height - 25, 30, 20, "Down", btn -> manip.changeTargetDown()));
+		MCVer.addButton(this, new NewButtonWidget(width / 2 - 100, height - 72, 200, 20, "Move to me", btn -> {
 			manip.setTargetToPlayer();
 			setTextToVec(AIManipMod.getTargetPos());
 		}));
-		MCVer.addButton(this, new NewButtonWidget(width / 2 - 100, height - 98, 200, 20, "Move to entity", btn -> {
+		MCVer.addButton(this, new NewButtonWidget(width / 2 - 100, height - 95, 200, 20, "Move to entity", btn -> {
 			manip.setTargetToEntity();
 			setTextToVec(AIManipMod.getTargetPos());
 		}));

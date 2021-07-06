@@ -4,6 +4,7 @@
     "package": "de.pfannekuchen.lotas.mixin",
     "compatibilityLevel": "JAVA_8",
     "mixins": [
+    	"accessors.AccessorMobEntity"
     ],
     "client": [
     	"MixinMinecraftClient",

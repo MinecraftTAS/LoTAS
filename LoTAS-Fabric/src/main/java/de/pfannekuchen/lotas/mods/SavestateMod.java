@@ -151,7 +151,7 @@ public class SavestateMod {
 			motionX = Double.parseDouble(data.split(":")[0]);
 			motionY = Double.parseDouble(data.split(":")[1]);
 			motionZ = Double.parseDouble(data.split(":")[2]);
-			//Timer.ticks = Integer.parseInt(data.split(":")[3]);
+			Timer.ticks = Integer.parseInt(data.split(":")[3]);
 			applyVelocity = true;
 			TrackerFile.increaseLoadstates(savestatesDir, worldName);
 		} catch (NumberFormatException | IOException e) {
