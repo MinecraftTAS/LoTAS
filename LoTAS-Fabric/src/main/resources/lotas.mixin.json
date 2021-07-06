@@ -41,7 +41,8 @@
 		"patches.MixinServerPlayerEntityPatch",
 		"patches.MixinEnderPearlPatch",
 		"patches.MixinUnbreakingPatch",
-		"patches.MixinItemEntity"
+		"patches.MixinItemEntity",
+		"patches.MixinPiglinBrainPatch"
 	],
   	"injectors": {
     	"defaultRequire": 1

@@ -18,6 +18,7 @@ import de.pfannekuchen.lotas.dropmanipulation.drops.entitydrops.MonsterDropManip
 import de.pfannekuchen.lotas.dropmanipulation.drops.entitydrops.NetherMobDropManipulation;
 import de.pfannekuchen.lotas.dropmanipulation.drops.entitydrops.PassiveDropManipulation;
 import de.pfannekuchen.lotas.dropmanipulation.drops.entitydrops.ZombieDropManipulation;
+import de.pfannekuchen.lotas.dropmanipulation.drops.rest.BarteringDropManipulation;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.GameMenuScreen;
@@ -56,6 +57,7 @@ public class DropManipulationScreen extends Screen {
 		manipulations.add(new ZombieDropManipulation(0, 0, 0, 0));
 		manipulations.add(new DrownedDropManipulation(0, 0, 0, 0));
 		manipulations.add(new FishDropManipulation(0, 0, 0, 0));
+		manipulations.add(new BarteringDropManipulation(0, 0, 0, 0));
 	}
 
 	public DropManipulationScreen(GameMenuScreen gameMenuScreen) {
@@ -74,6 +76,24 @@ public class DropManipulationScreen extends Screen {
 		super.init();
 	}
 
+	@Override
+	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+		manipulations.get(selected).keyPressed(keyCode, scanCode, modifiers);
+		return super.keyPressed(keyCode, scanCode, modifiers);
+	}
+	
+	@Override
+	public boolean charTyped(char chr, int keyCode) {
+		manipulations.get(selected).charTyped(chr, keyCode);
+		return super.charTyped(chr, keyCode);
+	}
+
+	@Override
+	public boolean mouseScrolled(double d, double e, double amount) {
+		manipulations.get(selected).mouseScrolled(d, e, amount);
+		return super.mouseScrolled(d, e, amount);
+	}
+	
 	@Override
 	public boolean mouseClicked(double mouseX, double mouseY, int button) {
 		manipulations.get(selected).mouseAction(mouseX, mouseY, button);
@@ -192,7 +212,19 @@ public class DropManipulationScreen extends Screen {
 		public abstract void update();
 
 		public abstract void mouseAction(double mouseX, double mouseY, int button);
-
+		
+		public void mouseScrolled(double d, double e, double amount) {
+			
+		}
+		
+		public void charTyped(char chr, int keyCode) {
+			
+		}
+		
+		public void keyPressed(int keyCode, int scanCode, int modifiers) {
+			
+		}
+		
 		public abstract void render(Object matrices, int mouseX, int mouseY, float delta);
 	}
 }
