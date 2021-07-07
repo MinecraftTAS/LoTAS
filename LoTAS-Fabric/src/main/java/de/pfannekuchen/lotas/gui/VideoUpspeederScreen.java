@@ -93,7 +93,7 @@ public class VideoUpspeederScreen extends Screen {
 					dialog.setVisible(true);
 					try {
 						selectedFile = dialog.getFiles()[0];
-						((EditBox)buttons).setValue(selectedFile.getAbsolutePath());
+						((EditBox)buttons.get(0)).setValue(selectedFile.getAbsolutePath());
 						FFmpegProbeResult result = VideoUpspeeder.ffprobe(selectedFile);
 
 						videoFormat = result.format.format_name.split(",")[0];

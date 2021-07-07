@@ -137,7 +137,7 @@ public class MixinMinecraftClient {
 			forward = forward * f;
 			float f1 = Mth.sin(player.yRot * 0.017453292F);
 			float f2 = Mth.cos(player.yRot * 0.017453292F);
-			MCVer.setXYZ(player, (strafe * f2 - forward * f1), up, (forward * f2 + strafe * f1));
+			MCVer.setXYZ(player, MCVer.getX(player) + (strafe * f2 - forward * f1), MCVer.getY(player) + up, MCVer.getZ(player) + (forward * f2 + strafe * f1));
 		}
 	}
 

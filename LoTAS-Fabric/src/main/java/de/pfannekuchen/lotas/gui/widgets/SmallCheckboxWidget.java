@@ -48,22 +48,17 @@ public class SmallCheckboxWidget extends AbstractButton {
 	//#endif
 		Minecraft minecraftClient = Minecraft.getInstance();
 		minecraftClient.getTextureManager().bind(TEXTURE);
-		MCVer.enableDepthTest();
-		MCVer.color4f(1.0F, 1.0F, 1.0F, this.alpha);
-		MCVer.enableBlend();
-		
-		MCVer.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-		MCVer.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 		MCVer.blit(this.x, this.y, 0.0F, 0.0F, 11, this.height, 11, 11);
 		//#if MC>=11600
 //$$ 		this.renderBg(MCVer.stack, minecraftClient, mouseX, mouseY);
 //$$ 		MCVer.drawShadow(this.getMessage().getString(), this.x + 16, this.y + (this.height - 8) / 2, 14737632 | Mth.ceil(this.alpha * 255.0F) << 24);
 		//#else
 		this.renderBg(minecraftClient, mouseX, mouseY);
-		MCVer.drawShadow(this.getMessage(), this.x + 16, this.y + (this.height - 8) / 2, 14737632 | Mth.ceil(this.alpha * 255.0F) << 24);
+		drawString(Minecraft.getInstance().font, this.getMessage(), this.x + 16, this.y + (this.height - 8) / 2, 14737632 | Mth.ceil(this.alpha * 255.0F) << 24);
 		//#endif
-		if (isChecked())
+		if (isChecked()) {
 			MCVer.drawShadow("x", this.x + 3, this.y + 1, 0xFFFFFF);
+		}
 	}
 
 	public void silentPress(boolean f) {
