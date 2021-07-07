@@ -1,5 +1,7 @@
 package de.pfannekuchen.lotas.mixin;
 
+import java.io.IOException;
+
 import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -7,6 +9,8 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import com.mojang.blaze3d.platform.NativeImage;
 
 import de.pfannekuchen.lotas.core.LoTASModContainer;
 import de.pfannekuchen.lotas.core.MCVer;
@@ -23,6 +27,8 @@ import net.minecraft.client.gui.screens.PauseScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.LevelRenderer;
+import net.minecraft.client.renderer.texture.DynamicTexture;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
 @Mixin(Minecraft.class)
@@ -66,6 +72,34 @@ public class MixinMinecraftClient {
 	@Inject(method = "init", at = @At("TAIL"))
 	//#endif
 	public void loadRenderingLate(CallbackInfo ci) {
+		// load textures
+		try {
+			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "drops/apple.png"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("deadbush.png"))));
+			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "drops/carrot.png"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("carrot.png"))));
+			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "drops/deadbush.png"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("deadbush.png"))));
+			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "drops/diamond_ore.png"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("diamond_ore.png"))));
+			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "drops/drowned.png"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("drowned.png"))));
+			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "drops/fish.gif"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("fish.gif"))));
+			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "drops/glowstone.png"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("glowstone.png"))));
+			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "drops/gold.png"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("gold.png"))));
+			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "drops/gravel.png"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("gravel.png"))));
+			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "drops/iron.png"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("iron.png"))));
+			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "drops/leaf.png"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("leaf.png"))));
+			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "drops/plants.png"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("plants.png"))));
+			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "drops/potato.png"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("potato.png"))));
+			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "drops/sapling.png"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("sapling.png"))));
+			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "drops/sealantern.gif"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("sealantern.gif"))));
+			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "drops/sheep.png"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("sheep.png"))));
+			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "drops/spider.png"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("spider.png"))));
+			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "drops/stick.png"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("stick.png"))));
+			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "drops/wither_skeleton.png"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("wither_skeleton.png"))));
+			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "drops/zombie.png"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("zombie.png"))));
+			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "dragon/breath.png"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("breath.png"))));
+			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "dragon/flying.png"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("flying.png"))));
+			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "dragon/shooting.png"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("shooting.png"))));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		LoTASModContainer.loadShields();
 		KeybindsUtils.registerKeybinds();
 	}

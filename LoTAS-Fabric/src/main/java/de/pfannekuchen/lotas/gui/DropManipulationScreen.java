@@ -11,7 +11,7 @@ import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.dropmanipulation.drops.blockdrops.DeadbushDropManipulation;
 import de.pfannekuchen.lotas.dropmanipulation.drops.blockdrops.GlowstoneDropManipulation;
 import de.pfannekuchen.lotas.dropmanipulation.drops.blockdrops.GravelDropManipulation;
-import de.pfannekuchen.lotas.dropmanipulation.drops.blockdrops.LeaveDropManipulation;
+import de.pfannekuchen.lotas.dropmanipulation.drops.blockdrops.LeafDropManipulation;
 import de.pfannekuchen.lotas.dropmanipulation.drops.blockdrops.OreDropManipulation;
 import de.pfannekuchen.lotas.dropmanipulation.drops.blockdrops.PlantsDropManipulation;
 import de.pfannekuchen.lotas.dropmanipulation.drops.blockdrops.SealanternDropManipulation;
@@ -39,7 +39,7 @@ public class DropManipulationScreen extends Screen {
 	static {
 		manipulations = new ArrayList<>();
 		manipulations.add(new GravelDropManipulation(0, 0, 0, 0));
-		manipulations.add(new LeaveDropManipulation(0, 0, 0, 0));
+		manipulations.add(new LeafDropManipulation(0, 0, 0, 0));
 		manipulations.add(new PlantsDropManipulation(0, 0, 0, 0));
 		manipulations.add(new DeadbushDropManipulation(0, 0, 0, 0));
 		manipulations.add(new GlowstoneDropManipulation(0, 0, 0, 0));

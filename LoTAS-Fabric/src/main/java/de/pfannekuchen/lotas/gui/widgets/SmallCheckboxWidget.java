@@ -2,8 +2,6 @@ package de.pfannekuchen.lotas.gui.widgets;
 
 import java.util.function.Consumer;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-
 import de.pfannekuchen.lotas.core.MCVer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractButton;
@@ -57,6 +55,7 @@ public class SmallCheckboxWidget extends AbstractButton {
 		drawString(Minecraft.getInstance().font, this.getMessage(), this.x + 16, this.y + (this.height - 8) / 2, 14737632 | Mth.ceil(this.alpha * 255.0F) << 24);
 		//#endif
 		if (isChecked()) {
+			MCVer.disableDepthTest();
 			MCVer.drawShadow("x", this.x + 3, this.y + 1, 0xFFFFFF);
 		}
 	}

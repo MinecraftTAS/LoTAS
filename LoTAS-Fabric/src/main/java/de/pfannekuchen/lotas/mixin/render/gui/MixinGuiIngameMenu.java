@@ -91,8 +91,7 @@ public abstract class MixinGuiIngameMenu extends Screen {
 
 		addButton(MCVer.Button((width / 4) * 1 + 2, height - 20, width / 4 - 2, 20, "Manipulate Dragon", btn -> {
 			Minecraft.getInstance().setScreen(new DragonManipulationScreen((PauseScreen) (Object) this));
-		}));
-		
+		})).active = MCVer.getCurrentLevel().getDragons().size() > 0;
 		addButton(MCVer.Button((width / 4) * 2 + 3, height - 20, width / 4 - 2, 20, "Manipulate Spawning", btn -> {
 			Minecraft.getInstance().setScreen(new SpawnManipulationScreen());
 		}));

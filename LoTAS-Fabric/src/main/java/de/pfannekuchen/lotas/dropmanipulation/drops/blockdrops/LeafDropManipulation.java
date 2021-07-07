@@ -16,24 +16,24 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class LeaveDropManipulation extends DropManipulationScreen.DropManipulation {
+public class LeafDropManipulation extends DropManipulationScreen.DropManipulation {
 
 	public static ImageButton dropApple = new ImageButton(x, y, c -> {
-		LeaveDropManipulation.dropApple.setToggled(!LeaveDropManipulation.dropApple.isToggled());
+		LeafDropManipulation.dropApple.setToggled(!LeafDropManipulation.dropApple.isToggled());
 	}, new ResourceLocation("lotas", "drops/apple.png"));
 	public static ImageButton dropStick = new ImageButton(x, y, c -> {
-		LeaveDropManipulation.dropStick.setToggled(!LeaveDropManipulation.dropStick.isToggled());
+		LeafDropManipulation.dropStick.setToggled(!LeafDropManipulation.dropStick.isToggled());
 	}, new ResourceLocation("lotas", "drops/stick.png"));
 	public static ImageButton dropSapling = new ImageButton(x, y, c -> {
-		LeaveDropManipulation.dropSapling.setToggled(!LeaveDropManipulation.dropSapling.isToggled());
+		LeafDropManipulation.dropSapling.setToggled(!LeafDropManipulation.dropSapling.isToggled());
 	}, new ResourceLocation("lotas", "drops/sapling.png"));
 
-	public LeaveDropManipulation(int x, int y, int width, int height) {
-		LeaveDropManipulation.x = x;
-		LeaveDropManipulation.y = y;
-		LeaveDropManipulation.width = width;
-		LeaveDropManipulation.height = height;
-		enabled = MCVer.Checkbox(x, y, 150, 20, "Override Leave Drops", false);
+	public LeafDropManipulation(int x, int y, int width, int height) {
+		LeafDropManipulation.x = x;
+		LeafDropManipulation.y = y;
+		LeafDropManipulation.width = width;
+		LeafDropManipulation.height = height;
+		enabled = MCVer.Checkbox(x, y, 150, 20, "Override Leaf Drops", false);
 	}
 
 	@Override
@@ -112,7 +112,7 @@ public class LeaveDropManipulation extends DropManipulationScreen.DropManipulati
 			MCVer.render(dropSapling, mouseX, mouseY, delta);
 		}
 
-		Minecraft.getInstance().getTextureManager().bind(new ResourceLocation("lotas", "drops/leave.png"));
+		Minecraft.getInstance().getTextureManager().bind(new ResourceLocation("lotas", "drops/leaf.png"));
 		MCVer.blit(width - 128, y + 24, 0.0F, 0.0F, 96, 96, 96, 96);
 	}
 

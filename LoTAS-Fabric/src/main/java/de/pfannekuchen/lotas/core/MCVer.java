@@ -75,6 +75,7 @@ public class MCVer {
 //$$ 		GuiComponent.fill(stack, a, b, c, d, e);
 //$$ 	}
 //$$ 	public static void drawCenteredString(Screen s, String text, int x, int y, int color) {
+//$$ 		if (text == null) text = " ";
 		//#if MC>=11606
 //$$ 		Screen.drawCenteredString(stack, Minecraft.getInstance().font, text, x, y, color);
 		//#else
