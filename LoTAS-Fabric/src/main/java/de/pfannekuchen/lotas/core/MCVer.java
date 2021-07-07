@@ -113,7 +113,7 @@ public class MCVer {
 		return new Checkbox(i, j, k, l, text, bl);
 	}
 	public static Button Button(int i, int j, int k, int l, String text, OnPress onpress) {
-		return MCVer.Button(i, j, k, l, text, onpress);
+		return new Button(i, j, k, l, text, onpress);
 	}
 	public static void blit(int i, int j, float f, float g, int k, int l, int m, int n) {
 		GuiComponent.blit(i, j, k, f, g, l, m, n, n);

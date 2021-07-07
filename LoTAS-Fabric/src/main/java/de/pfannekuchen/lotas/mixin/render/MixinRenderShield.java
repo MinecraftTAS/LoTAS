@@ -2,10 +2,8 @@ package de.pfannekuchen.lotas.mixin.render;
 
 import org.spongepowered.asm.mixin.Mixin;
 
-import net.minecraft.client.Minecraft;
-
 //#if MC>=11500
-//$$ @Mixin(Minecraft.class)
+//$$ @Mixin(net.minecraft.client.Minecraft.class)
 //$$ public class MixinRenderShield {
 //$$ 	// TODO: Fix Shields
 //$$ }
