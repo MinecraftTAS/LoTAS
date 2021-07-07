@@ -68,7 +68,7 @@ public abstract class MixinGuiIngameMenu extends Screen {
 		MCVer.addButton(this, new NewButtonWidget(this.width / 2 - 102, this.height / 4 + 48 + -16 + 24 + 24, 98, 20, "Savestate", btn -> {
 			if (Keyboard.isPressed(GLFW.GLFW_KEY_LEFT_SHIFT)) {
 				//#if MC>=11601
-//$$ 							    savestateName = new TextFieldWidget(MinecraftClient.getInstance().textRenderer, this.width / 2 - 100, this.height / 4 + 96 + -16, 98, 20, LiteralText.EMPTY);
+//$$ 				savestateName = new TextFieldWidget(MinecraftClient.getInstance().textRenderer, this.width / 2 - 100, this.height / 4 + 96 + -16, 98, 20, LiteralText.EMPTY);
 				//#else
 				savestateName = new TextFieldWidget(MinecraftClient.getInstance().textRenderer, this.width / 2 - 100, this.height / 4 + 96 + -16, 98, 20, "");
 				//#endif
@@ -86,7 +86,7 @@ public abstract class MixinGuiIngameMenu extends Screen {
 		MCVer.addButton(this, new NewButtonWidget(5, 15, 48, 20, "+", b -> {
 			if (Keyboard.isPressed(GLFW.GLFW_KEY_LEFT_SHIFT)) {
 				//#if MC>=11601
-//$$ 					    tickrateField = new TextFieldWidget(MinecraftClient.getInstance().textRenderer, 4, 15, 103, 20, LiteralText.EMPTY);
+//$$ 				tickrateField = new TextFieldWidget(MinecraftClient.getInstance().textRenderer, 4, 15, 103, 20, LiteralText.EMPTY);
 				//#else
 				tickrateField = new TextFieldWidget(MinecraftClient.getInstance().textRenderer, 4, 15, 103, 20, "");
 				//#endif
@@ -101,7 +101,7 @@ public abstract class MixinGuiIngameMenu extends Screen {
 		MCVer.addButton(this, new NewButtonWidget(55, 15, 48, 20, "-", b -> {
 			if (Keyboard.isPressed(GLFW.GLFW_KEY_LEFT_SHIFT)) {
 				//#if MC>=11601
-//$$ 					    tickrateField = new TextFieldWidget(MinecraftClient.getInstance().textRenderer, 4, 15, 103, 20, LiteralText.EMPTY);
+//$$ 				tickrateField = new TextFieldWidget(MinecraftClient.getInstance().textRenderer, 4, 15, 103, 20, LiteralText.EMPTY);
 				//#else
 				tickrateField = new TextFieldWidget(MinecraftClient.getInstance().textRenderer, 4, 15, 103, 20, "");
 				//#endif
@@ -117,21 +117,18 @@ public abstract class MixinGuiIngameMenu extends Screen {
 			MinecraftClient.getInstance().openScreen(new DropManipulationScreen((GameMenuScreen) (Object) this));
 		}));
 
-		//#if MC>=11601
-//$$ 		((NewButtonWidget) MCVer.addButton(this, new NewButtonWidget((width / 4) * 1 + 2, height - 20, width / 4 - 2, 20, "Manipulate Dragon", btn -> {
-//$$ 			MinecraftClient.getInstance().openScreen(new DragonManipulationScreen((GameMenuScreen) (Object) this));
-//$$ 		}))).active = MinecraftClient.getInstance().getServer().getWorld(World.END).getAliveEnderDragons().size() >= 1;
-		//#else
 		((NewButtonWidget) MCVer.addButton(this, new NewButtonWidget((width / 4) * 1 + 2, height - 20, width / 4 - 2, 20, "Manipulate Dragon", btn -> {
 			MinecraftClient.getInstance().openScreen(new DragonManipulationScreen((GameMenuScreen) (Object) this));
-		}))).active = MinecraftClient.getInstance().getServer().getWorld(DimensionType.THE_END).getAliveEnderDragons().size() >= 1;
-		//#endif
+		}))).active = MCVer.getServerWorld("THE_END").getAliveEnderDragons().size() >= 1;
+		
 		MCVer.addButton(this, new NewButtonWidget((width / 4) * 2 + 3, height - 20, width / 4 - 2, 20, "Manipulate Spawning", btn -> {
 			MinecraftClient.getInstance().openScreen(new SpawnManipulationScreen());
 		}));
+		
 		MCVer.addButton(this, new NewButtonWidget((width / 4) * 3 + 4, height - 20, width / 4 - 4, 20, "Manipulate AI", btn -> {
 			MinecraftClient.getInstance().openScreen(new AIManipulationScreen());
-		})).active=!MinecraftClient.getInstance().getServer().getWorld(MinecraftClient.getInstance().player.dimension).getEntities(MobEntity.class, MinecraftClient.getInstance().player.getBoundingBox().expand(64, 64, 64), Predicates.alwaysTrue()).isEmpty();
+ 		})).active=!MCVer.getEntities(MCVer.getServerWorld(MinecraftClient.getInstance().player), MobEntity.class, MinecraftClient.getInstance().player.getBoundingBox().expand(64, 64, 64), Predicates.alwaysTrue()).isEmpty();
+		
 		MCVer.addButton(this, new NewButtonWidget(5, 55, 98, 20, "Save Items", btn -> {
 			DupeMod.save(MinecraftClient.getInstance());
 			btn.active = false;

@@ -117,7 +117,7 @@ public class SpawnManipulationScreen extends Screen {
 		zText.mouseClicked(mouseX, mouseY, mouseButton);
 		boolean b = super.mouseClicked(mouseX, mouseY, mouseButton);
 		manip.setEntity(slider.getEntity(world));
-		buttons.get(buttons.size() - 3).active=SpawnManipMod.canSpawn();
+		MCVer.getButton(this, MCVer.getButtonSize(this)-3).active=SpawnManipMod.canSpawn();
 		setTextToVec(SpawnManipMod.getTargetPos());
 		return b;
 	}
@@ -127,7 +127,7 @@ public class SpawnManipulationScreen extends Screen {
 	public boolean mouseReleased(double mouseX, double mouseY, int state) {
 		boolean b = super.mouseReleased(mouseX, mouseY, state);
 		manip.setEntity(slider.getEntity(world));
-		buttons.get(buttons.size() - 3).active=SpawnManipMod.canSpawn();
+		MCVer.getButton(this, MCVer.getButtonSize(this)-3).active=SpawnManipMod.canSpawn();
 		setTextToVec(SpawnManipMod.getTargetPos());
 		return b;
 	}

@@ -2,6 +2,7 @@ package de.pfannekuchen.lotas.mixin.render.gui;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -110,30 +111,14 @@ public abstract class MixinGuiMainMenu extends Screen {
 		}
 	}
 
-	//#if MC>=11601
-	//#if MC>=11605
-	//#if MC>=11700
-//$$ 	@org.spongepowered.asm.mixin.injection.ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/TitleScreen;drawCenteredText(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/font/TextRenderer;Ljava/lang/String;III)V"))
-//$$     private String modifyText(String original) {
-//$$         return "TaS iS cHeAtInG !!1";
-		//#else
-//$$ 		@Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/TitleScreen;drawCenteredString(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/font/TextRenderer;Ljava/lang/String;III)V"))
-//$$ 	private void redirectdrawSplash(net.minecraft.client.util.math.MatrixStack matrices, TextRenderer textRenderer, String str, int centerX, int y, int color) {
-//$$ 		TitleScreen.drawCenteredString(matrices, textRenderer, "TaS iS cHeAtInG !!1", centerX, y, color);
-		//#endif
-//$$ 	}
-	//#else
-//$$ 	@Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/TitleScreen;drawCenteredString(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/font/TextRenderer;Ljava/lang/String;III)V"))
-//$$ 	private void redirectdrawSplash(TitleScreen titleScreen, net.minecraft.client.util.math.MatrixStack matrices, TextRenderer textRenderer, String str, int centerX, int y, int color) {
-//$$ 		titleScreen.drawCenteredString(matrices, textRenderer, "TaS iS cHeAtInG !!1", centerX, y, color);
-//$$ 	} 
-	//#endif    
-	//#else
-	@Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/TitleScreen;drawCenteredString(Lnet/minecraft/client/font/TextRenderer;Ljava/lang/String;III)V"))
-	private void redirectdrawSplash(TitleScreen titleScreen, TextRenderer textRenderer, String str, int centerX, int y, int color) {
-		titleScreen.drawCenteredString(textRenderer, "TaS iS cHeAtInG !!1", centerX, y, color);
+	
+	@Shadow
+	private String splashText;
+	
+	@Inject(method="init", at = @At("HEAD"))
+	private void changeSplash(CallbackInfo ci) {
+		splashText="TaS iS cHeAtInG !!1";
 	}
-	//#endif
 
 	/**
 	 * @reason Why do you want me to put this here javac

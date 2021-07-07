@@ -1,5 +1,10 @@
 package de.pfannekuchen.lotas.core;
 
+import java.util.List;
+import java.util.function.Predicate;
+
+import org.jetbrains.annotations.Nullable;
+
 import com.mojang.blaze3d.platform.GlStateManager;
 
 import de.pfannekuchen.lotas.gui.widgets.SmallCheckboxWidget;
@@ -13,9 +18,16 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.CheckboxWidget;
 //#if MC>=11601
 //$$ import net.minecraft.text.LiteralText;
+//$$ import net.minecraft.util.registry.RegistryKey;
+//$$ import net.minecraft.world.World;
 //#endif
 import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.text.LiteralText;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.math.Box;
+import net.minecraft.world.dimension.DimensionType;
 
 public class MCVer {
 
@@ -146,13 +158,24 @@ public class MCVer {
 
 	//#if MC>=11700
 //$$ 	public static ButtonWidget getButton(Screen obj, int buttonID) {
-//$$ 		return (ButtonWidget)obj.drawables;
+//$$ 		return (ButtonWidget)obj.drawables.get(buttonID);
 //$$ 	}
 	//#else
 	public static net.minecraft.client.gui.widget.AbstractButtonWidget getButton(Screen obj, int buttonID){
 		return ((AccessorButtons)obj).getButtons().get(buttonID);
 	}
 	//#endif
+	
+	//#if MC>=11700
+//$$ 	public static int getButtonSize(Screen obj) {
+//$$ 		return obj.drawables.size();
+//$$ 	}
+	//#else
+	public static int getButtonSize(Screen obj){
+		return ((AccessorButtons)obj).getButtons().size();
+	}
+	//#endif
+	
 	public static void render(TextFieldWidget draw, int mouseX, int mouseY, float delta) {
 		//#if MC>=11601
 //$$ 		draw.render((net.minecraft.client.util.math.MatrixStack) matrixStack, mouseX, mouseY, delta);
@@ -181,4 +204,45 @@ public class MCVer {
 		//#endif
 	}
 	
+	public static ServerWorld getServerWorld(PlayerEntity player) {
+		//#if MC>=11601
+//$$ 		return MinecraftClient.getInstance().getServer().getWorld(player.getEntityWorld().getRegistryKey());
+		//#else
+		return MinecraftClient.getInstance().getServer().getWorld(player.dimension);
+		//#endif
+	}
+	
+	public static ServerWorld getServerWorld(String world) {
+		//#if MC>=11601
+//$$ 		if(world.equals("OVERWORLD")) return MinecraftClient.getInstance().getServer().getWorld(World.OVERWORLD);
+//$$ 		else if(world.equals("THE_NETHER")) return MinecraftClient.getInstance().getServer().getWorld(World.NETHER);
+//$$ 		else if(world.equals("THE_END")) return MinecraftClient.getInstance().getServer().getWorld(World.END);
+//$$ 		else return null;
+		//#else
+		if(world.equals("OVERWORLD")) return MinecraftClient.getInstance().getServer().getWorld(DimensionType.OVERWORLD);
+		else if(world.equals("THE_NETHER")) return MinecraftClient.getInstance().getServer().getWorld(DimensionType.THE_NETHER);
+		else if(world.equals("THE_END")) return MinecraftClient.getInstance().getServer().getWorld(DimensionType.THE_END);
+		else return null;
+		//#endif
+	}
+	
+	public static List<MobEntity> getEntities(ServerWorld world, Class<? extends MobEntity> entityClass, Box box, @Nullable Predicate<? super MobEntity> predicate) {
+		//#if MC>=11605
+		//#if MC>=11700
+//$$ 		return (List<MobEntity>) world.getEntitiesByClass(entityClass, box, predicate);
+		//#else
+//$$ 		return world.getEntitiesByClass(entityClass, box, predicate);
+		//#endif
+		//#else
+		return world.getEntities(entityClass, box, predicate);
+		//#endif
+	}
+	
+	public static boolean doesNotCollide(ServerWorld world, Entity entity) {
+		//#if MC>=11605
+//$$ 		return world.getBlockCollisions(entity, entity.getBoundingBox()).count()==0;
+		//#else
+		return world.doesNotCollide(entity);
+		//#endif
+	}
 }

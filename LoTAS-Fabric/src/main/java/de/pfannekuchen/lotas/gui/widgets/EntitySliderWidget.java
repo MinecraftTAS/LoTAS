@@ -9,6 +9,7 @@ import de.pfannekuchen.lotas.mods.SpawnManipMod.EntityOptions;
 import net.minecraft.client.MinecraftClient;
 //#if MC>=11700
 //$$ import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
+//$$ import net.minecraft.client.gui.widget.PressableWidget;
 //#endif
 //#if MC<=11605
 import net.minecraft.client.gui.widget.AbstractButtonWidget;
@@ -55,7 +56,7 @@ public class EntitySliderWidget extends AbstractButtonWidget {
 		this.max = ent.size() - 1;
 		this.sliderPosition = -min / (max - min);
 		//#if MC>=11601
-//$$ 				this.setMessage(new LiteralText("Entity: " + ent.get(0)));
+//$$ 				this.setMessage(new LiteralText(ent.get(0).title));
 		//#else
 		this.setMessage(ent.get(0).title);
 		//#endif
@@ -199,7 +200,7 @@ public class EntitySliderWidget extends AbstractButtonWidget {
 				this.sliderPosition = 1.0F;
 			}
 			//#if MC>=11601
-//$$ 			this.setMessage(new LiteralText("Entity: " + entities.get((int) Math.round(sliderPosition * (max - min) + min)).title));
+//$$ 			this.setMessage(new LiteralText(entities.get((int) Math.round(sliderPosition * (max - min) + min)).title));
 			//#else
 			this.setMessage(entities.get((int) Math.round(sliderPosition * (max - min) + min)).title);
 			//#endif

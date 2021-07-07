@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import de.pfannekuchen.lotas.core.MCVer;
+import de.pfannekuchen.lotas.mixin.accessors.AccessorDimensionTypes;
 import de.pfannekuchen.lotas.mixin.accessors.AccessorMobEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.enchantment.Enchantments;
@@ -78,10 +80,18 @@ public class SpawnManipMod {
 	}
 	
 	public void debugSpawn() {
+		//#if MC>=11601
+//$$ 		ServerWorld world=mc.getServer().getWorld(mc.player.world.getRegistryKey());
+		//#else
 		ServerWorld world=mc.getServer().getWorld(mc.player.dimension);
+		//#endif
 		Entity entity = new SkeletonEntity(EntityType.SKELETON, world);
 		entity.updatePosition(target.x, target.y, target.z);
+		//#if MC>=11601
+//$$ 		((MobEntity)entity).initialize(world, world.getLocalDifficulty(entity.getBlockPos()), net.minecraft.entity.SpawnReason.NATURAL, null, null);
+		//#else
 		((MobEntity)entity).initialize(world, world.getLocalDifficulty(entity.getBlockPos()), SpawnType.NATURAL, null, null);
+		//#endif
 		world.spawnEntity(entity);
 	}
 	
@@ -91,8 +101,16 @@ public class SpawnManipMod {
 	
 	public void confirm() {
 		if(canSpawn()) {
+			//#if MC>=11601
+//$$ 			ServerWorld world=mc.getServer().getWorld(mc.player.world.getRegistryKey());
+			//#else
 			ServerWorld world=mc.getServer().getWorld(mc.player.dimension);
-			entity.updatePosition(Math.round(target.x)-0.5, Math.round(target.y), Math.round(target.z)-0.5);
+			//#endif
+			int targetX=(int) (Math.round(target.x)-0.5);
+			int targetY=(int) Math.round(target.y);
+			int targetZ=(int) (Math.round(target.z)-0.5);
+			
+			entity.updatePosition(targetX, targetY, targetZ);
 			world.spawnEntity(entity);
 		}
 	}
@@ -187,12 +205,16 @@ public class SpawnManipMod {
 	
 	public List<EntityOptions> getManipList(){
 		List<EntityOptions> entities=new ArrayList<EntityOptions>();
+		//#if MC>=11601
+//$$ 		DimensionType dimension = mc.player.getEntityWorld().getDimension();
+		//#else
 		DimensionType dimension = mc.player.dimension;
+		//#endif
 		ServerWorld world = mc.getServer().getPlayerManager().getPlayerList().get(0).getServerWorld();
 		float[] armor={1f,1f,1f,1f};
 		float[] hand= {1f,1f};
 		
-		if(dimension == DimensionType.OVERWORLD) {
+		if(dimension == AccessorDimensionTypes.getOverworld()) {
 			entities.add(new EntityOptions("Cave Spider", new CaveSpiderEntity(EntityType.CAVE_SPIDER, world)));
 			entities.add(new EntityOptions("Creeper", new CreeperEntity(EntityType.CREEPER, world)));
 			entities.add(new EntityOptions("Enderman", new EndermanEntity(EntityType.ENDERMAN, world)));
@@ -321,7 +343,7 @@ public class SpawnManipMod {
 				((AccessorMobEntity)entity).setHandDropChances(hand);
 				entities.add(new EntityOptions("Zombie (Diamond Armor, Enchanted Sword)", entity));
 			}
-		}else if(dimension==DimensionType.THE_NETHER) {
+		}else if(dimension==AccessorDimensionTypes.getNether()) {
 			entities.add(new EntityOptions("Blaze", new BlazeEntity(EntityType.BLAZE, world)));
 			entities.add(new EntityOptions("Ghast", new GhastEntity(EntityType.GHAST, world)));
 			entities.add(new EntityOptions("Magma Cube", new GhastEntity(EntityType.GHAST, world)));
@@ -388,7 +410,7 @@ public class SpawnManipMod {
 				((AccessorMobEntity)entity).setHandDropChances(hand);
 				entities.add(new EntityOptions("Skeleton (Diamond Armor, Enchanted Bow)", entity));
 			}
-		}else if(dimension==DimensionType.THE_END) {
+		}else if(dimension==AccessorDimensionTypes.getEnd()) {
 			entities.add(new EntityOptions("Enderman", new EndermanEntity(EntityType.ENDERMAN, world)));
 		}
 		return entities;
@@ -398,9 +420,12 @@ public class SpawnManipMod {
 		entity.updatePosition(target.x, target.y, target.z);
 		boolean flag=entity.getPos().distanceTo(playerPos)>24D && entity.getPos().distanceTo(playerPos)<128D;
 		if(flag) {
-			ServerWorld world=MinecraftClient.getInstance().getServer().getPlayerManager().getPlayerList().get(0).getServerWorld();
-			
-			return ((MobEntity) entity).canSpawn(world, net.minecraft.entity.SpawnType.NATURAL) && world.doesNotCollide(entity);
+			ServerWorld world=MCVer.getServerWorld(MinecraftClient.getInstance().player);
+			//#if MC>=11601
+//$$ 			return ((MobEntity) entity).canSpawn(world, net.minecraft.entity.SpawnReason.NATURAL) && MCVer.doesNotCollide(world, entity);
+			//#else
+			return ((MobEntity) entity).canSpawn(world, net.minecraft.entity.SpawnType.NATURAL) && MCVer.doesNotCollide(world, entity);
+			//#endif
 		}else return false;
 	}
 	
