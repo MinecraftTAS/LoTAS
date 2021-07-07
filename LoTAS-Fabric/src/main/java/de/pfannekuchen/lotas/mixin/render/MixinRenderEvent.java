@@ -32,6 +32,9 @@ public class MixinRenderEvent {
 			GL11.glEnable(GL11.GL_LINE_SMOOTH);
 			GL11.glLineWidth(2);
 
+			//#if MC>=11500
+//$$ 			RenderUtils.applyCameraRotationOnly();
+			//#endif
 			RenderUtils.applyRenderOffset();
 			
 			Vec3 targetPos=SpawnManipMod.getTargetPos();
@@ -67,6 +70,9 @@ public class MixinRenderEvent {
 			GL11.glEnable(GL11.GL_LINE_SMOOTH);
 			GL11.glLineWidth(2);
 
+			//#if MC>=11500
+//$$ 			RenderUtils.applyCameraRotationOnly();
+			//#endif
 			RenderUtils.applyRenderOffset();
 
 			Vec3 entityPos=AIManipMod.getSelectedEntityPos();
@@ -95,6 +101,9 @@ public class MixinRenderEvent {
 			GL11.glLineWidth(2);
 
 			// Draw output
+			//#if MC>=11500
+//$$ 			RenderUtils.applyCameraRotationOnly();
+			//#endif
 			RenderUtils.applyRenderOffset();
 
 			Vec3 targetPos=AIManipMod.getTargetPos();
