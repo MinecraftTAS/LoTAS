@@ -5,6 +5,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.core.utils.ConfigUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.Entity;
@@ -21,8 +22,8 @@ public abstract class MixinItemEntity extends Entity {
 	@Inject(at = @At("TAIL"), method = "Lnet/minecraft/world/entity/item/ItemEntity;<init>(Lnet/minecraft/world/level/Level;DDD)V")
 		public void hackVelocity(CallbackInfo ci) {
 		try {
-			double pX = Minecraft.getInstance().player.x - x;
-			double pZ = Minecraft.getInstance().player.z - z;
+			double pX = MCVer.getX(Minecraft.getInstance().player) - MCVer.getX(this);
+			double pZ = MCVer.getZ(Minecraft.getInstance().player) - MCVer.getZ(this);
 			if (pX > 0)
 				pX = 1;
 			if (pX < 0)

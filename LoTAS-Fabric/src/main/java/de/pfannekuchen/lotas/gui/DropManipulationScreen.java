@@ -2,18 +2,12 @@ package de.pfannekuchen.lotas.gui;
 
 import java.util.ArrayList;
 import java.util.List;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.components.Checkbox;
-import net.minecraft.client.gui.screens.PauseScreen;
-import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.state.BlockState;
-import com.mojang.blaze3d.platform.GlStateManager;
+
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.Tesselator;
+
+import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.dropmanipulation.drops.blockdrops.DeadbushDropManipulation;
 import de.pfannekuchen.lotas.dropmanipulation.drops.blockdrops.GlowstoneDropManipulation;
 import de.pfannekuchen.lotas.dropmanipulation.drops.blockdrops.GravelDropManipulation;
@@ -28,6 +22,14 @@ import de.pfannekuchen.lotas.dropmanipulation.drops.entitydrops.NetherMobDropMan
 import de.pfannekuchen.lotas.dropmanipulation.drops.entitydrops.PassiveDropManipulation;
 import de.pfannekuchen.lotas.dropmanipulation.drops.entitydrops.ZombieDropManipulation;
 import de.pfannekuchen.lotas.dropmanipulation.drops.rest.BarteringDropManipulation;
+import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.components.Checkbox;
+import net.minecraft.client.gui.screens.PauseScreen;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class DropManipulationScreen extends Screen {
 
@@ -100,14 +102,18 @@ public class DropManipulationScreen extends Screen {
 		return false;
 	}
 
-	@Override
-	public void render(int mouseX, int mouseY, float delta) {
-		renderBackground();
+	//#if MC>=11600
+//$$ 	@Override public void render(com.mojang.blaze3d.vertex.PoseStack stack, int mouseX, int mouseY, float delta) {
+//$$ 		MCVer.stack = stack;
+	//#else
+	@Override public void render(int mouseX, int mouseY, float delta) {
+	//#endif
+		MCVer.renderBackground(this);
 		Tesselator tessellator = Tesselator.getInstance();
 		BufferBuilder bufferBuilder = tessellator.getBuilder();
 		
-		GlStateManager.disableTexture();
-		GlStateManager.color4f(.5f, .5f, .5f, 0.5F);
+		MCVer.disableTexture();
+		MCVer.color4f(.5f, .5f, .5f, 0.5F);
 		bufferBuilder.begin(7, DefaultVertexFormat.POSITION);
 		bufferBuilder.vertex(24, 24, 0).endVertex();
 		bufferBuilder.vertex(24, height - 24, 0).endVertex();
@@ -115,7 +121,7 @@ public class DropManipulationScreen extends Screen {
 		bufferBuilder.vertex(width / 3.5f + 1, 24, 0).endVertex();
 		tessellator.end();
 
-		GlStateManager.color4f(0, 0, 0, 0.5F);
+		MCVer.color4f(0, 0, 0, 0.5F);
 		bufferBuilder.begin(7, DefaultVertexFormat.POSITION);
 		bufferBuilder.vertex(25, 25, 0).endVertex();
 		bufferBuilder.vertex(25, height - 25, 0).endVertex();
@@ -124,14 +130,14 @@ public class DropManipulationScreen extends Screen {
 		tessellator.end();
 
 		int boxY = 30 + selected * 15;
-		GlStateManager.color4f(1f, 1f, 1f, 1F);
+		MCVer.color4f(1f, 1f, 1f, 1F);
 		bufferBuilder.begin(7, DefaultVertexFormat.POSITION);
 		bufferBuilder.vertex(27, boxY - 4, 0).endVertex();
 		bufferBuilder.vertex(27, boxY + 11, 0).endVertex();
 		bufferBuilder.vertex(width / 3.5f - 2, boxY + 11, 0).endVertex();
 		bufferBuilder.vertex(width / 3.5f - 2, boxY - 4, 0).endVertex();
 		tessellator.end();
-		GlStateManager.color4f(0, 0, 0, 0.5F);
+		MCVer.color4f(0, 0, 0, 0.5F);
 		bufferBuilder.begin(7, DefaultVertexFormat.POSITION);
 		bufferBuilder.vertex(28, boxY - 3, 0).endVertex();
 		bufferBuilder.vertex(28, boxY + 10, 0).endVertex();
@@ -139,14 +145,16 @@ public class DropManipulationScreen extends Screen {
 		bufferBuilder.vertex(width / 3.5f - 3, boxY - 3, 0).endVertex();
 		tessellator.end();
 
-		GlStateManager.enableTexture();
+		MCVer.enableTexture();
 		int y = 30;
 		for (DropManipulation m : manipulations) {
-			drawString(Minecraft.getInstance().font, m.getName(), 32, y, 0xFFFFFF);
+			MCVer.drawShadow(m.getName(), 32, y, 0xFFFFFF);
 			y += 15;
 		}
 		manipulations.get(selected).render(mouseX, mouseY, delta);
-		super.render(mouseX, mouseY, delta);
+		for(int k = 0; k < this.buttons.size(); ++k) {
+			MCVer.render(((AbstractWidget)this.buttons.get(k)), mouseX, mouseY, delta);
+		}
 	}
 
 	public static abstract class DropManipulation {

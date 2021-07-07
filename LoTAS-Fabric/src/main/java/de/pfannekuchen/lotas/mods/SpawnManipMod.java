@@ -3,6 +3,7 @@ package de.pfannekuchen.lotas.mods;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.mixin.accessors.AccessorDimensionTypes;
 import de.pfannekuchen.lotas.mixin.accessors.AccessorMobEntity;
 import net.minecraft.client.Minecraft;
@@ -62,10 +63,14 @@ public class SpawnManipMod {
 	}
 	
 	public void debugSpawn() {
-		ServerLevel world=mc.getSingleplayerServer().getLevel(mc.player.dimension);
+		ServerLevel world=(ServerLevel) MCVer.getCurrentLevel();
 		Entity entity = new Skeleton(EntityType.SKELETON, world);
 		entity.setPos(target.x, target.y, target.z);
+		//#if MC>=11600
+//$$ 		((Mob)entity).finalizeSpawn(world, world.getCurrentDifficultyAt(entity.blockPosition()), MobSpawnType.NATURAL, null, null);
+		//#else
 		((Mob)entity).finalizeSpawn(world, world.getCurrentDifficultyAt(entity.getCommandSenderBlockPosition()), MobSpawnType.NATURAL, null, null);
+		//#endif
 		world.addFreshEntity(entity);
 	}
 	
@@ -75,7 +80,7 @@ public class SpawnManipMod {
 	
 	public void confirm() {
 		if(canSpawn()) {
-			ServerLevel world=mc.getSingleplayerServer().getLevel(mc.player.dimension);
+			ServerLevel world=(ServerLevel) MCVer.getCurrentLevel();
 			int targetX=(int) (Math.round(target.x)-0.5);
 			int targetY=(int) Math.round(target.y);
 			int targetZ=(int) (Math.round(target.z)-0.5);
@@ -183,7 +188,11 @@ public class SpawnManipMod {
 	
 	public List<EntityOptions> getManipList(){
 		List<EntityOptions> entities=new ArrayList<EntityOptions>();
-		DimensionType dimension = mc.player.dimension;
+		//#if MC>=11600
+//$$ 		DimensionType dimension = MCVer.getCurrentLevel().dimensionType();
+		//#else
+		DimensionType dimension = MCVer.getCurrentLevel().getDimension().getType();
+		//#endif
 		ServerLevel world = mc.getSingleplayerServer().getPlayerList().getPlayers().get(0).getLevel();
 		float[] armor={1f,1f,1f,1f};
 		float[] hand= {1f,1f};
@@ -394,7 +403,7 @@ public class SpawnManipMod {
 		entity.setPos(target.x, target.y, target.z);
 		boolean flag=entity.position().distanceTo(playerPos)>24D && entity.position().distanceTo(playerPos)<128D;
 		if(flag) {
-			ServerLevel world=(Minecraft.getInstance().getSingleplayerServer().getLevel(Minecraft.getInstance().player.dimension));
+			ServerLevel world=(ServerLevel) MCVer.getCurrentLevel();
 			return ((Mob) entity).checkSpawnRules(world, net.minecraft.world.entity.MobSpawnType.NATURAL) && world.noCollision(entity);
 		}else return false;
 	}

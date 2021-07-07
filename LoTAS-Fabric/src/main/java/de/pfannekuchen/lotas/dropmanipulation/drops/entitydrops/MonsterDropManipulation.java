@@ -3,13 +3,11 @@ package de.pfannekuchen.lotas.dropmanipulation.drops.entitydrops;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.platform.GlStateManager;
 
+import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.gui.DropManipulationScreen;
 import de.pfannekuchen.lotas.gui.widgets.SmallCheckboxWidget;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiComponent;
-import net.minecraft.client.gui.components.Checkbox;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -48,7 +46,7 @@ public class MonsterDropManipulation extends DropManipulationScreen.DropManipula
 		MonsterDropManipulation.y = y;
 		MonsterDropManipulation.width = width;
 		MonsterDropManipulation.height = height;
-		enabled = new Checkbox(x, y, 150, 20, "Override Monster Drops", false);
+		enabled = MCVer.Checkbox(x, y, 150, 20, "Override Monster Drops", false);
 	}
 
 	@Override
@@ -143,26 +141,26 @@ public class MonsterDropManipulation extends DropManipulationScreen.DropManipula
 
 	@Override
 	public void render(int mouseX, int mouseY, float delta) {
-		enabled.render(mouseX, mouseY, delta);
+		MCVer.render(enabled, mouseX, mouseY, delta);
 
 		if (!enabled.selected()) {
-			GlStateManager.color4f(.5f, .5f, .5f, .4f);
+			MCVer.color4f(.5f, .5f, .5f, .4f);
 		} else {
-			optimizeCaveSpider.render(mouseX, mouseY, delta);
-			optimizeEnderman.render(mouseX, mouseY, delta);
-			optimizeCreeper.render(mouseX, mouseY, delta);
-			optimizeElderGuardian.render(mouseX, mouseY, delta);
-			optimizePhantom.render(mouseX, mouseY, delta);
-			optimizeSlime.render(mouseX, mouseY, delta);
-			optimizeVindicator.render(mouseX, mouseY, delta);
-			optimizeSkeleton.render(mouseX, mouseY, delta);
-			optimizeShulker.render(mouseX, mouseY, delta);
-			optimizeGuardian.render(mouseX, mouseY, delta);
-			optimizeWitch.render(mouseX, mouseY, delta);
+			MCVer.render(optimizeCaveSpider, mouseX, mouseY, delta);
+			MCVer.render(optimizeEnderman, mouseX, mouseY, delta);
+			MCVer.render(optimizeCreeper, mouseX, mouseY, delta);
+			MCVer.render(optimizeElderGuardian, mouseX, mouseY, delta);
+			MCVer.render(optimizePhantom, mouseX, mouseY, delta);
+			MCVer.render(optimizeSlime, mouseX, mouseY, delta);
+			MCVer.render(optimizeVindicator, mouseX, mouseY, delta);
+			MCVer.render(optimizeSkeleton, mouseX, mouseY, delta);
+			MCVer.render(optimizeShulker, mouseX, mouseY, delta);
+			MCVer.render(optimizeGuardian, mouseX, mouseY, delta);
+			MCVer.render(optimizeWitch, mouseX, mouseY, delta);
 		}
 
 		Minecraft.getInstance().getTextureManager().bind(new ResourceLocation("lotas", "drops/spider.png"));
-		GuiComponent.blit(width - 128, y + 24, 0.0F, 0.0F, 109, 85, 109, 85);
+		MCVer.blit(width - 128, y + 24, 0.0F, 0.0F, 109, 85, 109, 85);
 	}
 
 }

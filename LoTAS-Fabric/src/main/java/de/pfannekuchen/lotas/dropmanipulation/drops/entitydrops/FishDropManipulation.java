@@ -3,13 +3,11 @@ package de.pfannekuchen.lotas.dropmanipulation.drops.entitydrops;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.platform.GlStateManager;
 
+import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.gui.DropManipulationScreen;
 import de.pfannekuchen.lotas.gui.widgets.SmallCheckboxWidget;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiComponent;
-import net.minecraft.client.gui.components.Checkbox;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.animal.Cod;
@@ -34,7 +32,7 @@ public class FishDropManipulation extends DropManipulationScreen.DropManipulatio
 		FishDropManipulation.y = y;
 		FishDropManipulation.width = width;
 		FishDropManipulation.height = height;
-		enabled = new Checkbox(x, y, 150, 20, "Override Fish Drops", false);
+		enabled = MCVer.Checkbox(x, y, 150, 20, "Override Fish Drops", false);
 	}
 
 	@Override
@@ -92,19 +90,19 @@ public class FishDropManipulation extends DropManipulationScreen.DropManipulatio
 
 	@Override
 	public void render(int mouseX, int mouseY, float delta) {
-		enabled.render(mouseX, mouseY, delta);
+		MCVer.render(enabled, mouseX, mouseY, delta);
 		if (!enabled.selected()) {
-			GlStateManager.color4f(.5f, .5f, .5f, .4f);
+			MCVer.color4f(.5f, .5f, .5f, .4f);
 		} else {
-			optimizeCod.render(mouseX, mouseY, delta);
-			optimizePufferfish.render(mouseX, mouseY, delta);
-			optimizeSalmon.render(mouseX, mouseY, delta);
-			optimizeDolphin.render(mouseX, mouseY, delta);
-			optimizeTropical.render(mouseX, mouseY, delta);
+			MCVer.render(optimizeCod, mouseX, mouseY, delta);
+			MCVer.render(optimizePufferfish, mouseX, mouseY, delta);
+			MCVer.render(optimizeSalmon, mouseX, mouseY, delta);
+			MCVer.render(optimizeDolphin, mouseX, mouseY, delta);
+			MCVer.render(optimizeTropical, mouseX, mouseY, delta);
 		}
 
 		Minecraft.getInstance().getTextureManager().bind(new ResourceLocation("lotas", "drops/fish.gif"));
-		GuiComponent.blit(width - 128, y + 24, 0.0F, 0.0F, 96, 76, 96, 76);
+		MCVer.blit(width - 128, y + 24, 0.0F, 0.0F, 96, 76, 96, 76);
 	}
 
 }

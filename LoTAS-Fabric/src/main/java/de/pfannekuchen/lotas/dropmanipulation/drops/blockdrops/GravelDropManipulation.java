@@ -3,13 +3,11 @@ package de.pfannekuchen.lotas.dropmanipulation.drops.blockdrops;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.platform.GlStateManager;
 
+import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.gui.DropManipulationScreen;
-import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiComponent;
-import net.minecraft.client.gui.components.Checkbox;
+import net.minecraft.client.gui.components.Button;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
@@ -21,10 +19,10 @@ public class GravelDropManipulation extends DropManipulationScreen.DropManipulat
 
 	public static boolean flint = false;
 
-	public static Button dropGravel = new Button(x, y, 98, 20, "Gravel", button -> {
+	public static Button dropGravel = MCVer.Button(x, y, 98, 20, "Gravel", button -> {
 		pressGravel();
 	});
-	public static Button dropFlint = new Button(x, y, 98, 20, "Flint", button -> {
+	public static Button dropFlint = MCVer.Button(x, y, 98, 20, "Flint", button -> {
 		pressFlint();
 	});
 
@@ -45,7 +43,7 @@ public class GravelDropManipulation extends DropManipulationScreen.DropManipulat
 		GravelDropManipulation.y = y;
 		GravelDropManipulation.width = width;
 		GravelDropManipulation.height = height;
-		enabled = new Checkbox(x, y, 150, 20, "Override Gravel Drops", false);
+		enabled = MCVer.Checkbox(x, y, 150, 20, "Override Gravel Drops", false);
 		dropGravel.active = false;
 	}
 
@@ -92,18 +90,18 @@ public class GravelDropManipulation extends DropManipulationScreen.DropManipulat
 
 	@Override
 	public void render(int mouseX, int mouseY, float delta) {
-		enabled.render(mouseX, mouseY, delta);
+		MCVer.render(enabled, mouseX, mouseY, delta);
 
 		if (!enabled.selected()) {
-			GlStateManager.color4f(.5f, .5f, .5f, .4f);
+			MCVer.color4f(.5f, .5f, .5f, .4f);
 		} else {
-			Minecraft.getInstance().font.drawShadow("Drop " + (flint ? "Flint" : "Gravel") + " when breaking Gravel", x, y + 64, 0xFFFFFF);
-			dropGravel.render(mouseX, mouseY, delta);
-			dropFlint.render(mouseX, mouseY, delta);
+			MCVer.drawShadow("Drop " + (flint ? "Flint" : "Gravel") + " when breaking Gravel", x, y + 64, 0xFFFFFF);
+			MCVer.render(dropGravel, mouseX, mouseY, delta);
+			MCVer.render(dropFlint, mouseX, mouseY, delta);
 		}
 
 		Minecraft.getInstance().getTextureManager().bind(new ResourceLocation("lotas", "drops/gravel.png"));
-		GuiComponent.blit(width - 128, y + 24, 0.0F, 0.0F, 96, 96, 96, 96);
+		MCVer.blit(width - 128, y + 24, 0.0F, 0.0F, 96, 96, 96, 96);
 	}
 
 }

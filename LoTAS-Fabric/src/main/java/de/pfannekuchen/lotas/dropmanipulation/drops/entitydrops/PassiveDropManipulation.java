@@ -3,13 +3,11 @@ package de.pfannekuchen.lotas.dropmanipulation.drops.entitydrops;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.platform.GlStateManager;
 
+import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.gui.DropManipulationScreen;
 import de.pfannekuchen.lotas.gui.widgets.SmallCheckboxWidget;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiComponent;
-import net.minecraft.client.gui.components.Checkbox;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -61,7 +59,7 @@ public class PassiveDropManipulation extends DropManipulationScreen.DropManipula
 		PassiveDropManipulation.y = y;
 		PassiveDropManipulation.width = width;
 		PassiveDropManipulation.height = height;
-		enabled = new Checkbox(x, y, 150, 20, "Override Passive Mob Drops", false);
+		enabled = MCVer.Checkbox(x, y, 150, 20, "Override Passive Mob Drops", false);
 	}
 
 	@Override
@@ -195,30 +193,30 @@ public class PassiveDropManipulation extends DropManipulationScreen.DropManipula
 
 	@Override
 	public void render(int mouseX, int mouseY, float delta) {
-		enabled.render(mouseX, mouseY, delta);
+		MCVer.render(enabled, mouseX, mouseY, delta);
 
 		if (!enabled.selected()) {
-			GlStateManager.color4f(.5f, .5f, .5f, .4f);
+			MCVer.color4f(.5f, .5f, .5f, .4f);
 		} else {
-			optimizeChicken.render(mouseX, mouseY, delta);
-			optimizeSkeletonhorse.render(mouseX, mouseY, delta);
-			optimizeCat.render(mouseX, mouseY, delta);
-			optimizeCow.render(mouseX, mouseY, delta);
-			optimizeMooshroom.render(mouseX, mouseY, delta);
-			optimizePig.render(mouseX, mouseY, delta);
-			optimizeParrot.render(mouseX, mouseY, delta);
-			optimizeSnowgolem.render(mouseX, mouseY, delta);
-			optimizeSheep.render(mouseX, mouseY, delta);
-			optimizeRabbit.render(mouseX, mouseY, delta);
-			optimizeSquid.render(mouseX, mouseY, delta);
-			optimizeTurtle.render(mouseX, mouseY, delta);
-			optimizeIronGolem.render(mouseX, mouseY, delta);
-			optimizePolarbear.render(mouseX, mouseY, delta);
-			optimizeHorses.render(mouseX, mouseY, delta);
+			MCVer.render(optimizeChicken, mouseX, mouseY, delta);
+			MCVer.render(optimizeSkeletonhorse, mouseX, mouseY, delta);
+			MCVer.render(optimizeCat, mouseX, mouseY, delta);
+			MCVer.render(optimizeCow, mouseX, mouseY, delta);
+			MCVer.render(optimizeMooshroom, mouseX, mouseY, delta);
+			MCVer.render(optimizePig, mouseX, mouseY, delta);
+			MCVer.render(optimizeParrot, mouseX, mouseY, delta);
+			MCVer.render(optimizeSnowgolem, mouseX, mouseY, delta);
+			MCVer.render(optimizeSheep, mouseX, mouseY, delta);
+			MCVer.render(optimizeRabbit, mouseX, mouseY, delta);
+			MCVer.render(optimizeSquid, mouseX, mouseY, delta);
+			MCVer.render(optimizeTurtle, mouseX, mouseY, delta);
+			MCVer.render(optimizeIronGolem, mouseX, mouseY, delta);
+			MCVer.render(optimizePolarbear, mouseX, mouseY, delta);
+			MCVer.render(optimizeHorses, mouseX, mouseY, delta);
 		}
 
 		Minecraft.getInstance().getTextureManager().bind(new ResourceLocation("lotas", "drops/sheep.png"));
-		GuiComponent.blit(width - 128, y + 24, 0.0F, 0.0F, 102, 120, 102, 120);
+		MCVer.blit(width - 128, y + 24, 0.0F, 0.0F, 102, 120, 102, 120);
 	}
 
 }

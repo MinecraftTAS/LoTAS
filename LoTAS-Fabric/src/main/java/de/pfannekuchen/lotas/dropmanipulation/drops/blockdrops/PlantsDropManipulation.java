@@ -3,13 +3,11 @@ package de.pfannekuchen.lotas.dropmanipulation.drops.blockdrops;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.platform.GlStateManager;
 
+import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.gui.DropManipulationScreen;
 import de.pfannekuchen.lotas.gui.widgets.SmallCheckboxWidget;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiComponent;
-import net.minecraft.client.gui.components.Checkbox;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
@@ -37,7 +35,7 @@ public class PlantsDropManipulation extends DropManipulationScreen.DropManipulat
 		PlantsDropManipulation.y = y;
 		PlantsDropManipulation.width = width;
 		PlantsDropManipulation.height = height;
-		enabled = new Checkbox(x, y, 150, 20, "Override Plant Drops", false);
+		enabled = MCVer.Checkbox(x, y, 150, 20, "Override Plant Drops", false);
 	}
 
 	@Override
@@ -133,25 +131,25 @@ public class PlantsDropManipulation extends DropManipulationScreen.DropManipulat
 
 	@Override
 	public void render(int mouseX, int mouseY, float delta) {
-		enabled.render(mouseX, mouseY, delta);
+		MCVer.render(enabled, mouseX, mouseY, delta);
 
 		if (!enabled.selected()) {
-			GlStateManager.color4f(.5f, .5f, .5f, .4f);
+			MCVer.color4f(.5f, .5f, .5f, .4f);
 		} else {
-			optimizeCarrots.render(mouseX, mouseY, delta);
-			optimizeBeetroot.render(mouseX, mouseY, delta);
-			optimizeMelons.render(mouseX, mouseY, delta);
-			optimizePotato.render(mouseX, mouseY, delta);
-			optimizeWheat.render(mouseX, mouseY, delta);
-			optimizeCocoa.render(mouseX, mouseY, delta);
-			optimizeChorus.render(mouseX, mouseY, delta);
-			optimizeSweetBerry.render(mouseX, mouseY, delta);
-			optimizeMushroom.render(mouseX, mouseY, delta);
-			optimizeNetherwart.render(mouseX, mouseY, delta);
+			MCVer.render(optimizeCarrots, mouseX, mouseY, delta);
+			MCVer.render(optimizeBeetroot, mouseX, mouseY, delta);
+			MCVer.render(optimizeMelons, mouseX, mouseY, delta);
+			MCVer.render(optimizePotato, mouseX, mouseY, delta);
+			MCVer.render(optimizeWheat, mouseX, mouseY, delta);
+			MCVer.render(optimizeCocoa, mouseX, mouseY, delta);
+			MCVer.render(optimizeChorus, mouseX, mouseY, delta);
+			MCVer.render(optimizeSweetBerry, mouseX, mouseY, delta);
+			MCVer.render(optimizeMushroom, mouseX, mouseY, delta);
+			MCVer.render(optimizeNetherwart, mouseX, mouseY, delta);
 		}
 
 		Minecraft.getInstance().getTextureManager().bind(new ResourceLocation("lotas", "drops/plants.png"));
-		GuiComponent.blit(width - 128, y + 24, 0.0F, 0.0F, 96, 96, 96, 96);
+		MCVer.blit(width - 128, y + 24, 0.0F, 0.0F, 96, 96, 96, 96);
 	}
 
 }

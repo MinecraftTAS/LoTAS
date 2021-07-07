@@ -9,13 +9,14 @@ import java.util.HashMap;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicReference;
 
+import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.gui.widgets.SmallCheckboxWidget;
 import de.pfannekuchen.lotas.mods.SavestateMod;
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.TextComponent;
-import net.minecraft.world.level.dimension.DimensionType;
 
 public class HudSettings extends Screen {
 	
@@ -120,8 +121,17 @@ public class HudSettings extends Screen {
 		return super.mouseReleased(mouseX, mouseY, button);
 	}
 	
+	//#if MC>=11600
+//$$ 	@Override public void render(com.mojang.blaze3d.vertex.PoseStack stack, int mouseX, int mouseY, float partialTicks) {
+//$$ 		MCVer.stack = stack;
+	//#else
 	@Override public void render(int mouseX, int mouseY, float partialTicks) {
-		if (dragging == null) super.render(mouseX, mouseY, partialTicks);
+	//#endif
+		if (dragging == null) {
+			for(int k = 0; k < this.buttons.size(); ++k) {
+				MCVer.render(((AbstractWidget)this.buttons.get(k)), mouseX, mouseY, partialTicks);
+			}
+		}
 	}
 	
 	public static void load() throws FileNotFoundException, IOException {
@@ -155,7 +165,7 @@ public class HudSettings extends Screen {
 		if (showWORLDSEED) {
 			int x = Integer.parseInt(p.getProperty("WORLDSEED_x"));
 			int y = Integer.parseInt(p.getProperty("WORLDSEED_y"));
-			widths.replace(Settings.WORLDSEED, drawRectWithText("World Seed: " + Minecraft.getInstance().getSingleplayerServer().getLevel(DimensionType.OVERWORLD).getSeed(), x, y, Boolean.parseBoolean(p.getProperty("WORLDSEED_hideRect"))));
+			widths.replace(Settings.WORLDSEED, drawRectWithText("World Seed: " + MCVer.getCurrentLevel().getSeed(), x, y, Boolean.parseBoolean(p.getProperty("WORLDSEED_hideRect"))));
 		}
 		
 		boolean showTICKS = Boolean.parseBoolean(p.getProperty("TICKS_visible"));
@@ -183,14 +193,14 @@ public class HudSettings extends Screen {
 	}
 	
 	private static int drawRectWithTextFixedWidth(String text, int x, int y, boolean rect, int w) {
-		if (!rect) fill(x, y, x + w, y + 14, -2147483648);
-		Minecraft.getInstance().font.drawShadow(text, x + 2, y + 3, 0xFFFFFF);
+		if (!rect) MCVer.fill(x, y, x + w, y + 14, -2147483648);
+		MCVer.drawShadow(text, x + 2, y + 3, 0xFFFFFF);
 		return Minecraft.getInstance().font.width(text) + 4;
 	}
 	
 	private static int drawRectWithText(String text, int x, int y, boolean rect) {
-		if (!rect) fill(x, y, x + Minecraft.getInstance().font.width(text) + 4, y + 14, -2147483648);
-		Minecraft.getInstance().font.drawShadow(text, x + 2, y + 3, 0xFFFFFF);
+		if (!rect) MCVer.fill(x, y, x + Minecraft.getInstance().font.width(text) + 4, y + 14, -2147483648);
+		MCVer.drawShadow(text, x + 2, y + 3, 0xFFFFFF);
 		return Minecraft.getInstance().font.width(text) + 4;
 	}
 	

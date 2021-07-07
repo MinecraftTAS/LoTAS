@@ -2,8 +2,7 @@ package de.pfannekuchen.lotas.gui.widgets;
 
 import java.util.List;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-
+import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.mods.SpawnManipMod.EntityOptions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -27,13 +26,17 @@ public class EntitySliderWidget extends AbstractWidget {
 	
 
 	public EntitySliderWidget(int xPos, int yPos, List<EntityOptions> ent, int width, int height, OnPress c) {
+		//#if MC>=11600
+//$$ 		super(xPos, yPos, width, height, net.minecraft.network.chat.TextComponent.EMPTY);
+		//#else
 		super(xPos, yPos, width, height, "");
+		//#endif
 		this.name = "Entity";
 		this.entities = ent;
 		this.min = 0;
 		this.max = ent.size() - 1;
 		this.sliderPosition = -min / (max - min);
-		this.setMessage(ent.get(0).title);
+		MCVer.setMessage(this, ent.get(0).title);
 	}
 
 	/**
@@ -53,7 +56,7 @@ public class EntitySliderWidget extends AbstractWidget {
 	 */
 	public void setSliderValue(float value) {
 		this.sliderPosition = (value - this.min) / (this.max - this.min);
-		this.setMessage(this.getDisplayString());
+		MCVer.setMessage(this, this.getDisplayString());
 	}
 
 	/**
@@ -70,13 +73,17 @@ public class EntitySliderWidget extends AbstractWidget {
 		return this.name + ": " + this.getSliderValue();
 	}
 
-	@Override
-	protected void renderBg(Minecraft client, int mouseX, int mouseY) {
+	//#if MC>=11600
+//$$ 	@Override protected void renderBg(com.mojang.blaze3d.vertex.PoseStack stack, Minecraft client, int mouseX, int mouseY) {
+//$$ 		MCVer.stack = stack;
+	//#else
+	@Override protected void renderBg(Minecraft client, int mouseX, int mouseY) {
+	//#endif
 		client.getTextureManager().bind(WIDGETS_LOCATION);
-		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		MCVer.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		int i = (this.isHovered() ? 2 : 1) * 20;
-		this.blit(this.x + (int) (this.sliderPosition * (double) (this.width - 8)), this.y, 0, 46 + i, 4, 20);
-		this.blit(this.x + (int) (this.sliderPosition * (double) (this.width - 8)) + 4, this.y, 196, 46 + i, 4, 20);
+		MCVer.blit(this.x + (int) (this.sliderPosition * (double) (this.width - 8)), this.y, 0, 46 + i, 4, 20);
+		MCVer.blit(this.x + (int) (this.sliderPosition * (double) (this.width - 8)) + 4, this.y, 196, 46 + i, 4, 20);
 	}
 
 	/**
@@ -96,12 +103,12 @@ public class EntitySliderWidget extends AbstractWidget {
 				if (this.sliderPosition > 1.0F) {
 					this.sliderPosition = 1.0F;
 				}
-				setMessage(entities.get((int) Math.round(sliderPosition * (max - min) + min)).title);
+				MCVer.setMessage(this, entities.get((int) Math.round(sliderPosition * (max - min) + min)).title);
 			}
 
-         	GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-			blit(this.x + (int) (this.sliderPosition * (float) (this.width - 8)), this.y, 0, 66, 4, 20);
-			blit(this.x + (int) (this.sliderPosition * (float) (this.width - 8)) + 4, this.y, 196, 66, 4, 20);
+         	MCVer.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+			MCVer.blit(this.x + (int) (this.sliderPosition * (float) (this.width - 8)), this.y, 0, 66, 4, 20);
+			MCVer.blit(this.x + (int) (this.sliderPosition * (float) (this.width - 8)) + 4, this.y, 196, 66, 4, 20);
 		}
 		return true;
 	}
@@ -117,7 +124,7 @@ public class EntitySliderWidget extends AbstractWidget {
 	 */
 	public void setSliderPosition(float position) {
 		this.sliderPosition = position;
-		this.setMessage(this.getDisplayString());
+		MCVer.setMessage(this, this.getDisplayString());
 	}
 
 	/**
@@ -136,7 +143,7 @@ public class EntitySliderWidget extends AbstractWidget {
 			if (this.sliderPosition > 1.0F) {
 				this.sliderPosition = 1.0F;
 			}
-			this.setMessage(entities.get((int) Math.round(sliderPosition * (max - min) + min)).title);
+			MCVer.setMessage(this, entities.get((int) Math.round(sliderPosition * (max - min) + min)).title);
 			this.isMouseDown = true;
 			return true;
 		} else {

@@ -4,13 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.platform.GlStateManager;
 
+import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.gui.DropManipulationScreen;
 import de.pfannekuchen.lotas.gui.widgets.ImageButton;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiComponent;
-import net.minecraft.client.gui.components.Checkbox;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.monster.Husk;
@@ -43,7 +41,7 @@ public class ZombieDropManipulation extends DropManipulationScreen.DropManipulat
 		ZombieDropManipulation.y = y;
 		ZombieDropManipulation.width = width;
 		ZombieDropManipulation.height = height;
-		enabled = new Checkbox(x, y, 150, 20, "Override Zombie/Zombie-Villager/Husk Drops", false);
+		enabled = MCVer.Checkbox(x, y, 150, 20, "Override Zombie/Zombie-Villager/Husk Drops", false);
 	}
 
 	@Override
@@ -97,19 +95,19 @@ public class ZombieDropManipulation extends DropManipulationScreen.DropManipulat
 
 	@Override
 	public void render(int mouseX, int mouseY, float delta) {
-		enabled.render(mouseX, mouseY, delta);
+		MCVer.render(enabled, mouseX, mouseY, delta);
 
 		if (!enabled.selected()) {
-			GlStateManager.color4f(.5f, .5f, .5f, .4f);
+			MCVer.color4f(.5f, .5f, .5f, .4f);
 		} else {
-			Minecraft.getInstance().font.drawShadow("Zombies drop: 2 Rotten Flesh" + (dropIron.isToggled() ? ", 1 Iron Ingot" : "") + (dropPotato.isToggled() ? ", 1 Potato" : "") + (dropCarrot.isToggled() ? ", 1 Carrot" : ""), x, y + 64, 0xFFFFFF);
-			dropIron.render(mouseX, mouseY, delta);
-			dropPotato.render(mouseX, mouseY, delta);
-			dropCarrot.render(mouseX, mouseY, delta);
+			MCVer.drawShadow("Zombies drop: 2 Rotten Flesh" + (dropIron.isToggled() ? ", 1 Iron Ingot" : "") + (dropPotato.isToggled() ? ", 1 Potato" : "") + (dropCarrot.isToggled() ? ", 1 Carrot" : ""), x, y + 64, 0xFFFFFF);
+			MCVer.render(dropIron, mouseX, mouseY, delta);
+			MCVer.render(dropPotato, mouseX, mouseY, delta);
+			MCVer.render(dropCarrot, mouseX, mouseY, delta);
 		}
 
 		Minecraft.getInstance().getTextureManager().bind(new ResourceLocation("lotas", "drops/zombie.png"));
-		GuiComponent.blit(width - 228, y + 24, 0.0F, 0.0F, 118, 198, 118, 198);
+		MCVer.blit(width - 228, y + 24, 0.0F, 0.0F, 118, 198, 118, 198);
 	}
 
 }

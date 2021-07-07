@@ -1,9 +1,10 @@
 package de.pfannekuchen.lotas.gui;
 
+import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.gui.widgets.EntitySliderWidget;
-import net.minecraft.client.gui.components.Button;
 import de.pfannekuchen.lotas.mods.SpawnManipMod;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.PauseScreen;
 import net.minecraft.client.gui.screens.Screen;
@@ -37,12 +38,18 @@ public class SpawnManipulationScreen extends Screen {
 	
 	private final ServerLevel world;
 
-	@Override
-	public void render(int mouseX, int mouseY, float partialTicks) {
-		super.render(mouseX, mouseY, partialTicks);
-		xText.render(mouseX, mouseY, partialTicks);
-		yText.render(mouseX, mouseY, partialTicks);
-		zText.render(mouseX, mouseY, partialTicks);
+	//#if MC>=11600
+//$$ 	@Override public void render(com.mojang.blaze3d.vertex.PoseStack stack, int mouseX, int mouseY, float partialTicks) {
+//$$ 		MCVer.stack = stack;
+	//#else
+	@Override public void render(int mouseX, int mouseY, float partialTicks) {
+	//#endif
+		for(int k = 0; k < this.buttons.size(); ++k) {
+			MCVer.render(((AbstractWidget)this.buttons.get(k)), mouseX, mouseY, partialTicks);
+		}
+		MCVer.render(xText, mouseX, mouseY, partialTicks);
+		MCVer.render(yText, mouseX, mouseY, partialTicks);
+		MCVer.render(zText, mouseX, mouseY, partialTicks);
 	}
 
 	@Override
@@ -71,24 +78,24 @@ public class SpawnManipulationScreen extends Screen {
 		manip.setEntity(slider.getEntity(world));
 		addButton(slider);
 		int margin=10;
-		addButton(new Button(width / 2 +140 - margin, height - 95, 20, 20, "\u2191", btn -> manip.changeTargetForward()));
-		addButton(new Button(width / 2 +140 - margin, height - 49, 20, 20, "\u2193", btn -> manip.changeTargetBack()));
-		addButton(new Button(width / 2 +118 - margin, height - 72, 20, 20, "\u2190", btn -> manip.changeTargetLeft()));
-		addButton(new Button(width / 2 +162 - margin, height - 72, 20, 20, "\u2192", btn -> manip.changeTargetRight()));
-		addButton(new Button(width / 2 +118 - margin, height - 25, 30, 20, "Up", btn -> manip.changeTargetUp()));
-		addButton(new Button(width / 2 +153 - margin, height - 25, 30, 20, "Down", btn -> manip.changeTargetDown()));
+		addButton(MCVer.Button(width / 2 +140 - margin, height - 95, 20, 20, "\u2191", btn -> manip.changeTargetForward()));
+		addButton(MCVer.Button(width / 2 +140 - margin, height - 49, 20, 20, "\u2193", btn -> manip.changeTargetBack()));
+		addButton(MCVer.Button(width / 2 +118 - margin, height - 72, 20, 20, "\u2190", btn -> manip.changeTargetLeft()));
+		addButton(MCVer.Button(width / 2 +162 - margin, height - 72, 20, 20, "\u2192", btn -> manip.changeTargetRight()));
+		addButton(MCVer.Button(width / 2 +118 - margin, height - 25, 30, 20, "Up", btn -> manip.changeTargetUp()));
+		addButton(MCVer.Button(width / 2 +153 - margin, height - 25, 30, 20, "Down", btn -> manip.changeTargetDown()));
 		
 		Vec3 target=SpawnManipMod.getTargetPos();
-		xText = new EditBox(Minecraft.getInstance().font, width / 2 - 98, height - 71, 58, 18, (int) target.x + "");
-		yText = new EditBox(Minecraft.getInstance().font, width / 2 - 29, height - 71, 59, 18, (int) target.y + "");
-		zText = new EditBox(Minecraft.getInstance().font, width / 2 + 39, height - 71, 59, 18, (int) target.z + "");
+		xText = MCVer.EditBox(Minecraft.getInstance().font, width / 2 - 98, height - 71, 58, 18, (int) target.x + "");
+		yText = MCVer.EditBox(Minecraft.getInstance().font, width / 2 - 29, height - 71, 59, 18, (int) target.y + "");
+		zText = MCVer.EditBox(Minecraft.getInstance().font, width / 2 + 39, height - 71, 59, 18, (int) target.z + "");
 		
 		setTextToVec(SpawnManipMod.getTargetPos());
 		
-		addButton(new Button(width / 2 - 100, height - 49, 200, 20, "Spawn Entity", btn -> manip.confirm()));
-		addButton(new Button(width / 2 - 100, height - 75 + 50, 200, 20, "Done", btn -> Minecraft.getInstance().setScreen(new PauseScreen(true))));
+		addButton(MCVer.Button(width / 2 - 100, height - 49, 200, 20, "Spawn Entity", btn -> manip.confirm()));
+		addButton(MCVer.Button(width / 2 - 100, height - 75 + 50, 200, 20, "Done", btn -> Minecraft.getInstance().setScreen(new PauseScreen(true))));
 	
-		addButton(new Button(width / 2 - 100, height - 95, 200, 20, "Move to me", btn -> {
+		addButton(MCVer.Button(width / 2 - 100, height - 95, 200, 20, "Move to me", btn -> {
 			manip.setTargetToPlayer();
 			setTextToVec(SpawnManipMod.getTargetPos());
 		}));

@@ -10,6 +10,8 @@ import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.phys.Vec3;
 import com.google.common.base.Predicates;
 
+import de.pfannekuchen.lotas.core.MCVer;
+
 /**
  * Forces a selected entity to walk to a target
  * @author ScribbleLP
@@ -30,7 +32,7 @@ public class AIManipMod {
 	
 	public AIManipMod() {
 		orientation =  mc.player.getDirection();
-		entities = mc.getSingleplayerServer().getLevel(Minecraft.getInstance().player.dimension).getEntitiesOfClass(Mob.class, mc.player.getBoundingBox().inflate(64, 64, 64), Predicates.alwaysTrue());
+		entities = MCVer.getCurrentLevel().getEntitiesOfClass(Mob.class, mc.player.getBoundingBox().inflate(64, 64, 64), Predicates.alwaysTrue());
 		sortEntities();
 		
 		selectedEntity= entities.get(selectedIndex);

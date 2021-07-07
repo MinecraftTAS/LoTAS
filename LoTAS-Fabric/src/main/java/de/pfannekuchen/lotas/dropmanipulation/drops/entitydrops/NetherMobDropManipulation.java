@@ -3,13 +3,11 @@ package de.pfannekuchen.lotas.dropmanipulation.drops.entitydrops;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.platform.GlStateManager;
 
+import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.gui.DropManipulationScreen;
 import de.pfannekuchen.lotas.gui.widgets.SmallCheckboxWidget;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiComponent;
-import net.minecraft.client.gui.components.Checkbox;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.monster.Blaze;
@@ -33,7 +31,7 @@ public class NetherMobDropManipulation extends DropManipulationScreen.DropManipu
 		NetherMobDropManipulation.y = y;
 		NetherMobDropManipulation.width = width;
 		NetherMobDropManipulation.height = height;
-		enabled = new Checkbox(x, y, 150, 20, "Override Nether Mob Drops", false);
+		enabled = MCVer.Checkbox(x, y, 150, 20, "Override Nether Mob Drops", false);
 	}
 
 	@Override
@@ -55,7 +53,7 @@ public class NetherMobDropManipulation extends DropManipulationScreen.DropManipu
 		if (entity instanceof WitherSkeleton && optimizeWitherskeleton.isChecked())
 			return ImmutableList.of(new ItemStack(Items.COAL, 1), new ItemStack(Items.BONE, 2), new ItemStack(Items.WITHER_SKELETON_SKULL));
 		//#if MC>=11601
-//$$ 		if (entity instanceof net.minecraft.entity.mob.ZombifiedPiglinEntity && optimizePigman.isChecked()) if (!((net.minecraft.entity.mob.ZombifiedPiglinEntity) entity).isBaby()) return ImmutableList.of(new ItemStack(Items.ROTTEN_FLESH, 2), new ItemStack(Items.GOLD_NUGGET), new ItemStack(Items.GOLD_INGOT));
+//$$ 		if (entity instanceof net.minecraft.world.entity.monster.ZombifiedPiglin && optimizePigman.isChecked()) if (!((net.minecraft.world.entity.monster.ZombifiedPiglin) entity).isBaby()) return ImmutableList.of(new ItemStack(Items.ROTTEN_FLESH, 2), new ItemStack(Items.GOLD_NUGGET), new ItemStack(Items.GOLD_INGOT));
 		//#else
 		if (entity instanceof net.minecraft.world.entity.monster.PigZombie && optimizePigman.isChecked()) if (!((net.minecraft.world.entity.monster.PigZombie) entity).isBaby()) return ImmutableList.of(new ItemStack(Items.ROTTEN_FLESH, 2), new ItemStack(Items.GOLD_NUGGET), new ItemStack(Items.GOLD_INGOT));
 		//#endif
@@ -96,20 +94,20 @@ public class NetherMobDropManipulation extends DropManipulationScreen.DropManipu
 
 	@Override
 	public void render(int mouseX, int mouseY, float delta) {
-		enabled.render(mouseX, mouseY, delta);
+		MCVer.render(enabled, mouseX, mouseY, delta);
 
 		if (!enabled.selected()) {
-			GlStateManager.color4f(5f, .5f, .5f, .4f);
+			MCVer.color4f(5f, .5f, .5f, .4f);
 		} else {
-			optimizeBlaze.render(mouseX, mouseY, delta);
-			optimizePigman.render(mouseX, mouseY, delta);
-			optimizeMagmaCube.render(mouseX, mouseY, delta);
-			optimizeGhast.render(mouseX, mouseY, delta);
-			optimizeWitherskeleton.render(mouseX, mouseY, delta);
+			MCVer.render(optimizeBlaze, mouseX, mouseY, delta);
+			MCVer.render(optimizePigman, mouseX, mouseY, delta);
+			MCVer.render(optimizeMagmaCube, mouseX, mouseY, delta);
+			MCVer.render(optimizeGhast, mouseX, mouseY, delta);
+			MCVer.render(optimizeWitherskeleton, mouseX, mouseY, delta);
 		}
 
 		Minecraft.getInstance().getTextureManager().bind(new ResourceLocation("lotas", "drops/wither_skeleton.png"));
-		GuiComponent.blit(width - 128, y + 24, 0.0F, 0.0F, 100, 150, 100, 150);
+		MCVer.blit(width - 128, y + 24, 0.0F, 0.0F, 100, 150, 100, 150);
 	}
 
 }

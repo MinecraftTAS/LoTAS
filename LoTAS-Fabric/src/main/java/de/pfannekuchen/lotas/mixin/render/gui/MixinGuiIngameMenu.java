@@ -9,6 +9,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.core.utils.ConfigUtils;
 import de.pfannekuchen.lotas.core.utils.EventUtils.Timer;
 import de.pfannekuchen.lotas.core.utils.Keyboard;
@@ -17,12 +18,12 @@ import de.pfannekuchen.lotas.gui.DragonManipulationScreen;
 import de.pfannekuchen.lotas.gui.DropManipulationScreen;
 import de.pfannekuchen.lotas.gui.LoadstateScreen;
 import de.pfannekuchen.lotas.gui.SpawnManipulationScreen;
-import net.minecraft.client.gui.components.Button;
 import de.pfannekuchen.lotas.gui.widgets.SmallCheckboxWidget;
 import de.pfannekuchen.lotas.mods.DupeMod;
 import de.pfannekuchen.lotas.mods.SavestateMod;
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.PauseScreen;
 import net.minecraft.client.gui.screens.Screen;
@@ -48,23 +49,23 @@ public abstract class MixinGuiIngameMenu extends Screen {
 		
 		buttons.get(7).y += 24;
 		
-		addButton(new Button(this.width / 2 - 102, this.height / 4 + 48 + -16 + 24 + 24, 98, 20, "Savestate", btn -> {
+		addButton(MCVer.Button(this.width / 2 - 102, this.height / 4 + 48 + -16 + 24 + 24, 98, 20, "Savestate", btn -> {
 			if (Keyboard.isPressed(GLFW.GLFW_KEY_LEFT_SHIFT)) {
-				savestateName = new EditBox(Minecraft.getInstance().font, this.width / 2 - 100, this.height / 4 + 96 + -16, 98, 20, "");
+				savestateName = MCVer.EditBox(Minecraft.getInstance().font, this.width / 2 - 100, this.height / 4 + 96 + -16, 98, 20, "");
 				btn.active = false;
 				setFocused(savestateName);
 			} else
 				SavestateMod.savestate(null);
 		}));
-		addButton(new Button(this.width / 2 + 4, this.height / 4 + 48 + -16 + 24 + 24, 98, 20, "Loadstate", btn -> {
+		addButton(MCVer.Button(this.width / 2 + 4, this.height / 4 + 48 + -16 + 24 + 24, 98, 20, "Loadstate", btn -> {
 			if (Keyboard.isPressed(GLFW.GLFW_KEY_LEFT_SHIFT))
 				Minecraft.getInstance().setScreen(new LoadstateScreen());
 			else
 				SavestateMod.loadstate(-1);
 		}));
-		addButton(new Button(5, 15, 48, 20, "+", b -> {
+		addButton(MCVer.Button(5, 15, 48, 20, "+", b -> {
 			if (Keyboard.isPressed(GLFW.GLFW_KEY_LEFT_SHIFT)) {
-				tickrateField = new EditBox(Minecraft.getInstance().font, 4, 15, 103, 20, "");
+				tickrateField = MCVer.EditBox(Minecraft.getInstance().font, 4, 15, 103, 20, "");
 				b.active = false;
 				setFocused(b);
 			} else {
@@ -73,9 +74,9 @@ public abstract class MixinGuiIngameMenu extends Screen {
 				TickrateChangerMod.updateTickrate(TickrateChangerMod.ticks[TickrateChangerMod.index]);
 			}
 		}));
-		addButton(new Button(55, 15, 48, 20, "-", b -> {
+		addButton(MCVer.Button(55, 15, 48, 20, "-", b -> {
 			if (Keyboard.isPressed(GLFW.GLFW_KEY_LEFT_SHIFT)) {
-				tickrateField = new EditBox(Minecraft.getInstance().font, 4, 15, 103, 20, "");
+				tickrateField = MCVer.EditBox(Minecraft.getInstance().font, 4, 15, 103, 20, "");
 				b.active = false;
 				setFocused(b);
 			} else {
@@ -84,37 +85,37 @@ public abstract class MixinGuiIngameMenu extends Screen {
 				TickrateChangerMod.updateTickrate(TickrateChangerMod.ticks[TickrateChangerMod.index]);
 			}
 		}));
-		addButton(new Button((width / 4) * 0 + 1, height - 20, width / 4 - 2, 20, "Manipulate Drops", btn -> {
+		addButton(MCVer.Button((width / 4) * 0 + 1, height - 20, width / 4 - 2, 20, "Manipulate Drops", btn -> {
 			Minecraft.getInstance().setScreen(new DropManipulationScreen((PauseScreen) (Object) this));
 		}));
 
-		addButton(new Button((width / 4) * 1 + 2, height - 20, width / 4 - 2, 20, "Manipulate Dragon", btn -> {
+		addButton(MCVer.Button((width / 4) * 1 + 2, height - 20, width / 4 - 2, 20, "Manipulate Dragon", btn -> {
 			Minecraft.getInstance().setScreen(new DragonManipulationScreen((PauseScreen) (Object) this));
 		}));
 		
-		addButton(new Button((width / 4) * 2 + 3, height - 20, width / 4 - 2, 20, "Manipulate Spawning", btn -> {
+		addButton(MCVer.Button((width / 4) * 2 + 3, height - 20, width / 4 - 2, 20, "Manipulate Spawning", btn -> {
 			Minecraft.getInstance().setScreen(new SpawnManipulationScreen());
 		}));
 		
-		addButton(new Button((width / 4) * 3 + 4, height - 20, width / 4 - 4, 20, "Manipulate AI", btn -> {
+		addButton(MCVer.Button((width / 4) * 3 + 4, height - 20, width / 4 - 4, 20, "Manipulate AI", btn -> {
 			Minecraft.getInstance().setScreen(new AIManipulationScreen());
  		}));
 		
-		addButton(new Button(5, 55, 98, 20, "Save Items", btn -> {
+		addButton(MCVer.Button(5, 55, 98, 20, "Save Items", btn -> {
 			DupeMod.save(Minecraft.getInstance());
 			btn.active = false;
 		}));
-		addButton(new Button(5, 75, 98, 20, "Load Items", btn -> {
+		addButton(MCVer.Button(5, 75, 98, 20, "Load Items", btn -> {
 			DupeMod.load(Minecraft.getInstance());
 			btn.active = false;
 		}));
-		addButton(new Button(37, 115, 66, 20, "Jump ticks", btn -> {
+		addButton(MCVer.Button(37, 115, 66, 20, "Jump ticks", btn -> {
 			TickrateChangerMod.ticksToJump = (int) TickrateChangerMod.ticks[TickrateChangerMod.ji];
 			btn.active = false;
-			btn.setMessage("Jumping...");
+			MCVer.setMessage(btn, "Jumping...");
 		}));
 
-		addButton(new Button(5, 115, 30, 20, TickrateChangerMod.ticks[TickrateChangerMod.ji] + "t", btn -> {
+		addButton(MCVer.Button(5, 115, 30, 20, TickrateChangerMod.ticks[TickrateChangerMod.ji] + "t", btn -> {
 			TickrateChangerMod.ji++;
 			if (TickrateChangerMod.ji > 10)
 				TickrateChangerMod.ji = 1;
@@ -152,7 +153,7 @@ public abstract class MixinGuiIngameMenu extends Screen {
 			ConfigUtils.setBoolean("tools", "rAutoClicker", b.isChecked());
 			ConfigUtils.save();
 		}));
-		addButton(new Button(this.width / 2 - 102, this.height / 4 + 144 + -16, 204, 20, "Reset Timer", btn -> {
+		addButton(MCVer.Button(this.width / 2 - 102, this.height / 4 + 144 + -16, 204, 20, "Reset Timer", btn -> {
 			Timer.ticks = -1;
 			Timer.startTime = Duration.ofMillis(System.currentTimeMillis());
 		}));
@@ -163,22 +164,28 @@ public abstract class MixinGuiIngameMenu extends Screen {
 		return (Button) this.buttons.get(index);
 	}
 	
+	//#if MC>=11600
+//$$ 	@Inject(method = "render", at = @At("TAIL"))
+//$$ 	public void drawScreen(com.mojang.blaze3d.vertex.PoseStack stack, int mouseX, int mouseY, float partialTicks, CallbackInfo ci) {
+//$$ 		MCVer.stack = stack;
+	//#else
 	@Inject(method = "render", at = @At("TAIL"))
-	public void drawScreen(int mouseX, int mouseY, float partialTicks, CallbackInfo ci) {
+	public void drawScreen(int mouseX, int mouseY, float partialTicks, CallbackInfo ci) {	
+	//#endif
 		if (Keyboard.isPressed(GLFW.GLFW_KEY_LEFT_SHIFT)) {
-			getButton(8).setMessage("\u00A76Name Savestate");
-			getButton(9).setMessage("\u00A76Choose State");
-			getButton(10).setMessage("\u00A76Custom");
-			getButton(11).setMessage("\u00A76Tickrate");
+			MCVer.setMessage(getButton(8), "\u00A76Name Savestate");
+			MCVer.setMessage(getButton(9), "\u00A76Choose State");
+			MCVer.setMessage(getButton(10), "\u00A76Custom");
+			MCVer.setMessage(getButton(11), "\u00A76Tickrate");
 		} else {
-			getButton(8).setMessage("Savestate");
-			getButton(9).setMessage("Loadstate");
-			getButton(10).setMessage("+");
-			getButton(11).setMessage("-");
+			MCVer.setMessage(getButton(8), "Savestate");
+			MCVer.setMessage(getButton(9), "Loadstate");
+			MCVer.setMessage(getButton(10), "+");
+			MCVer.setMessage(getButton(11), "-");
 		}
-		drawCenteredString(Minecraft.getInstance().font, "Hold Shift to access more features", width / 2, this.height / 4 + 152, 0xFFFFFF);
-		if (savestateName != null) savestateName.render(mouseX, mouseY, partialTicks);
-		if (tickrateField != null) tickrateField.render(mouseX, mouseY, partialTicks);
+		MCVer.drawCenteredString(this, "Hold Shift to access more features", width / 2, this.height / 4 + 152, 0xFFFFFF);
+		if (savestateName != null) MCVer.render(savestateName, mouseX, mouseY, partialTicks);
+		if (tickrateField != null) MCVer.render(tickrateField, mouseX, mouseY, partialTicks);
 
 		if (SavestateMod.showSavestateDone) {
 			long timeSince = System.currentTimeMillis() - SavestateMod.timeTitle;
@@ -187,24 +194,24 @@ public abstract class MixinGuiIngameMenu extends Screen {
 				buttons.get( 9).active=SavestateMod.hasSavestate();
 				return;
 			}
-			drawCenteredString(Minecraft.getInstance().font, "\u00A76Savestate successful...", width / 2, 20, new Color(1F, 1F, 1F, 1F - (timeSince / 2000F)).getRGB());
+			MCVer.drawCenteredString(this, "\u00A76Savestate successful...", width / 2, 20, new Color(1F, 1F, 1F, 1F - (timeSince / 2000F)).getRGB());
 		} else if (SavestateMod.showLoadstateDone) {
 			long timeSince = System.currentTimeMillis() - SavestateMod.timeTitle;
 			if (timeSince >= 1800) {
 				SavestateMod.showLoadstateDone = false;
 				return;
 			}
-			drawCenteredString(Minecraft.getInstance().font, "\u00A76Loadstate successful...", width / 2, 20, new Color(1F, 1F, 1F, 1F - (timeSince / 2000F)).getRGB());
+			MCVer.drawCenteredString(this, "\u00A76Loadstate successful...", width / 2, 20, new Color(1F, 1F, 1F, 1F - (timeSince / 2000F)).getRGB());
 		}
-		Minecraft.getInstance().font.drawShadow("Tickrate Changer (" + TickrateChangerMod.tickrate + ")", 5, 5, 0xFFFFFF);
+		MCVer.drawShadow("Tickrate Changer (" + TickrateChangerMod.tickrate + ")", 5, 5, 0xFFFFFF);
 		int i = 18;
-		Minecraft.getInstance().font.drawShadow("Tickjump", 10, 105, 0xFFFFFF);
+		MCVer.drawShadow("Tickjump", 10, 105, 0xFFFFFF);
 		if (getButton(i).active == false) {
-			Minecraft.getInstance().font.drawShadow("Tickjump is ready,", 8, 137, 0xFFFFFF);
-			Minecraft.getInstance().font.drawShadow("press ESC to continue", 8, 147, 0xFFFFFF);
+			MCVer.drawShadow("Tickjump is ready,", 8, 137, 0xFFFFFF);
+			MCVer.drawShadow("press ESC to continue", 8, 147, 0xFFFFFF);
 		}
 
-		Minecraft.getInstance().font.drawShadow("Duping", 10, 45, 0xFFFFFF);
+		MCVer.drawShadow("Duping", 10, 45, 0xFFFFFF);
 	}
 
 	@Override

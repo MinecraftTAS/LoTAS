@@ -12,6 +12,7 @@ import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.lwjgl.glfw.GLFW;
 
+import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.core.utils.EventUtils.Timer;
 import de.pfannekuchen.lotas.mixin.render.gui.MixinGuiIngameMenu;
 import net.minecraft.client.Minecraft;
@@ -65,7 +66,7 @@ public class SavestateMod {
 		server.saveAllChunks(false, true, false);
 		
 		new Thread(() -> {
-			final String worldName = server.getLevelIdName();
+			final String worldName = MCVer.getCurrentWorldFolder();
 			final File worldDir = new File(mc.gameDirectory, "saves/" + worldName);
 			final File savestatesDir = new File(mc.gameDirectory, "saves/savestates/");
 
@@ -121,7 +122,7 @@ public class SavestateMod {
 
 		mc.getSingleplayerServer().halt(true);
 
-		final String worldName = server.getLevelIdName();
+		final String worldName = MCVer.getCurrentWorldFolder();
 		final File worldDir = new File(mc.gameDirectory, "saves/" + worldName);
 		final File savestatesDir = new File(mc.gameDirectory, "saves/savestates/");
 
@@ -149,12 +150,16 @@ public class SavestateMod {
 		}
 		mc.gui.getChat().clearMessages(true);
 
-		GLFW.glfwSetCursorPos(mc.window.getWindow(), x, y);
+		GLFW.glfwSetCursorPos(Minecraft.getInstance().window.getWindow(), x, y);
 		mc.mouseHandler.turnPlayer();
 
+		//#if MC>=11600
+//$$ 		mc.loadLevel(worldName);
+		//#else
 		mc.selectLevel(worldName, worldName, null);
-
-		GLFW.glfwSetCursorPos(mc.window.getWindow(), x, y);
+		//#endif
+		
+		GLFW.glfwSetCursorPos(Minecraft.getInstance().window.getWindow(), x, y);
 		mc.mouseHandler.turnPlayer();
 
 	}
@@ -165,7 +170,7 @@ public class SavestateMod {
 	 * @see MixinGuiIngameMenu#injectinitGui(org.spongepowered.asm.mixin.injection.callback.CallbackInfo)
 	 */
 	public static boolean hasSavestate() {
-		final String worldName = Minecraft.getInstance().getSingleplayerServer().getLevelIdName();
+		final String worldName = MCVer.getCurrentWorldFolder();
 		File savestatesDir = new File(Minecraft.getInstance().gameDirectory, "saves/savestates/");
 		if (!savestatesDir.exists())
 			return false;
@@ -232,8 +237,7 @@ public class SavestateMod {
 	// Delete
 	public static void yeet(int i) {
 		final Minecraft mc = Minecraft.getInstance();
-		final IntegratedServer server = mc.getSingleplayerServer();
-		final String worldName = server.getLevelName();
+		final String worldName = MCVer.getCurrentWorldFolder();
 		final File savestatesDir = new File(mc.gameDirectory, "saves/savestates/");
 
 		final File savestateDir = new File(savestatesDir, worldName + "-Savestate" + (i));

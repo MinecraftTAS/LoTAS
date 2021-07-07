@@ -28,7 +28,7 @@ public abstract class MixinGuiSelectWorldScreen extends Screen {
 	public void injectinit(CallbackInfo ci) {
 		/*
 		 * TODO: Fucking fix this mess
-		 * addButton(new Button(2, 2, 98, 20, "Seed List", button -> {
+		 * addButton(MCVer.Button(2, 2, 98, 20, "Seed List", button -> {
 			Minecraft.getInstance().setScreen(new SeedListScreen());
 		}));*/
 		addButton(widget = new SmallCheckboxWidget(width - 160, 4, "Open ESC when joining world", ConfigUtils.getBoolean("tools", "hitEscape"), b -> {

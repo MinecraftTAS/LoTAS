@@ -3,13 +3,11 @@ package de.pfannekuchen.lotas.dropmanipulation.drops.blockdrops;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.platform.GlStateManager;
 
+import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.gui.DropManipulationScreen;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.gui.components.Checkbox;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
@@ -21,13 +19,13 @@ public class DeadbushDropManipulation extends DropManipulationScreen.DropManipul
 
 	public static int sticks = 0;
 
-	public static Button drop0Stick = new Button(x, y, 98, 20, "0 Sticks", button -> {
+	public static Button drop0Stick = MCVer.Button(x, y, 98, 20, "0 Sticks", button -> {
 		press0Stick();
 	});
-	public static Button drop1Stick = new Button(x, y, 98, 20, "1 Sticks", button -> {
+	public static Button drop1Stick = MCVer.Button(x, y, 98, 20, "1 Sticks", button -> {
 		press1Stick();
 	});
-	public static Button drop2Stick = new Button(x, y, 98, 20, "2 Sticks", button -> {
+	public static Button drop2Stick = MCVer.Button(x, y, 98, 20, "2 Sticks", button -> {
 		press2Stick();
 	});
 
@@ -57,7 +55,7 @@ public class DeadbushDropManipulation extends DropManipulationScreen.DropManipul
 		DeadbushDropManipulation.y = y;
 		DeadbushDropManipulation.width = width;
 		DeadbushDropManipulation.height = height;
-		enabled = new Checkbox(x, y, 150, 20, "Override Dead Bush Drops", false);
+		enabled = MCVer.Checkbox(x, y, 150, 20, "Override Dead Bush Drops", false);
 		drop0Stick.active = false;
 	}
 
@@ -107,17 +105,17 @@ public class DeadbushDropManipulation extends DropManipulationScreen.DropManipul
 
 	@Override
 	public void render(int mouseX, int mouseY, float delta) {
-		enabled.render(mouseX, mouseY, delta);
+		MCVer.render(enabled, mouseX, mouseY, delta);
 
 		if (!enabled.selected()) {
-			GlStateManager.color4f(.5f, .5f, .5f, .4f);
+			MCVer.color4f(.5f, .5f, .5f, .4f);
 		} else {
-			drop0Stick.render(mouseX, mouseY, delta);
-			Minecraft.getInstance().font.drawShadow("Drop " + sticks + " Sticks when breaking Gravel", x, y + 64, 0xFFFFFF);
+			MCVer.render(drop0Stick, mouseX, mouseY, delta);
+			MCVer.drawShadow("Drop " + sticks + " Sticks when breaking Gravel", x, y + 64, 0xFFFFFF);
 		}
 
 		Minecraft.getInstance().getTextureManager().bind(new ResourceLocation("lotas", "drops/deadbush.png"));
-		GuiComponent.blit(width - 128, y + 24, 0.0F, 0.0F, 96, 96, 96, 96);
+		MCVer.blit(width - 128, y + 24, 0.0F, 0.0F, 96, 96, 96, 96);
 
 	}
 

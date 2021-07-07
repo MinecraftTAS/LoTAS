@@ -1,7 +1,8 @@
 package de.pfannekuchen.lotas.core.utils;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.platform.Window;
+
+import de.pfannekuchen.lotas.core.MCVer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
@@ -30,7 +31,7 @@ public class PotionRenderer {
 		double scale=window.getGuiScale()/3;
 		int height=window.getScreenHeight();
 
-		GlStateManager.translated(0, 0, -13);
+		MCVer.translated(0, 0.0f, -13);
 
 		double skla=4.1;
 		if(scale==1D) {
@@ -45,17 +46,17 @@ public class PotionRenderer {
 		double height2=(height/2*-0.004)-skla;
 
 
-		GlStateManager.translated(0, height2, 0);
-		GlStateManager.scaled(scale, scale, scale);
+		MCVer.translated(0, height2, 0);
+		MCVer.scaled(scale, scale, scale);
 
 		double scale2=1+(1080-height)*0.0015;
-		GlStateManager.scaled(scale2, scale2, scale2);
+		MCVer.scaled(scale2, scale2, scale2);
 
 		if(Minecraft.getInstance().player.isUnderWater()) {
-			GlStateManager.translated(0, 0, -2.5);
+			MCVer.translated(0, 0, -2.5);
 		}
-		GlStateManager.rotated(180, 0, 1 ,0);
-		GlStateManager.rotated(10, 0, 0 ,1);
+		MCVer.rotated(180, 0, 1 ,0);
+		MCVer.rotated(10, 0, 0 ,1);
 		return stack;
 	}
 }

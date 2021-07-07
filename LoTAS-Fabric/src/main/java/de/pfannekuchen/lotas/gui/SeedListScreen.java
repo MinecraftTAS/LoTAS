@@ -12,14 +12,13 @@ import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.Tesselator;
 
-import net.minecraft.client.gui.components.Button;
-import de.pfannekuchen.lotas.mixin.accessors.AccessorCreateWorldScreen;
+import de.pfannekuchen.lotas.core.MCVer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.ProgressScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.TitleScreen;
-import net.minecraft.client.gui.screens.worldselection.CreateWorldScreen;
 import net.minecraft.client.gui.screens.worldselection.SelectWorldScreen;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.network.chat.TextComponent;
@@ -99,16 +98,16 @@ public class SeedListScreen extends Screen {
 	 */
 	@Override
 	protected void init() {
-		this.addButton(new Button(width / 2 - 100, height - 28, 200, 20, "Done", button -> {
+		this.addButton(MCVer.Button(width / 2 - 100, height - 28, 200, 20, "Done", button -> {
 			Minecraft.getInstance().setScreen(new SelectWorldScreen(new TitleScreen()));
 		}));
-		Button create = new Button(width / 2 - 100, height - 52, 200, 20, "Create World", button -> {
+		Button create = MCVer.Button(width / 2 - 100, height - 52, 200, 20, "Create World", button -> {
 		Minecraft.getInstance().setScreen(new ProgressScreen());
-			CreateWorldScreen createWorldScreen = new CreateWorldScreen(this);
-			AccessorCreateWorldScreen accessorCWS = (AccessorCreateWorldScreen) createWorldScreen;
-			accessorCWS.setSeed(selectedSeed.seed);
-			accessorCWS.setCheatsEnabled(true);
-			Minecraft.getInstance().setScreen(createWorldScreen);
+//			CreateWorldScreen createWorldScreen = new CreateWorldScreen(this);
+//			AccessorCreateWorldScreen accessorCWS = (AccessorCreateWorldScreen) createWorldScreen;
+//			accessorCWS.setSeed(selectedSeed.seed);
+//			accessorCWS.setCheatsEnabled(true);
+//			Minecraft.getInstance().setScreen(createWorldScreen);
 		});
 		create.active = false;
 		this.addButton(create);
@@ -122,7 +121,7 @@ public class SeedListScreen extends Screen {
 		Tesselator tessellator = Tesselator.getInstance();
 		BufferBuilder bufferBuilder = tessellator.getBuilder();
 		Minecraft.getInstance().getTextureManager().bind(GuiComponent.BACKGROUND_LOCATION);
-		GlStateManager.color4f(.5f, .5f, .5f, .4F);
+		MCVer.color4f(.5f, .5f, .5f, .4F);
 		bufferBuilder.begin(7, DefaultVertexFormat.POSITION);
 		bufferBuilder.vertex((double) 0, (double) bottom, 0.0D).uv(0.0F, ((float) bottom / 32.0F)).color(64, 64, 64, alphaBottom).endVertex();
 		bufferBuilder.vertex((double) (0 + this.width), (double) bottom, 0.0D).uv(((float) this.width / 32.0F), ((float) bottom / 32.0F)).color(64, 64, 64, alphaBottom).endVertex();
@@ -145,32 +144,31 @@ public class SeedListScreen extends Screen {
 			if (selectedSeed == seed) {
 				double r = x;
 				int q = x + Minecraft.getInstance().font.width(seed.description) + 38;
-				GlStateManager.disableTexture();
+				MCVer.disableTexture();
 				float f = 1.0F;
-				GlStateManager.color4f(f, f, f, 0.5F);
+				MCVer.color4f(f, f, f, 0.5F);
 				bufferBuilder.begin(7, DefaultVertexFormat.POSITION);
 				bufferBuilder.vertex((double) r - 1, (double) (y + n + 2), 1.0D).endVertex();
 				bufferBuilder.vertex((double) q - 1, (double) (y + n + 2), 1.0D).endVertex();
 				bufferBuilder.vertex((double) q - 1, (double) (y - 2), 1.0D).endVertex();
 				bufferBuilder.vertex((double) r - 1, (double) (y - 2), 1.0D).endVertex();
 				tessellator.end();
-				GlStateManager.color4f(0.0F, 0.0F, 0.0F, 0.5F);
+				MCVer.color4f(0.0F, 0.0F, 0.0F, 0.5F);
 				bufferBuilder.begin(7, DefaultVertexFormat.POSITION);
 				bufferBuilder.vertex((double) (r), (double) (y + n + 1), 1.0D).endVertex();
 				bufferBuilder.vertex((double) (q - 2), (double) (y + n + 1), 1.0D).endVertex();
 				bufferBuilder.vertex((double) (q - 2), (double) (y - 1), 1.0D).endVertex();
 				bufferBuilder.vertex((double) (r), (double) (y - 1), 1.0D).endVertex();
 				tessellator.end();
-				GlStateManager.enableTexture();
-				//#endif
+				MCVer.enableTexture();
 			}
-			Minecraft.getInstance().font.draw(seed.name, x + 35, y + 3, 16777215);
-			Minecraft.getInstance().font.draw(seed.description, x + 35, y + 14, 8421504);
-			Minecraft.getInstance().font.draw(seed.seed, x + 35, y + 24, 8421504);
-			GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+			MCVer.drawShadow(seed.name, x + 35, y + 3, 16777215);
+			MCVer.drawShadow(seed.description, x + 35, y + 14, 8421504);
+			MCVer.drawShadow(seed.seed, x + 35, y + 24, 8421504);
+			MCVer.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 			try {
 				Minecraft.getInstance().getTextureManager().bind(downloadSeed(seed.seed));
-				GuiComponent.blit(x + 1, y, 0.0F, 0.0F, 32, 32, 32, 32);
+				MCVer.blit(x + 1, y, 0.0F, 0.0F, 32, 32, 32, 32);
 			} catch (Exception e) {
 
 			}
@@ -178,24 +176,27 @@ public class SeedListScreen extends Screen {
 		}
 	}
 
-	@Override public void render(int mouseX, int mouseY, float delta) {
+	//#if MC>=11600
+//$$ 	@Override public void render(com.mojang.blaze3d.vertex.PoseStack stack, int mouseX, int mouseY, float partialTicks) {
+//$$ 		MCVer.stack = stack;
+	//#else
+	@Override public void render(int mouseX, int mouseY, float partialTicks) {
+	//#endif
 		int left = 0;
 		int right = width;
 		int top = 48;
 		int bottom = height - 64;
 
-		renderBackground();
+		MCVer.renderBackground(this);
 		
-		GlStateManager.disableLighting();
-		GlStateManager.disableFog();
-		//#endif
+		MCVer.disableLighting();
+		MCVer.disableFog();
 		Tesselator tessellator = Tesselator.getInstance();
 		BufferBuilder bufferBuilder = tessellator.getBuilder();
 		
 		Minecraft.getInstance().getTextureManager().bind(GuiComponent.BACKGROUND_LOCATION);
-		//#endif
 		
-		GlStateManager.color4f(1f, 1f, 1f, 1F);
+		MCVer.color4f(1f, 1f, 1f, 1F);
 		bufferBuilder.begin(7, DefaultVertexFormat.POSITION);
 		
 		bufferBuilder.vertex((double) left, (double) bottom, 0.0D).uv(((float) left / 32.0F), ((float) (bottom + (int) 1) / 32.0F)).color(32, 32, 32, 255).endVertex();
@@ -205,16 +206,15 @@ public class SeedListScreen extends Screen {
 		tessellator.end();
 
 		// OpenGL Stuff
-		GlStateManager.disableDepthTest();
+		MCVer.disableDepthTest();
 		this.renderHoleBackground(0, top, 255, 255);
 		this.renderHoleBackground(bottom, this.height, 255, 255);
-		GlStateManager.enableBlend();
-		GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ONE);
-		GlStateManager.disableAlphaTest();
-		GlStateManager.shadeModel(7425);
-		//#endif
+		MCVer.enableBlend();
+		MCVer.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ONE);
+		MCVer.disableAlphaTest();
+		MCVer.shadeModel(7425);
 		
-		GlStateManager.disableTexture();
+		MCVer.disableTexture();
 
 		// Draw top gradient
 		bufferBuilder.begin(7, DefaultVertexFormat.POSITION_TEX_COLOR);
@@ -232,12 +232,12 @@ public class SeedListScreen extends Screen {
 		bufferBuilder.vertex(left, bottom - 4, 0.0D).uv(0.0F, 0.0F).color(0, 0, 0, 0).endVertex();
 		tessellator.end();
 
-		GlStateManager.enableTexture();
-		GlStateManager.shadeModel(7424);
-		GlStateManager.enableAlphaTest();
-		GlStateManager.disableBlend();
+		MCVer.enableTexture();
+		MCVer.shadeModel(7424);
+		MCVer.enableAlphaTest();
+		MCVer.disableBlend();
 		
-		drawCenteredString(Minecraft.getInstance().font, "Seeds", width / 2, 8, 0xFFFFFF);
+		MCVer.drawCenteredString(this, "Seeds", width / 2, 8, 0xFFFFFF);
 
 		try {
 			drawSeeds(null);

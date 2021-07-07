@@ -23,9 +23,15 @@ import net.minecraft.world.level.Level;
 @Mixin(ServerPlayer.class)
 public abstract class MixinServerPlayerEntityPatch extends Player {
 
-	public MixinServerPlayerEntityPatch(Level world, GameProfile profile) {
-		super(world, profile);
-	}
+	//#if MC>=11600
+	//#if MC>=11605
+//$$ 	public MixinServerPlayerEntityPatch(Level level, net.minecraft.core.BlockPos blockPos, float f, GameProfile gameProfile) { super(level, blockPos, f, gameProfile); }
+	//#else
+//$$ 	public MixinServerPlayerEntityPatch(Level level, net.minecraft.core.BlockPos blockPos, GameProfile gameProfile) { super(level, blockPos, gameProfile); }
+	//#endif
+	//#else
+	public MixinServerPlayerEntityPatch(Level world, GameProfile profile) { super(world, profile); }
+	//#endif
 
 	@Final
 	@Shadow
@@ -47,9 +53,6 @@ public abstract class MixinServerPlayerEntityPatch extends Player {
 			if (flag.get()) {
 				Minecraft.getInstance().player.setDeltaMovement(0, 0, 0);
 				Minecraft.getInstance().player.hurtMarked = true;
-				Minecraft.getInstance().player.xo = this.x;
-				Minecraft.getInstance().player.yo = this.y;
-				Minecraft.getInstance().player.zo = this.z;
 			}
 			returnable.setReturnValue(false);
 			returnable.cancel();

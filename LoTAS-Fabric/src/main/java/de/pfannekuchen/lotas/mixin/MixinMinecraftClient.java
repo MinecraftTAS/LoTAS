@@ -9,6 +9,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import de.pfannekuchen.lotas.core.LoTASModContainer;
+import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.core.utils.ConfigUtils;
 import de.pfannekuchen.lotas.core.utils.EventUtils.Timer;
 import de.pfannekuchen.lotas.core.utils.KeybindsUtils;
@@ -20,7 +21,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.screens.PauseScreen;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.multiplayer.MultiPlayerLevel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.util.Mth;
@@ -52,11 +52,19 @@ public class MixinMinecraftClient {
 	public boolean isLoadingWorld;
 
 	@Inject(method = "setLevel", at = @At("HEAD"))
-	public void injectloadWorld(MultiPlayerLevel worldClientIn, CallbackInfo ci) {
+	//#if MC>=11500
+//$$ 	public void injectloadWorld(net.minecraft.client.multiplayer.ClientLevel worldClientIn, CallbackInfo ci) {
+	//#else
+	public void injectloadWorld(net.minecraft.client.multiplayer.MultiPlayerLevel worldClientIn, CallbackInfo ci) {
+	//#endif
 		isLoadingWorld = ConfigUtils.getBoolean("tools", "hitEscape") && worldClientIn != null;
 	}
 
+	//#if MC>=11500
+//$$ 	@Inject(method = "run", at = @At("HEAD"))
+	//#else
 	@Inject(method = "init", at = @At("TAIL"))
+	//#endif
 	public void loadRenderingLate(CallbackInfo ci) {
 		LoTASModContainer.loadShields();
 		KeybindsUtils.registerKeybinds();
@@ -77,14 +85,19 @@ public class MixinMinecraftClient {
 		}
 
 		if (player != null) {
-			if (player.onGround && !wasOnGround && KeybindsUtils.holdStrafeKeybind.isDown()) {
+			//#if MC>=11600
+//$$ 			boolean isOnGround = player.isOnGround();
+			//#else
+			boolean isOnGround = player.onGround;
+			//#endif
+			if (isOnGround && !wasOnGround && KeybindsUtils.holdStrafeKeybind.isDown()) {
 				player.yRot += 45;
 				KeyMapping.set(options.keyRight.getDefaultKey(), false);
-			} else if (!player.onGround && wasOnGround && KeybindsUtils.holdStrafeKeybind.isDown()) {
+			} else if (!isOnGround && wasOnGround && KeybindsUtils.holdStrafeKeybind.isDown()) {
 				player.yRot -= 45;
 				KeyMapping.set(options.keyRight.getDefaultKey(), true);
 			}
-			wasOnGround = player.onGround;
+			wasOnGround = isOnGround;
 		}
 
 		if (KeybindsUtils.shouldLoadstate) {
@@ -124,9 +137,7 @@ public class MixinMinecraftClient {
 			forward = forward * f;
 			float f1 = Mth.sin(player.yRot * 0.017453292F);
 			float f2 = Mth.cos(player.yRot * 0.017453292F);
-			player.x += (double) (strafe * f2 - forward * f1);
-			player.y += (double) up;
-			player.z += (double) (forward * f2 + strafe * f1);
+			MCVer.setXYZ(player, (strafe * f2 - forward * f1), up, (forward * f2 + strafe * f1));
 		}
 	}
 
@@ -190,7 +201,11 @@ public class MixinMinecraftClient {
 			if (options.keyJump.isDown()) {
 				move(0.0F, 0.92F, 0.0F, 1.0F);
 			}
+			//#if MC>=11500
+//$$ 			if (options.keyShift.isDown()) {
+			//#else
 			if (options.keySneak.isDown()) {
+			//#endif
 				move(0.0F, -0.92F, 0.0F, 1.0F);
 			}
 		}

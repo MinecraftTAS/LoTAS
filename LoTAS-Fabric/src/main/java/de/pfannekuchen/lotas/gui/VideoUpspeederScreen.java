@@ -8,11 +8,12 @@ import java.time.Duration;
 
 import org.lwjgl.opengl.GL11;
 
+import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.core.utils.VideoUpspeeder;
-import net.minecraft.client.gui.components.Button;
 import net.bramp.ffmpeg.probe.FFmpegProbeResult;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Checkbox;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
@@ -72,16 +73,16 @@ public class VideoUpspeederScreen extends Screen {
 	@Override
 	protected void init() {
 		if (isEncoding) {
-			addButton(new Button(width / 2 - 153, height - 40, 306, 20, "Continue encoding in the background >>", (b) -> {
+			addButton(MCVer.Button(width / 2 - 153, height - 40, 306, 20, "Continue encoding in the background >>", (b) -> {
 				Minecraft.getInstance().setScreen(new TitleScreen());
 			}));
 			return;
 		}
 
-		addButton(new EditBox(client.font, (width / 12) * 1 - (width / 24), (height / 8), (width / 12) * 9, 20, "")).setMaxLength(999);
-		addButton(new Button((width / 12) * 10 + 5 - (width / 24), (height / 8), (width / 12) * 2, 20, "Select File", (b) -> {
-			if (client.window.isFullscreen())
-				client.window.toggleFullScreen();
+		addButton(MCVer.EditBox(client.font, (width / 12) * 1 - (width / 24), (height / 8), (width / 12) * 9, 20, "")).setMaxLength(999);
+		addButton(MCVer.Button((width / 12) * 10 + 5 - (width / 24), (height / 8), (width / 12) * 2, 20, "Select File", (b) -> {
+			if (Minecraft.getInstance().window.isFullscreen())
+				Minecraft.getInstance().window.toggleFullScreen();
 			new Thread(new Runnable() {
 
 				@Override
@@ -108,86 +109,94 @@ public class VideoUpspeederScreen extends Screen {
 				}
 			}).start();
 		}));
-		addButton(new Button((width / 2) - 70, (height / 8) * 2 + 20, 20, 20, "-", (b) -> {
+		addButton(MCVer.Button((width / 2) - 70, (height / 8) * 2 + 20, 20, 20, "-", (b) -> {
 			if (tickrate != 1)
 				tickrate--;
 			((EditBox) buttons.get(buttons.size() - 1)).setValue(tickrate + "");
 		}));
-		addButton(new Button((width / 2) + 50, (height / 8) * 2 + 20, 20, 20, "+", (b) -> {
+		addButton(MCVer.Button((width / 2) + 50, (height / 8) * 2 + 20, 20, 20, "+", (b) -> {
 			tickrate++;
 			((EditBox) buttons.get(buttons.size() - 1)).setValue(tickrate + "");
 		}));
-		addButton(new Button((width / 2) - 98, this.height - (this.height / 10) - 15 - 20 - 5, 204, 20, "Speed up video", (b) -> {
+		addButton(MCVer.Button((width / 2) - 98, this.height - (this.height / 10) - 15 - 20 - 5, 204, 20, "Speed up video", (b) -> {
 			b.active = false;
 			isEncoding = true;
 			VideoUpspeeder.speedup(tickrate, bitrate(), codecFFmpeg, (long) ((lengthInMilliseconds / 16L) * (tickrate / 20F)));
 		})).active = selectedFile == null ? false : selectedFile.exists();
-		addButton(new Checkbox(2, this.height - 22, 20, 20, "High Quality", false));
-		addButton(new EditBox(client.font, (width / 2) - 45, (height / 8) * 2 + 23, 90, 14, "20")).setValue("20");
+		addButton(MCVer.Checkbox(2, this.height - 22, 20, 20, "High Quality", false));
+		addButton(MCVer.EditBox(client.font, (width / 2) - 45, (height / 8) * 2 + 23, 90, 14, "20")).setValue("20");
 		super.init();
 	}
 	
-	@Override
-	public void render(int mouseX, int mouseY, float delta) {
-		renderBackground();
+	//#if MC>=11600
+//$$ 	@Override public void render(com.mojang.blaze3d.vertex.PoseStack stack, int mouseX, int mouseY, float delta) {
+//$$ 		MCVer.stack = stack;
+	//#else
+	@Override public void render(int mouseX, int mouseY, float delta) {
+	//#endif
+		MCVer.renderBackground(this);
 		if (isEncoding) {
 			int i = this.width / 2 - 150;
 			int j = this.width / 2 + 150;
 			int k = this.height / 4 + 100;
 			int l = k + 10;
 			int m = 0;
-			fill(i - 1, k - 1, j + 1, l + 1, -16777216);
+			MCVer.fill(i - 1, k - 1, j + 1, l + 1, -16777216);
 			int n;
 			n = Mth.floor(progress * (float) (j - i));
-			fill(i + m, k, i + m + n, l, -13408734);
-			super.render(mouseX, mouseY, delta);
+			MCVer.fill(i + m, k, i + m + n, l, -13408734);
+			for(int k2 = 0; k2 < this.buttons.size(); ++k2) {
+				MCVer.render(((AbstractWidget)this.buttons.get(k2)), mouseX, mouseY, delta);
+			}
 			int var10004 = k + (l - k) / 2;
 
-			drawString(client.font, "Est: " + getDuration(est), i, 40 + (9 + 3) * 2, 10526880);
-			drawString(client.font, bitrate + "", i, 40 + 9 + 3, 10526880);
+			MCVer.drawShadow("Est: " + getDuration(est), i, 40 + (9 + 3) * 2, 10526880);
+			MCVer.drawShadow(bitrate + "", i, 40 + 9 + 3, 10526880);
 
-			drawCenteredString(client.font, framesDone + " / " + (long) ((lengthInMilliseconds / 16L) * (tickrate / 20F)) + " Frames", width / 2, var10004 - 9 / 2, 0xFFFFFF);
+			MCVer.drawCenteredString(this, framesDone + " / " + (long) ((lengthInMilliseconds / 16L) * (tickrate / 20F)) + " Frames", width / 2, var10004 - 9 / 2, 0xFFFFFF);
 
 			return;
 		}
 
 		if (VideoUpspeederScreen.downloadingFFmpeg) {
-			this.renderBackground();
-			drawCenteredString(client.font, installingProgress, this.width / 2, this.height / 2, 16777215);
+			MCVer.renderBackground(this);
+			MCVer.drawCenteredString(this, installingProgress, this.width / 2, this.height / 2, 16777215);
 			String var10002 = PROGRESS_BAR_STAGES[(int) (Util.getMillis() / 150L % (long) PROGRESS_BAR_STAGES.length)];
 			int var10003 = this.width / 2;
 			int var10004 = this.height / 2;
-			drawCenteredString(client.font, var10002, var10003, var10004 + 9 * 2, 16777215);
+			MCVer.drawCenteredString(this, var10002, var10003, var10004 + 9 * 2, 16777215);
 			return;
 		}
 
-		drawCenteredString(client.font, "Tickrate", (width / 2), (height / 8) * 2, 0xFFFFFF);
+		MCVer.drawCenteredString(this, "Tickrate", (width / 2), (height / 8) * 2, 0xFFFFFF);
 
 		if (selectedFile != null)
-			drawString(client.font, selectedFile.getAbsolutePath(), (width / 12) * 1 - (width / 24) + 4, (height / 8) + 6, 0xFFFFFF);
+			MCVer.drawShadow(selectedFile.getAbsolutePath(), (width / 12) * 1 - (width / 24) + 4, (height / 8) + 6, 0xFFFFFF);
 
-		drawCenteredString(client.font, "Input File", (width / 4), (height / 8) * 3 + 10, 0x808080);
-		drawCenteredString(client.font, "Output File", (width / 4) * 3, (height / 8) * 3 + 10, 0x808080);
+		MCVer.drawCenteredString(this, "Input File", (width / 4), (height / 8) * 3 + 10, 0x808080);
+		MCVer.drawCenteredString(this, "Output File", (width / 4) * 3, (height / 8) * 3 + 10, 0x808080);
 
-		drawString(client.font, "Format: " + videoFormat, (width / 4) - (width / 12), (height / 8) * 4, 0xFFFFFF);
-		drawString(client.font, "Codec: " + codec, (width / 4) - (width / 12), (height / 8) * 4 + 10, 0xFFFFFF);
-		drawString(client.font, "Resolution: " + resolution, (width / 4) - (width / 12), (height / 8) * 4 + 20, 0xFFFFFF);
-		drawString(client.font, "Length: " + length, (width / 4) - (width / 12), (height / 8) * 4 + 30, 0xFFFFFF);
-		drawString(client.font, "Size: " + filesize, (width / 4) - (width / 12), (height / 8) * 4 + 40, 0xFFFFFF);
+		MCVer.drawShadow("Format: " + videoFormat, (width / 4) - (width / 12), (height / 8) * 4, 0xFFFFFF);
+		MCVer.drawShadow("Codec: " + codec, (width / 4) - (width / 12), (height / 8) * 4 + 10, 0xFFFFFF);
+		MCVer.drawShadow("Resolution: " + resolution, (width / 4) - (width / 12), (height / 8) * 4 + 20, 0xFFFFFF);
+		MCVer.drawShadow("Length: " + length, (width / 4) - (width / 12), (height / 8) * 4 + 30, 0xFFFFFF);
+		MCVer.drawShadow("Size: " + filesize, (width / 4) - (width / 12), (height / 8) * 4 + 40, 0xFFFFFF);
 
-		drawString(client.font, "Format: mp4", (width / 4) * 3 - (width / 12), (height / 8) * 4, 0xFFFFFF);
-		drawString(client.font, "Encoder: " + codecFFmpeg, (width / 4) * 3 - (width / 12), (height / 8) * 4 + 10, 0xFFFFFF);
-		drawString(client.font, "Resolution: " + resolution, (width / 4) * 3 - (width / 12), (height / 8) * 4 + 20, 0xFFFFFF);
+		MCVer.drawShadow("Format: mp4", (width / 4) * 3 - (width / 12), (height / 8) * 4, 0xFFFFFF);
+		MCVer.drawShadow("Encoder: " + codecFFmpeg, (width / 4) * 3 - (width / 12), (height / 8) * 4 + 10, 0xFFFFFF);
+		MCVer.drawShadow("Resolution: " + resolution, (width / 4) * 3 - (width / 12), (height / 8) * 4 + 20, 0xFFFFFF);
 		String dur = null;
 		try {
 			dur = getDuration(Duration.ofMillis((long) (lengthInMilliseconds * (tickrate / 20F))));
 		} catch (Exception e) {
 
 		}
-		drawString(client.font, "Length: " + dur, (width / 4) * 3 - (width / 12), (height / 8) * 4 + 30, 0xFFFFFF);
-		drawString(client.font, "Size: " + calcSize(), (width / 4) * 3 - (width / 12), (height / 8) * 4 + 40, 0xFFFFFF);
+		MCVer.drawShadow("Length: " + dur, (width / 4) * 3 - (width / 12), (height / 8) * 4 + 30, 0xFFFFFF);
+		MCVer.drawShadow("Size: " + calcSize(), (width / 4) * 3 - (width / 12), (height / 8) * 4 + 40, 0xFFFFFF);
 
-		super.render(mouseX, mouseY, delta);
+		for(int k = 0; k < this.buttons.size(); ++k) {
+			MCVer.render(((AbstractWidget)this.buttons.get(k)), mouseX, mouseY, delta);
+		}
 	}
 
 	/* Gets the Bitrate from the button */

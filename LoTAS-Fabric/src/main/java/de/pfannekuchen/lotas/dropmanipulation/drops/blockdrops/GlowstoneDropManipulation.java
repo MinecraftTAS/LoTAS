@@ -3,13 +3,11 @@ package de.pfannekuchen.lotas.dropmanipulation.drops.blockdrops;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.platform.GlStateManager;
 
+import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.gui.DropManipulationScreen;
-import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiComponent;
-import net.minecraft.client.gui.components.Checkbox;
+import net.minecraft.client.gui.components.Button;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
@@ -21,13 +19,13 @@ public class GlowstoneDropManipulation extends DropManipulationScreen.DropManipu
 
 	public static int dust = 2;
 
-	public static Button drop2Glowstonedust = new Button(x, y, 98, 20, "2 Glowstone Dust", button -> {
+	public static Button drop2Glowstonedust = MCVer.Button(x, y, 98, 20, "2 Glowstone Dust", button -> {
 		press2Glowstonedust();
 	});
-	public static Button drop3Glowstonedust = new Button(x, y, 98, 20, "3 Glowstone Dust", button -> {
+	public static Button drop3Glowstonedust = MCVer.Button(x, y, 98, 20, "3 Glowstone Dust", button -> {
 		press3Glowstonedust();
 	});
-	public static Button drop4Glowstonedust = new Button(x, y, 98, 20, "4 Glowstone Dust", button -> {
+	public static Button drop4Glowstonedust = MCVer.Button(x, y, 98, 20, "4 Glowstone Dust", button -> {
 		press4Glowstonedust();
 	});
 
@@ -57,7 +55,7 @@ public class GlowstoneDropManipulation extends DropManipulationScreen.DropManipu
 		GlowstoneDropManipulation.y = y;
 		GlowstoneDropManipulation.width = width;
 		GlowstoneDropManipulation.height = height;
-		enabled = new Checkbox(x, y, 150, 20, "Override Glowstone Drops", false);
+		enabled = MCVer.Checkbox(x, y, 150, 20, "Override Glowstone Drops", false);
 		drop2Glowstonedust.active = false;
 	}
 
@@ -107,19 +105,19 @@ public class GlowstoneDropManipulation extends DropManipulationScreen.DropManipu
 
 	@Override
 	public void render(int mouseX, int mouseY, float delta) {
-		enabled.render(mouseX, mouseY, delta);
+		MCVer.render(enabled, mouseX, mouseY, delta);
 		
 		if (!enabled.selected()) {
-			GlStateManager.color4f(0.5f, 0.5f, 0.5f, 0.4f);
+			MCVer.color4f(0.5f, 0.5f, 0.5f, 0.4f);
 		} else {
-			Minecraft.getInstance().font.drawShadow("Drop " + dust + " Glowstone Dust when breaking Glowstone", x, y + 64, 0xFFFFFF);
-			drop4Glowstonedust.render(mouseX, mouseY, delta);
-			drop3Glowstonedust.render(mouseX, mouseY, delta);
-			drop2Glowstonedust.render(mouseX, mouseY, delta);
+			MCVer.drawShadow("Drop " + dust + " Glowstone Dust when breaking Glowstone", x, y + 64, 0xFFFFFF);
+			MCVer.render(drop4Glowstonedust, mouseX, mouseY, delta);
+			MCVer.render(drop3Glowstonedust, mouseX, mouseY, delta);
+			MCVer.render(drop2Glowstonedust, mouseX, mouseY, delta);
 		}
 
 		Minecraft.getInstance().getTextureManager().bind(new ResourceLocation("lotas", "drops/glowstone.png"));
-		GuiComponent.blit(width - 128, y + 24, 0.0F, 0.0F, 96, 96, 96, 96);
+		MCVer.blit(width - 128, y + 24, 0.0F, 0.0F, 96, 96, 96, 96);
 	}
 
 }

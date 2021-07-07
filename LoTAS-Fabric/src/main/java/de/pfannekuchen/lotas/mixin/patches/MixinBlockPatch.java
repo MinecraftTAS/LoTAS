@@ -11,7 +11,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import de.pfannekuchen.lotas.gui.DropManipulationScreen;
 
+//#if MC>=11600
+//$$ @Mixin(net.minecraft.world.level.block.state.BlockBehaviour.class)
+//#else
 @Mixin(net.minecraft.world.level.block.Block.class)
+//#endif
 public class MixinBlockPatch {
 	@Inject(method = "getDrops(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/storage/loot/LootContext$Builder;)Ljava/util/List;", at = @At("HEAD"), cancellable = true)
 	public void redodrop(BlockState state, LootContext.Builder builder, CallbackInfoReturnable<List<ItemStack>> drops) {

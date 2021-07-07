@@ -3,14 +3,16 @@ package de.pfannekuchen.lotas.gui;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
+
+import de.pfannekuchen.lotas.core.MCVer;
+import de.pfannekuchen.lotas.core.utils.ConfigUtils;
+import de.pfannekuchen.lotas.mixin.accessors.AccessorTextFieldWidget;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button.OnPress;
+import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.TextComponent;
-import de.pfannekuchen.lotas.core.utils.ConfigUtils;
-import net.minecraft.client.gui.components.Button;
-import de.pfannekuchen.lotas.mixin.accessors.AccessorTextFieldWidget;
 
 public class ConfigurationScreen extends Screen {
 
@@ -42,7 +44,7 @@ public class ConfigurationScreen extends Screen {
 			String title = option.split(":")[2];
 			if (option.split(":")[0].equalsIgnoreCase("B")) {
 				boolean v = Boolean.parseBoolean(option.split(":")[3]);
-				addButton(new Button(width / 2 - 100, y, 200, 20, title + ": " + (v ? "\u00A7atrue" : "\u00A7cfalse"), actionPerformed(i++)));
+				addButton(MCVer.Button(width / 2 - 100, y, 200, 20, title + ": " + (v ? "\u00A7atrue" : "\u00A7cfalse"), actionPerformed(i++)));
 			}
 			y += 25;
 		}
@@ -51,7 +53,7 @@ public class ConfigurationScreen extends Screen {
 			String title = option.split(":")[2];
 			if (option.split(":")[0].equalsIgnoreCase("S")) {
 				String v = option.split(":")[3];
-				strings.add(new EditBox(Minecraft.getInstance().font, width / 2 - 100, y, 200, 20, v));
+				strings.add(MCVer.EditBox(Minecraft.getInstance().font, width / 2 - 100, y, 200, 20, v));
 				strings.get(strings.size() - 1).setValue(v);
 				strings.get(strings.size() - 1).setTextColorUneditable(i++);
 				messages.put(y, title);
@@ -63,7 +65,7 @@ public class ConfigurationScreen extends Screen {
 			String title = option.split(":")[2];
 			if (option.split(":")[0].equalsIgnoreCase("I")) {
 				String v = option.split(":")[3];
-				ints.add(new EditBox(Minecraft.getInstance().font, width / 2 - 100, y, 200, 20, v));
+				ints.add(MCVer.EditBox(Minecraft.getInstance().font, width / 2 - 100, y, 200, 20, v));
 				ints.get(ints.size() - 1).setValue(v);
 				ints.get(ints.size() - 1).setTextColorUneditable(i++);
 				messages.put(y, title);
@@ -184,22 +186,27 @@ public class ConfigurationScreen extends Screen {
 		return super.charTyped(typedChar, keyCode);
 	}
 
-	@Override
-	public void render(int mouseX, int mouseY, float delta) {
-		renderBackground(0);
-		drawCenteredString(Minecraft.getInstance().font, "Configuration Menu", width / 2, 5, 0xFFFFFFFF);
+	//#if MC>=11600
+//$$ 	@Override public void render(com.mojang.blaze3d.vertex.PoseStack stack, int mouseX, int mouseY, float delta) {
+//$$ 		MCVer.stack = stack;
+	//#else
+	@Override public void render(int mouseX, int mouseY, float delta) {
+	//#endif
+		MCVer.renderBackground(this);
+		MCVer.drawCenteredString(this, "Configuration Menu", width / 2, 5, 0xFFFFFFFF);
 		for (Entry<Integer, String> entry : messages.entrySet()) {
-			drawString(Minecraft.getInstance().font, entry.getValue(), 35, entry.getKey() + 5, 0xFFFFFFFF);
+			MCVer.drawShadow(entry.getValue(), 35, entry.getKey() + 5, 0xFFFFFFFF);
 		}
 		for (EditBox field : strings) {
-			field.render(mouseX, mouseY, delta);
+			MCVer.render(field, mouseX, mouseY, delta);
 		}
 		for (EditBox field : ints) {
-			field.render(mouseX, mouseY, delta);
+			MCVer.render(field, mouseX, mouseY, delta);
 		}
-		super.render(mouseX, mouseY, delta);
+		for(int k = 0; k < this.buttons.size(); ++k) {
+			MCVer.render(((AbstractWidget)this.buttons.get(k)), mouseX, mouseY, delta);
+		}
 	}
-	//#endif
 
 	public static String getTitle(String line) {
 		return line.split(":")[2];

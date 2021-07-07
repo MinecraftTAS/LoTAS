@@ -6,13 +6,15 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 import javax.annotation.Nullable;
+
+import org.lwjgl.glfw.GLFW;
+
+import de.pfannekuchen.lotas.core.MCVer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
-import org.lwjgl.glfw.GLFW;
 
 /**
  * A searchable dropdown widget.
@@ -33,11 +35,15 @@ public class DropdownWidget<T> extends AbstractWidget {
     private boolean dropdownOpenUp;
 
     public DropdownWidget(Font textRenderer, List<T> selections, Function<T, String> nameProvider, int x, int y, int width, int height, String title, T value, Consumer<T> saveHandler) {
+    	//#if MC>=11600
+    //$$ 	super(x, y, width, height, new net.minecraft.network.chat.TextComponent(title));
+    	//#else
     	super(x, y, width, height, title);
+    	//#endif
         this.textRenderer = textRenderer;
-        this.searchBox = new EditBox(textRenderer, x, y, width, height, title);
+        this.searchBox = MCVer.EditBox(textRenderer, x, y, width, height, title);
         this.dropdown = new DropdownListWidget(selections, nameProvider, saveHandler, x, y, width, height, title);
-        this.dropdownButton = new Button(x, y, width, height, "", btn -> {
+        this.dropdownButton = MCVer.Button(x, y, width, height, "", btn -> {
             dropdown.visible ^= true;
             if(dropdown.visible) {
                 if(focused != null) {
@@ -63,7 +69,12 @@ public class DropdownWidget<T> extends AbstractWidget {
         }
     }
     
+    //#if MC>=11600
+    //$$ @Override public void renderButton(com.mojang.blaze3d.vertex.PoseStack stack, int mouseX, int mouseY, float delta) {
+    //$$ 	MCVer.stack = stack;
+    //#else
     @Override public void renderButton(int mouseX, int mouseY, float delta) {
+    //#endif
         int buttonWidth = (this.height);
         int searchBoxWidth = this.width - buttonWidth - PADDING_H;
         int buttonX, searchBoxX;
@@ -80,8 +91,8 @@ public class DropdownWidget<T> extends AbstractWidget {
         dropdownButton.x = buttonX;
         dropdownButton.y = this.y;
         dropdownButton.setWidth(buttonWidth);
-        searchBox.render(mouseX, mouseY, delta);
-        dropdownButton.render(mouseX, mouseY, delta);
+        MCVer.render(searchBox, mouseX, mouseY, delta);
+        MCVer.render(dropdownButton, mouseX, mouseY, delta);
         dropdown.x = searchBoxX;
         dropdown.y = searchBox.y + 20 + 1;
         dropdownOpenUp = false;
@@ -97,14 +108,22 @@ public class DropdownWidget<T> extends AbstractWidget {
         dropdown.setHeight(dropdownHeight);
     }
 
+    //#if MC>=11600
+    //$$ @Override public void renderBg(com.mojang.blaze3d.vertex.PoseStack stack, Minecraft mc, int mouseX, int mouseY) {
+    //$$ 	MCVer.stack = stack;
+    //$$ 	if(dropdown.visible) {
+    //$$ 		dropdown.render(stack, mouseX, mouseY, 1f);    
+    //$$ 		dropdown.renderButton(stack, mouseX, mouseY, 1f);
+    //$$     }
+    //$$ }
+    //#else
     @Override public void renderBg(Minecraft mc, int mouseX, int mouseY) {
     	if(dropdown.visible) {
     		dropdown.render(mouseX, mouseY, 1f);    
     		dropdown.renderButton(mouseX, mouseY, 1f);
-            // for some reason, rendering a single upward facing drop down causes text
-            // on some widgets to render in front of the drop down
         }
     }
+    //#endif
 
     /**
      * The height, in pixels, of each line in the drop down menu.
@@ -229,7 +248,11 @@ public class DropdownWidget<T> extends AbstractWidget {
         private boolean frozen;
 
         public DropdownListWidget(List<T> selections, Function<T, String> nameProvider, Consumer<T> saveHandler, int x, int y, int width, int height, String message) {
+        	//#if MC>=11600
+        //$$ 	super(x, y, width, height, new net.minecraft.network.chat.TextComponent(message));
+        	//#else
         	super(x, y, width, height, message);
+        	//#endif
         	this.selections = selections;
             this.nameProvider = nameProvider;
             this.suggestedSelections = new ArrayList<>(selections);
@@ -288,7 +311,12 @@ public class DropdownWidget<T> extends AbstractWidget {
             return true;
         }
 
+        //#if MC>=11600
+        //$$ @Override public void renderButton(com.mojang.blaze3d.vertex.PoseStack stack, int mouseX, int mouseY, float delta) {
+        //$$ 	MCVer.stack = stack;
+        //#else
         @Override public void renderButton(int mouseX, int mouseY, float delta) {
+        //#endif
             Font textRenderer = DropdownWidget.this.textRenderer;
             int lineHeight = getLineHeight(textRenderer);
             int bgx0 = this.x;
@@ -296,8 +324,8 @@ public class DropdownWidget<T> extends AbstractWidget {
             int bgx1 = bgx0 + this.width - SCROLL_BAR_WIDTH - SCROLL_BAR_PADDING;
             int bgy1 = bgy0 + this.height;
             // render background
-            GuiComponent.fill(bgx0 - 1, bgy0 - 1, bgx1 + 1, bgy1 + 1, -6250336);
-            GuiComponent.fill(bgx0, bgy0, bgx1, bgy1, 0xff000000);
+            MCVer.fill(bgx0 - 1, bgy0 - 1, bgx1 + 1, bgy1 + 1, -6250336);
+            MCVer.fill(bgx0, bgy0, bgx1, bgy1, 0xff000000);
             // render selections
             int endIdx = Math.min(suggestedSelections.size(), scrollIdx + DISPLAYED_LINE_COUNT);
             for(int i = scrollIdx; i < endIdx; i++) {
@@ -307,8 +335,8 @@ public class DropdownWidget<T> extends AbstractWidget {
                     int sy0 = y;
                     int sx1 = bgx1 + 1;
                     int sy1 = y + lineHeight;
-                    GuiComponent.fill(sx0 - 1, sy0 - 1, sx1 + 1, sy1 + 1, 0xffffffff);
-                    GuiComponent.fill(sx0, sy0, sx1, sy1, 0xff000000);
+                    MCVer.fill(sx0 - 1, sy0 - 1, sx1 + 1, sy1 + 1, 0xffffffff);
+                    MCVer.fill(sx0, sy0, sx1, sy1, 0xff000000);
                 }
                 String name = nameProvider.apply(suggestedSelections.get(i));
                 int textX;
@@ -318,7 +346,7 @@ public class DropdownWidget<T> extends AbstractWidget {
                     textX = bgx0 + 2;
                 }
                 int textY = y + (lineHeight / 4);
-            	this.drawString(textRenderer, name, textX, textY, 0xffffffff);
+                MCVer.drawShadow(name, textX, textY, 0xffffffff);
             }
             // render scroll bar
             int scrollMax = Math.max(1, suggestedSelections.size() - DISPLAYED_LINE_COUNT);
@@ -337,7 +365,7 @@ public class DropdownWidget<T> extends AbstractWidget {
             }
             int scrollY0 = (int)(scrollPos * (bgy1 - scrollHeight) + (1 - scrollPos) * bgy0);
             int scrollY1 = scrollY0 + scrollHeight;
-            GuiComponent.fill(scrollX0, scrollY0, scrollX1, scrollY1, 0xffaaaaaa);
+            MCVer.fill(scrollX0, scrollY0, scrollX1, scrollY1, 0xffaaaaaa);
         }
 
         /**

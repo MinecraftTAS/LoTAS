@@ -4,13 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.platform.GlStateManager;
 
+import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.gui.DropManipulationScreen;
 import de.pfannekuchen.lotas.gui.widgets.ImageButton;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiComponent;
-import net.minecraft.client.gui.components.Checkbox;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.monster.Drowned;
@@ -29,7 +27,7 @@ public class DrownedDropManipulation extends DropManipulationScreen.DropManipula
 		DrownedDropManipulation.y = y;
 		DrownedDropManipulation.width = width;
 		DrownedDropManipulation.height = height;
-		enabled = new Checkbox(x, y, 150, 20, "Override Drowned Drops", false);
+		enabled = MCVer.Checkbox(x, y, 150, 20, "Override Drowned Drops", false);
 	}
 
 	@Override
@@ -72,17 +70,17 @@ public class DrownedDropManipulation extends DropManipulationScreen.DropManipula
 
 	@Override
 	public void render(int mouseX, int mouseY, float delta) {
-		enabled.render(mouseX, mouseY, delta);
+		MCVer.render(enabled, mouseX, mouseY, delta);
 
 		if (!enabled.selected()) {
-			GlStateManager.color4f(.5f, .5f, .5f, .4f);
+			MCVer.color4f(.5f, .5f, .5f, .4f);
 		} else {
-			Minecraft.getInstance().font.drawShadow("Drowned drop: 2 Rotten Flesh" + (dropGold.isToggled() ? ", 1 Iron Ingot" : ""), x, y + 64, 0xFFFFFF);
-			dropGold.render(mouseX, mouseY, delta);
+			MCVer.drawShadow("Drowned drop: 2 Rotten Flesh" + (dropGold.isToggled() ? ", 1 Iron Ingot" : ""), x, y + 64, 0xFFFFFF);
+			MCVer.render(dropGold, mouseX, mouseY, delta);
 		}
 
 		Minecraft.getInstance().getTextureManager().bind(new ResourceLocation("lotas", "drops/drowned.png"));
-		GuiComponent.blit(width - 228, y + 24, 0.0F, 0.0F, 122, 199, 122, 199);
+		MCVer.blit(width - 228, y + 24, 0.0F, 0.0F, 122, 199, 122, 199);
 	}
 
 }

@@ -179,7 +179,6 @@ public enum RenderUtils {
 
 		GL11.glVertex3d(bb.maxX, bb.minY, bb.maxZ);
 		GL11.glVertex3d(bb.minX, bb.minY, bb.minZ);
-		//#endif
 		GL11.glEnd();
 	}
 
@@ -222,7 +221,6 @@ public enum RenderUtils {
 
 		GL11.glVertex3d(midX, bb.minY, midZ);
 		GL11.glVertex3d(midX, midY, bb.maxZ);
-		//#endif
 	}
 
 	public static void drawArrow(Vec3 from, Vec3 to) {

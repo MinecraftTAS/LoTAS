@@ -1,10 +1,8 @@
 package de.pfannekuchen.lotas.gui.widgets;
 
-import com.mojang.blaze3d.platform.GlStateManager;
+import de.pfannekuchen.lotas.core.MCVer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.resources.language.I18n;
 import net.minecraft.resources.ResourceLocation;
 
 public class ImageButton extends Button {
@@ -13,7 +11,11 @@ public class ImageButton extends Button {
 	private ResourceLocation pic;
 
 	public ImageButton(int x, int y, Button.OnPress action, ResourceLocation pic) {
-		super(x, y, 20, 20, I18n.get(""), action);
+		//#if MC>=11600
+//$$ 		super(x, y, 20, 20, new net.minecraft.network.chat.TextComponent(""), action);
+		//#else
+		super(x, y, 20, 20, "", action);
+		//#endif
 		this.pic = pic;
 	}
 
@@ -25,11 +27,17 @@ public class ImageButton extends Button {
 		this.toggled = toggled;
 	}
 
+	//#if MC>=11600
+//$$ 	public void renderButton(com.mojang.blaze3d.vertex.PoseStack matrices, int mouseX, int mouseY, float delta) {
+//$$ 		super.renderButton(matrices, mouseX, mouseY, delta);
+//$$ 		MCVer.stack = matrices;
+	//#else
 	public void renderButton(int mouseX, int mouseY, float delta) {
 		super.renderButton(mouseX, mouseY, delta);
+	//#endif
 		Minecraft.getInstance().getTextureManager().bind(pic);
-		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-		GuiComponent.blit(x, y, 0.0F, 0.0F, 20, 20, 20, 20);
+		MCVer.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		MCVer.blit(x, y, 0.0F, 0.0F, 20, 20, 20, 20);
 	}
 
 }
