@@ -55,8 +55,12 @@ public class PotionRenderer {
 		if(Minecraft.getInstance().player.isUnderWater()) {
 			MCVer.translated(0, 0, -2.5);
 		}
-		MCVer.rotated(180, 0, 1 ,0);
-		MCVer.rotated(10, 0, 0 ,1);
+		//#if MC>=11500
+//$$
+		//#else
+		com.mojang.blaze3d.platform.GlStateManager.rotated(180, 0, 1, 0);
+		com.mojang.blaze3d.platform.GlStateManager.rotated(10, 0, 0 ,1);
+		//#endif
 		return stack;
 	}
 }

@@ -5,7 +5,8 @@
     "compatibilityLevel": "JAVA_8",
     "mixins": [
     	"accessors.AccessorMobEntity",
-    	"accessors.AccessorDimensionTypes"
+    	"accessors.AccessorDimensionTypes",
+    	"accessors.AccessorLevelStorage"
     ],
     "client": [
     	"MixinMinecraftClient",

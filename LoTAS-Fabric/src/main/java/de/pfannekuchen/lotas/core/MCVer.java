@@ -3,6 +3,7 @@ package de.pfannekuchen.lotas.core;
 import com.mojang.blaze3d.platform.GlStateManager.DestFactor;
 import com.mojang.blaze3d.platform.GlStateManager.SourceFactor;
 
+import de.pfannekuchen.lotas.mixin.accessors.AccessorLevelStorage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiComponent;
@@ -37,7 +38,7 @@ public class MCVer {
 //$$ 		return (ServerLevel) Minecraft.getInstance().getSingleplayerServer().getPlayerList().getPlayers().get(0).level;
 //$$ 	}
 //$$ 	public static String getCurrentWorldFolder() {
-//$$ 		return Minecraft.getInstance().getSingleplayerServer().getWorldData().getLevelSettings().levelName();
+//$$ 		return ((AccessorLevelStorage)Minecraft.getInstance().getSingleplayerServer()).getStorageSource().getLevelId();
 //$$ 	}
 	//#else
 	public static double getX(Entity e) {
@@ -226,7 +227,7 @@ public class MCVer {
 //$$ 	}
 //$$
 //$$ 	public static void rotated(int i, int j, int k, int l) {
-//$$ 		com.mojang.blaze3d.systems.RenderSystem.rotatef(j, k, l, i);
+//$$ 		com.mojang.blaze3d.systems.RenderSystem.rotatef(i, j, k, l);
 //$$ 	}
 //$$
 //$$ 	public static void enableDepthTest() {
@@ -234,7 +235,7 @@ public class MCVer {
 //$$ 	}
 //$$
 //$$ 	public static void translated(int i, int y, double d) {
-//$$ 		com.mojang.blaze3d.systems.RenderSystem.translated(d, y, d);
+//$$ 		com.mojang.blaze3d.systems.RenderSystem.translated(i, y, d);
 //$$ 	}
 	//#else
 	public static void color4f(float r, float g, float b, float a) {
@@ -318,7 +319,7 @@ public class MCVer {
 	}
 
 	public static void rotated(int i, int j, int k, int l) {
-		com.mojang.blaze3d.platform.GlStateManager.rotatef(j, k, l, i);
+		com.mojang.blaze3d.platform.GlStateManager.rotated(i, j, k, l);
 	}
 
 	public static void enableDepthTest() {
@@ -326,7 +327,7 @@ public class MCVer {
 	}
 
 	public static void translated(int i, int y, double d) {
-		com.mojang.blaze3d.platform.GlStateManager.translated(d, y, d);
+		com.mojang.blaze3d.platform.GlStateManager.translated(i, y, d);
 	}
 	//#endif
 }
