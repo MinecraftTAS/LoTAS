@@ -45,7 +45,7 @@ import org.spongepowered.asm.mixin.Mixin;
 //$$
 //$$ }
 //#else
-@Mixin(net.minecraft.client.MinecraftClient.class)
+@Mixin(net.minecraft.client.Minecraft.class)
 public class MixinPiglinBrainPatch {
 
 }

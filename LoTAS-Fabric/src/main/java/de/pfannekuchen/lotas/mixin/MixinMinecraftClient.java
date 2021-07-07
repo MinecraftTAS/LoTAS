@@ -1,7 +1,5 @@
 package de.pfannekuchen.lotas.mixin;
 
-import java.io.File;
-
 import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -11,47 +9,41 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import de.pfannekuchen.lotas.core.LoTASModContainer;
-import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.core.utils.ConfigUtils;
 import de.pfannekuchen.lotas.core.utils.EventUtils.Timer;
 import de.pfannekuchen.lotas.core.utils.KeybindsUtils;
 import de.pfannekuchen.lotas.core.utils.Keyboard;
 import de.pfannekuchen.lotas.mods.SavestateMod;
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.GameMenuScreen;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.network.ClientPlayerEntity;
-//#if MC>=11700
-//$$ import net.minecraft.client.option.GameOptions;
-//$$ import net.minecraft.client.option.KeyBinding;
-//#else
-import net.minecraft.client.options.GameOptions;
-import net.minecraft.client.options.KeyBinding;
-//#endif
-import net.minecraft.client.render.WorldRenderer;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.client.KeyMapping;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.Options;
+import net.minecraft.client.gui.screens.PauseScreen;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.multiplayer.MultiPlayerLevel;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.LevelRenderer;
+import net.minecraft.util.Mth;
 
-@Mixin(MinecraftClient.class)
+@Mixin(Minecraft.class)
 public class MixinMinecraftClient {
 
 	@Shadow
-	private Screen currentScreen;
+	private Screen screen;
 
 	@Shadow
-	private WorldRenderer worldRenderer;
+	private LevelRenderer levelRenderer;
 
 	private int save;
 
 	@Shadow
-	private int itemUseCooldown;
+	private int rightClickDelay;
 
 	@Shadow
-	private ClientPlayerEntity player;
+	private LocalPlayer player;
 
 	@Shadow
-	private GameOptions options;
+	private Options options;
 
 	@Unique
 	public boolean wasOnGround;
@@ -59,27 +51,24 @@ public class MixinMinecraftClient {
 	@Unique
 	public boolean isLoadingWorld;
 
-	@Inject(method = "joinWorld", at = @At("HEAD"))
-	public void injectloadWorld(ClientWorld worldClientIn, CallbackInfo ci) {
+	@Inject(method = "setLevel", at = @At("HEAD"))
+	public void injectloadWorld(MultiPlayerLevel worldClientIn, CallbackInfo ci) {
 		isLoadingWorld = ConfigUtils.getBoolean("tools", "hitEscape") && worldClientIn != null;
 	}
 
-	//#if MC>=11502
-//$$ 		@Inject(method = "run", at = @At("HEAD"))
-	//#else
 	@Inject(method = "init", at = @At("TAIL"))
-	//#endif
 	public void loadRenderingLate(CallbackInfo ci) {
 		LoTASModContainer.loadShields();
+		KeybindsUtils.registerKeybinds();
 	}
 
 	@Inject(method = "tick", at = @At(value = "HEAD"))
 	public void injectrunTick(CallbackInfo ci) {
 		if (ConfigUtils.getBoolean("tools", "rAutoClicker"))
-			itemUseCooldown = 0;
+			rightClickDelay = 0;
 
 		TickrateChangerMod.show = !TickrateChangerMod.show;
-		if ((currentScreen == null ? true : Timer.allowed.contains(currentScreen.getClass().getSimpleName().toLowerCase())) && Timer.running)
+		if ((screen == null ? true : Timer.allowed.contains(screen.getClass().getSimpleName().toLowerCase())) && Timer.running)
 			Timer.ticks++;
 
 		if (KeybindsUtils.shouldSavestate) {
@@ -88,33 +77,14 @@ public class MixinMinecraftClient {
 		}
 
 		if (player != null) {
-			//#if MC>=11601
-//$$ 						if (player.isOnGround() && !wasOnGround && KeybindsUtils.holdStrafeKeybind.isPressed()) {
-							//#if MC>=11700
-//$$ 							player.setYaw(player.getYaw()+45);
-							//#else
-//$$ 							player.yaw += 45;
-							//#endif
-//$$ 							KeyBinding.setKeyPressed(options.keyRight.getDefaultKey(), false);
-//$$ 						} else if (!player.isOnGround() && wasOnGround && KeybindsUtils.holdStrafeKeybind.isPressed()) {
-							//#if MC>=11700
-//$$ 							player.setYaw(player.getYaw()-45);
-							//#else
-//$$ 							player.yaw -= 45;
-							//#endif
-//$$ 							KeyBinding.setKeyPressed(options.keyRight.getDefaultKey(), true);
-//$$ 						}
-//$$ 						wasOnGround = player.isOnGround();
-			//#else
-			if (player.onGround && !wasOnGround && KeybindsUtils.holdStrafeKeybind.isPressed()) {
-				player.yaw += 45;
-				KeyBinding.setKeyPressed(options.keyRight.getDefaultKeyCode(), false);
-			} else if (!player.onGround && wasOnGround && KeybindsUtils.holdStrafeKeybind.isPressed()) {
-				player.yaw -= 45;
-				KeyBinding.setKeyPressed(options.keyRight.getDefaultKeyCode(), true);
+			if (player.onGround && !wasOnGround && KeybindsUtils.holdStrafeKeybind.isDown()) {
+				player.yRot += 45;
+				KeyMapping.set(options.keyRight.getDefaultKey(), false);
+			} else if (!player.onGround && wasOnGround && KeybindsUtils.holdStrafeKeybind.isDown()) {
+				player.yRot -= 45;
+				KeyMapping.set(options.keyRight.getDefaultKey(), true);
 			}
 			wasOnGround = player.onGround;
-			//#endif
 		}
 
 		if (KeybindsUtils.shouldLoadstate) {
@@ -131,12 +101,12 @@ public class MixinMinecraftClient {
 			TickrateChangerMod.resetAdvanceClient();
 		}
 
-		if (TickrateChangerMod.ticksToJump != -1 && MinecraftClient.getInstance().currentScreen instanceof GameMenuScreen == false) {
+		if (TickrateChangerMod.ticksToJump != -1 && Minecraft.getInstance().screen instanceof PauseScreen == false) {
 			TickrateChangerMod.ticksToJump--;
 			if (TickrateChangerMod.ticksToJump == 0) {
 				TickrateChangerMod.ticksToJump = -1;
-				if (currentScreen == null && MinecraftClient.getInstance().player != null)
-					MinecraftClient.getInstance().openScreen(new GameMenuScreen(true));
+				if (screen == null && Minecraft.getInstance().player != null)
+					Minecraft.getInstance().setScreen(new PauseScreen(true));
 			}
 		}
 	}
@@ -145,34 +115,22 @@ public class MixinMinecraftClient {
 	private void move(float strafe, float up, float forward, float friction) {
 		float f = strafe * strafe + up * up + forward * forward;
 		if (f >= 1.0E-4F) {
-			f = MathHelper.sqrt(f);
+			f = Mth.sqrt(f);
 			if (f < 1.0F)
 				f = 1.0F;
 			f = friction / f;
 			strafe = strafe * f;
 			up = up * f;
 			forward = forward * f;
-			//#if MC>=11700
-//$$ 			float f1 = MathHelper.sin(player.getYaw() * 0.017453292F);
-//$$ 			float f2 = MathHelper.cos(player.getYaw() * 0.017453292F);
-			//#else
-			float f1 = MathHelper.sin(player.yaw * 0.017453292F);
-			float f2 = MathHelper.cos(player.yaw * 0.017453292F);
-			//#endif
-			//#if MC>=11601
-//$$ 			double _x = player.getX();
-//$$ 			double _y = player.getY();
-//$$ 			double _z = player.getZ();
-//$$ 			player.setPos(_x + (strafe * f2 - forward * f1), _y + up, _z + (forward * f2 + strafe * f1));
-			//#else
+			float f1 = Mth.sin(player.yRot * 0.017453292F);
+			float f2 = Mth.cos(player.yRot * 0.017453292F);
 			player.x += (double) (strafe * f2 - forward * f1);
 			player.y += (double) up;
 			player.z += (double) (forward * f2 + strafe * f1);
-			//#endif
 		}
 	}
 
-	@Inject(method = "render", at = @At(value = "HEAD"))
+	@Inject(method = "runTick", at = @At(value = "HEAD"))
 	public void injectrunGameLoop(CallbackInfo ci) {
 
 		if (TickrateChangerMod.tickrate == 0) {
@@ -180,7 +138,7 @@ public class MixinMinecraftClient {
 			TickrateChangerMod.timeSinceZero = System.currentTimeMillis();
 		}
 
-		if (KeybindsUtils.toggleAdvanceKeybind.wasPressed() && TickrateChangerMod.advanceClient == false && !KeybindsUtils.isFreecaming && currentScreen == null) {
+		if (KeybindsUtils.toggleAdvanceKeybind.consumeClick() && TickrateChangerMod.advanceClient == false && !KeybindsUtils.isFreecaming && screen == null) {
 			if (TickrateChangerMod.tickrate > 0) {
 				save = TickrateChangerMod.index;
 				TickrateChangerMod.updateTickrate(0);
@@ -191,89 +149,89 @@ public class MixinMinecraftClient {
 			}
 		}
 
-		if (TickrateChangerMod.tickrate == 0 && KeybindsUtils.advanceTicksKeybind.wasPressed() && !KeybindsUtils.isFreecaming) {
+		if (TickrateChangerMod.tickrate == 0 && KeybindsUtils.advanceTicksKeybind.consumeClick() && !KeybindsUtils.isFreecaming) {
 			TickrateChangerMod.advanceTick();
 		}
 		boolean flag = false;
-		if (KeybindsUtils.increaseTickrateKeybind.wasPressed()) {
+		if (KeybindsUtils.increaseTickrateKeybind.consumeClick()) {
 			flag = true;
 			TickrateChangerMod.index++;
-		} else if (KeybindsUtils.decreaseTickrateKeybind.wasPressed()) {
+		} else if (KeybindsUtils.decreaseTickrateKeybind.consumeClick()) {
 			flag = true;
 			TickrateChangerMod.index--;
 		}
 		if (flag) {
-			TickrateChangerMod.index = MCVer.clamp(TickrateChangerMod.index, 0, 11);
+			TickrateChangerMod.index = Mth.clamp(TickrateChangerMod.index, 0, 11);
 			TickrateChangerMod.updateTickrate(TickrateChangerMod.ticks[TickrateChangerMod.index]);
 		}
 
-		if (TickrateChangerMod.tickrate == 0 && currentScreen == null && Keyboard.isKeyDown(GLFW.GLFW_KEY_ESCAPE)) {
-			((MinecraftClient) (Object) this).openScreen(new GameMenuScreen(true));
+		if (TickrateChangerMod.tickrate == 0 && screen == null && Keyboard.isKeyDown(GLFW.GLFW_KEY_ESCAPE)) {
+			((Minecraft) (Object) this).setScreen(new PauseScreen(true));
 			TickrateChangerMod.updateTickrate(KeybindsUtils.savedTickrate);
 			KeybindsUtils.isFreecaming = false;
-			MinecraftClient.getInstance().player.noClip = false;
-			worldRenderer.reload();
+			Minecraft.getInstance().player.noPhysics = false;
+			levelRenderer.allChanged();
 		}
 
 		//Controls for freecam
 		if (KeybindsUtils.isFreecaming) {
-			if (options.keyForward.isPressed()) {
+			if (options.keyUp.isDown()) {
 				move(0.0F, 0.0F, 0.91F, 1.0F);
 			}
-			if (options.keyBack.isPressed()) {
+			if (options.keyDown.isDown()) {
 				move(0.0F, 0.0F, -0.91F, 1.0F);
 			}
-			if (options.keyLeft.isPressed()) {
+			if (options.keyLeft.isDown()) {
 				move(0.91F, 0.0F, 0.0F, 1.0F);
 			}
-			if (options.keyRight.isPressed()) {
+			if (options.keyRight.isDown()) {
 				move(-0.91F, 0.0F, 0.0F, 1.0F);
 			}
-			if (options.keyJump.isPressed()) {
+			if (options.keyJump.isDown()) {
 				move(0.0F, 0.92F, 0.0F, 1.0F);
 			}
-			if (options.keySneak.isPressed()) {
+			if (options.keySneak.isDown()) {
 				move(0.0F, -0.92F, 0.0F, 1.0F);
 			}
 		}
 
-		if (KeybindsUtils.toggleFreecamKeybind.wasPressed() && MinecraftClient.getInstance().currentScreen == null) {
+		if (KeybindsUtils.toggleFreecamKeybind.consumeClick() && Minecraft.getInstance().screen == null) {
 			if (KeybindsUtils.isFreecaming) {
 				KeybindsUtils.isFreecaming = false;
-				MinecraftClient.getInstance().player.noClip = false;
-				worldRenderer.reload();
+				Minecraft.getInstance().player.noPhysics = false;
+				levelRenderer.allChanged();
 				TickrateChangerMod.updateTickrate(KeybindsUtils.savedTickrate);
 			} else {
 				KeybindsUtils.isFreecaming = true;
-				MinecraftClient.getInstance().player.noClip = true;
+				Minecraft.getInstance().player.noPhysics = true;
 				KeybindsUtils.savedTickrate = (int) TickrateChangerMod.tickrate;
 				TickrateChangerMod.updateTickrate(0);
 			}
 		}
 	}
 
-	@Inject(method = "handleInputEvents", at = @At("RETURN"), cancellable = true)
+	@Inject(method = "handleKeybinds", at = @At("RETURN"), cancellable = true)
 	public void keyInputEvent(CallbackInfo ci) {
 		KeybindsUtils.keyEvent();
 	}
 
-	@Inject(method = "openScreen", at = @At(value = "HEAD"), cancellable = true)
+	@Inject(method = "setScreen", at = @At(value = "HEAD"), cancellable = true)
 	public void injectdisplayGuiScreen(Screen guiScreenIn, CallbackInfo ci) {
-		if (((guiScreenIn == null) ? true : guiScreenIn instanceof GameMenuScreen) && SavestateMod.isLoading) {
+		if (((guiScreenIn == null) ? true : guiScreenIn instanceof PauseScreen) && SavestateMod.isLoading) {
 			SavestateMod.isLoading = false;
 			SavestateMod.showLoadstateDone = true;
 			SavestateMod.timeTitle = System.currentTimeMillis();
 		}
 		if (isLoadingWorld && guiScreenIn == null) {
 			isLoadingWorld = false;
-			MinecraftClient.getInstance().openScreen(new GameMenuScreen(true));
+			Minecraft.getInstance().setScreen(new PauseScreen(true));
 			ci.cancel();
 		}
-		if (guiScreenIn == null && (((MinecraftClient) (Object) this).player != null)) {
+		if (guiScreenIn == null && (((Minecraft) (Object) this).player != null)) {
 			if (SavestateMod.applyVelocity) {
 				SavestateMod.applyVelocity = false;
-				ClientPlayerEntity player = ((MinecraftClient) (Object) this).player;
-				player.setVelocity(SavestateMod.motionX, SavestateMod.motionY, SavestateMod.motionZ);
+				LocalPlayer player = ((Minecraft) (Object) this).player;
+				player.setDeltaMovement(SavestateMod.motionX, SavestateMod.motionY, SavestateMod.motionZ);
 			}
 		}
 

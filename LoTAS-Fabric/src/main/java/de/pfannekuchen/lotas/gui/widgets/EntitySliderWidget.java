@@ -1,39 +1,21 @@
 package de.pfannekuchen.lotas.gui.widgets;
 
-import java.util.HashMap;
 import java.util.List;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 
 import de.pfannekuchen.lotas.mods.SpawnManipMod.EntityOptions;
-import net.minecraft.client.MinecraftClient;
-//#if MC>=11700
-//$$ import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
-//$$ import net.minecraft.client.gui.widget.PressableWidget;
-//#endif
-//#if MC<=11605
-import net.minecraft.client.gui.widget.AbstractButtonWidget;
-//#endif
-//#if MC>=11601
-//$$ import net.minecraft.text.LiteralText;
-//$$ import net.minecraft.client.util.math.MatrixStack;
-//#endif
-import net.minecraft.client.gui.widget.ButtonWidget.PressAction;
-import net.minecraft.enchantment.Enchantment;
-//#if MC<=11502
-import net.minecraft.enchantment.InfoEnchantment;
-//#endif
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.components.Button.OnPress;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentInstance;
 
 
 
-//#if MC>=11700
-//$$ public class EntitySliderWidget extends PressableWidget {
-//#else
-public class EntitySliderWidget extends AbstractButtonWidget {
-//#endif
+public class EntitySliderWidget extends AbstractWidget {
 
 	public List<EntityOptions> entities;
 
@@ -44,22 +26,14 @@ public class EntitySliderWidget extends AbstractButtonWidget {
 	private final float max;
 	
 
-	public EntitySliderWidget(int xPos, int yPos, List<EntityOptions> ent, int width, int height, PressAction c) {
-		//#if MC>=11601
-//$$ 				super(xPos, yPos, width, height, new LiteralText(""));
-		//#else
+	public EntitySliderWidget(int xPos, int yPos, List<EntityOptions> ent, int width, int height, OnPress c) {
 		super(xPos, yPos, width, height, "");
-		//#endif
 		this.name = "Entity";
 		this.entities = ent;
 		this.min = 0;
 		this.max = ent.size() - 1;
 		this.sliderPosition = -min / (max - min);
-		//#if MC>=11601
-//$$ 				this.setMessage(new LiteralText(ent.get(0).title));
-		//#else
 		this.setMessage(ent.get(0).title);
-		//#endif
 	}
 
 	/**
@@ -79,11 +53,7 @@ public class EntitySliderWidget extends AbstractButtonWidget {
 	 */
 	public void setSliderValue(float value) {
 		this.sliderPosition = (value - this.min) / (this.max - this.min);
-		//#if MC>=11601
-//$$ 			    this.setMessage(new LiteralText(this.getDisplayString()));
-		//#else
 		this.setMessage(this.getDisplayString());
-		//#endif
 	}
 
 	/**
@@ -100,33 +70,14 @@ public class EntitySliderWidget extends AbstractButtonWidget {
 		return this.name + ": " + this.getSliderValue();
 	}
 
-	//#if MC>=11601
-//$$ 	@Override
-//$$ 	public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-//$$ 		super.renderButton(matrices, mouseX, mouseY, delta);
-		//#if MC>=11700
-//$$ 		MinecraftClient.getInstance().getTextureManager().bindTexture(WIDGETS_TEXTURE);
-//$$ 		com.mojang.blaze3d.systems.RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-		//#else
-//$$ 		MinecraftClient.getInstance().getTextureManager().bindTexture(WIDGETS_LOCATION);
-//$$ 		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-		//#endif
-//$$ 		int i = (this.isHovered() ? 2 : 1) * 20;
-		//#if MC>=11601
-//$$ 		this.drawTexture(matrices, this.x + (int) (this.sliderPosition * (double) (this.width - 8)), this.y, 0, 46 + i, 4, 20);
-//$$ 		this.drawTexture(matrices, this.x + (int) (this.sliderPosition * (double) (this.width - 8)) + 4, this.y, 196, 46 + i, 4, 20);
-		//#endif
-//$$ 	}
-	//#else
 	@Override
-	protected void renderBg(MinecraftClient client, int mouseX, int mouseY) {
-		client.getTextureManager().bindTexture(WIDGETS_LOCATION);
+	protected void renderBg(Minecraft client, int mouseX, int mouseY) {
+		client.getTextureManager().bind(WIDGETS_LOCATION);
 		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		int i = (this.isHovered() ? 2 : 1) * 20;
 		this.blit(this.x + (int) (this.sliderPosition * (double) (this.width - 8)), this.y, 0, 46 + i, 4, 20);
 		this.blit(this.x + (int) (this.sliderPosition * (double) (this.width - 8)) + 4, this.y, 196, 46 + i, 4, 20);
 	}
-	//#endif
 
 	/**
 	 * Fired when the mouse button is dragged. Equivalent of
@@ -145,22 +96,12 @@ public class EntitySliderWidget extends AbstractButtonWidget {
 				if (this.sliderPosition > 1.0F) {
 					this.sliderPosition = 1.0F;
 				}
-				//#if MC>=11601
-//$$ 					setMessage(new LiteralText(entities.get((int) Math.round(sliderPosition * (max - min) + min)).title));
-				//#else
 				setMessage(entities.get((int) Math.round(sliderPosition * (max - min) + min)).title);
-				//#endif
 			}
 
-			//#if MC>=11700
-//$$ 			com.mojang.blaze3d.systems.RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-         	//#else
          	GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-         	//#endif
-			//#if MC<=11502
 			blit(this.x + (int) (this.sliderPosition * (float) (this.width - 8)), this.y, 0, 66, 4, 20);
 			blit(this.x + (int) (this.sliderPosition * (float) (this.width - 8)) + 4, this.y, 196, 66, 4, 20);
-			//#endif
 		}
 		return true;
 	}
@@ -176,11 +117,7 @@ public class EntitySliderWidget extends AbstractButtonWidget {
 	 */
 	public void setSliderPosition(float position) {
 		this.sliderPosition = position;
-		//#if MC>=11601
-//$$ 				this.setMessage(new LiteralText(this.getDisplayString()));
-		//#else
 		this.setMessage(this.getDisplayString());
-		//#endif
 	}
 
 	/**
@@ -199,11 +136,7 @@ public class EntitySliderWidget extends AbstractButtonWidget {
 			if (this.sliderPosition > 1.0F) {
 				this.sliderPosition = 1.0F;
 			}
-			//#if MC>=11601
-//$$ 			this.setMessage(new LiteralText(entities.get((int) Math.round(sliderPosition * (max - min) + min)).title));
-			//#else
 			this.setMessage(entities.get((int) Math.round(sliderPosition * (max - min) + min)).title);
-			//#endif
 			this.isMouseDown = true;
 			return true;
 		} else {
@@ -211,47 +144,14 @@ public class EntitySliderWidget extends AbstractButtonWidget {
 		}
 	}
 
-	public LivingEntity getEntity(ServerWorld world) {
+	public LivingEntity getEntity(ServerLevel world) {
 		return entities.get((int) Math.round(sliderPosition * (max - min) + min)).entity;
 	}
 
-	//#if MC>=11601
-//$$ 		public ItemStack addEnchants(ItemStack item,  HashMap<Enchantment, Integer> enchs) {
-//$$ 		    enchs.entrySet().forEach(entry->{
-//$$ 		        item.addEnchantment(entry.getKey(), entry.getValue());
-//$$ 		    });;
-//$$ 			return item;
-//$$ 		}
-	//#else
-	public ItemStack addEnchants(ItemStack item, InfoEnchantment[] enchants) {
-		for (InfoEnchantment enchantmentData : enchants) {
-			item.addEnchantment(enchantmentData.enchantment, enchantmentData.level);
+	public ItemStack addEnchants(ItemStack item, EnchantmentInstance[] enchants) {
+		for (EnchantmentInstance enchantmentData : enchants) {
+			item.enchant(enchantmentData.enchantment, enchantmentData.level);
 		}
 		return item;
 	}
-	//#endif
-
-	//#if MC>=11700
-//$$ 	/**
-//$$ 	 * Fired when the mouse button is released. Equivalent of
-//$$ 	 * MouseListener.mouseReleased(MouseEvent e).
-//$$ 	 */
-//$$ 	@Override
-//$$ 	public boolean mouseReleased(double mouseX, double mouseY, int button) {
-//$$ 		this.isMouseDown = false;
-//$$ 		return super.mouseReleased(mouseX, mouseY, button);
-//$$ 	}
-//$$
-//$$ 	@Override
-//$$ 	public void appendNarrations(NarrationMessageBuilder builder) {
-//$$ 		// TODO Auto-generated method stub
-//$$
-//$$ 	}
-//$$
-//$$ 	@Override
-//$$ 	public void onPress() {
-//$$ 		// TODO Auto-generated method stub
-//$$
-//$$ 	}
-	//#endif
 }

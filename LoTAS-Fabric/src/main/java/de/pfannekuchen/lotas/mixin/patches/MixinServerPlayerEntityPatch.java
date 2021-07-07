@@ -13,58 +13,43 @@ import com.mojang.authlib.GameProfile;
 
 import de.pfannekuchen.lotas.core.utils.ConfigUtils;
 import de.pfannekuchen.lotas.mixin.accessors.AccessorServerPlayerEntity;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.client.Minecraft;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 
-@Mixin(ServerPlayerEntity.class)
-public abstract class MixinServerPlayerEntityPatch extends PlayerEntity {
+@Mixin(ServerPlayer.class)
+public abstract class MixinServerPlayerEntityPatch extends Player {
 
-	//#if MC>=11601
-	//#if MC>=11605
-//$$ 	public MixinServerPlayerEntityPatch(World world, BlockPos pos, float yaw, GameProfile profile) { super(world, pos, yaw, profile); }
-	//#else
-//$$ 	public MixinServerPlayerEntityPatch(World world, BlockPos blockPos, GameProfile gameProfile) { super(world, blockPos, gameProfile); }
-	//#endif
-	//#else
-	public MixinServerPlayerEntityPatch(World world, GameProfile profile) {
+	public MixinServerPlayerEntityPatch(Level world, GameProfile profile) {
 		super(world, profile);
 	}
-	//#endif
 
 	@Final
 	@Shadow
 	public MinecraftServer server;
 
-	@Inject(method = "damage(Lnet/minecraft/entity/damage/DamageSource;F)Z", at = @At("HEAD"), cancellable = true)
+	@Inject(method = "hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z", at = @At("HEAD"), cancellable = true)
 	void damage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> returnable) {
 		if (ConfigUtils.getBoolean("tools", "takeDamage"))
 			return;
-		boolean bl = this.server.isDedicated() && this.server.isPvpEnabled() && "fall".equals(source.name);
+		boolean bl = this.server.isDedicatedServer() && this.server.isPvpAllowed() && "fall".equals(source.msgId);
 		AtomicBoolean flag = new AtomicBoolean(false);
-		server.getPlayerManager().getPlayerList().forEach(player -> {
-			if (((AccessorServerPlayerEntity) player).getField_13998() <= 0) {
-				((AccessorServerPlayerEntity) player).setField_13998(60);
+		server.getPlayerList().getPlayers().forEach(player -> {
+			if (((AccessorServerPlayerEntity) player).getSpawnInvulnerableTime() <= 0) {
+				((AccessorServerPlayerEntity) player).setSpawnInvulnerableTime(60);
 				flag.set(true);
 			}
 		});
 		if (!bl && source != DamageSource.OUT_OF_WORLD) {
 			if (flag.get()) {
-				MinecraftClient.getInstance().player.setVelocity(0, 0, 0);
-				MinecraftClient.getInstance().player.velocityModified = true;
-				//#if MC>=11601
-//$$ 				MinecraftClient.getInstance().player.prevX = this.getX();
-//$$ 				MinecraftClient.getInstance().player.prevY = this.getY();
-//$$ 				MinecraftClient.getInstance().player.prevZ = this.getZ();
-				//#else
-				MinecraftClient.getInstance().player.prevX = this.x;
-				MinecraftClient.getInstance().player.prevY = this.y;
-				MinecraftClient.getInstance().player.prevZ = this.z;
-				//#endif
+				Minecraft.getInstance().player.setDeltaMovement(0, 0, 0);
+				Minecraft.getInstance().player.hurtMarked = true;
+				Minecraft.getInstance().player.xo = this.x;
+				Minecraft.getInstance().player.yo = this.y;
+				Minecraft.getInstance().player.zo = this.z;
 			}
 			returnable.setReturnValue(false);
 			returnable.cancel();

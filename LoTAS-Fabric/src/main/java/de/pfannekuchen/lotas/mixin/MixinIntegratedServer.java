@@ -6,11 +6,11 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 import de.pfannekuchen.lotas.core.utils.KeybindsUtils;
 import de.pfannekuchen.lotas.mods.SavestateMod;
-import net.minecraft.server.integrated.IntegratedServer;
+import net.minecraft.client.server.IntegratedServer;
 
 @Mixin(IntegratedServer.class)
 public class MixinIntegratedServer {
-	@Redirect(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/integrated/IntegratedServer;save(ZZZ)Z"))
+	@Redirect(method = "tickServer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/server/IntegratedServer;saveAllChunks(ZZZ)Z"))
 	public boolean redirectSave(IntegratedServer server, boolean b1, boolean b2, boolean b3) {
 		if(!SavestateMod.showSavestateDone) {
 			if (KeybindsUtils.shouldSavestate) {
@@ -18,7 +18,7 @@ public class MixinIntegratedServer {
 				SavestateMod.savestate(null);
 			}
 		} else {
-			server.save(false, false, false);
+			server.saveAllChunks(false, false, false);
 		}
 		return true;
 	}

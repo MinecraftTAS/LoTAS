@@ -3,27 +3,28 @@ package de.pfannekuchen.lotas.dropmanipulation.drops.blockdrops;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
+import com.mojang.blaze3d.platform.GlStateManager;
 
-import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.gui.DropManipulationScreen;
-import de.pfannekuchen.lotas.gui.widgets.NewButtonWidget;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.entity.Entity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.components.Checkbox;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class GravelDropManipulation extends DropManipulationScreen.DropManipulation {
 
 	public static boolean flint = false;
 
-	public static ButtonWidget dropGravel = new NewButtonWidget(x, y, 98, 20, "Gravel", button -> {
+	public static Button dropGravel = new Button(x, y, 98, 20, "Gravel", button -> {
 		pressGravel();
 	});
-	public static ButtonWidget dropFlint = new NewButtonWidget(x, y, 98, 20, "Flint", button -> {
+	public static Button dropFlint = new Button(x, y, 98, 20, "Flint", button -> {
 		pressFlint();
 	});
 
@@ -44,7 +45,7 @@ public class GravelDropManipulation extends DropManipulationScreen.DropManipulat
 		GravelDropManipulation.y = y;
 		GravelDropManipulation.width = width;
 		GravelDropManipulation.height = height;
-		enabled = MCVer.CheckboxWidget(x, y, 150, 20, "Override Gravel Drops", false);
+		enabled = new Checkbox(x, y, 150, 20, "Override Gravel Drops", false);
 		dropGravel.active = false;
 	}
 
@@ -55,7 +56,7 @@ public class GravelDropManipulation extends DropManipulationScreen.DropManipulat
 
 	@Override
 	public List<ItemStack> redirectDrops(BlockState block) {
-		if (block.getBlock().getDefaultState().getBlock() != Blocks.GRAVEL)
+		if (block.getBlock().defaultBlockState().getBlock() != Blocks.GRAVEL)
 			return ImmutableList.of();
 		if (flint) {
 			return ImmutableList.of(new ItemStack(Items.FLINT));
@@ -83,26 +84,26 @@ public class GravelDropManipulation extends DropManipulationScreen.DropManipulat
 	@Override
 	public void mouseAction(double mouseX, double mouseY, int button) {
 		enabled.mouseClicked(mouseX, mouseY, button);
-		if (enabled.isChecked()) {
+		if (enabled.selected()) {
 			dropGravel.mouseClicked(mouseX, mouseY, button);
 			dropFlint.mouseClicked(mouseX, mouseY, button);
 		}
 	}
 
 	@Override
-	public void render(Object matrices, int mouseX, int mouseY, float delta) {
-		MCVer.render(enabled, mouseX, mouseY, delta);
+	public void render(int mouseX, int mouseY, float delta) {
+		enabled.render(mouseX, mouseY, delta);
 
-		if (!enabled.isChecked()) {
-			MCVer.color(.5f, .5f, .5f, .4f);
+		if (!enabled.selected()) {
+			GlStateManager.color4f(.5f, .5f, .5f, .4f);
 		} else {
-			MCVer.drawStringWithShadow("Drop " + (flint ? "Flint" : "Gravel") + " when breaking Gravel", x, y + 64, 0xFFFFFF);
-			MCVer.render(dropGravel, mouseX, mouseY, delta);
-			MCVer.render(dropFlint, mouseX, mouseY, delta);
+			Minecraft.getInstance().font.drawShadow("Drop " + (flint ? "Flint" : "Gravel") + " when breaking Gravel", x, y + 64, 0xFFFFFF);
+			dropGravel.render(mouseX, mouseY, delta);
+			dropFlint.render(mouseX, mouseY, delta);
 		}
 
-		MinecraftClient.getInstance().getTextureManager().bindTexture(new Identifier("lotas", "drops/gravel.png"));
-		MCVer.renderImage(width - 128, y + 24, 0.0F, 0.0F, 96, 96, 96, 96);
+		Minecraft.getInstance().getTextureManager().bind(new ResourceLocation("lotas", "drops/gravel.png"));
+		GuiComponent.blit(width - 128, y + 24, 0.0F, 0.0F, 96, 96, 96, 96);
 	}
 
 }

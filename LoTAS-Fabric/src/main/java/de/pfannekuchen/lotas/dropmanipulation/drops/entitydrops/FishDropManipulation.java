@@ -3,21 +3,23 @@ package de.pfannekuchen.lotas.dropmanipulation.drops.entitydrops;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
+import com.mojang.blaze3d.platform.GlStateManager;
 
-import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.gui.DropManipulationScreen;
 import de.pfannekuchen.lotas.gui.widgets.SmallCheckboxWidget;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.passive.CodEntity;
-import net.minecraft.entity.passive.DolphinEntity;
-import net.minecraft.entity.passive.PufferfishEntity;
-import net.minecraft.entity.passive.SalmonEntity;
-import net.minecraft.entity.passive.TropicalFishEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.components.Checkbox;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.animal.Cod;
+import net.minecraft.world.entity.animal.Dolphin;
+import net.minecraft.world.entity.animal.Pufferfish;
+import net.minecraft.world.entity.animal.Salmon;
+import net.minecraft.world.entity.animal.TropicalFish;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class FishDropManipulation extends DropManipulationScreen.DropManipulation {
 
@@ -32,7 +34,7 @@ public class FishDropManipulation extends DropManipulationScreen.DropManipulatio
 		FishDropManipulation.y = y;
 		FishDropManipulation.width = width;
 		FishDropManipulation.height = height;
-		enabled = MCVer.CheckboxWidget(x, y, 150, 20, "Override Fish Drops", false);
+		enabled = new Checkbox(x, y, 150, 20, "Override Fish Drops", false);
 	}
 
 	@Override
@@ -47,15 +49,15 @@ public class FishDropManipulation extends DropManipulationScreen.DropManipulatio
 
 	@Override
 	public List<ItemStack> redirectDrops(Entity entity) {
-		if (entity instanceof CodEntity && optimizeCod.isChecked())
+		if (entity instanceof Cod && optimizeCod.isChecked())
 			return ImmutableList.of(new ItemStack(Items.COD), new ItemStack(Items.BONE_MEAL, 1));
-		if (entity instanceof SalmonEntity && optimizeSalmon.isChecked())
+		if (entity instanceof Salmon && optimizeSalmon.isChecked())
 			return ImmutableList.of(new ItemStack(Items.SALMON), new ItemStack(Items.BONE_MEAL, 1));
-		if (entity instanceof DolphinEntity && optimizeDolphin.isChecked())
+		if (entity instanceof Dolphin && optimizeDolphin.isChecked())
 			return ImmutableList.of(new ItemStack(Items.COD));
-		if (entity instanceof PufferfishEntity && optimizePufferfish.isChecked())
+		if (entity instanceof Pufferfish && optimizePufferfish.isChecked())
 			return ImmutableList.of(new ItemStack(Items.PUFFERFISH, 1), new ItemStack(Items.BONE_MEAL, 1));
-		if (entity instanceof TropicalFishEntity && optimizeTropical.isChecked())
+		if (entity instanceof TropicalFish && optimizeTropical.isChecked())
 			return ImmutableList.of(new ItemStack(Items.TROPICAL_FISH, 1), new ItemStack(Items.BONE_MEAL, 1));
 		return ImmutableList.of();
 	}
@@ -79,7 +81,7 @@ public class FishDropManipulation extends DropManipulationScreen.DropManipulatio
 	@Override
 	public void mouseAction(double mouseX, double mouseY, int button) {
 		enabled.mouseClicked(mouseX, mouseY, button);
-		if (enabled.isChecked()) {
+		if (enabled.selected()) {
 			optimizeCod.mouseClicked(mouseX, mouseY, button);
 			optimizePufferfish.mouseClicked(mouseX, mouseY, button);
 			optimizeSalmon.mouseClicked(mouseX, mouseY, button);
@@ -89,20 +91,20 @@ public class FishDropManipulation extends DropManipulationScreen.DropManipulatio
 	}
 
 	@Override
-	public void render(Object matrices, int mouseX, int mouseY, float delta) {
-		MCVer.render(enabled, mouseX, mouseY, delta);
-		if (!enabled.isChecked()) {
-			MCVer.color(.5f, .5f, .5f, .4f);
+	public void render(int mouseX, int mouseY, float delta) {
+		enabled.render(mouseX, mouseY, delta);
+		if (!enabled.selected()) {
+			GlStateManager.color4f(.5f, .5f, .5f, .4f);
 		} else {
-			MCVer.render(optimizeCod, mouseX, mouseY, delta);
-			MCVer.render(optimizePufferfish, mouseX, mouseY, delta);
-			MCVer.render(optimizeSalmon, mouseX, mouseY, delta);
-			MCVer.render(optimizeDolphin, mouseX, mouseY, delta);
-			MCVer.render(optimizeTropical, mouseX, mouseY, delta);
+			optimizeCod.render(mouseX, mouseY, delta);
+			optimizePufferfish.render(mouseX, mouseY, delta);
+			optimizeSalmon.render(mouseX, mouseY, delta);
+			optimizeDolphin.render(mouseX, mouseY, delta);
+			optimizeTropical.render(mouseX, mouseY, delta);
 		}
 
-		MinecraftClient.getInstance().getTextureManager().bindTexture(new Identifier("lotas", "drops/fish.gif"));
-		MCVer.renderImage(width - 128, y + 24, 0.0F, 0.0F, 96, 76, 96, 76);
+		Minecraft.getInstance().getTextureManager().bind(new ResourceLocation("lotas", "drops/fish.gif"));
+		GuiComponent.blit(width - 128, y + 24, 0.0F, 0.0F, 96, 76, 96, 76);
 	}
 
 }

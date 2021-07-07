@@ -5,17 +5,15 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 import de.pfannekuchen.lotas.core.LoTASModContainer;
-import net.minecraft.client.render.item.BuiltinModelItemRenderer;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.renderer.EntityBlockRenderer;
+import net.minecraft.resources.ResourceLocation;
 
-@Mixin(BuiltinModelItemRenderer.class)
+@Mixin(EntityBlockRenderer.class)
 public class MixinRenderShield {
 
-	//#if MC<=11404
-	@ModifyArg(index = 0, method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/texture/TextureManager;bindTexture(Lnet/minecraft/util/Identifier;)V"))
-	public Identifier modifyShieldTexture(Identifier original) {
+	@ModifyArg(index = 0, method = "renderByItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/texture/TextureManager;bind(Lnet/minecraft/resources/ResourceLocation;)V"))
+	public ResourceLocation modifyShieldTexture(ResourceLocation original) {
 		return LoTASModContainer.shield == null ? original : LoTASModContainer.shield;
 	}
-	//#endif
 
 }

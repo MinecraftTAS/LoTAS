@@ -11,17 +11,17 @@ import de.pfannekuchen.lotas.gui.AIManipulationScreen;
 import de.pfannekuchen.lotas.gui.SpawnManipulationScreen;
 import de.pfannekuchen.lotas.mods.AIManipMod;
 import de.pfannekuchen.lotas.mods.SpawnManipMod;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.render.GameRenderer;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.world.phys.Vec3;
 
 @Mixin(GameRenderer.class)
 public class MixinRenderEvent {
 
-	@Inject(at = @At("HEAD"), method = "renderHand")
+	@Inject(at = @At("HEAD"), method = "renderItemInHand")
 	public void renderWorldLastEvent(CallbackInfo ci) {
-		final Screen gui = MinecraftClient.getInstance().currentScreen;
+		final Screen gui = Minecraft.getInstance().screen;
 		if (gui instanceof SpawnManipulationScreen) {
 			GL11.glPushMatrix();
 			GL11.glDisable(GL11.GL_TEXTURE_2D);
@@ -32,12 +32,9 @@ public class MixinRenderEvent {
 			GL11.glEnable(GL11.GL_LINE_SMOOTH);
 			GL11.glLineWidth(2);
 
-			//#if MC>=11502
-//$$ 						RenderUtils.applyCameraRotationOnly();
-			//#endif
 			RenderUtils.applyRenderOffset();
 			
-			Vec3d targetPos=SpawnManipMod.getTargetPos();
+			Vec3 targetPos=SpawnManipMod.getTargetPos();
 			double renderX =  ((int)targetPos.x);
 			double renderY =  ((int)targetPos.y);
 			double renderZ =  ((int)targetPos.z);
@@ -70,12 +67,9 @@ public class MixinRenderEvent {
 			GL11.glEnable(GL11.GL_LINE_SMOOTH);
 			GL11.glLineWidth(2);
 
-			//#if MC>=11502
-//$$ 			RenderUtils.applyCameraRotationOnly();
-			//#endif
 			RenderUtils.applyRenderOffset();
 
-			Vec3d entityPos=AIManipMod.getSelectedEntityPos();
+			Vec3 entityPos=AIManipMod.getSelectedEntityPos();
 			double renderX = ((int)entityPos.x) - 0.5f;
 			double renderY = ((int)entityPos.y);
 			double renderZ = ((int)entityPos.z) - 0.5F;
@@ -101,12 +95,9 @@ public class MixinRenderEvent {
 			GL11.glLineWidth(2);
 
 			// Draw output
-			//#if MC>=11502
-//$$ 			RenderUtils.applyCameraRotationOnly();
-			//#endif
 			RenderUtils.applyRenderOffset();
 
-			Vec3d targetPos=AIManipMod.getTargetPos();
+			Vec3 targetPos=AIManipMod.getTargetPos();
 			renderX = (int)targetPos.x;
 			renderY = (int)targetPos.y;
 			renderZ = (int)targetPos.z;

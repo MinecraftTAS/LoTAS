@@ -7,24 +7,21 @@ import java.util.function.Function;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.platform.GlStateManager;
 
-import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.gui.DropManipulationScreen;
 import de.pfannekuchen.lotas.gui.widgets.DropdownWidget;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.Entity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.potion.PotionUtil;
-import net.minecraft.potion.Potions;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.components.Checkbox;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class BarteringDropManipulation extends DropManipulationScreen.DropManipulation {
 
 	public static String f;
 	
-	public static DropdownWidget<String> elementwidgets = new DropdownWidget<String>(MinecraftClient.getInstance().textRenderer, 
+	public static DropdownWidget<String> elementwidgets = new DropdownWidget<String>(Minecraft.getInstance().font, 
 			//#if MC>=11602
 			//$$ Arrays.asList("Soul Speed Boots", "Soul Speed Book", "Splash Potion of Fire Resistance", "Potion of Fire Resistance", "Water Bottle", "Iron Nugget", "Ender Pearl", "String", "Nether Quartz", "Obsidian", "Crying Obsidian", "Fire Charge", "Leather", "Soul Sand", "Nether Brick", "Spectral Arrow", "Arrow", "Gravel", "Blackstone")
 			//#else
@@ -44,7 +41,7 @@ public class BarteringDropManipulation extends DropManipulationScreen.DropManipu
 		BarteringDropManipulation.y = y;
 		BarteringDropManipulation.width = width;
 		BarteringDropManipulation.height = height;
-		enabled = MCVer.CheckboxWidget(x, y, 150, 20, "Override Bartering Drops", false);
+		enabled = new Checkbox(x, y, 150, 20, "Override Bartering Drops", false);
 	}
 
 	@Override
@@ -131,31 +128,31 @@ public class BarteringDropManipulation extends DropManipulationScreen.DropManipu
 	@Override
 	public void mouseAction(double mouseX, double mouseY, int button) {
 		enabled.mouseClicked(mouseX, mouseY, button);
-		if (enabled.isChecked()) {
+		if (enabled.selected()) {
 			elementwidgets.mouseClicked(mouseX, mouseY, button);
 		}
 	}
 
 	@Override
-	public void render(Object matrices, int mouseX, int mouseY, float delta) {
-		MCVer.render(enabled, mouseX, mouseY, delta);
+	public void render(int mouseX, int mouseY, float delta) {
+		enabled.render(mouseX, mouseY, delta);
 
-		if (!enabled.isChecked()) {
-			MCVer.color(.5f, .5f, .5f, .4f);
+		if (!enabled.selected()) {
+			GlStateManager.color4f(.5f, .5f, .5f, .4f);
 		} else {
 			GlStateManager.pushMatrix();
 			//#if MC>=11601
-//$$ 			elementwidgets.render((net.minecraft.client.util.math.MatrixStack) matrices, mouseX, mouseY, delta);
+//$$ 			elementwidgets.render((net.minecraft.client.util.math.MatrixStack) matrices.render(mouseX, mouseY, delta);
 //$$ 			elementwidgets.renderBg((net.minecraft.client.util.math.MatrixStack) matrices, MinecraftClient.getInstance(), mouseX, mouseY);
 			//#else
 			elementwidgets.render(mouseX, mouseY, delta);
-			elementwidgets.renderBg(MinecraftClient.getInstance(), mouseX, mouseY);
+			elementwidgets.renderBg(Minecraft.getInstance(), mouseX, mouseY);
 			//#endif
 			GlStateManager.popMatrix();
 		}
 
-		MinecraftClient.getInstance().getTextureManager().bindTexture(new Identifier("lotas", "drops/zombie.png"));
-		MCVer.renderImage(width - 228, y + 24, 0.0F, 0.0F, 118, 198, 118, 198);
+		Minecraft.getInstance().getTextureManager().bind(new ResourceLocation("lotas", "drops/zombie.png"));
+		GuiComponent.blit(width - 228, y + 24, 0.0F, 0.0F, 118, 198, 118, 198);
 	}
 
 }

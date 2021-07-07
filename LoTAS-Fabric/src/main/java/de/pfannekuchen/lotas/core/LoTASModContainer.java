@@ -12,23 +12,20 @@ import java.util.List;
 import org.apache.commons.io.FileUtils;
 
 import de.pfannekuchen.lotas.core.utils.ConfigUtils;
-import de.pfannekuchen.lotas.core.utils.KeybindsUtils;
 import de.pfannekuchen.lotas.core.utils.TextureYoinker;
 import de.pfannekuchen.lotas.gui.HudSettings;
 import de.pfannekuchen.lotas.gui.SeedListScreen;
-import de.pfannekuchen.lotas.mods.AIManipMod;
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;
 import net.fabricmc.api.ModInitializer;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.Minecraft;
+import net.minecraft.resources.ResourceLocation;
 
 public class LoTASModContainer implements ModInitializer {
 
-	public static Identifier shield;
+	public static ResourceLocation shield;
 	
 	@Override
 	public void onInitialize() {
-		KeybindsUtils.registerKeybinds();
 		try {
 			HudSettings.load(); // This goes first.. muhahahahaha
 			Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
@@ -100,7 +97,7 @@ public class LoTASModContainer implements ModInitializer {
 			e1.printStackTrace();
 		}
 		try {
-			ConfigUtils.init(new File(MinecraftClient.getInstance().runDirectory, "lotas.properties"));
+			ConfigUtils.init(new File(Minecraft.getInstance().gameDirectory, "lotas.properties"));
 			if (ConfigUtils.getBoolean("tools", "saveTickrate"))
 				TickrateChangerMod.updateTickrate(ConfigUtils.getInt("hidden", "tickrate"));
 		} catch (IOException e) {
@@ -110,7 +107,7 @@ public class LoTASModContainer implements ModInitializer {
 	}
 
 	public static void loadShields() {
-		String uuid = MinecraftClient.getInstance().getSession().getProfile().getId().toString();
+		String uuid = Minecraft.getInstance().getUser().getGameProfile().getId().toString();
 
 		try {
 			URL url = new URL("https://raw.githubusercontent.com/ScribbleLP/MC-TASTools/1.12.2/shields/shieldnames.txt");

@@ -1,98 +1,72 @@
 package de.pfannekuchen.lotas.mods;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
-import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.mixin.accessors.AccessorDimensionTypes;
 import de.pfannekuchen.lotas.mixin.accessors.AccessorMobEntity;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.enchantment.Enchantments;
-//#if MC>=11601
-//$$ import net.minecraft.enchantment.Enchantment;
-//#else
-import net.minecraft.enchantment.InfoEnchantment;
-import net.minecraft.entity.SpawnType;
-//#endif
-
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.mob.BlazeEntity;
-import net.minecraft.entity.mob.CaveSpiderEntity;
-import net.minecraft.entity.mob.CreeperEntity;
-import net.minecraft.entity.mob.EndermanEntity;
-import net.minecraft.entity.mob.GhastEntity;
-import net.minecraft.entity.mob.HuskEntity;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.mob.SkeletonEntity;
-import net.minecraft.entity.mob.SlimeEntity;
-import net.minecraft.entity.mob.SpiderEntity;
-import net.minecraft.entity.mob.WitchEntity;
-import net.minecraft.entity.mob.WitherSkeletonEntity;
-import net.minecraft.entity.mob.ZombieEntity;
-import net.minecraft.entity.mob.ZombieVillagerEntity;
-import net.minecraft.entity.passive.IronGolemEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.client.Minecraft;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.monster.Blaze;
+import net.minecraft.world.entity.monster.CaveSpider;
+import net.minecraft.world.entity.monster.Creeper;
+import net.minecraft.world.entity.monster.EnderMan;
+import net.minecraft.world.entity.monster.Ghast;
+import net.minecraft.world.entity.monster.Husk;
+import net.minecraft.world.entity.monster.Skeleton;
+import net.minecraft.world.entity.monster.Slime;
+import net.minecraft.world.entity.monster.Spider;
+import net.minecraft.world.entity.monster.Witch;
+import net.minecraft.world.entity.monster.WitherSkeleton;
+import net.minecraft.world.entity.monster.Zombie;
+import net.minecraft.world.entity.monster.ZombieVillager;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.EnchantmentInstance;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.dimension.DimensionType;
+import net.minecraft.world.phys.Vec3;
 
 public class SpawnManipMod {
 	
-	private MinecraftClient mc = MinecraftClient.getInstance();
+	private Minecraft mc = Minecraft.getInstance();
 	
 	static Entity entity;
 	
-	static Vec3d target;
+	static Vec3 target;
 	
-	static Vec3d playerPos;
+	static Vec3 playerPos;
 	
 	private final Direction orientation;
 	
-	//#if MC>=11601
-//$$ 		@SuppressWarnings("serial")
-//$$ 		private final HashMap<Enchantment, Integer> skelBow = new HashMap<Enchantment, Integer>() {{
-//$$ 	   	put(Enchantments.UNBREAKING, 1);
-//$$ 	   	put(Enchantments.POWER, 1);}};
-//$$ 		@SuppressWarnings("serial")
-//$$ 		private final HashMap<Enchantment, Integer> zombieSword = new HashMap<Enchantment, Integer>() {{
-//$$ 	   	put(Enchantments.SHARPNESS, 2);
-//$$ 	   	put(Enchantments.UNBREAKING, 2);}};
-		//#else
-		private final InfoEnchantment[] skelBow = new InfoEnchantment[] { new InfoEnchantment(Enchantments.UNBREAKING, 1), new InfoEnchantment(Enchantments.POWER, 1) };
-		private final InfoEnchantment[] zombieSword = new InfoEnchantment[] { new InfoEnchantment(Enchantments.SHARPNESS, 2), new InfoEnchantment(Enchantments.UNBREAKING, 2) };
-		//#endif
+	private final EnchantmentInstance[] skelBow = new EnchantmentInstance[] { new EnchantmentInstance(Enchantments.UNBREAKING, 1), new EnchantmentInstance(Enchantments.POWER_ARROWS, 1) };
+	private final EnchantmentInstance[] zombieSword = new EnchantmentInstance[] { new EnchantmentInstance(Enchantments.SHARPNESS, 2), new EnchantmentInstance(Enchantments.UNBREAKING, 2) };
 	
 	public SpawnManipMod() {
-		orientation =  mc.player.getHorizontalFacing();
-		target=mc.player.getPos();
+		orientation =  mc.player.getDirection();
+		target=mc.player.position();
 		for(int i=0; i<3;i++) {
 			changeTargetForward();
 		}
-		playerPos=mc.player.getPos();
+		playerPos=mc.player.position();
 	}
 	
 	public void debugSpawn() {
-		//#if MC>=11601
-//$$ 		ServerWorld world=mc.getServer().getWorld(mc.player.world.getRegistryKey());
-		//#else
-		ServerWorld world=mc.getServer().getWorld(mc.player.dimension);
-		//#endif
-		Entity entity = new SkeletonEntity(EntityType.SKELETON, world);
-		entity.updatePosition(target.x, target.y, target.z);
-		//#if MC>=11601
-//$$ 		((MobEntity)entity).initialize(world, world.getLocalDifficulty(entity.getBlockPos()), net.minecraft.entity.SpawnReason.NATURAL, null, null);
-		//#else
-		((MobEntity)entity).initialize(world, world.getLocalDifficulty(entity.getBlockPos()), SpawnType.NATURAL, null, null);
-		//#endif
-		world.spawnEntity(entity);
+		ServerLevel world=mc.getSingleplayerServer().getLevel(mc.player.dimension);
+		Entity entity = new Skeleton(EntityType.SKELETON, world);
+		entity.setPos(target.x, target.y, target.z);
+		((Mob)entity).finalizeSpawn(world, world.getCurrentDifficultyAt(entity.getCommandSenderBlockPosition()), MobSpawnType.NATURAL, null, null);
+		world.addFreshEntity(entity);
 	}
 	
 	public void setEntity(Entity entity) {
@@ -101,17 +75,13 @@ public class SpawnManipMod {
 	
 	public void confirm() {
 		if(canSpawn()) {
-			//#if MC>=11601
-//$$ 			ServerWorld world=mc.getServer().getWorld(mc.player.world.getRegistryKey());
-			//#else
-			ServerWorld world=mc.getServer().getWorld(mc.player.dimension);
-			//#endif
+			ServerLevel world=mc.getSingleplayerServer().getLevel(mc.player.dimension);
 			int targetX=(int) (Math.round(target.x)-0.5);
 			int targetY=(int) Math.round(target.y);
 			int targetZ=(int) (Math.round(target.z)-0.5);
 			
-			entity.updatePosition(targetX, targetY, targetZ);
-			world.spawnEntity(entity);
+			entity.setPos(targetX, targetY, targetZ);
+			world.addFreshEntity(entity);
 		}
 	}
 	
@@ -128,6 +98,8 @@ public class SpawnManipMod {
 			break;
 		case WEST:
 			target=target.add(-1, 0, 0);
+			break;
+		default:
 			break;
 		}
 	}
@@ -146,6 +118,8 @@ public class SpawnManipMod {
 		case WEST:
 			target=target.add(1, 0, 0);
 			break;
+		default:
+			break;
 		}
 	}
 	
@@ -162,6 +136,8 @@ public class SpawnManipMod {
 			break;
 		case WEST:
 			target=target.add(0, 0, 1);
+			break;
+		default:
 			break;
 		}
 	}
@@ -180,6 +156,8 @@ public class SpawnManipMod {
 		case WEST:
 			target=target.add(0, 0, -1);
 			break;
+		default:
+			break;
 		}
 	}
 	
@@ -191,241 +169,233 @@ public class SpawnManipMod {
 		target=target.add(0, -1, 0);
 	}
 	
-	public void setTarget(Vec3d target) {
+	public void setTarget(Vec3 target) {
 		SpawnManipMod.target = target;
 	}
 	
 	public void setTargetToPlayer() {
-		target=mc.player.getPos();
+		target=mc.player.position();
 	}
 	
-	public static Vec3d getTargetPos() {
+	public static Vec3 getTargetPos() {
 		return target;
 	}
 	
 	public List<EntityOptions> getManipList(){
 		List<EntityOptions> entities=new ArrayList<EntityOptions>();
-		//#if MC>=11601
-//$$ 		DimensionType dimension = mc.player.getEntityWorld().getDimension();
-		//#else
 		DimensionType dimension = mc.player.dimension;
-		//#endif
-		ServerWorld world = mc.getServer().getPlayerManager().getPlayerList().get(0).getServerWorld();
+		ServerLevel world = mc.getSingleplayerServer().getPlayerList().getPlayers().get(0).getLevel();
 		float[] armor={1f,1f,1f,1f};
 		float[] hand= {1f,1f};
 		
 		if(dimension == AccessorDimensionTypes.getOverworld()) {
-			entities.add(new EntityOptions("Cave Spider", new CaveSpiderEntity(EntityType.CAVE_SPIDER, world)));
-			entities.add(new EntityOptions("Creeper", new CreeperEntity(EntityType.CREEPER, world)));
-			entities.add(new EntityOptions("Enderman", new EndermanEntity(EntityType.ENDERMAN, world)));
-			entities.add(new EntityOptions("Husk", new HuskEntity(EntityType.HUSK, world)));
-			entities.add(new EntityOptions("Iron Golem", new IronGolemEntity(EntityType.IRON_GOLEM, world)));
-			LivingEntity entity = new SkeletonEntity(EntityType.SKELETON, world);
-			entity.setStackInHand(Hand.MAIN_HAND, new ItemStack(Items.BOW));
+			entities.add(new EntityOptions("Cave Spider", new CaveSpider(EntityType.CAVE_SPIDER, world)));
+			entities.add(new EntityOptions("Creeper", new Creeper(EntityType.CREEPER, world)));
+			entities.add(new EntityOptions("Enderman", new EnderMan(EntityType.ENDERMAN, world)));
+			entities.add(new EntityOptions("Husk", new Husk(EntityType.HUSK, world)));
+			entities.add(new EntityOptions("Iron Golem", new IronGolem(EntityType.IRON_GOLEM, world)));
+			LivingEntity entity = new Skeleton(EntityType.SKELETON, world);
+			entity.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.BOW));
 			entities.add(new EntityOptions("Skeleton", entity));
-			entities.add(new EntityOptions("Slime", new SlimeEntity(EntityType.SLIME, world)));
-			entities.add(new EntityOptions("Spider", new SpiderEntity(EntityType.SPIDER, world)));
-			entities.add(new EntityOptions("Witch", new WitchEntity(EntityType.WITCH, world)));
-			entities.add(new EntityOptions("Zombie", new ZombieEntity(world)));
-			entities.add(new EntityOptions("Zombievillager", new ZombieVillagerEntity(EntityType.ZOMBIE_VILLAGER, world)));
+			entities.add(new EntityOptions("Slime", new Slime(EntityType.SLIME, world)));
+			entities.add(new EntityOptions("Spider", new Spider(EntityType.SPIDER, world)));
+			entities.add(new EntityOptions("Witch", new Witch(EntityType.WITCH, world)));
+			entities.add(new EntityOptions("Zombie", new Zombie(world)));
+			entities.add(new EntityOptions("Zombievillager", new ZombieVillager(EntityType.ZOMBIE_VILLAGER, world)));
 			
-			if (MinecraftClient.getInstance().world.getDifficulty() == Difficulty.HARD) {
-				entity = new SkeletonEntity(EntityType.SKELETON, world);
-				entity.setStackInHand(Hand.MAIN_HAND, addEnchants(new ItemStack(Items.BOW), skelBow));
+			if (Minecraft.getInstance().level.getDifficulty() == Difficulty.HARD) {
+				entity = new Skeleton(EntityType.SKELETON, world);
+				entity.setItemInHand(InteractionHand.MAIN_HAND, addEnchants(new ItemStack(Items.BOW), skelBow));
 				((AccessorMobEntity)entity).setArmorDropChances(armor);
 				((AccessorMobEntity)entity).setHandDropChances(hand);
 				entities.add(new EntityOptions("Skeleton (Enchanted Bow)", entity));
 				
-				entity = new ZombieEntity(world);
-				entity.setStackInHand(Hand.MAIN_HAND, addEnchants(new ItemStack(Items.IRON_SWORD), zombieSword));
+				entity = new Zombie(world);
+				entity.setItemInHand(InteractionHand.MAIN_HAND, addEnchants(new ItemStack(Items.IRON_SWORD), zombieSword));
 				((AccessorMobEntity)entity).setArmorDropChances(armor);
 				((AccessorMobEntity)entity).setHandDropChances(hand);
 				entities.add(new EntityOptions("Zombie (Enchanted Sword)", entity));
 
-				entity = new SkeletonEntity(EntityType.SKELETON, world);
-				entity.setStackInHand(Hand.MAIN_HAND, addEnchants(new ItemStack(Items.BOW), skelBow));
-				entity.equipStack(EquipmentSlot.FEET, new ItemStack(Items.LEATHER_BOOTS));
-				entity.equipStack(EquipmentSlot.CHEST, new ItemStack(Items.LEATHER_CHESTPLATE));
-				entity.equipStack(EquipmentSlot.LEGS, new ItemStack(Items.LEATHER_LEGGINGS));
-				entity.equipStack(EquipmentSlot.HEAD, new ItemStack(Items.LEATHER_HELMET));
+				entity = new Skeleton(EntityType.SKELETON, world);
+				entity.setItemInHand(InteractionHand.MAIN_HAND, addEnchants(new ItemStack(Items.BOW), skelBow));
+				entity.setItemSlot(EquipmentSlot.FEET, new ItemStack(Items.LEATHER_BOOTS));
+				entity.setItemSlot(EquipmentSlot.CHEST, new ItemStack(Items.LEATHER_CHESTPLATE));
+				entity.setItemSlot(EquipmentSlot.LEGS, new ItemStack(Items.LEATHER_LEGGINGS));
+				entity.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.LEATHER_HELMET));
 				((AccessorMobEntity)entity).setArmorDropChances(armor);
 				((AccessorMobEntity)entity).setHandDropChances(hand);
 				entities.add(new EntityOptions("Skeleton (Leather Armor, Enchanted Bow)", entity));
 				
-				entity = new ZombieEntity(world);
-				entity.setStackInHand(Hand.MAIN_HAND, addEnchants(new ItemStack(Items.IRON_SWORD), zombieSword));
-				entity.equipStack(EquipmentSlot.FEET, new ItemStack(Items.LEATHER_BOOTS));
-				entity.equipStack(EquipmentSlot.CHEST, new ItemStack(Items.LEATHER_CHESTPLATE));
-				entity.equipStack(EquipmentSlot.LEGS, new ItemStack(Items.LEATHER_LEGGINGS));
-				entity.equipStack(EquipmentSlot.HEAD, new ItemStack(Items.LEATHER_HELMET));
+				entity = new Zombie(world);
+				entity.setItemInHand(InteractionHand.MAIN_HAND, addEnchants(new ItemStack(Items.IRON_SWORD), zombieSword));
+				entity.setItemSlot(EquipmentSlot.FEET, new ItemStack(Items.LEATHER_BOOTS));
+				entity.setItemSlot(EquipmentSlot.CHEST, new ItemStack(Items.LEATHER_CHESTPLATE));
+				entity.setItemSlot(EquipmentSlot.LEGS, new ItemStack(Items.LEATHER_LEGGINGS));
+				entity.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.LEATHER_HELMET));
 				((AccessorMobEntity)entity).setArmorDropChances(armor);
 				((AccessorMobEntity)entity).setHandDropChances(hand);
 				entities.add(new EntityOptions("Zombie (Leather Armor, Enchanted Sword)", entity));
 				
-				entity = new SkeletonEntity(EntityType.SKELETON, world);
-				entity.setStackInHand(Hand.MAIN_HAND, addEnchants(new ItemStack(Items.BOW), skelBow));
-				entity.equipStack(EquipmentSlot.FEET, new ItemStack(Items.GOLDEN_BOOTS));
-				entity.equipStack(EquipmentSlot.CHEST, new ItemStack(Items.GOLDEN_CHESTPLATE));
-				entity.equipStack(EquipmentSlot.LEGS, new ItemStack(Items.GOLDEN_LEGGINGS));
-				entity.equipStack(EquipmentSlot.HEAD, new ItemStack(Items.GOLDEN_HELMET));
+				entity = new Skeleton(EntityType.SKELETON, world);
+				entity.setItemInHand(InteractionHand.MAIN_HAND, addEnchants(new ItemStack(Items.BOW), skelBow));
+				entity.setItemSlot(EquipmentSlot.FEET, new ItemStack(Items.GOLDEN_BOOTS));
+				entity.setItemSlot(EquipmentSlot.CHEST, new ItemStack(Items.GOLDEN_CHESTPLATE));
+				entity.setItemSlot(EquipmentSlot.LEGS, new ItemStack(Items.GOLDEN_LEGGINGS));
+				entity.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.GOLDEN_HELMET));
 				((AccessorMobEntity)entity).setArmorDropChances(armor);
 				((AccessorMobEntity)entity).setHandDropChances(hand);
 				entities.add(new EntityOptions("Skeleton (Gold Armor, Enchanted Bow)", entity));
 				
-				entity = new ZombieEntity(world);
-				entity.setStackInHand(Hand.MAIN_HAND, addEnchants(new ItemStack(Items.IRON_SWORD), zombieSword));
-				entity.equipStack(EquipmentSlot.FEET, new ItemStack(Items.GOLDEN_BOOTS));
-				entity.equipStack(EquipmentSlot.CHEST, new ItemStack(Items.GOLDEN_CHESTPLATE));
-				entity.equipStack(EquipmentSlot.LEGS, new ItemStack(Items.GOLDEN_LEGGINGS));
-				entity.equipStack(EquipmentSlot.HEAD, new ItemStack(Items.GOLDEN_HELMET));
+				entity = new Zombie(world);
+				entity.setItemInHand(InteractionHand.MAIN_HAND, addEnchants(new ItemStack(Items.IRON_SWORD), zombieSword));
+				entity.setItemSlot(EquipmentSlot.FEET, new ItemStack(Items.GOLDEN_BOOTS));
+				entity.setItemSlot(EquipmentSlot.CHEST, new ItemStack(Items.GOLDEN_CHESTPLATE));
+				entity.setItemSlot(EquipmentSlot.LEGS, new ItemStack(Items.GOLDEN_LEGGINGS));
+				entity.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.GOLDEN_HELMET));
 				((AccessorMobEntity)entity).setArmorDropChances(armor);
 				((AccessorMobEntity)entity).setHandDropChances(hand);
 				entities.add(new EntityOptions("Zombie (Gold Armor, Enchanted Sword)", entity));
 				
-				entity = new SkeletonEntity(EntityType.SKELETON, world);
-				entity.setStackInHand(Hand.MAIN_HAND, addEnchants(new ItemStack(Items.BOW), skelBow));
-				entity.equipStack(EquipmentSlot.FEET, new ItemStack(Items.CHAINMAIL_BOOTS));
-				entity.equipStack(EquipmentSlot.CHEST, new ItemStack(Items.CHAINMAIL_CHESTPLATE));
-				entity.equipStack(EquipmentSlot.LEGS, new ItemStack(Items.CHAINMAIL_LEGGINGS));
-				entity.equipStack(EquipmentSlot.HEAD, new ItemStack(Items.CHAINMAIL_HELMET));
+				entity = new Skeleton(EntityType.SKELETON, world);
+				entity.setItemInHand(InteractionHand.MAIN_HAND, addEnchants(new ItemStack(Items.BOW), skelBow));
+				entity.setItemSlot(EquipmentSlot.FEET, new ItemStack(Items.CHAINMAIL_BOOTS));
+				entity.setItemSlot(EquipmentSlot.CHEST, new ItemStack(Items.CHAINMAIL_CHESTPLATE));
+				entity.setItemSlot(EquipmentSlot.LEGS, new ItemStack(Items.CHAINMAIL_LEGGINGS));
+				entity.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.CHAINMAIL_HELMET));
 				((AccessorMobEntity)entity).setArmorDropChances(armor);
 				((AccessorMobEntity)entity).setHandDropChances(hand);
 				entities.add(new EntityOptions("Skeleton (Chain Armor, Enchanted Bow)", entity));
 				
-				entity = new ZombieEntity(world);
-				entity.setStackInHand(Hand.MAIN_HAND, addEnchants(new ItemStack(Items.IRON_SWORD), zombieSword));
-				entity.equipStack(EquipmentSlot.FEET, new ItemStack(Items.CHAINMAIL_BOOTS));
-				entity.equipStack(EquipmentSlot.CHEST, new ItemStack(Items.CHAINMAIL_CHESTPLATE));
-				entity.equipStack(EquipmentSlot.LEGS, new ItemStack(Items.CHAINMAIL_LEGGINGS));
-				entity.equipStack(EquipmentSlot.HEAD, new ItemStack(Items.CHAINMAIL_HELMET));
+				entity = new Zombie(world);
+				entity.setItemInHand(InteractionHand.MAIN_HAND, addEnchants(new ItemStack(Items.IRON_SWORD), zombieSword));
+				entity.setItemSlot(EquipmentSlot.FEET, new ItemStack(Items.CHAINMAIL_BOOTS));
+				entity.setItemSlot(EquipmentSlot.CHEST, new ItemStack(Items.CHAINMAIL_CHESTPLATE));
+				entity.setItemSlot(EquipmentSlot.LEGS, new ItemStack(Items.CHAINMAIL_LEGGINGS));
+				entity.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.CHAINMAIL_HELMET));
 				((AccessorMobEntity)entity).setArmorDropChances(armor);
 				((AccessorMobEntity)entity).setHandDropChances(hand);
 				entities.add(new EntityOptions("Zombie (Chain Armor, Enchanted Sword)", entity));
 				
-				entity = new SkeletonEntity(EntityType.SKELETON, world);
-				entity.setStackInHand(Hand.MAIN_HAND, addEnchants(new ItemStack(Items.BOW), skelBow));
-				entity.equipStack(EquipmentSlot.FEET, new ItemStack(Items.IRON_BOOTS));
-				entity.equipStack(EquipmentSlot.CHEST, new ItemStack(Items.IRON_CHESTPLATE));
-				entity.equipStack(EquipmentSlot.LEGS, new ItemStack(Items.IRON_LEGGINGS));
-				entity.equipStack(EquipmentSlot.HEAD, new ItemStack(Items.IRON_HELMET));
+				entity = new Skeleton(EntityType.SKELETON, world);
+				entity.setItemInHand(InteractionHand.MAIN_HAND, addEnchants(new ItemStack(Items.BOW), skelBow));
+				entity.setItemSlot(EquipmentSlot.FEET, new ItemStack(Items.IRON_BOOTS));
+				entity.setItemSlot(EquipmentSlot.CHEST, new ItemStack(Items.IRON_CHESTPLATE));
+				entity.setItemSlot(EquipmentSlot.LEGS, new ItemStack(Items.IRON_LEGGINGS));
+				entity.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.IRON_HELMET));
 				((AccessorMobEntity)entity).setArmorDropChances(armor);
 				((AccessorMobEntity)entity).setHandDropChances(hand);
 				entities.add(new EntityOptions("Skeleton (Iron Armor, Enchanted Sword)", entity));
 				
-				entity = new ZombieEntity(world);
-				entity.setStackInHand(Hand.MAIN_HAND, addEnchants(new ItemStack(Items.IRON_SWORD), zombieSword));
-				entity.equipStack(EquipmentSlot.FEET, new ItemStack(Items.IRON_BOOTS));
-				entity.equipStack(EquipmentSlot.CHEST, new ItemStack(Items.IRON_CHESTPLATE));
-				entity.equipStack(EquipmentSlot.LEGS, new ItemStack(Items.IRON_LEGGINGS));
-				entity.equipStack(EquipmentSlot.HEAD, new ItemStack(Items.IRON_HELMET));
+				entity = new Zombie(world);
+				entity.setItemInHand(InteractionHand.MAIN_HAND, addEnchants(new ItemStack(Items.IRON_SWORD), zombieSword));
+				entity.setItemSlot(EquipmentSlot.FEET, new ItemStack(Items.IRON_BOOTS));
+				entity.setItemSlot(EquipmentSlot.CHEST, new ItemStack(Items.IRON_CHESTPLATE));
+				entity.setItemSlot(EquipmentSlot.LEGS, new ItemStack(Items.IRON_LEGGINGS));
+				entity.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.IRON_HELMET));
 				((AccessorMobEntity)entity).setArmorDropChances(armor);
 				((AccessorMobEntity)entity).setHandDropChances(hand);
 				entities.add(new EntityOptions("Zombie (Iron Armor, Enchanted Sword)", entity));
 				
-				entity = new SkeletonEntity(EntityType.SKELETON, world);
-				entity.setStackInHand(Hand.MAIN_HAND, addEnchants(new ItemStack(Items.BOW), skelBow));
-				entity.setStackInHand(Hand.MAIN_HAND, new ItemStack(Items.BOW));
-				entity.equipStack(EquipmentSlot.FEET, new ItemStack(Items.DIAMOND_BOOTS));
-				entity.equipStack(EquipmentSlot.CHEST, new ItemStack(Items.DIAMOND_CHESTPLATE));
-				entity.equipStack(EquipmentSlot.LEGS, new ItemStack(Items.DIAMOND_LEGGINGS));
-				entity.equipStack(EquipmentSlot.HEAD, new ItemStack(Items.DIAMOND_HELMET));
+				entity = new Skeleton(EntityType.SKELETON, world);
+				entity.setItemInHand(InteractionHand.MAIN_HAND, addEnchants(new ItemStack(Items.BOW), skelBow));
+				entity.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.BOW));
+				entity.setItemSlot(EquipmentSlot.FEET, new ItemStack(Items.DIAMOND_BOOTS));
+				entity.setItemSlot(EquipmentSlot.CHEST, new ItemStack(Items.DIAMOND_CHESTPLATE));
+				entity.setItemSlot(EquipmentSlot.LEGS, new ItemStack(Items.DIAMOND_LEGGINGS));
+				entity.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.DIAMOND_HELMET));
 				((AccessorMobEntity)entity).setArmorDropChances(armor);
 				((AccessorMobEntity)entity).setHandDropChances(hand);
 				entities.add(new EntityOptions("Skeleton (Diamond Armor, Enchanted Bow)", entity));
 				
-				entity = new ZombieEntity(world);
-				entity.setStackInHand(Hand.MAIN_HAND, addEnchants(new ItemStack(Items.IRON_SWORD), zombieSword));
-				entity.equipStack(EquipmentSlot.FEET, new ItemStack(Items.DIAMOND_BOOTS));
-				entity.equipStack(EquipmentSlot.CHEST, new ItemStack(Items.DIAMOND_CHESTPLATE));
-				entity.equipStack(EquipmentSlot.LEGS, new ItemStack(Items.DIAMOND_LEGGINGS));
-				entity.equipStack(EquipmentSlot.HEAD, new ItemStack(Items.DIAMOND_HELMET));
+				entity = new Zombie(world);
+				entity.setItemInHand(InteractionHand.MAIN_HAND, addEnchants(new ItemStack(Items.IRON_SWORD), zombieSword));
+				entity.setItemSlot(EquipmentSlot.FEET, new ItemStack(Items.DIAMOND_BOOTS));
+				entity.setItemSlot(EquipmentSlot.CHEST, new ItemStack(Items.DIAMOND_CHESTPLATE));
+				entity.setItemSlot(EquipmentSlot.LEGS, new ItemStack(Items.DIAMOND_LEGGINGS));
+				entity.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.DIAMOND_HELMET));
 				((AccessorMobEntity)entity).setArmorDropChances(armor);
 				((AccessorMobEntity)entity).setHandDropChances(hand);
 				entities.add(new EntityOptions("Zombie (Diamond Armor, Enchanted Sword)", entity));
 			}
 		}else if(dimension==AccessorDimensionTypes.getNether()) {
-			entities.add(new EntityOptions("Blaze", new BlazeEntity(EntityType.BLAZE, world)));
-			entities.add(new EntityOptions("Ghast", new GhastEntity(EntityType.GHAST, world)));
-			entities.add(new EntityOptions("Magma Cube", new GhastEntity(EntityType.GHAST, world)));
-			LivingEntity entity = new SkeletonEntity(EntityType.SKELETON, world);
-			entity.setStackInHand(Hand.MAIN_HAND, new ItemStack(Items.BOW));
+			entities.add(new EntityOptions("Blaze", new Blaze(EntityType.BLAZE, world)));
+			entities.add(new EntityOptions("Ghast", new Ghast(EntityType.GHAST, world)));
+			entities.add(new EntityOptions("Magma Cube", new Ghast(EntityType.GHAST, world)));
+			LivingEntity entity = new Skeleton(EntityType.SKELETON, world);
+			entity.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.BOW));
 			entities.add(new EntityOptions("Skeleton", entity));
-			entities.add(new EntityOptions("Witherskeleton", new WitherSkeletonEntity(EntityType.WITHER_SKELETON, world)));
+			entities.add(new EntityOptions("Witherskeleton", new WitherSkeleton(EntityType.WITHER_SKELETON, world)));
 			
-			if (MinecraftClient.getInstance().world.getDifficulty() == Difficulty.HARD) {
-				entity = new SkeletonEntity(EntityType.SKELETON, world);
-				entity.setStackInHand(Hand.MAIN_HAND, addEnchants(new ItemStack(Items.BOW), skelBow));
+			if (Minecraft.getInstance().level.getDifficulty() == Difficulty.HARD) {
+				entity = new Skeleton(EntityType.SKELETON, world);
+				entity.setItemInHand(InteractionHand.MAIN_HAND, addEnchants(new ItemStack(Items.BOW), skelBow));
 				((AccessorMobEntity)entity).setArmorDropChances(armor);
 				((AccessorMobEntity)entity).setHandDropChances(hand);
 				entities.add(new EntityOptions("Skeleton (Enchanted Bow)", entity));
 				
-				entity = new SkeletonEntity(EntityType.SKELETON, world);
-				entity.setStackInHand(Hand.MAIN_HAND, addEnchants(new ItemStack(Items.BOW), skelBow));
-				entity.equipStack(EquipmentSlot.FEET, new ItemStack(Items.LEATHER_BOOTS));
-				entity.equipStack(EquipmentSlot.CHEST, new ItemStack(Items.LEATHER_CHESTPLATE));
-				entity.equipStack(EquipmentSlot.LEGS, new ItemStack(Items.LEATHER_LEGGINGS));
-				entity.equipStack(EquipmentSlot.HEAD, new ItemStack(Items.LEATHER_HELMET));
+				entity = new Skeleton(EntityType.SKELETON, world);
+				entity.setItemInHand(InteractionHand.MAIN_HAND, addEnchants(new ItemStack(Items.BOW), skelBow));
+				entity.setItemSlot(EquipmentSlot.FEET, new ItemStack(Items.LEATHER_BOOTS));
+				entity.setItemSlot(EquipmentSlot.CHEST, new ItemStack(Items.LEATHER_CHESTPLATE));
+				entity.setItemSlot(EquipmentSlot.LEGS, new ItemStack(Items.LEATHER_LEGGINGS));
+				entity.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.LEATHER_HELMET));
 				((AccessorMobEntity)entity).setArmorDropChances(armor);
 				((AccessorMobEntity)entity).setHandDropChances(hand);
 				entities.add(new EntityOptions("Skeleton (Leather Armor, Enchanted Bow)", entity));
 				
-				entity = new SkeletonEntity(EntityType.SKELETON, world);
-				entity.setStackInHand(Hand.MAIN_HAND, addEnchants(new ItemStack(Items.BOW), skelBow));
-				entity.equipStack(EquipmentSlot.FEET, new ItemStack(Items.GOLDEN_BOOTS));
-				entity.equipStack(EquipmentSlot.CHEST, new ItemStack(Items.GOLDEN_CHESTPLATE));
-				entity.equipStack(EquipmentSlot.LEGS, new ItemStack(Items.GOLDEN_LEGGINGS));
-				entity.equipStack(EquipmentSlot.HEAD, new ItemStack(Items.GOLDEN_HELMET));
+				entity = new Skeleton(EntityType.SKELETON, world);
+				entity.setItemInHand(InteractionHand.MAIN_HAND, addEnchants(new ItemStack(Items.BOW), skelBow));
+				entity.setItemSlot(EquipmentSlot.FEET, new ItemStack(Items.GOLDEN_BOOTS));
+				entity.setItemSlot(EquipmentSlot.CHEST, new ItemStack(Items.GOLDEN_CHESTPLATE));
+				entity.setItemSlot(EquipmentSlot.LEGS, new ItemStack(Items.GOLDEN_LEGGINGS));
+				entity.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.GOLDEN_HELMET));
 				((AccessorMobEntity)entity).setArmorDropChances(armor);
 				((AccessorMobEntity)entity).setHandDropChances(hand);
 				entities.add(new EntityOptions("Skeleton (Gold Armor, Enchanted Bow)", entity));
 				
-				entity = new SkeletonEntity(EntityType.SKELETON, world);
-				entity.setStackInHand(Hand.MAIN_HAND, addEnchants(new ItemStack(Items.BOW), skelBow));
-				entity.equipStack(EquipmentSlot.FEET, new ItemStack(Items.CHAINMAIL_BOOTS));
-				entity.equipStack(EquipmentSlot.CHEST, new ItemStack(Items.CHAINMAIL_CHESTPLATE));
-				entity.equipStack(EquipmentSlot.LEGS, new ItemStack(Items.CHAINMAIL_LEGGINGS));
-				entity.equipStack(EquipmentSlot.HEAD, new ItemStack(Items.CHAINMAIL_HELMET));
+				entity = new Skeleton(EntityType.SKELETON, world);
+				entity.setItemInHand(InteractionHand.MAIN_HAND, addEnchants(new ItemStack(Items.BOW), skelBow));
+				entity.setItemSlot(EquipmentSlot.FEET, new ItemStack(Items.CHAINMAIL_BOOTS));
+				entity.setItemSlot(EquipmentSlot.CHEST, new ItemStack(Items.CHAINMAIL_CHESTPLATE));
+				entity.setItemSlot(EquipmentSlot.LEGS, new ItemStack(Items.CHAINMAIL_LEGGINGS));
+				entity.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.CHAINMAIL_HELMET));
 				((AccessorMobEntity)entity).setArmorDropChances(armor);
 				((AccessorMobEntity)entity).setHandDropChances(hand);
 				entities.add(new EntityOptions("Skeleton (Chain Armor, Enchanted Bow)", entity));
 				
-				entity = new SkeletonEntity(EntityType.SKELETON, world);
-				entity.setStackInHand(Hand.MAIN_HAND, addEnchants(new ItemStack(Items.BOW), skelBow));
-				entity.equipStack(EquipmentSlot.FEET, new ItemStack(Items.IRON_BOOTS));
-				entity.equipStack(EquipmentSlot.CHEST, new ItemStack(Items.IRON_CHESTPLATE));
-				entity.equipStack(EquipmentSlot.LEGS, new ItemStack(Items.IRON_LEGGINGS));
-				entity.equipStack(EquipmentSlot.HEAD, new ItemStack(Items.IRON_HELMET));
+				entity = new Skeleton(EntityType.SKELETON, world);
+				entity.setItemInHand(InteractionHand.MAIN_HAND, addEnchants(new ItemStack(Items.BOW), skelBow));
+				entity.setItemSlot(EquipmentSlot.FEET, new ItemStack(Items.IRON_BOOTS));
+				entity.setItemSlot(EquipmentSlot.CHEST, new ItemStack(Items.IRON_CHESTPLATE));
+				entity.setItemSlot(EquipmentSlot.LEGS, new ItemStack(Items.IRON_LEGGINGS));
+				entity.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.IRON_HELMET));
 				((AccessorMobEntity)entity).setArmorDropChances(armor);
 				((AccessorMobEntity)entity).setHandDropChances(hand);
 				entities.add(new EntityOptions("Skeleton (Iron Armor, Enchanted Sword)", entity));
 				
-				entity = new SkeletonEntity(EntityType.SKELETON, world);
-				entity.setStackInHand(Hand.MAIN_HAND, addEnchants(new ItemStack(Items.BOW), skelBow));
-				entity.setStackInHand(Hand.MAIN_HAND, new ItemStack(Items.BOW));
-				entity.equipStack(EquipmentSlot.FEET, new ItemStack(Items.DIAMOND_BOOTS));
-				entity.equipStack(EquipmentSlot.CHEST, new ItemStack(Items.DIAMOND_CHESTPLATE));
-				entity.equipStack(EquipmentSlot.LEGS, new ItemStack(Items.DIAMOND_LEGGINGS));
-				entity.equipStack(EquipmentSlot.HEAD, new ItemStack(Items.DIAMOND_HELMET));
+				entity = new Skeleton(EntityType.SKELETON, world);
+				entity.setItemInHand(InteractionHand.MAIN_HAND, addEnchants(new ItemStack(Items.BOW), skelBow));
+				entity.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.BOW));
+				entity.setItemSlot(EquipmentSlot.FEET, new ItemStack(Items.DIAMOND_BOOTS));
+				entity.setItemSlot(EquipmentSlot.CHEST, new ItemStack(Items.DIAMOND_CHESTPLATE));
+				entity.setItemSlot(EquipmentSlot.LEGS, new ItemStack(Items.DIAMOND_LEGGINGS));
+				entity.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.DIAMOND_HELMET));
 				((AccessorMobEntity)entity).setArmorDropChances(armor);
 				((AccessorMobEntity)entity).setHandDropChances(hand);
 				entities.add(new EntityOptions("Skeleton (Diamond Armor, Enchanted Bow)", entity));
 			}
 		}else if(dimension==AccessorDimensionTypes.getEnd()) {
-			entities.add(new EntityOptions("Enderman", new EndermanEntity(EntityType.ENDERMAN, world)));
+			entities.add(new EntityOptions("Enderman", new EnderMan(EntityType.ENDERMAN, world)));
 		}
 		return entities;
 	}
 	
 	public static boolean canSpawn() {
-		entity.updatePosition(target.x, target.y, target.z);
-		boolean flag=entity.getPos().distanceTo(playerPos)>24D && entity.getPos().distanceTo(playerPos)<128D;
+		entity.setPos(target.x, target.y, target.z);
+		boolean flag=entity.position().distanceTo(playerPos)>24D && entity.position().distanceTo(playerPos)<128D;
 		if(flag) {
-			ServerWorld world=MCVer.getServerWorld(MinecraftClient.getInstance().player);
-			//#if MC>=11601
-//$$ 			return ((MobEntity) entity).canSpawn(world, net.minecraft.entity.SpawnReason.NATURAL) && MCVer.doesNotCollide(world, entity);
-			//#else
-			return ((MobEntity) entity).canSpawn(world, net.minecraft.entity.SpawnType.NATURAL) && MCVer.doesNotCollide(world, entity);
-			//#endif
+			ServerLevel world=(Minecraft.getInstance().getSingleplayerServer().getLevel(Minecraft.getInstance().player.dimension));
+			return ((Mob) entity).checkSpawnRules(world, net.minecraft.world.entity.MobSpawnType.NATURAL) && world.noCollision(entity);
 		}else return false;
 	}
 	
@@ -440,19 +410,10 @@ public class SpawnManipMod {
 		}
 	}
 	
-	//#if MC>=11601
-//$$ 			public ItemStack addEnchants(ItemStack item,  HashMap<Enchantment, Integer> enchs) {
-//$$ 			    enchs.entrySet().forEach(entry->{
-//$$ 			        item.addEnchantment(entry.getKey(), entry.getValue());
-//$$ 			    });;
-//$$ 				return item;
-//$$ 			}
-		//#else
-		public ItemStack addEnchants(ItemStack item, InfoEnchantment[] enchants) {
-			for (InfoEnchantment enchantmentData : enchants) {
-				item.addEnchantment(enchantmentData.enchantment, enchantmentData.level);
-			}
-			return item;
+	public ItemStack addEnchants(ItemStack item, EnchantmentInstance[] enchants) {
+		for (EnchantmentInstance enchantmentData : enchants) {
+			item.enchant(enchantmentData.enchantment, enchantmentData.level);
 		}
-		//#endif
+		return item;
+	}
 }

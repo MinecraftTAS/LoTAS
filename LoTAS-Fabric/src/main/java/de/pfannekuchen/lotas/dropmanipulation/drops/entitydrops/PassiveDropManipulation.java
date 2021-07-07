@@ -3,38 +3,40 @@ package de.pfannekuchen.lotas.dropmanipulation.drops.entitydrops;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
+import com.mojang.blaze3d.platform.GlStateManager;
 
-import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.gui.DropManipulationScreen;
 import de.pfannekuchen.lotas.gui.widgets.SmallCheckboxWidget;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.mob.SkeletonHorseEntity;
-import net.minecraft.entity.mob.ZombieHorseEntity;
-import net.minecraft.entity.passive.CatEntity;
-import net.minecraft.entity.passive.ChickenEntity;
-import net.minecraft.entity.passive.CowEntity;
-import net.minecraft.entity.passive.DonkeyEntity;
-import net.minecraft.entity.passive.HorseEntity;
-import net.minecraft.entity.passive.IronGolemEntity;
-import net.minecraft.entity.passive.LlamaEntity;
-import net.minecraft.entity.passive.MooshroomEntity;
-import net.minecraft.entity.passive.MuleEntity;
-import net.minecraft.entity.passive.ParrotEntity;
-import net.minecraft.entity.passive.PigEntity;
-import net.minecraft.entity.passive.PolarBearEntity;
-import net.minecraft.entity.passive.RabbitEntity;
-import net.minecraft.entity.passive.SheepEntity;
-import net.minecraft.entity.passive.SnowGolemEntity;
-import net.minecraft.entity.passive.SquidEntity;
-import net.minecraft.entity.passive.TraderLlamaEntity;
-import net.minecraft.entity.passive.TurtleEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.components.Checkbox;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.animal.Cat;
+import net.minecraft.world.entity.animal.Chicken;
+import net.minecraft.world.entity.animal.Cow;
+import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.animal.MushroomCow;
+import net.minecraft.world.entity.animal.Parrot;
+import net.minecraft.world.entity.animal.Pig;
+import net.minecraft.world.entity.animal.PolarBear;
+import net.minecraft.world.entity.animal.Rabbit;
+import net.minecraft.world.entity.animal.Sheep;
+import net.minecraft.world.entity.animal.SnowGolem;
+import net.minecraft.world.entity.animal.Squid;
+import net.minecraft.world.entity.animal.Turtle;
+import net.minecraft.world.entity.animal.horse.Donkey;
+import net.minecraft.world.entity.animal.horse.Horse;
+import net.minecraft.world.entity.animal.horse.Llama;
+import net.minecraft.world.entity.animal.horse.Mule;
+import net.minecraft.world.entity.animal.horse.SkeletonHorse;
+import net.minecraft.world.entity.animal.horse.TraderLlama;
+import net.minecraft.world.entity.animal.horse.ZombieHorse;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class PassiveDropManipulation extends DropManipulationScreen.DropManipulation {
 
@@ -59,7 +61,7 @@ public class PassiveDropManipulation extends DropManipulationScreen.DropManipula
 		PassiveDropManipulation.y = y;
 		PassiveDropManipulation.width = width;
 		PassiveDropManipulation.height = height;
-		enabled = MCVer.CheckboxWidget(x, y, 150, 20, "Override Passive Mob Drops", false);
+		enabled = new Checkbox(x, y, 150, 20, "Override Passive Mob Drops", false);
 	}
 
 	@Override
@@ -74,59 +76,59 @@ public class PassiveDropManipulation extends DropManipulationScreen.DropManipula
 
 	@Override
 	public List<ItemStack> redirectDrops(Entity entity) {
-		if (entity instanceof ChickenEntity && optimizeChicken.isChecked()) {
+		if (entity instanceof Chicken && optimizeChicken.isChecked()) {
 			if (!((LivingEntity) entity).isBaby())
 				return ImmutableList.of(new ItemStack(Items.FEATHER, 2), entity.isOnFire() ? new ItemStack(Items.COOKED_CHICKEN) : new ItemStack(Items.CHICKEN));
-		} else if (entity instanceof CowEntity && optimizeCow.isChecked()) {
+		} else if (entity instanceof Cow && optimizeCow.isChecked()) {
 			if (!((LivingEntity) entity).isBaby())
 				return ImmutableList.of(new ItemStack(Items.LEATHER), entity.isOnFire() ? new ItemStack(Items.COOKED_BEEF, 3) : new ItemStack(Items.BEEF, 3));
-		} else if (entity instanceof MooshroomEntity && optimizeMooshroom.isChecked()) {
+		} else if (entity instanceof MushroomCow && optimizeMooshroom.isChecked()) {
 			if (!((LivingEntity) entity).isBaby())
 				return ImmutableList.of(new ItemStack(Items.LEATHER, 2), entity.isOnFire() ? new ItemStack(Items.COOKED_BEEF, 3) : new ItemStack(Items.BEEF, 3));
-		} else if (entity instanceof SkeletonHorseEntity && optimizeSkeletonhorse.isChecked()) {
+		} else if (entity instanceof SkeletonHorse && optimizeSkeletonhorse.isChecked()) {
 			if (!((LivingEntity) entity).isBaby())
 				return ImmutableList.of(new ItemStack(Items.BONE, 2));
-		} else if (entity instanceof CatEntity && optimizeCat.isChecked()) {
+		} else if (entity instanceof Cat && optimizeCat.isChecked()) {
 			if (!((LivingEntity) entity).isBaby())
 				return ImmutableList.of(new ItemStack(Items.STRING, 2));
-		} else if (entity instanceof PigEntity && optimizePig.isChecked()) {
+		} else if (entity instanceof Pig && optimizePig.isChecked()) {
 			if (!((LivingEntity) entity).isBaby())
 				return ImmutableList.of(entity.isOnFire() ? new ItemStack(Items.COOKED_PORKCHOP, 3) : new ItemStack(Items.PORKCHOP, 3));
-		} else if (entity instanceof ParrotEntity && optimizeParrot.isChecked()) {
+		} else if (entity instanceof Parrot && optimizeParrot.isChecked()) {
 			if (!((LivingEntity) entity).isBaby())
 				return ImmutableList.of(new ItemStack(Items.FEATHER, 2));
-		} else if (entity instanceof RabbitEntity && optimizeRabbit.isChecked()) {
+		} else if (entity instanceof Rabbit && optimizeRabbit.isChecked()) {
 			if (!((LivingEntity) entity).isBaby())
 				return ImmutableList.of(new ItemStack(Items.RABBIT_FOOT, 1), new ItemStack(Items.RABBIT_HIDE, 1), entity.isOnFire() ? new ItemStack(Items.COOKED_RABBIT) : new ItemStack(Items.RABBIT));
-		} else if (entity instanceof SheepEntity && optimizeSheep.isChecked()) {
+		} else if (entity instanceof Sheep && optimizeSheep.isChecked()) {
 			if (!((LivingEntity) entity).isBaby()) {
 				try {
-					return ImmutableList.of(entity.isOnFire() ? new ItemStack(Items.COOKED_MUTTON, 3) : new ItemStack(Items.MUTTON, 3), new ItemStack((Item) Items.class.getField(((SheepEntity) entity).getColor().name() + "_WOOL").get(null)));
+					return ImmutableList.of(entity.isOnFire() ? new ItemStack(Items.COOKED_MUTTON, 3) : new ItemStack(Items.MUTTON, 3), new ItemStack((Item) Items.class.getField(((Sheep) entity).getColor().name() + "_WOOL").get(null)));
 				} catch (IllegalAccessException e) {
 					e.printStackTrace();
 				} catch (NoSuchFieldException e) {
 					e.printStackTrace();
 				}
 			}
-		} else if (entity instanceof SnowGolemEntity && optimizeSnowgolem.isChecked()) {
+		} else if (entity instanceof SnowGolem && optimizeSnowgolem.isChecked()) {
 			if (!((LivingEntity) entity).isBaby())
 				return ImmutableList.of(new ItemStack(Items.SNOWBALL, 15));
-		} else if (entity instanceof SquidEntity && optimizeSquid.isChecked()) {
+		} else if (entity instanceof Squid && optimizeSquid.isChecked()) {
 			if (!((LivingEntity) entity).isBaby())
 				return ImmutableList.of(new ItemStack(Items.INK_SAC, 3));
-		} else if ((entity instanceof HorseEntity || entity instanceof MuleEntity || entity instanceof DonkeyEntity || entity instanceof LlamaEntity || entity instanceof TraderLlamaEntity) && optimizeHorses.isChecked()) {
+		} else if ((entity instanceof Horse || entity instanceof Mule || entity instanceof Donkey || entity instanceof Llama || entity instanceof TraderLlama) && optimizeHorses.isChecked()) {
 			if (!((LivingEntity) entity).isBaby())
 				return ImmutableList.of(new ItemStack(Items.LEATHER, 2));
-		} else if (entity instanceof ZombieHorseEntity && optimizeHorses.isChecked()) {
+		} else if (entity instanceof ZombieHorse && optimizeHorses.isChecked()) {
 			if (!((LivingEntity) entity).isBaby())
 				return ImmutableList.of(new ItemStack(Items.ROTTEN_FLESH, 2));
-		} else if (entity instanceof TurtleEntity && optimizeTurtle.isChecked()) {
+		} else if (entity instanceof Turtle && optimizeTurtle.isChecked()) {
 			if (!((LivingEntity) entity).isBaby())
 				return ImmutableList.of(new ItemStack(Items.SEAGRASS, 2));
-		} else if (entity instanceof IronGolemEntity && optimizeIronGolem.isChecked()) {
+		} else if (entity instanceof IronGolem && optimizeIronGolem.isChecked()) {
 			if (!((LivingEntity) entity).isBaby())
 				return ImmutableList.of(new ItemStack(Items.IRON_INGOT, 5), new ItemStack(Items.POPPY));
-		} else if (entity instanceof PolarBearEntity && optimizePolarbear.isChecked()) {
+		} else if (entity instanceof PolarBear && optimizePolarbear.isChecked()) {
 			if (!((LivingEntity) entity).isBaby())
 				return ImmutableList.of(new ItemStack(Items.COD, 2));
 		}
@@ -172,7 +174,7 @@ public class PassiveDropManipulation extends DropManipulationScreen.DropManipula
 	@Override
 	public void mouseAction(double mouseX, double mouseY, int button) {
 		enabled.mouseClicked(mouseX, mouseY, button);
-		if (enabled.isChecked()) {
+		if (enabled.selected()) {
 			optimizeChicken.mouseClicked(mouseX, mouseY, button);
 			optimizeSkeletonhorse.mouseClicked(mouseX, mouseY, button);
 			optimizeCat.mouseClicked(mouseX, mouseY, button);
@@ -192,31 +194,31 @@ public class PassiveDropManipulation extends DropManipulationScreen.DropManipula
 	}
 
 	@Override
-	public void render(Object matrices, int mouseX, int mouseY, float delta) {
-		MCVer.render(enabled, mouseX, mouseY, delta);
+	public void render(int mouseX, int mouseY, float delta) {
+		enabled.render(mouseX, mouseY, delta);
 
-		if (!enabled.isChecked()) {
-			MCVer.color(.5f, .5f, .5f, .4f);
+		if (!enabled.selected()) {
+			GlStateManager.color4f(.5f, .5f, .5f, .4f);
 		} else {
-			MCVer.render(optimizeChicken, mouseX, mouseY, delta);
-			MCVer.render(optimizeSkeletonhorse, mouseX, mouseY, delta);
-			MCVer.render(optimizeCat, mouseX, mouseY, delta);
-			MCVer.render(optimizeCow, mouseX, mouseY, delta);
-			MCVer.render(optimizeMooshroom, mouseX, mouseY, delta);
-			MCVer.render(optimizePig, mouseX, mouseY, delta);
-			MCVer.render(optimizeParrot, mouseX, mouseY, delta);
-			MCVer.render(optimizeSnowgolem, mouseX, mouseY, delta);
-			MCVer.render(optimizeSheep, mouseX, mouseY, delta);
-			MCVer.render(optimizeRabbit, mouseX, mouseY, delta);
-			MCVer.render(optimizeSquid, mouseX, mouseY, delta);
-			MCVer.render(optimizeTurtle, mouseX, mouseY, delta);
-			MCVer.render(optimizeIronGolem, mouseX, mouseY, delta);
-			MCVer.render(optimizePolarbear, mouseX, mouseY, delta);
-			MCVer.render(optimizeHorses, mouseX, mouseY, delta);
+			optimizeChicken.render(mouseX, mouseY, delta);
+			optimizeSkeletonhorse.render(mouseX, mouseY, delta);
+			optimizeCat.render(mouseX, mouseY, delta);
+			optimizeCow.render(mouseX, mouseY, delta);
+			optimizeMooshroom.render(mouseX, mouseY, delta);
+			optimizePig.render(mouseX, mouseY, delta);
+			optimizeParrot.render(mouseX, mouseY, delta);
+			optimizeSnowgolem.render(mouseX, mouseY, delta);
+			optimizeSheep.render(mouseX, mouseY, delta);
+			optimizeRabbit.render(mouseX, mouseY, delta);
+			optimizeSquid.render(mouseX, mouseY, delta);
+			optimizeTurtle.render(mouseX, mouseY, delta);
+			optimizeIronGolem.render(mouseX, mouseY, delta);
+			optimizePolarbear.render(mouseX, mouseY, delta);
+			optimizeHorses.render(mouseX, mouseY, delta);
 		}
 
-		MinecraftClient.getInstance().getTextureManager().bindTexture(new Identifier("lotas", "drops/sheep.png"));
-		MCVer.renderImage(width - 128, y + 24, 0.0F, 0.0F, 102, 120, 102, 120);
+		Minecraft.getInstance().getTextureManager().bind(new ResourceLocation("lotas", "drops/sheep.png"));
+		GuiComponent.blit(width - 128, y + 24, 0.0F, 0.0F, 102, 120, 102, 120);
 	}
 
 }

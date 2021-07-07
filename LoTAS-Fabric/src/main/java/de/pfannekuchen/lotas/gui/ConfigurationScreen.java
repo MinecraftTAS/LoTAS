@@ -3,23 +3,19 @@ package de.pfannekuchen.lotas.gui;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
-
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.Button.OnPress;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.TextComponent;
 import de.pfannekuchen.lotas.core.utils.ConfigUtils;
-import de.pfannekuchen.lotas.gui.widgets.NewButtonWidget;
+import net.minecraft.client.gui.components.Button;
 import de.pfannekuchen.lotas.mixin.accessors.AccessorTextFieldWidget;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.ButtonWidget.PressAction;
-//#if MC>=11601
-//$$ import net.minecraft.client.util.math.MatrixStack;
-//#endif
-import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.text.LiteralText;
 
 public class ConfigurationScreen extends Screen {
 
 	public ConfigurationScreen() {
-		super(new LiteralText("Configuration"));
+		super(new TextComponent("Configuration"));
 	}
 
 	public static String[] optionsBoolean = new String[] { "B:tools:saveTickrate:INSERT", "B:ui:hideTickrateMessages:INSERT", "B:tools:showTickIndicator:INSERT", "B:ui:hideRTATimer:INSERT", "B:tools:removePearlDelay:INSERT", "B:tools:noDamageUnbreaking:INSERT", "B:tools:showSpeedometer:INSERT" };
@@ -28,8 +24,8 @@ public class ConfigurationScreen extends Screen {
 
 	public static String[] optionsString = new String[] {  };
 
-	public ArrayList<TextFieldWidget> strings = new ArrayList<TextFieldWidget>();
-	public ArrayList<TextFieldWidget> ints = new ArrayList<TextFieldWidget>();
+	public ArrayList<EditBox> strings = new ArrayList<EditBox>();
+	public ArrayList<EditBox> ints = new ArrayList<EditBox>();
 	public HashMap<Integer, String> messages = new HashMap<Integer, String>();
 
 	@Override
@@ -38,23 +34,15 @@ public class ConfigurationScreen extends Screen {
 		messages.clear();
 		ints.clear();
 		
-		//#if MC>=11700
-//$$ 		clearChildren();
-		//#else
 		buttons.clear();
 		children.clear();
-		//#endif
 		int y = 25;
 		int i = 0;
 		for (String option : optionsBoolean) {
 			String title = option.split(":")[2];
 			if (option.split(":")[0].equalsIgnoreCase("B")) {
 				boolean v = Boolean.parseBoolean(option.split(":")[3]);
-				//#if MC>=11700
-//$$ 				addDrawableChild(new NewButtonWidget(width / 2 - 100, y, 200, 20, title + ": " + (v ? "\u00A7atrue" : "\u00A7cfalse"), actionPerformed(i++)));
-				//#else
-				addButton(new NewButtonWidget(width / 2 - 100, y, 200, 20, title + ": " + (v ? "\u00A7atrue" : "\u00A7cfalse"), actionPerformed(i++)));
-				//#endif
+				addButton(new Button(width / 2 - 100, y, 200, 20, title + ": " + (v ? "\u00A7atrue" : "\u00A7cfalse"), actionPerformed(i++)));
 			}
 			y += 25;
 		}
@@ -63,13 +51,9 @@ public class ConfigurationScreen extends Screen {
 			String title = option.split(":")[2];
 			if (option.split(":")[0].equalsIgnoreCase("S")) {
 				String v = option.split(":")[3];
-				//#if MC>=11601
-//$$ 				strings.add(new TextFieldWidget(MinecraftClient.getInstance().textRenderer, width / 2 - 100, y, 200, 20, new LiteralText(v)));
-				//#else
-				strings.add(new TextFieldWidget(MinecraftClient.getInstance().textRenderer, width / 2 - 100, y, 200, 20, v));
-				//#endif
-				strings.get(strings.size() - 1).setText(v);
-				strings.get(strings.size() - 1).setUneditableColor(i++);
+				strings.add(new EditBox(Minecraft.getInstance().font, width / 2 - 100, y, 200, 20, v));
+				strings.get(strings.size() - 1).setValue(v);
+				strings.get(strings.size() - 1).setTextColorUneditable(i++);
 				messages.put(y, title);
 			}
 			y += 25;
@@ -79,20 +63,16 @@ public class ConfigurationScreen extends Screen {
 			String title = option.split(":")[2];
 			if (option.split(":")[0].equalsIgnoreCase("I")) {
 				String v = option.split(":")[3];
-				//#if MC>=11601
-//$$ 				ints.add(new TextFieldWidget(MinecraftClient.getInstance().textRenderer, width / 2 - 100, y, 200, 20, new LiteralText(v)));
-				//#else
-				ints.add(new TextFieldWidget(MinecraftClient.getInstance().textRenderer, width / 2 - 100, y, 200, 20, v));
-				//#endif
-				ints.get(ints.size() - 1).setText(v);
-				ints.get(ints.size() - 1).setUneditableColor(i++);
+				ints.add(new EditBox(Minecraft.getInstance().font, width / 2 - 100, y, 200, 20, v));
+				ints.get(ints.size() - 1).setValue(v);
+				ints.get(ints.size() - 1).setTextColorUneditable(i++);
 				messages.put(y, title);
 			}
 			y += 25;
 		}
 	}
 
-	protected PressAction actionPerformed(int id) {
+	protected OnPress actionPerformed(int id) {
 		return b -> {
 			if (optionsBoolean[id].startsWith("B:")) {
 				optionsBoolean[id] = setBoolean(optionsBoolean[id], !Boolean.parseBoolean(optionsBoolean[id].split(":")[3]));
@@ -105,10 +85,10 @@ public class ConfigurationScreen extends Screen {
 
 	@Override
 	public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
-		for (TextFieldWidget field : strings) {
+		for (EditBox field : strings) {
 			field.mouseClicked(mouseX, mouseY, mouseButton);
 		}
-		for (TextFieldWidget field : ints) {
+		for (EditBox field : ints) {
 			field.mouseClicked(mouseX, mouseY, mouseButton);
 		}
 		return super.mouseClicked(mouseX, mouseY, mouseButton);
@@ -116,28 +96,28 @@ public class ConfigurationScreen extends Screen {
 
 	@Override
 	public boolean keyReleased(int keyCode, int scanCode, int modifiers) {
-		for (TextFieldWidget field : strings) {
+		for (EditBox field : strings) {
 			if (field.keyReleased(keyCode, scanCode, modifiers)) {
 				String line = optionsString[((AccessorTextFieldWidget) field).getUneditableColor() - 20];
-				ConfigUtils.setString(line.split(":")[1], line.split(":")[2], field.getText());
+				ConfigUtils.setString(line.split(":")[1], line.split(":")[2], field.getValue());
 				ConfigUtils.save();
-				optionsString[((AccessorTextFieldWidget) field).getUneditableColor() - 20] = setString(line.split(":")[1], line.split(":")[2], field.getText());
+				optionsString[((AccessorTextFieldWidget) field).getUneditableColor() - 20] = setString(line.split(":")[1], line.split(":")[2], field.getValue());
 			}
 		}
-		for (TextFieldWidget field : ints) {
-			String textBefore = field.getText();
+		for (EditBox field : ints) {
+			String textBefore = field.getValue();
 			if (field.keyReleased(keyCode, scanCode, modifiers)) {
 				String line = optionsInteger[((AccessorTextFieldWidget) field).getUneditableColor() - 40];
 				try {
-					if (field.getText().isEmpty())
-						field.setText("0");
-					if (field.getText().startsWith("0") && field.getText().length() != 1)
-						field.setText(field.getText().substring(1));
-					ConfigUtils.setInt(line.split(":")[1], line.split(":")[2], Integer.parseInt(field.getText()));
+					if (field.getValue().isEmpty())
+						field.setValue("0");
+					if (field.getValue().startsWith("0") && field.getValue().length() != 1)
+						field.setValue(field.getValue().substring(1));
+					ConfigUtils.setInt(line.split(":")[1], line.split(":")[2], Integer.parseInt(field.getValue()));
 					ConfigUtils.save();
-					optionsInteger[((AccessorTextFieldWidget) field).getUneditableColor() - 40] = setInt(line.split(":")[1], line.split(":")[2], Integer.parseInt(field.getText()));
+					optionsInteger[((AccessorTextFieldWidget) field).getUneditableColor() - 40] = setInt(line.split(":")[1], line.split(":")[2], Integer.parseInt(field.getValue()));
 				} catch (Exception e) {
-					field.setText(textBefore);
+					field.setValue(textBefore);
 				}
 			}
 		}
@@ -146,28 +126,28 @@ public class ConfigurationScreen extends Screen {
 
 	@Override
 	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-		for (TextFieldWidget field : strings) {
+		for (EditBox field : strings) {
 			if (field.keyPressed(keyCode, scanCode, modifiers)) {
 				String line = optionsString[((AccessorTextFieldWidget) field).getUneditableColor() - 20];
-				ConfigUtils.setString(line.split(":")[1], line.split(":")[2], field.getText());
+				ConfigUtils.setString(line.split(":")[1], line.split(":")[2], field.getValue());
 				ConfigUtils.save();
-				optionsString[((AccessorTextFieldWidget) field).getUneditableColor() - 20] = setString(line.split(":")[1], line.split(":")[2], field.getText());
+				optionsString[((AccessorTextFieldWidget) field).getUneditableColor() - 20] = setString(line.split(":")[1], line.split(":")[2], field.getValue());
 			}
 		}
-		for (TextFieldWidget field : ints) {
-			String textBefore = field.getText();
+		for (EditBox field : ints) {
+			String textBefore = field.getValue();
 			if (field.keyPressed(keyCode, scanCode, modifiers)) {
 				String line = optionsInteger[((AccessorTextFieldWidget) field).getUneditableColor() - 40];
 				try {
-					if (field.getText().isEmpty())
-						field.setText("0");
-					if (field.getText().startsWith("0") && field.getText().length() != 1)
-						field.setText(field.getText().substring(1));
-					ConfigUtils.setInt(line.split(":")[1], line.split(":")[2], Integer.parseInt(field.getText()));
+					if (field.getValue().isEmpty())
+						field.setValue("0");
+					if (field.getValue().startsWith("0") && field.getValue().length() != 1)
+						field.setValue(field.getValue().substring(1));
+					ConfigUtils.setInt(line.split(":")[1], line.split(":")[2], Integer.parseInt(field.getValue()));
 					ConfigUtils.save();
-					optionsInteger[((AccessorTextFieldWidget) field).getUneditableColor() - 40] = setInt(line.split(":")[1], line.split(":")[2], Integer.parseInt(field.getText()));
+					optionsInteger[((AccessorTextFieldWidget) field).getUneditableColor() - 40] = setInt(line.split(":")[1], line.split(":")[2], Integer.parseInt(field.getValue()));
 				} catch (Exception e) {
-					field.setText(textBefore);
+					field.setValue(textBefore);
 				}
 			}
 		}
@@ -176,66 +156,45 @@ public class ConfigurationScreen extends Screen {
 
 	@Override
 	public boolean charTyped(char typedChar, int keyCode) {
-		for (TextFieldWidget field : strings) {
+		for (EditBox field : strings) {
 			if (field.charTyped(typedChar, keyCode)) {
 				String line = optionsString[((AccessorTextFieldWidget) field).getUneditableColor() - 20];
-				ConfigUtils.setString(line.split(":")[1], line.split(":")[2], field.getText());
+				ConfigUtils.setString(line.split(":")[1], line.split(":")[2], field.getValue());
 				ConfigUtils.save();
-				optionsString[((AccessorTextFieldWidget) field).getUneditableColor() - 20] = setString(line.split(":")[1], line.split(":")[2], field.getText());
+				optionsString[((AccessorTextFieldWidget) field).getUneditableColor() - 20] = setString(line.split(":")[1], line.split(":")[2], field.getValue());
 			}
 		}
-		for (TextFieldWidget field : ints) {
-			String textBefore = field.getText();
+		for (EditBox field : ints) {
+			String textBefore = field.getValue();
 			if (field.charTyped(typedChar, keyCode)) {
 				String line = optionsInteger[((AccessorTextFieldWidget) field).getUneditableColor() - 40];
 				try {
-					if (field.getText().isEmpty())
-						field.setText("0");
-					if (field.getText().startsWith("0") && field.getText().length() != 1)
-						field.setText(field.getText().substring(1));
-					ConfigUtils.setInt(line.split(":")[1], line.split(":")[2], Integer.parseInt(field.getText()));
+					if (field.getValue().isEmpty())
+						field.setValue("0");
+					if (field.getValue().startsWith("0") && field.getValue().length() != 1)
+						field.setValue(field.getValue().substring(1));
+					ConfigUtils.setInt(line.split(":")[1], line.split(":")[2], Integer.parseInt(field.getValue()));
 					ConfigUtils.save();
-					optionsInteger[((AccessorTextFieldWidget) field).getUneditableColor() - 40] = setInt(line.split(":")[1], line.split(":")[2], Integer.parseInt(field.getText()));
+					optionsInteger[((AccessorTextFieldWidget) field).getUneditableColor() - 40] = setInt(line.split(":")[1], line.split(":")[2], Integer.parseInt(field.getValue()));
 				} catch (Exception e) {
-					field.setText(textBefore);
+					field.setValue(textBefore);
 				}
 			}
 		}
 		return super.charTyped(typedChar, keyCode);
 	}
 
-	//#if MC>=11601
-//$$ 	@Override
-//$$ 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-//$$ 		renderBackground(matrices, 0);
-		//#if MC>=11700
-//$$ 		drawCenteredText(matrices, MinecraftClient.getInstance().textRenderer, "Configuration Menu", width / 2, 5, 0xFFFFFFFF);
-		//#else
-//$$ 		drawCenteredString(matrices, MinecraftClient.getInstance().textRenderer, "Configuration Menu", width / 2, 5, 0xFFFFFFFF);
-		//#endif
-//$$ 		for (Entry<Integer, String> entry : messages.entrySet()) {
-//$$ 			drawStringWithShadow(matrices, MinecraftClient.getInstance().textRenderer, entry.getValue(), 35, entry.getKey() + 5, 0xFFFFFFFF);
-//$$ 		}
-//$$ 		for (TextFieldWidget field : strings) {
-//$$ 			field.render(matrices, mouseX, mouseY, delta);
-//$$ 		}
-//$$ 		for (TextFieldWidget field : ints) {
-//$$ 			field.render(matrices, mouseX, mouseY, delta);
-//$$ 		}
-//$$ 		super.render(matrices, mouseX, mouseY, delta);
-//$$ 	}
-	//#else
 	@Override
 	public void render(int mouseX, int mouseY, float delta) {
 		renderBackground(0);
-		drawCenteredString(MinecraftClient.getInstance().textRenderer, "Configuration Menu", width / 2, 5, 0xFFFFFFFF);
+		drawCenteredString(Minecraft.getInstance().font, "Configuration Menu", width / 2, 5, 0xFFFFFFFF);
 		for (Entry<Integer, String> entry : messages.entrySet()) {
-			drawString(MinecraftClient.getInstance().textRenderer, entry.getValue(), 35, entry.getKey() + 5, 0xFFFFFFFF);
+			drawString(Minecraft.getInstance().font, entry.getValue(), 35, entry.getKey() + 5, 0xFFFFFFFF);
 		}
-		for (TextFieldWidget field : strings) {
+		for (EditBox field : strings) {
 			field.render(mouseX, mouseY, delta);
 		}
-		for (TextFieldWidget field : ints) {
+		for (EditBox field : ints) {
 			field.render(mouseX, mouseY, delta);
 		}
 		super.render(mouseX, mouseY, delta);

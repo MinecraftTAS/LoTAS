@@ -6,26 +6,20 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Comparator;
-
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.ObjectSelectionList;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.TextComponent;
 import com.google.common.io.Files;
 import com.mojang.blaze3d.platform.GlStateManager;
 
-import de.pfannekuchen.lotas.gui.widgets.NewButtonWidget;
+import net.minecraft.client.gui.components.Button;
 import de.pfannekuchen.lotas.mods.SavestateMod;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.AlwaysSelectedEntryListWidget;
-import net.minecraft.client.gui.widget.ButtonWidget;
-//#if MC>=11601
-//$$ import net.minecraft.client.util.math.MatrixStack;
-//#endif
-import net.minecraft.text.LiteralText;
-import net.minecraft.text.Text;
 
 public class LoadstateScreen extends Screen {
 
 	public LoadstateScreen() {
-		super(new LiteralText("Loadstate Screen"));
+		super(new TextComponent("Loadstate Screen"));
 	}
 
 	GuiLoadstateList list;
@@ -37,43 +31,21 @@ public class LoadstateScreen extends Screen {
 		} catch (NumberFormatException | IOException e) {
 			e.printStackTrace();
 		}
-		//#if MC>=11700
-//$$ 		addDrawableChild(new NewButtonWidget(width / 2 - 102, height - 52, 204, 20, "Loadstate", btn -> {
-//$$ 			SavestateMod.loadstate(list.getSelectedOrNull().index + 1);
-//$$ 		}));
-//$$ 		addDrawableChild(new NewButtonWidget(width / 2 - 102, height - 31, 204, 20, "Delete State", btn -> {
-//$$ 			SavestateMod.yeet(list.getSelectedOrNull().index + 1);
-//$$ 			MinecraftClient.getInstance().openScreen(new LoadstateScreen());
-//$$ 		}));
-		//#else
-		addButton(new NewButtonWidget(width / 2 - 102, height - 52, 204, 20, "Loadstate", btn -> {
+		addButton(new Button(width / 2 - 102, height - 52, 204, 20, "Loadstate", btn -> {
 			SavestateMod.loadstate(list.getSelected().index + 1);
 		}));
-		addButton(new NewButtonWidget(width / 2 - 102, height - 31, 204, 20, "Delete State", btn -> {
+		addButton(new Button(width / 2 - 102, height - 31, 204, 20, "Delete State", btn -> {
 			SavestateMod.yeet(list.getSelected().index + 1);
-			MinecraftClient.getInstance().openScreen(new LoadstateScreen());
+			Minecraft.getInstance().setScreen(new LoadstateScreen());
 		}));
-		//#endif
 		super.init();
 	}
 
-	//#if MC>=11601
-//$$ 	@Override public void render(MatrixStack stack, int mouseX, int mouseY, float partialTicks) {
-//$$ 		list.render(stack, mouseX, mouseY, partialTicks);
-		//#if MC>=11700
-//$$ 		drawCenteredText(stack, MinecraftClient.getInstance().textRenderer, "Select State to load", width / 2, 16, 0xFFFFFF);
-		//#else
-//$$ 		drawCenteredString(stack, MinecraftClient.getInstance().textRenderer, "Select State to load", width / 2, 16, 0xFFFFFF);
-		//#endif
-//$$ 		super.render(stack, mouseX, mouseY, partialTicks);
-//$$ 	}
-	//#else
 	@Override public void render(int mouseX, int mouseY, float partialTicks) {
 		list.render(mouseX, mouseY, partialTicks);
-		drawCenteredString(MinecraftClient.getInstance().textRenderer, "Select State to load", width / 2, 16, 0xFFFFFF);
+		drawCenteredString(Minecraft.getInstance().font, "Select State to load", width / 2, 16, 0xFFFFFF);
 		super.render(mouseX, mouseY, partialTicks);
 	}
-	//#endif
 
 	@Override
 	public boolean mouseClicked(double mouseX, double mouseY, int button) {
@@ -105,20 +77,16 @@ public class LoadstateScreen extends Screen {
 		return super.mouseScrolled(d, e, amount);
 	}
 
-	public static class GuiLoadstateList extends AlwaysSelectedEntryListWidget<GuiLoadstateList.StateEntry> {
+	public static class GuiLoadstateList extends ObjectSelectionList<GuiLoadstateList.StateEntry> {
 
 		public GuiLoadstateList(int widthIn, int heightIn, int topIn, int bottomIn, int slotHeightIn) throws NumberFormatException, IOException {
-			super(MinecraftClient.getInstance(), widthIn, heightIn, topIn, bottomIn, slotHeightIn);
+			super(Minecraft.getInstance(), widthIn, heightIn, topIn, bottomIn, slotHeightIn);
 
-			File[] f = new File(MinecraftClient.getInstance().runDirectory, "saves/savestates/").listFiles(new FilenameFilter() {
+			File[] f = new File(Minecraft.getInstance().gameDirectory, "saves/savestates/").listFiles(new FilenameFilter() {
 
 				@Override
 				public boolean accept(File dir, String name) {
-					//#if MC>=11601
-//$$ 					return name.startsWith(MinecraftClient.getInstance().getServer().getSaveProperties().getLevelName() + "-Savestate");
-					//#else
-					return name.startsWith(MinecraftClient.getInstance().getServer().getLevelName() + "-Savestate");
-					//#endif
+					return name.startsWith(Minecraft.getInstance().getSingleplayerServer().getLevelIdName() + "-Savestate");
 				}
 			});
 			Arrays.sort(f, new Comparator<File>() {
@@ -142,7 +110,7 @@ public class LoadstateScreen extends Screen {
 			}
 		}
 
-		public final class StateEntry extends AlwaysSelectedEntryListWidget.Entry<GuiLoadstateList.StateEntry> {
+		public final class StateEntry extends ObjectSelectionList.Entry<GuiLoadstateList.StateEntry> {
 
 			public String name;
 			public String description;
@@ -154,26 +122,13 @@ public class LoadstateScreen extends Screen {
 				this.index = index;
 			}
 
-			//#if MC>=11601
-//$$ 			@Override public void render(MatrixStack matrices, int slotIndex, int y, int x, int listWidth, int slotHeight, int mouseX, int mouseY, boolean isSelected, float partialTicks) {
-			//#else
 			@Override public void render(int slotIndex, int y, int x, int listWidth, int slotHeight, int mouseX, int mouseY, boolean isSelected, float partialTicks) {
-			//#endif
 				String s = name;
 				String s1 = description;
 
-				//#if MC>=11601
-//$$ 				MinecraftClient.getInstance().textRenderer.draw(matrices, s, x + 32 + 3, y + 1, 16777215);
-//$$ 				MinecraftClient.getInstance().textRenderer.draw(matrices, s1, x + 32 + 3, y + MinecraftClient.getInstance().textRenderer.fontHeight + 3, 8421504);
-				//#else
-				MinecraftClient.getInstance().textRenderer.draw(s, x + 32 + 3, y + 1, 16777215);
-				MinecraftClient.getInstance().textRenderer.draw(s1, x + 32 + 3, y + MinecraftClient.getInstance().textRenderer.fontHeight + 3, 8421504);
-				//#endif
-				//#if MC>=11700
-//$$ 				com.mojang.blaze3d.systems.RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-				//#else
+				Minecraft.getInstance().font.draw(s, x + 32 + 3, y + 1, 16777215);
+				Minecraft.getInstance().font.draw(s1, x + 32 + 3, y + Minecraft.getInstance().font.lineHeight + 3, 8421504);
 				GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-				//#endif
 			}
 
 			@Override
@@ -187,13 +142,6 @@ public class LoadstateScreen extends Screen {
 				GuiLoadstateList.this.setSelected(this);
 				return super.mouseReleased(mouseX, mouseY, button);
 			}
-			//#if MC>=11700
-//$$ 			@Override
-//$$ 			public Text method_37006() {
-//$$ 				// TODO Auto-generated method stub
-//$$ 				return null;
-//$$ 			}
-			//#endif
 		}
 
 	}

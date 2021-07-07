@@ -7,21 +7,19 @@ import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.lwjgl.glfw.GLFW;
 
 import de.pfannekuchen.lotas.core.utils.EventUtils.Timer;
-import de.pfannekuchen.lotas.mixin.accessors.AccessorLevelSession;
 import de.pfannekuchen.lotas.mixin.render.gui.MixinGuiIngameMenu;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.server.IntegratedServer;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.integrated.IntegratedServer;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.phys.Vec3;
 
 /**
  * Saves the player velocity and makes a copy of the world in a seperate folder.
@@ -47,8 +45,8 @@ public class SavestateMod {
 	 * @return Data as String
 	 */
 	public static final String generateSavestateFile() {
-		final ClientPlayerEntity p = MinecraftClient.getInstance().player;
-		final Vec3d velocity = p.getVelocity();
+		final LocalPlayer p = Minecraft.getInstance().player;
+		final Vec3 velocity = p.getDeltaMovement();
 		return velocity.x + ":" + velocity.y + ":" + velocity.z + ":" + Timer.ticks;
 	}
 
@@ -59,21 +57,17 @@ public class SavestateMod {
 	public static void savestate(String name) {
 
 		final String data = generateSavestateFile();
-		final MinecraftClient mc = MinecraftClient.getInstance();
+		final Minecraft mc = Minecraft.getInstance();
 
-		final MinecraftServer server = mc.getServer();
-		server.getPlayerManager().saveAllPlayerData();
+		final MinecraftServer server = mc.getSingleplayerServer();
+		server.getPlayerList().saveAll();
 		
-		server.save(false, true, false);
+		server.saveAllChunks(false, true, false);
 		
 		new Thread(() -> {
-			//#if MC>=11601
-//$$ 				final String worldName = ((AccessorLevelSession)server).getSession().getDirectoryName();
-			//#else
-			final String worldName = server.getLevelName();
-			//#endif
-			final File worldDir = new File(mc.runDirectory, "saves/" + worldName);
-			final File savestatesDir = new File(mc.runDirectory, "saves/savestates/");
+			final String worldName = server.getLevelIdName();
+			final File worldDir = new File(mc.gameDirectory, "saves/" + worldName);
+			final File savestatesDir = new File(mc.gameDirectory, "saves/savestates/");
 
 			if (!savestatesDir.exists())
 				savestatesDir.mkdir();
@@ -112,28 +106,24 @@ public class SavestateMod {
 		if (!hasSavestate())
 			return;
 
-		final MinecraftClient mc = MinecraftClient.getInstance();
+		final Minecraft mc = Minecraft.getInstance();
 
-		double x = mc.mouse.getX();
-		double y = mc.mouse.getY();
+		double x = mc.mouseHandler.xpos();
+		double y = mc.mouseHandler.ypos();
 
 		isLoading = true;
 
-		final IntegratedServer server = mc.getServer();
+		final IntegratedServer server = mc.getSingleplayerServer();
 
-		for (ServerWorld worldserver : server.getWorlds()) {
-			worldserver.savingDisabled = true;
+		for (ServerLevel worldserver : server.getAllLevels()) {
+			worldserver.noSave = true;
 		}
 
-		mc.getServer().stop(true);
+		mc.getSingleplayerServer().halt(true);
 
-		//#if MC>=11601
-//$$ 				final String worldName = server.getSaveProperties().getLevelName();
-		//#else
-		final String worldName = server.getLevelName();
-		//#endif
-		final File worldDir = new File(mc.runDirectory, "saves/" + worldName);
-		final File savestatesDir = new File(mc.runDirectory, "saves/savestates/");
+		final String worldName = server.getLevelIdName();
+		final File worldDir = new File(mc.gameDirectory, "saves/" + worldName);
+		final File savestatesDir = new File(mc.gameDirectory, "saves/savestates/");
 
 		int existingSavestates = savestatesDir.listFiles((d, s) -> {
 			return s.startsWith(worldName + "-Savestate");
@@ -157,19 +147,15 @@ public class SavestateMod {
 		} catch (NumberFormatException | IOException e) {
 			e.printStackTrace();
 		}
-		mc.inGameHud.getChatHud().clear(true);
+		mc.gui.getChat().clearMessages(true);
 
-		GLFW.glfwSetCursorPos(mc.window.getHandle(), x, y);
-		mc.mouse.updateMouse();
+		GLFW.glfwSetCursorPos(mc.window.getWindow(), x, y);
+		mc.mouseHandler.turnPlayer();
 
-		//#if MC>=11601
-//$$ 			mc.startIntegratedServer(worldName);
-		//#else
-		mc.startIntegratedServer(worldName, worldName, null);
-		//#endif
+		mc.selectLevel(worldName, worldName, null);
 
-		GLFW.glfwSetCursorPos(mc.window.getHandle(), x, y);
-		mc.mouse.updateMouse();
+		GLFW.glfwSetCursorPos(mc.window.getWindow(), x, y);
+		mc.mouseHandler.turnPlayer();
 
 	}
 
@@ -179,12 +165,8 @@ public class SavestateMod {
 	 * @see MixinGuiIngameMenu#injectinitGui(org.spongepowered.asm.mixin.injection.callback.CallbackInfo)
 	 */
 	public static boolean hasSavestate() {
-		//#if MC>=11601
-//$$ 				final String worldName = MinecraftClient.getInstance().getServer().getSaveProperties().getLevelName();
-		//#else
-		final String worldName = MinecraftClient.getInstance().getServer().getLevelName();
-		//#endif
-		File savestatesDir = new File(MinecraftClient.getInstance().runDirectory, "saves/savestates/");
+		final String worldName = Minecraft.getInstance().getSingleplayerServer().getLevelIdName();
+		File savestatesDir = new File(Minecraft.getInstance().gameDirectory, "saves/savestates/");
 		if (!savestatesDir.exists())
 			return false;
 		int existingSavestates = savestatesDir.listFiles((d, s) -> {
@@ -249,14 +231,10 @@ public class SavestateMod {
 
 	// Delete
 	public static void yeet(int i) {
-		final MinecraftClient mc = MinecraftClient.getInstance();
-		final IntegratedServer server = mc.getServer();
-		//#if MC>=11601
-//$$ 				final String worldName = server.getSaveProperties().getLevelName();
-		//#else
-		final String worldName = server.getServerName();
-		//#endif
-		final File savestatesDir = new File(mc.runDirectory, "saves/savestates/");
+		final Minecraft mc = Minecraft.getInstance();
+		final IntegratedServer server = mc.getSingleplayerServer();
+		final String worldName = server.getLevelName();
+		final File savestatesDir = new File(mc.gameDirectory, "saves/savestates/");
 
 		final File savestateDir = new File(savestatesDir, worldName + "-Savestate" + (i));
 		try {

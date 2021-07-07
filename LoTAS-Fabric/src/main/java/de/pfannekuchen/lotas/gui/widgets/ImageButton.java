@@ -1,26 +1,19 @@
 package de.pfannekuchen.lotas.gui.widgets;
 
 import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.brigadier.LiteralMessage;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.resources.ResourceLocation;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawableHelper;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.resource.language.I18n;
-import net.minecraft.text.LiteralText;
-import net.minecraft.util.Identifier;
-
-public class ImageButton extends ButtonWidget {
+public class ImageButton extends Button {
 	private boolean toggled;
 
-	private Identifier pic;
+	private ResourceLocation pic;
 
-	public ImageButton(int x, int y, ButtonWidget.PressAction action, Identifier pic) {
-		//#if MC>=11601
-//$$ 		super(x, y, 20, 20, new LiteralText(""), action);
-		//#else
-		super(x, y, 20, 20, I18n.translate(""), action);
-		//#endif
+	public ImageButton(int x, int y, Button.OnPress action, ResourceLocation pic) {
+		super(x, y, 20, 20, I18n.get(""), action);
 		this.pic = pic;
 	}
 
@@ -33,22 +26,10 @@ public class ImageButton extends ButtonWidget {
 	}
 
 	public void renderButton(int mouseX, int mouseY, float delta) {
-		//#if MC>=11601
-//$$ 		super.renderButton(null, mouseX, mouseY, delta);
-		//#else
 		super.renderButton(mouseX, mouseY, delta);
-		//#endif
-		MinecraftClient.getInstance().getTextureManager().bindTexture(pic);
-		//#if MC>=11700
-//$$ 		com.mojang.blaze3d.systems.RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-		//#else
+		Minecraft.getInstance().getTextureManager().bind(pic);
 		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-		//#endif
-		//#if MC>=11601
-//$$ 		drawTexture(null, x, y, 0.0F, 0.0F, 20, 20, 20, 20);
-		//#else
-		DrawableHelper.blit(x, y, 0.0F, 0.0F, 20, 20, 20, 20);
-		//#endif
+		GuiComponent.blit(x, y, 0.0F, 0.0F, 20, 20, 20, 20);
 	}
 
 }

@@ -4,36 +4,38 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
+import com.mojang.blaze3d.platform.GlStateManager;
 
-import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.gui.DropManipulationScreen;
 import de.pfannekuchen.lotas.gui.widgets.ImageButton;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.entity.Entity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.components.Checkbox;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class LeaveDropManipulation extends DropManipulationScreen.DropManipulation {
 
 	public static ImageButton dropApple = new ImageButton(x, y, c -> {
 		LeaveDropManipulation.dropApple.setToggled(!LeaveDropManipulation.dropApple.isToggled());
-	}, new Identifier("lotas", "drops/apple.png"));
+	}, new ResourceLocation("lotas", "drops/apple.png"));
 	public static ImageButton dropStick = new ImageButton(x, y, c -> {
 		LeaveDropManipulation.dropStick.setToggled(!LeaveDropManipulation.dropStick.isToggled());
-	}, new Identifier("lotas", "drops/stick.png"));
+	}, new ResourceLocation("lotas", "drops/stick.png"));
 	public static ImageButton dropSapling = new ImageButton(x, y, c -> {
 		LeaveDropManipulation.dropSapling.setToggled(!LeaveDropManipulation.dropSapling.isToggled());
-	}, new Identifier("lotas", "drops/sapling.png"));
+	}, new ResourceLocation("lotas", "drops/sapling.png"));
 
 	public LeaveDropManipulation(int x, int y, int width, int height) {
 		LeaveDropManipulation.x = x;
 		LeaveDropManipulation.y = y;
 		LeaveDropManipulation.width = width;
 		LeaveDropManipulation.height = height;
-		enabled = MCVer.CheckboxWidget(x, y, 150, 20, "Override Leave Drops", false);
+		enabled = new Checkbox(x, y, 150, 20, "Override Leave Drops", false);
 	}
 
 	@Override
@@ -44,28 +46,28 @@ public class LeaveDropManipulation extends DropManipulationScreen.DropManipulati
 	@Override
 	public List<ItemStack> redirectDrops(BlockState block) {
 		List<ItemStack> list = new ArrayList<>();
-		if (Blocks.OAK_LEAVES.equals(block.getBlock().getDefaultState().getBlock())) {
+		if (Blocks.OAK_LEAVES.equals(block.getBlock().defaultBlockState().getBlock())) {
 			if (dropSapling.isToggled())
 				list.add(new ItemStack(Items.OAK_SAPLING));
-		} else if (Blocks.BIRCH_LEAVES.equals(block.getBlock().getDefaultState().getBlock())) {
+		} else if (Blocks.BIRCH_LEAVES.equals(block.getBlock().defaultBlockState().getBlock())) {
 			if (dropSapling.isToggled())
 				list.add(new ItemStack(Items.BIRCH_SAPLING));
-		} else if (Blocks.SPRUCE_LEAVES.equals(block.getBlock().getDefaultState().getBlock())) {
+		} else if (Blocks.SPRUCE_LEAVES.equals(block.getBlock().defaultBlockState().getBlock())) {
 			if (dropSapling.isToggled())
 				list.add(new ItemStack(Items.SPRUCE_SAPLING));
-		} else if (Blocks.JUNGLE_LEAVES.equals(block.getBlock().getDefaultState().getBlock())) {
+		} else if (Blocks.JUNGLE_LEAVES.equals(block.getBlock().defaultBlockState().getBlock())) {
 			if (dropSapling.isToggled())
 				list.add(new ItemStack(Items.JUNGLE_SAPLING));
-		} else if (Blocks.DARK_OAK_LEAVES.equals(block.getBlock().getDefaultState().getBlock())) {
+		} else if (Blocks.DARK_OAK_LEAVES.equals(block.getBlock().defaultBlockState().getBlock())) {
 			if (dropSapling.isToggled())
 				list.add(new ItemStack(Items.DARK_OAK_SAPLING));
-		} else if (Blocks.ACACIA_LEAVES.equals(block.getBlock().getDefaultState().getBlock())) {
+		} else if (Blocks.ACACIA_LEAVES.equals(block.getBlock().defaultBlockState().getBlock())) {
 			if (dropSapling.isToggled())
 				list.add(new ItemStack(Items.ACACIA_SAPLING));
 		} else {
 			return ImmutableList.of();
 		}
-		if (dropApple.isToggled() && (Blocks.OAK_LEAVES.equals(block.getBlock().getDefaultState().getBlock()) || Blocks.DARK_OAK_LEAVES.equals(block.getBlock().getDefaultState().getBlock())))
+		if (dropApple.isToggled() && (Blocks.OAK_LEAVES.equals(block.getBlock().defaultBlockState().getBlock()) || Blocks.DARK_OAK_LEAVES.equals(block.getBlock().defaultBlockState().getBlock())))
 			list.add(new ItemStack(Items.APPLE));
 		if (dropStick.isToggled())
 			list.add(new ItemStack(Items.STICK));
@@ -92,7 +94,7 @@ public class LeaveDropManipulation extends DropManipulationScreen.DropManipulati
 	@Override
 	public void mouseAction(double mouseX, double mouseY, int button) {
 		enabled.mouseClicked(mouseX, mouseY, button);
-		if (enabled.isChecked()) {
+		if (enabled.selected()) {
 			dropApple.mouseClicked(mouseX, mouseY, button);
 			dropStick.mouseClicked(mouseX, mouseY, button);
 			dropSapling.mouseClicked(mouseX, mouseY, button);
@@ -100,20 +102,20 @@ public class LeaveDropManipulation extends DropManipulationScreen.DropManipulati
 	}
 
 	@Override
-	public void render(Object matrices, int mouseX, int mouseY, float delta) {
-		MCVer.render(enabled, mouseX, mouseY, delta);
+	public void render(int mouseX, int mouseY, float delta) {
+		enabled.render(mouseX, mouseY, delta);
 
-		if (!enabled.isChecked()) {
-			MCVer.color(.5f, .5f, .5f, .4f);
+		if (!enabled.selected()) {
+			GlStateManager.color4f(.5f, .5f, .5f, .4f);
 		} else {
-			MCVer.drawStringWithShadow("Leaves drop:" + (dropApple.isToggled() ? " 1 Apple" : "") + (dropStick.isToggled() ? " 1 Stick" : "") + (dropSapling.isToggled() ? " 1 Sapling" : ""), x, y + 64, 0xFFFFFF);
-			MCVer.render(dropApple, mouseX, mouseY, delta);
-			MCVer.render(dropStick, mouseX, mouseY, delta);
-			MCVer.render(dropSapling, mouseX, mouseY, delta);
+			Minecraft.getInstance().font.drawShadow("Leaves drop:" + (dropApple.isToggled() ? " 1 Apple" : "") + (dropStick.isToggled() ? " 1 Stick" : "") + (dropSapling.isToggled() ? " 1 Sapling" : ""), x, y + 64, 0xFFFFFF);
+			dropApple.render(mouseX, mouseY, delta);
+			dropStick.render(mouseX, mouseY, delta);
+			dropSapling.render(mouseX, mouseY, delta);
 		}
 
-		MinecraftClient.getInstance().getTextureManager().bindTexture(new Identifier("lotas", "drops/leave.png"));
-		MCVer.renderImage(width - 128, y + 24, 0.0F, 0.0F, 96, 96, 96, 96);
+		Minecraft.getInstance().getTextureManager().bind(new ResourceLocation("lotas", "drops/leave.png"));
+		GuiComponent.blit(width - 128, y + 24, 0.0F, 0.0F, 96, 96, 96, 96);
 	}
 
 }

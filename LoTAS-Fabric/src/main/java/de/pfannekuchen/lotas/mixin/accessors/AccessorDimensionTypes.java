@@ -3,7 +3,7 @@ package de.pfannekuchen.lotas.mixin.accessors;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
-import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.level.dimension.DimensionType;
 
 @Mixin(DimensionType.class)
 public interface AccessorDimensionTypes {
@@ -12,7 +12,7 @@ public interface AccessorDimensionTypes {
 		throw new AssertionError();
 	}
 	
-	@Accessor("THE_NETHER")
+	@Accessor("NETHER")
 	public static DimensionType getNether() {
 		throw new AssertionError();
 	}

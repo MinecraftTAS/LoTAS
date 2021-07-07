@@ -1,16 +1,15 @@
 package de.pfannekuchen.lotas.core.utils;
 
+import com.mojang.blaze3d.platform.NativeImage;
 import java.io.IOException;
 import java.io.InputStream;
-
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.texture.NativeImage;
-import net.minecraft.client.texture.NativeImageBackedTexture;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.DynamicTexture;
+import net.minecraft.resources.ResourceLocation;
 
 public class TextureYoinker {
 
-	public static Identifier downloadShield(String uuid, InputStream image) {
+	public static ResourceLocation downloadShield(String uuid, InputStream image) {
 		NativeImage img = null;
 		try {
 			img = NativeImage.read(image);
@@ -18,9 +17,9 @@ public class TextureYoinker {
 			e.printStackTrace();
 		}
 
-		NativeImageBackedTexture nIBT = new NativeImageBackedTexture(img);
-		nIBT.bindTexture();
-		return MinecraftClient.getInstance().getTextureManager().registerDynamicTexture(uuid.replace("-", ""), nIBT);
+		DynamicTexture nIBT = new DynamicTexture(img);
+		nIBT.bind();
+		return Minecraft.getInstance().getTextureManager().register(uuid.replace("-", ""), nIBT);
 	}
 
 	public static NativeImage parseImage(NativeImage image) {
@@ -36,25 +35,21 @@ public class TextureYoinker {
 		NativeImage imgNew = new NativeImage(imageWidth, imageHeight, true);
 		for (int x = 0; x < imageSrcWidth; x++) {
 			for (int y = 0; y < srcHeight; y++) {
-				//#if MC>=11601
-//$$ 						imgNew.setPixelColor(x, y, image.getPixelColor(x, y));
-				//#else
-				imgNew.setPixelRgba(x, y, image.getPixelRgba(x, y));
-				//#endif
+				imgNew.setPixelRGBA(x, y, image.getPixelRGBA(x, y));
 			}
 		}
 		image.close();
 		return imgNew;
 	}
 
-	public static Identifier download(String name, InputStream stream) {
+	public static ResourceLocation download(String name, InputStream stream) {
 		NativeImage img = null;
 		try {
 			img = NativeImage.read(stream);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		NativeImageBackedTexture nIBT = new NativeImageBackedTexture(parseImage(img));
-		return MinecraftClient.getInstance().getTextureManager().registerDynamicTexture(name, nIBT);
+		DynamicTexture nIBT = new DynamicTexture(parseImage(img));
+		return Minecraft.getInstance().getTextureManager().register(name, nIBT);
 	}
 }
