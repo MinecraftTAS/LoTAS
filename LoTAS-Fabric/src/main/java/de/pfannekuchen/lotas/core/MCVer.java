@@ -75,7 +75,7 @@ public class MCVer {
 //$$ 	}
 //$$ 	public static void drawCenteredString(Screen s, String text, int x, int y, int color) {
 //$$ 		if (text == null) text = " ";
-		//#if MC>=11606
+		//#if MC>=11605
 //$$ 		Screen.drawCenteredString(stack, Minecraft.getInstance().font, text, x, y, color);
 		//#else
 //$$ 		s.drawCenteredString(stack, Minecraft.getInstance().font, net.minecraft.network.chat.FormattedText.of(text), x, y, color);
