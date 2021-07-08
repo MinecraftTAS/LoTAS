@@ -20,14 +20,25 @@ import net.fabricmc.api.ModInitializer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 
+/**
+ * Fabric Mod Entry Point, initializes stuff here
+ * @author Pancake
+ * @since v1.0
+ * @version v2.0
+ */
 public class LoTASModContainer implements ModInitializer {
 
+	/** Texture for the Shield */
 	public static ResourceLocation shield;
 	
+	/**
+	 * Called by the Fabric Loader, whenever the Mod is being initialized
+	 */
 	@Override
 	public void onInitialize() {
 		try {
-			HudSettings.load(); // This goes first.. muhahahahaha
+			HudSettings.load();
+			/* Load the Settings-Hud. */
 			Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
 				
 				@Override
@@ -40,6 +51,7 @@ public class LoTASModContainer implements ModInitializer {
 				}
 			}));
 		} catch (IOException e3) {
+			/* Default Settings for the Info Hud. */
 			HudSettings.p = new java.util.Properties();
 			HudSettings.p.setProperty("XYZ_visible", "false");
 			HudSettings.p.setProperty("XYZPRECISE_visible", "false");

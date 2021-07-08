@@ -1,7 +1,6 @@
 package de.pfannekuchen.lotas.core.utils;
 
 import com.mojang.blaze3d.platform.Window;
-import com.mojang.math.Vector3f;
 
 import de.pfannekuchen.lotas.core.MCVer;
 import net.minecraft.client.Minecraft;
@@ -58,7 +57,7 @@ public class PotionRenderer {
 //$$ 			matrices.translate(0, 0, -2.5);                     
 //$$ 		}                                                              
 //$$
-//$$ 		matrices.mulPose(Vector3f.ZP.rotationDegrees(10));                           
+//$$ 		matrices.mulPose(com.mojang.math.Vector3f.ZP.rotationDegrees(10));                           
 //$$ 		return stack;
 //$$ 	}
 	//#else

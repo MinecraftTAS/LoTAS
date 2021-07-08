@@ -1,6 +1,5 @@
 package de.pfannekuchen.lotas.mixin.render;
 
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -8,30 +7,30 @@ import org.spongepowered.asm.mixin.injection.At.Shift;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-
 import de.pfannekuchen.lotas.core.utils.PotionRenderer;
-import net.minecraft.client.Camera;
-import net.minecraft.client.Minecraft;
 //#if MC<=11404
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.At.Shift;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.world.item.ItemStack;
-
 import de.pfannekuchen.lotas.core.MCVer;
-import de.pfannekuchen.lotas.core.utils.PotionRenderer;
 import de.pfannekuchen.lotas.mixin.accessors.AccessorItemRenderer;
+//#else
+//$$ import org.spongepowered.asm.mixin.Final;
+//$$ import net.minecraft.client.Camera;
+//$$ import net.minecraft.client.Minecraft;
+//$$ import net.minecraft.client.renderer.block.model.ItemTransforms.TransformType;
+//$$ import com.mojang.blaze3d.systems.RenderSystem;
+//$$ import net.minecraft.client.renderer.texture.OverlayTexture;
+//$$ import net.minecraft.client.renderer.MultiBufferSource.BufferSource;
+//$$ import net.minecraft.client.renderer.RenderBuffers;
+//$$ import de.pfannekuchen.lotas.core.utils.PotionRenderer;
+//$$ import org.spongepowered.asm.mixin.injection.At;
+//$$ import org.spongepowered.asm.mixin.injection.At.Shift;
+//$$ import org.spongepowered.asm.mixin.injection.Inject;
+//$$ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+//$$ import net.minecraft.world.item.ItemStack;
 //#endif
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.ItemInHandRenderer;
-import net.minecraft.client.renderer.MultiBufferSource.BufferSource;
-import net.minecraft.client.renderer.RenderBuffers;
-import net.minecraft.client.renderer.block.model.ItemTransforms.TransformType;
-import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.world.item.ItemStack;
 
 @Mixin(GameRenderer.class)
 public abstract class MixinPotionRenderer {
