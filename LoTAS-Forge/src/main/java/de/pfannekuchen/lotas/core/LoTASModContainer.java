@@ -77,7 +77,7 @@ public class LoTASModContainer {
 		} catch (IOException e3) {
 			/* Defaults whenever the file wasn't found */
 			HudSettings.p = new java.util.Properties();
-			HudSettings.p.setProperty("XYZ_visible", "true");
+			HudSettings.p.setProperty("XYZ_visible", "false");
 			HudSettings.p.setProperty("XYZPRECISE_visible", "false");
 			HudSettings.p.setProperty("CXZ_visible", "false");
 			HudSettings.p.setProperty("WORLDSEED_visible", "false");
@@ -87,6 +87,8 @@ public class LoTASModContainer {
 			HudSettings.p.setProperty("TICKRATE_visible", "false");
 			HudSettings.p.setProperty("SAVESTATECOUNT_visible", "false");
 			HudSettings.p.setProperty("TRAJECTORIES_visible", "false");
+			HudSettings.p.setProperty("BPS_visible", "false");
+			HudSettings.p.setProperty("TIMER_visible", "true");
 			
 			HudSettings.p.setProperty("XYZ_x", "0");
 			HudSettings.p.setProperty("XYZPRECISE_x", "0");
@@ -98,6 +100,8 @@ public class LoTASModContainer {
 			HudSettings.p.setProperty("TICKRATE_x", "0");
 			HudSettings.p.setProperty("SAVESTATECOUNT_x", "0");
 			HudSettings.p.setProperty("TRAJECTORIES_x", "0");
+			HudSettings.p.setProperty("TIMER_x", "0");
+			HudSettings.p.setProperty("BPS_x", "0");
 			
 			HudSettings.p.setProperty("XYZ_y", "0");
 			HudSettings.p.setProperty("XYZPRECISE_y", "0");
@@ -109,6 +113,8 @@ public class LoTASModContainer {
 			HudSettings.p.setProperty("TICKRATE_y", "0");
 			HudSettings.p.setProperty("SAVESTATECOUNT_y", "0");
 			HudSettings.p.setProperty("TRAJECTORIES_y", "0");
+			HudSettings.p.setProperty("TIMER_y", "0");
+			HudSettings.p.setProperty("BPS_y", "0");
 			
 			HudSettings.p.setProperty("XYZ_hideRect", "false");
 			HudSettings.p.setProperty("XYZPRECISE_hideRect", "false");
@@ -120,6 +126,9 @@ public class LoTASModContainer {
 			HudSettings.p.setProperty("TICKRATE_hideRect", "false");
 			HudSettings.p.setProperty("SAVESTATECOUNT_hideRect", "false");
 			HudSettings.p.setProperty("TRAJECTORIES_hideRect", "false");
+			HudSettings.p.setProperty("TIMER_hideRect", "false");
+			HudSettings.p.setProperty("BPS_hideRect", "false");
+			
 			try {
 				HudSettings.save(); // save defaults to file
 			} catch (IOException e420) {

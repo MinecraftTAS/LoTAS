@@ -3,7 +3,6 @@ package de.pfannekuchen.lotas.core;
 import com.mojang.blaze3d.platform.GlStateManager.DestFactor;
 import com.mojang.blaze3d.platform.GlStateManager.SourceFactor;
 
-import de.pfannekuchen.lotas.mixin.accessors.AccessorLevelStorage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiComponent;
@@ -38,7 +37,7 @@ public class MCVer {
 //$$ 		return (ServerLevel) Minecraft.getInstance().getSingleplayerServer().getPlayerList().getPlayers().get(0).level;
 //$$ 	}
 //$$ 	public static String getCurrentWorldFolder() {
-//$$ 		return ((AccessorLevelStorage)Minecraft.getInstance().getSingleplayerServer()).getStorageSource().getLevelId();
+//$$ 		return ((de.pfannekuchen.lotas.mixin.accessors.AccessorLevelStorage)Minecraft.getInstance().getSingleplayerServer()).getStorageSource().getLevelId();
 //$$ 	}
 	//#else
 	public static double getX(Entity e) {

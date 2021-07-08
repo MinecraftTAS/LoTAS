@@ -1,15 +1,11 @@
 package de.pfannekuchen.lotas.mixin.render;
 
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.At.Shift;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.core.utils.PotionRenderingUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.EntityRenderer;
@@ -28,19 +24,19 @@ import net.minecraft.item.ItemStack;
 @Mixin(EntityRenderer.class)
 public abstract class MixinPotionRenderer {
 
-//	@Shadow @Final
+//	@org.spongepowered.asm.mixin.Shadow @org.spongepowered.asm.mixin.Final
 //	public Minecraft mc;
-//	@Shadow
+//	@org.spongepowered.asm.mixin.Shadow
 //	//#if MC>=10900
 //	public abstract void rotateArm(float partialTicks);
-//	@Shadow protected abstract void renderItemSide(EntityLivingBase entitylivingbaseIn, ItemStack heldStack, ItemCameraTransforms.TransformType transform, boolean leftHanded);
+//	@org.spongepowered.asm.mixin.Shadow protected abstract void renderItemSide(EntityLivingBase entitylivingbaseIn, ItemStack heldStack, ItemCameraTransforms.TransformType transform, boolean leftHanded);
 //	//#else
 ////$$ 	public abstract void rotateWithPlayerRotations(net.minecraft.client.entity.EntityPlayerSP entityplayerspIn, float partialTicks);
-////$$ 	@Shadow public abstract void renderItem(EntityLivingBase entityIn, ItemStack heldStack, ItemCameraTransforms.TransformType transform);
+////$$ 	@org.spongepowered.asm.mixin.Shadow public abstract void renderItem(EntityLivingBase entityIn, ItemStack heldStack, ItemCameraTransforms.TransformType transform);
 //	//#endif
 //	
 //	//#if MC>=10900
-//	@Redirect(method = "Lnet/minecraft/client/renderer/ItemRenderer;renderItemInFirstPerson(F)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/ItemRenderer;rotateArm(F)V"))
+//	@org.spongepowered.asm.mixin.injection.Redirect(method = "Lnet/minecraft/client/renderer/ItemRenderer;renderItemInFirstPerson(F)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/ItemRenderer;rotateArm(F)V"))
 //	private void cancelRotateArm(ItemRenderer renderer, float pff) {
 //
 //	}

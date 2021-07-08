@@ -5,11 +5,14 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicReference;
 
 import de.pfannekuchen.lotas.core.MCVer;
+import de.pfannekuchen.lotas.core.utils.ConfigUtils;
+import de.pfannekuchen.lotas.core.utils.EventUtils.Timer;
 import de.pfannekuchen.lotas.gui.widgets.SmallCheckboxWidget;
 import de.pfannekuchen.lotas.mods.SavestateMod;
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;
@@ -17,6 +20,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.util.Mth;
 
 public class HudSettings extends Screen {
 	
@@ -36,10 +40,12 @@ public class HudSettings extends Screen {
 		widths.put(Settings.TICKS, 0);
 		widths.put(Settings.TICKRATE, 0);
 		widths.put(Settings.SAVESTATECOUNT, 0);
+		widths.put(Settings.TIMER, 0);
+		widths.put(Settings.BPS, 0);
 	}
 	
 	public static enum Settings {
-		XYZ, XYZPRECISE, CXZ, WORLDSEED, FACING, TICKS, TICKRATE, SAVESTATECOUNT, TRAJECTORIES;
+		XYZ, XYZPRECISE, CXZ, WORLDSEED, FACING, TICKS, TICKRATE, SAVESTATECOUNT, TRAJECTORIES, TIMER, BPS;
 	}
 	
 	public static Properties p;
@@ -176,11 +182,34 @@ public class HudSettings extends Screen {
 			drawRectWithTextFixedWidth("Client Ticks: " + TickrateChangerMod.ticksPassed, x, y, Boolean.parseBoolean(p.getProperty("TICKS_hideRect")), i);
 		}
 		
-		boolean showTICKRATE= Boolean.parseBoolean(p.getProperty("TICKRATE_visible"));
+		boolean showTICKRATE = Boolean.parseBoolean(p.getProperty("TICKRATE_visible"));
 		if (showTICKRATE) {
 			int x = Integer.parseInt(p.getProperty("TICKRATE_x"));
 			int y = Integer.parseInt(p.getProperty("TICKRATE_y"));
 			widths.replace(Settings.TICKRATE, drawRectWithText("Tickrate: " + (int) (TickrateChangerMod.tickrate), x, y, Boolean.parseBoolean(p.getProperty("TICKRATE_hideRect"))));
+		}
+		
+		boolean showBPS = Boolean.parseBoolean(p.getProperty("BPS_visible"));
+		if (showBPS) {
+			double distTraveledLastTickX = MCVer.getX(Minecraft.getInstance().player) - Minecraft.getInstance().player.xOld;
+			double distTraveledLastTickZ = MCVer.getZ(Minecraft.getInstance().player) - Minecraft.getInstance().player.zOld;
+			String message = String.format("%.2f", Mth.sqrt((distTraveledLastTickX * distTraveledLastTickX + distTraveledLastTickZ * distTraveledLastTickZ)) / 0.05F) + " blocks/sec";
+			
+			int x = Integer.parseInt(p.getProperty("BPS_x"));
+			int y = Integer.parseInt(p.getProperty("BPS_y"));
+			widths.replace(Settings.BPS, drawRectWithText(message, x, y, Boolean.parseBoolean(p.getProperty("BPS_hideRect"))));
+		}
+		
+		boolean showTIMER = Boolean.parseBoolean(p.getProperty("TIMER_visible"));
+		if (showTIMER) {
+			Duration dur = Duration.ofMillis(Timer.ticks * 50);
+			if (Timer.running)
+				TickrateChangerMod.rta = Duration.ofMillis(System.currentTimeMillis() - Timer.startTime.toMillis());
+			String message = Timer.ticks == -1 ? "Timer is paused" : Timer.getDuration(dur);
+			int x = Integer.parseInt(p.getProperty("TIMER_x"));
+			int y = Integer.parseInt(p.getProperty("TIMER_y"));
+			widths.replace(Settings.TIMER, drawRectWithTextFixedWidth(message, x, y, Boolean.parseBoolean(p.getProperty("TIMER_hideRect")), 100));
+			if (Timer.ticks != -1 && !ConfigUtils.getBoolean("ui", "hideRTATimer")) drawRectWithTextFixedWidth("RTA: " + Timer.getDuration(TickrateChangerMod.rta), x, y + 14, Boolean.parseBoolean(p.getProperty("TIMER_hideRect")), 100);
 		}
 		
 		boolean showSAVESTATECOUNT = Boolean.parseBoolean(p.getProperty("SAVESTATECOUNT_visible"));
