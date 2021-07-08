@@ -1,0 +1,10 @@
+plugins {
+	id 'fabric-loom' version '0.8-SNAPSHOT'
+}
+
+apply from: '../common.gradle'
+archivesBaseName = "LoTAS1.17.1"
+dependencies {
+	minecraft "com.mojang:minecraft:1.17.1"
+	mappings minecraft.officialMojangMappings()
+}

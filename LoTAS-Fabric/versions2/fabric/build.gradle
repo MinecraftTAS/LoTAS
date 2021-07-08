@@ -1,5 +1,9 @@
 plugins {
+	//#if MC>=11701
+//$$ 	id 'fabric-loom' version '0.8-SNAPSHOT'
+	//#else
 	id 'fabric-loom' version '0.7-SNAPSHOT'
+	//#endif
 }
 
 apply from: '../common.gradle'
@@ -10,6 +14,10 @@ sourceSets {
 }
 
 dependencies {
+	//#if MC>=11701
+//$$ 	minecraft "com.mojang:minecraft:1.17.1"
+//$$ 	mappings minecraft.officialMojangMappings()
+	//#else
 	//#if MC>=11605
 //$$  	minecraft "com.mojang:minecraft:1.16.5"
 //$$  	mappings minecraft.officialMojangMappings()
@@ -24,6 +32,7 @@ dependencies {
 	//#else
 	minecraft "com.mojang:minecraft:1.14.4"
 	mappings minecraft.officialMojangMappings()
+	//#endif
 	//#endif
 	//#endif
 	//#endif
