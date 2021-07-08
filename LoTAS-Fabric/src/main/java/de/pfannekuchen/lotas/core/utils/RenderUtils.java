@@ -9,6 +9,13 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.lwjgl.opengl.GL11;
 
+/**
+ * Rendering Utils to render boxes.
+ * Not commented.
+ * @since v1.0
+ * @version v1.0
+ * @author Wurstv6
+ */
 public enum RenderUtils {
 	;
 

@@ -15,9 +15,9 @@ import com.mojang.blaze3d.platform.NativeImage;
 import de.pfannekuchen.lotas.core.LoTASModContainer;
 import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.core.utils.ConfigUtils;
-import de.pfannekuchen.lotas.core.utils.EventUtils.Timer;
 import de.pfannekuchen.lotas.core.utils.KeybindsUtils;
 import de.pfannekuchen.lotas.core.utils.Keyboard;
+import de.pfannekuchen.lotas.core.utils.Timer;
 import de.pfannekuchen.lotas.mods.SavestateMod;
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;
 import net.minecraft.client.KeyMapping;
@@ -31,6 +31,10 @@ import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
+/**
+ * Changes to the Minecraft Classes
+ * @author Pancake, ScribbleLP
+ */
 @Mixin(Minecraft.class)
 public class MixinMinecraftClient {
 
@@ -40,6 +44,7 @@ public class MixinMinecraftClient {
 	@Shadow
 	private LevelRenderer levelRenderer;
 
+	/** Index of the Tickrate Slider stored while Tick Advancing */
 	private int save;
 
 	@Shadow
@@ -51,12 +56,17 @@ public class MixinMinecraftClient {
 	@Shadow
 	private Options options;
 
+	/** Whether the Player was on Ground last tick */
 	@Unique
 	public boolean wasOnGround;
 
+	/** Whether the World is loading */
 	@Unique
 	public boolean isLoadingWorld;
 
+	/**
+	 * Called when a load is being loaded.
+	 */
 	@Inject(method = "setLevel", at = @At("HEAD"))
 	//#if MC>=11500
 //$$ 	public void injectloadWorld(net.minecraft.client.multiplayer.ClientLevel worldClientIn, CallbackInfo ci) {
@@ -66,13 +76,16 @@ public class MixinMinecraftClient {
 		isLoadingWorld = ConfigUtils.getBoolean("tools", "hitEscape") && worldClientIn != null;
 	}
 
+	/**
+	 * Called after the Graphics have been initialized
+	 */
 	//#if MC>=11500
 //$$ 	@Inject(method = "run", at = @At("HEAD"))
 	//#else
 	@Inject(method = "init", at = @At("TAIL"))
 	//#endif
 	public void loadRenderingLate(CallbackInfo ci) {
-		// load textures
+		/* Load Textures because FabricAPI has been removed */
 		try {
 			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "drops/apple.png"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("deadbush.png"))));
 			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "drops/carrot.png"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("carrot.png"))));
@@ -100,24 +113,32 @@ public class MixinMinecraftClient {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		/* Load Shields and Register Keymappings */
 		LoTASModContainer.loadShields();
 		KeybindsUtils.registerKeybinds();
 	}
 
+	/**
+	 * Called before a tick passes
+	 */
 	@Inject(method = "tick", at = @At(value = "HEAD"))
 	public void injectrunTick(CallbackInfo ci) {
+		/* Reset the Right Mouse Delay when the Auto Clicker is enabled */
 		if (ConfigUtils.getBoolean("tools", "rAutoClicker"))
 			rightClickDelay = 0;
 
+		/* Timer and Tick Indicator */
 		TickrateChangerMod.show = !TickrateChangerMod.show;
 		if ((screen == null ? true : Timer.allowed.contains(screen.getClass().getSimpleName().toLowerCase())) && Timer.running)
 			Timer.ticks++;
 
+		/* Savestates when requested */
 		if (KeybindsUtils.shouldSavestate) {
 			KeybindsUtils.shouldSavestate = false;
 			SavestateMod.savestate(null);
 		}
 
+		/* Auto Strafing */
 		if (player != null) {
 			//#if MC>=11600
 //$$ 			boolean isOnGround = player.isOnGround();
@@ -134,6 +155,7 @@ public class MixinMinecraftClient {
 			wasOnGround = isOnGround;
 		}
 
+		/* Loadstate when requested */
 		if (KeybindsUtils.shouldLoadstate) {
 			KeybindsUtils.shouldLoadstate = false;
 			/*try {
@@ -144,10 +166,13 @@ public class MixinMinecraftClient {
 				e.printStackTrace();
 			}*/
 		}
+		
+		/* Tick Advance - Post */
 		if (TickrateChangerMod.advanceClient) {
 			TickrateChangerMod.resetAdvanceClient();
 		}
 
+		/* Tick Jumping */
 		if (TickrateChangerMod.ticksToJump != -1 && Minecraft.getInstance().screen instanceof PauseScreen == false) {
 			TickrateChangerMod.ticksToJump--;
 			if (TickrateChangerMod.ticksToJump == 0) {
@@ -157,7 +182,14 @@ public class MixinMinecraftClient {
 			}
 		}
 	}
-
+ 
+	/**
+	 * Moves the Player when in Freecam mode
+	 * @param strafe Direction
+	 * @param up to
+	 * @param forward move
+	 * @param friction to
+	 */
 	@Unique
 	private void move(float strafe, float up, float forward, float friction) {
 		float f = strafe * strafe + up * up + forward * forward;
@@ -175,14 +207,18 @@ public class MixinMinecraftClient {
 		}
 	}
 
+	/**
+	 * Called before every single frame
+	 */
 	@Inject(method = "runTick", at = @At(value = "HEAD"))
 	public void injectrunGameLoop(CallbackInfo ci) {
-
+		/* Tickrate Zero Rendering */
 		if (TickrateChangerMod.tickrate == 0) {
 			TickrateChangerMod.timeOffset += System.currentTimeMillis() - TickrateChangerMod.timeSinceZero;
 			TickrateChangerMod.timeSinceZero = System.currentTimeMillis();
 		}
 
+		/* Tickrate Zero Toggle */
 		if (KeybindsUtils.toggleAdvanceKeybind.consumeClick() && TickrateChangerMod.advanceClient == false && !KeybindsUtils.isFreecaming && screen == null) {
 			if (TickrateChangerMod.tickrate > 0) {
 				save = TickrateChangerMod.index;
@@ -194,9 +230,11 @@ public class MixinMinecraftClient {
 			}
 		}
 
+		/* Tickrate Zero */
 		if (TickrateChangerMod.tickrate == 0 && KeybindsUtils.advanceTicksKeybind.consumeClick() && !KeybindsUtils.isFreecaming) {
 			TickrateChangerMod.advanceTick();
 		}
+		/* Tickrate Changer */
 		boolean flag = false;
 		if (KeybindsUtils.increaseTickrateKeybind.consumeClick()) {
 			flag = true;
@@ -210,6 +248,7 @@ public class MixinMinecraftClient {
 			TickrateChangerMod.updateTickrate(TickrateChangerMod.ticks[TickrateChangerMod.index]);
 		}
 
+		/* Escape using Freecam disables Freecam */
 		if (TickrateChangerMod.tickrate == 0 && screen == null && Keyboard.isKeyDown(GLFW.GLFW_KEY_ESCAPE)) {
 			((Minecraft) (Object) this).setScreen(new PauseScreen(true));
 			TickrateChangerMod.updateTickrate(KeybindsUtils.savedTickrate);
@@ -218,7 +257,7 @@ public class MixinMinecraftClient {
 			levelRenderer.allChanged();
 		}
 
-		//Controls for freecam
+		/* Freecam Movement */
 		if (KeybindsUtils.isFreecaming) {
 			if (options.keyUp.isDown()) {
 				move(0.0F, 0.0F, 0.91F, 1.0F);
@@ -244,6 +283,7 @@ public class MixinMinecraftClient {
 			}
 		}
 
+		/* Freecam Toggle */
 		if (KeybindsUtils.toggleFreecamKeybind.consumeClick() && Minecraft.getInstance().screen == null) {
 			if (KeybindsUtils.isFreecaming) {
 				KeybindsUtils.isFreecaming = false;
@@ -259,23 +299,32 @@ public class MixinMinecraftClient {
 		}
 	}
 
+	/**
+	 * Handles all Keybinds
+	 */
 	@Inject(method = "handleKeybinds", at = @At("RETURN"), cancellable = true)
 	public void keyInputEvent(CallbackInfo ci) {
 		KeybindsUtils.keyEvent();
 	}
 
+	/**
+	 * Redirects the screen to set, whenever a screen is being set
+	 */
 	@Inject(method = "setScreen", at = @At(value = "HEAD"), cancellable = true)
 	public void injectdisplayGuiScreen(Screen guiScreenIn, CallbackInfo ci) {
+		/* Reset Tick Binds */
 		if (((guiScreenIn == null) ? true : guiScreenIn instanceof PauseScreen) && SavestateMod.isLoading) {
 			SavestateMod.isLoading = false;
 			SavestateMod.showLoadstateDone = true;
 			SavestateMod.timeTitle = System.currentTimeMillis();
 		}
+		/* Auto-Pause */
 		if (isLoadingWorld && guiScreenIn == null) {
 			isLoadingWorld = false;
 			Minecraft.getInstance().setScreen(new PauseScreen(true));
 			ci.cancel();
 		}
+		/* Loadstate Velocity Reseting */
 		if (guiScreenIn == null && (((Minecraft) (Object) this).player != null)) {
 			if (SavestateMod.applyVelocity) {
 				SavestateMod.applyVelocity = false;

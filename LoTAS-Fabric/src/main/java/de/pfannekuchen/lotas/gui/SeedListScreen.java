@@ -24,6 +24,10 @@ import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 
+/**
+ * List of Seeds, unused
+ * @author Pancake
+ */
 public class SeedListScreen extends Screen {
 
 	public Seed selectedSeed = null;

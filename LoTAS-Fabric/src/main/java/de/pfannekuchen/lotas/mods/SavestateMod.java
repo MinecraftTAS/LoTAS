@@ -13,7 +13,7 @@ import org.apache.commons.io.FileUtils;
 import org.lwjgl.glfw.GLFW;
 
 import de.pfannekuchen.lotas.core.MCVer;
-import de.pfannekuchen.lotas.core.utils.EventUtils.Timer;
+import de.pfannekuchen.lotas.core.utils.Timer;
 import de.pfannekuchen.lotas.mixin.render.gui.MixinGuiIngameMenu;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;

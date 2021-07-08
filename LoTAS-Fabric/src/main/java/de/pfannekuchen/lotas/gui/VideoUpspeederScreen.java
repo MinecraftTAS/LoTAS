@@ -21,6 +21,10 @@ import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.util.Mth;
 
+/**
+ * Screen where you can speed up a video using FFMPEG
+ * @author Pancake
+ */
 public class VideoUpspeederScreen extends Screen {
 
 	String[] PROGRESS_BAR_STAGES = new String[] { "oooooo", "Oooooo", "oOoooo", "ooOooo", "oooOoo", "ooooOo", "oooooO" };

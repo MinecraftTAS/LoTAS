@@ -11,9 +11,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import de.pfannekuchen.lotas.gui.DropManipulationScreen;
 
+/**
+ * This Mixin alters the behaviour when entities get killed
+ * @author Pancake
+ */
 @Mixin(LivingEntity.class)
 public class MixinEntityPatch {
 
+	/**
+	 * Redirects the drops for Entities
+	 */
 	@Inject(method = "dropFromLootTable", at = @At("HEAD"), cancellable = true)
 	public void redodrop(DamageSource source, boolean causedByPlayer, CallbackInfo ci) {
 		for (DropManipulationScreen.DropManipulation man : DropManipulationScreen.manipulations) {

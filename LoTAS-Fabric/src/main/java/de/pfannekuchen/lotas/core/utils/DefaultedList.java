@@ -9,6 +9,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings(value = { "unchecked", "rawtypes" })
+/**
+ * List that has a default value that is not null
+ */
 public class DefaultedList<E> extends AbstractList<E> {
 	private final List<E> delegate;
 	private final E initialElement;

@@ -13,6 +13,10 @@ import net.minecraft.client.gui.screens.worldselection.SelectWorldScreen;
 import net.minecraft.client.gui.screens.worldselection.WorldSelectionList;
 import net.minecraft.network.chat.Component;
 
+/**
+ * Adds Utility Buttons to the World Selection Screen
+ * @author Pancake
+ */
 @Mixin(SelectWorldScreen.class)
 public abstract class MixinGuiSelectWorldScreen extends Screen {
 

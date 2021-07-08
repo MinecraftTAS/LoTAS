@@ -15,7 +15,6 @@ import de.pfannekuchen.lotas.core.MCVer;
 /**
  * Forces a selected entity to walk to a target
  * @author ScribbleLP
- *
  */
 public class AIManipMod {
 	private Minecraft mc = Minecraft.getInstance();

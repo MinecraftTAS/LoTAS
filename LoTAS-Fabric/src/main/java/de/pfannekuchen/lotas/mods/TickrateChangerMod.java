@@ -10,6 +10,9 @@ import de.pfannekuchen.lotas.mixin.accessors.AccessorTimer;
 /**
  * Here is the basic Tickrate Changer Management.
  * It contains the Hotkeys, Ticksync, Tickrate and the ticks passed
+ * @author Scribble
+ * @version v2.0
+ * @since v1.0
  */
 public class TickrateChangerMod {
 	/**

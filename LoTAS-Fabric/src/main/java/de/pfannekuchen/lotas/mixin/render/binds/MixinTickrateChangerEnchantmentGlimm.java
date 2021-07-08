@@ -6,6 +6,10 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;
 
+/**
+ * Slows down the Enchantment *foil*
+ * @author ScribbleLP
+ */
 //#if MC>=11500
 //$$ @Mixin(net.minecraft.client.renderer.RenderStateShard.class)
 //$$ public abstract class MixinTickrateChangerEnchantmentGlimm {

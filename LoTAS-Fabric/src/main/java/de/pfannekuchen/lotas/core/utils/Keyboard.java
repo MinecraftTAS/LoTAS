@@ -7,7 +7,6 @@ import net.minecraft.client.Minecraft;
 /**
  * A LWJGL style keyboard method
  * @author ScribbleLP
- *
  */
 public class Keyboard {
 

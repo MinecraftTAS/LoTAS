@@ -10,6 +10,10 @@ import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.client.sounds.SoundEngine;
 import net.minecraft.util.Mth;
 
+/**
+ * Slows down Audio
+ * @author ScribbleLP
+ */
 @Mixin(SoundEngine.class)
 public abstract class MixinTickrateChangerAudioPitch {
 

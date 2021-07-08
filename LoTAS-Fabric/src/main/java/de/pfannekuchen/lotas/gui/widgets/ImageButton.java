@@ -5,6 +5,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.resources.ResourceLocation;
 
+/**
+ * Button with an Image Overlayed
+ * @author Pancake
+ */
 public class ImageButton extends Button {
 	private boolean toggled;
 

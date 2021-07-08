@@ -20,6 +20,10 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 
+/**
+ * Makes the Player Invulnerable by abusing 3 seconds spawn invulnerability
+ * @author Pancake
+ */
 @Mixin(ServerPlayer.class)
 public abstract class MixinServerPlayerEntityPatch extends Player {
 
@@ -37,6 +41,9 @@ public abstract class MixinServerPlayerEntityPatch extends Player {
 	@Shadow
 	public MinecraftServer server;
 
+	/**
+	 * Disable Damage
+	 */
 	@Inject(method = "hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z", at = @At("HEAD"), cancellable = true)
 	void damage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> returnable) {
 		if (ConfigUtils.getBoolean("tools", "takeDamage"))

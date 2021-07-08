@@ -38,6 +38,10 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.phys.Vec3;
 
+/**
+ * Allows for spawning entities at valid locations
+ * @author ScribbleLP
+ */
 public class SpawnManipMod {
 	
 	private Minecraft mc = Minecraft.getInstance();

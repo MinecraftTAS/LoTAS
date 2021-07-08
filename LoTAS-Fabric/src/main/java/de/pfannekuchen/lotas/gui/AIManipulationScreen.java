@@ -10,6 +10,10 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.phys.Vec3;
 
+/**
+ * Screen for manipulating the AI
+ * @author Pancake
+ */
 public class AIManipulationScreen extends Screen {
 
 	public AIManipulationScreen() {

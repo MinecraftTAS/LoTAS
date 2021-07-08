@@ -11,8 +11,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.core.utils.ConfigUtils;
-import de.pfannekuchen.lotas.core.utils.EventUtils.Timer;
 import de.pfannekuchen.lotas.core.utils.Keyboard;
+import de.pfannekuchen.lotas.core.utils.Timer;
 import de.pfannekuchen.lotas.gui.AIManipulationScreen;
 import de.pfannekuchen.lotas.gui.DragonManipulationScreen;
 import de.pfannekuchen.lotas.gui.DropManipulationScreen;
@@ -30,6 +30,9 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 
+/**
+ * Adds Utility Buttons to the Game Menu
+ */
 @Mixin(PauseScreen.class)
 public abstract class MixinGuiIngameMenu extends Screen {
 	protected MixinGuiIngameMenu(Component title) {

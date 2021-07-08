@@ -15,6 +15,10 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 
+/**
+ * Cross Version Compatibility File
+ * @author Pancake
+ */
 public class MCVer {
 	// =============================================== 1.15.2 | 1.16.1 REST      =========================================
 	//#if MC>=11600

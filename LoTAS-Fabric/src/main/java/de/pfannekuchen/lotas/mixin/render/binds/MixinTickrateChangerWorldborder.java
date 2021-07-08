@@ -7,6 +7,10 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;
 import net.minecraft.client.renderer.LevelRenderer;
 
+/**
+ * Slows down the Worldborder
+ * @author Pancake
+ */
 @Mixin(LevelRenderer.class)
 public class MixinTickrateChangerWorldborder {
 

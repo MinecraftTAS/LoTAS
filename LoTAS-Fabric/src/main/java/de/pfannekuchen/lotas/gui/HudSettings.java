@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.core.utils.ConfigUtils;
-import de.pfannekuchen.lotas.core.utils.EventUtils.Timer;
+import de.pfannekuchen.lotas.core.utils.Timer;
 import de.pfannekuchen.lotas.gui.widgets.SmallCheckboxWidget;
 import de.pfannekuchen.lotas.mods.SavestateMod;
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;

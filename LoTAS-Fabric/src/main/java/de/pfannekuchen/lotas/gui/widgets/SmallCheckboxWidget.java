@@ -8,6 +8,10 @@ import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
+/**
+ * Small Checkbox Widget from 1.12.2
+ * @author Pancake
+ */
 public class SmallCheckboxWidget extends AbstractButton {
 	private static final ResourceLocation TEXTURE = new ResourceLocation("textures/gui/small_checkbox.png");
 	boolean checked;

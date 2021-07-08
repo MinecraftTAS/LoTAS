@@ -9,6 +9,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.PotionItem;
 
+/**
+ * Draws a potion in the gui hud that is moving with the camera
+ * @author ScribbleLP
+ * @since v1.0
+ * @version v1.2
+ */
 public class PotionRenderer {
 
 	public static float lerpX = 0f;

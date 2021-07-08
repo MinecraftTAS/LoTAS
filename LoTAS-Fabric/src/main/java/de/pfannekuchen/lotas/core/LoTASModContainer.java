@@ -111,11 +111,13 @@ public class LoTASModContainer implements ModInitializer {
 				e420.printStackTrace();
 			}
 		}
+		/* Load the Seeds for the (disabled) Seeds Menu */
 		try {
 			loadSeeds();
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
+		/* Load the Configuration and set the tickrate if required */
 		try {
 			ConfigUtils.init(new File(Minecraft.getInstance().gameDirectory, "lotas.properties"));
 			if (ConfigUtils.getBoolean("tools", "saveTickrate"))
@@ -126,6 +128,9 @@ public class LoTASModContainer implements ModInitializer {
 		}
 	}
 
+	/**
+	 * Load Shields loads a shield texture that has been modified for specific people
+	 */
 	public static void loadShields() {
 		String uuid = Minecraft.getInstance().getUser().getGameProfile().getId().toString();
 

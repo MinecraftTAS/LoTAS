@@ -12,8 +12,10 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentInstance;
 
-
-
+/**
+ * Slider which can choose between Entities instead of values
+ * @author Pancake
+ */
 public class EntitySliderWidget extends AbstractWidget {
 
 	public List<EntityOptions> entities;

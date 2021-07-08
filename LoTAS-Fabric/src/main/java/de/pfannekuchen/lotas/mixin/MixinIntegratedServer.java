@@ -8,6 +8,10 @@ import de.pfannekuchen.lotas.core.utils.KeybindsUtils;
 import de.pfannekuchen.lotas.mods.SavestateMod;
 import net.minecraft.client.server.IntegratedServer;
 
+/**
+ * Savestates whenever it was requested from another Thread
+ * @author ScribbleLP
+ */
 @Mixin(IntegratedServer.class)
 public class MixinIntegratedServer {
 	@Redirect(method = "tickServer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/server/IntegratedServer;saveAllChunks(ZZZ)Z"))

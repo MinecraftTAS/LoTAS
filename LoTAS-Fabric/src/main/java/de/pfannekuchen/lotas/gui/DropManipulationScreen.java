@@ -31,6 +31,10 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 
+/**
+ * Draws a List of Drop Manipulations
+ * @author Pancake
+ */
 public class DropManipulationScreen extends Screen {
 
 	public static ArrayList<DropManipulation> manipulations;

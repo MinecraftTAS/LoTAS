@@ -13,6 +13,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.resources.ResourceLocation;
 
+/**
+ * Renders an Overlay over the screen
+ * @author Pancake
+ */
 @Mixin(Gui.class)
 public class MixinOverlayEvent {
 

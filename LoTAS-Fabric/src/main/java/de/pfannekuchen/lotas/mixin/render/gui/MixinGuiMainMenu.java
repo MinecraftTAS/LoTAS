@@ -20,6 +20,10 @@ import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
+/**
+ * Removes and adds Buttons from the Title Screen
+ * @author Pancake
+ */
 @Mixin(TitleScreen.class)
 public abstract class MixinGuiMainMenu extends Screen {
 	protected MixinGuiMainMenu(Component title) {

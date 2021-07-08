@@ -16,6 +16,10 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.world.phys.Vec3;
 
+/**
+ * Renders 3D Stuff
+ * @author Pancake
+ */
 @Mixin(GameRenderer.class)
 public class MixinRenderEvent {
 

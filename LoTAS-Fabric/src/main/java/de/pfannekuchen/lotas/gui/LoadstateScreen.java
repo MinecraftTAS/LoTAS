@@ -17,6 +17,10 @@ import net.minecraft.client.gui.components.ObjectSelectionList;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.TextComponent;
 
+/**
+ * List of States to load/delete
+ * @author Pancake
+ */
 public class LoadstateScreen extends Screen {
 
 	public LoadstateScreen() {

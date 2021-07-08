@@ -7,6 +7,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.resources.ResourceLocation;
 
+/**
+ * File that can dynamically load Texture
+ * @author Pancake
+ * @since v2.0
+ * @version v2.0
+ */
 public class TextureYoinker {
 
 	public static ResourceLocation downloadShield(String uuid, InputStream image) {

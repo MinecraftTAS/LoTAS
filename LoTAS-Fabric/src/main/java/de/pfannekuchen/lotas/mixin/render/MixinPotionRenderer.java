@@ -32,6 +32,10 @@ import de.pfannekuchen.lotas.mixin.accessors.AccessorItemRenderer;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.ItemInHandRenderer;
 
+/**
+ * Renders a Potion above the Hotbar
+ * @author ScribbleLP
+ */
 @Mixin(GameRenderer.class)
 public abstract class MixinPotionRenderer {
 

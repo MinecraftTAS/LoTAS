@@ -2,6 +2,10 @@ package de.pfannekuchen.lotas.mixin.render;
 
 import org.spongepowered.asm.mixin.Mixin;
 
+/**
+ * Changes the Shield Texture
+ * @author ScribbleLP, Pancake
+ */
 //#if MC>=11500
 //$$ @Mixin(net.minecraft.client.Minecraft.class)
 //$$ public class MixinRenderShield {

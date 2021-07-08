@@ -13,12 +13,20 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.level.Level;
 
+/**
+ * Alters the velocity of a newly spawned Item
+ * @author Pancake
+ */
 @Mixin(ItemEntity.class)
 public abstract class MixinItemEntity extends Entity {
 
 	public MixinItemEntity(EntityType<?> type, Level world) {
 		super(type, world);
 	}
+	
+	/**
+	 * Modify the Velocity of any Item
+	 */
 	@Inject(at = @At("TAIL"), method = "Lnet/minecraft/world/entity/item/ItemEntity;<init>(Lnet/minecraft/world/level/Level;DDD)V")
 		public void hackVelocity(CallbackInfo ci) {
 		try {

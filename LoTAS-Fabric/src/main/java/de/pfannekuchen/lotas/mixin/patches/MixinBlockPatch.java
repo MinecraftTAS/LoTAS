@@ -11,12 +11,21 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import de.pfannekuchen.lotas.gui.DropManipulationScreen;
 
+/**
+ * This mixin alters the behaviour whenever a block is being destroyed
+ * @author Pancake
+ * @since v1.0
+ * @version v1.1
+ */
 //#if MC>=11600
 //$$ @Mixin(net.minecraft.world.level.block.state.BlockBehaviour.class)
 //#else
 @Mixin(net.minecraft.world.level.block.Block.class)
 //#endif
 public class MixinBlockPatch {
+	/** 
+	 * Change the Items to be dropped
+	 */
 	@Inject(method = "getDrops(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/storage/loot/LootContext$Builder;)Ljava/util/List;", at = @At("HEAD"), cancellable = true)
 	public void redodrop(BlockState state, LootContext.Builder builder, CallbackInfoReturnable<List<ItemStack>> drops) {
 		for (DropManipulationScreen.DropManipulation man : DropManipulationScreen.manipulations) {
