@@ -13,7 +13,6 @@ import de.pfannekuchen.lotas.core.utils.reflection.IdentifierAc;
 import de.pfannekuchen.lotas.gui.ConfigurationScreen;
 import de.pfannekuchen.lotas.gui.VideoUpspeederScreen;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.Options;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.client.gui.screens.worldselection.SelectWorldScreen;
@@ -47,17 +46,22 @@ public abstract class MixinGuiMainMenu extends Screen {
 			MCVer.blit(i, j, 0, 0, 248, 166);
 			i += 10;
 			j += 8;
-			MCVer.drawShadow("LoTAS Cheat prevention", i, j, 2039583);
-			j += 12;
-			Options gameOptions = this.minecraft.options;
-			MCVer.drawShadow(I18n.get("This mod collects a bit of data", gameOptions.keyUp.getTranslatedKeyMessage(), gameOptions.keyLeft.getTranslatedKeyMessage(), gameOptions.keyDown.getTranslatedKeyMessage(), gameOptions.keyRight.getTranslatedKeyMessage()), i, j, 5197647);
-			MCVer.drawShadow(I18n.get("to prevent cheating."), i, (j + 12), 5197647);
-			MCVer.drawShadow(I18n.get("Your data will be hashed and encrypted.", gameOptions.keyJump.getTranslatedKeyMessage()), i, (j + 24), 5197647);
-			MCVer.drawShadow(I18n.get("\u00A7cYour Data is unreadable to anyone!", gameOptions.keyInventory.getTranslatedKeyMessage()), i, (j + 36), 5197647);
 			//#if MC>=11600
+//$$ 			this.font.draw(stack, "LoTAS Cheat prevention", i, j, 2039583);
+//$$ 			j += 12;
+//$$ 			this.font.draw(stack, "This mod collects a bit of data", i, j, 2039583);
+//$$ 			this.font.draw(stack, "to prevent cheating.", i, (j + 12), 2039583);
+//$$ 			this.font.draw(stack, "Your data will be hashed and encrypted.", i, (j + 24), 2039583);
+//$$ 			this.font.draw(stack, "\u00A7cYour Data is unreadable to anyone!", i, (j + 36), 5197647);
 //$$ 			this.font.drawWordWrap(net.minecraft.network.chat.FormattedText.of("If you are confused or worried, dm me on discord: MCPfannkuchenYT#9745."), i, j + 68, 218, 2039583);
 //$$ 			super.render(stack, 0, 0, 0f);
 			//#else
+ 			this.font.draw("LoTAS Cheat prevention", i, j, 2039583);
+ 			j += 12;
+ 			this.font.draw("This mod collects a bit of data", i, j, 2039583);
+ 			this.font.draw("to prevent cheating.", i, (j + 12), 2039583);
+ 			this.font.draw("Your data will be hashed and encrypted.", i, (j + 24), 2039583);
+ 			this.font.draw("\u00A7cYour Data is unreadable to anyone!", i, (j + 36), 5197647);
 			this.font.drawWordWrap(I18n.get("If you are confused or worried, dm me on discord: MCPfannkuchenYT#9745."), i, j + 68, 218, 2039583);
 			super.render(0, 0, 0f);
 			//#endif

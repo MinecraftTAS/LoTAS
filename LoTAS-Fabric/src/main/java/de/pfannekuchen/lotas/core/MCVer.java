@@ -91,7 +91,7 @@ public class MCVer {
 //$$ 		return new EditBox(f, i, j, k, l, new net.minecraft.network.chat.TextComponent(text));
 //$$ 	}
 //$$ 	public static void blit(int i, int j, float k, float f, int g, int l) {
-//$$ 		GuiComponent.blit(stack, i, j, k, f, g, l, g, l); // FIXME: wth
+//$$ 		GuiComponent.blit(stack, i, j, k, f, g, l, 256, 256);
 //$$ 	}
 //$$ 	public static void blit(int i, int j, float k, float f, int g, int l, int x, int y) {
 //$$ 		GuiComponent.blit(stack, i, j, k, f, g, l, x, y);
@@ -120,7 +120,7 @@ public class MCVer {
 		GuiComponent.blit(i, j, k, f, g, l, m, n, n);
 	}
 	public static void blit(int i, int j, float k, float f, int g, int l) {
- 		GuiComponent.blit(i, j, k, f, g, l, g, l); // FIXME: wth
+ 		GuiComponent.blit(i, j, k, f, g, l, 256, 256);
  	}
 	public static void render(AbstractWidget component, int mouseX, int mouseY, float delta) {
 		component.render(mouseX, mouseY, delta);
