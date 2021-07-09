@@ -101,7 +101,7 @@ public class FishDropManipulation extends DropManipulationScreen.DropManipulatio
 			MCVer.render(optimizeTropical, mouseX, mouseY, delta);
 		}
 
-		Minecraft.getInstance().getTextureManager().bind(new ResourceLocation("lotas", "drops/fish.gif"));
+		MCVer.bind(Minecraft.getInstance().getTextureManager(), new ResourceLocation("lotas", "drops/fish.gif"));
 		MCVer.blit(width - 128, y + 24, 0.0F, 0.0F, 96, 76, 96, 76);
 	}
 

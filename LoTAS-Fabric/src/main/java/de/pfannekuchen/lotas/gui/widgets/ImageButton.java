@@ -39,7 +39,7 @@ public class ImageButton extends Button {
 	public void renderButton(int mouseX, int mouseY, float delta) {
 		super.renderButton(mouseX, mouseY, delta);
 	//#endif
-		Minecraft.getInstance().getTextureManager().bind(pic);
+		MCVer.bind(Minecraft.getInstance().getTextureManager(), pic);
 		MCVer.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		MCVer.blit(x, y, 0.0F, 0.0F, 20, 20, 20, 20);
 	}

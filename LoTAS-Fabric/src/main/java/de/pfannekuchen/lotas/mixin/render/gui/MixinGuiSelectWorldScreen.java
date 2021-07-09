@@ -6,6 +6,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.core.utils.ConfigUtils;
 import de.pfannekuchen.lotas.gui.widgets.SmallCheckboxWidget;
 import net.minecraft.client.gui.screens.Screen;
@@ -35,7 +36,7 @@ public abstract class MixinGuiSelectWorldScreen extends Screen {
 		 * addButton(MCVer.Button(2, 2, 98, 20, "Seed List", button -> {
 			Minecraft.getInstance().setScreen(new SeedListScreen());
 		}));*/
-		addButton(widget = new SmallCheckboxWidget(width - 160, 4, "Open ESC when joining world", ConfigUtils.getBoolean("tools", "hitEscape"), b -> {
+		MCVer.addButton(this, widget = new SmallCheckboxWidget(width - 160, 4, "Open ESC when joining world", ConfigUtils.getBoolean("tools", "hitEscape"), b -> {
 			ConfigUtils.setBoolean("tools", "hitEscape", widget.isChecked());
 			ConfigUtils.save();
 		}));

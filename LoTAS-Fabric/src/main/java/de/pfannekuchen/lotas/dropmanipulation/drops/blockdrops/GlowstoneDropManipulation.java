@@ -116,7 +116,7 @@ public class GlowstoneDropManipulation extends DropManipulationScreen.DropManipu
 			MCVer.render(drop2Glowstonedust, mouseX, mouseY, delta);
 		}
 
-		Minecraft.getInstance().getTextureManager().bind(new ResourceLocation("lotas", "drops/glowstone.png"));
+		MCVer.bind(Minecraft.getInstance().getTextureManager(), new ResourceLocation("lotas", "drops/glowstone.png"));
 		MCVer.blit(width - 128, y + 24, 0.0F, 0.0F, 96, 96, 96, 96);
 	}
 

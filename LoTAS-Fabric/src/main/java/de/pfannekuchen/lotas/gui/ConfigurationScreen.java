@@ -39,15 +39,20 @@ public class ConfigurationScreen extends Screen {
 		messages.clear();
 		ints.clear();
 		
+		
+		//#if MC>=11700
+//$$ 		clearWidgets();
+		//#else
 		buttons.clear();
 		children.clear();
+		//#endif
 		int y = 25;
 		int i = 0;
 		for (String option : optionsBoolean) {
 			String title = option.split(":")[2];
 			if (option.split(":")[0].equalsIgnoreCase("B")) {
 				boolean v = Boolean.parseBoolean(option.split(":")[3]);
-				addButton(MCVer.Button(width / 2 - 100, y, 200, 20, title + ": " + (v ? "\u00A7atrue" : "\u00A7cfalse"), actionPerformed(i++)));
+				MCVer.addButton(this, MCVer.Button(width / 2 - 100, y, 200, 20, title + ": " + (v ? "\u00A7atrue" : "\u00A7cfalse"), actionPerformed(i++)));
 			}
 			y += 25;
 		}
@@ -206,8 +211,8 @@ public class ConfigurationScreen extends Screen {
 		for (EditBox field : ints) {
 			MCVer.render(field, mouseX, mouseY, delta);
 		}
-		for(int k = 0; k < this.buttons.size(); ++k) {
-			MCVer.render(((AbstractWidget)this.buttons.get(k)), mouseX, mouseY, delta);
+		for(int k = 0; k < MCVer.getButtonSize(this); ++k) {
+			MCVer.render(((AbstractWidget)MCVer.getButton(this, k)), mouseX, mouseY, delta);
 		}
 	}
 

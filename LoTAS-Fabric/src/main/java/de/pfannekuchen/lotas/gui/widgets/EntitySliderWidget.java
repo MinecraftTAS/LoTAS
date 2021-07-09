@@ -81,7 +81,7 @@ public class EntitySliderWidget extends AbstractWidget {
 	//#else
 	@Override protected void renderBg(Minecraft client, int mouseX, int mouseY) {
 	//#endif
-		client.getTextureManager().bind(WIDGETS_LOCATION);
+		MCVer.bind(client.getTextureManager(), WIDGETS_LOCATION);
 		MCVer.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		int i = (this.isHovered() ? 2 : 1) * 20;
 		MCVer.blit(this.x + (int) (this.sliderPosition * (double) (this.width - 8)), this.y, 0, 46 + i, 4, 20);
@@ -163,4 +163,10 @@ public class EntitySliderWidget extends AbstractWidget {
 		}
 		return item;
 	}
+	//#if MC>=11700
+//$$ 	@Override
+//$$ 	public void updateNarration(net.minecraft.client.gui.narration.NarrationElementOutput narrationElementOutput) {
+//$$
+//$$ 	}
+	//#endif
 }

@@ -14,8 +14,10 @@ import net.bramp.ffmpeg.probe.FFmpegProbeResult;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Checkbox;
 import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.network.chat.TextComponent;
@@ -63,7 +65,7 @@ public class VideoUpspeederScreen extends Screen {
 	public boolean charTyped(char chr, int modifiers) {
 		super.charTyped(chr, modifiers);
 		try {
-			tickrate = Integer.parseInt(((EditBox) buttons.get(buttons.size() - 1)).getValue());
+			tickrate = Integer.parseInt(((EditBox) MCVer.getButton(this, MCVer.getButtonSize(this)-1)).getValue());
 		} catch (Exception e) {
 
 		}
@@ -77,14 +79,13 @@ public class VideoUpspeederScreen extends Screen {
 	@Override
 	protected void init() {
 		if (isEncoding) {
-			addButton(MCVer.Button(width / 2 - 153, height - 40, 306, 20, "Continue encoding in the background >>", (b) -> {
+			MCVer.addButton(this, MCVer.Button(width / 2 - 153, height - 40, 306, 20, "Continue encoding in the background >>", (b) -> {
 				Minecraft.getInstance().setScreen(new TitleScreen());
 			}));
 			return;
 		}
-
-		addButton(MCVer.EditBox(client.font, (width / 12) * 1 - (width / 24), (height / 8), (width / 12) * 9, 20, "")).setMaxLength(999);
-		addButton(MCVer.Button((width / 12) * 10 + 5 - (width / 24), (height / 8), (width / 12) * 2, 20, "Select File", (b) -> {
+		MCVer.addButton(this, MCVer.EditBox(client.font, (width / 12) * 1 - (width / 24), (height / 8), (width / 12) * 9, 20, "")).setMaxLength(999);
+		MCVer.addButton(this, MCVer.Button((width / 12) * 10 + 5 - (width / 24), (height / 8), (width / 12) * 2, 20, "Select File", (b) -> {
 			if (Minecraft.getInstance().window.isFullscreen())
 				Minecraft.getInstance().window.toggleFullScreen();
 			new Thread(new Runnable() {
@@ -97,7 +98,11 @@ public class VideoUpspeederScreen extends Screen {
 					dialog.setVisible(true);
 					try {
 						selectedFile = dialog.getFiles()[0];
+						//#if MC>=11700
+//$$ 						((EditBox)children().get(0)).setValue(selectedFile.getAbsolutePath());
+						//#else
 						((EditBox)buttons.get(0)).setValue(selectedFile.getAbsolutePath());
+						//#endif
 						FFmpegProbeResult result = VideoUpspeeder.ffprobe(selectedFile);
 
 						videoFormat = result.format.format_name.split(",")[0];
@@ -106,29 +111,33 @@ public class VideoUpspeederScreen extends Screen {
 						resolution = result.streams.get(0).width + "x" + result.streams.get(0).height;
 						filesize = (Files.size(selectedFile.toPath()) / 1024 / 1024) + " MB";
 						lengthInMilliseconds = (long) (result.format.duration * 1000);
+						//#if MC>=11700
+//$$ 						((Button)children().get(4)).active = true;
+						//#else
 						buttons.get(4).active = true;
+						//#endif
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
 				}
 			}).start();
 		}));
-		addButton(MCVer.Button((width / 2) - 70, (height / 8) * 2 + 20, 20, 20, "-", (b) -> {
+		MCVer.addButton(this, MCVer.Button((width / 2) - 70, (height / 8) * 2 + 20, 20, 20, "-", (b) -> {
 			if (tickrate != 1)
 				tickrate--;
-			((EditBox) buttons.get(buttons.size() - 1)).setValue(tickrate + "");
+			((EditBox) MCVer.getButton(this, MCVer.getButtonSize(this)-1)).setValue(tickrate + "");
 		}));
-		addButton(MCVer.Button((width / 2) + 50, (height / 8) * 2 + 20, 20, 20, "+", (b) -> {
+		MCVer.addButton(this, MCVer.Button((width / 2) + 50, (height / 8) * 2 + 20, 20, 20, "+", (b) -> {
 			tickrate++;
-			((EditBox) buttons.get(buttons.size() - 1)).setValue(tickrate + "");
+			((EditBox) MCVer.getButton(this, MCVer.getButtonSize(this)-1)).setValue(tickrate + "");
 		}));
-		addButton(MCVer.Button((width / 2) - 98, this.height - (this.height / 10) - 15 - 20 - 5, 204, 20, "Speed up video", (b) -> {
+		MCVer.addButton(this, MCVer.Button((width / 2) - 98, this.height - (this.height / 10) - 15 - 20 - 5, 204, 20, "Speed up video", (b) -> {
 			b.active = false;
 			isEncoding = true;
 			VideoUpspeeder.speedup(tickrate, bitrate(), codecFFmpeg, (long) ((lengthInMilliseconds / 16L) * (tickrate / 20F)));
 		})).active = selectedFile == null ? false : selectedFile.exists();
-		addButton(MCVer.Checkbox(2, this.height - 22, 20, 20, "High Quality", false));
-		addButton(MCVer.EditBox(client.font, (width / 2) - 45, (height / 8) * 2 + 23, 90, 14, "20")).setValue("20");
+		MCVer.addButton(this, MCVer.Checkbox(2, this.height - 22, 20, 20, "High Quality", false));
+		MCVer.addButton(this, MCVer.EditBox(client.font, (width / 2) - 45, (height / 8) * 2 + 23, 90, 14, "20")).setValue("20");
 		super.init();
 	}
 	
@@ -149,8 +158,8 @@ public class VideoUpspeederScreen extends Screen {
 			int n;
 			n = Mth.floor(progress * (float) (j - i));
 			MCVer.fill(i + m, k, i + m + n, l, -13408734);
-			for(int k2 = 0; k2 < this.buttons.size(); ++k2) {
-				MCVer.render(((AbstractWidget)this.buttons.get(k2)), mouseX, mouseY, delta);
+			for(int k2 = 0; k2 < MCVer.getButtonSize(this); ++k2) {
+				MCVer.render(((AbstractWidget)MCVer.getButton(this, k2)), mouseX, mouseY, delta);
 			}
 			int var10004 = k + (l - k) / 2;
 
@@ -198,14 +207,14 @@ public class VideoUpspeederScreen extends Screen {
 		MCVer.drawShadow("Length: " + dur, (width / 4) * 3 - (width / 12), (height / 8) * 4 + 30, 0xFFFFFF);
 		MCVer.drawShadow("Size: " + calcSize(), (width / 4) * 3 - (width / 12), (height / 8) * 4 + 40, 0xFFFFFF);
 
-		for(int k = 0; k < this.buttons.size(); ++k) {
-			MCVer.render(((AbstractWidget)this.buttons.get(k)), mouseX, mouseY, delta);
+		for(int k = 0; k < MCVer.getButtonSize(this); ++k) {
+			MCVer.render(((AbstractWidget)MCVer.getButton(this, k)), mouseX, mouseY, delta);
 		}
 	}
 
 	/* Gets the Bitrate from the button */
 	private int bitrate() {
-		return ((Checkbox) buttons.get(5)).selected() ? 20000000 : 8000000;
+		return ((Checkbox) MCVer.getButton(this, 5)).selected() ? 20000000 : 8000000;
 	}
 
 	/* Calculates the Size if the Video with a max bitrate: bitrate * frames */

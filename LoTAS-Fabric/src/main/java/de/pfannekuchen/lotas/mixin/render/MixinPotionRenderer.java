@@ -59,17 +59,25 @@ public abstract class MixinPotionRenderer {
 //$$
 //$$ 	@Inject(method = "renderItemInHand", at = @At(value = "INVOKE", shift = Shift.AFTER, target = "Lcom/mojang/blaze3d/vertex/PoseStack;popPose()V"))
 //$$ 	public void drawPotionAfter(com.mojang.blaze3d.vertex.PoseStack matrices, Camera camera, float tickDelta, CallbackInfo ci) {
+		//#if MC<=11605
 //$$ 		RenderSystem.matrixMode(5888);
 //$$ 		RenderSystem.loadIdentity();
 //$$ 		RenderSystem.pushMatrix();
+		//#endif
 //$$ 		matrices.pushPose();
 //$$ 		ItemStack stack2 = PotionRenderer.render(matrices);
 //$$
 //$$ 		BufferSource immediate = renderBuffers.bufferSource();
+		//#if MC>=11700
+//$$ 		Minecraft.getInstance().getItemRenderer().renderStatic(stack2, TransformType.FIXED, 15728880, OverlayTexture.NO_OVERLAY, matrices, immediate, 0);
+		//#else
 //$$ 		Minecraft.getInstance().getItemRenderer().renderStatic(stack2, TransformType.FIXED, 15728880, OverlayTexture.NO_OVERLAY, matrices, immediate);
+		//#endif
 //$$ 		matrices.popPose();
 //$$ 		immediate.endBatch();
+		//#if MC<=11605
 //$$ 		RenderSystem.popMatrix();
+		//#endif
 //$$ 	}
 	//#endif
 }

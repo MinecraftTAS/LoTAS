@@ -142,7 +142,7 @@ public class BarteringDropManipulation extends DropManipulationScreen.DropManipu
 			MCVer.popMatrix();
 		}
 
-		Minecraft.getInstance().getTextureManager().bind(new ResourceLocation("lotas", "drops/zombie.png"));
+		MCVer.bind(Minecraft.getInstance().getTextureManager(), new ResourceLocation("lotas", "drops/zombie.png"));
 		MCVer.blit(width - 228, y + 24, 0.0F, 0.0F, 118, 198, 118, 198);
 	}
 

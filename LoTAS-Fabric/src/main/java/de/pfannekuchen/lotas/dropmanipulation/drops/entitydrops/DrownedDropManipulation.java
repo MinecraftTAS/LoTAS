@@ -79,7 +79,7 @@ public class DrownedDropManipulation extends DropManipulationScreen.DropManipula
 			MCVer.render(dropGold, mouseX, mouseY, delta);
 		}
 
-		Minecraft.getInstance().getTextureManager().bind(new ResourceLocation("lotas", "drops/drowned.png"));
+		MCVer.bind(Minecraft.getInstance().getTextureManager(), new ResourceLocation("lotas", "drops/drowned.png"));
 		MCVer.blit(width - 228, y + 24, 0.0F, 0.0F, 122, 199, 122, 199);
 	}
 

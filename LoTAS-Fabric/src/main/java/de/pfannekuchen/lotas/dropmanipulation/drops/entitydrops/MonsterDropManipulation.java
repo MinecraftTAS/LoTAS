@@ -159,7 +159,7 @@ public class MonsterDropManipulation extends DropManipulationScreen.DropManipula
 			MCVer.render(optimizeWitch, mouseX, mouseY, delta);
 		}
 
-		Minecraft.getInstance().getTextureManager().bind(new ResourceLocation("lotas", "drops/spider.png"));
+		MCVer.bind(Minecraft.getInstance().getTextureManager(), new ResourceLocation("lotas", "drops/spider.png"));
 		MCVer.blit(width - 128, y + 24, 0.0F, 0.0F, 109, 85, 109, 85);
 	}
 

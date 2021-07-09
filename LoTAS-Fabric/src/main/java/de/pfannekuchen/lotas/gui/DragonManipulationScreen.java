@@ -146,10 +146,10 @@ public class DragonManipulationScreen extends Screen {
 			action2.active = false;
 			action3.active = false;
 		}
-		addButton(action1);
-		addButton(action2);
-		addButton(action3);
-		addButton(MCVer.Button(this.width / 2 - 155, this.height - 29, 300, 20, I18n.get("gui.done"), btn -> {
+		MCVer.addButton(this, action1);
+		MCVer.addButton(this, action2);
+		MCVer.addButton(this, action3);
+		MCVer.addButton(this, MCVer.Button(this.width / 2 - 155, this.height - 29, 300, 20, I18n.get("gui.done"), btn -> {
 			Minecraft.getInstance().setScreen(here);
 		}));
 		super.init();
@@ -167,10 +167,10 @@ public class DragonManipulationScreen extends Screen {
 
 		MCVer.drawCenteredString(this, translation.get(dragonPhase.getClass().getSimpleName()), width / 2, 10, 0xFFFFFF);
 
-		minecraft.getTextureManager().bind(DRAGONGIF);
+		MCVer.bind(minecraft.getTextureManager(), DRAGONGIF);
 		MCVer.blit(width / 28 * 3, height / 19 * 2, 0, 0, width / 28 * 23, height / 19 * 17, width / 28 * 23, height / 19 * 17);
-		for(int k = 0; k < this.buttons.size(); ++k) {
-			MCVer.render(((AbstractWidget)this.buttons.get(k)), mouseX, mouseY, partialTicks);
+		for(int k = 0; k < MCVer.getButtonSize(this); ++k) {
+			MCVer.render(((AbstractWidget)MCVer.getButton(this, k)), mouseX, mouseY, partialTicks);
 		}
 	}
 

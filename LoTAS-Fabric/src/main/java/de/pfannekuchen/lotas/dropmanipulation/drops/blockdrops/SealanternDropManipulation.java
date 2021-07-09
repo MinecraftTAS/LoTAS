@@ -100,7 +100,7 @@ public class SealanternDropManipulation extends DropManipulationScreen.DropManip
 			MCVer.render(drop3Pris, mouseX, mouseY, delta);
 		}
 
-		Minecraft.getInstance().getTextureManager().bind(new ResourceLocation("lotas", "drops/sealantern.gif"));
+		MCVer.bind(Minecraft.getInstance().getTextureManager(), new ResourceLocation("lotas", "drops/sealantern.gif"));
 		MCVer.blit(width - 128, y + 24, 0.0F, 0.0F, 96, 96, 96, 96);
 	}
 

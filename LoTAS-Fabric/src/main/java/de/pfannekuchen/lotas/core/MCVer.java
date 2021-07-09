@@ -3,6 +3,8 @@ package de.pfannekuchen.lotas.core;
 import com.mojang.blaze3d.platform.GlStateManager.DestFactor;
 import com.mojang.blaze3d.platform.GlStateManager.SourceFactor;
 
+import de.pfannekuchen.lotas.mixin.accessors.AccessorButtons;
+import de.pfannekuchen.lotas.mixin.accessors.AccessorScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiComponent;
@@ -11,7 +13,10 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Button.OnPress;
 import net.minecraft.client.gui.components.Checkbox;
 import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.components.Widget;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 
@@ -334,4 +339,46 @@ public class MCVer {
 		com.mojang.blaze3d.platform.GlStateManager.translated(i, y, d);
 	}
 	//#endif
+	
+	// =============================================== 1.16.5 | 1.17 BUTTONS =========================================
+	//#if MC>=11700
+//$$ 	public static <T extends net.minecraft.client.gui.components.events.GuiEventListener & net.minecraft.client.gui.components.Widget & net.minecraft.client.gui.narration.NarratableEntry> T addButton(Screen screen, T button) {
+//$$ 		((de.pfannekuchen.lotas.mixin.accessors.AccessorScreen)screen).addRenderableWidget(button);
+//$$ 		return button;
+//$$ 	}
+	//#else
+	public static <T extends AbstractWidget> T addButton(Screen screen, T button) {
+		((de.pfannekuchen.lotas.mixin.accessors.AccessorScreen)screen).invokeAddButton(button);
+		return button;
+	}
+	//#endif
+	
+	//#if MC>=11700
+//$$ 	public static Widget getButton(Screen obj, int buttonID) {
+//$$ 		return ((AccessorButtons)obj).getButtons().get(buttonID);
+//$$ 	}
+	//#else
+		public static AbstractWidget getButton(Screen obj, int buttonID){
+			return (AbstractWidget) ((AccessorButtons)obj).getButtons().get(buttonID);
+		}
+	//#endif
+		
+	//#if MC>=11700
+//$$ 	public static int getButtonSize(Screen obj) {
+//$$ 		return ((AccessorButtons)obj).getButtons().size();
+//$$ 	}
+		//#else
+		public static int getButtonSize(Screen obj){
+			return ((AccessorButtons)obj).getButtons().size();
+		}
+		//#endif
+	// =============================================== 1.16.5 | 1.17 TEXTURES =========================================
+	
+	public static void bind(TextureManager textureManager, ResourceLocation resource) {
+		//#if MC>=11700
+//$$ 		textureManager.bindForSetup(resource);
+		//#else
+		textureManager.bind(resource);
+		//#endif
+	}
 }
