@@ -22,6 +22,7 @@
 		"render.binds.MixinTickrateChangerEnchantmentGlimm",
 		"render.binds.MixinTickrateChangerSubtitleOverlay",
 		"render.binds.MixinTickrateChangerWorldborder",
+		"render.binds.MixinTickrateChangerAchievements",
 		"render.gui.MixinGuiIngameMenu",
 		"render.gui.MixinGuiMainMenu",
 		"render.gui.MixinGuiSelectWorldScreen",
