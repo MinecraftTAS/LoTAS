@@ -442,5 +442,15 @@ public class DropdownWidget<T> extends AbstractWidget {
             }
             return true;
         }
+//#if MC>=11700
+//$$ 		@Override
+//$$ 		public void updateNarration(net.minecraft.client.gui.narration.NarrationElementOutput narrationElementOutput) {
+//$$ 		}
+//#endif
     }
+//#if MC>=11700
+//$$ 	@Override
+//$$ 	public void updateNarration(net.minecraft.client.gui.narration.NarrationElementOutput narrationElementOutput) {
+//$$ 	}
+//#endif
 }

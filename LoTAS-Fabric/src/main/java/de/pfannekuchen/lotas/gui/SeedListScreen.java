@@ -77,7 +77,7 @@ public class SeedListScreen extends Screen {
 		if (mouseY > 0 && mouseY < seeds.size() * 40) {
 			int index = (int) Math.floor(mouseY / 40);
 			selectedSeed = seeds.get(index);
-			this.buttons.get(1).active = true;
+			((Button)MCVer.getButton(this, 1)).active = true;
 		}
 		return super.mouseClicked(mouseX, mouseY + 52, button);
 	}
@@ -102,10 +102,11 @@ public class SeedListScreen extends Screen {
 	 */
 	@Override
 	protected void init() {
-		this.addButton(MCVer.Button(width / 2 - 100, height - 28, 200, 20, "Done", button -> {
+		MCVer.addButton(this, MCVer.Button(width / 2 - 100, height - 28, 200, 20, "Done", button -> {
 			Minecraft.getInstance().setScreen(new SelectWorldScreen(new TitleScreen()));
 		}));
 		Button create = MCVer.Button(width / 2 - 100, height - 52, 200, 20, "Create World", button -> {
+		
 		Minecraft.getInstance().setScreen(new ProgressScreen());
 //			CreateWorldScreen createWorldScreen = new CreateWorldScreen(this);
 //			AccessorCreateWorldScreen accessorCWS = (AccessorCreateWorldScreen) createWorldScreen;
@@ -114,7 +115,7 @@ public class SeedListScreen extends Screen {
 //			Minecraft.getInstance().setScreen(createWorldScreen);
 		});
 		create.active = false;
-		this.addButton(create);
+		MCVer.addButton(this, create);
 		super.init();
 	}
 
@@ -124,7 +125,7 @@ public class SeedListScreen extends Screen {
 	protected void renderHoleBackground(int top, int bottom, int alphaTop, int alphaBottom) {
 		Tesselator tessellator = Tesselator.getInstance();
 		BufferBuilder bufferBuilder = tessellator.getBuilder();
-		Minecraft.getInstance().getTextureManager().bind(GuiComponent.BACKGROUND_LOCATION);
+		MCVer.bind(Minecraft.getInstance().getTextureManager(), GuiComponent.BACKGROUND_LOCATION);
 		MCVer.color4f(.5f, .5f, .5f, .4F);
 		bufferBuilder.begin(7, DefaultVertexFormat.POSITION);
 		bufferBuilder.vertex((double) 0, (double) bottom, 0.0D).uv(0.0F, ((float) bottom / 32.0F)).color(64, 64, 64, alphaBottom).endVertex();
@@ -171,7 +172,7 @@ public class SeedListScreen extends Screen {
 			MCVer.drawShadow(seed.seed, x + 35, y + 24, 8421504);
 			MCVer.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 			try {
-				Minecraft.getInstance().getTextureManager().bind(downloadSeed(seed.seed));
+				MCVer.bind(Minecraft.getInstance().getTextureManager(), downloadSeed(seed.seed));
 				MCVer.blit(x + 1, y, 0.0F, 0.0F, 32, 32, 32, 32);
 			} catch (Exception e) {
 
@@ -198,7 +199,7 @@ public class SeedListScreen extends Screen {
 		Tesselator tessellator = Tesselator.getInstance();
 		BufferBuilder bufferBuilder = tessellator.getBuilder();
 		
-		Minecraft.getInstance().getTextureManager().bind(GuiComponent.BACKGROUND_LOCATION);
+		MCVer.bind(Minecraft.getInstance().getTextureManager(), GuiComponent.BACKGROUND_LOCATION);
 		
 		MCVer.color4f(1f, 1f, 1f, 1F);
 		bufferBuilder.begin(7, DefaultVertexFormat.POSITION);

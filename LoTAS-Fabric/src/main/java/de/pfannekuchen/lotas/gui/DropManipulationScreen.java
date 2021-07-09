@@ -158,8 +158,8 @@ public class DropManipulationScreen extends Screen {
 			y += 15;
 		}
 		manipulations.get(selected).render(mouseX, mouseY, delta);
-		for(int k = 0; k < this.buttons.size(); ++k) {
-			MCVer.render(((AbstractWidget)this.buttons.get(k)), mouseX, mouseY, delta);
+		for(int k = 0; k < MCVer.getButtonSize(this); ++k) {
+			MCVer.render(((AbstractWidget)MCVer.getButton(this, k)), mouseX, mouseY, delta);
 		}
 	}
 

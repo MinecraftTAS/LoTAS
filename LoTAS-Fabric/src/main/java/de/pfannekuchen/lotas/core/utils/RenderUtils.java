@@ -1,6 +1,7 @@
 package de.pfannekuchen.lotas.core.utils;
 
 import net.minecraft.client.Camera;
+import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;

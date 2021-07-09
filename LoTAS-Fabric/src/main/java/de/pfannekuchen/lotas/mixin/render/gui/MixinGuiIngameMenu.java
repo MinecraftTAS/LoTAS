@@ -19,7 +19,7 @@ import de.pfannekuchen.lotas.gui.DropManipulationScreen;
 import de.pfannekuchen.lotas.gui.LoadstateScreen;
 import de.pfannekuchen.lotas.gui.SpawnManipulationScreen;
 import de.pfannekuchen.lotas.gui.widgets.SmallCheckboxWidget;
-import de.pfannekuchen.lotas.mods.AIManipMod;
+import de.pfannekuchen.lotas.mixin.accessors.AccessorButtons;
 import de.pfannekuchen.lotas.mods.DupeMod;
 import de.pfannekuchen.lotas.mods.SavestateMod;
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;
@@ -48,12 +48,14 @@ public abstract class MixinGuiIngameMenu extends Screen {
 	@Inject(at = @At("RETURN"), method = "init")
 	public void addCustomButtons(CallbackInfo ci) {
 		// Move Buttons higher
-		for (net.minecraft.client.gui.components.AbstractWidget guiButton : buttons) 
+		for (int i=0;i<MCVer.getButtonSize(this); i++) {
+			Button guiButton=(Button)MCVer.getButton(this, i);
 			guiButton.y -= 24;
+		}
 		
-		buttons.get(7).y += 24;
+		((Button)MCVer.getButton(this, 7)).y += 24;
 		
-		addButton(MCVer.Button(this.width / 2 - 102, this.height / 4 + 48 + -16 + 24 + 24, 98, 20, "Savestate", btn -> {
+		MCVer.addButton(this, MCVer.Button(this.width / 2 - 102, this.height / 4 + 48 + -16 + 24 + 24, 98, 20, "Savestate", btn -> {
 			if (Keyboard.isPressed(GLFW.GLFW_KEY_LEFT_SHIFT)) {
 				savestateName = MCVer.EditBox(Minecraft.getInstance().font, this.width / 2 - 100, this.height / 4 + 96 + -16, 98, 20, "");
 				btn.active = false;
@@ -61,13 +63,13 @@ public abstract class MixinGuiIngameMenu extends Screen {
 			} else
 				SavestateMod.savestate(null);
 		}));
-		addButton(MCVer.Button(this.width / 2 + 4, this.height / 4 + 48 + -16 + 24 + 24, 98, 20, "Loadstate", btn -> {
+		MCVer.addButton(this, MCVer.Button(this.width / 2 + 4, this.height / 4 + 48 + -16 + 24 + 24, 98, 20, "Loadstate", btn -> {
 			if (Keyboard.isPressed(GLFW.GLFW_KEY_LEFT_SHIFT))
 				Minecraft.getInstance().setScreen(new LoadstateScreen());
 			else
 				SavestateMod.loadstate(-1);
 		}));
-		addButton(MCVer.Button(5, 15, 48, 20, "+", b -> {
+		MCVer.addButton(this, MCVer.Button(5, 15, 48, 20, "+", b -> {
 			if (Keyboard.isPressed(GLFW.GLFW_KEY_LEFT_SHIFT)) {
 				tickrateField = MCVer.EditBox(Minecraft.getInstance().font, 4, 15, 103, 20, "");
 				b.active = false;
@@ -78,7 +80,7 @@ public abstract class MixinGuiIngameMenu extends Screen {
 				TickrateChangerMod.updateTickrate(TickrateChangerMod.ticks[TickrateChangerMod.index]);
 			}
 		}));
-		addButton(MCVer.Button(55, 15, 48, 20, "-", b -> {
+		MCVer.addButton(this, MCVer.Button(55, 15, 48, 20, "-", b -> {
 			if (Keyboard.isPressed(GLFW.GLFW_KEY_LEFT_SHIFT)) {
 				tickrateField = MCVer.EditBox(Minecraft.getInstance().font, 4, 15, 103, 20, "");
 				b.active = false;
@@ -89,48 +91,52 @@ public abstract class MixinGuiIngameMenu extends Screen {
 				TickrateChangerMod.updateTickrate(TickrateChangerMod.ticks[TickrateChangerMod.index]);
 			}
 		}));
-		addButton(MCVer.Button((width / 4) * 0 + 1, height - 20, width / 4 - 2, 20, "Manipulate Drops", btn -> {
+		MCVer.addButton(this, MCVer.Button((width / 4) * 0 + 1, height - 20, width / 4 - 2, 20, "Manipulate Drops", btn -> {
 			Minecraft.getInstance().setScreen(new DropManipulationScreen((PauseScreen) (Object) this));
 		}));
 
-		addButton(MCVer.Button((width / 4) * 1 + 2, height - 20, width / 4 - 2, 20, "Manipulate Dragon", btn -> {
+		MCVer.addButton(this, MCVer.Button((width / 4) * 1 + 2, height - 20, width / 4 - 2, 20, "Manipulate Dragon", btn -> {
 			Minecraft.getInstance().setScreen(new DragonManipulationScreen((PauseScreen) (Object) this));
 		})).active = MCVer.getCurrentLevel().getDragons().size() > 0;
-		addButton(MCVer.Button((width / 4) * 2 + 3, height - 20, width / 4 - 2, 20, "Manipulate Spawning", btn -> {
+		MCVer.addButton(this, MCVer.Button((width / 4) * 2 + 3, height - 20, width / 4 - 2, 20, "Manipulate Spawning", btn -> {
 			Minecraft.getInstance().setScreen(new SpawnManipulationScreen());
 		}));
 		
-		addButton(MCVer.Button((width / 4) * 3 + 4, height - 20, width / 4 - 4, 20, "Manipulate AI", btn -> {
+		MCVer.addButton(this, MCVer.Button((width / 4) * 3 + 4, height - 20, width / 4 - 4, 20, "Manipulate AI", btn -> {
 			Minecraft.getInstance().setScreen(new AIManipulationScreen());
  		})).active=AIManipMod.isEntityInRange();
 		
-		addButton(MCVer.Button(5, 55, 98, 20, "Save Items", btn -> {
+		MCVer.addButton(this, MCVer.Button(5, 55, 98, 20, "Save Items", btn -> {
 			DupeMod.save(Minecraft.getInstance());
 			btn.active = false;
 		}));
-		addButton(MCVer.Button(5, 75, 98, 20, "Load Items", btn -> {
+		MCVer.addButton(this, MCVer.Button(5, 75, 98, 20, "Load Items", btn -> {
 			DupeMod.load(Minecraft.getInstance());
 			btn.active = false;
 		}));
-		addButton(MCVer.Button(37, 115, 66, 20, "Jump ticks", btn -> {
+		MCVer.addButton(this, MCVer.Button(37, 115, 66, 20, "Jump ticks", btn -> {
 			TickrateChangerMod.ticksToJump = (int) TickrateChangerMod.ticks[TickrateChangerMod.ji];
 			btn.active = false;
 			MCVer.setMessage(btn, "Jumping...");
 		}));
 
-		addButton(MCVer.Button(5, 115, 30, 20, TickrateChangerMod.ticks[TickrateChangerMod.ji] + "t", btn -> {
+		MCVer.addButton(this, MCVer.Button(5, 115, 30, 20, TickrateChangerMod.ticks[TickrateChangerMod.ji] + "t", btn -> {
 			TickrateChangerMod.ji++;
 			if (TickrateChangerMod.ji > 10)
 				TickrateChangerMod.ji = 1;
+			//#if MC>=11700
+//$$ 			((AccessorButtons)this).getButtons().clear();
+			//#else
 			buttons.clear();
+			//#endif
 			init();
 		}));
-		addButton(new SmallCheckboxWidget(2, height - 20 - 15, "Avoid taking damage", !ConfigUtils.getBoolean("tools", "takeDamage"), b -> {
+		MCVer.addButton(this, new SmallCheckboxWidget(2, height - 20 - 15, "Avoid taking damage", !ConfigUtils.getBoolean("tools", "takeDamage"), b -> {
 			ConfigUtils.setBoolean("tools", "takeDamage", !b.isChecked());
 			ConfigUtils.save();
 		}));
 
-		addButton(new SmallCheckboxWidget(2, height - 32 - 15, "Drop towards me", ConfigUtils.getBoolean("tools", "manipulateVelocityTowards"), b -> {
+		MCVer.addButton(this, new SmallCheckboxWidget(2, height - 32 - 15, "Drop towards me", ConfigUtils.getBoolean("tools", "manipulateVelocityTowards"), b -> {
 			ConfigUtils.setBoolean("tools", "manipulateVelocityTowards", b.isChecked());
 			if (b.isChecked()) {
 				ConfigUtils.setBoolean("tools", "manipulateVelocityAway", false);
@@ -138,8 +144,8 @@ public abstract class MixinGuiIngameMenu extends Screen {
 			}
 			ConfigUtils.save();
 		}));
-		final SmallCheckboxWidget tw = (SmallCheckboxWidget) buttons.get(buttons.size() - 1);
-		addButton(new SmallCheckboxWidget(2, height - 44 - 15, "Drop away from me", ConfigUtils.getBoolean("tools", "manipulateVelocityAway"), b -> {
+		final SmallCheckboxWidget tw = (SmallCheckboxWidget) MCVer.getButton(this, MCVer.getButtonSize(this)-1);
+		MCVer.addButton(this, new SmallCheckboxWidget(2, height - 44 - 15, "Drop away from me", ConfigUtils.getBoolean("tools", "manipulateVelocityAway"), b -> {
 			ConfigUtils.setBoolean("tools", "manipulateVelocityAway", b.isChecked());
 			if (b.isChecked()) {
 				ConfigUtils.setBoolean("tools", "manipulateVelocityTowards", false);
@@ -147,16 +153,16 @@ public abstract class MixinGuiIngameMenu extends Screen {
 			}
 			ConfigUtils.save();
 		}));
-		fw = (SmallCheckboxWidget) buttons.get(buttons.size() - 1);
-		addButton(new SmallCheckboxWidget(2, height - 56 - 15, "Optimize Explosions", ConfigUtils.getBoolean("tools", "manipulateExplosionDropChance"), b -> {
+		fw = (SmallCheckboxWidget) MCVer.getButton(this, MCVer.getButtonSize(this)-1);
+		MCVer.addButton(this, new SmallCheckboxWidget(2, height - 56 - 15, "Optimize Explosions", ConfigUtils.getBoolean("tools", "manipulateExplosionDropChance"), b -> {
 			ConfigUtils.setBoolean("tools", "manipulateExplosionDropChance", b.isChecked());
 			ConfigUtils.save();
 		}));
-		addButton(new SmallCheckboxWidget(2, height - 68 - 15, "Right Auto Clicker", ConfigUtils.getBoolean("tools", "rAutoClicker"), b -> {
+		MCVer.addButton(this, new SmallCheckboxWidget(2, height - 68 - 15, "Right Auto Clicker", ConfigUtils.getBoolean("tools", "rAutoClicker"), b -> {
 			ConfigUtils.setBoolean("tools", "rAutoClicker", b.isChecked());
 			ConfigUtils.save();
 		}));
-		addButton(MCVer.Button(this.width / 2 - 102, this.height / 4 + 144 + -16, 204, 20, "Reset Timer", btn -> {
+		MCVer.addButton(this, MCVer.Button(this.width / 2 - 102, this.height / 4 + 144 + -16, 204, 20, "Reset Timer", btn -> {
 			Timer.ticks = -1;
 			Timer.startTime = Duration.ofMillis(System.currentTimeMillis());
 		}));
@@ -164,7 +170,7 @@ public abstract class MixinGuiIngameMenu extends Screen {
 	}
 
 	public Button getButton(int index) {
-		return (Button) this.buttons.get(index);
+		return (Button) MCVer.getButton(this, index);
 	}
 	
 	//#if MC>=11600
@@ -194,7 +200,7 @@ public abstract class MixinGuiIngameMenu extends Screen {
 			long timeSince = System.currentTimeMillis() - SavestateMod.timeTitle;
 			if (timeSince >= 1800) {
 				SavestateMod.showSavestateDone = false;
-				buttons.get( 9).active=SavestateMod.hasSavestate();
+				((Button)MCVer.getButton(this, 9)).active=SavestateMod.hasSavestate();
 				return;
 			}
 			MCVer.drawCenteredString(this, "\u00A76Savestate successful...", width / 2, 20, new Color(1F, 1F, 1F, 1F - (timeSince / 2000F)).getRGB());

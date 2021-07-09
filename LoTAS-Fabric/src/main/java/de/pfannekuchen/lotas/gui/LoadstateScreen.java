@@ -15,6 +15,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.ObjectSelectionList;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 
 /**
@@ -36,10 +37,10 @@ public class LoadstateScreen extends Screen {
 		} catch (NumberFormatException | IOException e) {
 			e.printStackTrace();
 		}
-		addButton(MCVer.Button(width / 2 - 102, height - 52, 204, 20, "Loadstate", btn -> {
+		MCVer.addButton(this, MCVer.Button(width / 2 - 102, height - 52, 204, 20, "Loadstate", btn -> {
 			SavestateMod.loadstate(list.getSelected().index + 1);
 		}));
-		addButton(MCVer.Button(width / 2 - 102, height - 31, 204, 20, "Delete State", btn -> {
+		MCVer.addButton(this, MCVer.Button(width / 2 - 102, height - 31, 204, 20, "Delete State", btn -> {
 			SavestateMod.yeet(list.getSelected().index + 1);
 			Minecraft.getInstance().setScreen(new LoadstateScreen());
 		}));
@@ -55,8 +56,8 @@ public class LoadstateScreen extends Screen {
 	list.render(mouseX, mouseY, partialTicks);
 	//#endif
 		MCVer.drawCenteredString(this, "Select State to load", width / 2, 16, 0xFFFFFF);
-		for(int k = 0; k < this.buttons.size(); ++k) {
-			MCVer.render(((AbstractWidget)this.buttons.get(k)), mouseX, mouseY, partialTicks);
+		for(int k = 0; k < MCVer.getButtonSize(this); ++k) {
+			MCVer.render(((AbstractWidget)MCVer.getButton(this, k)), mouseX, mouseY, partialTicks);
 		}
 	}
 
@@ -160,6 +161,12 @@ public class LoadstateScreen extends Screen {
 				GuiLoadstateList.this.setSelected(this);
 				return super.mouseReleased(mouseX, mouseY, button);
 			}
+			//#if MC>=11700
+//$$ 			@Override
+//$$ 			public Component getNarration() {
+//$$ 				return null;
+//$$ 			}
+			//#endif
 		}
 
 	}

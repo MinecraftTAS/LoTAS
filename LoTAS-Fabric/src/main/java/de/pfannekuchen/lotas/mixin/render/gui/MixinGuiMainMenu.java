@@ -77,12 +77,12 @@ public abstract class MixinGuiMainMenu extends Screen {
 	public void redirectInit(CallbackInfo ci) {
 		if (!ConfigUtils.getBoolean("hidden", "acceptedDataSending")) {
 			isAcceptance = true;
-			addButton(MCVer.Button(width / 2 - 116, height / 2 + 62 + -16, 114, 20, "Accept", c1 -> {
+			MCVer.addButton(this, MCVer.Button(width / 2 - 116, height / 2 + 62 + -16, 114, 20, "Accept", c1 -> {
 				ConfigUtils.setBoolean("hidden", "acceptedDataSending", true);
 				ConfigUtils.save();
 				Minecraft.getInstance().setScreen(new TitleScreen());
 			}));
-			addButton(MCVer.Button(width / 2 + 2, height / 2 + 62 + -16, 114, 20, "Decline", c2 -> {
+			MCVer.addButton(this, MCVer.Button(width / 2 + 2, height / 2 + 62 + -16, 114, 20, "Decline", c2 -> {
 				System.exit(29);
 			}));
 			ci.cancel();
@@ -112,13 +112,13 @@ public abstract class MixinGuiMainMenu extends Screen {
 	 */
 	@Overwrite
 	private void createNormalMenuOptions(int y, int spacingY) {
-		addButton(MCVer.Button(this.width / 2 - 100, y, 200, 20, I18n.get("menu.singleplayer"), (Button) -> {
+		MCVer.addButton(this, MCVer.Button(this.width / 2 - 100, y, 200, 20, I18n.get("menu.singleplayer"), (Button) -> {
 			Minecraft.getInstance().setScreen(new SelectWorldScreen(this));
 		}));
-		addButton(MCVer.Button(this.width / 2 - 100, y + spacingY * 1, 200, 20, I18n.get("Video Upspeeder"), (Button) -> {
+		MCVer.addButton(this, MCVer.Button(this.width / 2 - 100, y + spacingY * 1, 200, 20, I18n.get("Video Upspeeder"), (Button) -> {
 			Minecraft.getInstance().setScreen(new VideoUpspeederScreen());
 		}));
-		addButton(MCVer.Button(this.width / 2 - 100, y + spacingY * 2, 200, 20, I18n.get("Configuration"), (Button) -> {
+		MCVer.addButton(this, MCVer.Button(this.width / 2 - 100, y + spacingY * 2, 200, 20, I18n.get("Configuration"), (Button) -> {
 			Minecraft.getInstance().setScreen(new ConfigurationScreen());
 		}));
 	}

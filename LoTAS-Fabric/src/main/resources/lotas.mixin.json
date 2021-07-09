@@ -18,6 +18,8 @@
     	"accessors.AccessorCreateWorldScreen",
     	"accessors.AccessorServerPlayerEntity",
     	"accessors.AccessorItemRenderer",
+    	"accessors.AccessorScreen",
+    	"accessors.AccessorButtons",
 		"render.binds.MixinTickrateChangerAudioPitch",
 		"render.binds.MixinTickrateChangerEnchantmentGlimm",
 		"render.binds.MixinTickrateChangerSubtitleOverlay",

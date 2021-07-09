@@ -215,7 +215,7 @@ public class PassiveDropManipulation extends DropManipulationScreen.DropManipula
 			MCVer.render(optimizeHorses, mouseX, mouseY, delta);
 		}
 
-		Minecraft.getInstance().getTextureManager().bind(new ResourceLocation("lotas", "drops/sheep.png"));
+		MCVer.bind(Minecraft.getInstance().getTextureManager(), new ResourceLocation("lotas", "drops/sheep.png"));
 		MCVer.blit(width - 128, y + 24, 0.0F, 0.0F, 102, 120, 102, 120);
 	}
 

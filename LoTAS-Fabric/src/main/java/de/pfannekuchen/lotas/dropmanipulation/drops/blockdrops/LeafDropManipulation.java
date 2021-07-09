@@ -112,7 +112,7 @@ public class LeafDropManipulation extends DropManipulationScreen.DropManipulatio
 			MCVer.render(dropSapling, mouseX, mouseY, delta);
 		}
 
-		Minecraft.getInstance().getTextureManager().bind(new ResourceLocation("lotas", "drops/leaf.png"));
+		MCVer.bind(Minecraft.getInstance().getTextureManager(), new ResourceLocation("lotas", "drops/leaf.png"));
 		MCVer.blit(width - 128, y + 24, 0.0F, 0.0F, 96, 96, 96, 96);
 	}
 

@@ -49,7 +49,7 @@ public class SmallCheckboxWidget extends AbstractButton {
 	@Override public void renderButton(int mouseX, int mouseY, float delta) {
 	//#endif
 		Minecraft minecraftClient = Minecraft.getInstance();
-		minecraftClient.getTextureManager().bind(TEXTURE);
+		MCVer.bind(minecraftClient.getTextureManager(), TEXTURE);
 		MCVer.blit(this.x, this.y, 0.0F, 0.0F, 11, this.height, 11, 11);
 		//#if MC>=11600
 //$$ 		this.renderBg(MCVer.stack, minecraftClient, mouseX, mouseY);
@@ -67,4 +67,11 @@ public class SmallCheckboxWidget extends AbstractButton {
 	public void silentPress(boolean f) {
 		this.checked = f;
 	}
+	//#if MC>=11700
+//$$ 	@Override
+//$$ 	public void updateNarration(net.minecraft.client.gui.narration.NarrationElementOutput narrationElementOutput) {
+//$$ 		// TODO Auto-generated method stub
+//$$
+//$$ 	}
+	//#endif
 }

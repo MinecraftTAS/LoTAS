@@ -106,7 +106,7 @@ public class NetherMobDropManipulation extends DropManipulationScreen.DropManipu
 			MCVer.render(optimizeWitherskeleton, mouseX, mouseY, delta);
 		}
 
-		Minecraft.getInstance().getTextureManager().bind(new ResourceLocation("lotas", "drops/wither_skeleton.png"));
+		MCVer.bind(Minecraft.getInstance().getTextureManager(), new ResourceLocation("lotas", "drops/wither_skeleton.png"));
 		MCVer.blit(width - 128, y + 24, 0.0F, 0.0F, 100, 150, 100, 150);
 	}
 

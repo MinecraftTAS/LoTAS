@@ -80,7 +80,7 @@ public class OreDropManipulation extends DropManipulationScreen.DropManipulation
 			MCVer.render(optimizeLapis, mouseX, mouseY, delta);
 		}
 
-		Minecraft.getInstance().getTextureManager().bind(new ResourceLocation("lotas", "drops/diamond_ore.png"));
+		MCVer.bind(Minecraft.getInstance().getTextureManager(), new ResourceLocation("lotas", "drops/diamond_ore.png"));
 		MCVer.blit(width - 128, y + 24, 0.0F, 0.0F, 96, 96, 96, 96);
 	}
 

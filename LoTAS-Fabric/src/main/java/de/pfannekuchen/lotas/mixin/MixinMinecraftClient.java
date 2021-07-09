@@ -148,10 +148,18 @@ public class MixinMinecraftClient {
 			boolean isOnGround = player.onGround;
 			//#endif
 			if (isOnGround && !wasOnGround && KeybindsUtils.holdStrafeKeybind.isDown()) {
+				//#if MC>=11700
+//$$ 				player.setYRot(player.getYRot() + 45);
+				//#else
 				player.yRot += 45;
+				//#endif
 				KeyMapping.set(options.keyRight.getDefaultKey(), false);
 			} else if (!isOnGround && wasOnGround && KeybindsUtils.holdStrafeKeybind.isDown()) {
+				//#if MC>=11700
+//$$ 				player.setYRot(player.getYRot() - 45);
+				//#else
 				player.yRot -= 45;
+				//#endif
 				KeyMapping.set(options.keyRight.getDefaultKey(), true);
 			}
 			wasOnGround = isOnGround;
@@ -203,8 +211,13 @@ public class MixinMinecraftClient {
 			strafe = strafe * f;
 			up = up * f;
 			forward = forward * f;
+			//#if MC>=11700
+//$$ 			float f1 = Mth.sin(player.getYRot() * 0.017453292F);
+//$$ 			float f2 = Mth.cos(player.getYRot() * 0.017453292F);
+			//#else
 			float f1 = Mth.sin(player.yRot * 0.017453292F);
 			float f2 = Mth.cos(player.yRot * 0.017453292F);
+			//#endif
 			MCVer.setXYZ(player, MCVer.getX(player) + (strafe * f2 - forward * f1), MCVer.getY(player) + up, MCVer.getZ(player) + (forward * f2 + strafe * f1));
 		}
 	}
