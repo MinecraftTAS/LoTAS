@@ -319,10 +319,6 @@ public class MCVer {
 		com.mojang.blaze3d.platform.GlStateManager.popMatrix();
 	}
 
-	public static void translated(int i, double j, int k) {
-		com.mojang.blaze3d.platform.GlStateManager.translated(i, j, k);
-	}
-
 	public static void scaled(double scale, double scale2, double scale3) {
 		com.mojang.blaze3d.platform.GlStateManager.scaled(scale, scale2, scale3);
 	}
@@ -335,7 +331,7 @@ public class MCVer {
 		com.mojang.blaze3d.platform.GlStateManager.enableDepthTest();
 	}
 
-	public static void translated(int i, int y, double d) {
+	public static void translated(double i, double y, double d) {
 		com.mojang.blaze3d.platform.GlStateManager.translated(i, y, d);
 	}
 	//#endif

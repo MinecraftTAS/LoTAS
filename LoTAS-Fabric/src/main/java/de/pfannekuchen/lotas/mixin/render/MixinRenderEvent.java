@@ -6,6 +6,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import com.mojang.blaze3d.platform.GlStateManager.DestFactor;
+import com.mojang.blaze3d.platform.GlStateManager.SourceFactor;
+
+import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.core.utils.RenderUtils;
 import de.pfannekuchen.lotas.gui.AIManipulationScreen;
 import de.pfannekuchen.lotas.gui.SpawnManipulationScreen;
@@ -27,14 +31,11 @@ public class MixinRenderEvent {
 	public void renderWorldLastEvent(CallbackInfo ci) {
 		final Screen gui = Minecraft.getInstance().screen;
 		if (gui instanceof SpawnManipulationScreen) {
-			GL11.glPushMatrix();
-			GL11.glDisable(GL11.GL_TEXTURE_2D);
-			GL11.glEnable(GL11.GL_BLEND);
-			GL11.glDepthMask(true);
-			GL11.glEnable(GL11.GL_DEPTH_TEST);
-			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-			GL11.glEnable(GL11.GL_LINE_SMOOTH);
-			GL11.glLineWidth(2);
+			MCVer.pushMatrix();
+			MCVer.disableTexture();
+			MCVer.enableBlend();
+			MCVer.enableDepthTest();
+			MCVer.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 
 			//#if MC>=11500
 //$$ 			RenderUtils.applyCameraRotationOnly();
@@ -46,24 +47,23 @@ public class MixinRenderEvent {
 			double renderY =  ((int)targetPos.y);
 			double renderZ =  ((int)targetPos.z);
 
-			GL11.glTranslated(renderX, renderY, renderZ);
-			GL11.glScalef(1, 2, 1);
-			GL11.glColor4f(28, 188, 220, 0.5f);
+			MCVer.translated(renderX, renderY, renderZ);
+			MCVer.scaled(1, 2, 1);
+			MCVer.color4f(28, 188, 220, 0.5f);
 			RenderUtils.drawOutlinedBox();
 			RenderUtils.drawCrossBox();
 			
 			if(SpawnManipMod.canSpawn()) {
-				GL11.glColor4f(0F, 1F, 0F, 0.15F);
+				RenderUtils.drawSolidBox(0F, 1F, 0F, 0.15F);
 			}else {
-				GL11.glColor4f(1F, 0F, 0F, 0.15f);
+				RenderUtils.drawSolidBox(1F, 0F, 0F, 0.15F);
 			}
-			RenderUtils.drawSolidBox();
+			
 
-			GL11.glDisable(GL11.GL_BLEND);
-			GL11.glEnable(GL11.GL_TEXTURE_2D);
-			GL11.glDisable(GL11.GL_DEPTH_TEST);
-			GL11.glDisable(GL11.GL_LINE_SMOOTH);
-			GL11.glPopMatrix();
+			MCVer.disableBlend();
+			MCVer.enableTexture();
+			MCVer.disableDepthTest();
+			MCVer.popMatrix();
 		} else if (gui instanceof AIManipulationScreen) {
 			if (AIManipMod.getSelectedEntityPos() == null)
 				return;
@@ -80,17 +80,16 @@ public class MixinRenderEvent {
 			RenderUtils.applyRenderOffset();
 
 			Vec3 entityPos=AIManipMod.getSelectedEntityPos();
-			double renderX = ((int)entityPos.x) - 0.5f;
+			double renderX = ((int)entityPos.x);
 			double renderY = ((int)entityPos.y);
-			double renderZ = ((int)entityPos.z) - 0.5F;
+			double renderZ = ((int)entityPos.z);
 
 			GL11.glTranslated(renderX, renderY, renderZ);
 			GL11.glScalef(1, 2, 1);
 			GL11.glColor4f(28, 188, 220, 0.5f);
 			RenderUtils.drawOutlinedBox();
 			RenderUtils.drawCrossBox();
-			GL11.glColor4f(1F, 0F, 0F, 0.15F);
-			RenderUtils.drawSolidBox();
+			RenderUtils.drawSolidBox(1F, 0F, 0F, 0.15F);
 
 			GL11.glDisable(GL11.GL_BLEND);
 			GL11.glEnable(GL11.GL_TEXTURE_2D);
@@ -121,7 +120,7 @@ public class MixinRenderEvent {
 			RenderUtils.drawOutlinedBox();
 			RenderUtils.drawCrossBox();
 			GL11.glColor4f(0F, 0F, 1F, 0.15F);
-			RenderUtils.drawSolidBox();
+			RenderUtils.drawSolidBox(0F, 0F, 1F, 0.15F);
 
 			GL11.glDisable(GL11.GL_BLEND);
 			GL11.glEnable(GL11.GL_TEXTURE_2D);
