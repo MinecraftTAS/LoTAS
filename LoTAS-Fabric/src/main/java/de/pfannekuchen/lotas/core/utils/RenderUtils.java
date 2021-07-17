@@ -10,6 +10,12 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.lwjgl.opengl.GL11;
 
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.Tesselator;
+
+import de.pfannekuchen.lotas.core.MCVer;
+
 /**
  * Rendering Utils to render boxes.
  * Not commented.
@@ -24,7 +30,7 @@ public enum RenderUtils {
 
 	public static void applyRenderOffset() {
 		Vec3 camPos = getCameraPos();
-		GL11.glTranslated(-camPos.x, -camPos.y, -camPos.z);
+		MCVer.translated(-camPos.x, -camPos.y, -camPos.z);
 	}
 
 	public static void applyRegionalRenderOffset() {
@@ -64,42 +70,46 @@ public enum RenderUtils {
 		return BlockEntityRenderDispatcher.instance.camera.getBlockPosition();
 	}
 
-	public static void drawSolidBox() {
-		drawSolidBox(DEFAULT_AABB);
+	public static void drawSolidBox(float r, float g, float b, float a) {
+		drawSolidBox(DEFAULT_AABB, r, g, b, a);
 	}
 
-	public static void drawSolidBox(AABB bb) {
-		GL11.glBegin(GL11.GL_QUADS);
-		GL11.glVertex3d(bb.minX, bb.minY, bb.minZ);
-		GL11.glVertex3d(bb.maxX, bb.minY, bb.minZ);
-		GL11.glVertex3d(bb.maxX, bb.minY, bb.maxZ);
-		GL11.glVertex3d(bb.minX, bb.minY, bb.maxZ);
+	public static void drawSolidBox(AABB bb, float r, float g, float b, float a) {
+		Tesselator tesselator = Tesselator.getInstance();
+	    BufferBuilder bufferBuilder = tesselator.getBuilder();
+	    bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormat.POSITION_COLOR);
+	    
+	    bufferBuilder.vertex(bb.minX, bb.minY, bb.minZ).color(r, g, b, a).endVertex();
+	    bufferBuilder.vertex(bb.maxX, bb.minY, bb.minZ).color(r, g, b, a).endVertex();
+	    bufferBuilder.vertex(bb.maxX, bb.minY, bb.maxZ).color(r, g, b, a).endVertex();
+		bufferBuilder.vertex(bb.minX, bb.minY, bb.maxZ).color(r, g, b, a).endVertex();
 
-		GL11.glVertex3d(bb.minX, bb.maxY, bb.minZ);
-		GL11.glVertex3d(bb.minX, bb.maxY, bb.maxZ);
-		GL11.glVertex3d(bb.maxX, bb.maxY, bb.maxZ);
-		GL11.glVertex3d(bb.maxX, bb.maxY, bb.minZ);
-
-		GL11.glVertex3d(bb.minX, bb.minY, bb.minZ);
-		GL11.glVertex3d(bb.minX, bb.maxY, bb.minZ);
-		GL11.glVertex3d(bb.maxX, bb.maxY, bb.minZ);
-		GL11.glVertex3d(bb.maxX, bb.minY, bb.minZ);
-
-		GL11.glVertex3d(bb.maxX, bb.minY, bb.minZ);
-		GL11.glVertex3d(bb.maxX, bb.maxY, bb.minZ);
-		GL11.glVertex3d(bb.maxX, bb.maxY, bb.maxZ);
-		GL11.glVertex3d(bb.maxX, bb.minY, bb.maxZ);
-
-		GL11.glVertex3d(bb.minX, bb.minY, bb.maxZ);
-		GL11.glVertex3d(bb.maxX, bb.minY, bb.maxZ);
-		GL11.glVertex3d(bb.maxX, bb.maxY, bb.maxZ);
-		GL11.glVertex3d(bb.minX, bb.maxY, bb.maxZ);
-
-		GL11.glVertex3d(bb.minX, bb.minY, bb.minZ);
-		GL11.glVertex3d(bb.minX, bb.minY, bb.maxZ);
-		GL11.glVertex3d(bb.minX, bb.maxY, bb.maxZ);
-		GL11.glVertex3d(bb.minX, bb.maxY, bb.minZ);
-		GL11.glEnd();
+		bufferBuilder.vertex(bb.maxX, bb.minY, bb.maxZ).color(r, g, b, a).endVertex();
+	    bufferBuilder.vertex(bb.maxX, bb.minY, bb.minZ).color(r, g, b, a).endVertex();
+	    bufferBuilder.vertex(bb.maxX, bb.maxY, bb.minZ).color(r, g, b, a).endVertex();
+		bufferBuilder.vertex(bb.maxX, bb.maxY, bb.maxZ).color(r, g, b, a).endVertex();
+		
+		bufferBuilder.vertex(bb.maxX, bb.minY, bb.maxZ).color(r, g, b, a).endVertex();
+	    bufferBuilder.vertex(bb.maxX, bb.maxY, bb.maxZ).color(r, g, b, a).endVertex();
+	    bufferBuilder.vertex(bb.minX, bb.maxY, bb.maxZ).color(r, g, b, a).endVertex();
+		bufferBuilder.vertex(bb.minX, bb.minY, bb.maxZ).color(r, g, b, a).endVertex();
+		
+		bufferBuilder.vertex(bb.maxX, bb.maxY, bb.maxZ).color(r, g, b, a).endVertex();
+	    bufferBuilder.vertex(bb.maxX, bb.maxY, bb.minZ).color(r, g, b, a).endVertex();
+	    bufferBuilder.vertex(bb.minX, bb.maxY, bb.minZ).color(r, g, b, a).endVertex();
+		bufferBuilder.vertex(bb.minX, bb.maxY, bb.maxZ).color(r, g, b, a).endVertex();
+		
+		bufferBuilder.vertex(bb.minX, bb.maxY, bb.minZ).color(r, g, b, a).endVertex();
+	    bufferBuilder.vertex(bb.minX, bb.minY, bb.minZ).color(r, g, b, a).endVertex();
+	    bufferBuilder.vertex(bb.minX, bb.minY, bb.maxZ).color(r, g, b, a).endVertex();
+		bufferBuilder.vertex(bb.minX, bb.maxY, bb.maxZ).color(r, g, b, a).endVertex();
+		
+		bufferBuilder.vertex(bb.minX, bb.maxY, bb.minZ).color(r, g, b, a).endVertex();
+	    bufferBuilder.vertex(bb.maxX, bb.maxY, bb.minZ).color(r, g, b, a).endVertex();
+	    bufferBuilder.vertex(bb.maxX, bb.minY, bb.minZ).color(r, g, b, a).endVertex();
+		bufferBuilder.vertex(bb.minX, bb.minY, bb.minZ).color(r, g, b, a).endVertex();
+		
+		tesselator.end();
 	}
 
 	public static void drawOutlinedBox() {
@@ -107,87 +117,91 @@ public enum RenderUtils {
 	}
 
 	public static void drawOutlinedBox(AABB bb) {
-		GL11.glBegin(GL11.GL_LINES);
-		GL11.glVertex3d(bb.minX, bb.minY, bb.minZ);
-		GL11.glVertex3d(bb.maxX, bb.minY, bb.minZ);
-
-		GL11.glVertex3d(bb.maxX, bb.minY, bb.minZ);
-		GL11.glVertex3d(bb.maxX, bb.minY, bb.maxZ);
-
-		GL11.glVertex3d(bb.maxX, bb.minY, bb.maxZ);
-		GL11.glVertex3d(bb.minX, bb.minY, bb.maxZ);
-
-		GL11.glVertex3d(bb.minX, bb.minY, bb.maxZ);
-		GL11.glVertex3d(bb.minX, bb.minY, bb.minZ);
-
-		GL11.glVertex3d(bb.minX, bb.minY, bb.minZ);
-		GL11.glVertex3d(bb.minX, bb.maxY, bb.minZ);
-
-		GL11.glVertex3d(bb.maxX, bb.minY, bb.minZ);
-		GL11.glVertex3d(bb.maxX, bb.maxY, bb.minZ);
-
-		GL11.glVertex3d(bb.maxX, bb.minY, bb.maxZ);
-		GL11.glVertex3d(bb.maxX, bb.maxY, bb.maxZ);
-
-		GL11.glVertex3d(bb.minX, bb.minY, bb.maxZ);
-		GL11.glVertex3d(bb.minX, bb.maxY, bb.maxZ);
-
-		GL11.glVertex3d(bb.minX, bb.maxY, bb.minZ);
-		GL11.glVertex3d(bb.maxX, bb.maxY, bb.minZ);
-
-		GL11.glVertex3d(bb.maxX, bb.maxY, bb.minZ);
-		GL11.glVertex3d(bb.maxX, bb.maxY, bb.maxZ);
-
-		GL11.glVertex3d(bb.maxX, bb.maxY, bb.maxZ);
-		GL11.glVertex3d(bb.minX, bb.maxY, bb.maxZ);
-
-		GL11.glVertex3d(bb.minX, bb.maxY, bb.maxZ);
-		GL11.glVertex3d(bb.minX, bb.maxY, bb.minZ);
-		GL11.glEnd();
+		Tesselator tesselator = Tesselator.getInstance();
+	    BufferBuilder bufferBuilder = tesselator.getBuilder();
+	    bufferBuilder.begin(1, DefaultVertexFormat.POSITION_COLOR);
+	    bufferBuilder.vertex(bb.minX, bb.minY, bb.minZ).color(1F, 1F, 1F, 1F).endVertex();
+		bufferBuilder.vertex(bb.maxX, bb.minY, bb.minZ).color(1F, 1F, 1F, 1F).endVertex();
+		
+		bufferBuilder.vertex(bb.maxX, bb.minY, bb.minZ).color(1F, 1F, 1F, 1F).endVertex();
+		bufferBuilder.vertex(bb.maxX, bb.minY, bb.maxZ).color(1F, 1F, 1F, 1F).endVertex();
+		
+		bufferBuilder.vertex(bb.maxX, bb.minY, bb.maxZ).color(1F, 1F, 1F, 1F).endVertex();
+		bufferBuilder.vertex(bb.minX, bb.minY, bb.maxZ).color(1F, 1F, 1F, 1F).endVertex();
+		
+		bufferBuilder.vertex(bb.minX, bb.minY, bb.maxZ).color(1F, 1F, 1F, 1F).endVertex();
+		bufferBuilder.vertex(bb.minX, bb.minY, bb.minZ).color(1F, 1F, 1F, 1F).endVertex();
+		
+		bufferBuilder.vertex(bb.minX, bb.minY, bb.minZ).color(1F, 1F, 1F, 1F).endVertex();
+		bufferBuilder.vertex(bb.minX, bb.maxY, bb.minZ).color(1F, 1F, 1F, 1F).endVertex();
+		
+		bufferBuilder.vertex(bb.maxX, bb.minY, bb.minZ).color(1F, 1F, 1F, 1F).endVertex();
+		bufferBuilder.vertex(bb.maxX, bb.maxY, bb.minZ).color(1F, 1F, 1F, 1F).endVertex();
+		
+		bufferBuilder.vertex(bb.maxX, bb.minY, bb.maxZ).color(1F, 1F, 1F, 1F).endVertex();
+		bufferBuilder.vertex(bb.maxX, bb.maxY, bb.maxZ).color(1F, 1F, 1F, 1F).endVertex();
+		
+		bufferBuilder.vertex(bb.minX, bb.minY, bb.maxZ).color(1F, 1F, 1F, 1F).endVertex();
+		bufferBuilder.vertex(bb.minX, bb.maxY, bb.maxZ).color(1F, 1F, 1F, 1F).endVertex();
+		
+		bufferBuilder.vertex(bb.minX, bb.maxY, bb.minZ).color(1F, 1F, 1F, 1F).endVertex();
+		bufferBuilder.vertex(bb.maxX, bb.maxY, bb.minZ).color(1F, 1F, 1F, 1F).endVertex();
+		
+		bufferBuilder.vertex(bb.maxX, bb.maxY, bb.minZ).color(1F, 1F, 1F, 1F).endVertex();
+		bufferBuilder.vertex(bb.maxX, bb.maxY, bb.maxZ).color(1F, 1F, 1F, 1F).endVertex();
+		
+		bufferBuilder.vertex(bb.maxX, bb.maxY, bb.maxZ).color(1F, 1F, 1F, 1F).endVertex();
+		bufferBuilder.vertex(bb.minX, bb.maxY, bb.maxZ).color(1F, 1F, 1F, 1F).endVertex();
+		
+		bufferBuilder.vertex(bb.minX, bb.maxY, bb.maxZ).color(1F, 1F, 1F, 1F).endVertex();
+		bufferBuilder.vertex(bb.minX, bb.maxY, bb.minZ).color(1F, 1F, 1F, 1F).endVertex();
+		tesselator.end();
 	}
 
 	public static void drawCrossBox() {
-		drawCrossBox(DEFAULT_AABB);
+//		drawCrossBox(DEFAULT_AABB);
 	}
 
 	public static void drawCrossBox(AABB bb) {
-		GL11.glBegin(GL11.GL_LINES);
-		GL11.glVertex3d(bb.minX, bb.minY, bb.minZ);
-		GL11.glVertex3d(bb.maxX, bb.maxY, bb.minZ);
-
-		GL11.glVertex3d(bb.maxX, bb.minY, bb.minZ);
-		GL11.glVertex3d(bb.maxX, bb.maxY, bb.maxZ);
-
-		GL11.glVertex3d(bb.maxX, bb.minY, bb.maxZ);
-		GL11.glVertex3d(bb.minX, bb.maxY, bb.maxZ);
-
-		GL11.glVertex3d(bb.minX, bb.minY, bb.maxZ);
-		GL11.glVertex3d(bb.minX, bb.maxY, bb.minZ);
-
-		GL11.glVertex3d(bb.maxX, bb.minY, bb.minZ);
-		GL11.glVertex3d(bb.minX, bb.maxY, bb.minZ);
-
-		GL11.glVertex3d(bb.maxX, bb.minY, bb.maxZ);
-		GL11.glVertex3d(bb.maxX, bb.maxY, bb.minZ);
-
-		GL11.glVertex3d(bb.minX, bb.minY, bb.maxZ);
-		GL11.glVertex3d(bb.maxX, bb.maxY, bb.maxZ);
-
-		GL11.glVertex3d(bb.minX, bb.minY, bb.minZ);
-		GL11.glVertex3d(bb.minX, bb.maxY, bb.maxZ);
-
-		GL11.glVertex3d(bb.minX, bb.maxY, bb.minZ);
-		GL11.glVertex3d(bb.maxX, bb.maxY, bb.maxZ);
-
-		GL11.glVertex3d(bb.maxX, bb.maxY, bb.minZ);
-		GL11.glVertex3d(bb.minX, bb.maxY, bb.maxZ);
-
-		GL11.glVertex3d(bb.maxX, bb.minY, bb.minZ);
-		GL11.glVertex3d(bb.minX, bb.minY, bb.maxZ);
-
-		GL11.glVertex3d(bb.maxX, bb.minY, bb.maxZ);
-		GL11.glVertex3d(bb.minX, bb.minY, bb.minZ);
-		GL11.glEnd();
+		Tesselator tesselator = Tesselator.getInstance();
+	    BufferBuilder bufferBuilder = tesselator.getBuilder();
+	    bufferBuilder.begin(1, DefaultVertexFormat.POSITION_COLOR);
+	    bufferBuilder.vertex(bb.minX, bb.minY, bb.minZ).color(1F, 1F, 1F, 1F).endVertex();
+		bufferBuilder.vertex(bb.maxX, bb.maxY, bb.minZ).color(1F, 1F, 1F, 1F).endVertex();
+		                                              
+		bufferBuilder.vertex(bb.maxX, bb.minY, bb.minZ).color(1F, 1F, 1F, 1F).endVertex();
+		bufferBuilder.vertex(bb.maxX, bb.maxY, bb.maxZ).color(1F, 1F, 1F, 1F).endVertex();
+		                                              
+		bufferBuilder.vertex(bb.maxX, bb.minY, bb.maxZ).color(1F, 1F, 1F, 1F).endVertex();
+		bufferBuilder.vertex(bb.minX, bb.maxY, bb.maxZ).color(1F, 1F, 1F, 1F).endVertex();
+		                                              
+		bufferBuilder.vertex(bb.minX, bb.minY, bb.maxZ).color(1F, 1F, 1F, 1F).endVertex();
+		bufferBuilder.vertex(bb.minX, bb.maxY, bb.minZ).color(1F, 1F, 1F, 1F).endVertex();
+		                                              
+		bufferBuilder.vertex(bb.maxX, bb.minY, bb.minZ).color(1F, 1F, 1F, 1F).endVertex();
+		bufferBuilder.vertex(bb.minX, bb.maxY, bb.minZ).color(1F, 1F, 1F, 1F).endVertex();
+		                                              
+		bufferBuilder.vertex(bb.maxX, bb.minY, bb.maxZ).color(1F, 1F, 1F, 1F).endVertex();
+		bufferBuilder.vertex(bb.maxX, bb.maxY, bb.minZ).color(1F, 1F, 1F, 1F).endVertex();
+		                                              
+		bufferBuilder.vertex(bb.minX, bb.minY, bb.maxZ).color(1F, 1F, 1F, 1F).endVertex();
+		bufferBuilder.vertex(bb.maxX, bb.maxY, bb.maxZ).color(1F, 1F, 1F, 1F).endVertex();
+		                                              
+		bufferBuilder.vertex(bb.minX, bb.minY, bb.minZ).color(1F, 1F, 1F, 1F).endVertex();
+		bufferBuilder.vertex(bb.minX, bb.maxY, bb.maxZ).color(1F, 1F, 1F, 1F).endVertex();
+		                                              
+		bufferBuilder.vertex(bb.minX, bb.maxY, bb.minZ).color(1F, 1F, 1F, 1F).endVertex();
+		bufferBuilder.vertex(bb.maxX, bb.maxY, bb.maxZ).color(1F, 1F, 1F, 1F).endVertex();
+		                                              
+		bufferBuilder.vertex(bb.maxX, bb.maxY, bb.minZ).color(1F, 1F, 1F, 1F).endVertex();
+		bufferBuilder.vertex(bb.minX, bb.maxY, bb.maxZ).color(1F, 1F, 1F, 1F).endVertex();
+		                                              
+		bufferBuilder.vertex(bb.maxX, bb.minY, bb.minZ).color(1F, 1F, 1F, 1F).endVertex();
+		bufferBuilder.vertex(bb.minX, bb.minY, bb.maxZ).color(1F, 1F, 1F, 1F).endVertex();
+		                                              
+		bufferBuilder.vertex(bb.maxX, bb.minY, bb.maxZ).color(1F, 1F, 1F, 1F).endVertex();
+		bufferBuilder.vertex(bb.minX, bb.minY, bb.minZ).color(1F, 1F, 1F, 1F).endVertex();
+		tesselator.end();
 	}
 
 	public static void drawNode(AABB bb) {
