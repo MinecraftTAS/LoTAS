@@ -40,7 +40,7 @@ public class SavestateMod {
 	public static long timeTitle;
 	
 	public static boolean isLoading;
-
+	
 	/**
 	 * Returns the motion of the player, and the current time of the timer as a string
 	 * @return Data as String
@@ -55,15 +55,24 @@ public class SavestateMod {
 	 * Closes the server and creates a savestate in .minecraft/savestates/
 	 * @throws IOException
 	 */
-	public static void savestate(String name) {
-
+	public static void savestate(String name) {		
 		final String data = generateSavestateFile();
 		final Minecraft mc = Minecraft.getInstance();
 
 		final MinecraftServer server = mc.getSingleplayerServer();
-		server.getPlayerList().saveAll();
-		
-		server.saveAllChunks(false, true, false);
+		try {
+			server.getPlayerList().saveAll();
+			server.saveAllChunks(false, true, false);
+		} catch (Exception e) {
+			System.err.println("Saving failed. Trying again.. later.. or maybe not");
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e1) {
+				e1.printStackTrace();
+			}
+			SavestateMod.savestate(name);
+			return;
+		}
 		
 		new Thread(() -> {
 			final String worldName = MCVer.getCurrentWorldFolder();
