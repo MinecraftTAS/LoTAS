@@ -69,9 +69,9 @@ public class AIManipulationScreen extends Screen {
 			setTextToVec(AIManipMod.getTargetPos());
 		}));
 
-		buttons.get( 1).active = manip.hasNext();
+		buttons.get(1).active = manip.hasNext();
 
-		buttons.get( 0).active = manip.hasPrevious();
+		buttons.get(0).active = manip.hasPrevious();
 
 		super.init();
 	}
@@ -84,9 +84,9 @@ public class AIManipulationScreen extends Screen {
 
 		setTextToVec(AIManipMod.getTargetPos());
 
-		buttons.get( 1).active = manip.hasNext();
+		buttons.get(1).active = manip.hasNext();
 
-		buttons.get( 0).active = manip.hasPrevious();
+		buttons.get(0).active = manip.hasPrevious();
 		
 		xText.mouseClicked(mouseX, mouseY, mouseButton);
 		yText.mouseClicked(mouseX, mouseY, mouseButton);
@@ -107,7 +107,7 @@ public class AIManipulationScreen extends Screen {
 			int spawnZ = Integer.parseInt(zText.getValue());
 			
 			manip.setTarget(new Vec3(spawnX, spawnY, spawnZ));
-			buttons.get( 2).active=!manip.contains(AIManipMod.getSelectedEntity());
+			buttons.get(2).active=!manip.contains(AIManipMod.getSelectedEntity());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

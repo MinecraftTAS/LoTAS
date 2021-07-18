@@ -38,6 +38,11 @@ public class AIManipMod {
 		target=mc.player.position();
 	}
 
+	public static boolean isEntityInRange() {
+		Minecraft mc=Minecraft.getInstance();
+		return !MCVer.getCurrentLevel().getEntitiesOfClass(Mob.class, mc.player.getBoundingBox().inflate(64, 64, 64), Predicates.alwaysTrue()).isEmpty();
+	}
+	
 	public static void tick() {
 		for (AiJob job : new ArrayList<>(jobQueue)) {
 			job.timeoutTick();

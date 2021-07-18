@@ -19,6 +19,7 @@ import de.pfannekuchen.lotas.gui.DropManipulationScreen;
 import de.pfannekuchen.lotas.gui.LoadstateScreen;
 import de.pfannekuchen.lotas.gui.SpawnManipulationScreen;
 import de.pfannekuchen.lotas.gui.widgets.SmallCheckboxWidget;
+import de.pfannekuchen.lotas.mods.AIManipMod;
 import de.pfannekuchen.lotas.mods.DupeMod;
 import de.pfannekuchen.lotas.mods.SavestateMod;
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;
@@ -101,7 +102,7 @@ public abstract class MixinGuiIngameMenu extends Screen {
 		
 		addButton(MCVer.Button((width / 4) * 3 + 4, height - 20, width / 4 - 4, 20, "Manipulate AI", btn -> {
 			Minecraft.getInstance().setScreen(new AIManipulationScreen());
- 		}));
+ 		})).active=AIManipMod.isEntityInRange();
 		
 		addButton(MCVer.Button(5, 55, 98, 20, "Save Items", btn -> {
 			DupeMod.save(Minecraft.getInstance());
