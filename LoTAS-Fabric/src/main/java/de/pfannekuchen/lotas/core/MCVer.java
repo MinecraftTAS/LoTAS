@@ -1,10 +1,11 @@
 package de.pfannekuchen.lotas.core;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.platform.GlStateManager.DestFactor;
 import com.mojang.blaze3d.platform.GlStateManager.SourceFactor;
+import com.mojang.math.Matrix4f;
+import com.mojang.math.Quaternion;
 
-import de.pfannekuchen.lotas.mixin.accessors.AccessorButtons;
-import de.pfannekuchen.lotas.mixin.accessors.AccessorScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiComponent;
@@ -15,6 +16,7 @@ import net.minecraft.client.gui.components.Checkbox;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.Widget;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -153,8 +155,98 @@ public class MCVer {
 		s.drawCenteredString(Minecraft.getInstance().font, text, x, y, color);
 	}
 	//#endif
-	// =============================================== 1.14.4 | 1.15.2 RENDERING =========================================
+	// =============================================== 1.14.4 | 1.15.2 | 1.17 RENDERING =========================================
 	//#if MC>=11500
+	//#if MC>=11700
+//$$ 	public static void blendFunc(SourceFactor srcAlpha, DestFactor oneMinusSrcAlpha) {
+//$$ 		com.mojang.blaze3d.systems.RenderSystem.blendFunc(srcAlpha, oneMinusSrcAlpha);
+//$$ 	}
+//$$
+//$$ 	public static void color4f(float r, float g, float b, float a) {
+//$$ 		 com.mojang.blaze3d.systems.RenderSystem.setShaderColor(r, g, b, a);
+//$$ 	}
+//$$
+//$$ 	public static void disableDepthTest() {
+//$$ 		com.mojang.blaze3d.systems.RenderSystem.disableDepthTest();
+//$$ 	}
+//$$
+//$$ 	public static void enableTexture() {
+//$$ 		com.mojang.blaze3d.systems.RenderSystem.enableTexture();
+//$$ 	}
+//$$
+//$$ 	public static void shadeModel(int i) {
+//$$ 	}
+//$$
+//$$ 	public static void enableAlphaTest() {
+//$$ 	}
+//$$
+//$$ 	public static void disableBlend() {
+//$$ 		com.mojang.blaze3d.systems.RenderSystem.disableBlend();
+//$$ 	}
+//$$
+//$$ 	public static void enableBlend() {
+//$$ 		com.mojang.blaze3d.systems.RenderSystem.enableBlend();
+//$$ 	}
+//$$
+//$$ 	public static void blendFuncSeparate(SourceFactor srcAlpha, DestFactor oneMinusSrcAlpha, SourceFactor zero, DestFactor one) {
+//$$ 		com.mojang.blaze3d.systems.RenderSystem.blendFuncSeparate(srcAlpha, oneMinusSrcAlpha, zero, one);
+//$$ 	}
+//$$
+//$$ 	public static void disableAlphaTest() {
+//$$ 	}
+//$$
+//$$ 	public static void disableTexture() {
+//$$ 		com.mojang.blaze3d.systems.RenderSystem.disableTexture();
+//$$ 	}
+//$$
+//$$ 	public static void disableFog() {
+//$$ 	}
+//$$
+//$$ 	public static void disableLighting() {
+//$$ 	}
+//$$
+//$$ 	public static void matrixMode(int i) {
+//$$ 	}
+//$$
+//$$ 	public static void loadIdentity() {
+//$$ 	}
+//$$
+//$$ 	public static void pushMatrix() {
+//$$ 		stack.pushPose();
+//$$ 	}
+//$$
+//$$ 	public static void enableLighting() {
+//$$ 	}
+//$$
+//$$ 	public static void popMatrix() {
+//$$ 		stack.pushPose();
+//$$ 	}
+//$$
+//$$ 	public static void translated(double x, double y, double z) {
+//$$ 		stack.translate(x, y, z);
+//$$ 	}
+//$$
+//$$ 	public static void scaled(double scale, double scale2, double scale3) {
+//$$ 		stack.scale((float)scale, (float)scale2, (float)scale3);
+//$$ 	}
+//$$
+//$$ 	public static void rotated(double i, double j, double k, double l) {
+//$$ 		stack.mulPose(new Quaternion((float)i,(float) j,(float) k,(float) l));
+//$$ 	}
+//$$
+//$$ 	public static void enableDepthTest() {
+//$$ 		com.mojang.blaze3d.systems.RenderSystem.enableDepthTest();
+//$$ 	}
+//$$
+//$$ 	public static void translated(int i, int y, double d) {
+//$$ 		stack.translate(i, y, d);
+//$$ 	}
+//$$
+//$$ 	public static BlockEntityRenderDispatcher getBlockEntityDispatcher() {
+//$$ 		return Minecraft.getInstance().getBlockEntityRenderDispatcher();
+//$$ 	}
+//$$
+	//#else
 //$$ 	public static void color4f(float r, float g, float b, float a) {
 //$$ 		com.mojang.blaze3d.systems.RenderSystem.color4f(r, g, b, a);
 //$$ 	}
@@ -227,16 +319,16 @@ public class MCVer {
 //$$ 		com.mojang.blaze3d.systems.RenderSystem.popMatrix();
 //$$ 	}
 //$$
-//$$ 	public static void translated(int i, double j, int k) {
-//$$ 		com.mojang.blaze3d.systems.RenderSystem.translated(i, j, k);
+//$$ 	public static void translated(double x, double y, double z) {
+//$$ 		com.mojang.blaze3d.systems.RenderSystem.translated(x, y, z);
 //$$ 	}
 //$$
 //$$ 	public static void scaled(double scale, double scale2, double scale3) {
 //$$ 		com.mojang.blaze3d.systems.RenderSystem.scaled(scale, scale2, scale3);
 //$$ 	}
 //$$
-//$$ 	public static void rotated(int i, int j, int k, int l) {
-//$$ 		com.mojang.blaze3d.systems.RenderSystem.rotatef(i, j, k, l);
+//$$ 	public static void rotated(double i, double j, double k, double l) {
+//$$ 		com.mojang.blaze3d.systems.RenderSystem.rotatef((float)i,(float) j,(float) k,(float) l);
 //$$ 	}
 //$$
 //$$ 	public static void enableDepthTest() {
@@ -246,6 +338,12 @@ public class MCVer {
 //$$ 	public static void translated(int i, int y, double d) {
 //$$ 		com.mojang.blaze3d.systems.RenderSystem.translated(i, y, d);
 //$$ 	}
+//$$
+//$$ 	public static BlockEntityRenderDispatcher getBlockEntityDispatcher() {
+//$$ 		return BlockEntityRenderDispatcher.instance;
+//$$ 	}
+//$$ 	//end of 1.17 if
+	//#endif
 	//#else
 	public static void color4f(float r, float g, float b, float a) {
 		com.mojang.blaze3d.platform.GlStateManager.color4f(r, g, b, a);
@@ -334,17 +432,18 @@ public class MCVer {
 	public static void translated(double i, double y, double d) {
 		com.mojang.blaze3d.platform.GlStateManager.translated(i, y, d);
 	}
+
 	//#endif
 	
 	// =============================================== 1.16.5 | 1.17 BUTTONS =========================================
 	//#if MC>=11700
 //$$ 	public static <T extends net.minecraft.client.gui.components.events.GuiEventListener & net.minecraft.client.gui.components.Widget & net.minecraft.client.gui.narration.NarratableEntry> T addButton(Screen screen, T button) {
-//$$ 		((de.pfannekuchen.lotas.mixin.accessors.AccessorScreen)screen).addRenderableWidget(button);
+//$$ 		((de.pfannekuchen.lotas.core.utils.AccessorScreen2)screen).addRenderableWidget(button);
 //$$ 		return button;
 //$$ 	}
 	//#else
 	public static <T extends AbstractWidget> T addButton(Screen screen, T button) {
-		((de.pfannekuchen.lotas.mixin.accessors.AccessorScreen)screen).invokeAddButton(button);
+		((de.pfannekuchen.lotas.mixin.accessors.AccessorButtons)screen).invokeAddButton(button);
 		return button;
 	}
 	//#endif

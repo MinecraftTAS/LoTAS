@@ -1,6 +1,7 @@
 package de.pfannekuchen.lotas.core.utils;
 
 import net.minecraft.client.Camera;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.core.BlockPos;
@@ -11,7 +12,9 @@ import net.minecraft.world.phys.Vec3;
 import org.lwjgl.opengl.GL11;
 
 import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.BufferUploader;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 
 import de.pfannekuchen.lotas.core.MCVer;
@@ -42,7 +45,7 @@ public enum RenderUtils {
 		int regionX = (blockPos.getX() >> 9) * 512;
 		int regionZ = (blockPos.getZ() >> 9) * 512;
 
-		GL11.glTranslated(regionX - camPos.x, -camPos.y, regionZ - camPos.z);
+		MCVer.translated(regionX - camPos.x, -camPos.y, regionZ - camPos.z);
 	}
 
 	public static void applyRegionalRenderOffset(ChunkAccess chunk) {
@@ -57,17 +60,17 @@ public enum RenderUtils {
 	}
 
 	public static void applyCameraRotationOnly() {
-		Camera camera = BlockEntityRenderDispatcher.instance.camera;
-		GL11.glRotated(Mth.wrapDegrees(camera.getXRot()), 1, 0, 0);
-		GL11.glRotated(Mth.wrapDegrees(camera.getYRot() + 180.0), 0, 1, 0);
+		Camera camera = MCVer.getBlockEntityDispatcher().camera;
+		MCVer.rotated((int) Mth.wrapDegrees(camera.getXRot()), 1, 0, 0);
+		MCVer.rotated((int) Mth.wrapDegrees(camera.getYRot() + 180.0), 0, 1, 0);
 	}
 
 	public static Vec3 getCameraPos() {
-		return BlockEntityRenderDispatcher.instance.camera.getPosition();
+		return MCVer.getBlockEntityDispatcher().camera.getPosition();
 	}
 
 	public static BlockPos getCameraBlockPos() {
-		return BlockEntityRenderDispatcher.instance.camera.getBlockPosition();
+		return MCVer.getBlockEntityDispatcher().camera.getBlockPosition();
 	}
 
 	public static void drawSolidBox(float r, float g, float b, float a) {
@@ -77,8 +80,10 @@ public enum RenderUtils {
 	public static void drawSolidBox(AABB bb, float r, float g, float b, float a) {
 		Tesselator tesselator = Tesselator.getInstance();
 	    BufferBuilder bufferBuilder = tesselator.getBuilder();
-	    bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormat.POSITION_COLOR);
-	    
+	    //#if MC>=1170
+	    com.mojang.math.Matrix4f matrix = MCVer.stack.last().pose();
+	    com.mojang.blaze3d.systems.RenderSystem.setShader(net.minecraft.client.renderer.GameRenderer::getPositionColorShader);
+	    bufferBuilder.begin(com.mojang.blaze3d.vertex.VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
 	    bufferBuilder.vertex(bb.minX, bb.minY, bb.minZ).color(r, g, b, a).endVertex();
 	    bufferBuilder.vertex(bb.maxX, bb.minY, bb.minZ).color(r, g, b, a).endVertex();
 	    bufferBuilder.vertex(bb.maxX, bb.minY, bb.maxZ).color(r, g, b, a).endVertex();
@@ -109,7 +114,44 @@ public enum RenderUtils {
 	    bufferBuilder.vertex(bb.maxX, bb.minY, bb.minZ).color(r, g, b, a).endVertex();
 		bufferBuilder.vertex(bb.minX, bb.minY, bb.minZ).color(r, g, b, a).endVertex();
 		
-		tesselator.end();
+		bufferBuilder.end();
+		
+		BufferUploader.end(bufferBuilder);
+	    //#else
+//$$ 	    bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormat.POSITION_COLOR);
+//$$
+//$$ 	    bufferBuilder.vertex(bb.minX, bb.minY, bb.minZ).color(r, g, b, a).endVertex();
+//$$ 	    bufferBuilder.vertex(bb.maxX, bb.minY, bb.minZ).color(r, g, b, a).endVertex();
+//$$ 	    bufferBuilder.vertex(bb.maxX, bb.minY, bb.maxZ).color(r, g, b, a).endVertex();
+//$$ 		bufferBuilder.vertex(bb.minX, bb.minY, bb.maxZ).color(r, g, b, a).endVertex();
+//$$
+//$$ 		bufferBuilder.vertex(bb.maxX, bb.minY, bb.maxZ).color(r, g, b, a).endVertex();
+//$$ 	    bufferBuilder.vertex(bb.maxX, bb.minY, bb.minZ).color(r, g, b, a).endVertex();
+//$$ 	    bufferBuilder.vertex(bb.maxX, bb.maxY, bb.minZ).color(r, g, b, a).endVertex();
+//$$ 		bufferBuilder.vertex(bb.maxX, bb.maxY, bb.maxZ).color(r, g, b, a).endVertex();
+//$$
+//$$ 		bufferBuilder.vertex(bb.maxX, bb.minY, bb.maxZ).color(r, g, b, a).endVertex();
+//$$ 	    bufferBuilder.vertex(bb.maxX, bb.maxY, bb.maxZ).color(r, g, b, a).endVertex();
+//$$ 	    bufferBuilder.vertex(bb.minX, bb.maxY, bb.maxZ).color(r, g, b, a).endVertex();
+//$$ 		bufferBuilder.vertex(bb.minX, bb.minY, bb.maxZ).color(r, g, b, a).endVertex();
+//$$
+//$$ 		bufferBuilder.vertex(bb.maxX, bb.maxY, bb.maxZ).color(r, g, b, a).endVertex();
+//$$ 	    bufferBuilder.vertex(bb.maxX, bb.maxY, bb.minZ).color(r, g, b, a).endVertex();
+//$$ 	    bufferBuilder.vertex(bb.minX, bb.maxY, bb.minZ).color(r, g, b, a).endVertex();
+//$$ 		bufferBuilder.vertex(bb.minX, bb.maxY, bb.maxZ).color(r, g, b, a).endVertex();
+//$$
+//$$ 		bufferBuilder.vertex(bb.minX, bb.maxY, bb.minZ).color(r, g, b, a).endVertex();
+//$$ 	    bufferBuilder.vertex(bb.minX, bb.minY, bb.minZ).color(r, g, b, a).endVertex();
+//$$ 	    bufferBuilder.vertex(bb.minX, bb.minY, bb.maxZ).color(r, g, b, a).endVertex();
+//$$ 		bufferBuilder.vertex(bb.minX, bb.maxY, bb.maxZ).color(r, g, b, a).endVertex();
+//$$
+//$$ 		bufferBuilder.vertex(bb.minX, bb.maxY, bb.minZ).color(r, g, b, a).endVertex();
+//$$ 	    bufferBuilder.vertex(bb.maxX, bb.maxY, bb.minZ).color(r, g, b, a).endVertex();
+//$$ 	    bufferBuilder.vertex(bb.maxX, bb.minY, bb.minZ).color(r, g, b, a).endVertex();
+//$$ 		bufferBuilder.vertex(bb.minX, bb.minY, bb.minZ).color(r, g, b, a).endVertex();
+//$$
+//$$ 		tesselator.end();
+	    //#endif
 	}
 
 	public static void drawOutlinedBox() {
@@ -119,53 +161,104 @@ public enum RenderUtils {
 	public static void drawOutlinedBox(AABB bb) {
 		Tesselator tesselator = Tesselator.getInstance();
 	    BufferBuilder bufferBuilder = tesselator.getBuilder();
-	    bufferBuilder.begin(1, DefaultVertexFormat.POSITION_COLOR);
-	    bufferBuilder.vertex(bb.minX, bb.minY, bb.minZ).color(1F, 1F, 1F, 1F).endVertex();
+	    
+	    //#if MC>=11700
+//$$ 	    com.mojang.math.Matrix4f matrix = MCVer.stack.last().pose();
+//$$ 	    com.mojang.blaze3d.systems.RenderSystem.setShader(net.minecraft.client.renderer.GameRenderer::getPositionColorShader);
+//$$ 	    bufferBuilder.begin(com.mojang.blaze3d.vertex.VertexFormat.Mode.DEBUG_LINES, DefaultVertexFormat.POSITION_COLOR);
+//$$ 	    bufferBuilder.vertex(matrix, (float)bb.minX, (float)bb.minY, (float)bb.minZ).color(1F, 1F, 1F, 1F).endVertex();
+//$$ 		bufferBuilder.vertex(matrix, (float)bb.maxX, (float)bb.minY, (float)bb.minZ).color(1F, 1F, 1F, 1F).endVertex();
+//$$
+//$$ 		bufferBuilder.vertex(matrix, (float)bb.maxX, (float)bb.minY, (float)bb.minZ).color(1F, 1F, 1F, 1F).endVertex();
+//$$ 		bufferBuilder.vertex(matrix, (float)bb.maxX, (float)bb.minY, (float)bb.maxZ).color(1F, 1F, 1F, 1F).endVertex();
+//$$
+//$$ 		bufferBuilder.vertex(matrix, (float)bb.maxX, (float)bb.minY, (float)bb.maxZ).color(1F, 1F, 1F, 1F).endVertex();
+//$$ 		bufferBuilder.vertex(matrix, (float)bb.minX, (float)bb.minY, (float)bb.maxZ).color(1F, 1F, 1F, 1F).endVertex();
+//$$
+//$$ 		bufferBuilder.vertex(matrix, (float)bb.minX, (float)bb.minY, (float)bb.maxZ).color(1F, 1F, 1F, 1F).endVertex();
+//$$ 		bufferBuilder.vertex(matrix, (float)bb.minX, (float)bb.minY, (float)bb.minZ).color(1F, 1F, 1F, 1F).endVertex();
+//$$
+//$$ 		bufferBuilder.vertex(matrix, (float)bb.minX, (float)bb.minY, (float)bb.minZ).color(1F, 1F, 1F, 1F).endVertex();
+//$$ 		bufferBuilder.vertex(matrix, (float)bb.minX, (float)bb.maxY, (float)bb.minZ).color(1F, 1F, 1F, 1F).endVertex();
+//$$
+//$$ 		bufferBuilder.vertex(matrix, (float)bb.maxX, (float)bb.minY, (float)bb.minZ).color(1F, 1F, 1F, 1F).endVertex();
+//$$ 		bufferBuilder.vertex(matrix, (float)bb.maxX, (float)bb.maxY, (float)bb.minZ).color(1F, 1F, 1F, 1F).endVertex();
+//$$
+//$$ 		bufferBuilder.vertex(matrix, (float)bb.maxX, (float)bb.minY, (float)bb.maxZ).color(1F, 1F, 1F, 1F).endVertex();
+//$$ 		bufferBuilder.vertex(matrix, (float)bb.maxX, (float)bb.maxY, (float)bb.maxZ).color(1F, 1F, 1F, 1F).endVertex();
+//$$
+//$$ 		bufferBuilder.vertex(matrix, (float)bb.minX, (float)bb.minY, (float)bb.maxZ).color(1F, 1F, 1F, 1F).endVertex();
+//$$ 		bufferBuilder.vertex(matrix, (float)bb.minX, (float)bb.maxY, (float)bb.maxZ).color(1F, 1F, 1F, 1F).endVertex();
+//$$
+//$$ 		bufferBuilder.vertex(matrix, (float)bb.minX, (float)bb.maxY, (float)bb.minZ).color(1F, 1F, 1F, 1F).endVertex();
+//$$ 		bufferBuilder.vertex(matrix, (float)bb.maxX, (float)bb.maxY, (float)bb.minZ).color(1F, 1F, 1F, 1F).endVertex();
+//$$
+//$$ 		bufferBuilder.vertex(matrix, (float)bb.maxX, (float)bb.maxY, (float)bb.minZ).color(1F, 1F, 1F, 1F).endVertex();
+//$$ 		bufferBuilder.vertex(matrix, (float)bb.maxX, (float)bb.maxY, (float)bb.maxZ).color(1F, 1F, 1F, 1F).endVertex();
+//$$
+//$$ 		bufferBuilder.vertex(matrix, (float)bb.maxX, (float)bb.maxY, (float)bb.maxZ).color(1F, 1F, 1F, 1F).endVertex();
+//$$ 		bufferBuilder.vertex(matrix, (float)bb.minX, (float)bb.maxY, (float)bb.maxZ).color(1F, 1F, 1F, 1F).endVertex();
+//$$
+//$$ 		bufferBuilder.vertex(matrix, (float)bb.minX, (float)bb.maxY, (float)bb.maxZ).color(1F, 1F, 1F, 1F).endVertex();
+//$$ 		bufferBuilder.vertex(matrix, (float)bb.minX, (float)bb.maxY, (float)bb.minZ).color(1F, 1F, 1F, 1F).endVertex();
+//$$
+//$$ 		bufferBuilder.end();
+//$$
+//$$ 		BufferUploader.end(bufferBuilder);
+	    //#else
+		bufferBuilder.begin(GL11.GL_LINES, DefaultVertexFormat.POSITION_COLOR);
+		bufferBuilder.vertex(bb.minX, bb.minY, bb.minZ).color(1F, 1F, 1F, 1F).endVertex();
 		bufferBuilder.vertex(bb.maxX, bb.minY, bb.minZ).color(1F, 1F, 1F, 1F).endVertex();
-		
+
 		bufferBuilder.vertex(bb.maxX, bb.minY, bb.minZ).color(1F, 1F, 1F, 1F).endVertex();
 		bufferBuilder.vertex(bb.maxX, bb.minY, bb.maxZ).color(1F, 1F, 1F, 1F).endVertex();
-		
+
 		bufferBuilder.vertex(bb.maxX, bb.minY, bb.maxZ).color(1F, 1F, 1F, 1F).endVertex();
 		bufferBuilder.vertex(bb.minX, bb.minY, bb.maxZ).color(1F, 1F, 1F, 1F).endVertex();
-		
+
 		bufferBuilder.vertex(bb.minX, bb.minY, bb.maxZ).color(1F, 1F, 1F, 1F).endVertex();
 		bufferBuilder.vertex(bb.minX, bb.minY, bb.minZ).color(1F, 1F, 1F, 1F).endVertex();
-		
+
 		bufferBuilder.vertex(bb.minX, bb.minY, bb.minZ).color(1F, 1F, 1F, 1F).endVertex();
 		bufferBuilder.vertex(bb.minX, bb.maxY, bb.minZ).color(1F, 1F, 1F, 1F).endVertex();
-		
+
 		bufferBuilder.vertex(bb.maxX, bb.minY, bb.minZ).color(1F, 1F, 1F, 1F).endVertex();
 		bufferBuilder.vertex(bb.maxX, bb.maxY, bb.minZ).color(1F, 1F, 1F, 1F).endVertex();
-		
+
 		bufferBuilder.vertex(bb.maxX, bb.minY, bb.maxZ).color(1F, 1F, 1F, 1F).endVertex();
 		bufferBuilder.vertex(bb.maxX, bb.maxY, bb.maxZ).color(1F, 1F, 1F, 1F).endVertex();
-		
+
 		bufferBuilder.vertex(bb.minX, bb.minY, bb.maxZ).color(1F, 1F, 1F, 1F).endVertex();
 		bufferBuilder.vertex(bb.minX, bb.maxY, bb.maxZ).color(1F, 1F, 1F, 1F).endVertex();
-		
+
 		bufferBuilder.vertex(bb.minX, bb.maxY, bb.minZ).color(1F, 1F, 1F, 1F).endVertex();
 		bufferBuilder.vertex(bb.maxX, bb.maxY, bb.minZ).color(1F, 1F, 1F, 1F).endVertex();
-		
+
 		bufferBuilder.vertex(bb.maxX, bb.maxY, bb.minZ).color(1F, 1F, 1F, 1F).endVertex();
 		bufferBuilder.vertex(bb.maxX, bb.maxY, bb.maxZ).color(1F, 1F, 1F, 1F).endVertex();
-		
+
 		bufferBuilder.vertex(bb.maxX, bb.maxY, bb.maxZ).color(1F, 1F, 1F, 1F).endVertex();
 		bufferBuilder.vertex(bb.minX, bb.maxY, bb.maxZ).color(1F, 1F, 1F, 1F).endVertex();
-		
+
 		bufferBuilder.vertex(bb.minX, bb.maxY, bb.maxZ).color(1F, 1F, 1F, 1F).endVertex();
 		bufferBuilder.vertex(bb.minX, bb.maxY, bb.minZ).color(1F, 1F, 1F, 1F).endVertex();
 		tesselator.end();
+		//#endif
+		
 	}
 
 	public static void drawCrossBox() {
-//		drawCrossBox(DEFAULT_AABB);
+		drawCrossBox(DEFAULT_AABB);
 	}
 
 	public static void drawCrossBox(AABB bb) {
 		Tesselator tesselator = Tesselator.getInstance();
 	    BufferBuilder bufferBuilder = tesselator.getBuilder();
-	    bufferBuilder.begin(1, DefaultVertexFormat.POSITION_COLOR);
+	    //#if MC>=11700
+//$$ 	    bufferBuilder.begin(com.mojang.blaze3d.vertex.VertexFormat.Mode.DEBUG_LINES, DefaultVertexFormat.POSITION_COLOR);
+	    //#else
+		bufferBuilder.begin(GL11.GL_LINES, DefaultVertexFormat.POSITION_COLOR);
+	    //#endif
 	    bufferBuilder.vertex(bb.minX, bb.minY, bb.minZ).color(1F, 1F, 1F, 1F).endVertex();
 		bufferBuilder.vertex(bb.maxX, bb.maxY, bb.minZ).color(1F, 1F, 1F, 1F).endVertex();
 		                                              

@@ -197,7 +197,7 @@ public class HudSettings extends Screen {
 		if (showBPS) {
 			double distTraveledLastTickX = MCVer.getX(Minecraft.getInstance().player) - Minecraft.getInstance().player.xOld;
 			double distTraveledLastTickZ = MCVer.getZ(Minecraft.getInstance().player) - Minecraft.getInstance().player.zOld;
-			String message = String.format("%.2f", Mth.sqrt((distTraveledLastTickX * distTraveledLastTickX + distTraveledLastTickZ * distTraveledLastTickZ)) / 0.05F) + " blocks/sec";
+			String message = String.format("%.2f", Mth.sqrt((float) (distTraveledLastTickX * distTraveledLastTickX + distTraveledLastTickZ * distTraveledLastTickZ)) / 0.05F) + " blocks/sec";
 			
 			int x = Integer.parseInt(p.getProperty("BPS_x"));
 			int y = Integer.parseInt(p.getProperty("BPS_y"));
