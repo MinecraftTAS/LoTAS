@@ -44,7 +44,7 @@ public abstract class MixinGuiMainMenu extends Screen {
 		if (isAcceptance) {
 			MCVer.renderBackground(this);
 			MCVer.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-			this.minecraft.getTextureManager().bind(DEMO_BG);
+			MCVer.bind(Minecraft.getInstance().getTextureManager(), DEMO_BG);
 			int i = (this.width - 248) / 2;
 			int j = (this.height - 166) / 2;
 			MCVer.blit(i, j, 0, 0, 248, 166);

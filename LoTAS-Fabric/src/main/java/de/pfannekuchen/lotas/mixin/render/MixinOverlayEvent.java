@@ -30,7 +30,7 @@ public class MixinOverlayEvent {
 	//#endif
 		LoTASModContainer.hud.drawHud();
 		if (ConfigUtils.getBoolean("tools", "showTickIndicator") && TickrateChangerMod.tickrate <= 5F && TickrateChangerMod.show) {
-			Minecraft.getInstance().getTextureManager().bind(streaming);
+			MCVer.bind(Minecraft.getInstance().getTextureManager(),streaming);
 			MCVer.blit(Minecraft.getInstance().window.getGuiScaledWidth() - 17, 1, 0, 0, 16, 16, 16, 64);
 		}
 	}
