@@ -13,7 +13,7 @@ import org.apache.commons.io.FileUtils;
 
 import de.pfannekuchen.lotas.core.utils.ConfigUtils;
 import de.pfannekuchen.lotas.core.utils.TextureYoinker;
-import de.pfannekuchen.lotas.gui.HudSettings;
+import de.pfannekuchen.lotas.gui.InfoHud;
 import de.pfannekuchen.lotas.gui.SeedListScreen;
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;
 import net.fabricmc.api.ModInitializer;
@@ -30,87 +30,15 @@ public class LoTASModContainer implements ModInitializer {
 
 	/** Texture for the Shield */
 	public static ResourceLocation shield;
+	/** The only info gui */
+	public static InfoHud hud;
 	
 	/**
 	 * Called by the Fabric Loader, whenever the Mod is being initialized
 	 */
 	@Override
 	public void onInitialize() {
-		try {
-			HudSettings.load();
-			/* Load the Settings-Hud. */
-			Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
-				
-				@Override
-				public void run() {
-					try {
-						HudSettings.save();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-			}));
-		} catch (IOException e3) {
-			/* Default Settings for the Info Hud. */
-			HudSettings.p = new java.util.Properties();
-			HudSettings.p.setProperty("XYZ_visible", "false");
-			HudSettings.p.setProperty("XYZPRECISE_visible", "false");
-			HudSettings.p.setProperty("CXZ_visible", "false");
-			HudSettings.p.setProperty("WORLDSEED_visible", "false");
-			HudSettings.p.setProperty("RNGSEEDS_visible", "false");
-			HudSettings.p.setProperty("FACING_visible", "false");
-			HudSettings.p.setProperty("TICKS_visible", "false");
-			HudSettings.p.setProperty("TICKRATE_visible", "false");
-			HudSettings.p.setProperty("SAVESTATECOUNT_visible", "false");
-			HudSettings.p.setProperty("TRAJECTORIES_visible", "false");
-			HudSettings.p.setProperty("BPS_visible", "false");
-			HudSettings.p.setProperty("TIMER_visible", "true");
-			
-			HudSettings.p.setProperty("XYZ_x", "0");
-			HudSettings.p.setProperty("XYZPRECISE_x", "0");
-			HudSettings.p.setProperty("CXZ_x", "0");
-			HudSettings.p.setProperty("WORLDSEED_x", "0");
-			HudSettings.p.setProperty("RNGSEEDS_x", "0");
-			HudSettings.p.setProperty("FACING_x", "0");
-			HudSettings.p.setProperty("TICKS_x", "0");
-			HudSettings.p.setProperty("TICKRATE_x", "0");
-			HudSettings.p.setProperty("SAVESTATECOUNT_x", "0");
-			HudSettings.p.setProperty("TRAJECTORIES_x", "0");
-			HudSettings.p.setProperty("TIMER_x", "0");
-			HudSettings.p.setProperty("BPS_x", "0");
-			
-			HudSettings.p.setProperty("XYZ_y", "0");
-			HudSettings.p.setProperty("XYZPRECISE_y", "0");
-			HudSettings.p.setProperty("CXZ_y", "0");
-			HudSettings.p.setProperty("WORLDSEED_y", "0");
-			HudSettings.p.setProperty("RNGSEEDS_y", "0");
-			HudSettings.p.setProperty("FACING_y", "0");
-			HudSettings.p.setProperty("TICKS_y", "0");
-			HudSettings.p.setProperty("TICKRATE_y", "0");
-			HudSettings.p.setProperty("SAVESTATECOUNT_y", "0");
-			HudSettings.p.setProperty("TRAJECTORIES_y", "0");
-			HudSettings.p.setProperty("TIMER_y", "0");
-			HudSettings.p.setProperty("BPS_y", "0");
-			
-			HudSettings.p.setProperty("XYZ_hideRect", "false");
-			HudSettings.p.setProperty("XYZPRECISE_hideRect", "false");
-			HudSettings.p.setProperty("CXZ_hideRect", "false");
-			HudSettings.p.setProperty("WORLDSEED_hideRect", "false");
-			HudSettings.p.setProperty("RNGSEEDS_hideRect", "false");
-			HudSettings.p.setProperty("FACING_hideRect", "false");
-			HudSettings.p.setProperty("TICKS_hideRect", "false");
-			HudSettings.p.setProperty("TICKRATE_hideRect", "false");
-			HudSettings.p.setProperty("SAVESTATECOUNT_hideRect", "false");
-			HudSettings.p.setProperty("TRAJECTORIES_hideRect", "false");
-			HudSettings.p.setProperty("TIMER_hideRect", "false");
-			HudSettings.p.setProperty("BPS_hideRect", "false");
-			
-			try {
-				HudSettings.save();
-			} catch (IOException e420) {
-				e420.printStackTrace();
-			}
-		}
+		hud = new InfoHud();
 		/* Load the Seeds for the (disabled) Seeds Menu */
 		try {
 			loadSeeds();

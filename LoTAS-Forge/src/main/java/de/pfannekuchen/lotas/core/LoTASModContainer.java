@@ -19,7 +19,7 @@ import de.pfannekuchen.lotas.core.utils.EventUtils;
 import de.pfannekuchen.lotas.core.utils.KeybindsUtils;
 import de.pfannekuchen.lotas.gui.GuiSeedList.SeedListExtended;
 import de.pfannekuchen.lotas.gui.GuiSeedList.SeedListExtended.SeedEntry;
-import de.pfannekuchen.lotas.gui.HudSettings;
+import de.pfannekuchen.lotas.gui.InfoHud;
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;
 import de.pfannekuchen.lotas.taschallenges.ChallengeMap;
 import net.minecraft.util.ResourceLocation;
@@ -48,6 +48,8 @@ public class LoTASModContainer {
 	public static int offsetX = 0;
 	/** World spawn offset Z */
 	public static int offsetZ = 0;
+	/** Only ever InfoHud instance */
+	public static InfoHud hud;
 	
 	/** Minecraft Version */
 	public static String version = ForgeVersion.mcVersion;
@@ -59,82 +61,7 @@ public class LoTASModContainer {
 	@EventHandler public void onInit(FMLInitializationEvent e) {
 		loadShields(); // load custom shields
 		KeybindsUtils.registerKeybinds(); // register keybinds
-		/* Load the Settings-Hud. */
-		try {
-			HudSettings.load(); // This goes first.. muhahahahaha
-			// add a hook whenever the JVM stops to save the hud
-			Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
-				
-				@Override
-				public void run() {
-					try {
-						HudSettings.save();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-			}));
-		} catch (IOException e3) {
-			/* Defaults whenever the file wasn't found */
-			HudSettings.p = new java.util.Properties();
-			HudSettings.p.setProperty("XYZ_visible", "false");
-			HudSettings.p.setProperty("XYZPRECISE_visible", "false");
-			HudSettings.p.setProperty("CXZ_visible", "false");
-			HudSettings.p.setProperty("WORLDSEED_visible", "false");
-			HudSettings.p.setProperty("RNGSEEDS_visible", "false");
-			HudSettings.p.setProperty("FACING_visible", "false");
-			HudSettings.p.setProperty("TICKS_visible", "false");
-			HudSettings.p.setProperty("TICKRATE_visible", "false");
-			HudSettings.p.setProperty("SAVESTATECOUNT_visible", "false");
-			HudSettings.p.setProperty("TRAJECTORIES_visible", "false");
-			HudSettings.p.setProperty("BPS_visible", "false");
-			HudSettings.p.setProperty("TIMER_visible", "true");
-			
-			HudSettings.p.setProperty("XYZ_x", "0");
-			HudSettings.p.setProperty("XYZPRECISE_x", "0");
-			HudSettings.p.setProperty("CXZ_x", "0");
-			HudSettings.p.setProperty("WORLDSEED_x", "0");
-			HudSettings.p.setProperty("RNGSEEDS_x", "0");
-			HudSettings.p.setProperty("FACING_x", "0");
-			HudSettings.p.setProperty("TICKS_x", "0");
-			HudSettings.p.setProperty("TICKRATE_x", "0");
-			HudSettings.p.setProperty("SAVESTATECOUNT_x", "0");
-			HudSettings.p.setProperty("TRAJECTORIES_x", "0");
-			HudSettings.p.setProperty("TIMER_x", "0");
-			HudSettings.p.setProperty("BPS_x", "0");
-			
-			HudSettings.p.setProperty("XYZ_y", "0");
-			HudSettings.p.setProperty("XYZPRECISE_y", "0");
-			HudSettings.p.setProperty("CXZ_y", "0");
-			HudSettings.p.setProperty("WORLDSEED_y", "0");
-			HudSettings.p.setProperty("RNGSEEDS_y", "0");
-			HudSettings.p.setProperty("FACING_y", "0");
-			HudSettings.p.setProperty("TICKS_y", "0");
-			HudSettings.p.setProperty("TICKRATE_y", "0");
-			HudSettings.p.setProperty("SAVESTATECOUNT_y", "0");
-			HudSettings.p.setProperty("TRAJECTORIES_y", "0");
-			HudSettings.p.setProperty("TIMER_y", "0");
-			HudSettings.p.setProperty("BPS_y", "0");
-			
-			HudSettings.p.setProperty("XYZ_hideRect", "false");
-			HudSettings.p.setProperty("XYZPRECISE_hideRect", "false");
-			HudSettings.p.setProperty("CXZ_hideRect", "false");
-			HudSettings.p.setProperty("WORLDSEED_hideRect", "false");
-			HudSettings.p.setProperty("RNGSEEDS_hideRect", "false");
-			HudSettings.p.setProperty("FACING_hideRect", "false");
-			HudSettings.p.setProperty("TICKS_hideRect", "false");
-			HudSettings.p.setProperty("TICKRATE_hideRect", "false");
-			HudSettings.p.setProperty("SAVESTATECOUNT_hideRect", "false");
-			HudSettings.p.setProperty("TRAJECTORIES_hideRect", "false");
-			HudSettings.p.setProperty("TIMER_hideRect", "false");
-			HudSettings.p.setProperty("BPS_hideRect", "false");
-			
-			try {
-				HudSettings.save(); // save defaults to file
-			} catch (IOException e420) {
-				e420.printStackTrace();
-			}
-		}
+		hud = new InfoHud(); // load info gui
 	}
 	
 	/**

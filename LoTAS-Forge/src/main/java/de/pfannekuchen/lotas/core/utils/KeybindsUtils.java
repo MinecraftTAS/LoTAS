@@ -2,6 +2,7 @@ package de.pfannekuchen.lotas.core.utils;
 
 import org.lwjgl.input.Keyboard;
 
+import de.pfannekuchen.lotas.core.LoTASModContainer;
 import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.mods.DupeMod;
 import net.minecraft.client.Minecraft;
@@ -81,7 +82,7 @@ public class KeybindsUtils {
 		wasPressed = holdStrafeKeybind.isKeyDown(); // update state for next tick
 		// Info Hud handling
 		if (openInfoHud.isPressed()) {
-			Minecraft.getMinecraft().displayGuiScreen(new de.pfannekuchen.lotas.gui.HudSettings());
+			Minecraft.getMinecraft().displayGuiScreen(LoTASModContainer.hud);
 		}
 	}
 	

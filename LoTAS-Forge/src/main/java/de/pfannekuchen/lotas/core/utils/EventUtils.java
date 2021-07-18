@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.lwjgl.opengl.GL11;
 
+import de.pfannekuchen.lotas.core.LoTASModContainer;
 import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.gui.GuiAiManipulation;
 import de.pfannekuchen.lotas.gui.GuiEntitySpawnManipulation;
@@ -34,7 +35,7 @@ public class EventUtils {
 	 */
 	@SubscribeEvent public void onDraw(RenderGameOverlayEvent.Post e) {
 		if (checkNonText(e)) return; // Check whether the event is not a text render event.
-		de.pfannekuchen.lotas.gui.HudSettings.drawOverlay(); // Render the Info-HUD overlay
+		LoTASModContainer.hud.drawHud();
 		
 		if (ConfigUtils.getBoolean("tools", "showTickIndicator") && TickrateChangerMod.tickrate <= 5F && TickrateChangerMod.show) {
 			// Render the Tick Indicator whenever ever second tick occurs and the Tickrate is below 5

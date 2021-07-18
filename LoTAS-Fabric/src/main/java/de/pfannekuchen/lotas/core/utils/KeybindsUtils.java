@@ -5,7 +5,7 @@ import java.time.Duration;
 import org.apache.commons.lang3.ArrayUtils;
 import org.lwjgl.glfw.GLFW;
 
-import de.pfannekuchen.lotas.gui.HudSettings;
+import de.pfannekuchen.lotas.core.LoTASModContainer;
 import de.pfannekuchen.lotas.mods.DupeMod;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -86,7 +86,7 @@ public class KeybindsUtils {
 		}
 		// Info Hud handling
 		while (openInfoHud.consumeClick()) {
-			Minecraft.getInstance().setScreen(new HudSettings());
+			Minecraft.getInstance().setScreen(LoTASModContainer.hud);
 		}
 		// Autostrafe auto rotation handling
 		if (wasPressed != holdStrafeKeybind.isDown() && wasPressed == true) {
