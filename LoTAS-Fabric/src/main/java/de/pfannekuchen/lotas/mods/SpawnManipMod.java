@@ -60,7 +60,7 @@ public class SpawnManipMod {
 	public SpawnManipMod() {
 		orientation =  mc.player.getDirection();
 		target=mc.player.position();
-		for(int i=0; i<3;i++) {
+		for(int i=0; i<25;i++) {
 			changeTargetForward();
 		}
 		playerPos=mc.player.position();
@@ -337,7 +337,9 @@ public class SpawnManipMod {
 			LivingEntity entity = new Skeleton(EntityType.SKELETON, world);
 			entity.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.BOW));
 			entities.add(new EntityOptions("Skeleton", entity));
-			entities.add(new EntityOptions("Witherskeleton", new WitherSkeleton(EntityType.WITHER_SKELETON, world)));
+			entity = new WitherSkeleton(EntityType.WITHER_SKELETON, world);
+			entity.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.STONE_SWORD));
+			entities.add(new EntityOptions("Wither Skeleton", entity));
 			
 			if (Minecraft.getInstance().level.getDifficulty() == Difficulty.HARD) {
 				entity = new Skeleton(EntityType.SKELETON, world);
