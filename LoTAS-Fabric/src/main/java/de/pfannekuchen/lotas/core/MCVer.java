@@ -6,6 +6,8 @@ import com.mojang.blaze3d.platform.GlStateManager.SourceFactor;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Quaternion;
 
+import de.pfannekuchen.lotas.mixin.accessors.AccessorButtons;
+import de.pfannekuchen.lotas.mixin.accessors.AccessorScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiComponent;
@@ -211,35 +213,36 @@ public class MCVer {
 //$$ 	public static void loadIdentity() {
 //$$ 	}
 //$$
-//$$ 	public static void pushMatrix() {
-//$$ 		stack.pushPose();
+//$$ 	public static void pushMatrix(Object stack) {
+//$$ 		com.mojang.blaze3d.vertex.PoseStack poseStack = (com.mojang.blaze3d.vertex.PoseStack)stack;
+//$$ 		poseStack.pushPose();
 //$$ 	}
 //$$
 //$$ 	public static void enableLighting() {
 //$$ 	}
 //$$
-//$$ 	public static void popMatrix() {
-//$$ 		stack.pushPose();
+//$$ 	public static void popMatrix(Object stack) {
+//$$ 		com.mojang.blaze3d.vertex.PoseStack poseStack = (com.mojang.blaze3d.vertex.PoseStack)stack;
+//$$ 		poseStack.popPose();
 //$$ 	}
 //$$
-//$$ 	public static void translated(double x, double y, double z) {
-//$$ 		stack.translate(x, y, z);
+//$$ 	public static void translated(Object stack, double x, double y, double z) {
+//$$ 		com.mojang.blaze3d.vertex.PoseStack poseStack = (com.mojang.blaze3d.vertex.PoseStack)stack;
+//$$ 		poseStack.translate(x, y, z);
 //$$ 	}
 //$$
-//$$ 	public static void scaled(double scale, double scale2, double scale3) {
-//$$ 		stack.scale((float)scale, (float)scale2, (float)scale3);
+//$$ 	public static void scaled(Object stack, double scale, double scale2, double scale3) {
+//$$ 		com.mojang.blaze3d.vertex.PoseStack poseStack = (com.mojang.blaze3d.vertex.PoseStack)stack;
+//$$ 		poseStack.scale((float)scale, (float)scale2, (float)scale3);
 //$$ 	}
 //$$
-//$$ 	public static void rotated(double i, double j, double k, double l) {
-//$$ 		stack.mulPose(new Quaternion((float)i,(float) j,(float) k,(float) l));
+//$$ 	public static void rotated(Object stack, double i, double j, double k, double l) {
+//$$ 		com.mojang.blaze3d.vertex.PoseStack poseStack = (com.mojang.blaze3d.vertex.PoseStack)stack;
+//$$ 		poseStack.mulPose(new Quaternion((float)i,(float) j,(float) k,(float) l));
 //$$ 	}
 //$$
 //$$ 	public static void enableDepthTest() {
 //$$ 		com.mojang.blaze3d.systems.RenderSystem.enableDepthTest();
-//$$ 	}
-//$$
-//$$ 	public static void translated(int i, int y, double d) {
-//$$ 		stack.translate(i, y, d);
 //$$ 	}
 //$$
 //$$ 	public static BlockEntityRenderDispatcher getBlockEntityDispatcher() {
@@ -307,7 +310,7 @@ public class MCVer {
 //$$ 		com.mojang.blaze3d.systems.RenderSystem.loadIdentity();
 //$$ 	}
 //$$
-//$$ 	public static void pushMatrix() {
+//$$ 	public static void pushMatrix(Object poseStack) {
 //$$ 		com.mojang.blaze3d.systems.RenderSystem.pushMatrix();
 //$$ 	}
 //$$
@@ -315,19 +318,19 @@ public class MCVer {
 //$$ 		com.mojang.blaze3d.systems.RenderSystem.enableLighting();
 //$$ 	}
 //$$
-//$$ 	public static void popMatrix() {
+//$$ 	public static void popMatrix(Object object) {
 //$$ 		com.mojang.blaze3d.systems.RenderSystem.popMatrix();
 //$$ 	}
 //$$
-//$$ 	public static void translated(double x, double y, double z) {
+//$$ 	public static void translated(Object poseStack, double x, double y, double z) {
 //$$ 		com.mojang.blaze3d.systems.RenderSystem.translated(x, y, z);
 //$$ 	}
 //$$
-//$$ 	public static void scaled(double scale, double scale2, double scale3) {
+//$$ 	public static void scaled(Object poseStack, double scale, double scale2, double scale3) {
 //$$ 		com.mojang.blaze3d.systems.RenderSystem.scaled(scale, scale2, scale3);
 //$$ 	}
 //$$
-//$$ 	public static void rotated(double i, double j, double k, double l) {
+//$$ 	public static void rotated(Object poseStack, double i, double j, double k, double l) {
 //$$ 		com.mojang.blaze3d.systems.RenderSystem.rotatef((float)i,(float) j,(float) k,(float) l);
 //$$ 	}
 //$$
@@ -405,7 +408,7 @@ public class MCVer {
 		com.mojang.blaze3d.platform.GlStateManager.loadIdentity();
 	}
 
-	public static void pushMatrix() {
+	public static void pushMatrix(Object poseStack) {
 		com.mojang.blaze3d.platform.GlStateManager.pushMatrix();
 	}
 
@@ -413,15 +416,15 @@ public class MCVer {
 		com.mojang.blaze3d.platform.GlStateManager.enableLighting();
 	}
 
-	public static void popMatrix() {
+	public static void popMatrix(Object object) {
 		com.mojang.blaze3d.platform.GlStateManager.popMatrix();
 	}
 
-	public static void scaled(double scale, double scale2, double scale3) {
+	public static void scaled(Object poseStack, double scale, double scale2, double scale3) {
 		com.mojang.blaze3d.platform.GlStateManager.scaled(scale, scale2, scale3);
 	}
 
-	public static void rotated(int i, int j, int k, int l) {
+	public static void rotated(Object poseStack, int i, int j, int k, int l) {
 		com.mojang.blaze3d.platform.GlStateManager.rotated(i, j, k, l);
 	}
 
@@ -429,10 +432,13 @@ public class MCVer {
 		com.mojang.blaze3d.platform.GlStateManager.enableDepthTest();
 	}
 
-	public static void translated(double i, double y, double d) {
+	public static void translated(Object poseStack, double i, double y, double d) {
 		com.mojang.blaze3d.platform.GlStateManager.translated(i, y, d);
 	}
 
+	public static BlockEntityRenderDispatcher getBlockEntityDispatcher() {
+		return BlockEntityRenderDispatcher.instance;
+	}
 	//#endif
 	
 	// =============================================== 1.16.5 | 1.17 BUTTONS =========================================
@@ -443,7 +449,7 @@ public class MCVer {
 //$$ 	}
 	//#else
 	public static <T extends AbstractWidget> T addButton(Screen screen, T button) {
-		((de.pfannekuchen.lotas.mixin.accessors.AccessorButtons)screen).invokeAddButton(button);
+		((AccessorScreen)screen).invokeAddButton(button);
 		return button;
 	}
 	//#endif

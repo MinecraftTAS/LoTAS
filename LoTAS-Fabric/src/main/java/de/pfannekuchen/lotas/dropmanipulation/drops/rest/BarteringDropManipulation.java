@@ -139,7 +139,11 @@ public class BarteringDropManipulation extends DropManipulationScreen.DropManipu
 			//#else
 			elementwidgets.renderBg(Minecraft.getInstance(), mouseX, mouseY);
 			//#endif
-			MCVer.popMatrix();
+			//#if MC>=11700
+//$$ 			MCVer.popMatrix(MCVer.stack);
+			//#else
+			MCVer.popMatrix(null);
+			//#endif
 		}
 		
 		Minecraft.getInstance().getTextureManager().bind(new ResourceLocation("lotas", "drops/piglin.png"));

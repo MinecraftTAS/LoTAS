@@ -107,7 +107,7 @@ public class SeedListScreen extends Screen {
 		}));
 		Button create = MCVer.Button(width / 2 - 100, height - 52, 200, 20, "Create World", button -> {
 		
-		//#if MC>=11600
+		//#if MC>=11700
 //$$ 		Minecraft.getInstance().setScreen(new ProgressScreen(true));
 		//#else
 		Minecraft.getInstance().setScreen(new ProgressScreen());
@@ -131,7 +131,11 @@ public class SeedListScreen extends Screen {
 		BufferBuilder bufferBuilder = tessellator.getBuilder();
 		MCVer.bind(Minecraft.getInstance().getTextureManager(), GuiComponent.BACKGROUND_LOCATION);
 		MCVer.color4f(.5f, .5f, .5f, .4F);
-		bufferBuilder.begin(com.mojang.blaze3d.vertex.VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION);
+		//#if MC>=11700
+//$$ 		bufferBuilder.begin(com.mojang.blaze3d.vertex.VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION);
+		//#else
+		bufferBuilder.begin(7, DefaultVertexFormat.POSITION);
+		//#endif
 		bufferBuilder.vertex((double) 0, (double) bottom, 0.0D).uv(0.0F, ((float) bottom / 32.0F)).color(64, 64, 64, alphaBottom).endVertex();
 		bufferBuilder.vertex((double) (0 + this.width), (double) bottom, 0.0D).uv(((float) this.width / 32.0F), ((float) bottom / 32.0F)).color(64, 64, 64, alphaBottom).endVertex();
 		bufferBuilder.vertex((double) (0 + this.width), (double) top, 0.0D).uv(((float) this.width / 32.0F), ((float) top / 32.0F)).color(64, 64, 64, alphaTop).endVertex();
@@ -156,14 +160,22 @@ public class SeedListScreen extends Screen {
 				MCVer.disableTexture();
 				float f = 1.0F;
 				MCVer.color4f(f, f, f, 0.5F);
-				bufferBuilder.begin(com.mojang.blaze3d.vertex.VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION);
+				//#if MC>=11700
+//$$ 				bufferBuilder.begin(com.mojang.blaze3d.vertex.VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION);
+				//#else
+				bufferBuilder.begin(7, DefaultVertexFormat.POSITION);
+				//#endif
 				bufferBuilder.vertex((double) r - 1, (double) (y + n + 2), 1.0D).endVertex();
 				bufferBuilder.vertex((double) q - 1, (double) (y + n + 2), 1.0D).endVertex();
 				bufferBuilder.vertex((double) q - 1, (double) (y - 2), 1.0D).endVertex();
 				bufferBuilder.vertex((double) r - 1, (double) (y - 2), 1.0D).endVertex();
 				tessellator.end();
 				MCVer.color4f(0.0F, 0.0F, 0.0F, 0.5F);
-				bufferBuilder.begin(com.mojang.blaze3d.vertex.VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION);
+				//#if MC>=11700
+//$$ 				bufferBuilder.begin(com.mojang.blaze3d.vertex.VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION);
+				//#else
+				bufferBuilder.begin(7, DefaultVertexFormat.POSITION);
+				//#endif
 				bufferBuilder.vertex((double) (r), (double) (y + n + 1), 1.0D).endVertex();
 				bufferBuilder.vertex((double) (q - 2), (double) (y + n + 1), 1.0D).endVertex();
 				bufferBuilder.vertex((double) (q - 2), (double) (y - 1), 1.0D).endVertex();
@@ -206,7 +218,11 @@ public class SeedListScreen extends Screen {
 		MCVer.bind(Minecraft.getInstance().getTextureManager(), GuiComponent.BACKGROUND_LOCATION);
 		
 		MCVer.color4f(1f, 1f, 1f, 1F);
-		bufferBuilder.begin(com.mojang.blaze3d.vertex.VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION);
+		//#if MC>=11700
+//$$ 		bufferBuilder.begin(com.mojang.blaze3d.vertex.VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION);
+		//#else
+		bufferBuilder.begin(7, DefaultVertexFormat.POSITION);
+		//#endif
 		
 		bufferBuilder.vertex((double) left, (double) bottom, 0.0D).uv(((float) left / 32.0F), ((float) (bottom + (int) 1) / 32.0F)).color(32, 32, 32, 255).endVertex();
 		bufferBuilder.vertex((double) right, (double) bottom, 0.0D).uv(((float) right / 32.0F), ((float) (bottom + (int) 1) / 32.0F)).color(32, 32, 32, 255).endVertex();
@@ -226,7 +242,11 @@ public class SeedListScreen extends Screen {
 		MCVer.disableTexture();
 
 		// Draw top gradient
-		bufferBuilder.begin(com.mojang.blaze3d.vertex.VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION_TEX_COLOR);
+		//#if MC>=11700
+//$$ 		bufferBuilder.begin(com.mojang.blaze3d.vertex.VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION);
+		//#else
+		bufferBuilder.begin(7, DefaultVertexFormat.POSITION);
+		//#endif
 		bufferBuilder.vertex(left, top + 4, 0.0D).uv(0.0F, 1.0F).color(0, 0, 0, 0).endVertex();
 		bufferBuilder.vertex(right, top + 4, 0.0D).uv(1.0F, 1.0F).color(0, 0, 0, 0).endVertex();
 		bufferBuilder.vertex(right, top, 0.0D).uv(1.0F, 0.0F).color(0, 0, 0, 255).endVertex();
@@ -234,7 +254,11 @@ public class SeedListScreen extends Screen {
 		tessellator.end();
 
 		// Draw bottom gradient
-		bufferBuilder.begin(com.mojang.blaze3d.vertex.VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION_TEX_COLOR);
+		//#if MC>=11700
+//$$ 		bufferBuilder.begin(com.mojang.blaze3d.vertex.VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION);
+		//#else
+		bufferBuilder.begin(7, DefaultVertexFormat.POSITION);
+		//#endif
 		bufferBuilder.vertex(left, bottom, 0.0D).uv(0.0F, 1.0F).color(0, 0, 0, 255).endVertex();
 		bufferBuilder.vertex(right, bottom, 0.0D).uv(1.0F, 1.0F).color(0, 0, 0, 255).endVertex();
 		bufferBuilder.vertex(right, bottom - 4, 0.0D).uv(1.0F, 0.0F).color(0, 0, 0, 0).endVertex();

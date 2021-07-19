@@ -46,12 +46,12 @@ public abstract class MixinPotionRenderer {
 	public void drawPotionAfter(CallbackInfo ci) {
 		MCVer.matrixMode(5888);
 		MCVer.loadIdentity();
-		MCVer.pushMatrix();
+		MCVer.pushMatrix(null);
 		ItemStack stack2 = PotionRenderer.render();
 		MCVer.disableLighting();
 		((AccessorItemRenderer)itemInHandRenderer).getItemRenderer().renderStatic(stack2, ItemTransforms.TransformType.FIXED);
 		MCVer.enableLighting();
-		MCVer.popMatrix();
+		MCVer.popMatrix(null);
 	}
 	//#else
 //$$ 	@Shadow @Final
