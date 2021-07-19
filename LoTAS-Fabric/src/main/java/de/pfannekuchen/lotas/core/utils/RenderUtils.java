@@ -60,8 +60,12 @@ public enum RenderUtils {
 
 	public static void applyCameraRotationOnly(Object poseStack) {
 		Camera camera = MCVer.getBlockEntityDispatcher().camera;
-		MCVer.rotated(poseStack, (int) Mth.wrapDegrees(camera.getXRot()), 1, 0, 0);
-		MCVer.rotated(poseStack, (int) Mth.wrapDegrees(camera.getYRot() + 180.0), 0, 1, 0);
+		//#if MC>=11500
+		//#if MC<=11605
+//$$ 		MCVer.rotated(poseStack, Mth.wrapDegrees(camera.getXRot()), 1, 0, 0);
+//$$ 		MCVer.rotated(poseStack, Mth.wrapDegrees(camera.getYRot() + 180.0), 0, 1, 0);
+		//#endif
+		//#endif
 	}
 
 	public static Vec3 getCameraPos() {
