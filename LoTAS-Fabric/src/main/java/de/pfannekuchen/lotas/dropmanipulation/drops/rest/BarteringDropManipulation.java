@@ -139,7 +139,11 @@ public class BarteringDropManipulation extends DropManipulationScreen.DropManipu
 			//#else
 			elementwidgets.renderBg(Minecraft.getInstance(), mouseX, mouseY);
 			//#endif
-			MCVer.popMatrix();
+			//#if MC>=11700
+//$$ 			MCVer.popMatrix(MCVer.stack);
+			//#else
+			MCVer.popMatrix(null);
+			//#endif
 		}
 
 		MCVer.bind(Minecraft.getInstance().getTextureManager(), new ResourceLocation("lotas", "drops/zombie.png"));

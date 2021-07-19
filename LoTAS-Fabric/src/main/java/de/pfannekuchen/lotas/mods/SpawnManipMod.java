@@ -85,9 +85,9 @@ public class SpawnManipMod {
 	public void confirm() {
 		if(canSpawn()) {
 			ServerLevel world=(ServerLevel) MCVer.getCurrentLevel();
-			int targetX=(int) (Math.round(target.x)-0.5);
+			int targetX=(int) Math.round(target.x-0.5);
 			int targetY=(int) Math.round(target.y);
-			int targetZ=(int) (Math.round(target.z)-0.5);
+			int targetZ=(int) Math.round(target.z-0.5);
 			
 			entity.setPos(targetX, targetY, targetZ);
 			world.addFreshEntity(entity);

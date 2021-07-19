@@ -82,7 +82,7 @@ public class PotionRenderer {
 		double scale=window.getGuiScale()/3;
 		int height=window.getScreenHeight();
 
-		MCVer.translated(0, 0.0f, -13);
+		MCVer.translated(null, 0, 0.0f, -13);
 
 		double skla=4.1;
 		if(scale==1D) {
@@ -97,17 +97,17 @@ public class PotionRenderer {
 		double height2=(height/2*-0.004)-skla;
 
 
-		MCVer.translated(0, height2, 0);
-		MCVer.scaled(scale, scale, scale);
+		MCVer.translated(null, 0, height2, 0);
+		MCVer.scaled(null, scale, scale, scale);
 
 		double scale2=1+(1080-height)*0.0015;
-		MCVer.scaled(scale2, scale2, scale2);
+		MCVer.scaled(null, scale2, scale2, scale2);
 
 		if(Minecraft.getInstance().player.isUnderWater()) {
-			MCVer.translated(0, 0, -2.5);
+			MCVer.translated(null, 0, 0, -2.5);
 		}
-		MCVer.rotated(180, 0, 1, 0);
-		MCVer.rotated(10, 0, 0, 1);
+		MCVer.rotated(null, 180, 0, 1, 0);
+		MCVer.rotated(null, 10, 0, 0, 1);
 		return stack;
 	}
 	//#endif
