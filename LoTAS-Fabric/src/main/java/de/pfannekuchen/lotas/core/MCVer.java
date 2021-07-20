@@ -3,7 +3,6 @@ package de.pfannekuchen.lotas.core;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.platform.GlStateManager.DestFactor;
 import com.mojang.blaze3d.platform.GlStateManager.SourceFactor;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Quaternion;
 
@@ -478,7 +477,7 @@ public class MCVer {
 	
 	public static void bind(TextureManager textureManager, ResourceLocation resource) {
 		//#if MC>=11700
-//$$ 		RenderSystem.setShaderTexture(0, resource);
+//$$ 		com.mojang.blaze3d.systems.RenderSystem.setShaderTexture(0, resource);
 		//#else
 		textureManager.bind(resource);
 		//#endif

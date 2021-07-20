@@ -91,12 +91,6 @@ public class KeybindsUtils {
 		// Autostrafe auto rotation handling
 		if (wasPressed != holdStrafeKeybind.isDown() && wasPressed == true) {
 			KeyMapping.set(Minecraft.getInstance().options.keyRight.getDefaultKey(), false);
-		} else if (wasPressed != holdStrafeKeybind.isDown() && wasPressed == false) {
-			//#if MC>=11700
-//$$ 			Minecraft.getInstance().player.setYRot(Minecraft.getInstance().player.getYRot()- 45); ;
-			//#else
-			Minecraft.getInstance().player.yRot -= 45;
-			//#endif
 		}
 		wasPressed = holdStrafeKeybind.isDown();
 		if(test.consumeClick()) {

@@ -191,6 +191,9 @@ public class MixinMinecraftClient {
 					Minecraft.getInstance().setScreen(new PauseScreen(true));
 			}
 		}
+		if(player!=null) {
+			LoTASModContainer.hud.tick();
+		}
 	}
  
 	/**

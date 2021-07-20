@@ -132,7 +132,11 @@ public class BarteringDropManipulation extends DropManipulationScreen.DropManipu
 		if (!enabled.selected()) {
 			MCVer.color4f(.5f, .5f, .5f, .4f);
 		} else {
-			MCVer.pushMatrix(MCVer.stack);
+			//#if MC>=11700
+//$$ 			MCVer.popMatrix(MCVer.stack);
+			//#else
+			MCVer.pushMatrix(null);
+			//#endif
 			MCVer.render(elementwidgets, mouseX, mouseY, delta);
 			//#if MC>=11600
 //$$ 			elementwidgets.renderBg(MCVer.stack, Minecraft.getInstance(), mouseX, mouseY);
