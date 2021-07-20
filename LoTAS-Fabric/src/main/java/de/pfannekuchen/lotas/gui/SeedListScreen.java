@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.lwjgl.opengl.GL11;
+
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.platform.NativeImage;
 import com.mojang.blaze3d.vertex.BufferBuilder;
@@ -132,9 +134,9 @@ public class SeedListScreen extends Screen {
 		MCVer.bind(Minecraft.getInstance().getTextureManager(), GuiComponent.BACKGROUND_LOCATION);
 		MCVer.color4f(.5f, .5f, .5f, .4F);
 		//#if MC>=11700
-//$$ 		bufferBuilder.begin(com.mojang.blaze3d.vertex.VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION);
+//$$ 		bufferBuilder.begin(com.mojang.blaze3d.vertex.VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION);
 		//#else
-		bufferBuilder.begin(7, DefaultVertexFormat.POSITION);
+		bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormat.POSITION);
 		//#endif
 		bufferBuilder.vertex((double) 0, (double) bottom, 0.0D).uv(0.0F, ((float) bottom / 32.0F)).color(64, 64, 64, alphaBottom).endVertex();
 		bufferBuilder.vertex((double) (0 + this.width), (double) bottom, 0.0D).uv(((float) this.width / 32.0F), ((float) bottom / 32.0F)).color(64, 64, 64, alphaBottom).endVertex();
@@ -161,9 +163,9 @@ public class SeedListScreen extends Screen {
 				float f = 1.0F;
 				MCVer.color4f(f, f, f, 0.5F);
 				//#if MC>=11700
-//$$ 				bufferBuilder.begin(com.mojang.blaze3d.vertex.VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION);
+//$$ 				bufferBuilder.begin(com.mojang.blaze3d.vertex.VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION);
 				//#else
-				bufferBuilder.begin(7, DefaultVertexFormat.POSITION);
+				bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormat.POSITION);
 				//#endif
 				bufferBuilder.vertex((double) r - 1, (double) (y + n + 2), 1.0D).endVertex();
 				bufferBuilder.vertex((double) q - 1, (double) (y + n + 2), 1.0D).endVertex();
@@ -172,9 +174,9 @@ public class SeedListScreen extends Screen {
 				tessellator.end();
 				MCVer.color4f(0.0F, 0.0F, 0.0F, 0.5F);
 				//#if MC>=11700
-//$$ 				bufferBuilder.begin(com.mojang.blaze3d.vertex.VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION);
+//$$ 				bufferBuilder.begin(com.mojang.blaze3d.vertex.VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION);
 				//#else
-				bufferBuilder.begin(7, DefaultVertexFormat.POSITION);
+				bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormat.POSITION);
 				//#endif
 				bufferBuilder.vertex((double) (r), (double) (y + n + 1), 1.0D).endVertex();
 				bufferBuilder.vertex((double) (q - 2), (double) (y + n + 1), 1.0D).endVertex();
@@ -219,9 +221,9 @@ public class SeedListScreen extends Screen {
 		
 		MCVer.color4f(1f, 1f, 1f, 1F);
 		//#if MC>=11700
-//$$ 		bufferBuilder.begin(com.mojang.blaze3d.vertex.VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION);
+//$$ 		bufferBuilder.begin(com.mojang.blaze3d.vertex.VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION);
 		//#else
-		bufferBuilder.begin(7, DefaultVertexFormat.POSITION);
+		bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormat.POSITION);
 		//#endif
 		
 		bufferBuilder.vertex((double) left, (double) bottom, 0.0D).uv(((float) left / 32.0F), ((float) (bottom + (int) 1) / 32.0F)).color(32, 32, 32, 255).endVertex();
@@ -243,9 +245,9 @@ public class SeedListScreen extends Screen {
 
 		// Draw top gradient
 		//#if MC>=11700
-//$$ 		bufferBuilder.begin(com.mojang.blaze3d.vertex.VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION);
+//$$ 		bufferBuilder.begin(com.mojang.blaze3d.vertex.VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION);
 		//#else
-		bufferBuilder.begin(7, DefaultVertexFormat.POSITION);
+		bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormat.POSITION);
 		//#endif
 		bufferBuilder.vertex(left, top + 4, 0.0D).uv(0.0F, 1.0F).color(0, 0, 0, 0).endVertex();
 		bufferBuilder.vertex(right, top + 4, 0.0D).uv(1.0F, 1.0F).color(0, 0, 0, 0).endVertex();
@@ -255,9 +257,9 @@ public class SeedListScreen extends Screen {
 
 		// Draw bottom gradient
 		//#if MC>=11700
-//$$ 		bufferBuilder.begin(com.mojang.blaze3d.vertex.VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION);
+//$$ 		bufferBuilder.begin(com.mojang.blaze3d.vertex.VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION);
 		//#else
-		bufferBuilder.begin(7, DefaultVertexFormat.POSITION);
+		bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormat.POSITION);
 		//#endif
 		bufferBuilder.vertex(left, bottom, 0.0D).uv(0.0F, 1.0F).color(0, 0, 0, 255).endVertex();
 		bufferBuilder.vertex(right, bottom, 0.0D).uv(1.0F, 1.0F).color(0, 0, 0, 255).endVertex();

@@ -3,6 +3,8 @@ package de.pfannekuchen.lotas.gui;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.lwjgl.opengl.GL11;
+
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.Tesselator;
@@ -121,9 +123,9 @@ public class DropManipulationScreen extends Screen {
 		MCVer.disableTexture();
 		MCVer.color4f(.5f, .5f, .5f, 0.5F);
 		//#if MC>=11700
-//$$ 		bufferBuilder.begin(com.mojang.blaze3d.vertex.VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION);
+//$$ 		bufferBuilder.begin(com.mojang.blaze3d.vertex.VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION);
 		//#else
-		bufferBuilder.begin(7, DefaultVertexFormat.POSITION);
+		bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormat.POSITION);
 		//#endif
 		bufferBuilder.vertex(24, 24, 0).endVertex();
 		bufferBuilder.vertex(24, height - 24, 0).endVertex();
@@ -133,9 +135,9 @@ public class DropManipulationScreen extends Screen {
 
 		MCVer.color4f(0, 0, 0, 0.5F);
 		//#if MC>=11700
-//$$ 		bufferBuilder.begin(com.mojang.blaze3d.vertex.VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION);
+//$$ 		bufferBuilder.begin(com.mojang.blaze3d.vertex.VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION);
 		//#else
-		bufferBuilder.begin(7, DefaultVertexFormat.POSITION);
+		bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormat.POSITION);
 		//#endif
 		bufferBuilder.vertex(25, 25, 0).endVertex();
 		bufferBuilder.vertex(25, height - 25, 0).endVertex();
@@ -146,9 +148,9 @@ public class DropManipulationScreen extends Screen {
 		int boxY = 30 + selected * 15;
 		MCVer.color4f(1f, 1f, 1f, 1F);
 		//#if MC>=11700
-//$$ 		bufferBuilder.begin(com.mojang.blaze3d.vertex.VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION);
+//$$ 		bufferBuilder.begin(com.mojang.blaze3d.vertex.VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION);
 		//#else
-		bufferBuilder.begin(7, DefaultVertexFormat.POSITION);
+		bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormat.POSITION);
 		//#endif
 		bufferBuilder.vertex(27, boxY - 4, 0).endVertex();
 		bufferBuilder.vertex(27, boxY + 11, 0).endVertex();
@@ -157,9 +159,9 @@ public class DropManipulationScreen extends Screen {
 		tessellator.end();
 		MCVer.color4f(0, 0, 0, 0.5F);
 		//#if MC>=11700
-//$$ 		bufferBuilder.begin(com.mojang.blaze3d.vertex.VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION);
+//$$ 		bufferBuilder.begin(com.mojang.blaze3d.vertex.VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION);
 		//#else
-		bufferBuilder.begin(7, DefaultVertexFormat.POSITION);
+		bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormat.POSITION);
 		//#endif
 		bufferBuilder.vertex(28, boxY - 3, 0).endVertex();
 		bufferBuilder.vertex(28, boxY + 10, 0).endVertex();
