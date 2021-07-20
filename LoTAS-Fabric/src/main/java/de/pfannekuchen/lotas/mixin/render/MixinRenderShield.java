@@ -1,21 +1,24 @@
 package de.pfannekuchen.lotas.mixin.render;
 
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
 
-import de.pfannekuchen.lotas.core.LoTASModContainer;
-import net.minecraft.client.render.item.BuiltinModelItemRenderer;
-import net.minecraft.util.Identifier;
-
-@Mixin(BuiltinModelItemRenderer.class)
+/**
+ * Changes the Shield Texture
+ * @author ScribbleLP, Pancake
+ */
+//#if MC>=11500
+//$$ @Mixin(net.minecraft.client.Minecraft.class)
+//$$ public class MixinRenderShield {
+//$$ 	// TODO: Fix Shields
+//$$ }
+//#else
+@Mixin(net.minecraft.client.renderer.EntityBlockRenderer.class)
 public class MixinRenderShield {
 
-	//#if MC<=11404
-	@ModifyArg(index = 0, method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/texture/TextureManager;bindTexture(Lnet/minecraft/util/Identifier;)V"))
-	public Identifier modifyShieldTexture(Identifier original) {
-		return LoTASModContainer.shield == null ? original : LoTASModContainer.shield;
+	@org.spongepowered.asm.mixin.injection.ModifyArg(index = 0, method = "renderByItem", at = @org.spongepowered.asm.mixin.injection.At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/texture/TextureManager;bind(Lnet/minecraft/resources/ResourceLocation;)V"))
+	public net.minecraft.resources.ResourceLocation modifyShieldTexture(net.minecraft.resources.ResourceLocation original) {
+		return de.pfannekuchen.lotas.core.LoTASModContainer.shield == null ? original : de.pfannekuchen.lotas.core.LoTASModContainer.shield;
 	}
-	//#endif
 
 }
+//#endif

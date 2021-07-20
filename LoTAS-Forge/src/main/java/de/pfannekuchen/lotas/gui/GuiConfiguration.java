@@ -17,10 +17,8 @@ public class GuiConfiguration extends GuiScreen {
 		"B:tools:saveTickrate:INSERT",
 		"B:ui:hideTickrateMessages:INSERT",
 		"B:tools:showTickIndicator:INSERT",
-		"B:ui:hideRTATimer:INSERT",
 		"B:tools:removePearlDelay:INSERT",
-		"B:tools:noDamageUnbreaking:INSERT",
-		"B:tools:showSpeedometer:INSERT"
+		"B:tools:noDamageUnbreaking:INSERT"
 	};
 	
 	public static String[] optionsInteger = new String[] {

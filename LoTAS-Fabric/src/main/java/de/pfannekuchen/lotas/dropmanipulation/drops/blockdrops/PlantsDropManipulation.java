@@ -7,15 +7,15 @@ import com.google.common.collect.ImmutableList;
 import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.gui.DropManipulationScreen;
 import de.pfannekuchen.lotas.gui.widgets.SmallCheckboxWidget;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.entity.Entity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.state.property.IntProperty;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.Minecraft;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 
 public class PlantsDropManipulation extends DropManipulationScreen.DropManipulation {
 
@@ -35,7 +35,7 @@ public class PlantsDropManipulation extends DropManipulationScreen.DropManipulat
 		PlantsDropManipulation.y = y;
 		PlantsDropManipulation.width = width;
 		PlantsDropManipulation.height = height;
-		enabled = MCVer.CheckboxWidget(x, y, 150, 20, "Override Plant Drops", false);
+		enabled = MCVer.Checkbox(x, y, 150, 20, "Override Plant Drops", false);
 	}
 
 	@Override
@@ -46,36 +46,36 @@ public class PlantsDropManipulation extends DropManipulationScreen.DropManipulat
 	@Override
 	public List<ItemStack> redirectDrops(BlockState blockstate) {
 		Block block = blockstate.getBlock();
-		if (block.getDefaultState().getBlock() == Blocks.CARROTS && optimizeCarrots.isChecked()) {
-			if (blockstate.get(IntProperty.of("age", 0, 7)) == 7)
+		if (block.defaultBlockState().getBlock() == Blocks.CARROTS && optimizeCarrots.isChecked()) {
+			if (blockstate.getValue(IntegerProperty.create("age", 0, 7)) == 7)
 				return ImmutableList.of(new ItemStack(Items.CARROT, 5));
-		} else if (block.getDefaultState().getBlock() == Blocks.POTATOES && optimizePotato.isChecked()) {
-			if (blockstate.get(IntProperty.of("age", 0, 7)) == 7)
+		} else if (block.defaultBlockState().getBlock() == Blocks.POTATOES && optimizePotato.isChecked()) {
+			if (blockstate.getValue(IntegerProperty.create("age", 0, 7)) == 7)
 				return ImmutableList.of(new ItemStack(Items.POTATO, 5), new ItemStack(Items.POISONOUS_POTATO, 1));
-		} else if (block.getDefaultState().getBlock() == Blocks.WHEAT && optimizeWheat.isChecked()) {
-			if (blockstate.get(IntProperty.of("age", 0, 7)) == 7)
+		} else if (block.defaultBlockState().getBlock() == Blocks.WHEAT && optimizeWheat.isChecked()) {
+			if (blockstate.getValue(IntegerProperty.create("age", 0, 7)) == 7)
 				return ImmutableList.of(new ItemStack(Items.WHEAT_SEEDS, 3), new ItemStack(Items.WHEAT, 1));
-		} else if (block.getDefaultState().getBlock() == Blocks.BEETROOTS && optimizeBeetroot.isChecked()) {
-			if (blockstate.get(IntProperty.of("age", 0, 3)) == 3)
+		} else if (block.defaultBlockState().getBlock() == Blocks.BEETROOTS && optimizeBeetroot.isChecked()) {
+			if (blockstate.getValue(IntegerProperty.create("age", 0, 3)) == 3)
 				return ImmutableList.of(new ItemStack(Items.BEETROOT, 1), new ItemStack(Items.BEETROOT_SEEDS, 4));
-		} else if (block.getDefaultState().getBlock() == Blocks.MELON && optimizeMelons.isChecked()) {
+		} else if (block.defaultBlockState().getBlock() == Blocks.MELON && optimizeMelons.isChecked()) {
 			return ImmutableList.of(new ItemStack(Items.MELON_SLICE, 7));
-		} else if (block.getDefaultState().getBlock() == Blocks.COCOA && optimizeCocoa.isChecked()) {
-			if (blockstate.get(IntProperty.of("age", 0, 2)) == 2)
+		} else if (block.defaultBlockState().getBlock() == Blocks.COCOA && optimizeCocoa.isChecked()) {
+			if (blockstate.getValue(IntegerProperty.create("age", 0, 2)) == 2)
 				return ImmutableList.of(new ItemStack(Items.COCOA_BEANS, 3));
-		} else if (block.getDefaultState().getBlock() == Blocks.CHORUS_PLANT && optimizeChorus.isChecked()) {
+		} else if (block.defaultBlockState().getBlock() == Blocks.CHORUS_PLANT && optimizeChorus.isChecked()) {
 			return ImmutableList.of(new ItemStack(Items.CHORUS_FRUIT, 1));
-		} else if (block.getDefaultState().getBlock() == Blocks.BROWN_MUSHROOM_BLOCK && optimizeMushroom.isChecked()) {
+		} else if (block.defaultBlockState().getBlock() == Blocks.BROWN_MUSHROOM_BLOCK && optimizeMushroom.isChecked()) {
 			return ImmutableList.of(new ItemStack(Items.BROWN_MUSHROOM, 2));
-		} else if (block.getDefaultState().getBlock() == Blocks.RED_MUSHROOM_BLOCK && optimizeMushroom.isChecked()) {
+		} else if (block.defaultBlockState().getBlock() == Blocks.RED_MUSHROOM_BLOCK && optimizeMushroom.isChecked()) {
 			return ImmutableList.of(new ItemStack(Items.RED_MUSHROOM, 2));
-		} else if (block.getDefaultState().getBlock() == Blocks.NETHER_WART && optimizeNetherwart.isChecked()) {
-			if (blockstate.get(IntProperty.of("age", 0, 3)) == 3)
+		} else if (block.defaultBlockState().getBlock() == Blocks.NETHER_WART && optimizeNetherwart.isChecked()) {
+			if (blockstate.getValue(IntegerProperty.create("age", 0, 3)) == 3)
 				return ImmutableList.of(new ItemStack(Items.NETHER_WART, 4));
-		} else if (block.getDefaultState().getBlock() == Blocks.SWEET_BERRY_BUSH && optimizeSweetBerry.isChecked()) {
-			if (blockstate.get(IntProperty.of("age", 0, 3)) == 3)
+		} else if (block.defaultBlockState().getBlock() == Blocks.SWEET_BERRY_BUSH && optimizeSweetBerry.isChecked()) {
+			if (blockstate.getValue(IntegerProperty.create("age", 0, 3)) == 3)
 				return ImmutableList.of(new ItemStack(Items.SWEET_BERRIES, 3));
-			else if (blockstate.get(IntProperty.of("age", 0, 3)) == 2)
+			else if (blockstate.getValue(IntegerProperty.create("age", 0, 3)) == 2)
 				return ImmutableList.of(new ItemStack(Items.SWEET_BERRIES, 2));
 		}
 		return ImmutableList.of();
@@ -115,7 +115,7 @@ public class PlantsDropManipulation extends DropManipulationScreen.DropManipulat
 	@Override
 	public void mouseAction(double mouseX, double mouseY, int button) {
 		enabled.mouseClicked(mouseX, mouseY, button);
-		if (enabled.isChecked()) {
+		if (enabled.selected()) {
 			optimizeCarrots.mouseClicked(mouseX, mouseY, button);
 			optimizeBeetroot.mouseClicked(mouseX, mouseY, button);
 			optimizeMelons.mouseClicked(mouseX, mouseY, button);
@@ -130,11 +130,11 @@ public class PlantsDropManipulation extends DropManipulationScreen.DropManipulat
 	}
 
 	@Override
-	public void render(Object matrices, int mouseX, int mouseY, float delta) {
+	public void render(int mouseX, int mouseY, float delta) {
 		MCVer.render(enabled, mouseX, mouseY, delta);
 
-		if (!enabled.isChecked()) {
-			MCVer.color(.5f, .5f, .5f, .4f);
+		if (!enabled.selected()) {
+			MCVer.color4f(.5f, .5f, .5f, .4f);
 		} else {
 			MCVer.render(optimizeCarrots, mouseX, mouseY, delta);
 			MCVer.render(optimizeBeetroot, mouseX, mouseY, delta);
@@ -148,8 +148,8 @@ public class PlantsDropManipulation extends DropManipulationScreen.DropManipulat
 			MCVer.render(optimizeNetherwart, mouseX, mouseY, delta);
 		}
 
-		MinecraftClient.getInstance().getTextureManager().bindTexture(new Identifier("lotas", "drops/plants.png"));
-		MCVer.renderImage(width - 128, y + 24, 0.0F, 0.0F, 96, 96, 96, 96);
+		MCVer.bind(Minecraft.getInstance().getTextureManager(), new ResourceLocation("lotas", "drops/plants.png"));
+		MCVer.blit(width - 128, y + 24, 0.0F, 0.0F, 96, 96, 96, 96);
 	}
 
 }

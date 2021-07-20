@@ -1,12 +1,11 @@
 package de.pfannekuchen.lotas.mixin.accessors;
 
+import net.minecraft.client.gui.components.EditBox;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
-import net.minecraft.client.gui.widget.TextFieldWidget;
-
-@Mixin(TextFieldWidget.class)
+@Mixin(EditBox.class)
 public interface AccessorTextFieldWidget {
-	@Accessor
+	@Accessor("textColorUneditable")
 	public int getUneditableColor();
 }

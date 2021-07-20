@@ -6,27 +6,26 @@ import com.google.common.collect.ImmutableList;
 
 import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.gui.DropManipulationScreen;
-import de.pfannekuchen.lotas.gui.widgets.NewButtonWidget;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.entity.Entity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class GlowstoneDropManipulation extends DropManipulationScreen.DropManipulation {
 
 	public static int dust = 2;
 
-	public static ButtonWidget drop2Glowstonedust = new NewButtonWidget(x, y, 98, 20, "2 Glowstone Dust", button -> {
+	public static Button drop2Glowstonedust = MCVer.Button(x, y, 98, 20, "2 Glowstone Dust", button -> {
 		press2Glowstonedust();
 	});
-	public static ButtonWidget drop3Glowstonedust = new NewButtonWidget(x, y, 98, 20, "3 Glowstone Dust", button -> {
+	public static Button drop3Glowstonedust = MCVer.Button(x, y, 98, 20, "3 Glowstone Dust", button -> {
 		press3Glowstonedust();
 	});
-	public static ButtonWidget drop4Glowstonedust = new NewButtonWidget(x, y, 98, 20, "4 Glowstone Dust", button -> {
+	public static Button drop4Glowstonedust = MCVer.Button(x, y, 98, 20, "4 Glowstone Dust", button -> {
 		press4Glowstonedust();
 	});
 
@@ -56,7 +55,7 @@ public class GlowstoneDropManipulation extends DropManipulationScreen.DropManipu
 		GlowstoneDropManipulation.y = y;
 		GlowstoneDropManipulation.width = width;
 		GlowstoneDropManipulation.height = height;
-		enabled = MCVer.CheckboxWidget(x, y, 150, 20, "Override Glowstone Drops", false);
+		enabled = MCVer.Checkbox(x, y, 150, 20, "Override Glowstone Drops", false);
 		drop2Glowstonedust.active = false;
 	}
 
@@ -67,7 +66,7 @@ public class GlowstoneDropManipulation extends DropManipulationScreen.DropManipu
 
 	@Override
 	public List<ItemStack> redirectDrops(BlockState block) {
-		if (block.getBlock().getDefaultState().getBlock() != Blocks.GLOWSTONE)
+		if (block.getBlock().defaultBlockState().getBlock() != Blocks.GLOWSTONE)
 			return ImmutableList.of();
 		return ImmutableList.of(new ItemStack(Items.GLOWSTONE_DUST, dust));
 	}
@@ -97,7 +96,7 @@ public class GlowstoneDropManipulation extends DropManipulationScreen.DropManipu
 	@Override
 	public void mouseAction(double mouseX, double mouseY, int button) {
 		enabled.mouseClicked(mouseX, mouseY, button);
-		if (enabled.isChecked()) {
+		if (enabled.selected()) {
 			drop2Glowstonedust.mouseClicked(mouseX, mouseY, button);
 			drop3Glowstonedust.mouseClicked(mouseX, mouseY, button);
 			drop4Glowstonedust.mouseClicked(mouseX, mouseY, button);
@@ -105,20 +104,20 @@ public class GlowstoneDropManipulation extends DropManipulationScreen.DropManipu
 	}
 
 	@Override
-	public void render(Object matrices, int mouseX, int mouseY, float delta) {
+	public void render(int mouseX, int mouseY, float delta) {
 		MCVer.render(enabled, mouseX, mouseY, delta);
 		
-		if (!enabled.isChecked()) {
-			MCVer.color(0.5f, 0.5f, 0.5f, 0.4f);
+		if (!enabled.selected()) {
+			MCVer.color4f(0.5f, 0.5f, 0.5f, 0.4f);
 		} else {
-			MCVer.drawStringWithShadow("Drop " + dust + " Glowstone Dust when breaking Glowstone", x, y + 64, 0xFFFFFF);
+			MCVer.drawShadow("Drop " + dust + " Glowstone Dust when breaking Glowstone", x, y + 64, 0xFFFFFF);
 			MCVer.render(drop4Glowstonedust, mouseX, mouseY, delta);
 			MCVer.render(drop3Glowstonedust, mouseX, mouseY, delta);
 			MCVer.render(drop2Glowstonedust, mouseX, mouseY, delta);
 		}
 
-		MinecraftClient.getInstance().getTextureManager().bindTexture(new Identifier("lotas", "drops/glowstone.png"));
-		MCVer.renderImage(width - 128, y + 24, 0.0F, 0.0F, 96, 96, 96, 96);
+		MCVer.bind(Minecraft.getInstance().getTextureManager(), new ResourceLocation("lotas", "drops/glowstone.png"));
+		MCVer.blit(width - 128, y + 24, 0.0F, 0.0F, 96, 96, 96, 96);
 	}
 
 }

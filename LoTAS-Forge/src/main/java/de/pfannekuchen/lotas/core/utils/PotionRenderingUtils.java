@@ -88,7 +88,7 @@ public class PotionRenderingUtils {
 		GlStateManager.scale(scale2, scale2, scale2);
 		
 		IBlockState block = MCVer.world(mc).getBlockState(MCVer.player(mc).getPosition().add(0, 1, 0));
-		if (block.getBlock()==Blocks.WATER) {
+		if (block.getBlock()==MCVer.getBlock("WATER")) {
 			GlStateManager.translate(0, 0, -2.5);
 		}
 		//#if MC>=11102

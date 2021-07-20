@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.lwjgl.opengl.GL11;
 
+import de.pfannekuchen.lotas.core.LoTASModContainer;
 import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.gui.GuiAiManipulation;
 import de.pfannekuchen.lotas.gui.GuiEntitySpawnManipulation;
@@ -19,7 +20,6 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
 
 /**
  * All events that MinecraftForge provides end up here, excluding the initialization event.
@@ -35,33 +35,12 @@ public class EventUtils {
 	 */
 	@SubscribeEvent public void onDraw(RenderGameOverlayEvent.Post e) {
 		if (checkNonText(e)) return; // Check whether the event is not a text render event.
-		de.pfannekuchen.lotas.gui.HudSettings.drawOverlay(); // Render the Info-HUD overlay
+		LoTASModContainer.hud.drawHud();
 		
-		/* Render the Timer and Tick Indicator */
-		if (Timer.ticks != -1) {
-			// Render the timer whenever it is supposed to show up, and hide the RTA-Timer if configuration option is set.
-			Gui.drawRect(0, 0, 75, ConfigUtils.getBoolean("ui", "hideRTATimer") ? 13 : 24, new java.awt.Color(0, 0, 0, 175).getRGB());
-			Duration dur = Duration.ofMillis(Timer.ticks * 50);
-			if (Timer.running) TickrateChangerMod.rta = Duration.ofMillis(System.currentTimeMillis() - Timer.startTime.toMillis());
-			MCVer.getFontRenderer(Minecraft.getMinecraft()).drawStringWithShadow(Timer.getDuration(dur), 1, 3, 0xFFFFFFFF);
-			if (!ConfigUtils.getBoolean("ui", "hideRTATimer")) MCVer.getFontRenderer(Minecraft.getMinecraft()).drawStringWithShadow("RTA: " + Timer.getDuration(TickrateChangerMod.rta), 1, 15, 0xFFFFFFFF);
-		}
 		if (ConfigUtils.getBoolean("tools", "showTickIndicator") && TickrateChangerMod.tickrate <= 5F && TickrateChangerMod.show) {
 			// Render the Tick Indicator whenever ever second tick occurs and the Tickrate is below 5
 			Minecraft.getMinecraft().getTextureManager().bindTexture(TickrateChangerMod.streaming);
 			Gui.drawModalRectWithCustomSizedTexture(new net.minecraft.client.gui.ScaledResolution(Minecraft.getMinecraft()).getScaledWidth() - 17, 1, 0, 0, 16, 16, 16, 64);
-		}
-		
-		/* Calculate the players speed and render the Speedometer if wanted */
-		if (ConfigUtils.getBoolean("tools", "showSpeedometer")) {
-			// Dividing the players movement per tick x by z, multiplied by 0.05 will result in the blocks per second. 
-			double distTraveledLastTickX = MCVer.player(Minecraft.getMinecraft()).posX - MCVer.player(Minecraft.getMinecraft()).prevPosX;
-			double distTraveledLastTickZ = MCVer.player(Minecraft.getMinecraft()).posZ - MCVer.player(Minecraft.getMinecraft()).prevPosZ;
-			String message = String.format("%.2f", MCVer.sqrt((distTraveledLastTickX * distTraveledLastTickX + distTraveledLastTickZ * distTraveledLastTickZ)) / 0.05F) + " blocks/sec";
-			int width = MCVer.getFontRenderer(Minecraft.getMinecraft()).getStringWidth(message);
-			// Render the Speedometer to the screen.
-			Gui.drawRect(4, 4, 4 + width + 2 * 2, 4 + MCVer.getFontRenderer(Minecraft.getMinecraft()).FONT_HEIGHT + 2 + 2 - 1, 0xAA000000);
-			MCVer.getFontRenderer(Minecraft.getMinecraft()).drawString(message, 6, 6, 14737632);
 		}
 	}
 	

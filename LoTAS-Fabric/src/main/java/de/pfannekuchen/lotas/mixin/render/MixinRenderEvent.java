@@ -1,122 +1,136 @@
 package de.pfannekuchen.lotas.mixin.render;
 
-import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import com.mojang.blaze3d.platform.GlStateManager.DestFactor;
+import com.mojang.blaze3d.platform.GlStateManager.SourceFactor;
+
+import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.core.utils.RenderUtils;
 import de.pfannekuchen.lotas.gui.AIManipulationScreen;
 import de.pfannekuchen.lotas.gui.SpawnManipulationScreen;
 import de.pfannekuchen.lotas.mods.AIManipMod;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.render.GameRenderer;
-import net.minecraft.util.math.Vec3d;
+import de.pfannekuchen.lotas.mods.SpawnManipMod;
+import net.minecraft.client.Camera;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.world.phys.Vec3;
 
+/**
+ * Renders 3D Stuff
+ * @author Pancake
+ */
 @Mixin(GameRenderer.class)
 public class MixinRenderEvent {
 
-	@Inject(at = @At("HEAD"), method = "renderHand")
+	@Inject(at = @At("HEAD"), method = "renderItemInHand")
+	//#if MC>=11700
+//$$ 	public void renderWorldLastEvent(com.mojang.blaze3d.vertex.PoseStack poseStack, Camera camera, float f, CallbackInfo ci) {
+	//#else
 	public void renderWorldLastEvent(CallbackInfo ci) {
-		final Screen gui = MinecraftClient.getInstance().currentScreen;
+	//#endif
+		Minecraft mc=Minecraft.getInstance();
+		final Screen gui = mc.screen;
+		//#if MC<=11605
+		Object poseStack=null;
+		//#endif
 		if (gui instanceof SpawnManipulationScreen) {
-			GL11.glPushMatrix();
-			GL11.glDisable(GL11.GL_TEXTURE_2D);
-			GL11.glEnable(GL11.GL_BLEND);
-			GL11.glDepthMask(true);
-			GL11.glEnable(GL11.GL_DEPTH_TEST);
-			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-			GL11.glEnable(GL11.GL_LINE_SMOOTH);
-			GL11.glLineWidth(2);
+			MCVer.pushMatrix(poseStack);
+			MCVer.disableTexture();
+			MCVer.enableBlend();
+			MCVer.enableDepthTest();
+			MCVer.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 
-			//#if MC>=11502
-//$$ 						RenderUtils.applyCameraRotationOnly();
+			//#if MC>=11500
+			//#if MC<=11605
+//$$ 			RenderUtils.applyCameraRotationOnly(poseStack);
 			//#endif
-			RenderUtils.applyRenderOffset();
+			//#endif
+			RenderUtils.applyRenderOffset(poseStack);
+			
+			Vec3 targetPos=SpawnManipMod.getTargetPos();
+			double renderX = ((int)targetPos.x);
+			double renderY = ((int)targetPos.y);
+			double renderZ = ((int)targetPos.z);
 
-			double renderX = ((double) ((SpawnManipulationScreen) gui).spawnX - 0.5f);
-			double renderY = ((double) ((SpawnManipulationScreen) gui).spawnY);
-			double renderZ = ((double) ((SpawnManipulationScreen) gui).spawnZ - 0.5F);
-
-			GL11.glTranslated(renderX, renderY, renderZ);
-			GL11.glScalef(1, 2, 1);
-			GL11.glColor4f(28, 188, 220, 0.5f);
-			RenderUtils.drawOutlinedBox();
-			RenderUtils.drawCrossBox();
-			GL11.glColor4f(0F, 1F, 0F, 0.15F);
-			RenderUtils.drawSolidBox();
-
-			GL11.glDisable(GL11.GL_BLEND);
-			GL11.glEnable(GL11.GL_TEXTURE_2D);
-			GL11.glDisable(GL11.GL_DEPTH_TEST);
-			GL11.glDisable(GL11.GL_LINE_SMOOTH);
-			GL11.glPopMatrix();
+			MCVer.translated(poseStack, renderX, renderY, renderZ);
+			MCVer.scaled(poseStack, 1, 2, 1);
+			RenderUtils.drawOutlinedBox(poseStack);
+//			RenderUtils.drawCrossBox();
+			
+			if(SpawnManipMod.canSpawn()) {
+				RenderUtils.drawSolidBox(poseStack, 0F, 1F, 0F, 0.15F);
+			}else {
+				RenderUtils.drawSolidBox(poseStack, 1F, 0F, 0F, 0.15F);
+			}
+			
+			MCVer.disableBlend();
+			MCVer.enableTexture();
+			MCVer.disableDepthTest();
+			MCVer.popMatrix(poseStack);
 		} else if (gui instanceof AIManipulationScreen) {
 			if (AIManipMod.getSelectedEntityPos() == null)
 				return;
-			GL11.glPushMatrix();
-			GL11.glDisable(GL11.GL_TEXTURE_2D);
-			GL11.glEnable(GL11.GL_BLEND);
-			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-			GL11.glEnable(GL11.GL_LINE_SMOOTH);
-			GL11.glLineWidth(2);
+			MCVer.pushMatrix(poseStack);
+			MCVer.disableTexture();
+			MCVer.enableBlend();
+			MCVer.enableDepthTest();
+			MCVer.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 
-			//#if MC>=11502
-//$$ 			RenderUtils.applyCameraRotationOnly();
+			//#if MC>=11500
+//$$ //			RenderUtils.applyCameraRotationOnly(poseStack);
 			//#endif
-			RenderUtils.applyRenderOffset();
+			RenderUtils.applyRenderOffset(poseStack);
 
-			Vec3d entityPos=AIManipMod.getSelectedEntityPos();
-			double renderX = entityPos.x - 0.5f;
+			Vec3 entityPos=AIManipMod.getSelectedEntityPos();
+			double renderX = entityPos.x-0.5;
 			double renderY = entityPos.y;
-			double renderZ = entityPos.z - 0.5F;
+			double renderZ = entityPos.z-0.5;
 
-			GL11.glTranslated(renderX, renderY, renderZ);
-			GL11.glScalef(1, 2, 1);
-			GL11.glColor4f(28, 188, 220, 0.5f);
-			RenderUtils.drawOutlinedBox();
-			RenderUtils.drawCrossBox();
-			GL11.glColor4f(1F, 0F, 0F, 0.15F);
-			RenderUtils.drawSolidBox();
+			MCVer.translated(poseStack, renderX, renderY, renderZ);
+			MCVer.scaled(poseStack, 1, 2, 1);
+			RenderUtils.drawOutlinedBox(poseStack);
+//			RenderUtils.drawCrossBox();
+			RenderUtils.drawSolidBox(poseStack, 1F, 0F, 0F, 0.15F);
 
-			GL11.glDisable(GL11.GL_BLEND);
-			GL11.glEnable(GL11.GL_TEXTURE_2D);
-			GL11.glDisable(GL11.GL_LINE_SMOOTH);
-			GL11.glPopMatrix();
+			MCVer.disableBlend();
+			MCVer.enableTexture();
+			MCVer.disableDepthTest();
+			MCVer.popMatrix(poseStack);
 
-			GL11.glPushMatrix();
-			GL11.glDisable(GL11.GL_TEXTURE_2D);
-			GL11.glEnable(GL11.GL_BLEND);
-			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-			GL11.glEnable(GL11.GL_LINE_SMOOTH);
-			GL11.glLineWidth(2);
+			MCVer.pushMatrix(poseStack);
+			MCVer.disableTexture();
+			MCVer.enableBlend();
+			MCVer.enableDepthTest();
+			MCVer.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 
 			// Draw output
-			//#if MC>=11502
-//$$ 			RenderUtils.applyCameraRotationOnly();
+			//#if MC>=11500
+			//#if MC<=11605
+//$$ 			RenderUtils.applyCameraRotationOnly(poseStack);
 			//#endif
-			RenderUtils.applyRenderOffset();
+			//#endif
+			RenderUtils.applyRenderOffset(poseStack);
 
-			Vec3d targetPos=AIManipMod.getTargetPos();
+			Vec3 targetPos=AIManipMod.getTargetPos();
 			renderX = (int)targetPos.x;
 			renderY = (int)targetPos.y;
 			renderZ = (int)targetPos.z;
 
-			GL11.glTranslated(renderX, renderY, renderZ);
-			GL11.glScalef(1, 1, 1);
-			GL11.glColor4f(28, 188, 220, 0.5f);
-			RenderUtils.drawOutlinedBox();
-			RenderUtils.drawCrossBox();
-			GL11.glColor4f(0F, 0F, 1F, 0.15F);
-			RenderUtils.drawSolidBox();
+			MCVer.translated(poseStack, renderX, renderY, renderZ);
+			
+			RenderUtils.drawOutlinedBox(poseStack);
+//			RenderUtils.drawCrossBox();
+			RenderUtils.drawSolidBox(poseStack, 0F, 0F, 1F, 0.15F);
 
-			GL11.glDisable(GL11.GL_BLEND);
-			GL11.glEnable(GL11.GL_TEXTURE_2D);
-			GL11.glDisable(GL11.GL_LINE_SMOOTH);
-			GL11.glPopMatrix();
+			MCVer.disableBlend();
+			MCVer.enableTexture();
+			MCVer.disableDepthTest();
+			MCVer.popMatrix(poseStack);
 		}
 	}
-
 }

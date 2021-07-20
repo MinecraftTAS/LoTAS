@@ -4,28 +4,27 @@
     "package": "de.pfannekuchen.lotas.mixin",
     "compatibilityLevel": "JAVA_8",
     "mixins": [
+    	"accessors.AccessorMobEntity",
+    	"accessors.AccessorDimensionTypes",
+    	"accessors.AccessorLevelStorage"
     ],
     "client": [
     	"MixinMinecraftClient",
     	"MixinMinecraftServer",
     	"MixinIntegratedServer",
-    	"accessors.AccessorScreen",
     	"accessors.AccessorMinecraftClient",
     	"accessors.AccessorTimer",
     	"accessors.AccessorTextFieldWidget",
     	"accessors.AccessorCreateWorldScreen",
     	"accessors.AccessorServerPlayerEntity",
     	"accessors.AccessorItemRenderer",
+    	"accessors.AccessorScreen",
     	"accessors.AccessorButtons",
-    	"accessors.AccessorLevelSession",
-    	//#if MC>=11502
-    //$$ 	"accessors.AccessorModelLoader",
-    	//#endif
-    	"render.binds.MixinTickrateChangerAchievement",
 		"render.binds.MixinTickrateChangerAudioPitch",
 		"render.binds.MixinTickrateChangerEnchantmentGlimm",
 		"render.binds.MixinTickrateChangerSubtitleOverlay",
 		"render.binds.MixinTickrateChangerWorldborder",
+		"render.binds.MixinTickrateChangerAchievements",
 		"render.gui.MixinGuiIngameMenu",
 		"render.gui.MixinGuiMainMenu",
 		"render.gui.MixinGuiSelectWorldScreen",
@@ -39,7 +38,8 @@
 		"patches.MixinServerPlayerEntityPatch",
 		"patches.MixinEnderPearlPatch",
 		"patches.MixinUnbreakingPatch",
-		"patches.MixinItemEntity"
+		"patches.MixinItemEntity",
+		"patches.MixinPiglinBrainPatch"
 	],
   	"injectors": {
     	"defaultRequire": 1

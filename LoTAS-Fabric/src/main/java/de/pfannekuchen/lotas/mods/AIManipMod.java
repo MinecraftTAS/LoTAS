@@ -3,46 +3,46 @@ package de.pfannekuchen.lotas.mods;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-
+import net.minecraft.client.Minecraft;
+import net.minecraft.core.Direction;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.control.MoveControl;
+import net.minecraft.world.phys.Vec3;
 import com.google.common.base.Predicates;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.entity.ai.control.MoveControl;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3d;
+import de.pfannekuchen.lotas.core.MCVer;
 
+/**
+ * Forces a selected entity to walk to a target
+ * @author ScribbleLP
+ */
 public class AIManipMod {
-	MinecraftClient mc = MinecraftClient.getInstance();
-
-	private static Vec3d target;
+	private Minecraft mc = Minecraft.getInstance();
+	private static Vec3 target;
 
 	private int selectedIndex = 0;
-	private List<MobEntity> entities;
+	private List<Mob> entities;
 
-	private static MobEntity selectedEntity;
+	private static Mob selectedEntity;
 	
 	private static List<AiJob> jobQueue = new ArrayList<AiJob>();
 	
 	private final Direction orientation;
 	
 	public AIManipMod() {
-		orientation =  mc.player.getHorizontalFacing();
-		//#if MC>=11601
-		//#if MC>=11605
-//$$ 		entities = MinecraftClient.getInstance().getServer().getPlayerManager().getPlayerList().get(0).getServerWorld().getEntitiesByClass(MobEntity.class, MinecraftClient.getInstance().player.getBoundingBox().expand(64, 64, 64), Predicates.alwaysTrue()); 
-		//#else
-//$$ 		entities = MinecraftClient.getInstance().getServer().getPlayerManager().getPlayerList().get(0).getServerWorld().getEntities(MobEntity.class, MinecraftClient.getInstance().player.getBoundingBox().expand(64, 64, 64), Predicates.alwaysTrue()); 
-		//#endif
-		//#else
-		entities = mc.getServer().getWorld(MinecraftClient.getInstance().player.dimension).getEntities(MobEntity.class, mc.player.getBoundingBox().expand(64, 64, 64), Predicates.alwaysTrue());
-		//#endif
+		orientation =  mc.player.getDirection();
+		entities = MCVer.getCurrentLevel().getEntitiesOfClass(Mob.class, mc.player.getBoundingBox().inflate(64, 64, 64), Predicates.alwaysTrue());
 		sortEntities();
 		
 		selectedEntity= entities.get(selectedIndex);
-		target=mc.player.getPos();
+		target=mc.player.position();
 	}
 
+	public static boolean isEntityInRange() {
+		Minecraft mc=Minecraft.getInstance();
+		return !MCVer.getCurrentLevel().getEntitiesOfClass(Mob.class, mc.player.getBoundingBox().inflate(64, 64, 64), Predicates.alwaysTrue()).isEmpty();
+	}
+	
 	public static void tick() {
 		for (AiJob job : new ArrayList<>(jobQueue)) {
 			job.timeoutTick();
@@ -50,8 +50,8 @@ public class AIManipMod {
 				jobQueue.remove(job);
 			}else {
 				MoveControl control = job.entity.getMoveControl();
-				Vec3d target=job.target;
-				control.moveTo(target.x, target.y, target.z, 1);
+				Vec3 target=job.target;
+				control.setWantedPosition(target.x, target.y, target.z, 1);
 			}
 		}
 	}
@@ -59,12 +59,12 @@ public class AIManipMod {
 	public void selectNext() {
 		if(hasNext()) {
 			selectedIndex++;
+			
 			selectedEntity=entities.get(selectedIndex);
 		}
 	}
 	
 	public boolean hasNext() {
-		//2 //0
 		return entities.size()>=selectedIndex+2;
 	}
 
@@ -76,7 +76,6 @@ public class AIManipMod {
 	}
 	
 	public boolean hasPrevious() {
-		//2 //1
 		return entities.size()>0&&selectedIndex-1>=0;
 	}
 	
@@ -93,6 +92,8 @@ public class AIManipMod {
 			break;
 		case WEST:
 			target=target.add(-1, 0, 0);
+			break;
+		default:
 			break;
 		}
 	}
@@ -111,6 +112,8 @@ public class AIManipMod {
 		case WEST:
 			target=target.add(1, 0, 0);
 			break;
+		default:
+			break;
 		}
 	}
 	
@@ -127,6 +130,8 @@ public class AIManipMod {
 			break;
 		case WEST:
 			target=target.add(0, 0, 1);
+			break;
+		default:
 			break;
 		}
 	}
@@ -145,6 +150,8 @@ public class AIManipMod {
 		case WEST:
 			target=target.add(0, 0, -1);
 			break;
+		default:
+			break;
 		}
 	}
 	
@@ -160,31 +167,31 @@ public class AIManipMod {
 		addJob(selectedEntity, target);
 	}
 	
-	public static Vec3d getSelectedEntityPos() {
+	public static Vec3 getSelectedEntityPos() {
 		if(selectedEntity!=null) {
-			return selectedEntity.getPos();
+			return selectedEntity.position();
 		}else {
 			return null;
 		}
 	}
 	
-	public void setTarget(Vec3d target) {
+	public void setTarget(Vec3 target) {
 		AIManipMod.target = target;
 	}
 	
 	public void setTargetToPlayer() {
-		target=mc.player.getPos();
+		target=mc.player.position();
 	}
 	
 	public void setTargetToEntity() {
-		target=selectedEntity.getPos();
+		target=selectedEntity.position();
 	}
 	
-	public static Vec3d getTargetPos() {
+	public static Vec3 getTargetPos() {
 		return target;
 	}
 	
-	public boolean contains(MobEntity entity) {
+	public boolean contains(Mob entity) {
 		for (AiJob job:jobQueue) {
 			if(job.entity.equals(entity)) {
 				return true;
@@ -193,7 +200,7 @@ public class AIManipMod {
 		return false;
 	}
 	
-	public static MobEntity getSelectedEntity() {
+	public static Mob getSelectedEntity() {
 		return selectedEntity;
 	}
 	
@@ -203,61 +210,71 @@ public class AIManipMod {
 		}
 	}
 
-	public void addJob(MobEntity entity, Vec3d target) {
+	public void addJob(Mob entity, Vec3 target) {
 		if(entity!=null) {
 			if(contains(entity)) return;
 			jobQueue.add(new AiJob(entity, target));
 		}
 	}
 
+	/**
+	 * Sorts entities by distance from the player
+	 */
 	private void sortEntities() {
 		if(entities.isEmpty()) return;
-		entities.sort(new Comparator<MobEntity>() {
-			Vec3d player = mc.player.getPos();
+		entities.sort(new Comparator<Mob>() {
+			Vec3 player = mc.player.position();
 
 			@Override
-			public int compare(MobEntity o1, MobEntity o2) {
-				return (int) (player.distanceTo(o1.getPos()) - player.distanceTo(o2.getPos()));
+			public int compare(Mob o1, Mob o2) {
+				return (int) (player.distanceTo(o1.position()) - player.distanceTo(o2.position()));
 			}
 		});
 	}
+	
+	private class AiJob {
 
-	public class AiJob {
+		final Mob entity;
 
-		final MobEntity entity;
-
-		final Vec3d target;
+		final Vec3 target;
 		
-		Vec3d prevPos;
+		Vec3 prevPos;
 		
 		int timeouttimer=0;
 
-		public AiJob(MobEntity entity, Vec3d target) {
+		public AiJob(Mob entity, Vec3 target) {
 			this.entity = entity;
 			this.target=target;
 		}
 
+		/**
+		 * Checks if the entity is at the target or if it's stuck
+		 * @return
+		 */
 		public boolean isFinished() {
-			double distance=target.distanceTo(entity.getPos());
+			double distance=target.distanceTo(entity.position());
 			if (distance < 1) {
 				return true;
 			}else if(timeouttimer==180) {
 				return true;
 			}else if(!entity.isAlive()) {
 				return true;
-			}else if(entity.squaredDistanceTo(mc.player.getPos())>500) {
+			}else if(entity.distanceToSqr(mc.player.position())>500) {
 				return true;
 			}else {
 				return false;
 			}
 		}
 		
+		/**
+		 * If an entity is stuck, the timeouttimer will increase
+		 */
 		public void timeoutTick() {
 			if(prevPos==null) {
-				Vec3d pos = entity.getPos();
+				Vec3 pos = entity.position();
 				prevPos=pos;
 			}else {
-				Vec3d pos = entity.getPos();
+				Vec3 pos = entity.position();
 				double distance=prevPos.distanceTo(pos);
 				if(distance<15) {
 					timeouttimer++;

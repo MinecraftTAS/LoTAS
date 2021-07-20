@@ -5,9 +5,13 @@ import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
 
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;
-import net.minecraft.client.gui.hud.SubtitlesHud;
+import net.minecraft.client.gui.components.SubtitleOverlay;
 
-@Mixin(SubtitlesHud.class)
+/**
+ * Slows down the Subtitles
+ * @author ScribbleLP
+ */
+@Mixin(SubtitleOverlay.class)
 public abstract class MixinTickrateChangerSubtitleOverlay {
 
 	@ModifyConstant(method = "render", constant = @Constant(longValue = 3000L))

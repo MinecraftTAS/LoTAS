@@ -2,103 +2,120 @@ package de.pfannekuchen.lotas.core.utils;
 
 import java.time.Duration;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.lwjgl.glfw.GLFW;
 
-import de.pfannekuchen.lotas.core.utils.EventUtils.Timer;
-import de.pfannekuchen.lotas.gui.HudSettings;
-import de.pfannekuchen.lotas.mods.AIManipMod;
+import de.pfannekuchen.lotas.core.LoTASModContainer;
 import de.pfannekuchen.lotas.mods.DupeMod;
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.GameMenuScreen;
-//#if MC>=11700
-//$$ import net.minecraft.client.option.KeyBinding;
-//#else
-import net.minecraft.client.options.KeyBinding;
-//#endif
+import net.minecraft.client.KeyMapping;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.PauseScreen;
 
+/**
+ * Contains all keybinds and handles key inputs
+ * @author Pancake
+ * @since v1.0
+ * @version v1.1
+ */
 public class KeybindsUtils {
 
-	public static KeyBinding saveStateKeybind = new KeyBinding("Savestate", GLFW.GLFW_KEY_J, "Stating");
-	public static final KeyBinding loadStateKeybind = new KeyBinding("Loadstate", GLFW.GLFW_KEY_K, "Stating");
-	public static final KeyBinding loadDupeKeybind = new KeyBinding("Load Items/Chests", GLFW.GLFW_KEY_O, "Duping");
-	public static final KeyBinding saveDupeKeybind = new KeyBinding("Save Items/Chests", GLFW.GLFW_KEY_P, "Duping");
-	public static final KeyBinding holdStrafeKeybind = new KeyBinding("Auto-Strafe", GLFW.GLFW_KEY_H, "Moving");
-	public static final KeyBinding toggleFreecamKeybind = new KeyBinding("Freecam", GLFW.GLFW_KEY_I, "Moving");
-	public static final KeyBinding increaseTickrateKeybind = new KeyBinding("Faster Tickrate", GLFW.GLFW_KEY_PERIOD, "Tickrate Changer");
-	public static final KeyBinding decreaseTickrateKeybind = new KeyBinding("Slower Tickrate", GLFW.GLFW_KEY_COMMA, "Tickrate Changer");
-	public static final KeyBinding advanceTicksKeybind = new KeyBinding("Advance Tick", GLFW.GLFW_KEY_F9, "Tickrate Changer");
-	public static final KeyBinding toggleAdvanceKeybind = new KeyBinding("Tickrate Zero Toggle", GLFW.GLFW_KEY_F8, "Tickrate Changer");
-	public static final KeyBinding toggleTimerKeybind = new KeyBinding("Start/Stop Timer", GLFW.GLFW_KEY_KP_5, "Tickrate Changer");
-	public static final KeyBinding openInfoHud = new KeyBinding("Open InfoGui Editor", GLFW.GLFW_KEY_F6, "Misc");
-	public static final KeyBinding test = new KeyBinding("Test", GLFW.GLFW_KEY_F12, "Misc");
+	/* Keybind that will savestate */
+	public static final KeyMapping saveStateKeybind = new KeyMapping("Savestate", GLFW.GLFW_KEY_J, "Stating");
+	/* Keybind that will load a state */
+	public static final KeyMapping loadStateKeybind = new KeyMapping("Loadstate", GLFW.GLFW_KEY_K, "Stating");
+	/* Keybind that will load your Inventory */
+	public static final KeyMapping loadDupeKeybind = new KeyMapping("Load Items/Chests", GLFW.GLFW_KEY_O, "Duping");
+	/* Keybind that will save your inventory */
+	public static final KeyMapping saveDupeKeybind = new KeyMapping("Save Items/Chests", GLFW.GLFW_KEY_P, "Duping");
+	/* Keybind used for automated strafing */
+	public static final KeyMapping holdStrafeKeybind = new KeyMapping("Auto-Strafe", GLFW.GLFW_KEY_H, "Moving");
+	/* Toggles freecamming */
+	public static final KeyMapping toggleFreecamKeybind = new KeyMapping("Freecam", GLFW.GLFW_KEY_I, "Moving");
+	/* Increases the Tickrate */
+	public static final KeyMapping increaseTickrateKeybind = new KeyMapping("Faster Tickrate", GLFW.GLFW_KEY_PERIOD, "Tickrate Changer");
+	/* Decreases the Tickrate */
+	public static final KeyMapping decreaseTickrateKeybind = new KeyMapping("Slower Tickrate", GLFW.GLFW_KEY_COMMA, "Tickrate Changer");
+	/* Advances a single tick while in Tick Advance Mode */
+	public static final KeyMapping advanceTicksKeybind = new KeyMapping("Advance Tick", GLFW.GLFW_KEY_F9, "Tickrate Changer");
+	/* Toggles Tickrate Zero (aka Tick Advance Mode) */
+	public static final KeyMapping toggleAdvanceKeybind = new KeyMapping("Tickrate Zero Toggle", GLFW.GLFW_KEY_F8, "Tickrate Changer");
+	/* Starts or stops the Timer */
+	public static final KeyMapping toggleTimerKeybind = new KeyMapping("Start/Stop Timer", GLFW.GLFW_KEY_KP_5, "Tickrate Changer");
+	/* Opens the Info Hud Editor */
+	public static final KeyMapping openInfoHud = new KeyMapping("Open InfoGui Editor", GLFW.GLFW_KEY_F6, "Misc");
+	/* ^_____^ */
+	public static final KeyMapping test = new KeyMapping("Test", GLFW.GLFW_KEY_F12, "Misc");
+	/** Temporary variable used to request a savestate */
 	public static boolean shouldSavestate;
+	/** Temporary variable used to request a loadstate */
 	public static boolean shouldLoadstate;
+	/** Variable that shows whether the player is currently freecamming */
 	public static boolean isFreecaming;
+	/** Temporary variable that will reset the tickrate when leaving freecam */
 	public static int savedTickrate;
-
+	/** Temporary variable that will state whether the hold strafe key was pressed a tick before */
 	public static boolean wasPressed = false;
 
+	/**
+	 * Handles a new KeyInputEvent and ticks through all keybinds.
+	 */
 	public static void keyEvent() {
-		while (saveStateKeybind.wasPressed()) {
+		// Savestate and Loadstate handling
+		while (saveStateKeybind.consumeClick()) {
 			shouldSavestate = true;
-			MinecraftClient.getInstance().openScreen(new GameMenuScreen(true));
+			Minecraft.getInstance().setScreen(new PauseScreen(true));
 		}
-		while (loadStateKeybind.wasPressed()) {
-			MinecraftClient.getInstance().openScreen(new GameMenuScreen(true));
+		while (loadStateKeybind.consumeClick()) {
+			Minecraft.getInstance().setScreen(new PauseScreen(true));
 			shouldLoadstate = true;
 		}
-		while (loadDupeKeybind.wasPressed()) {
-			DupeMod.load(MinecraftClient.getInstance());
+		// Dupemod save and load handling.
+		while (loadDupeKeybind.consumeClick()) {
+			DupeMod.load(Minecraft.getInstance());
 		}
-		while (saveDupeKeybind.wasPressed()) {
-			DupeMod.save(MinecraftClient.getInstance());
+		while (saveDupeKeybind.consumeClick()) {
+			DupeMod.save(Minecraft.getInstance());
 		}
-		while (toggleTimerKeybind.wasPressed()) {
+		// Timer
+		while (toggleTimerKeybind.consumeClick()) {
 			if (Timer.ticks < 1 || Timer.startTime == null) {
 				Timer.startTime = Duration.ofMillis(System.currentTimeMillis());
 				Timer.ticks = 1;
 			}
 			Timer.running = !Timer.running;
 		}
-		
-		while (openInfoHud.wasPressed()) {
-			MinecraftClient.getInstance().openScreen(new HudSettings());
+		// Info Hud handling
+		while (openInfoHud.consumeClick()) {
+			Minecraft.getInstance().setScreen(LoTASModContainer.hud);
 		}
-
-		if (wasPressed != holdStrafeKeybind.isPressed() && wasPressed == true) {
-			//#if MC>=11601
-//$$ 						KeyBinding.setKeyPressed(MinecraftClient.getInstance().options.keyRight.getDefaultKey(), false);
-			//#else
-			KeyBinding.setKeyPressed(MinecraftClient.getInstance().options.keyRight.getDefaultKeyCode(), false);
-			//#endif
-		} else if (wasPressed != holdStrafeKeybind.isPressed() && wasPressed == false) {
-			//#if MC>=11700
-//$$ 			float newyaw=MinecraftClient.getInstance().player.getYaw()-45;
-//$$ 			MinecraftClient.getInstance().player.setYaw(newyaw);
-			//#else
-			MinecraftClient.getInstance().player.yaw -= 45;
-			//#endif
+		// Autostrafe auto rotation handling
+		if (wasPressed != holdStrafeKeybind.isDown() && wasPressed == true) {
+			KeyMapping.set(Minecraft.getInstance().options.keyRight.getDefaultKey(), false);
 		}
-		if(test.wasPressed()) {
-//			MinecraftClient.getInstance().getServer().save(false, false, false);
+		wasPressed = holdStrafeKeybind.isDown();
+		if(test.consumeClick()) {
+//			SpawnManipMod manip=new SpawnManipMod();
+//			manip.debugSpawn();
 		}
-		wasPressed = holdStrafeKeybind.isPressed();
 	}
 
+	/**
+	 * Static method to register all Keybinds to the game.
+	 * Note: Not using Fabric API to avoid a crash using Mojang Mappings
+	 */
 	public static void registerKeybinds() {
-		KeyBindingHelper.registerKeyBinding(saveStateKeybind);
-		KeyBindingHelper.registerKeyBinding(loadStateKeybind);
-		KeyBindingHelper.registerKeyBinding(loadDupeKeybind);
-		KeyBindingHelper.registerKeyBinding(saveDupeKeybind);
-		KeyBindingHelper.registerKeyBinding(holdStrafeKeybind);
-		KeyBindingHelper.registerKeyBinding(toggleFreecamKeybind);
-		KeyBindingHelper.registerKeyBinding(increaseTickrateKeybind);
-		KeyBindingHelper.registerKeyBinding(decreaseTickrateKeybind);
-		KeyBindingHelper.registerKeyBinding(advanceTicksKeybind);
-		KeyBindingHelper.registerKeyBinding(toggleAdvanceKeybind);
-		KeyBindingHelper.registerKeyBinding(toggleTimerKeybind);
-		KeyBindingHelper.registerKeyBinding(openInfoHud);
-//		KeyBindingHelper.registerKeyBinding(test);
+		ArrayUtils.addAll(Minecraft.getInstance().options.keyMappings,
+				saveStateKeybind,
+				loadStateKeybind,
+				loadDupeKeybind,
+				saveDupeKeybind,
+				holdStrafeKeybind,
+				toggleFreecamKeybind,
+				increaseTickrateKeybind,
+				decreaseTickrateKeybind,
+				advanceTicksKeybind,
+				toggleAdvanceKeybind,
+				toggleTimerKeybind,
+				openInfoHud);
 	}
 }

@@ -7,25 +7,25 @@ import com.google.common.collect.ImmutableList;
 import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.gui.DropManipulationScreen;
 import de.pfannekuchen.lotas.gui.widgets.SmallCheckboxWidget;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.mob.CaveSpiderEntity;
-import net.minecraft.entity.mob.CreeperEntity;
-import net.minecraft.entity.mob.ElderGuardianEntity;
-import net.minecraft.entity.mob.EndermanEntity;
-import net.minecraft.entity.mob.GuardianEntity;
-import net.minecraft.entity.mob.PhantomEntity;
-import net.minecraft.entity.mob.ShulkerEntity;
-import net.minecraft.entity.mob.SkeletonEntity;
-import net.minecraft.entity.mob.SlimeEntity;
-import net.minecraft.entity.mob.StrayEntity;
-import net.minecraft.entity.mob.VindicatorEntity;
-import net.minecraft.entity.mob.WitchEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.Minecraft;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.CaveSpider;
+import net.minecraft.world.entity.monster.Creeper;
+import net.minecraft.world.entity.monster.ElderGuardian;
+import net.minecraft.world.entity.monster.EnderMan;
+import net.minecraft.world.entity.monster.Guardian;
+import net.minecraft.world.entity.monster.Phantom;
+import net.minecraft.world.entity.monster.Shulker;
+import net.minecraft.world.entity.monster.Skeleton;
+import net.minecraft.world.entity.monster.Slime;
+import net.minecraft.world.entity.monster.Stray;
+import net.minecraft.world.entity.monster.Vindicator;
+import net.minecraft.world.entity.monster.Witch;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class MonsterDropManipulation extends DropManipulationScreen.DropManipulation {
 
@@ -46,7 +46,7 @@ public class MonsterDropManipulation extends DropManipulationScreen.DropManipula
 		MonsterDropManipulation.y = y;
 		MonsterDropManipulation.width = width;
 		MonsterDropManipulation.height = height;
-		enabled = MCVer.CheckboxWidget(x, y, 150, 20, "Override Monster Drops", false);
+		enabled = MCVer.Checkbox(x, y, 150, 20, "Override Monster Drops", false);
 	}
 
 	@Override
@@ -61,32 +61,32 @@ public class MonsterDropManipulation extends DropManipulationScreen.DropManipula
 
 	@Override
 	public List<ItemStack> redirectDrops(Entity entity) {
-		if (entity instanceof CaveSpiderEntity && optimizeCaveSpider.isChecked())
+		if (entity instanceof CaveSpider && optimizeCaveSpider.isChecked())
 			return ImmutableList.of(new ItemStack(Items.SPIDER_EYE), new ItemStack(Items.STRING, 2));
-		if (entity instanceof CreeperEntity && optimizeCreeper.isChecked())
+		if (entity instanceof Creeper && optimizeCreeper.isChecked())
 			return ImmutableList.of(new ItemStack(Items.GUNPOWDER, 2));
-		if (entity instanceof ElderGuardianEntity && optimizeElderGuardian.isChecked())
+		if (entity instanceof ElderGuardian && optimizeElderGuardian.isChecked())
 			return ImmutableList.of(new ItemStack(Items.PRISMARINE_CRYSTALS, 1), new ItemStack(Items.PRISMARINE_SHARD, 2), new ItemStack(Items.WET_SPONGE), new ItemStack(Items.PUFFERFISH));
-		if (entity instanceof EndermanEntity && optimizeEnderman.isChecked())
+		if (entity instanceof EnderMan && optimizeEnderman.isChecked())
 			return ImmutableList.of(new ItemStack(Items.ENDER_PEARL, 1));
-		if (entity instanceof PhantomEntity && optimizePhantom.isChecked())
+		if (entity instanceof Phantom && optimizePhantom.isChecked())
 			return ImmutableList.of(new ItemStack(Items.PHANTOM_MEMBRANE, 1));
-		if ((entity instanceof SkeletonEntity || entity instanceof StrayEntity) && optimizeSkeleton.isChecked())
+		if ((entity instanceof Skeleton || entity instanceof Stray) && optimizeSkeleton.isChecked())
 			return ImmutableList.of(new ItemStack(Items.ARROW, 2), new ItemStack(Items.BONE, 2));
-		if (entity instanceof SlimeEntity && optimizeSlime.isChecked())
-			if (((SlimeEntity) entity).getSize() == 1) {
+		if (entity instanceof Slime && optimizeSlime.isChecked())
+			if (((Slime) entity).getSize() == 1) {
 				return ImmutableList.of(new ItemStack(Items.SLIME_BALL, 2));
 			}
-		if (entity instanceof SlimeEntity && optimizeSlime.isChecked())
-			if (((SlimeEntity) entity).getSize() == 1)
+		if (entity instanceof Slime && optimizeSlime.isChecked())
+			if (((Slime) entity).getSize() == 1)
 				return ImmutableList.of(new ItemStack(Items.SLIME_BALL, 2));
-		if (entity instanceof VindicatorEntity && optimizeVindicator.isChecked())
+		if (entity instanceof Vindicator && optimizeVindicator.isChecked())
 			return ImmutableList.of(new ItemStack(Items.EMERALD, 1));
-		if (entity instanceof GuardianEntity && optimizeGuardian.isChecked())
+		if (entity instanceof Guardian && optimizeGuardian.isChecked())
 			return ImmutableList.of(new ItemStack(Items.PRISMARINE_SHARD, 2));
-		if (entity instanceof ShulkerEntity && optimizeShulker.isChecked())
+		if (entity instanceof Shulker && optimizeShulker.isChecked())
 			return ImmutableList.of(new ItemStack(Items.SHULKER_SHELL, 1));
-		if (entity instanceof WitchEntity && optimizeWitch.isChecked()) {
+		if (entity instanceof Witch && optimizeWitch.isChecked()) {
 			if (!((LivingEntity) entity).isBaby())
 				return ImmutableList.of(new ItemStack(Items.GLOWSTONE_DUST), new ItemStack(Items.STICK), new ItemStack(Items.REDSTONE), new ItemStack(Items.GUNPOWDER), new ItemStack(Items.GLASS_BOTTLE), new ItemStack(Items.SPIDER_EYE));
 		}
@@ -124,7 +124,7 @@ public class MonsterDropManipulation extends DropManipulationScreen.DropManipula
 	@Override
 	public void mouseAction(double mouseX, double mouseY, int button) {
 		enabled.mouseClicked(mouseX, mouseY, button);
-		if (enabled.isChecked()) {
+		if (enabled.selected()) {
 			optimizeCaveSpider.mouseClicked(mouseX, mouseY, button);
 			optimizeEnderman.mouseClicked(mouseX, mouseY, button);
 			optimizeCreeper.mouseClicked(mouseX, mouseY, button);
@@ -140,11 +140,11 @@ public class MonsterDropManipulation extends DropManipulationScreen.DropManipula
 	}
 
 	@Override
-	public void render(Object matrices, int mouseX, int mouseY, float delta) {
+	public void render(int mouseX, int mouseY, float delta) {
 		MCVer.render(enabled, mouseX, mouseY, delta);
 
-		if (!enabled.isChecked()) {
-			MCVer.color(.5f, .5f, .5f, .4f);
+		if (!enabled.selected()) {
+			MCVer.color4f(.5f, .5f, .5f, .4f);
 		} else {
 			MCVer.render(optimizeCaveSpider, mouseX, mouseY, delta);
 			MCVer.render(optimizeEnderman, mouseX, mouseY, delta);
@@ -159,8 +159,8 @@ public class MonsterDropManipulation extends DropManipulationScreen.DropManipula
 			MCVer.render(optimizeWitch, mouseX, mouseY, delta);
 		}
 
-		MinecraftClient.getInstance().getTextureManager().bindTexture(new Identifier("lotas", "drops/spider.png"));
-		MCVer.renderImage(width - 128, y + 24, 0.0F, 0.0F, 109, 85, 109, 85);
+		MCVer.bind(Minecraft.getInstance().getTextureManager(), new ResourceLocation("lotas", "drops/spider.png"));
+		MCVer.blit(width - 128, y + 24, 0.0F, 0.0F, 109, 85, 109, 85);
 	}
 
 }

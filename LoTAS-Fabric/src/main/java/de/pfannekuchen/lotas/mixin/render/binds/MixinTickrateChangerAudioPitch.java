@@ -6,16 +6,20 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;
-import net.minecraft.client.sound.SoundInstance;
-import net.minecraft.client.sound.SoundSystem;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.client.resources.sounds.SoundInstance;
+import net.minecraft.client.sounds.SoundEngine;
+import net.minecraft.util.Mth;
 
-@Mixin(SoundSystem.class)
+/**
+ * Slows down Audio
+ * @author ScribbleLP
+ */
+@Mixin(SoundEngine.class)
 public abstract class MixinTickrateChangerAudioPitch {
 
-	@Inject(method = "getAdjustedPitch", at = @At(value = "HEAD"), cancellable = true)
+	@Inject(method = "calculatePitch", at = @At(value = "HEAD"), cancellable = true)
 	public void redosetPitch(SoundInstance soundInstance, CallbackInfoReturnable<Float> ci) {
-		ci.setReturnValue(MathHelper.clamp(soundInstance.getPitch(), 0.5F, 2.0F) * (TickrateChangerMod.tickrate / 20F));
+		ci.setReturnValue(Mth.clamp(soundInstance.getPitch(), 0.5F, 2.0F) * (TickrateChangerMod.tickrate / 20F));
 		ci.cancel();
 	}
 

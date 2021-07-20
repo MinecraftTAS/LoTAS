@@ -19,11 +19,11 @@ import net.bramp.ffmpeg.FFprobe;
 import net.bramp.ffmpeg.probe.FFmpegProbeResult;
 import net.bramp.ffmpeg.progress.Progress;
 import net.bramp.ffmpeg.progress.ProgressListener;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.toast.SystemToast;
-import net.minecraft.client.toast.SystemToast.Type;
-import net.minecraft.text.LiteralText;
-import net.minecraft.util.crash.CrashReport;
+import net.minecraft.CrashReport;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.toasts.SystemToast;
+import net.minecraft.client.gui.components.toasts.SystemToast.SystemToastIds;
+import net.minecraft.network.chat.TextComponent;
 
 /**
  * 
@@ -89,14 +89,14 @@ public class VideoUpspeeder {
 
 	/** Download FFmpeg and install it 
 	 * @param videoUpspeederScreen */
-	public static void installFFmpeg(final MinecraftClient client) {
+	public static void installFFmpeg(final Minecraft client) {
 		VideoUpspeederScreen.downloadingFFmpeg = true;
 		new Thread(() -> {
 			try {
 				VideoUpspeederScreen.installingProgress = "Connecting to https://mgnet.work/";
 				URLConnection conn = new URL("http://mgnet.work/ffmpeg.zip").openConnection();
-				final File ffmpeg = new File(client.runDirectory, "ffmpeg");
-				final File ffmpegZip = new File(client.runDirectory, "ffmpeg.zip");
+				final File ffmpeg = new File(client.gameDirectory, "ffmpeg");
+				final File ffmpegZip = new File(client.gameDirectory, "ffmpeg.zip");
 				VideoUpspeederScreen.installingProgress = "Downloading https://mgnet.work/ffmpeg.zip";
 				FileUtils.copyInputStreamToFile(conn.getInputStream(), ffmpegZip);
 				VideoUpspeederScreen.installingProgress = "Extracting ffmpeg.zip";
@@ -109,8 +109,8 @@ public class VideoUpspeeder {
 				VideoUpspeederScreen.onStatsReady();
 			} catch (IOException e) {
 				e.printStackTrace();
-				MinecraftClient.getInstance().printCrashReport(new CrashReport("Downloading of FFmpeg failed", e));
-				client.stop();
+				Minecraft.getInstance().crash(new CrashReport("Downloading of FFmpeg failed", e));
+				client.destroy();
 			}
 		}).start();
 	}
@@ -156,7 +156,7 @@ public class VideoUpspeeder {
 
 	/* Speed up the Video using the Wrapper. TODO: Remove the Wrapper */
 	public static void speedup(final int tickrate, int bitrate, String codec, float frames) {
-		MinecraftClient.getInstance().openScreen(new VideoUpspeederScreen());
+		Minecraft.getInstance().setScreen(new VideoUpspeederScreen());
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -175,12 +175,12 @@ public class VideoUpspeeder {
 					VideoUpspeederScreen.progress = 0f;
 					VideoUpspeederScreen.isEncoding = false;
 					try {
-						if (MinecraftClient.getInstance().currentScreen instanceof VideoUpspeederScreen)
-							MinecraftClient.getInstance().openScreen(new VideoUpspeederScreen());
+						if (Minecraft.getInstance().screen instanceof VideoUpspeederScreen)
+							Minecraft.getInstance().setScreen(new VideoUpspeederScreen());
 					} catch (Exception e) {
 
 					}
-					MinecraftClient.getInstance().getToastManager().add(new SystemToast(Type.WORLD_BACKUP, new LiteralText("Video Encoding is done."), new LiteralText("Video Size: " + String.format("%.2f MB", VideoUpspeederScreen.size) + " Mb")));
+					Minecraft.getInstance().getToasts().addToast(new SystemToast(SystemToastIds.WORLD_BACKUP, new TextComponent("Video Encoding is done."), new TextComponent("Video Size: " + String.format("%.2f MB", VideoUpspeederScreen.size) + " Mb")));
 				} catch (IOException e) {
 					e.printStackTrace();
 				}

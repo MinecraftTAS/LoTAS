@@ -2,28 +2,21 @@ package de.pfannekuchen.lotas.gui;
 
 import java.util.HashMap;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-
-import de.pfannekuchen.lotas.gui.widgets.NewButtonWidget;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawableHelper;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.resource.language.I18n;
-//#if MC>=11601
-//$$ import net.minecraft.client.util.math.MatrixStack;
-//#endif
-import net.minecraft.entity.boss.dragon.EnderDragonEntity;
-import net.minecraft.entity.boss.dragon.phase.AbstractSittingPhase;
-import net.minecraft.entity.boss.dragon.phase.HoldingPatternPhase;
-import net.minecraft.entity.boss.dragon.phase.LandingApproachPhase;
-import net.minecraft.entity.boss.dragon.phase.Phase;
-import net.minecraft.entity.boss.dragon.phase.PhaseType;
-import net.minecraft.entity.boss.dragon.phase.StrafePlayerPhase;
-import net.minecraft.text.LiteralText;
-import net.minecraft.util.Identifier;
-import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
+import de.pfannekuchen.lotas.core.MCVer;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
+import net.minecraft.world.entity.boss.enderdragon.phases.AbstractDragonSittingPhase;
+import net.minecraft.world.entity.boss.enderdragon.phases.DragonHoldingPatternPhase;
+import net.minecraft.world.entity.boss.enderdragon.phases.DragonLandingApproachPhase;
+import net.minecraft.world.entity.boss.enderdragon.phases.DragonPhaseInstance;
+import net.minecraft.world.entity.boss.enderdragon.phases.DragonStrafePlayerPhase;
+import net.minecraft.world.entity.boss.enderdragon.phases.EnderDragonPhase;
 
 /**
  * Draws a gui screen where the player can select the next dragon phase the dragon will execute. All buttons are disabled if there is no dragon available
@@ -34,11 +27,11 @@ public class DragonManipulationScreen extends Screen {
 
 	Screen here;
 
-	static final Identifier DRAGONGIF = new Identifier("lotas", "dragon/flying.png");
-	static final Identifier DRAGONGIF2 = new Identifier("lotas", "dragon/breath.png");
-	static final Identifier DRAGONGIF3 = new Identifier("lotas", "dragon/shooting.png");
+	static final ResourceLocation DRAGONGIF = new ResourceLocation("lotas", "dragon/flying.png");
+	static final ResourceLocation DRAGONGIF2 = new ResourceLocation("lotas", "dragon/breath.png");
+	static final ResourceLocation DRAGONGIF3 = new ResourceLocation("lotas", "dragon/shooting.png");
 
-	static HashMap<String, PhaseType<?>> phases = new HashMap<String, PhaseType<?>>();
+	static HashMap<String, EnderDragonPhase<?>> phases = new HashMap<String, EnderDragonPhase<?>>();
 
 	static HashMap<String, String> translation = new HashMap<String, String>() {
 		{
@@ -56,200 +49,129 @@ public class DragonManipulationScreen extends Screen {
 		}
 	};
 
-	Phase dragonPhase;
+	DragonPhaseInstance dragonPhase;
 
-	ButtonWidget action1;
-	ButtonWidget action2;
-	ButtonWidget action3;
+	Button action1;
+	Button action2;
+	Button action3;
 
 	public DragonManipulationScreen(Screen screen) {
-		super(new LiteralText("Dragon Manipulator Screen"));
-		//#if MC>=11601
-//$$ 		EnderDragonEntity dragon = MinecraftClient.getInstance().getServer().getWorld(World.END).getAliveEnderDragons().get(0);
-		//#else
-		EnderDragonEntity dragon = MinecraftClient.getInstance().getServer().getWorld(DimensionType.THE_END).getAliveEnderDragons().get(0);
-		//#endif
-		dragonPhase = dragon.getPhaseManager().getCurrent();
+		super(new TextComponent("Dragon Manipulator Screen"));
+		EnderDragon dragon = MCVer.getCurrentLevel().getDragons().get(0);
+		dragonPhase = dragon.getPhaseManager().getCurrentPhase();
 		here = screen;
 
-		phases = new HashMap<String, PhaseType<?>>();
-		phases.put("Stop shooting at the Player", PhaseType.HOLDING_PATTERN);
-		phases.put("Shoot at the Player", PhaseType.STRAFE_PLAYER);
-		phases.put("Try to land", PhaseType.LANDING_APPROACH);
-		phases.put("Takeoff", PhaseType.TAKEOFF);
-		phases.put("Start Flaming", PhaseType.SITTING_FLAMING);
-		phases.put("Turn", PhaseType.SITTING_SCANNING);
-		phases.put("Cancel Landing", PhaseType.HOLDING_PATTERN);
-		phases.put("Cancel Landing and shoot at Player", PhaseType.STRAFE_PLAYER);
+		phases = new HashMap<String, EnderDragonPhase<?>>();
+		phases.put("Stop shooting at the Player", EnderDragonPhase.HOLDING_PATTERN);
+		phases.put("Shoot at the Player", EnderDragonPhase.STRAFE_PLAYER);
+		phases.put("Try to land", EnderDragonPhase.LANDING_APPROACH);
+		phases.put("Takeoff", EnderDragonPhase.TAKEOFF);
+		phases.put("Start Flaming", EnderDragonPhase.SITTING_FLAMING);
+		phases.put("Turn", EnderDragonPhase.SITTING_SCANNING);
+		phases.put("Cancel Landing", EnderDragonPhase.HOLDING_PATTERN);
+		phases.put("Cancel Landing and shoot at Player", EnderDragonPhase.STRAFE_PLAYER);
 	}
 
+	public String getButtonMessage(Button btn) {
+		//#if MC>=11600
+//$$ 		return btn.getMessage().getString();
+		//#else
+		return btn.getMessage();
+		//#endif
+	}
+	
 	@Override
 	public void init() {
-		action1 = new NewButtonWidget(this.width / 3 * 0 + 5, height / 8, this.width / 3 - 10, 20, "Phase1", btn -> {
+		action1 = MCVer.Button(this.width / 3 * 0 + 5, height / 8, this.width / 3 - 10, 20, "Phase1", btn -> {
 			action1.active = false;
 			action2.active = false;
 			action3.active = false;
 
-			//#if MC>=11601
-//$$ 			EnderDragonEntity dragon = MinecraftClient.getInstance().getServer().getWorld(World.END).getAliveEnderDragons().get(0);
-			//#else
-			EnderDragonEntity dragon = MinecraftClient.getInstance().getServer().getWorld(DimensionType.THE_END).getAliveEnderDragons().get(0);
-			//#endif
-			//#if MC>=11601
-//$$ 			dragon.getPhaseManager().setPhase(phases.get(btn.getMessage().asString()));
-			//#else
-			dragon.getPhaseManager().setPhase(phases.get(btn.getMessage()));
-			//#endif
-			dragonPhase = dragon.getPhaseManager().getCurrent();
+			EnderDragon dragon = MCVer.getCurrentLevel().getDragons().get(0);
+			dragon.getPhaseManager().setPhase(phases.get(getButtonMessage(btn)));
+			dragonPhase = dragon.getPhaseManager().getCurrentPhase();
 		});
-		action2 = new NewButtonWidget(this.width / 3 * 1 + 5, height / 8, this.width / 3 - 10, 20, "Phase2", btn -> {
+		action2 = MCVer.Button(this.width / 3 * 1 + 5, height / 8, this.width / 3 - 10, 20, "Phase2", btn -> {
 			action1.active = false;
 			action2.active = false;
 			action3.active = false;
 
-			//#if MC>=11601
-//$$ 			EnderDragonEntity dragon = MinecraftClient.getInstance().getServer().getWorld(World.END).getAliveEnderDragons().get(0);
-			//#else
-			EnderDragonEntity dragon = MinecraftClient.getInstance().getServer().getWorld(DimensionType.THE_END).getAliveEnderDragons().get(0);
-			//#endif
-			//#if MC>=11601
-//$$ 			dragon.getPhaseManager().setPhase(phases.get(btn.getMessage().asString()));
-			//#else
-			dragon.getPhaseManager().setPhase(phases.get(btn.getMessage()));
-			//#endif
-			dragonPhase = dragon.getPhaseManager().getCurrent();
+			EnderDragon dragon = MCVer.getCurrentLevel().getDragons().get(0);
+			dragon.getPhaseManager().setPhase(phases.get(getButtonMessage(btn)));
+			dragonPhase = dragon.getPhaseManager().getCurrentPhase();
 		});
-		action3 = new NewButtonWidget(this.width / 3 * 2 + 5, height / 8, this.width / 3 - 10, 20, "Phase3", btn -> {
+		action3 = MCVer.Button(this.width / 3 * 2 + 5, height / 8, this.width / 3 - 10, 20, "Phase3", btn -> {
 			action1.active = false;
 			action2.active = false;
 			action3.active = false;
 
-			//#if MC>=11601
-//$$ 			EnderDragonEntity dragon = MinecraftClient.getInstance().getServer().getWorld(World.END).getAliveEnderDragons().get(0);
-			//#else
-			EnderDragonEntity dragon = MinecraftClient.getInstance().getServer().getWorld(DimensionType.THE_END).getAliveEnderDragons().get(0);
-			//#endif
-			//#if MC>=11601
-//$$ 			dragon.getPhaseManager().setPhase(phases.get(btn.getMessage().asString()));
-			//#else
-			dragon.getPhaseManager().setPhase(phases.get(btn.getMessage()));
-			//#endif
-			dragonPhase = dragon.getPhaseManager().getCurrent();
+			EnderDragon dragon = MCVer.getCurrentLevel().getDragons().get(0);
+			dragon.getPhaseManager().setPhase(phases.get(getButtonMessage(btn)));
+			dragonPhase = dragon.getPhaseManager().getCurrentPhase();
 		});
 
-		if (dragonPhase instanceof HoldingPatternPhase) {
-			//#if MC>=11601
-//$$ 			action1.setMessage(new LiteralText("Try to land"));
-//$$ 			action2.setMessage(new LiteralText("Shoot at the Player"));
-//$$ 			action3.setMessage(new LiteralText(""));
-			//#else
-			action1.setMessage("Try to land");
-			action2.setMessage("Shoot at the Player");
-			action3.setMessage("");
-			//#endif
+		if (dragonPhase instanceof DragonHoldingPatternPhase) {
+			MCVer.setMessage(action1, "Try to land");
+			MCVer.setMessage(action2, "Shoot at the Player");
+			MCVer.setMessage(action3, "");
 			action1.active = true;
 			action2.active = true;
 			action3.active = false;
-		} else if (dragonPhase instanceof LandingApproachPhase) {
-			//#if MC>=11601
-//$$ 			action1.setMessage(new LiteralText("Cancel Landing"));
-//$$ 			action2.setMessage(new LiteralText("Cancel Landing and shoot at Player"));
-//$$ 			action3.setMessage(new LiteralText(""));
-			//#else
-			action1.setMessage("Cancel Landing");
-			action2.setMessage("Cancel Landing and shoot at Player");
-			action3.setMessage("");
-			//#endif
+		} else if (dragonPhase instanceof DragonLandingApproachPhase) {
+			MCVer.setMessage(action1, "Cancel Landing");
+			MCVer.setMessage(action2, "Cancel Landing and shoot at Player");
+			MCVer.setMessage(action3, "");
 			action1.active = true;
 			action2.active = true;
 			action3.active = false;
-		} else if (dragonPhase instanceof StrafePlayerPhase) {
-			//#if MC>=11601
-//$$ 			action1.setMessage(new LiteralText("Stop shooting at the Player"));
-//$$ 			action2.setMessage(new LiteralText("Try to land"));
-//$$ 			action3.setMessage(new LiteralText(""));
-			//#else
-			action1.setMessage("Stop shooting at the Player");
-			action2.setMessage("Try to land");
-			action3.setMessage("");
-			//#endif
+		} else if (dragonPhase instanceof DragonStrafePlayerPhase) {
+			MCVer.setMessage(action1, "Stop shooting at the Player");
+			MCVer.setMessage(action2, "Try to land");
+			MCVer.setMessage(action3, "");
 			action1.active = true;
 			action2.active = true;
 			action3.active = false;
-		} else if (dragonPhase instanceof AbstractSittingPhase) {
-			//#if MC>=11601
-//$$ 			action1.setMessage(new LiteralText("Takeoff"));
-//$$ 			action2.setMessage(new LiteralText("Turn"));
-//$$ 			action3.setMessage(new LiteralText("Start Flaming"));
-			//#else
-			action1.setMessage("Takeoff");
-			action2.setMessage("Turn");
-			action3.setMessage("Start Flaming");
-			//#endif
+		} else if (dragonPhase instanceof AbstractDragonSittingPhase) {
+			MCVer.setMessage(action1, "Takeoff");
+			MCVer.setMessage(action2, "Turn");
+			MCVer.setMessage(action3, "Start Flaming");
 			action1.active = true;
 			action2.active = true;
 			action3.active = true;
 		} else {
-			//#if MC>=11601
-//$$ 			action1.setMessage(new LiteralText(""));
-//$$ 			action2.setMessage(new LiteralText(""));
-//$$ 			action3.setMessage(new LiteralText(""));
-			//#else
-			action1.setMessage("");
-			action2.setMessage("");
-			action3.setMessage("");
-			//#endif
+			MCVer.setMessage(action1, "");
+			MCVer.setMessage(action2, "");
+			MCVer.setMessage(action3, "");
 			action1.active = false;
 			action2.active = false;
 			action3.active = false;
 		}
-		//#if MC>=11700
-//$$ 		addDrawableChild(action1);
-//$$ 		addDrawableChild(action2);
-//$$ 		addDrawableChild(action3);
-//$$ 		addDrawableChild(new NewButtonWidget(this.width / 2 - 155, this.height - 29, 300, 20, I18n.translate("gui.done"), btn -> {
-//$$ 			MinecraftClient.getInstance().openScreen(here);
-//$$ 		}));
-		//#else
-		addButton(action1);
-		addButton(action2);
-		addButton(action3);
-		addButton(new NewButtonWidget(this.width / 2 - 155, this.height - 29, 300, 20, I18n.translate("gui.done"), btn -> {
-			MinecraftClient.getInstance().openScreen(here);
+		MCVer.addButton(this, action1);
+		MCVer.addButton(this, action2);
+		MCVer.addButton(this, action3);
+		MCVer.addButton(this, MCVer.Button(this.width / 2 - 155, this.height - 29, 300, 20, I18n.get("gui.done"), btn -> {
+			Minecraft.getInstance().setScreen(here);
 		}));
-		//#endif
 		super.init();
 	}
 
-	//#if MC>=11601
-//$$ 	@Override
-//$$ 	public void render(MatrixStack matrices, int mouseX, int mouseY, float partialTicks) {
-//$$ 		renderBackground(matrices);
-		//#if MC>=11700
-//$$ 		GlStateManager._enableTexture();
-//$$
-//$$ 		drawCenteredText(matrices, MinecraftClient.getInstance().textRenderer, translation.get(dragonPhase.getClass().getSimpleName()), width / 2, 10, 0xFFFFFF);
-		//#else
-//$$ 		GlStateManager.enableTexture();
-//$$
-//$$ 		drawCenteredString(matrices, MinecraftClient.getInstance().textRenderer, translation.get(dragonPhase.getClass().getSimpleName()), width / 2, 10, 0xFFFFFF);
-		//#endif
-//$$ 		MinecraftClient.getInstance().getTextureManager().bindTexture(DRAGONGIF);
-//$$ 		DrawableHelper.drawTexture(matrices, width / 28 * 3, height / 19 * 2, 0, 0, width / 28 * 23, height / 19 * 17, width / 28 * 23, height / 19 * 17);
-//$$ 		super.render(matrices, mouseX, mouseY, partialTicks);
-//$$ 	}
+	//#if MC>=11600
+//$$ 	@Override public void render(com.mojang.blaze3d.vertex.PoseStack stack, int mouseX, int mouseY, float partialTicks) {
+//$$ 		MCVer.stack = stack;
 	//#else
-	@Override
-	public void render(int mouseX, int mouseY, float partialTicks) {
-		renderBackground();
-		GlStateManager.enableTexture();
-
-		drawCenteredString(MinecraftClient.getInstance().textRenderer, translation.get(dragonPhase.getClass().getSimpleName()), width / 2, 10, 0xFFFFFF);
-
-		minecraft.getTextureManager().bindTexture(DRAGONGIF);
-		DrawableHelper.blit(width / 28 * 3, height / 19 * 2, 0, 0, width / 28 * 23, height / 19 * 17, width / 28 * 23, height / 19 * 17);
-		super.render(mouseX, mouseY, partialTicks);
-	}
+	@Override public void render(int mouseX, int mouseY, float partialTicks) {
 	//#endif
+		
+		MCVer.renderBackground(this);
+		MCVer.enableTexture();
+
+		MCVer.drawCenteredString(this, translation.get(dragonPhase.getClass().getSimpleName()), width / 2, 10, 0xFFFFFF);
+
+		MCVer.bind(minecraft.getTextureManager(), DRAGONGIF);
+		MCVer.blit(width / 28 * 3, height / 19 * 2, 0, 0, width / 28 * 23, height / 19 * 17, width / 28 * 23, height / 19 * 17);
+		for(int k = 0; k < MCVer.getButtonSize(this); ++k) {
+			MCVer.render(((AbstractWidget)MCVer.getButton(this, k)), mouseX, mouseY, partialTicks);
+		}
+	}
 
 }

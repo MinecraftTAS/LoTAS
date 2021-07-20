@@ -8,31 +8,34 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.core.utils.ConfigUtils;
-import de.pfannekuchen.lotas.gui.SeedListScreen;
-import de.pfannekuchen.lotas.gui.widgets.NewButtonWidget;
 import de.pfannekuchen.lotas.gui.widgets.SmallCheckboxWidget;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.world.SelectWorldScreen;
-import net.minecraft.client.gui.screen.world.WorldListWidget;
-import net.minecraft.text.Text;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.worldselection.SelectWorldScreen;
+import net.minecraft.client.gui.screens.worldselection.WorldSelectionList;
+import net.minecraft.network.chat.Component;
 
+/**
+ * Adds Utility Buttons to the World Selection Screen
+ * @author Pancake
+ */
 @Mixin(SelectWorldScreen.class)
 public abstract class MixinGuiSelectWorldScreen extends Screen {
 
-	protected MixinGuiSelectWorldScreen(Text title) {
+	protected MixinGuiSelectWorldScreen(Component title) {
 		super(title);
 	}
 
 	private SmallCheckboxWidget widget;
 	@Shadow
-	private WorldListWidget levelList;
+	private WorldSelectionList list;
 
 	@Inject(at = @At("TAIL"), method = "init")
 	public void injectinit(CallbackInfo ci) {
-		MCVer.addButton(this, new NewButtonWidget(2, 2, 98, 20, "Seed List", button -> {
-			MinecraftClient.getInstance().openScreen(new SeedListScreen());
-		}));
+		/*
+		 * TODO: Fucking fix this mess
+		 * addButton(MCVer.Button(2, 2, 98, 20, "Seed List", button -> {
+			Minecraft.getInstance().setScreen(new SeedListScreen());
+		}));*/
 		MCVer.addButton(this, widget = new SmallCheckboxWidget(width - 160, 4, "Open ESC when joining world", ConfigUtils.getBoolean("tools", "hitEscape"), b -> {
 			ConfigUtils.setBoolean("tools", "hitEscape", widget.isChecked());
 			ConfigUtils.save();

@@ -7,14 +7,14 @@ import com.google.common.collect.ImmutableList;
 import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.gui.DropManipulationScreen;
 import de.pfannekuchen.lotas.gui.widgets.SmallCheckboxWidget;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.entity.Entity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.Minecraft;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class OreDropManipulation extends DropManipulationScreen.DropManipulation {
 
@@ -26,7 +26,7 @@ public class OreDropManipulation extends DropManipulationScreen.DropManipulation
 		OreDropManipulation.y = y;
 		OreDropManipulation.width = width;
 		OreDropManipulation.height = height;
-		enabled = MCVer.CheckboxWidget(x, y, 150, 20, "Override Ore Drops", false);
+		enabled = MCVer.Checkbox(x, y, 150, 20, "Override Ore Drops", false);
 	}
 
 	@Override
@@ -37,9 +37,9 @@ public class OreDropManipulation extends DropManipulationScreen.DropManipulation
 	@Override
 	public List<ItemStack> redirectDrops(BlockState blockstate) {
 		Block block = blockstate.getBlock();
-		if (block.getDefaultState().getBlock() == Blocks.LAPIS_ORE && optimizeLapis.isChecked()) {
+		if (block.defaultBlockState().getBlock() == Blocks.LAPIS_ORE && optimizeLapis.isChecked()) {
 			return ImmutableList.of(new ItemStack(Items.LAPIS_LAZULI, 9));
-		} else if (block.getDefaultState().getBlock() == Blocks.REDSTONE_ORE && optimizeRedstone.isChecked()) {
+		} else if (block.defaultBlockState().getBlock() == Blocks.REDSTONE_ORE && optimizeRedstone.isChecked()) {
 			return ImmutableList.of(new ItemStack(Items.REDSTONE, 5));
 		}
 		return ImmutableList.of();
@@ -63,25 +63,25 @@ public class OreDropManipulation extends DropManipulationScreen.DropManipulation
 	@Override
 	public void mouseAction(double mouseX, double mouseY, int button) {
 		enabled.mouseClicked(mouseX, mouseY, button);
-		if (enabled.isChecked()) {
+		if (enabled.selected()) {
 			optimizeRedstone.mouseClicked(mouseX, mouseY, button);
 			optimizeLapis.mouseClicked(mouseX, mouseY, button);
 		}
 	}
 
 	@Override
-	public void render(Object matrices, int mouseX, int mouseY, float delta) {
+	public void render(int mouseX, int mouseY, float delta) {
 		MCVer.render(enabled, mouseX, mouseY, delta);
 
-		if (!enabled.isChecked()) {
-			MCVer.color(.5f, .5f, .5f, .4f);
+		if (!enabled.selected()) {
+			MCVer.color4f(.5f, .5f, .5f, .4f);
 		} else {
 			MCVer.render(optimizeRedstone, mouseX, mouseY, delta);
 			MCVer.render(optimizeLapis, mouseX, mouseY, delta);
 		}
 
-		MinecraftClient.getInstance().getTextureManager().bindTexture(new Identifier("lotas", "drops/diamond_ore.png"));
-		MCVer.renderImage(width - 128, y + 24, 0.0F, 0.0F, 96, 96, 96, 96);
+		MCVer.bind(Minecraft.getInstance().getTextureManager(), new ResourceLocation("lotas", "drops/diamond_ore.png"));
+		MCVer.blit(width - 128, y + 24, 0.0F, 0.0F, 96, 96, 96, 96);
 	}
 
 }

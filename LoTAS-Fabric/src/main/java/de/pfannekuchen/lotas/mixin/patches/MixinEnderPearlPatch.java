@@ -5,17 +5,23 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 import de.pfannekuchen.lotas.core.utils.ConfigUtils;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.item.EnderPearlItem;
+import net.minecraft.client.Minecraft;
+import net.minecraft.world.item.EnderpearlItem;
 
-@Mixin(EnderPearlItem.class)
+/**
+ * This Mixin can remove the ender pearl delay by reconnecting
+ * @author Pancake
+ */
+@Mixin(EnderpearlItem.class)
 public class MixinEnderPearlPatch {
 
-	@ModifyArg(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/ItemCooldownManager;set(Lnet/minecraft/item/Item;I)V"), method = "use", index = 1)
+	/**
+	 * Change the amount of ticks the pearl will be delayed to
+	 */
+	@ModifyArg(at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemCooldowns;addCooldown(Lnet/minecraft/world/item/Item;I)V"), method = "use", index = 1)
 	public int removePearlCooldown(int ticksIn) {
 		if (ConfigUtils.getBoolean("tools", "removePearlDelay")) {
-			MinecraftClient.getInstance().player.setVelocity(0, 0, 0);
-			;
+			Minecraft.getInstance().player.setDeltaMovement(0, 0, 0);
 			return 0;
 		} else {
 			return ticksIn;

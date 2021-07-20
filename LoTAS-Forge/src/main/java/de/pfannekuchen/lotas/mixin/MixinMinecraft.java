@@ -13,11 +13,13 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import de.pfannekuchen.lotas.core.LoTASModContainer;
 import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.core.utils.ConfigUtils;
 import de.pfannekuchen.lotas.core.utils.EventUtils;
 import de.pfannekuchen.lotas.core.utils.KeybindsUtils;
 import de.pfannekuchen.lotas.gui.GuiChallengeIngameMenu;
+import de.pfannekuchen.lotas.gui.InfoHud;
 import de.pfannekuchen.lotas.mods.DupeMod;
 import de.pfannekuchen.lotas.mods.SavestateMod;
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;
@@ -85,6 +87,8 @@ public class MixinMinecraft {
 			KeybindsUtils.shouldSavestate = false;
 			SavestateMod.savestate(null);
 		}
+		
+		LoTASModContainer.hud.tick();
 		
 		if (KeybindsUtils.shouldLoadstate) {
 			KeybindsUtils.shouldLoadstate = false;

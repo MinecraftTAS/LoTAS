@@ -14,3 +14,4 @@ out/
 eclipse/
 
 LoTAS-Forge/versions/*/*.launch
+*.launch

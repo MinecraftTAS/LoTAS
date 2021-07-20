@@ -1,16 +1,18 @@
 package de.pfannekuchen.lotas.mods;
 
 import java.time.Duration;
-
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.TextComponent;
 import de.pfannekuchen.lotas.core.utils.ConfigUtils;
 import de.pfannekuchen.lotas.mixin.accessors.AccessorMinecraftClient;
 import de.pfannekuchen.lotas.mixin.accessors.AccessorTimer;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.LiteralText;
 
 /**
  * Here is the basic Tickrate Changer Management.
  * It contains the Hotkeys, Ticksync, Tickrate and the ticks passed
+ * @author Scribble
+ * @version v2.0
+ * @since v1.0
  */
 public class TickrateChangerMod {
 	/**
@@ -84,16 +86,16 @@ public class TickrateChangerMod {
 	 */
 	public static void updateClientTickrate(float tickrateIn) {
 		if (tickrateIn != 0f) {
-			((AccessorTimer) ((AccessorMinecraftClient) MinecraftClient.getInstance()).getRenderTickCounter()).setTickTime(1000f / tickrateIn);
+			((AccessorTimer) ((AccessorMinecraftClient) Minecraft.getInstance()).getTimer()).setTickTime(1000f / tickrateIn);
 		} else {
 			if (tickrate != 0) {
 				tickrateSaved = tickrate;
 			}
-			((AccessorTimer) ((AccessorMinecraftClient) MinecraftClient.getInstance()).getRenderTickCounter()).setTickTime(Float.MAX_VALUE);
+			((AccessorTimer) ((AccessorMinecraftClient) Minecraft.getInstance()).getTimer()).setTickTime(Float.MAX_VALUE);
 		}
 		tickrate = tickrateIn;
-		if (!ConfigUtils.getBoolean("ui", "hideTickrateMessages") && MinecraftClient.getInstance().inGameHud != null)
-			MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(new LiteralText("Updated Tickrate to \u00A7b" + tickrateIn));
+		if (!ConfigUtils.getBoolean("ui", "hideTickrateMessages") && Minecraft.getInstance().gui != null)
+			Minecraft.getInstance().gui.getChat().addMessage(new TextComponent("Updated Tickrate to \u00A7b" + tickrateIn));
 	}
 
 	/**

@@ -1,12 +1,11 @@
 package de.pfannekuchen.lotas.mixin.accessors;
 
+import net.minecraft.client.Timer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
-import net.minecraft.client.render.RenderTickCounter;
-
-@Mixin(RenderTickCounter.class)
+@Mixin(Timer.class)
 public interface AccessorTimer {
-	@Accessor("tickTime")
+	@Accessor("msPerTick")
 	public void setTickTime(float f);
 }

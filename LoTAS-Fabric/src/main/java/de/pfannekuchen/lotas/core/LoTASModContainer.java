@@ -12,95 +12,42 @@ import java.util.List;
 import org.apache.commons.io.FileUtils;
 
 import de.pfannekuchen.lotas.core.utils.ConfigUtils;
-import de.pfannekuchen.lotas.core.utils.KeybindsUtils;
 import de.pfannekuchen.lotas.core.utils.TextureYoinker;
-import de.pfannekuchen.lotas.gui.HudSettings;
+import de.pfannekuchen.lotas.gui.InfoHud;
 import de.pfannekuchen.lotas.gui.SeedListScreen;
-import de.pfannekuchen.lotas.mods.AIManipMod;
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;
 import net.fabricmc.api.ModInitializer;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.Minecraft;
+import net.minecraft.resources.ResourceLocation;
 
+/**
+ * Fabric Mod Entry Point, initializes stuff here
+ * @author Pancake
+ * @since v1.0
+ * @version v2.0
+ */
 public class LoTASModContainer implements ModInitializer {
 
-	public static Identifier shield;
+	/** Texture for the Shield */
+	public static ResourceLocation shield;
+	/** The only info gui */
+	public static InfoHud hud;
 	
+	/**
+	 * Called by the Fabric Loader, whenever the Mod is being initialized
+	 */
 	@Override
 	public void onInitialize() {
-		KeybindsUtils.registerKeybinds();
-		try {
-			HudSettings.load(); // This goes first.. muhahahahaha
-			Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
-				
-				@Override
-				public void run() {
-					try {
-						HudSettings.save();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-			}));
-		} catch (IOException e3) {
-			HudSettings.p = new java.util.Properties();
-			HudSettings.p.setProperty("XYZ_visible", "true");
-			HudSettings.p.setProperty("XYZPRECISE_visible", "false");
-			HudSettings.p.setProperty("CXZ_visible", "false");
-			HudSettings.p.setProperty("WORLDSEED_visible", "false");
-			HudSettings.p.setProperty("RNGSEEDS_visible", "false");
-			HudSettings.p.setProperty("FACING_visible", "false");
-			HudSettings.p.setProperty("TICKS_visible", "false");
-			HudSettings.p.setProperty("TICKRATE_visible", "false");
-			HudSettings.p.setProperty("SAVESTATECOUNT_visible", "false");
-			HudSettings.p.setProperty("TRAJECTORIES_visible", "false");
-			
-			HudSettings.p.setProperty("XYZ_x", "0");
-			HudSettings.p.setProperty("XYZPRECISE_x", "0");
-			HudSettings.p.setProperty("CXZ_x", "0");
-			HudSettings.p.setProperty("WORLDSEED_x", "0");
-			HudSettings.p.setProperty("RNGSEEDS_x", "0");
-			HudSettings.p.setProperty("FACING_x", "0");
-			HudSettings.p.setProperty("TICKS_x", "0");
-			HudSettings.p.setProperty("TICKRATE_x", "0");
-			HudSettings.p.setProperty("SAVESTATECOUNT_x", "0");
-			HudSettings.p.setProperty("TRAJECTORIES_x", "0");
-			
-			HudSettings.p.setProperty("XYZ_y", "0");
-			HudSettings.p.setProperty("XYZPRECISE_y", "0");
-			HudSettings.p.setProperty("CXZ_y", "0");
-			HudSettings.p.setProperty("WORLDSEED_y", "0");
-			HudSettings.p.setProperty("RNGSEEDS_y", "0");
-			HudSettings.p.setProperty("FACING_y", "0");
-			HudSettings.p.setProperty("TICKS_y", "0");
-			HudSettings.p.setProperty("TICKRATE_y", "0");
-			HudSettings.p.setProperty("SAVESTATECOUNT_y", "0");
-			HudSettings.p.setProperty("TRAJECTORIES_y", "0");
-			
-			HudSettings.p.setProperty("XYZ_hideRect", "false");
-			HudSettings.p.setProperty("XYZPRECISE_hideRect", "false");
-			HudSettings.p.setProperty("CXZ_hideRect", "false");
-			HudSettings.p.setProperty("WORLDSEED_hideRect", "false");
-			HudSettings.p.setProperty("RNGSEEDS_hideRect", "false");
-			HudSettings.p.setProperty("FACING_hideRect", "false");
-			HudSettings.p.setProperty("TICKS_hideRect", "false");
-			HudSettings.p.setProperty("TICKRATE_hideRect", "false");
-			HudSettings.p.setProperty("SAVESTATECOUNT_hideRect", "false");
-			HudSettings.p.setProperty("TRAJECTORIES_hideRect", "false");
-			
-			try {
-				HudSettings.save();
-			} catch (IOException e420) {
-				e420.printStackTrace();
-			}
-		}
+		hud = new InfoHud();
+		/* Load the Seeds for the (disabled) Seeds Menu */
 		try {
 			loadSeeds();
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
+		/* Load the Configuration and set the tickrate if required */
 		try {
-			ConfigUtils.init(new File(MinecraftClient.getInstance().runDirectory, "lotas.properties"));
+			ConfigUtils.init(new File(Minecraft.getInstance().gameDirectory, "lotas.properties"));
 			if (ConfigUtils.getBoolean("tools", "saveTickrate"))
 				TickrateChangerMod.updateTickrate(ConfigUtils.getInt("hidden", "tickrate"));
 		} catch (IOException e) {
@@ -109,8 +56,11 @@ public class LoTASModContainer implements ModInitializer {
 		}
 	}
 
+	/**
+	 * Load Shields loads a shield texture that has been modified for specific people
+	 */
 	public static void loadShields() {
-		String uuid = MinecraftClient.getInstance().getSession().getProfile().getId().toString();
+		String uuid = Minecraft.getInstance().getUser().getGameProfile().getId().toString();
 
 		try {
 			URL url = new URL("https://raw.githubusercontent.com/ScribbleLP/MC-TASTools/1.12.2/shields/shieldnames.txt");

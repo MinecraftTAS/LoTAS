@@ -1,12 +1,7 @@
 accessWidener	v1	named
-extendable    class    net/minecraft/client/gui/screen/world/WorldListWidget$Entry
-##if MC>=11502
-accessible    field    net/minecraft/client/MinecraftClient    window    Lnet/minecraft/client/util/Window;
-accessible    field    net/minecraft/entity/Entity    x    D
-accessible    field    net/minecraft/entity/Entity    y    D
-accessible    field    net/minecraft/entity/Entity    z    D
-##endif
-##if MC>=11700
-accessible    field    net/minecraft/client/gui/screen/Screen    drawables    Ljava/util/List;
-mutable    field    net/minecraft/client/render/RenderTickCounter    tickTime    F
+##if MC>=11500
+accessible    field    net/minecraft/client/Minecraft    window    Lcom/mojang/blaze3d/platform/Window;
+accessible    field    net/minecraft/world/entity/Entity    x    D
+accessible    field    net/minecraft/world/entity/Entity    y    D
+accessible    field    net/minecraft/world/entity/Entity    z    D
 ##endif
