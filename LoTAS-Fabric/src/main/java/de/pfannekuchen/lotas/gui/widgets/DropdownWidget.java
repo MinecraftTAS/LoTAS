@@ -43,7 +43,7 @@ public class DropdownWidget<T> extends AbstractWidget {
         this.textRenderer = textRenderer;
         this.searchBox = MCVer.EditBox(textRenderer, x, y, width, height, title);
         this.dropdown = new DropdownListWidget(selections, nameProvider, saveHandler, x, y, width, height, title);
-        this.dropdownButton = MCVer.Button(x, y, width, height, "", btn -> {
+        this.dropdownButton = MCVer.Button(x, y, width, height, "...", btn -> {
             dropdown.visible ^= true;
             if(dropdown.visible) {
                 if(focused != null) {

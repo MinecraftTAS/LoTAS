@@ -106,6 +106,18 @@ public class KeybindsUtils {
 	 * Note: Not using Fabric API to avoid a crash using Mojang Mappings
 	 */
 	public static void registerKeybinds() {
-		ArrayUtils.addAll(Minecraft.getInstance().options.keyMappings, saveStateKeybind, loadStateKeybind, loadDupeKeybind, saveDupeKeybind, holdStrafeKeybind, toggleFreecamKeybind, increaseTickrateKeybind, decreaseTickrateKeybind, advanceTicksKeybind, toggleAdvanceKeybind, toggleTimerKeybind, openInfoHud);
+		ArrayUtils.addAll(Minecraft.getInstance().options.keyMappings,
+				saveStateKeybind,
+				loadStateKeybind,
+				loadDupeKeybind,
+				saveDupeKeybind,
+				holdStrafeKeybind,
+				toggleFreecamKeybind,
+				increaseTickrateKeybind,
+				decreaseTickrateKeybind,
+				advanceTicksKeybind,
+				toggleAdvanceKeybind,
+				toggleTimerKeybind,
+				openInfoHud);
 	}
 }

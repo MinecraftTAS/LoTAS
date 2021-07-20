@@ -111,6 +111,8 @@ public class DeadbushDropManipulation extends DropManipulationScreen.DropManipul
 			MCVer.color4f(.5f, .5f, .5f, .4f);
 		} else {
 			MCVer.render(drop0Stick, mouseX, mouseY, delta);
+			MCVer.render(drop1Stick, mouseX, mouseY, delta);
+			MCVer.render(drop2Stick, mouseX, mouseY, delta);
 			MCVer.drawShadow("Drop " + sticks + " Sticks when breaking Dead Bush", x, y + 64, 0xFFFFFF);
 		}
 

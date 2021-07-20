@@ -87,7 +87,7 @@ public class MixinMinecraftClient {
 	public void loadRenderingLate(CallbackInfo ci) {
 		/* Load Textures because FabricAPI has been removed */
 		try {
-			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "drops/apple.png"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("deadbush.png"))));
+			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "drops/apple.png"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("apple.png"))));
 			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "drops/carrot.png"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("carrot.png"))));
 			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "drops/deadbush.png"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("deadbush.png"))));
 			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "drops/diamond_ore.png"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("diamond_ore.png"))));
@@ -110,6 +110,8 @@ public class MixinMinecraftClient {
 			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "dragon/breath.png"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("breath.png"))));
 			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "dragon/flying.png"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("flying.png"))));
 			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "dragon/shooting.png"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("shooting.png"))));
+			
+			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "drops/piglin.png"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("piglin.png"))));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

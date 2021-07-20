@@ -49,7 +49,7 @@ public class PotionRenderer {
 //$$ 		}                                                              
 //$$ 		else if(scale<0.4&&scale>0.1) {                                
 //$$ 			skla=6.6;                                                  
-//$$ 		}                                                              
+//$$ 		}
 //$$ 		double height2=(height/2*-0.004)-skla;                         
 //$$
 //$$

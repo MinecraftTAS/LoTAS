@@ -75,7 +75,7 @@ public class DrownedDropManipulation extends DropManipulationScreen.DropManipula
 		if (!enabled.selected()) {
 			MCVer.color4f(.5f, .5f, .5f, .4f);
 		} else {
-			MCVer.drawShadow("Drowned drop: 2 Rotten Flesh" + (dropGold.isToggled() ? ", 1 Iron Ingot" : ""), x, y + 64, 0xFFFFFF);
+			MCVer.drawShadow("Drowned drop: 2 Rotten Flesh" + (dropGold.isToggled() ? ", 1 Gold Ingot" : ""), x, y + 64, 0xFFFFFF);
 			MCVer.render(dropGold, mouseX, mouseY, delta);
 		}
 

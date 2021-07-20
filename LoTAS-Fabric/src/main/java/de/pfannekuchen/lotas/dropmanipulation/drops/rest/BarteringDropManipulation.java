@@ -114,7 +114,7 @@ public class BarteringDropManipulation extends DropManipulationScreen.DropManipu
 	
 	@Override
 	public void mouseScrolled(double d, double e, double amount) {
-		elementwidgets.mouseScrolled(e, e, amount);
+		elementwidgets.mouseScrolled(d, e, amount);
 	}
 	
 	@Override
@@ -141,9 +141,11 @@ public class BarteringDropManipulation extends DropManipulationScreen.DropManipu
 			//#endif
 			MCVer.popMatrix();
 		}
-
-		Minecraft.getInstance().getTextureManager().bind(new ResourceLocation("lotas", "drops/zombie.png"));
-		MCVer.blit(width - 228, y + 24, 0.0F, 0.0F, 118, 198, 118, 198);
+		
+		Minecraft.getInstance().getTextureManager().bind(new ResourceLocation("lotas", "drops/piglin.png"));
+		int scaleX=10;
+		int scaleY=50;
+		MCVer.blit(width - 130, y + 24, 0.0F, 0.0F, 118-scaleX, 198-scaleY, 118-scaleX, 198-scaleY);
 	}
 
 }
