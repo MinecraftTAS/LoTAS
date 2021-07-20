@@ -3,6 +3,7 @@ package de.pfannekuchen.lotas.mixin.accessors;
 import java.util.List;
 
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.gen.Invoker;
 
@@ -13,11 +14,11 @@ import net.minecraft.client.gui.screens.Screen;
 //#if MC>=11700
 //$$ public class AccessorScreen implements AccessorScreen2{
 //$$
-//$$
+//$$ 	@Shadow
 //$$ 	private List<net.minecraft.client.gui.components.Widget> renderables;
-//$$
+//$$ 	@Shadow
 //$$ 	private List<net.minecraft.client.gui.components.events.GuiEventListener> children;
-//$$
+//$$ 	@Shadow
 //$$ 	private List<net.minecraft.client.gui.narration.NarratableEntry> narratables;
 //$$
 //$$ 	@Override
