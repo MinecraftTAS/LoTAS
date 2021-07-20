@@ -106,7 +106,7 @@ public class ZombieDropManipulation extends DropManipulationScreen.DropManipulat
 			MCVer.render(dropCarrot, mouseX, mouseY, delta);
 		}
 
-		Minecraft.getInstance().getTextureManager().bind(new ResourceLocation("lotas", "drops/zombie.png"));
+		MCVer.bind(Minecraft.getInstance().getTextureManager(), new ResourceLocation("lotas", "drops/zombie.png"));
 		int scaleX=30;
 		int scaleY=50;
 		MCVer.blit(width - 110, y + 24, 0.0F, 0.0F, 118-scaleX, 198-scaleY, 118-scaleX, 198-scaleY);

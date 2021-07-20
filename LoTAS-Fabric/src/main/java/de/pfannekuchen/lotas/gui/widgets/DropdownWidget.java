@@ -53,7 +53,7 @@ public class DropdownWidget<T> extends AbstractWidget {
                 focused = dropdown;
             }
         });
-        searchBox.setValue("???");
+        searchBox.setValue("");
         searchBox.setResponder(this::onSearchBoxTextChanged);
         searchBox.setMaxLength(65536);
         dropdown.visible = false;

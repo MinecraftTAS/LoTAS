@@ -125,7 +125,7 @@ public abstract class MixinGuiIngameMenu extends Screen {
 			if (TickrateChangerMod.ji > 10)
 				TickrateChangerMod.ji = 1;
 			//#if MC>=11700
-//$$ 			((AccessorButtons)this).getButtons().clear();
+//$$ 			((de.pfannekuchen.lotas.mixin.accessors.AccessorButtons)this).getButtons().clear();
 			//#else
 			buttons.clear();
 			//#endif

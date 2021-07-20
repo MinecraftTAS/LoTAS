@@ -2,11 +2,14 @@ package de.pfannekuchen.lotas.gui.widgets;
 
 import java.util.List;
 
+import com.mojang.blaze3d.systems.RenderSystem;
+
 import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.mods.SpawnManipMod.EntityOptions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button.OnPress;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;

@@ -202,7 +202,11 @@ public class InfoHud extends Screen {
 			}));
 			if (configuration.getProperty("chunkposition_x", "err").equals("err")) setDefaults("chunkposition");
 			lists.add(new InfoLabel("chunkposition", Integer.parseInt(configuration.getProperty("chunkposition_x")), Integer.parseInt(configuration.getProperty("chunkposition_y")), Boolean.parseBoolean(configuration.getProperty("chunkposition_visible")), Boolean.parseBoolean(configuration.getProperty("chunkposition_rect")), () -> {
+				//#if MC>=11700
+//$$ 				return String.format("%d %d", Minecraft.getInstance().player.chunkPosition().getRegionLocalX(), Minecraft.getInstance().player.chunkPosition().getRegionLocalZ());
+				//#else
 				return String.format("%d %d %d", Minecraft.getInstance().player.xChunk, Minecraft.getInstance().player.yChunk, Minecraft.getInstance().player.zChunk);
+				//#endif
 			}));
 			if (configuration.getProperty("worldseed_x", "err").equals("err")) setDefaults("worldseed");
 			lists.add(new InfoLabel("worldseed", Integer.parseInt(configuration.getProperty("worldseed_x")), Integer.parseInt(configuration.getProperty("worldseed_y")), Boolean.parseBoolean(configuration.getProperty("worldseed_visible")), Boolean.parseBoolean(configuration.getProperty("worldseed_rect")), () -> {
@@ -234,7 +238,11 @@ public class InfoHud extends Screen {
 			lists.add(new InfoLabel("bps", Integer.parseInt(configuration.getProperty("bps_x")), Integer.parseInt(configuration.getProperty("bps_y")), Boolean.parseBoolean(configuration.getProperty("bps_visible")), Boolean.parseBoolean(configuration.getProperty("bps_rect")), () -> {
 				double distTraveledLastTickX = MCVer.getX(Minecraft.getInstance().player) - Minecraft.getInstance().player.xOld;
 				double distTraveledLastTickZ = MCVer.getZ(Minecraft.getInstance().player) - Minecraft.getInstance().player.zOld;
+				//#if MC>=11700
+//$$ 				return String.format("%.2f", Mth.sqrt((float) (distTraveledLastTickX * distTraveledLastTickX + distTraveledLastTickZ * distTraveledLastTickZ)) / 0.05F) + " blocks/sec";
+				//#else
 				return String.format("%.2f", Mth.sqrt((distTraveledLastTickX * distTraveledLastTickX + distTraveledLastTickZ * distTraveledLastTickZ)) / 0.05F) + " blocks/sec";
+				//#endif
 			}));
 		} catch (Exception e) {
 			e.printStackTrace();

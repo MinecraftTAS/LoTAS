@@ -132,7 +132,7 @@ public class BarteringDropManipulation extends DropManipulationScreen.DropManipu
 		if (!enabled.selected()) {
 			MCVer.color4f(.5f, .5f, .5f, .4f);
 		} else {
-//			MCVer.pushMatrix();
+			MCVer.pushMatrix(MCVer.stack);
 			MCVer.render(elementwidgets, mouseX, mouseY, delta);
 			//#if MC>=11600
 //$$ 			elementwidgets.renderBg(MCVer.stack, Minecraft.getInstance(), mouseX, mouseY);
@@ -146,7 +146,7 @@ public class BarteringDropManipulation extends DropManipulationScreen.DropManipu
 			//#endif
 		}
 		
-		Minecraft.getInstance().getTextureManager().bind(new ResourceLocation("lotas", "drops/piglin.png"));
+		MCVer.bind(Minecraft.getInstance().getTextureManager(), new ResourceLocation("lotas", "drops/piglin.png"));
 		int scaleX=10;
 		int scaleY=50;
 		MCVer.blit(width - 130, y + 24, 0.0F, 0.0F, 118-scaleX, 198-scaleY, 118-scaleX, 198-scaleY);
