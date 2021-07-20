@@ -111,7 +111,7 @@ public class DeadbushDropManipulation extends DropManipulationScreen.DropManipul
 			MCVer.color4f(.5f, .5f, .5f, .4f);
 		} else {
 			MCVer.render(drop0Stick, mouseX, mouseY, delta);
-			MCVer.drawShadow("Drop " + sticks + " Sticks when breaking Gravel", x, y + 64, 0xFFFFFF);
+			MCVer.drawShadow("Drop " + sticks + " Sticks when breaking Dead Bush", x, y + 64, 0xFFFFFF);
 		}
 
 		Minecraft.getInstance().getTextureManager().bind(new ResourceLocation("lotas", "drops/deadbush.png"));

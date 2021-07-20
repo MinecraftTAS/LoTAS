@@ -97,8 +97,8 @@ public class MCVer {
 //$$ 	public static void blit(int i, int j, float k, float f, int g, int l) {
 //$$ 		GuiComponent.blit(stack, i, j, k, f, g, l, 256, 256);
 //$$ 	}
-//$$ 	public static void blit(int i, int j, float k, float f, int g, int l, int x, int y) {
-//$$ 		GuiComponent.blit(stack, i, j, k, f, g, l, x, y);
+//$$ 	public static void blit(int i, int j, float k, float f, int g, int l, int m, int n) {
+//$$ 		GuiComponent.blit(stack, i, j, k, f, g, l, m, n);
 //$$ 	}
 //$$ 	public static void render(AbstractWidget component, int mouseX, int mouseY, float delta) {
 //$$ 		component.render(stack, mouseX, mouseY, delta);
@@ -120,8 +120,8 @@ public class MCVer {
 	public static Button Button(int i, int j, int k, int l, String text, OnPress onpress) {
 		return new Button(i, j, k, l, text, onpress);
 	}
-	public static void blit(int i, int j, float f, float g, int k, int l, int m, int n) {
-		GuiComponent.blit(i, j, k, f, g, l, m, n, n);
+	public static void blit(int i, int j, float k, float f, int g, int l, int m, int n) {
+		GuiComponent.blit(i, j, k, f, g, l, m, n);
 	}
 	public static void blit(int i, int j, float k, float f, int g, int l) {
  		GuiComponent.blit(i, j, k, f, g, l, 256, 256);

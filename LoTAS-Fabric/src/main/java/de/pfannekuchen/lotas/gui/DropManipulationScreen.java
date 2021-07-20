@@ -55,7 +55,9 @@ public class DropManipulationScreen extends Screen {
 		manipulations.add(new ZombieDropManipulation(0, 0, 0, 0));
 		manipulations.add(new DrownedDropManipulation(0, 0, 0, 0));
 		manipulations.add(new FishDropManipulation(0, 0, 0, 0));
-		manipulations.add(new BarteringDropManipulation(0, 0, 0, 0));
+		//#if MC>=11600
+//$$ 		manipulations.add(new BarteringDropManipulation(0, 0, 0, 0));
+		//#endif
 	}
 
 	public DropManipulationScreen(PauseScreen gameMenuScreen) {

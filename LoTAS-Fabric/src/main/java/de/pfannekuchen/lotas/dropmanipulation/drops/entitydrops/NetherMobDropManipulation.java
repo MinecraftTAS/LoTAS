@@ -97,7 +97,7 @@ public class NetherMobDropManipulation extends DropManipulationScreen.DropManipu
 		MCVer.render(enabled, mouseX, mouseY, delta);
 
 		if (!enabled.selected()) {
-			MCVer.color4f(5f, .5f, .5f, .4f);
+			MCVer.color4f(.5f, .5f, .5f, .4f);
 		} else {
 			MCVer.render(optimizeBlaze, mouseX, mouseY, delta);
 			MCVer.render(optimizePigman, mouseX, mouseY, delta);

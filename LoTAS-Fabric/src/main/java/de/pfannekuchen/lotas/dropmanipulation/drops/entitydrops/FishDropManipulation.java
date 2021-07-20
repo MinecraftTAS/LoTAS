@@ -23,7 +23,7 @@ public class FishDropManipulation extends DropManipulationScreen.DropManipulatio
 
 	public static SmallCheckboxWidget optimizeCod = new SmallCheckboxWidget(0, 0, "Cod drop Bone Meal", false);
 	public static SmallCheckboxWidget optimizeSalmon = new SmallCheckboxWidget(0, 0, "Salmon drop Bone Meal", false);
-	public static SmallCheckboxWidget optimizeDolphin = new SmallCheckboxWidget(0, 0, "Dolphin drop 1 cod", false);
+	public static SmallCheckboxWidget optimizeDolphin = new SmallCheckboxWidget(0, 0, "Dolphin drop 1 Cod", false);
 	public static SmallCheckboxWidget optimizePufferfish = new SmallCheckboxWidget(0, 0, "Pufferfish drop Bone Meal", false);
 	public static SmallCheckboxWidget optimizeTropical = new SmallCheckboxWidget(0, 0, "Tropical Fish drop Bone Meal", false);
 
