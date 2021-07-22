@@ -42,7 +42,7 @@ public abstract class MixinPotionRenderer {
 	@Shadow
 	ItemInHandRenderer itemInHandRenderer;
 	//#if MC<=11404
-	@Inject(method = "renderItemInHand", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GameRenderer;turnOffLightLayer()V", shift = Shift.AFTER))
+	@Inject(method = "renderItemInHand", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/GlStateManager;popMatrix()V", shift = Shift.AFTER))
 	public void drawPotionAfter(CallbackInfo ci) {
 		MCVer.matrixMode(5888);
 		MCVer.loadIdentity();

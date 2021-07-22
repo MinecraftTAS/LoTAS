@@ -1,11 +1,19 @@
 package de.pfannekuchen.lotas.core.utils;
 
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.lwjgl.glfw.GLFW;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
+
 import de.pfannekuchen.lotas.core.LoTASModContainer;
+import de.pfannekuchen.lotas.mixin.accessors.AccessorKeyMapping;
+import de.pfannekuchen.lotas.mixin.accessors.AccessorOptions;
 import de.pfannekuchen.lotas.mods.DupeMod;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -104,8 +112,8 @@ public class KeybindsUtils {
 	 * Note: Not using Fabric API to avoid a crash using Mojang Mappings
 	 */
 	public static void registerKeybinds() {
-		ArrayUtils.addAll(Minecraft.getInstance().options.keyMappings,
-				saveStateKeybind,
+		Minecraft mc=Minecraft.getInstance();
+		List<KeyMapping> modded=new ArrayList<KeyMapping>(ImmutableList.of(saveStateKeybind,
 				loadStateKeybind,
 				loadDupeKeybind,
 				saveDupeKeybind,
@@ -116,6 +124,28 @@ public class KeybindsUtils {
 				advanceTicksKeybind,
 				toggleAdvanceKeybind,
 				toggleTimerKeybind,
-				openInfoHud);
+				openInfoHud));
+		
+		addCategories(modded);
+		
+		List<KeyMapping> newKeyMappings = Lists.newArrayList(mc.options.keyMappings);
+		newKeyMappings.removeAll(modded);
+		newKeyMappings.addAll(modded);
+		
+		((AccessorOptions)mc.options).setKeyMappings(newKeyMappings.toArray(new KeyMapping[0]));
+	}
+	
+	private static void addCategories(List<KeyMapping> modded) {
+		modded.forEach(key->{
+			Map<String, Integer> map=AccessorKeyMapping.getCategorySorting();
+			String categoryName=key.getCategory();
+			if (map.containsKey(categoryName)) {
+				return;
+			}
+
+			Optional<Integer> largest = map.values().stream().max(Integer::compareTo);
+			int largestInt = largest.orElse(0);
+			map.put(categoryName, largestInt + 1);
+		});
 	}
 }

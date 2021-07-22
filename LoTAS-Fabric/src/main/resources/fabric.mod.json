@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "lotas",
-  "version": "2.0.0-SNAPSHOT",
+  "version": "prerelease-2.0.0-6",
 
   "name": "LoTAS",
   "description": "Low Optimization Tool Assisted Speedrun Mod",
