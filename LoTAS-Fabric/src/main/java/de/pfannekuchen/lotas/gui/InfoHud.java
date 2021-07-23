@@ -259,12 +259,20 @@ public class InfoHud extends Screen {
 				drawRectWithText(label.renderText, label.x, label.y, label.renderRect);
 			} else if (Minecraft.getInstance().screen != null) {
 				if (Minecraft.getInstance().screen.getClass().getSimpleName().contains("InfoHud")) {
-					GL11.glPushMatrix();
+					//#if MC>=11700
+//$$ 					MCVer.pushMatrix(MCVer.stack);
+					//#else
+					MCVer.pushMatrix(null);
+					//#endif
 		         	GL11.glEnable(GL11.GL_BLEND);
 		         	GL11.glBlendFunc(770, 771);
 		         	MCVer.drawShadow(label.renderText, label.x + 2, label.y + 3, 0x40FFFFFF);
 		    		GL11.glDisable(GL11.GL_BLEND);
-		         	GL11.glPopMatrix();
+		    		//#if MC>=11700
+//$$ 					MCVer.popMatrix(MCVer.stack);
+					//#else
+					MCVer.popMatrix(null);
+					//#endif
 				}
 			}
 		}

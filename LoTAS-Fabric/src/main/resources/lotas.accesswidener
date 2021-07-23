@@ -4,4 +4,7 @@ accessible    field    net/minecraft/client/Minecraft    window    Lcom/mojang/b
 accessible    field    net/minecraft/world/entity/Entity    x    D
 accessible    field    net/minecraft/world/entity/Entity    y    D
 accessible    field    net/minecraft/world/entity/Entity    z    D
+##if MC>=11700
+mutable    field    net/minecraft/client/Timer    msPerTick    F
+mutable    field    net/minecraft/client/Options	keyMappings    [Lnet/minecraft/client/KeyMapping;
 ##endif

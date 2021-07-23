@@ -20,6 +20,8 @@
     	"accessors.AccessorItemRenderer",
     	"accessors.AccessorScreen",
     	"accessors.AccessorButtons",
+    	"accessors.AccessorOptions",
+    	"accessors.AccessorKeyMapping",
 		"render.binds.MixinTickrateChangerAudioPitch",
 		"render.binds.MixinTickrateChangerEnchantmentGlimm",
 		"render.binds.MixinTickrateChangerSubtitleOverlay",
