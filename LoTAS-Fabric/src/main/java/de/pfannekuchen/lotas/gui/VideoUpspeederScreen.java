@@ -49,13 +49,11 @@ public class VideoUpspeederScreen extends Screen {
 	public static float progress;
 	public static float size;
 
-	public static Minecraft client;
-
 	public VideoUpspeederScreen() {
 		super(new TextComponent(""));
-		client = Minecraft.getInstance();
-		if (!VideoUpspeeder.instantiate(new File(client.gameDirectory, "ffmpeg"))) {
-			VideoUpspeeder.installFFmpeg(client);
+		minecraft = Minecraft.getInstance();
+		if (!VideoUpspeeder.instantiate(new File(minecraft.gameDirectory, "ffmpeg"))) {
+			VideoUpspeeder.installFFmpeg(minecraft);
 		}
 		if (codecFFmpeg == null)
 			codecFFmpeg = GL11.glGetString(GL11.GL_VENDOR).toUpperCase().contains("NVIDIA") ? "nvenc_h264" : "h264";
@@ -84,7 +82,7 @@ public class VideoUpspeederScreen extends Screen {
 			}));
 			return;
 		}
-		MCVer.addButton(this, MCVer.EditBox(client.font, (width / 12) * 1 - (width / 24), (height / 8), (width / 12) * 9, 20, "")).setMaxLength(999);
+		MCVer.addButton(this, MCVer.EditBox(minecraft.font, (width / 12) * 1 - (width / 24), (height / 8), (width / 12) * 9, 20, "")).setMaxLength(999);
 		MCVer.addButton(this, MCVer.Button((width / 12) * 10 + 5 - (width / 24), (height / 8), (width / 12) * 2, 20, "Select File", (b) -> {
 			if (Minecraft.getInstance().window.isFullscreen())
 				Minecraft.getInstance().window.toggleFullScreen();
@@ -97,7 +95,9 @@ public class VideoUpspeederScreen extends Screen {
 					dialog.setMultipleMode(false);
 					dialog.setVisible(true);
 					try {
-						selectedFile = dialog.getFiles()[0];
+						if(dialog.getFiles().length>0) {
+							selectedFile = dialog.getFiles()[0];
+						}else return;
 						//#if MC>=11700
 //$$ 						((EditBox)children().get(0)).setValue(selectedFile.getAbsolutePath());
 						//#else
@@ -137,7 +137,7 @@ public class VideoUpspeederScreen extends Screen {
 			VideoUpspeeder.speedup(tickrate, bitrate(), codecFFmpeg, (long) ((lengthInMilliseconds / 16L) * (tickrate / 20F)));
 		})).active = selectedFile == null ? false : selectedFile.exists();
 		MCVer.addButton(this, MCVer.Checkbox(2, this.height - 22, 20, 20, "High Quality", false));
-		MCVer.addButton(this, MCVer.EditBox(client.font, (width / 2) - 45, (height / 8) * 2 + 23, 90, 14, "20")).setValue("20");
+		MCVer.addButton(this, MCVer.EditBox(minecraft.font, (width / 2) - 45, (height / 8) * 2 + 23, 90, 14, "20")).setValue("20");
 		super.init();
 	}
 	
