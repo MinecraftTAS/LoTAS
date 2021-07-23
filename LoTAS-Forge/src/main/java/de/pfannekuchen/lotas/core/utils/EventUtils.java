@@ -10,6 +10,7 @@ import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.gui.GuiAiManipulation;
 import de.pfannekuchen.lotas.gui.GuiEntitySpawnManipulation;
 import de.pfannekuchen.lotas.mixin.accessors.AccessorRenderManager;
+import de.pfannekuchen.lotas.mods.AIManipMod;
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -147,7 +148,7 @@ public class EventUtils {
 			GL11.glDisable(GL11.GL_LINE_SMOOTH);
 			GL11.glPopMatrix();
 		} else if (gui instanceof GuiAiManipulation) {
-			if (GuiAiManipulation.entities.size() == 0) return;
+			if (AIManipMod.getSelectedEntityPos() == null) return;
 			GL11.glPushMatrix();
 			GL11.glDisable(GL11.GL_TEXTURE_2D);
 			GL11.glEnable(GL11.GL_BLEND);
@@ -157,9 +158,9 @@ public class EventUtils {
 			
 			// offset the view to the camera perspective
 			final RenderManager renderManager = Minecraft.getMinecraft().getRenderManager();
-			double renderX = ((double) GuiAiManipulation.entities.get(GuiAiManipulation.selectedIndex).posX - 0.5f) - ((AccessorRenderManager) renderManager).renderPosX();
-			double renderY = ((double) GuiAiManipulation.entities.get(GuiAiManipulation.selectedIndex).posY) - ((AccessorRenderManager) renderManager).renderPosY();
-			double renderZ = ((double) GuiAiManipulation.entities.get(GuiAiManipulation.selectedIndex).posZ - 0.5F) - ((AccessorRenderManager) renderManager).renderPosZ();
+			double renderX = AIManipMod.getSelectedEntityPos().x - ((AccessorRenderManager) renderManager).renderPosX();
+			double renderY = AIManipMod.getSelectedEntityPos().y - ((AccessorRenderManager) renderManager).renderPosY();
+			double renderZ = AIManipMod.getSelectedEntityPos().z - ((AccessorRenderManager) renderManager).renderPosZ();
 			GL11.glTranslated(renderX, renderY, renderZ);
 			
 			// draw first box around the entity
@@ -182,9 +183,9 @@ public class EventUtils {
 			GL11.glEnable(GL11.GL_LINE_SMOOTH);
 			GL11.glLineWidth(2);
 			
-			renderX = GuiAiManipulation.spawnX - ((AccessorRenderManager) renderManager).renderPosX();
-			renderY = GuiAiManipulation.spawnY - ((AccessorRenderManager) renderManager).renderPosY();
-			renderZ = GuiAiManipulation.spawnZ - ((AccessorRenderManager) renderManager).renderPosZ();
+			renderX = AIManipMod.getTargetPos().x - ((AccessorRenderManager) renderManager).renderPosX();
+			renderY = AIManipMod.getTargetPos().y - ((AccessorRenderManager) renderManager).renderPosY();
+			renderZ = AIManipMod.getTargetPos().z - ((AccessorRenderManager) renderManager).renderPosZ();
 			
 			// render second box around the target
 			GL11.glTranslated(renderX, renderY, renderZ);

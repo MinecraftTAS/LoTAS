@@ -19,7 +19,7 @@ import de.pfannekuchen.lotas.core.utils.ConfigUtils;
 import de.pfannekuchen.lotas.core.utils.EventUtils;
 import de.pfannekuchen.lotas.core.utils.KeybindsUtils;
 import de.pfannekuchen.lotas.gui.GuiChallengeIngameMenu;
-import de.pfannekuchen.lotas.gui.InfoHud;
+import de.pfannekuchen.lotas.mods.AIManipMod;
 import de.pfannekuchen.lotas.mods.DupeMod;
 import de.pfannekuchen.lotas.mods.SavestateMod;
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;
@@ -88,7 +88,8 @@ public class MixinMinecraft {
 			SavestateMod.savestate(null);
 		}
 		
-		LoTASModContainer.hud.tick();
+		AIManipMod.tick();
+		if (MCVer.player((Minecraft) (Object) this) != null) LoTASModContainer.hud.tick();
 		
 		if (KeybindsUtils.shouldLoadstate) {
 			KeybindsUtils.shouldLoadstate = false;
