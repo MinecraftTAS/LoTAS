@@ -48,6 +48,9 @@ public class SavestateMod {
 	public static final String generateSavestateFile() {
 		final LocalPlayer p = Minecraft.getInstance().player;
 		final Vec3 velocity = p.getDeltaMovement();
+		motionX = velocity.x;
+		motionY = velocity.y;
+		motionZ = velocity.z;
 		return velocity.x + ":" + velocity.y + ":" + velocity.z + ":" + Timer.ticks;
 	}
 
@@ -60,50 +63,45 @@ public class SavestateMod {
 		final Minecraft mc = Minecraft.getInstance();
 
 		final MinecraftServer server = mc.getSingleplayerServer();
+		
+		server.getPlayerList().saveAll();
+		
+		final String worldName = MCVer.getCurrentWorldFolder();
+		final File worldDir = new File(mc.gameDirectory, "saves/" + worldName);
+		final File savestatesDir = new File(mc.gameDirectory, "saves/savestates/");
+		
+		mc.getSingleplayerServer().halt(true);
+		
+		if (!savestatesDir.exists())
+			savestatesDir.mkdir();
+
+		final int existingSavestates = savestatesDir.listFiles((d, s) -> {
+			return s.startsWith(worldName + "-Savestate");
+		}).length;
+
+		File savestateDir = new File(savestatesDir, worldName + "-Savestate" + (existingSavestates + 1));
+
 		try {
-			server.getPlayerList().saveAll();
-			server.saveAllChunks(false, true, false);
-		} catch (Exception e) {
-			System.err.println("Saving failed. Trying again.. later.. or maybe not");
-			try {
-				Thread.sleep(500);
-			} catch (InterruptedException e1) {
-				e1.printStackTrace();
-			}
-			SavestateMod.savestate(name);
-			return;
+			FileUtils.copyDirectory(worldDir, savestateDir);
+			com.google.common.io.Files.write(data.getBytes(), new File(savestateDir, "savestate.dat"));
+			com.google.common.io.Files.write((name == null) ? new SimpleDateFormat("MM-dd-yyyy HH.mm.ss").format(new Date()).getBytes() : name.getBytes(), new File(savestateDir, "lotas.dat"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		try {
+			TrackerFile.increaseSavestates(savestatesDir, worldName);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		
-		new Thread(() -> {
-			final String worldName = MCVer.getCurrentWorldFolder();
-			final File worldDir = new File(mc.gameDirectory, "saves/" + worldName);
-			final File savestatesDir = new File(mc.gameDirectory, "saves/savestates/");
-
-			if (!savestatesDir.exists())
-				savestatesDir.mkdir();
-
-			final int existingSavestates = savestatesDir.listFiles((d, s) -> {
-				return s.startsWith(worldName + "-Savestate");
-			}).length;
-
-			File savestateDir = new File(savestatesDir, worldName + "-Savestate" + (existingSavestates + 1));
-
-			try {
-				FileUtils.copyDirectory(worldDir, savestateDir);
-				com.google.common.io.Files.write(data.getBytes(), new File(savestateDir, "savestate.dat"));
-				com.google.common.io.Files.write((name == null) ? new SimpleDateFormat("MM-dd-yyyy HH.mm.ss").format(new Date()).getBytes() : name.getBytes(), new File(savestateDir, "lotas.dat"));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-
-			try {
-				TrackerFile.increaseSavestates(savestatesDir, worldName);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-
-		}).start();
-
+		//#if MC>=11600
+//$$ 		mc.loadLevel(worldName);
+		//#else
+		mc.selectLevel(worldName, worldName, null);
+		//#endif
+		
+		applyVelocity=true;
 		showSavestateDone = true;
 		timeTitle = System.currentTimeMillis();
 	}
