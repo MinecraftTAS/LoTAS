@@ -11,6 +11,7 @@ import de.pfannekuchen.lotas.gui.GuiAiManipulation;
 import de.pfannekuchen.lotas.gui.GuiEntitySpawnManipulation;
 import de.pfannekuchen.lotas.mixin.accessors.AccessorRenderManager;
 import de.pfannekuchen.lotas.mods.AIManipMod;
+import de.pfannekuchen.lotas.mods.SpawnManipMod;
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -130,17 +131,23 @@ public class EventUtils {
 			
 			// offset the view to the cameras perspective
 			final RenderManager renderManager = Minecraft.getMinecraft().getRenderManager();
-			final double renderX = ((double) ((GuiEntitySpawnManipulation) gui).spawnX - 0.5f) - ((AccessorRenderManager) renderManager).renderPosX();
-			final double renderY = ((double) ((GuiEntitySpawnManipulation) gui).spawnY) - ((AccessorRenderManager) renderManager).renderPosY();
-			final double renderZ = ((double) ((GuiEntitySpawnManipulation) gui).spawnZ - 0.5F) - ((AccessorRenderManager) renderManager).renderPosZ();
+			double renderX = SpawnManipMod.getTargetPos().x - ((AccessorRenderManager) renderManager).renderPosX();
+			double renderY = SpawnManipMod.getTargetPos().y - ((AccessorRenderManager) renderManager).renderPosY();
+			double renderZ = SpawnManipMod.getTargetPos().z - ((AccessorRenderManager) renderManager).renderPosZ();
 			GL11.glTranslated(renderX, renderY, renderZ);
 			
 			// draw a box
 			GL11.glScalef(1, 2, 1);
-			GL11.glColor4f(28, 188, 220, 0.5f);
+			
+				GL11.glColor4f(28, 188, 220, 0.5f);
+			
 			RenderUtils.drawOutlinedBox();
 			RenderUtils.drawCrossBox();
-			GL11.glColor4f(0F, 1F, 0F, 0.15F);
+			if (SpawnManipMod.canSpawn()) {
+				GL11.glColor4f(0F, 1F, 0F, 0.15F);
+			} else {
+				GL11.glColor4f(1F, 0F, 0F, 0.15F);
+			}
 			RenderUtils.drawSolidBox();
 			
 			GL11.glDisable(GL11.GL_BLEND);

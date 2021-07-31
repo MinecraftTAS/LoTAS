@@ -10,6 +10,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.EnumConnectionState;
 import net.minecraft.network.Packet;
 import net.minecraft.network.handshake.client.C00Handshake;
@@ -181,4 +182,36 @@ public class MCVer {
 		return new AxisAlignedBB(box.minX - 16, box.minY - 16, box.minZ - 16, box.maxX + 16, box.maxY + 16, box.maxZ + 16);
 	}
 	
+	public static void setItemToSlot(EntityLiving entity, int slot, ItemStack stack){
+	//#if MC>=10900
+		switch (slot) {
+		case 0:
+			entity.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.MAINHAND, stack);
+			break;
+		case 1:
+			entity.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.FEET, stack);
+			break;
+		case 2:
+			entity.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.CHEST, stack);
+			break;
+		case 3:
+			entity.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.LEGS, stack);
+			break;
+		case 4:
+			entity.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.HEAD, stack);
+
+			break;
+		}
+	//#else
+//$$ 		entity.setCurrentItemOrArmor(slot, stack);
+	//#endif
+	}
+
+	public static void spawnEntity(WorldServer world, EntityLiving entity) {
+		//#if MC>=11100
+			world.spawnEntity(entity);
+		//#else
+//$$ 		world.spawnEntityInWorld(entity);
+		//#endif
+	}
 }

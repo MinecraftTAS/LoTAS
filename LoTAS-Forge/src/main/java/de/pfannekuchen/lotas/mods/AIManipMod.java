@@ -335,9 +335,9 @@ public class AIManipMod {
 			this.y = positionVector.y;
 			this.z = positionVector.z;
 			//#else
-			//$$ this.x = positionVector.xCoord;
-			//$$ this.y = positionVector.yCoord;
-			//$$ this.z = positionVector.zCoord;
+//$$ 			this.x = positionVector.xCoord;
+//$$ 			this.y = positionVector.yCoord;
+//$$ 			this.z = positionVector.zCoord;
 			//#endif
 		}
 		

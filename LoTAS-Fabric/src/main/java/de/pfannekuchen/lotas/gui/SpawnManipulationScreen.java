@@ -33,9 +33,7 @@ public class SpawnManipulationScreen extends Screen {
 	private EditBox yText;
 	private EditBox zText;
 
-	public static LivingEntity e;
-	
-	public EntitySliderWidget slider;
+	private EntitySliderWidget slider;
 	
 	private final ServerLevel world;
 

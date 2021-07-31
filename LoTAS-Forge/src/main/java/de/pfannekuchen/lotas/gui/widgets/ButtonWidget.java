@@ -23,7 +23,6 @@ public class ButtonWidget extends GuiButton {
 	
 	@Override
 	public boolean mousePressed(Minecraft mc, int mouseX, int mouseY) {
-		playPressSound(mc.getSoundHandler());
 		if (this.enabled && this.visible && mouseX >= MCVer.x(this) && mouseY >= MCVer.y(this) && mouseX < MCVer.x(this) + this.width && mouseY < MCVer.y(this) + this.height) {
 			p.trigger(this);
 			return true;
