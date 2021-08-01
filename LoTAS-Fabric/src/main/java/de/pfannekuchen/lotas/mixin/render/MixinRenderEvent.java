@@ -82,7 +82,9 @@ public class MixinRenderEvent {
 			MCVer.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 
 			//#if MC>=11500
-//$$ //			RenderUtils.applyCameraRotationOnly(poseStack);
+			//#if MC<=11605
+//$$ 			RenderUtils.applyCameraRotationOnly(poseStack);
+			//#endif
 			//#endif
 			RenderUtils.applyRenderOffset(poseStack);
 

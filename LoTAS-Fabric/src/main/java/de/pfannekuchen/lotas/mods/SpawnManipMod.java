@@ -197,6 +197,7 @@ public class SpawnManipMod {
 //$$ 		DimensionType dimension = MCVer.getCurrentLevel().dimensionType();
 		//#else
 		DimensionType dimension = MCVer.getCurrentLevel().getDimension().getType();
+		//#endif
 		ServerLevel world = mc.getSingleplayerServer().getPlayerList().getPlayers().get(0).getLevel();
 		float[] armor={1f,1f,1f,1f};
 		float[] hand= {1f,1f};
