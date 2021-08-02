@@ -70,8 +70,8 @@ public class KeybindsUtils {
 	public static void keyEvent() {
 		// Savestate and Loadstate handling
 		while (saveStateKeybind.consumeClick()) {
-			shouldSavestate = true;
 			Minecraft.getInstance().setScreen(new PauseScreen(true));
+			shouldSavestate = true;
 		}
 		while (loadStateKeybind.consumeClick()) {
 			Minecraft.getInstance().setScreen(new PauseScreen(true));

@@ -224,12 +224,15 @@ public class AIManipMod {
 		}
 	}
 	
-	public void save() {
-		File file=new File(Minecraft.getInstance().gameDirectory, MCVer.getCurrentWorldFolder()+"aijobs.txt");
+	public static void save() {
+		File file=new File(Minecraft.getInstance().gameDirectory, "saves/"+MCVer.getCurrentWorldFolder()+"/aijobs.dat");
 		List<String> aijobs=new ArrayList<>();
 		
 		if(jobQueue.isEmpty()&&file.exists()) {
 			file.delete();
+			return;
+		}else if(jobQueue.isEmpty()) {
+			return;
 		}
 		
 		jobQueue.forEach(job->{
@@ -241,12 +244,10 @@ public class AIManipMod {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		jobQueue.clear();
 	}
 	
-	public void read() {
-		File file=new File(Minecraft.getInstance().gameDirectory, MCVer.getCurrentWorldFolder()+"aijobs.txt");
-		jobQueue.clear();
+	public static void read() {
+		File file=new File(Minecraft.getInstance().gameDirectory, "saves/"+MCVer.getCurrentWorldFolder()+"/aijobs.dat");
 		if(!file.exists()) {
 			return;
 		}
@@ -258,9 +259,9 @@ public class AIManipMod {
 		}
 		
 		if(aijobs.isEmpty()) return;
-		
+		jobQueue.clear();
 		aijobs.forEach(line->{
-			jobQueue.add(fromString(this, line));
+			jobQueue.add(fromString(line));
 		});
 	}
 
@@ -279,7 +280,7 @@ public class AIManipMod {
 		});
 	}
 	
-	public static AiJob fromString(AIManipMod manip, String line) {
+	public static AiJob fromString(String line) {
 		String[] split=line.split(",");
 		Mob entity=(Mob) MCVer.getCurrentLevel().getEntity(UUID.fromString(split[0]));
 		double x = Double.parseDouble(split[1]);
@@ -292,10 +293,10 @@ public class AIManipMod {
 		Vec3 target=new Vec3(x, y, z);
 		Vec3 prevPos=new Vec3(px, py, pz);
 		
-		return manip.new AiJob(entity, target, prevPos);
+		return new AiJob(entity, target, prevPos);
 	}
 	
-	private class AiJob {
+	private static class AiJob {
 
 		final Mob entity;
 
@@ -328,7 +329,9 @@ public class AIManipMod {
 				return true;
 			}else if(!entity.isAlive()) {
 				return true;
-			}else if(entity.distanceToSqr(mc.player.position())>500) {
+			}else if(Minecraft.getInstance().player==null) {
+				return false;
+			}else if(entity.distanceToSqr(Minecraft.getInstance().player.position())>500) {
 				return true;
 			}else {
 				return false;
@@ -355,7 +358,7 @@ public class AIManipMod {
 		
 		@Override
 		public String toString() {
-			return String.format("%s,%d,%d,%d,%d,%d,%d", entity.getStringUUID(), target.x, target.y, target.z, prevPos.x, prevPos.y, prevPos.z);
+			return entity.getStringUUID()+","+target.x+","+target.y+","+target.z+","+prevPos.x+","+prevPos.y+","+prevPos.z;
 		}
 	}
 }

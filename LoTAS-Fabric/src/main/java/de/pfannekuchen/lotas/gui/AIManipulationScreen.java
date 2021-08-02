@@ -48,6 +48,7 @@ public class AIManipulationScreen extends Screen {
 		xText = MCVer.EditBox(Minecraft.getInstance().font, width / 2 - 98, height - 48, 58, 19, (int) target.x + "");
 		yText = MCVer.EditBox(Minecraft.getInstance().font, width / 2 - 29, height - 48, 59, 19, (int) target.y + "");
 		zText = MCVer.EditBox(Minecraft.getInstance().font, width / 2 + 39, height - 48, 59, 19, (int) target.z + "");
+		setTextToVec(AIManipMod.getTargetPos());
 
 		MCVer.addButton(this, MCVer.Button(width / 2 - 100, height - 25, 200, 20, "Change Target", button -> {
 			manip.confirm();

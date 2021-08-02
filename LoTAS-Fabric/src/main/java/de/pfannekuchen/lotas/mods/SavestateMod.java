@@ -70,6 +70,7 @@ public class SavestateMod {
 		final File worldDir = new File(mc.gameDirectory, "saves/" + worldName);
 		final File savestatesDir = new File(mc.gameDirectory, "saves/savestates/");
 		
+		AIManipMod.save();
 		mc.getSingleplayerServer().halt(true);
 		
 		if (!savestatesDir.exists())
@@ -168,7 +169,6 @@ public class SavestateMod {
 		
 		GLFW.glfwSetCursorPos(Minecraft.getInstance().window.getWindow(), x, y);
 		mc.mouseHandler.turnPlayer();
-
 	}
 
 	/**
