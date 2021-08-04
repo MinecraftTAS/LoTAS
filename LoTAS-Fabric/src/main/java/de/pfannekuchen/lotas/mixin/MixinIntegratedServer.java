@@ -14,7 +14,7 @@ import net.minecraft.client.server.IntegratedServer;
  */
 @Mixin(IntegratedServer.class)
 public class MixinIntegratedServer {
-	@Redirect(method = "tickServer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/server/IntegratedServer;saveAllChunks(ZZZ)Z"))
+//	@Redirect(method = "tickServer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/server/IntegratedServer;saveAllChunks(ZZZ)Z"))
 	public boolean redirectSave(IntegratedServer server, boolean b1, boolean b2, boolean b3) {
 		if(!SavestateMod.showSavestateDone) {
 			if (KeybindsUtils.shouldSavestate) {

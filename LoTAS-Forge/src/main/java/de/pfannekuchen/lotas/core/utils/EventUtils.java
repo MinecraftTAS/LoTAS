@@ -139,7 +139,7 @@ public class EventUtils {
 			// draw a box
 			GL11.glScalef(1, 2, 1);
 			
-				GL11.glColor4f(28, 188, 220, 0.5f);
+			GL11.glColor4f(28, 188, 220, 0.5f);
 			
 			RenderUtils.drawOutlinedBox();
 			RenderUtils.drawCrossBox();

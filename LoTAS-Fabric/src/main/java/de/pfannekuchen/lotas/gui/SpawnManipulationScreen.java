@@ -91,7 +91,10 @@ public class SpawnManipulationScreen extends Screen {
 		
 		setTextToVec(SpawnManipMod.getTargetPos());
 		
-		MCVer.addButton(this, MCVer.Button(width / 2 - 100, height - 49, 200, 20, "Spawn Entity", btn -> manip.confirm()));
+		MCVer.addButton(this, MCVer.Button(width / 2 - 100, height - 49, 200, 20, "Spawn Entity", btn -> {
+			manip.confirm();
+			slider.updateManipList(manip.getManipList());
+		}));
 		MCVer.addButton(this, MCVer.Button(width / 2 - 100, height - 75 + 50, 200, 20, "Done", btn -> Minecraft.getInstance().setScreen(new PauseScreen(true))));
 	
 		MCVer.addButton(this, MCVer.Button(width / 2 - 100, height - 95, 200, 20, "Move to me", btn -> {

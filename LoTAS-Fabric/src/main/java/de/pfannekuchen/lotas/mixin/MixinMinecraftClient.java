@@ -111,6 +111,7 @@ public class MixinMinecraftClient {
 			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "dragon/breath.png"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("breath.png"))));
 			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "dragon/flying.png"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("flying.png"))));
 			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "dragon/shooting.png"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("shooting.png"))));
+			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "heck/potion.png"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("potion.png"))));
 			
 			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "drops/piglin.png"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("piglin.png"))));
 		} catch (IOException e) {

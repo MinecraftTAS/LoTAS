@@ -2,6 +2,7 @@ package de.pfannekuchen.lotas.core;
 
 import com.mojang.authlib.GameProfile;
 
+import de.pfannekuchen.lotas.mixin.accessors.AccessorEntityLiving;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -214,4 +215,19 @@ public class MCVer {
 //$$ 		world.spawnEntityInWorld(entity);
 		//#endif
 	}
+
+	public static void setArmorDropChances(EntityLiving entity, float[] fs) {
+		//#if MC>=10900
+		((AccessorEntityLiving) entity).inventoryArmorDropChances(fs);
+		//#else
+//$$ 		((AccessorEntityLiving) entity).equipmentDropChances(new float[] {1F,1F,1F,1F,1F});
+		//#endif
+	}
+
+	public static void setHandDropChances(EntityLiving entity, float[] fs) {
+		//#if MC>=10900
+		((AccessorEntityLiving) entity).inventoryHandsDropChances(fs);
+		//#endif
+	}
+	
 }

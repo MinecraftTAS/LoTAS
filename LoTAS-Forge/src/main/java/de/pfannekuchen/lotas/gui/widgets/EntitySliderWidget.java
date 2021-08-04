@@ -59,5 +59,10 @@ public class EntitySliderWidget extends GuiSlider {
 				+ suffix;
 	}
 
+	public void updateManipList(List<EntityOptions> manipList) {
+		entities=manipList;
+		updateSlider();
+	}
+
 	
 }

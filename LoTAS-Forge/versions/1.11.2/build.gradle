@@ -6,6 +6,8 @@ buildscript {
 
 apply from: '../common.gradle'
 
+archivesBaseName = "LoTAS1.11.2"
+
 minecraft {
     version = '1.11.2-13.20.1.2588'
     mappings = "snapshot_20161220"
@@ -16,5 +18,5 @@ repositories {
 }
 
 dependencies {
-    shade 'net.bramp.ffmpeg:ffmpeg:2.8.0-21.0'
+    shade 'net.bramp.ffmpeg:ffmpeg:2.2.4-17.0'
 }

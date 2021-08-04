@@ -105,6 +105,7 @@ public class SavestateMod {
 		applyVelocity=true;
 		showSavestateDone = true;
 		timeTitle = System.currentTimeMillis();
+		System.gc();
 	}
 
 	/**
@@ -169,6 +170,7 @@ public class SavestateMod {
 		
 		GLFW.glfwSetCursorPos(Minecraft.getInstance().window.getWindow(), x, y);
 		mc.mouseHandler.turnPlayer();
+		System.gc();
 	}
 
 	/**

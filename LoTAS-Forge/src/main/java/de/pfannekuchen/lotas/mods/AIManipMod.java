@@ -305,7 +305,7 @@ public class AIManipMod {
 		//#if MC>=10900
 		public double distanceTo(Vec3d positionVector) {
 		//#else
-		//$$ public double distanceTo(Vec3 positionVector) {
+//$$ 		public double distanceTo(Vec3 positionVector) {
 		//#endif
 			return distanceTo(new Vec(positionVector));
 		}
@@ -321,14 +321,14 @@ public class AIManipMod {
 			//#if MC>=10900
 			return new Vec3d(positionVector.x, positionVector.y, positionVector.z).distanceTo(new Vec3d(x, y, z));
 			//#else
-			//$$ return new Vec3(positionVector.x, positionVector.y, positionVector.z).distanceTo(new Vec3(x, y, z));
+//$$ 			return new Vec3(positionVector.x, positionVector.y, positionVector.z).distanceTo(new Vec3(x, y, z));
 			//#endif
 		}
 
 		//#if MC>=10900
 		public Vec(Vec3d positionVector) {
 		//#else
-		//$$ public Vec(Vec3 positionVector) {	
+//$$ 		public Vec(Vec3 positionVector) {	
 		//#endif
 			//#if MC>=11202
 			this.x = positionVector.x;

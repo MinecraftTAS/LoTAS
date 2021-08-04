@@ -12,7 +12,9 @@ import net.minecraft.client.gui.GuiIngameMenu;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.entity.EntityLiving;
+//#if MC>10900
 import net.minecraft.util.math.BlockPos;
+//#endif
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.WorldServer;
 
@@ -25,7 +27,7 @@ public class GuiEntitySpawnManipulation extends GuiScreen {
 	
 	public GuiEntitySpawnManipulation() {
 		manip=new SpawnManipMod();
-		world=MCVer.world(Minecraft.getMinecraft().getIntegratedServer(), Minecraft.getMinecraft().player.dimension);
+		world=MCVer.world(Minecraft.getMinecraft().getIntegratedServer(), MCVer.player(Minecraft.getMinecraft()).dimension);
 	}
 	
 	private final SpawnManipMod manip;
@@ -77,7 +79,10 @@ public class GuiEntitySpawnManipulation extends GuiScreen {
 		zText = new GuiTextField(93, MCVer.getFontRenderer(Minecraft.getMinecraft()), width / 2 + 39, height - 71, 59, 18);
 		setTextToVec(target);
 		
-		this.buttonList.add(new ButtonWidget(width / 2 - 100, height - 49, 200, 20, "Spawn Entity", btn -> manip.confirm()));
+		this.buttonList.add(new ButtonWidget(width / 2 - 100, height - 49, 200, 20, "Spawn Entity", btn -> {
+			manip.confirm();
+			slider.updateManipList(manip.getManipList());
+		}));
 		this.buttonList.add(new ButtonWidget(width / 2 - 100, height - 75 + 50, 200, 20, "Done", btn -> Minecraft.getMinecraft().displayGuiScreen(new GuiIngameMenu())));
 		
 		buttonList.add(new ButtonWidget(width / 2 - 100, height - 95, 200, 20, "Move to me", btn -> {
@@ -105,25 +110,6 @@ public class GuiEntitySpawnManipulation extends GuiScreen {
 		setTextToVec(SpawnManipMod.getTargetPos());
 	}
 	
-	private boolean isValidLightLevel(EntityLiving entity) {
-        BlockPos blockpos = new BlockPos(entity.posX, entity.getEntityBoundingBox().minY, entity.posZ);
-
-        if (MCVer.world(entity).getLightFor(EnumSkyBlock.SKY, blockpos) > 31) {
-            return false;
-        } else {
-            int i = MCVer.world(entity).getLightFromNeighbors(blockpos);
-
-            if (MCVer.world(entity).isThundering()) {
-                int j = MCVer.world(entity).getSkylightSubtracted();
-                MCVer.world(entity).setSkylightSubtracted(10);
-                i = MCVer.world(entity).getLightFromNeighbors(blockpos);
-                MCVer.world(entity).setSkylightSubtracted(j);
-            }
-
-            return i <= 7;
-        }
-	}
-
 	private void setTextToVec(Vec vec) {
 	    xText.setText((int) vec.x + "");
 	    yText.setText((int) vec.y + "");

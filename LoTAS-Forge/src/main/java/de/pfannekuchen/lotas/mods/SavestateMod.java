@@ -133,6 +133,7 @@ public class SavestateMod {
 		// show the label, that the savestates is done.
 		showSavestateDone = true;
 		timeTitle = System.currentTimeMillis();
+		System.gc();
 	}
 
 	/**
@@ -203,7 +204,7 @@ public class SavestateMod {
 		Mouse.getDX();
 		Mouse.getDY();
 
-
+		System.gc();
 	}
 
 	/**

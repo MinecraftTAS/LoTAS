@@ -6,6 +6,8 @@ buildscript {
 
 apply from: '../common.gradle'
 
+archivesBaseName = "LoTAS1.9.4"
+
 minecraft {
     version = '1.9.4-12.17.0.2317-1.9.4'
     mappings = "snapshot_20160518"

@@ -53,7 +53,7 @@ repositories {
 }
 
 dependencies {
-	//#if MC>=11100
+	//#if MC>=11200
     shade 'net.bramp.ffmpeg:ffmpeg:2.8.0-21.0'
     //#else
     //$$ shade 'net.bramp.ffmpeg:ffmpeg:2.2.4-17.0'
