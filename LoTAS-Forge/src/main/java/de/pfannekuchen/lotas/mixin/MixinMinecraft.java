@@ -266,8 +266,11 @@ public class MixinMinecraft {
 		}
 
 	}
-	
+	//#if MC>10900
 	@Inject(method = "runTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;runTickMouse()V"))
+	//#else
+//$$ 	@Inject(method = "runTick", at = @At(value = "INVOKE", target = "Lorg/lwjgl/input/Keyboard;next()V"))
+	//#endif
 	public void injectAtRunTickKebindings(CallbackInfo ci) {
 		EventUtils.onInput2();
 	}

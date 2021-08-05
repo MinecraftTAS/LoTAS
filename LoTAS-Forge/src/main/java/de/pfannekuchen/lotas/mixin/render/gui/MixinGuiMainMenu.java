@@ -38,6 +38,20 @@ public abstract class MixinGuiMainMenu extends GuiScreen {
 
     private static final int BUFFER_SIZE = 4096;
 
+	@Inject(at = @At("RETURN"), method = "addSingleplayerMultiplayerButtons")
+	public void redoaddSingleplayerMultiplayerButtons(int p_73969_1_, int p_73969_2_, CallbackInfo ci) {
+		this.buttonList.get(1).id = 24;
+		this.buttonList.get(1).displayString = "Speed up Video";
+		
+		//#if MC>=10900
+		this.modButton.width = this.buttonList.get(1).width;
+		this.modButton.visible = false;
+		//#endif
+		
+		buttonList.add(new GuiButton(69, width / 2 - (this.buttonList.get(1).width / 2), MCVer.y(this.buttonList.get(1)) + 24, this.buttonList.get(1).width, 20, "Configuration"));
+		this.realmsButton.visible = false;
+	}
+	
     public void unzip(String zipFilePath, String destDirectory) throws IOException {
         File destDir = new File(destDirectory);
         if (!destDir.exists()) {
