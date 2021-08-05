@@ -59,6 +59,8 @@ public class MixinMinecraft {
 	private boolean isGamePaused;
 	@Unique
 	public boolean wasOnGround = false;
+
+	private boolean once;
 	
 	@Inject(method = "Lnet/minecraft/client/Minecraft;loadWorld(Lnet/minecraft/client/multiplayer/WorldClient;Ljava/lang/String;)V", at = @At("HEAD"))
 	public void injectloadWorld(WorldClient worldClientIn, String loadingMessage, CallbackInfo ci) {
@@ -257,6 +259,10 @@ public class MixinMinecraft {
 				MCVer.player((Minecraft) (Object) this).motionY = SavestateMod.motionY;
 				MCVer.player((Minecraft) (Object) this).motionZ = SavestateMod.motionZ;
 			}
+			if(!once) {
+				once=true;
+				AIManipMod.read();
+			}
 		}
 
 	}
@@ -265,4 +271,16 @@ public class MixinMinecraft {
 	public void injectAtRunTickKebindings(CallbackInfo ci) {
 		EventUtils.onInput2();
 	}
+	
+	
+	@Inject(method = "Lnet/minecraft/client/Minecraft;loadWorld(Lnet/minecraft/client/multiplayer/WorldClient;Ljava/lang/String;)V", at = @At("HEAD"))
+	public void injectLoadLevel(WorldClient world, String string, CallbackInfo ci) {
+		if(world==null&&Minecraft.getMinecraft().getIntegratedServer()!=null&&!SavestateMod.isLoading) {
+			AIManipMod.save();
+		}else if(world!=null) {
+			once=false;
+		}
+	}
+	
+	
 }

@@ -71,6 +71,7 @@ public class SavestateMod {
 		//#if MC>=10900
 		server.getPlayerList().saveAllPlayerData();
 		server.saveAllWorlds(false);
+		AIManipMod.save();
 		//#else
 //$$ 		server.getConfigurationManager().saveAllPlayerData();
 		//#endif
