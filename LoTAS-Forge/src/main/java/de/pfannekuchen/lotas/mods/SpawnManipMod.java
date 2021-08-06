@@ -81,9 +81,9 @@ public class SpawnManipMod {
 	public void confirm() {
 		if(canSpawn()) {
 			WorldServer world=(WorldServer) MCVer.world(mc.getIntegratedServer(), MCVer.player(Minecraft.getMinecraft()).dimension);
-			int targetX=(int) Math.round(target.x);
-			int targetY=(int) Math.round(target.y);
-			int targetZ=(int) Math.round(target.z);
+			double targetX=Math.floor(target.x)+0.5;
+			double targetY=Math.floor(target.y);
+			double targetZ=Math.floor(target.z)+0.5;
 			
 			entity.setPosition(targetX, targetY, targetZ);
 			MCVer.spawnEntity(world, entity);
