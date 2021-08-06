@@ -24,6 +24,7 @@ import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.monster.Ghast;
 import net.minecraft.world.entity.monster.Husk;
+import net.minecraft.world.entity.monster.MagmaCube;
 import net.minecraft.world.entity.monster.Skeleton;
 import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.entity.monster.Spider;
@@ -311,7 +312,6 @@ public class SpawnManipMod {
 				
 				entity = new Skeleton(EntityType.SKELETON, world);
 				entity.setItemInHand(InteractionHand.MAIN_HAND, addEnchants(new ItemStack(Items.BOW), skelBow));
-				entity.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.BOW));
 				entity.setItemSlot(EquipmentSlot.FEET, new ItemStack(Items.DIAMOND_BOOTS));
 				entity.setItemSlot(EquipmentSlot.CHEST, new ItemStack(Items.DIAMOND_CHESTPLATE));
 				entity.setItemSlot(EquipmentSlot.LEGS, new ItemStack(Items.DIAMOND_LEGGINGS));
@@ -333,7 +333,7 @@ public class SpawnManipMod {
 		}else if(dimension==AccessorDimensionTypes.getNether()) {
 			entities.add(new EntityOptions("Blaze", new Blaze(EntityType.BLAZE, world)));
 			entities.add(new EntityOptions("Ghast", new Ghast(EntityType.GHAST, world)));
-			entities.add(new EntityOptions("Magma Cube", new Ghast(EntityType.GHAST, world)));
+			entities.add(new EntityOptions("Magma Cube", new MagmaCube(EntityType.MAGMA_CUBE, world)));
 			LivingEntity entity = new Skeleton(EntityType.SKELETON, world);
 			entity.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.BOW));
 			entities.add(new EntityOptions("Skeleton", entity));
@@ -390,7 +390,6 @@ public class SpawnManipMod {
 				
 				entity = new Skeleton(EntityType.SKELETON, world);
 				entity.setItemInHand(InteractionHand.MAIN_HAND, addEnchants(new ItemStack(Items.BOW), skelBow));
-				entity.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.BOW));
 				entity.setItemSlot(EquipmentSlot.FEET, new ItemStack(Items.DIAMOND_BOOTS));
 				entity.setItemSlot(EquipmentSlot.CHEST, new ItemStack(Items.DIAMOND_CHESTPLATE));
 				entity.setItemSlot(EquipmentSlot.LEGS, new ItemStack(Items.DIAMOND_LEGGINGS));

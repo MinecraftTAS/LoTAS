@@ -11,9 +11,11 @@ import com.google.common.io.Files;
 
 import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.mods.SavestateMod;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.ObjectSelectionList;
+import net.minecraft.client.gui.screens.PauseScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
@@ -37,12 +39,19 @@ public class LoadstateScreen extends Screen {
 		} catch (NumberFormatException | IOException e) {
 			e.printStackTrace();
 		}
-		MCVer.addButton(this, MCVer.Button(width / 2 - 102, height - 52, 204, 20, "Loadstate", btn -> {
-			SavestateMod.loadstate(list.getSelected().index + 1);
+		MCVer.addButton(this, MCVer.Button(width / 2 - 102, height - 55, 120, 20, "Loadstate", btn -> {
+			if (list.getSelected() != null) {
+				SavestateMod.loadstate(list.getSelected().index + 1);
+			}
 		}));
-		MCVer.addButton(this, MCVer.Button(width / 2 - 102, height - 31, 204, 20, "Delete State", btn -> {
-			SavestateMod.yeet(list.getSelected().index + 1);
-			Minecraft.getInstance().setScreen(new LoadstateScreen());
+		MCVer.addButton(this, MCVer.Button(width / 2 + 22, height - 55, 80, 20, ChatFormatting.RED+"Delete state", btn -> {
+			if (list.getSelected() != null) {
+				SavestateMod.yeet(list.getSelected().index + 1);
+				Minecraft.getInstance().setScreen(new LoadstateScreen());
+			}
+		}));
+		MCVer.addButton(this, MCVer.Button(width /2 -102, height - 31, 204, 20, "Back", btn->{
+			Minecraft.getInstance().setScreen(new PauseScreen(true));
 		}));
 		super.init();
 	}
@@ -55,7 +64,7 @@ public class LoadstateScreen extends Screen {
 	@Override public void render(int mouseX, int mouseY, float partialTicks) {
 	list.render(mouseX, mouseY, partialTicks);
 	//#endif
-		MCVer.drawCenteredString(this, "Select State to load", width / 2, 16, 0xFFFFFF);
+		MCVer.drawCenteredString(this, "Select a state to load", width / 2, 16, 0xFFFFFF);
 		for(int k = 0; k < MCVer.getButtonSize(this); ++k) {
 			MCVer.render(((AbstractWidget)MCVer.getButton(this, k)), mouseX, mouseY, partialTicks);
 		}
@@ -116,7 +125,7 @@ public class LoadstateScreen extends Screen {
 			for (File file : f) {
 				fallbackentry++;
 				try {
-				addEntry(new StateEntry(Files.readLines(new File(file, "lotas.dat"), StandardCharsets.UTF_8).get(0), "Savestate " + file.getName().split("-Savestate")[1], Integer.parseInt(file.getName().split("-Savestate")[1]) - 1));
+					addEntry(new StateEntry(Files.readLines(new File(file, "lotas.dat"), StandardCharsets.UTF_8).get(0), "Savestate " + file.getName().split("-Savestate")[1], Integer.parseInt(file.getName().split("-Savestate")[1]) - 1));
 				} catch(Exception e) {
 					addEntry(new StateEntry("Error while reading the file", "responsible for this text", fallbackentry));
 					e.printStackTrace();

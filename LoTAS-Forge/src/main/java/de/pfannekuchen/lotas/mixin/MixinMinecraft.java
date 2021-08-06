@@ -19,7 +19,7 @@ import de.pfannekuchen.lotas.core.utils.ConfigUtils;
 import de.pfannekuchen.lotas.core.utils.EventUtils;
 import de.pfannekuchen.lotas.core.utils.KeybindsUtils;
 import de.pfannekuchen.lotas.gui.GuiChallengeIngameMenu;
-import de.pfannekuchen.lotas.gui.InfoHud;
+import de.pfannekuchen.lotas.mods.AIManipMod;
 import de.pfannekuchen.lotas.mods.DupeMod;
 import de.pfannekuchen.lotas.mods.SavestateMod;
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;
@@ -59,6 +59,8 @@ public class MixinMinecraft {
 	private boolean isGamePaused;
 	@Unique
 	public boolean wasOnGround = false;
+
+	private boolean once;
 	
 	@Inject(method = "Lnet/minecraft/client/Minecraft;loadWorld(Lnet/minecraft/client/multiplayer/WorldClient;Ljava/lang/String;)V", at = @At("HEAD"))
 	public void injectloadWorld(WorldClient worldClientIn, String loadingMessage, CallbackInfo ci) {
@@ -88,7 +90,8 @@ public class MixinMinecraft {
 			SavestateMod.savestate(null);
 		}
 		
-		LoTASModContainer.hud.tick();
+		AIManipMod.tick();
+		if (MCVer.player((Minecraft) (Object) this) != null) LoTASModContainer.hud.tick();
 		
 		if (KeybindsUtils.shouldLoadstate) {
 			KeybindsUtils.shouldLoadstate = false;
@@ -256,12 +259,31 @@ public class MixinMinecraft {
 				MCVer.player((Minecraft) (Object) this).motionY = SavestateMod.motionY;
 				MCVer.player((Minecraft) (Object) this).motionZ = SavestateMod.motionZ;
 			}
+			if(!once) {
+				once=true;
+				AIManipMod.read();
+			}
 		}
 
 	}
-	
+	//#if MC>10900
 	@Inject(method = "runTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;runTickMouse()V"))
+	//#else
+//$$ 	@Inject(method = "runTick", at = @At(value = "INVOKE", target = "Lorg/lwjgl/input/Keyboard;next()V"))
+	//#endif
 	public void injectAtRunTickKebindings(CallbackInfo ci) {
 		EventUtils.onInput2();
 	}
+	
+	
+	@Inject(method = "Lnet/minecraft/client/Minecraft;loadWorld(Lnet/minecraft/client/multiplayer/WorldClient;Ljava/lang/String;)V", at = @At("HEAD"))
+	public void injectLoadLevel(WorldClient world, String string, CallbackInfo ci) {
+		if(world==null&&Minecraft.getMinecraft().getIntegratedServer()!=null&&!SavestateMod.isLoading) {
+			AIManipMod.save();
+		}else if(world!=null) {
+			once=false;
+		}
+	}
+	
+	
 }

@@ -71,6 +71,7 @@ public class SavestateMod {
 		//#if MC>=10900
 		server.getPlayerList().saveAllPlayerData();
 		server.saveAllWorlds(false);
+		AIManipMod.save();
 		//#else
 //$$ 		server.getConfigurationManager().saveAllPlayerData();
 		//#endif
@@ -133,6 +134,7 @@ public class SavestateMod {
 		// show the label, that the savestates is done.
 		showSavestateDone = true;
 		timeTitle = System.currentTimeMillis();
+		System.gc();
 	}
 
 	/**
@@ -203,7 +205,7 @@ public class SavestateMod {
 		Mouse.getDX();
 		Mouse.getDY();
 
-
+		System.gc();
 	}
 
 	/**

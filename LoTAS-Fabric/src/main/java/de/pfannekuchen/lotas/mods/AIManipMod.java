@@ -1,16 +1,23 @@
 package de.pfannekuchen.lotas.mods;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.UUID;
+
+import org.apache.commons.io.FileUtils;
+
+import com.google.common.base.Predicates;
+
+import de.pfannekuchen.lotas.core.MCVer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.phys.Vec3;
-import com.google.common.base.Predicates;
-
-import de.pfannekuchen.lotas.core.MCVer;
 
 /**
  * Forces a selected entity to walk to a target
@@ -34,8 +41,8 @@ public class AIManipMod {
 		entities = MCVer.getCurrentLevel().getEntitiesOfClass(Mob.class, mc.player.getBoundingBox().inflate(64, 64, 64), Predicates.alwaysTrue());
 		sortEntities();
 		
-		selectedEntity= entities.get(selectedIndex);
-		target=mc.player.position();
+		selectedEntity = entities.get(selectedIndex);
+		target = mc.player.position();
 	}
 
 	public static boolean isEntityInRange() {
@@ -216,6 +223,47 @@ public class AIManipMod {
 			jobQueue.add(new AiJob(entity, target));
 		}
 	}
+	
+	public static void save() {
+		File file=new File(Minecraft.getInstance().gameDirectory, "saves/"+MCVer.getCurrentWorldFolder()+"/aijobs.dat");
+		List<String> aijobs=new ArrayList<>();
+		
+		if(jobQueue.isEmpty()&&file.exists()) {
+			file.delete();
+			return;
+		}else if(jobQueue.isEmpty()) {
+			return;
+		}
+		
+		jobQueue.forEach(job->{
+			aijobs.add(job.toString());
+		});
+		
+		try {
+			FileUtils.writeLines(file, aijobs);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void read() {
+		File file=new File(Minecraft.getInstance().gameDirectory, "saves/"+MCVer.getCurrentWorldFolder()+"/aijobs.dat");
+		if(!file.exists()) {
+			return;
+		}
+		List<String> aijobs=new ArrayList<>();
+		try {
+			aijobs=FileUtils.readLines(file, Charset.defaultCharset());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		if(aijobs.isEmpty()) return;
+		jobQueue.clear();
+		aijobs.forEach(line->{
+			jobQueue.add(fromString(line));
+		});
+	}
 
 	/**
 	 * Sorts entities by distance from the player
@@ -232,7 +280,23 @@ public class AIManipMod {
 		});
 	}
 	
-	private class AiJob {
+	public static AiJob fromString(String line) {
+		String[] split=line.split(",");
+		Mob entity=(Mob) MCVer.getCurrentLevel().getEntity(UUID.fromString(split[0]));
+		double x = Double.parseDouble(split[1]);
+		double y = Double.parseDouble(split[2]);
+		double z = Double.parseDouble(split[3]);
+		double px = Double.parseDouble(split[4]);
+		double py = Double.parseDouble(split[5]);
+		double pz = Double.parseDouble(split[6]);
+		
+		Vec3 target=new Vec3(x, y, z);
+		Vec3 prevPos=new Vec3(px, py, pz);
+		
+		return new AiJob(entity, target, prevPos);
+	}
+	
+	private static class AiJob {
 
 		final Mob entity;
 
@@ -245,6 +309,12 @@ public class AIManipMod {
 		public AiJob(Mob entity, Vec3 target) {
 			this.entity = entity;
 			this.target=target;
+		}
+		
+		public AiJob(Mob entity, Vec3 target, Vec3 prevPos) {
+			this.entity = entity;
+			this.target=target;
+			this.prevPos=prevPos;
 		}
 
 		/**
@@ -259,7 +329,9 @@ public class AIManipMod {
 				return true;
 			}else if(!entity.isAlive()) {
 				return true;
-			}else if(entity.distanceToSqr(mc.player.position())>500) {
+			}else if(Minecraft.getInstance().player==null) {
+				return false;
+			}else if(entity.distanceToSqr(Minecraft.getInstance().player.position())>500) {
 				return true;
 			}else {
 				return false;
@@ -282,6 +354,11 @@ public class AIManipMod {
 					timeouttimer=0;
 				}
 			}
+		}
+		
+		@Override
+		public String toString() {
+			return entity.getStringUUID()+","+target.x+","+target.y+","+target.z+","+prevPos.x+","+prevPos.y+","+prevPos.z;
 		}
 	}
 }

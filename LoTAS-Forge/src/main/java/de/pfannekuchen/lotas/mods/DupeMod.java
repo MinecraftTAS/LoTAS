@@ -7,6 +7,7 @@ import java.util.List;
 import de.pfannekuchen.lotas.core.MCVer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.tileentity.TileEntity;
@@ -50,9 +51,7 @@ public class DupeMod {
 			Minecraft mc = Minecraft.getMinecraft();
 			
 			// reset motion because we are actually "crashing" the game
-			MCVer.player(mc).motionX = 0;
-			MCVer.player(mc).motionY = 0;
-			MCVer.player(mc).motionZ = 0;
+			resetMotion(mc);
 			
 			if (DupeMod.items != null) {
 				if (!DupeMod.items.isEmpty()) {
@@ -101,9 +100,7 @@ public class DupeMod {
 			double pZ = MCVer.player(mc).posZ;
 			
 			// relog
-			MCVer.player(mc).motionX = 0;
-			MCVer.player(mc).motionY = 0;
-			MCVer.player(mc).motionZ = 0;
+			resetMotion(mc);
 			
 			DupeMod.items = new LinkedList<EntityItem>();
 			
@@ -153,6 +150,16 @@ public class DupeMod {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * Resets the motion
+	 * @param mc
+	 */
+	private static void resetMotion(Minecraft mc) {
+		MCVer.player(mc).motionX = 0;
+		MCVer.player(mc).motionY = 0;
+		MCVer.player(mc).motionZ = 0;
 	}
 	
 }

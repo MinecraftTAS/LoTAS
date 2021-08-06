@@ -158,12 +158,10 @@ public class EntitySliderWidget extends AbstractWidget {
 		return entities.get((int) Math.round(sliderPosition * (max - min) + min)).entity;
 	}
 
-	public ItemStack addEnchants(ItemStack item, EnchantmentInstance[] enchants) {
-		for (EnchantmentInstance enchantmentData : enchants) {
-			item.enchant(enchantmentData.enchantment, enchantmentData.level);
-		}
-		return item;
+	public void updateManipList(List<EntityOptions> manipList) {
+		entities=manipList;
 	}
+
 	//#if MC>=11700
 //$$ 	@Override
 //$$ 	public void updateNarration(net.minecraft.client.gui.narration.NarrationElementOutput narrationElementOutput) {

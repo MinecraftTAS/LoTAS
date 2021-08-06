@@ -2,6 +2,7 @@ package de.pfannekuchen.lotas.core;
 
 import com.mojang.authlib.GameProfile;
 
+import de.pfannekuchen.lotas.mixin.accessors.AccessorEntityLiving;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -10,6 +11,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.EnumConnectionState;
 import net.minecraft.network.Packet;
 import net.minecraft.network.handshake.client.C00Handshake;
@@ -177,8 +179,55 @@ public class MCVer {
         //#endif
 	}
 
-	public static AxisAlignedBB expandBy32(AxisAlignedBB box) {
-		return new AxisAlignedBB(box.minX - 16, box.minY - 16, box.minZ - 16, box.maxX + 16, box.maxY + 16, box.maxZ + 16);
+	public static AxisAlignedBB expandBy64(AxisAlignedBB box) {
+		return new AxisAlignedBB(box.minX - 32, box.minY - 32, box.minZ - 32, box.maxX + 32, box.maxY + 32, box.maxZ + 32);
+	}
+	
+	public static void setItemToSlot(EntityLiving entity, int slot, ItemStack stack){
+	//#if MC>=10900
+		switch (slot) {
+		case 0:
+			entity.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.MAINHAND, stack);
+			break;
+		case 1:
+			entity.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.FEET, stack);
+			break;
+		case 2:
+			entity.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.CHEST, stack);
+			break;
+		case 3:
+			entity.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.LEGS, stack);
+			break;
+		case 4:
+			entity.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.HEAD, stack);
+
+			break;
+		}
+	//#else
+//$$ 		entity.setCurrentItemOrArmor(slot, stack);
+	//#endif
+	}
+
+	public static void spawnEntity(WorldServer world, EntityLiving entity) {
+		//#if MC>=11100
+			world.spawnEntity(entity);
+		//#else
+//$$ 		world.spawnEntityInWorld(entity);
+		//#endif
+	}
+
+	public static void setArmorDropChances(EntityLiving entity, float[] fs) {
+		//#if MC>=10900
+		((AccessorEntityLiving) entity).inventoryArmorDropChances(fs);
+		//#else
+//$$ 		((AccessorEntityLiving) entity).equipmentDropChances(new float[] {1F,1F,1F,1F,1F});
+		//#endif
+	}
+
+	public static void setHandDropChances(EntityLiving entity, float[] fs) {
+		//#if MC>=10900
+		((AccessorEntityLiving) entity).inventoryHandsDropChances(fs);
+		//#endif
 	}
 	
 }

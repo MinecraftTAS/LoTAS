@@ -40,7 +40,7 @@
 		"render.binds.MixinTickrateChangerWorldborder",
 		"render.binds.MixinTickrateChangerSubtitle",
 		"render.MixinShieldRenderer",
-		"render.MixinPotionRenderer",
+		"render.gui.MixinInGameHud",
 		//#if MC<=11002
 //$$ 		"render.MixinItemPotion",
 		//#endif

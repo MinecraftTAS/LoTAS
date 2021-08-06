@@ -10,6 +10,8 @@ import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.gui.GuiAiManipulation;
 import de.pfannekuchen.lotas.gui.GuiEntitySpawnManipulation;
 import de.pfannekuchen.lotas.mixin.accessors.AccessorRenderManager;
+import de.pfannekuchen.lotas.mods.AIManipMod;
+import de.pfannekuchen.lotas.mods.SpawnManipMod;
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -129,17 +131,23 @@ public class EventUtils {
 			
 			// offset the view to the cameras perspective
 			final RenderManager renderManager = Minecraft.getMinecraft().getRenderManager();
-			final double renderX = ((double) ((GuiEntitySpawnManipulation) gui).spawnX - 0.5f) - ((AccessorRenderManager) renderManager).renderPosX();
-			final double renderY = ((double) ((GuiEntitySpawnManipulation) gui).spawnY) - ((AccessorRenderManager) renderManager).renderPosY();
-			final double renderZ = ((double) ((GuiEntitySpawnManipulation) gui).spawnZ - 0.5F) - ((AccessorRenderManager) renderManager).renderPosZ();
+			double renderX = Math.floor(SpawnManipMod.getTargetPos().x) - ((AccessorRenderManager) renderManager).renderPosX();
+			double renderY = Math.floor(SpawnManipMod.getTargetPos().y) - ((AccessorRenderManager) renderManager).renderPosY();
+			double renderZ = Math.floor(SpawnManipMod.getTargetPos().z) - ((AccessorRenderManager) renderManager).renderPosZ();
 			GL11.glTranslated(renderX, renderY, renderZ);
 			
 			// draw a box
 			GL11.glScalef(1, 2, 1);
+			
 			GL11.glColor4f(28, 188, 220, 0.5f);
+			
 			RenderUtils.drawOutlinedBox();
 			RenderUtils.drawCrossBox();
-			GL11.glColor4f(0F, 1F, 0F, 0.15F);
+			if (SpawnManipMod.canSpawn()) {
+				GL11.glColor4f(0F, 1F, 0F, 0.15F);
+			} else {
+				GL11.glColor4f(1F, 0F, 0F, 0.15F);
+			}
 			RenderUtils.drawSolidBox();
 			
 			GL11.glDisable(GL11.GL_BLEND);
@@ -147,7 +155,7 @@ public class EventUtils {
 			GL11.glDisable(GL11.GL_LINE_SMOOTH);
 			GL11.glPopMatrix();
 		} else if (gui instanceof GuiAiManipulation) {
-			if (GuiAiManipulation.entities.size() == 0) return;
+			if (AIManipMod.getSelectedEntityPos() == null) return;
 			GL11.glPushMatrix();
 			GL11.glDisable(GL11.GL_TEXTURE_2D);
 			GL11.glEnable(GL11.GL_BLEND);
@@ -157,9 +165,9 @@ public class EventUtils {
 			
 			// offset the view to the camera perspective
 			final RenderManager renderManager = Minecraft.getMinecraft().getRenderManager();
-			double renderX = ((double) GuiAiManipulation.entities.get(GuiAiManipulation.selectedIndex).posX - 0.5f) - ((AccessorRenderManager) renderManager).renderPosX();
-			double renderY = ((double) GuiAiManipulation.entities.get(GuiAiManipulation.selectedIndex).posY) - ((AccessorRenderManager) renderManager).renderPosY();
-			double renderZ = ((double) GuiAiManipulation.entities.get(GuiAiManipulation.selectedIndex).posZ - 0.5F) - ((AccessorRenderManager) renderManager).renderPosZ();
+			double renderX = Math.floor(AIManipMod.getSelectedEntityPos().x) - ((AccessorRenderManager) renderManager).renderPosX();
+			double renderY = Math.floor(AIManipMod.getSelectedEntityPos().y) - ((AccessorRenderManager) renderManager).renderPosY();
+			double renderZ = Math.floor(AIManipMod.getSelectedEntityPos().z) - ((AccessorRenderManager) renderManager).renderPosZ();
 			GL11.glTranslated(renderX, renderY, renderZ);
 			
 			// draw first box around the entity
@@ -182,9 +190,9 @@ public class EventUtils {
 			GL11.glEnable(GL11.GL_LINE_SMOOTH);
 			GL11.glLineWidth(2);
 			
-			renderX = GuiAiManipulation.spawnX - ((AccessorRenderManager) renderManager).renderPosX();
-			renderY = GuiAiManipulation.spawnY - ((AccessorRenderManager) renderManager).renderPosY();
-			renderZ = GuiAiManipulation.spawnZ - ((AccessorRenderManager) renderManager).renderPosZ();
+			renderX = Math.floor(AIManipMod.getTargetPos().x) - ((AccessorRenderManager) renderManager).renderPosX();
+			renderY = Math.floor(AIManipMod.getTargetPos().y) - ((AccessorRenderManager) renderManager).renderPosY();
+			renderZ = Math.floor(AIManipMod.getTargetPos().z) - ((AccessorRenderManager) renderManager).renderPosZ();
 			
 			// render second box around the target
 			GL11.glTranslated(renderX, renderY, renderZ);

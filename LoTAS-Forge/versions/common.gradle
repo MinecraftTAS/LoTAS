@@ -15,9 +15,9 @@ apply plugin: 'org.spongepowered.mixin'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-version = "2.0.0-SNAPSHOT"
+version = "prerelease-2.0.0-7"
 group= "de.pfannekuchen.lotas"
-archivesBaseName = "lotas"
+archivesBaseName = "LoTAS"
 
 minecraft {
     coreMod = 'de.pfannekuchen.lotas.core.LoadingPlugin'

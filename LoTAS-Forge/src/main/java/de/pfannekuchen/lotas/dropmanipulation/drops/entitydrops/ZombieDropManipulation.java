@@ -102,7 +102,9 @@ public class ZombieDropManipulation extends GuiDropChanceManipulation.DropManipu
         }
 
         Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation("lotas", "drops/zombie.png"));
-        Gui.drawModalRectWithCustomSizedTexture(width - 228, y + 24, 0.0F, 0.0F, 118, 198, 118, 198);
+        int scaleX=30;
+		int scaleY=50;
+        Gui.drawModalRectWithCustomSizedTexture(width - 110, y + 24, 0.0F, 0.0F, 118-scaleX, 198-scaleY, 118-scaleX, 198-scaleY);
     }
 
 }
