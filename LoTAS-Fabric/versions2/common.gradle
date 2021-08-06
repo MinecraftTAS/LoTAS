@@ -17,7 +17,6 @@ configurations {
 
 dependencies {
     implementation 'org.projectlombok:lombok:1.16.4'
-	include 'work.mgnet:identifier:1.1'
     include 'net.bramp.ffmpeg:ffmpeg:2.8.0-21.0'
     include 'org.slf4j:slf4j-api:1.7.25'
     include 'com.google.code.findbugs:annotations:3.0.1u2'
