@@ -115,7 +115,7 @@ public class GuiAiManipulation extends GuiScreen {
 		zText.drawTextBox();
 		
 		Vec entityPos = AIManipMod.getSelectedEntityPos();
-		drawCenteredString(MCVer.getFontRenderer(mc), AIManipMod.getSelectedEntity().getName() + " (" + entityPos.x + ", " + entityPos.y + ", " + entityPos.z + ")", width / 2, 5, 0xFFFFFF);
+		drawCenteredString(MCVer.getFontRenderer(mc), AIManipMod.getSelectedEntity().getName() + " (" + (int)entityPos.x + ", " + (int)entityPos.y + ", " + (int)entityPos.z + ")", width / 2, 5, 0xFFFFFF);
 	}
 	
 }

@@ -37,7 +37,8 @@ public class DupeMod {
 		for (int i = 0; i < inventory.offhand.size(); i++) {
 			offHand.set(i, inventory.offhand.get(i).copy());
 		}
-		client.player.setDeltaMovement(0, 0, 0);
+		resetMotion(client);
+		
 	}
 
 	/**
@@ -58,6 +59,14 @@ public class DupeMod {
 		for (int i = 0; i < offHand.size(); i++) {
 			inventory.offhand.set(i, offHand.get(i));
 		}
+		resetMotion(client);
+	}
+
+	/**
+	 * Resets the motion
+	 * @param client
+	 */
+	private static void resetMotion(Minecraft client) {
 		client.player.setDeltaMovement(0, 0, 0);
 	}
 

@@ -13,9 +13,11 @@ import java.util.List;
 import com.google.common.io.Files;
 
 import de.pfannekuchen.lotas.core.MCVer;
+import de.pfannekuchen.lotas.gui.widgets.ButtonWidget;
 import de.pfannekuchen.lotas.mods.SavestateMod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiIngameMenu;
 import net.minecraft.client.gui.GuiListExtended;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
@@ -31,8 +33,15 @@ public class GuiLoadstateMenu extends GuiScreen {
 		} catch (NumberFormatException | IOException e) {
 			e.printStackTrace();
 		}
-		this.buttonList.add(new GuiButton(0, width / 2 - 102, height - 52, 204, 20, "Loadstate"));
-		this.buttonList.add(new GuiButton(1, width / 2 - 102, height - 31, 204, 20, "Delete State"));
+		this.buttonList.add(new GuiButton(0, width / 2 - 102, height - 55, 120, 20, "Loadstate"));
+		//#if MC>10900
+		this.buttonList.add(new GuiButton(1, width / 2 + 22, height - 55, 80, 20, net.minecraft.util.text.TextFormatting.RED+"Delete state"));
+		//#else
+//$$ 		this.buttonList.add(new GuiButton(1, width / 2 + 22, height - 55, 80, 20, com.mojang.realmsclient.gui.ChatFormatting.RED+"Delete state"));
+		//#endif
+		this.buttonList.add(new ButtonWidget(width / 2 - 102, height - 31, 204, 20, "Back", btn->{
+			Minecraft.getMinecraft().displayGuiScreen(new GuiIngameMenu());
+		}));
 		super.initGui();
 	}
 	
@@ -50,7 +59,7 @@ public class GuiLoadstateMenu extends GuiScreen {
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		list.drawScreen(mouseX, mouseY, partialTicks);
-		drawCenteredString(MCVer.getFontRenderer(mc), "Select State to load", width / 2, 16, 0xFFFFFF);
+		drawCenteredString(MCVer.getFontRenderer(mc), "Select a state to load", width / 2, 16, 0xFFFFFF);
 		super.drawScreen(mouseX, mouseY, partialTicks);
 	}
 	
@@ -81,7 +90,7 @@ public class GuiLoadstateMenu extends GuiScreen {
 				
 				@Override
 				public boolean accept(File dir, String name) {	
-					System.out.println(name);
+//					System.out.println(name);
 					return name.startsWith(Minecraft.getMinecraft().getIntegratedServer().getFolderName() + "-Savestate");
 				}
 			});
@@ -95,7 +104,12 @@ public class GuiLoadstateMenu extends GuiScreen {
 				}
 			});
 			for (File file : f) {
+				try {
 				states.add(new StateEntry(Files.readLines(new File(file, "lotas.dat"), StandardCharsets.UTF_8).get(0), "Savestate " + file.getName().split("-Savestate")[1]));
+				} catch(Exception e) {
+					states.add(new StateEntry("Error while reading the file", "responsible for this text"));
+					e.printStackTrace();
+				}
 			}
 			
 		}

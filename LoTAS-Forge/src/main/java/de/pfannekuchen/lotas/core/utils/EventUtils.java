@@ -131,9 +131,9 @@ public class EventUtils {
 			
 			// offset the view to the cameras perspective
 			final RenderManager renderManager = Minecraft.getMinecraft().getRenderManager();
-			double renderX = SpawnManipMod.getTargetPos().x - ((AccessorRenderManager) renderManager).renderPosX();
-			double renderY = SpawnManipMod.getTargetPos().y - ((AccessorRenderManager) renderManager).renderPosY();
-			double renderZ = SpawnManipMod.getTargetPos().z - ((AccessorRenderManager) renderManager).renderPosZ();
+			double renderX = Math.floor(SpawnManipMod.getTargetPos().x) - ((AccessorRenderManager) renderManager).renderPosX();
+			double renderY = Math.floor(SpawnManipMod.getTargetPos().y) - ((AccessorRenderManager) renderManager).renderPosY();
+			double renderZ = Math.floor(SpawnManipMod.getTargetPos().z) - ((AccessorRenderManager) renderManager).renderPosZ();
 			GL11.glTranslated(renderX, renderY, renderZ);
 			
 			// draw a box
@@ -165,9 +165,9 @@ public class EventUtils {
 			
 			// offset the view to the camera perspective
 			final RenderManager renderManager = Minecraft.getMinecraft().getRenderManager();
-			double renderX = AIManipMod.getSelectedEntityPos().x - ((AccessorRenderManager) renderManager).renderPosX();
-			double renderY = AIManipMod.getSelectedEntityPos().y - ((AccessorRenderManager) renderManager).renderPosY();
-			double renderZ = AIManipMod.getSelectedEntityPos().z - ((AccessorRenderManager) renderManager).renderPosZ();
+			double renderX = Math.floor(AIManipMod.getSelectedEntityPos().x) - ((AccessorRenderManager) renderManager).renderPosX();
+			double renderY = Math.floor(AIManipMod.getSelectedEntityPos().y) - ((AccessorRenderManager) renderManager).renderPosY();
+			double renderZ = Math.floor(AIManipMod.getSelectedEntityPos().z) - ((AccessorRenderManager) renderManager).renderPosZ();
 			GL11.glTranslated(renderX, renderY, renderZ);
 			
 			// draw first box around the entity
@@ -190,9 +190,9 @@ public class EventUtils {
 			GL11.glEnable(GL11.GL_LINE_SMOOTH);
 			GL11.glLineWidth(2);
 			
-			renderX = AIManipMod.getTargetPos().x - ((AccessorRenderManager) renderManager).renderPosX();
-			renderY = AIManipMod.getTargetPos().y - ((AccessorRenderManager) renderManager).renderPosY();
-			renderZ = AIManipMod.getTargetPos().z - ((AccessorRenderManager) renderManager).renderPosZ();
+			renderX = Math.floor(AIManipMod.getTargetPos().x) - ((AccessorRenderManager) renderManager).renderPosX();
+			renderY = Math.floor(AIManipMod.getTargetPos().y) - ((AccessorRenderManager) renderManager).renderPosY();
+			renderZ = Math.floor(AIManipMod.getTargetPos().z) - ((AccessorRenderManager) renderManager).renderPosZ();
 			
 			// render second box around the target
 			GL11.glTranslated(renderX, renderY, renderZ);

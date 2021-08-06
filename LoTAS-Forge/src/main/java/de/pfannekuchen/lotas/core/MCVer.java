@@ -179,8 +179,8 @@ public class MCVer {
         //#endif
 	}
 
-	public static AxisAlignedBB expandBy32(AxisAlignedBB box) {
-		return new AxisAlignedBB(box.minX - 16, box.minY - 16, box.minZ - 16, box.maxX + 16, box.maxY + 16, box.maxZ + 16);
+	public static AxisAlignedBB expandBy64(AxisAlignedBB box) {
+		return new AxisAlignedBB(box.minX - 32, box.minY - 32, box.minZ - 32, box.maxX + 32, box.maxY + 32, box.maxZ + 32);
 	}
 	
 	public static void setItemToSlot(EntityLiving entity, int slot, ItemStack stack){

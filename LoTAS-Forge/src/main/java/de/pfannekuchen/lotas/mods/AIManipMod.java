@@ -41,7 +41,7 @@ public class AIManipMod {
 	
 	public AIManipMod() {
 		orientation = MCVer.player(mc).getHorizontalFacing();
-		entities = MCVer.world(mc.getIntegratedServer(), MCVer.player(Minecraft.getMinecraft()).dimension).getEntitiesWithinAABB(EntityLiving.class, MCVer.expandBy32(MCVer.player(Minecraft.getMinecraft()).getEntityBoundingBox()));
+		entities = MCVer.world(mc.getIntegratedServer(), MCVer.player(Minecraft.getMinecraft()).dimension).getEntitiesWithinAABB(EntityLiving.class, MCVer.expandBy64(MCVer.player(Minecraft.getMinecraft()).getEntityBoundingBox()));
 		sortEntities();
 		
 		selectedEntity= entities.get(selectedIndex);
@@ -50,7 +50,7 @@ public class AIManipMod {
 
 	public static boolean isEntityInRange() {
 		Minecraft mc=Minecraft.getMinecraft();
-		return !MCVer.world(mc.getIntegratedServer(), MCVer.player(Minecraft.getMinecraft()).dimension).getEntitiesWithinAABB(EntityLiving.class, MCVer.expandBy32(MCVer.player(Minecraft.getMinecraft()).getEntityBoundingBox())).isEmpty();
+		return !MCVer.world(mc.getIntegratedServer(), MCVer.player(Minecraft.getMinecraft()).dimension).getEntitiesWithinAABB(EntityLiving.class, MCVer.expandBy64(MCVer.player(Minecraft.getMinecraft()).getEntityBoundingBox())).isEmpty();
 	}
 	
 	public static void tick() {
