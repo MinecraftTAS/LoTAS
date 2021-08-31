@@ -6,7 +6,8 @@
     "mixins": [
     	"accessors.AccessorMobEntity",
     	"accessors.AccessorDimensionTypes",
-    	"accessors.AccessorLevelStorage"
+    	"accessors.AccessorLevelStorage",
+		"patches.MixinInaccuracyPatch"
     ],
     "client": [
     	"MixinMinecraftClient",
