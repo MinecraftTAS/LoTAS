@@ -66,6 +66,9 @@ public class SavestateMod {
 		
 		server.getPlayerList().saveAll();
 		
+		float tickratesaved=TickrateChangerMod.tickrateServer;
+		TickrateChangerMod.updateTickrate(20);
+		
 		final String worldName = MCVer.getCurrentWorldFolder();
 		final File worldDir = new File(mc.gameDirectory, "saves/" + worldName);
 		final File savestatesDir = new File(mc.gameDirectory, "saves/savestates/");
@@ -105,7 +108,9 @@ public class SavestateMod {
 		applyVelocity=true;
 		showSavestateDone = true;
 		timeTitle = System.currentTimeMillis();
+		
 		System.gc();
+		TickrateChangerMod.updateTickrate(tickratesaved);
 	}
 
 	/**
@@ -122,6 +127,9 @@ public class SavestateMod {
 		double y = mc.mouseHandler.ypos();
 
 		isLoading = true;
+		
+		float tickratesaved=TickrateChangerMod.tickrateServer;
+		TickrateChangerMod.updateTickrate(20);
 
 		final IntegratedServer server = mc.getSingleplayerServer();
 
@@ -171,6 +179,7 @@ public class SavestateMod {
 		GLFW.glfwSetCursorPos(Minecraft.getInstance().window.getWindow(), x, y);
 		mc.mouseHandler.turnPlayer();
 		System.gc();
+		TickrateChangerMod.updateTickrate(tickratesaved);
 	}
 
 	/**
