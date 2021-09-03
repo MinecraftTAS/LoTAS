@@ -57,21 +57,38 @@ public class BarteringDropManipulation extends DropManipulationScreen.DropManipu
 		//#if MC>=11601
 //$$ 		if (entity == null) {
 //$$ 			System.out.println(f.toLowerCase());
+			//#if MC>=11605
+//$$ 			int quartz=12;
+//$$ 			int soulsand=8;
+//$$ 			int string=9;
+//$$ 			int pearl=4;
+//$$ 			int netherbrick=8;
+//$$ 			int firecharge=1;
+//$$ 			int leather=4;
+			//#else
+//$$ 			int quartz=16;
+//$$ 			int soulsand=16;
+//$$ 			int string=24;
+//$$ 			int pearl=8;
+//$$ 			int netherbrick=16;
+//$$ 			int firecharge=5;
+//$$ 			int leather=10;
+			//#endif
 //$$ 			switch (f.toLowerCase()) {
 //$$ 				case "soul speed boots": return ImmutableList.of(soulspeed(new ItemStack(net.minecraft.world.item.Items.IRON_BOOTS)));
 //$$ 				case "soul speed book": return ImmutableList.of();
 //$$ 				case "splash potion of fire resistance": return ImmutableList.of(net.minecraft.world.item.alchemy.PotionUtils.setPotion(new ItemStack(net.minecraft.world.item.Items.SPLASH_POTION), net.minecraft.world.item.alchemy.Potions.FIRE_RESISTANCE));
 //$$ 				case "potion of fire resistance": return ImmutableList.of(net.minecraft.world.item.alchemy.PotionUtils.setPotion(new ItemStack(net.minecraft.world.item.Items.POTION), net.minecraft.world.item.alchemy.Potions.FIRE_RESISTANCE));
 //$$ 				case "iron nugget": return ImmutableList.of(new ItemStack(net.minecraft.world.item.Items.IRON_NUGGET, 36));
-//$$ 				case "ender pearl": return ImmutableList.of(new ItemStack(net.minecraft.world.item.Items.ENDER_PEARL, 4));
-//$$ 				case "string": return ImmutableList.of(new ItemStack(net.minecraft.world.item.Items.STRING, 9));
-//$$ 				case "nether quartz": return ImmutableList.of(new ItemStack(net.minecraft.world.item.Items.QUARTZ, 12));
+//$$ 				case "ender pearl": return ImmutableList.of(new ItemStack(net.minecraft.world.item.Items.ENDER_PEARL, pearl));
+//$$ 				case "string": return ImmutableList.of(new ItemStack(net.minecraft.world.item.Items.STRING, string));
+//$$ 				case "nether quartz": return ImmutableList.of(new ItemStack(net.minecraft.world.item.Items.QUARTZ, quartz));
 //$$ 				case "obsidian": return ImmutableList.of(new ItemStack(net.minecraft.world.item.Items.OBSIDIAN, 1));
 //$$ 				case "crying obsidian": return ImmutableList.of(new ItemStack(net.minecraft.world.item.Items.CRYING_OBSIDIAN, 3));
-//$$ 				case "fire charge": return ImmutableList.of(new ItemStack(net.minecraft.world.item.Items.FIRE_CHARGE, 1));
-//$$ 				case "leather": return ImmutableList.of(new ItemStack(net.minecraft.world.item.Items.LEATHER, 4));
-//$$ 				case "soul sand": return ImmutableList.of(new ItemStack(net.minecraft.world.item.Items.SOUL_SAND, 8));
-//$$ 				case "nether brick": return ImmutableList.of(new ItemStack(net.minecraft.world.item.Items.NETHER_BRICK, 8));
+//$$ 				case "fire charge": return ImmutableList.of(new ItemStack(net.minecraft.world.item.Items.FIRE_CHARGE, firecharge));
+//$$ 				case "leather": return ImmutableList.of(new ItemStack(net.minecraft.world.item.Items.LEATHER, leather));
+//$$ 				case "soul sand": return ImmutableList.of(new ItemStack(net.minecraft.world.item.Items.SOUL_SAND, soulsand));
+//$$ 				case "nether brick": return ImmutableList.of(new ItemStack(net.minecraft.world.item.Items.NETHER_BRICK, netherbrick));
 //$$ 				case "spectral arrow": return ImmutableList.of(new ItemStack(net.minecraft.world.item.Items.SPECTRAL_ARROW, 16));
 //$$ 				case "arrow": return ImmutableList.of(new ItemStack(net.minecraft.world.item.Items.ARROW, 12));
 //$$ 				case "gravel": return ImmutableList.of(new ItemStack(net.minecraft.world.item.Items.GRAVEL, 16));
