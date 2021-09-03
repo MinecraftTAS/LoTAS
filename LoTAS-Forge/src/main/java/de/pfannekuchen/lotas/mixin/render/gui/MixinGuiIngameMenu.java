@@ -248,7 +248,6 @@ public abstract class MixinGuiIngameMenu extends GuiScreen {
 				TickrateChangerMod.index = MCVer.clamp(TickrateChangerMod.index, 0, 11);
 				TickrateChangerMod.updateTickrate(TickrateChangerMod.ticks[TickrateChangerMod.index]);
 			}
-			// 
 		} else if (button.id == 16) {
 			if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
 				tickrateField = new GuiTextField(0, MCVer.getFontRenderer(Minecraft.getMinecraft()), 4, 15, 103, 20);
@@ -270,7 +269,12 @@ public abstract class MixinGuiIngameMenu extends GuiScreen {
 		} else if (button.id == 19) {
 			Minecraft.getMinecraft().displayGuiScreen(new GuiDropChanceManipulation((GuiIngameMenu) (Object) this));
 		} else if (button.id == 20) {
+			//#if MC>=10900
 			Minecraft.getMinecraft().displayGuiScreen(new GuiDragonManipulation(this));
+			//#else
+//$$ 			button.enabled=false;
+//$$ 			GuiDragonManipulation.chargePlayer();
+			//#endif
 		} else if (button.id == 21) {
 			Minecraft.getMinecraft().displayGuiScreen(new GuiEntitySpawnManipulation());
 		} else if (button.id == 22) {

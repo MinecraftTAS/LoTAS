@@ -17,11 +17,11 @@ import java.util.Random;
  */
 @Mixin(EntityThrowable.class)
 public abstract class MixinInaccuracyPatch {
-    //#if MC>=11200
-    @Redirect(method = "shoot(DDDFF)V", at = @At(value = "INVOKE", target = "Ljava/util/Random;nextGaussian()D", remap = false))
-    //#else
+	//#if MC>=11200
+	@Redirect(method = "shoot(DDDFF)V", at = @At(value = "INVOKE", target = "Ljava/util/Random;nextGaussian()D", remap = false))
+	//#else
 //$$ 	@Redirect(method = "setThrowableHeading", at = @At(value = "INVOKE", target = "Ljava/util/Random;nextGaussian()D", remap = false))
-    //#endif
+	//#endif
     private double redirect_internalShoot(Random random) {
         if (ConfigUtils.getBoolean("tools", "removeThrowableInaccuracy")) {
             return 0;
