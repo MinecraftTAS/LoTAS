@@ -1,6 +1,10 @@
 package de.pfannekuchen.lotas.gui;
 
+import java.util.List;
+
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraftforge.common.DimensionManager;
 
 //#if MC>=10900
 import java.io.IOException;
@@ -156,6 +160,19 @@ public class GuiDragonManipulation extends GuiScreen {
 //$$ public class GuiDragonManipulation extends GuiScreen {	
 //$$ 	public GuiDragonManipulation(GuiScreen screen) {
 //$$
+//$$ 	}
+//$$
+//$$ 	public static void chargePlayer() {
+//$$ 		List<net.minecraft.entity.boss.EntityDragon> dragons = DimensionManager.getWorld(1).getEntities(net.minecraft.entity.boss.EntityDragon.class, new com.google.common.base.Predicate<net.minecraft.entity.boss.EntityDragon>() {
+//$$ 			@Override
+//$$ 			public boolean apply(net.minecraft.entity.boss.EntityDragon e) {
+//$$ 				return !e.isDead;
+//$$ 			}
+//$$ 		});
+//$$
+//$$ 		for (int i = 0; i < dragons.size(); i++) {
+//$$ 			dragons.get(i).target=Minecraft.getMinecraft().thePlayer;
+//$$ 		}
 //$$ 	}
 //$$ }
 //#endif

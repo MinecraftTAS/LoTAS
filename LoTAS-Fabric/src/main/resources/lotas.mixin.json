@@ -6,12 +6,14 @@
     "mixins": [
     	"accessors.AccessorMobEntity",
     	"accessors.AccessorDimensionTypes",
-    	"accessors.AccessorLevelStorage"
+    	"accessors.AccessorLevelStorage",
+		"patches.MixinInaccuracyPatch"
     ],
     "client": [
     	"MixinMinecraftClient",
     	"MixinMinecraftServer",
     	"MixinIntegratedServer",
+    	"MixinOptions",
     	"accessors.AccessorMinecraftClient",
     	"accessors.AccessorTimer",
     	"accessors.AccessorTextFieldWidget",
@@ -20,7 +22,6 @@
     	"accessors.AccessorItemRenderer",
     	"accessors.AccessorScreen",
     	"accessors.AccessorButtons",
-    	"accessors.AccessorOptions",
     	"accessors.AccessorKeyMapping",
 		"render.binds.MixinTickrateChangerAudioPitch",
 		"render.binds.MixinTickrateChangerEnchantmentGlimm",

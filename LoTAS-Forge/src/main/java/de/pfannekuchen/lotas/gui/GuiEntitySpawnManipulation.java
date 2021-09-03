@@ -56,6 +56,14 @@ public class GuiEntitySpawnManipulation extends GuiScreen {
 			zText.textboxKeyTyped(typedChar, keyCode);
 		}
 		super.keyTyped(typedChar, keyCode);
+		try {
+			int spawnX = Integer.parseInt(xText.getText());
+			int spawnY = Integer.parseInt(yText.getText());
+			int spawnZ = Integer.parseInt(zText.getText());
+			
+			manip.setTarget(new Vec(spawnX, spawnY, spawnZ));
+		} catch (Exception e) {
+		}
 	}
 	
 	@Override

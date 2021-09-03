@@ -67,6 +67,10 @@ public class SavestateMod {
 		final Minecraft mc = Minecraft.getMinecraft();
 
 		final MinecraftServer server = mc.getIntegratedServer();
+		
+		float tickratesaved=TickrateChangerMod.tickrateServer;
+		TickrateChangerMod.updateTickrate(20);
+		
 		// save the world
 		//#if MC>=10900
 		server.getPlayerList().saveAllPlayerData();
@@ -135,6 +139,8 @@ public class SavestateMod {
 		showSavestateDone = true;
 		timeTitle = System.currentTimeMillis();
 		System.gc();
+		
+		TickrateChangerMod.updateTickrate(tickratesaved);
 	}
 
 	/**
@@ -149,6 +155,9 @@ public class SavestateMod {
 		int y = Mouse.getY();
 
 		isLoading = true; // turn off rendering
+		
+		float tickratesaved=TickrateChangerMod.tickrateServer;
+		TickrateChangerMod.updateTickrate(20);
 		
 		// stop the server without saving the world
 		final Minecraft mc = Minecraft.getMinecraft();
@@ -204,7 +213,9 @@ public class SavestateMod {
 		Mouse.setCursorPosition(x, y);
 		Mouse.getDX();
 		Mouse.getDY();
-
+		
+		TickrateChangerMod.updateTickrate(tickratesaved);
+		
 		System.gc();
 	}
 

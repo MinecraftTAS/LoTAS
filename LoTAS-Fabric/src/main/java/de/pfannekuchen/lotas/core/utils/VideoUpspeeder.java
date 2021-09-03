@@ -70,6 +70,7 @@ public class VideoUpspeeder {
 				ffmpeg = new FFmpeg(new File(bin, "bin/linux/ffmpeg").getAbsolutePath());
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			return false;
 		}
 		return true;
@@ -93,18 +94,21 @@ public class VideoUpspeeder {
 		VideoUpspeederScreen.downloadingFFmpeg = true;
 		new Thread(() -> {
 			try {
-				VideoUpspeederScreen.installingProgress = "Connecting to https://mgnet.work/";
-				URLConnection conn = new URL("http://mgnet.work/ffmpeg.zip").openConnection();
 				final File ffmpeg = new File(client.gameDirectory, "ffmpeg");
 				final File ffmpegZip = new File(client.gameDirectory, "ffmpeg.zip");
-				VideoUpspeederScreen.installingProgress = "Downloading https://mgnet.work/ffmpeg.zip";
-				FileUtils.copyInputStreamToFile(conn.getInputStream(), ffmpegZip);
+				if(!ffmpegZip.exists()) {
+					VideoUpspeederScreen.installingProgress = "Connecting to https://mgnet.work/";
+					URLConnection conn = new URL("http://mgnet.work/ffmpeg.zip").openConnection();
+					VideoUpspeederScreen.installingProgress = "Downloading https://mgnet.work/ffmpeg.zip (This may take a while, ca. 220MB)";
+					FileUtils.copyInputStreamToFile(conn.getInputStream(), ffmpegZip);
+				}
 				VideoUpspeederScreen.installingProgress = "Extracting ffmpeg.zip";
 				unzip(ffmpegZip.getAbsolutePath(), ffmpeg.getAbsolutePath());
+				File linuxdir=new File(ffmpeg, "linux/");
 				VideoUpspeederScreen.installingProgress = "Wrapping FFmpeg";
 				instantiate(ffmpeg);
-				VideoUpspeederScreen.installingProgress = "Deleting FFmpeg";
-				ffmpegZip.delete();
+//				VideoUpspeederScreen.installingProgress = "Deleting FFmpeg";
+//				ffmpegZip.delete();
 				VideoUpspeederScreen.installingProgress = "Done";
 				VideoUpspeederScreen.onStatsReady();
 			} catch (IOException e) {

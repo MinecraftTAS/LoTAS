@@ -119,7 +119,6 @@ public class MixinMinecraftClient {
 		}
 		/* Load Shields and Register Keymappings */
 		LoTASModContainer.loadShields();
-		KeybindsUtils.registerKeybinds();
 	}
 
 	/**

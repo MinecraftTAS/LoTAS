@@ -81,9 +81,9 @@ public class SpawnManipMod {
 	public void confirm() {
 		if(canSpawn()) {
 			WorldServer world=(WorldServer) MCVer.world(mc.getIntegratedServer(), MCVer.player(Minecraft.getMinecraft()).dimension);
-			int targetX=(int) Math.round(target.x);
-			int targetY=(int) Math.round(target.y);
-			int targetZ=(int) Math.round(target.z);
+			double targetX=Math.floor(target.x)+0.5;
+			double targetY=Math.floor(target.y);
+			double targetZ=Math.floor(target.z)+0.5;
 			
 			entity.setPosition(targetX, targetY, targetZ);
 			MCVer.spawnEntity(world, entity);
@@ -240,7 +240,7 @@ public class SpawnManipMod {
 				MCVer.setItemToSlot(entity, 0, addEnchants(new ItemStack(MCVer.getItem("bow")), skelBow));
 				MCVer.setItemToSlot(entity, 1, new ItemStack(MCVer.getItem("leather_boots")));
 				MCVer.setItemToSlot(entity, 2, new ItemStack(MCVer.getItem("leather_chestplate")));
-				MCVer.setItemToSlot(entity, 3, new ItemStack(MCVer.getItem("leather_leggins")));
+				MCVer.setItemToSlot(entity, 3, new ItemStack(MCVer.getItem("leather_leggings")));
 				MCVer.setItemToSlot(entity, 4, new ItemStack(MCVer.getItem("leather_helmet")));
 				MCVer.setArmorDropChances(entity, new float[] { 1.0f, 1.0f, 1.0f, 1.0f });
 				MCVer.setHandDropChances(entity, new float[] { 1.0f, 1.0f });
@@ -250,7 +250,7 @@ public class SpawnManipMod {
 				MCVer.setItemToSlot(entity, 0, addEnchants(new ItemStack(MCVer.getItem("iron_sword")), zombieSword));
 				MCVer.setItemToSlot(entity, 1, new ItemStack(MCVer.getItem("leather_boots")));     
 				MCVer.setItemToSlot(entity, 2, new ItemStack(MCVer.getItem("leather_chestplate")));
-				MCVer.setItemToSlot(entity, 3, new ItemStack(MCVer.getItem("leather_leggins")));   
+				MCVer.setItemToSlot(entity, 3, new ItemStack(MCVer.getItem("leather_leggings")));   
 				MCVer.setItemToSlot(entity, 4, new ItemStack(MCVer.getItem("leather_helmet")));    
 				MCVer.setArmorDropChances(entity, new float[] { 1.0f, 1.0f, 1.0f, 1.0f });
 				MCVer.setHandDropChances(entity, new float[] { 1.0f, 1.0f });
@@ -260,7 +260,7 @@ public class SpawnManipMod {
 				MCVer.setItemToSlot(entity, 0, addEnchants(new ItemStack(MCVer.getItem("bow")), skelBow));
 				MCVer.setItemToSlot(entity, 1, new ItemStack(MCVer.getItem("golden_boots")));     
 				MCVer.setItemToSlot(entity, 2, new ItemStack(MCVer.getItem("golden_chestplate")));
-				MCVer.setItemToSlot(entity, 3, new ItemStack(MCVer.getItem("golden_leggins")));   
+				MCVer.setItemToSlot(entity, 3, new ItemStack(MCVer.getItem("golden_leggings")));   
 				MCVer.setItemToSlot(entity, 4, new ItemStack(MCVer.getItem("golden_helmet")));    
 				MCVer.setArmorDropChances(entity, new float[] { 1.0f, 1.0f, 1.0f, 1.0f });
 				MCVer.setHandDropChances(entity, new float[] { 1.0f, 1.0f });
@@ -270,7 +270,7 @@ public class SpawnManipMod {
 				MCVer.setItemToSlot(entity, 0, addEnchants(new ItemStack(MCVer.getItem("iron_sword")), zombieSword));
 				MCVer.setItemToSlot(entity, 1, new ItemStack(MCVer.getItem("golden_boots")));     
 				MCVer.setItemToSlot(entity, 2, new ItemStack(MCVer.getItem("golden_chestplate")));
-				MCVer.setItemToSlot(entity, 3, new ItemStack(MCVer.getItem("golden_leggins")));   
+				MCVer.setItemToSlot(entity, 3, new ItemStack(MCVer.getItem("golden_leggings")));   
 				MCVer.setItemToSlot(entity, 4, new ItemStack(MCVer.getItem("golden_helmet")));    
 				MCVer.setArmorDropChances(entity, new float[] { 1.0f, 1.0f, 1.0f, 1.0f });
 				MCVer.setHandDropChances(entity, new float[] { 1.0f, 1.0f });
@@ -280,7 +280,7 @@ public class SpawnManipMod {
 				MCVer.setItemToSlot(entity, 0, addEnchants(new ItemStack(MCVer.getItem("bow")), skelBow));
 				MCVer.setItemToSlot(entity, 1, new ItemStack(MCVer.getItem("chainmail_boots")));     
 				MCVer.setItemToSlot(entity, 2, new ItemStack(MCVer.getItem("chainmail_chestplate")));
-				MCVer.setItemToSlot(entity, 3, new ItemStack(MCVer.getItem("chainmail_leggins")));   
+				MCVer.setItemToSlot(entity, 3, new ItemStack(MCVer.getItem("chainmail_leggings")));   
 				MCVer.setItemToSlot(entity, 4, new ItemStack(MCVer.getItem("chainmail_helmet")));    
 				MCVer.setArmorDropChances(entity, new float[] { 1.0f, 1.0f, 1.0f, 1.0f });
 				MCVer.setHandDropChances(entity, new float[] { 1.0f, 1.0f });
@@ -290,7 +290,7 @@ public class SpawnManipMod {
 				MCVer.setItemToSlot(entity, 0, addEnchants(new ItemStack(MCVer.getItem("iron_sword")), zombieSword));
 				MCVer.setItemToSlot(entity, 1, new ItemStack(MCVer.getItem("chainmail_boots")));     
 				MCVer.setItemToSlot(entity, 2, new ItemStack(MCVer.getItem("chainmail_chestplate")));
-				MCVer.setItemToSlot(entity, 3, new ItemStack(MCVer.getItem("chainmail_leggins")));   
+				MCVer.setItemToSlot(entity, 3, new ItemStack(MCVer.getItem("chainmail_leggings")));   
 				MCVer.setItemToSlot(entity, 4, new ItemStack(MCVer.getItem("chainmail_helmet")));    
 				MCVer.setArmorDropChances(entity, new float[] { 1.0f, 1.0f, 1.0f, 1.0f });
 				MCVer.setHandDropChances(entity, new float[] { 1.0f, 1.0f });
@@ -300,7 +300,7 @@ public class SpawnManipMod {
 				MCVer.setItemToSlot(entity, 0, addEnchants(new ItemStack(MCVer.getItem("bow")), skelBow));
 				MCVer.setItemToSlot(entity, 1, new ItemStack(MCVer.getItem("iron_boots")));      
 				MCVer.setItemToSlot(entity, 2, new ItemStack(MCVer.getItem("iron_chestplate"))); 
-				MCVer.setItemToSlot(entity, 3, new ItemStack(MCVer.getItem("iron_leggins")));    
+				MCVer.setItemToSlot(entity, 3, new ItemStack(MCVer.getItem("iron_leggings")));    
 				MCVer.setItemToSlot(entity, 4, new ItemStack(MCVer.getItem("iron_helmet")));     
 				MCVer.setArmorDropChances(entity, new float[] { 1.0f, 1.0f, 1.0f, 1.0f });
 				MCVer.setHandDropChances(entity, new float[] { 1.0f, 1.0f });
@@ -310,7 +310,7 @@ public class SpawnManipMod {
 				MCVer.setItemToSlot(entity, 0, addEnchants(new ItemStack(MCVer.getItem("iron_sword")), zombieSword));
 				MCVer.setItemToSlot(entity, 1, new ItemStack(MCVer.getItem("iron_boots")));     
 				MCVer.setItemToSlot(entity, 2, new ItemStack(MCVer.getItem("iron_chestplate")));
-				MCVer.setItemToSlot(entity, 3, new ItemStack(MCVer.getItem("iron_leggins")));   
+				MCVer.setItemToSlot(entity, 3, new ItemStack(MCVer.getItem("iron_leggings")));   
 				MCVer.setItemToSlot(entity, 4, new ItemStack(MCVer.getItem("iron_helmet")));    
 				MCVer.setArmorDropChances(entity, new float[] { 1.0f, 1.0f, 1.0f, 1.0f });
 				MCVer.setHandDropChances(entity, new float[] { 1.0f, 1.0f });
@@ -320,7 +320,7 @@ public class SpawnManipMod {
 				MCVer.setItemToSlot(entity, 0, addEnchants(new ItemStack(MCVer.getItem("bow")), skelBow));
 				MCVer.setItemToSlot(entity, 1, new ItemStack(MCVer.getItem("diamond_boots")));     
 				MCVer.setItemToSlot(entity, 2, new ItemStack(MCVer.getItem("diamond_chestplate")));
-				MCVer.setItemToSlot(entity, 3, new ItemStack(MCVer.getItem("diamond_leggins")));   
+				MCVer.setItemToSlot(entity, 3, new ItemStack(MCVer.getItem("diamond_leggings")));   
 				MCVer.setItemToSlot(entity, 4, new ItemStack(MCVer.getItem("diamond_helmet")));    
 				MCVer.setArmorDropChances(entity, new float[] { 1.0f, 1.0f, 1.0f, 1.0f });
 				MCVer.setHandDropChances(entity, new float[] { 1.0f, 1.0f });
@@ -330,7 +330,7 @@ public class SpawnManipMod {
 				MCVer.setItemToSlot(entity, 0, addEnchants(new ItemStack(MCVer.getItem("iron_sword")), zombieSword));
 				MCVer.setItemToSlot(entity, 1, new ItemStack(MCVer.getItem("diamond_boots")));     
 				MCVer.setItemToSlot(entity, 2, new ItemStack(MCVer.getItem("diamond_chestplate")));
-				MCVer.setItemToSlot(entity, 3, new ItemStack(MCVer.getItem("diamond_leggins")));   
+				MCVer.setItemToSlot(entity, 3, new ItemStack(MCVer.getItem("diamond_leggings")));   
 				MCVer.setItemToSlot(entity, 4, new ItemStack(MCVer.getItem("diamond_helmet")));    
 				MCVer.setArmorDropChances(entity, new float[] { 1.0f, 1.0f, 1.0f, 1.0f });
 				MCVer.setHandDropChances(entity, new float[] { 1.0f, 1.0f });
@@ -369,7 +369,7 @@ public class SpawnManipMod {
 				MCVer.setItemToSlot(entity, 0, addEnchants(new ItemStack(MCVer.getItem("bow")), skelBow));
 				MCVer.setItemToSlot(entity, 1, new ItemStack(MCVer.getItem("leather_boots")));     
 				MCVer.setItemToSlot(entity, 2, new ItemStack(MCVer.getItem("leather_chestplate")));
-				MCVer.setItemToSlot(entity, 3, new ItemStack(MCVer.getItem("leather_leggins")));   
+				MCVer.setItemToSlot(entity, 3, new ItemStack(MCVer.getItem("leather_leggings")));   
 				MCVer.setItemToSlot(entity, 4, new ItemStack(MCVer.getItem("leather_helmet")));    
 				MCVer.setArmorDropChances(entity, new float[] { 1.0f, 1.0f, 1.0f, 1.0f });
 				MCVer.setHandDropChances(entity, new float[] { 1.0f, 1.0f });
@@ -379,7 +379,7 @@ public class SpawnManipMod {
 				MCVer.setItemToSlot(entity, 0, addEnchants(new ItemStack(MCVer.getItem("bow")), skelBow));
 				MCVer.setItemToSlot(entity, 1, new ItemStack(MCVer.getItem("golden_boots")));     
 				MCVer.setItemToSlot(entity, 2, new ItemStack(MCVer.getItem("golden_chestplate")));
-				MCVer.setItemToSlot(entity, 3, new ItemStack(MCVer.getItem("golden_leggins")));   
+				MCVer.setItemToSlot(entity, 3, new ItemStack(MCVer.getItem("golden_leggings")));   
 				MCVer.setItemToSlot(entity, 4, new ItemStack(MCVer.getItem("golden_helmet")));    
 				MCVer.setArmorDropChances(entity, new float[] { 1.0f, 1.0f, 1.0f, 1.0f });
 				MCVer.setHandDropChances(entity, new float[] { 1.0f, 1.0f });
@@ -389,7 +389,7 @@ public class SpawnManipMod {
 				MCVer.setItemToSlot(entity, 0, addEnchants(new ItemStack(MCVer.getItem("bow")), skelBow));
 				MCVer.setItemToSlot(entity, 1, new ItemStack(MCVer.getItem("chainmail_boots")));     
 				MCVer.setItemToSlot(entity, 2, new ItemStack(MCVer.getItem("chainmail_chestplate")));
-				MCVer.setItemToSlot(entity, 3, new ItemStack(MCVer.getItem("chainmail_leggins")));   
+				MCVer.setItemToSlot(entity, 3, new ItemStack(MCVer.getItem("chainmail_leggings")));   
 				MCVer.setItemToSlot(entity, 4, new ItemStack(MCVer.getItem("chainmail_helmet")));    
 				MCVer.setArmorDropChances(entity, new float[] { 1.0f, 1.0f, 1.0f, 1.0f });
 				MCVer.setHandDropChances(entity, new float[] { 1.0f, 1.0f });
@@ -399,7 +399,7 @@ public class SpawnManipMod {
 				MCVer.setItemToSlot(entity, 0, addEnchants(new ItemStack(MCVer.getItem("bow")), skelBow));
 				MCVer.setItemToSlot(entity, 1, new ItemStack(MCVer.getItem("iron_boots")));     
 				MCVer.setItemToSlot(entity, 2, new ItemStack(MCVer.getItem("iron_chestplate")));
-				MCVer.setItemToSlot(entity, 3, new ItemStack(MCVer.getItem("iron_leggins")));   
+				MCVer.setItemToSlot(entity, 3, new ItemStack(MCVer.getItem("iron_leggings")));   
 				MCVer.setItemToSlot(entity, 4, new ItemStack(MCVer.getItem("iron_helmet")));    
 				MCVer.setArmorDropChances(entity, new float[] { 1.0f, 1.0f, 1.0f, 1.0f });
 				MCVer.setHandDropChances(entity, new float[] { 1.0f, 1.0f });
@@ -409,7 +409,7 @@ public class SpawnManipMod {
 				MCVer.setItemToSlot(entity, 0, addEnchants(new ItemStack(MCVer.getItem("bow")), skelBow));
 				MCVer.setItemToSlot(entity, 1, new ItemStack(MCVer.getItem("diamond_boots")));     
 				MCVer.setItemToSlot(entity, 2, new ItemStack(MCVer.getItem("diamond_chestplate")));
-				MCVer.setItemToSlot(entity, 3, new ItemStack(MCVer.getItem("diamond_leggins")));   
+				MCVer.setItemToSlot(entity, 3, new ItemStack(MCVer.getItem("diamond_leggings")));   
 				MCVer.setItemToSlot(entity, 4, new ItemStack(MCVer.getItem("diamond_helmet")));    
 				MCVer.setArmorDropChances(entity, new float[] { 1.0f, 1.0f, 1.0f, 1.0f });
 				MCVer.setHandDropChances(entity, new float[] { 1.0f, 1.0f });

@@ -110,8 +110,9 @@ public class KeybindsUtils {
 	/**
 	 * Static method to register all Keybinds to the game.
 	 * Note: Not using Fabric API to avoid a crash using Mojang Mappings
+	 * @return 
 	 */
-	public static void registerKeybinds() {
+	public static KeyMapping[] registerKeybinds(KeyMapping[] keyMappings) {
 		Minecraft mc=Minecraft.getInstance();
 		List<KeyMapping> modded=new ArrayList<KeyMapping>(ImmutableList.of(saveStateKeybind,
 				loadStateKeybind,
@@ -128,11 +129,11 @@ public class KeybindsUtils {
 		
 		addCategories(modded);
 		
-		List<KeyMapping> newKeyMappings = Lists.newArrayList(mc.options.keyMappings);
+		List<KeyMapping> newKeyMappings = Lists.newArrayList(keyMappings);
 		newKeyMappings.removeAll(modded);
 		newKeyMappings.addAll(modded);
 		
-		((AccessorOptions)mc.options).setKeyMappings(newKeyMappings.toArray(new KeyMapping[0]));
+		return newKeyMappings.toArray(new KeyMapping[0]);
 	}
 	
 	private static void addCategories(List<KeyMapping> modded) {
