@@ -36,7 +36,7 @@ dependencies {
 }
 
 loom {
-	accessWidener = new File("src/main/resources/lotas.accesswidener");
+	accessWidener = file("src/main/resources/lotas.accesswidener")
 }
 
 processResources {
