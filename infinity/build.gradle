@@ -35,6 +35,10 @@ dependencies {
 	// You may need to force-disable transitiveness on them.
 }
 
+loom {
+	accessWidener = new File("src/main/resources/lotas.accesswidener");
+}
+
 processResources {
 	inputs.property "version", project.version
 
