@@ -8,6 +8,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.item.Item;
@@ -229,5 +230,22 @@ public class MCVer {
 		((AccessorEntityLiving) entity).inventoryHandsDropChances(fs);
 		//#endif
 	}
+
+	public static GuiTextField offsetX(int width) {
+		GuiTextField offsetX = new GuiTextField(0, MCVer.getFontRenderer(Minecraft.getMinecraft()), width / 2 - 140, 132, 55, 13);
+		return offsetX;
+	}
 	
+	public static GuiTextField offsetZ(int width) {
+		GuiTextField offsetZ = new GuiTextField(0, MCVer.getFontRenderer(Minecraft.getMinecraft()), width / 2 - 66, 132, 55, 13);
+		return offsetZ;
+	}
+	
+	public static void textX(int width) {
+		MCVer.getFontRenderer(Minecraft.getMinecraft()).drawStringWithShadow("X:", width/2 -150, 135, -6250336);
+	}
+	
+	public static void textY(int width) {
+		MCVer.getFontRenderer(Minecraft.getMinecraft()).drawStringWithShadow("Y:", width/2 -76, 135, -6250336);
+	}
 }

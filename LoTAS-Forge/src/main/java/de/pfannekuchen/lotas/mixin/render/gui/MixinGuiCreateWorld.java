@@ -27,22 +27,22 @@ public abstract class MixinGuiCreateWorld extends GuiScreen {
 	
 	@Inject(at = @At("TAIL"), method = "initGui")
 	public void onInitGui(CallbackInfo ci) {
-		offsetX = new GuiTextField(0, MCVer.getFontRenderer(Minecraft.getMinecraft()), this.width / 2 + 6, 125, 70, 20);
-		offsetX.setText("X");
-		offsetZ = new GuiTextField(0, MCVer.getFontRenderer(Minecraft.getMinecraft()), this.width / 2 + 14 + 70, 125, 70, 20);
-		offsetZ.setText("Z");
+		offsetX=MCVer.offsetX(this.width);
+		offsetZ=MCVer.offsetZ(this.width);
 	}
-
+	
 	@Inject(at = @At("TAIL"), method = "keyTyped")
 	public void onKeyTyped(char key, int code, CallbackInfo ci) {
 		if (inMoreWorldOptionsDisplay) {
-			offsetX.textboxKeyTyped(key, code);
-			offsetZ.textboxKeyTyped(key, code);
-			try {
-				LoTASModContainer.offsetX = MCVer.clamp(Integer.parseInt(offsetX.getText()), 0, 9);
-				LoTASModContainer.offsetZ = MCVer.clamp(Integer.parseInt(offsetZ.getText()), 0, 9);
-			} catch (Exception e) {
-				// Lazyness wins. (This is actually fine)
+			if (Character.isDigit(key)||key=='-'||key=='\b'||code==203||code==205||code==211) {
+				offsetX.textboxKeyTyped(key, code);
+				offsetZ.textboxKeyTyped(key, code);
+				try {
+					LoTASModContainer.offsetX = MCVer.clamp(Integer.parseInt(offsetX.getText()), -9, 9);
+					LoTASModContainer.offsetZ = MCVer.clamp(Integer.parseInt(offsetZ.getText()), -9, 9);
+				} catch (Exception e) {
+					// Lazyness wins. (This is actually fine)
+				}
 			}
 		}
 	}	
@@ -60,6 +60,9 @@ public abstract class MixinGuiCreateWorld extends GuiScreen {
 		if (inMoreWorldOptionsDisplay) {
 			offsetX.drawTextBox();
 			offsetZ.drawTextBox();
+			MCVer.textX(width);
+			MCVer.textY(width);
 		}
-	}	
+	}
+	
 }
