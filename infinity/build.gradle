@@ -20,11 +20,17 @@ repositories {
 	maven { url 'https://jitpack.io' }
 }
 
+configurations {
+	include
+	implementation.extendsFrom(include)
+}
+
 dependencies {
 	// To change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	mappings minecraft.officialMojangMappings()
+	include 'net.bramp.ffmpeg:ffmpeg:2.8.0-21.0'
 	// PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
 	// You may need to force-disable transitiveness on them.
 }
@@ -35,6 +41,13 @@ processResources {
 	filesMatching("fabric.mod.json") {
 		expand "version": project.version
 	}
+}
+
+jar {
+	from {
+    	configurations.include.collect { it.isDirectory() ? it : zipTree(it) }
+  	}
+  	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
 tasks.withType(JavaCompile).configureEach {

@@ -84,8 +84,8 @@ public class VideoUpspeederScreen extends Screen {
 		}
 		MCVer.addButton(this, MCVer.EditBox(minecraft.font, (width / 12) * 1 - (width / 24), (height / 8), (width / 12) * 9, 20, "")).setMaxLength(999);
 		MCVer.addButton(this, MCVer.Button((width / 12) * 10 + 5 - (width / 24), (height / 8), (width / 12) * 2, 20, "Select File", (b) -> {
-			if (Minecraft.getInstance().window.isFullscreen())
-				Minecraft.getInstance().window.toggleFullScreen();
+			if (Minecraft.getInstance().getWindow().isFullscreen())
+				Minecraft.getInstance().getWindow().toggleFullScreen();
 			new Thread(new Runnable() {
 
 				@Override

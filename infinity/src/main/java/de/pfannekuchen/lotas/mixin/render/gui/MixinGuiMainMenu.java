@@ -47,7 +47,7 @@ public abstract class MixinGuiMainMenu extends Screen {
 			Minecraft.getInstance().setScreen(new SelectWorldScreen(this));
 		}));
 		MCVer.addButton(this, MCVer.Button(this.width / 2 - 100, y + spacingY * 1, 200, 20, I18n.get("Video Upspeeder"), (Button) -> {
-			Minecraft.getInstance().setScreen(new VideoUpspeederScreen(null));
+			Minecraft.getInstance().setScreen(new VideoUpspeederScreen());
 		}));
 		MCVer.addButton(this, MCVer.Button(this.width / 2 - 100, y + spacingY * 2, 200, 20, I18n.get("Configuration"), (Button) -> {
 			Minecraft.getInstance().setScreen(new ConfigurationScreen());
