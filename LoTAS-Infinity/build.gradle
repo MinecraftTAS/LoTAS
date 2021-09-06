@@ -31,6 +31,9 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	mappings minecraft.officialMojangMappings()
 	include 'net.bramp.ffmpeg:ffmpeg:2.8.0-21.0'
+	include 'org.slf4j:slf4j-api:1.7.25'
+    include 'com.google.code.findbugs:annotations:3.0.1u2'
+    include 'com.google.errorprone:error_prone_annotations:2.0.19'
 	// PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
 	// You may need to force-disable transitiveness on them.
 }
