@@ -56,7 +56,11 @@ public class NetherMobDropManipulation extends GuiDropChanceManipulation.DropMan
         //#else
         //$$ if (entity instanceof EntitySkeleton && optimizeWitherskeleton.isChecked()) {
         //$$ 	EntitySkeleton skel=(EntitySkeleton) entity;
+        	//#if MC>=11000
+        //$$ 	if(skel.getSkeletonType()==net.minecraft.entity.monster.SkeletonType.WITHER) {
+        	//#else
         //$$ 	if(skel.getSkeletonType()==1) {
+        	//#endif
         //$$ 		return ImmutableList.of(new ItemStack(MCVer.getItem("COAL"), 1), new ItemStack(MCVer.getItem("BONE"), 2), new ItemStack(MCVer.getItem("SKULL"), 1, 1));
         //$$ 	}
         //$$ }

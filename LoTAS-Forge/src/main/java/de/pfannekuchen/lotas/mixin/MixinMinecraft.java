@@ -9,7 +9,9 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
@@ -285,5 +287,8 @@ public class MixinMinecraft {
 		}
 	}
 	
-	
+	@ModifyConstant(method = "runTickMouse", constant = @Constant(longValue = 200L))
+	public long fixMouseWheel(long twohundredLong) {
+		return (long) Math.max(4000F / TickrateChangerMod.tickrate, 200L);
+	}
 }
