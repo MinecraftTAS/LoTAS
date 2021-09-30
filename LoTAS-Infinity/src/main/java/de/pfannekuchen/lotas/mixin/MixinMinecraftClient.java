@@ -118,7 +118,7 @@ public class MixinMinecraftClient {
 			e.printStackTrace();
 		}
 		/* Load Shields and Register Keymappings */
-		LoTASModContainer.loadShields();
+		LoTASModContainer.loadShieldsMCTAS();
 	}
 
 	/**

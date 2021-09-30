@@ -1,15 +1,29 @@
 package de.pfannekuchen.lotas.mixin.render;
 
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
+
+import com.mojang.blaze3d.vertex.PoseStack;
+
+import de.pfannekuchen.lotas.core.LoTASModContainer;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.world.item.ItemStack;
 
 /**
  * Changes the Shield Texture
  * @author ScribbleLP, Pancake
  */
-//#if MC>=11500
-@Mixin(net.minecraft.client.Minecraft.class)
+@Mixin(net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer.class)
 public class MixinRenderShield {
-	// TODO: Fix Shields
+	@ModifyVariable(method = "renderByItem", at = @At(value = "STORE"), index = 9, ordinal = 0)
+	public com.mojang.blaze3d.vertex.VertexConsumer changeShield(com.mojang.blaze3d.vertex.VertexConsumer vertexconsumer, ItemStack itemStack, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, int j){
+		if(itemStack.getTagElement("BlockEntityTag") != null||LoTASModContainer.shield==null) {
+			return vertexconsumer;
+		}else {
+			return multiBufferSource.getBuffer(net.minecraft.client.renderer.RenderType.entitySolid(LoTASModContainer.shield));
+		}
+	}
 }
 //#else
 //$$ @Mixin(net.minecraft.client.renderer.EntityBlockRenderer.class)
