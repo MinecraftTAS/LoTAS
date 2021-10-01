@@ -1,19 +1,19 @@
 package de.pfannekuchen.lotas.core;
 
-import net.minecraft.client.renderer.IImageBuffer;
-import java.io.IOException;
-import net.minecraft.client.renderer.ImageBufferDownload;
-import net.minecraft.client.renderer.ThreadDownloadImageData;
-import net.minecraft.client.Minecraft;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.net.ssl.HttpsURLConnection;
+
 import org.apache.commons.io.FileUtils;
+
 import de.pfannekuchen.lotas.core.utils.ConfigUtils;
 import de.pfannekuchen.lotas.core.utils.EventUtils;
 import de.pfannekuchen.lotas.core.utils.KeybindsUtils;
@@ -22,6 +22,10 @@ import de.pfannekuchen.lotas.gui.GuiSeedList.SeedListExtended.SeedEntry;
 import de.pfannekuchen.lotas.gui.InfoHud;
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;
 import de.pfannekuchen.lotas.taschallenges.ChallengeMap;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.IImageBuffer;
+import net.minecraft.client.renderer.ImageBufferDownload;
+import net.minecraft.client.renderer.ThreadDownloadImageData;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.ForgeVersion;
 import net.minecraftforge.common.MinecraftForge;
@@ -59,7 +63,7 @@ public class LoTASModContainer {
 	 * @param e FMLInitializationEvent provided by MinecraftForge
 	 */
 	@EventHandler public void onInit(FMLInitializationEvent e) {
-		loadShields(); // load custom shields
+		loadShieldsMCTAS(); // load custom shields
 		KeybindsUtils.registerKeybinds(); // register keybinds
 		hud = new InfoHud(); // load info gui
 	}
@@ -88,7 +92,7 @@ public class LoTASModContainer {
 			
 			// Try to download all tas challenge maps
 			try {
-				BufferedReader stream = new BufferedReader(new InputStreamReader(new URL("http://mgnet.work/taschallenges/maps" + version + ".txt").openStream()));
+				BufferedReader stream = new BufferedReader(new InputStreamReader(new URL("https://data.mgnet.work/lotas/taschallenges/" + version + ".txt").openStream()));
 				int maps = Integer.parseInt(stream.readLine().charAt(0) + ""); // First line contains number of maps
 				for (int i = 0; i < maps; i++) {
 					ChallengeMap map = new ChallengeMap();
@@ -96,7 +100,7 @@ public class LoTASModContainer {
 					map.displayName = stream.readLine();
 					map.name = stream.readLine();
 					map.description = stream.readLine();
-					map.map = new URL("http://mgnet.work/taschallenges/" + stream.readLine());
+					map.map = new URL("https://data.mgnet.work/lotas/taschallenges/maps/" + stream.readLine());
 					int board = Integer.parseInt(stream.readLine().charAt(0) + "");
 					map.leaderboard = new String[board];
 					for (int j = 0; j < board; j++) {
@@ -105,7 +109,7 @@ public class LoTASModContainer {
 					
 					// load the icon for the tas challenge
 					ResourceLocation loc = new ResourceLocation("maps", map.name);
-					ThreadDownloadImageData dw = new ThreadDownloadImageData((File) null, "http://mgnet.work/taschallenges/" + map.name + ".png", null, new ImageBufferDownload());
+					ThreadDownloadImageData dw = new ThreadDownloadImageData((File) null, "https://data.mgnet.work/lotas/taschallenges/images/" + map.name + ".png", null, new ImageBufferDownload());
 					Minecraft.getMinecraft().getTextureManager().loadTexture(loc, dw);
 					map.resourceLoc = loc.getResourcePath();
 					
@@ -125,10 +129,10 @@ public class LoTASModContainer {
 	}
 	
 	/**
-	 * Method that loads the custom shields for LoTAS
+	 * Method that loads the custom shields for LoTAS from the <a href="https://github.com/ScribbleLP/MC-TASTools/tree/1.12.2/shields">TASTools<a/> repository
 	 * @author Scribble
 	 */
-	public void loadShields() {	
+	public void loadShieldsTASTools() {	
 		// load shields from server
 		//#if MC>=10900
 		String uuid = Minecraft.getMinecraft().getSession().getProfile().getId().toString();
@@ -163,8 +167,53 @@ public class LoTASModContainer {
 			e.printStackTrace();
 		}
 		// when there is no custom shield, set the texture to the normal one
-		LoTASModContainer.shield = net.minecraft.client.renderer.BannerTextures.SHIELD_BASE_TEXTURE;
+		LoTASModContainer.shield = new ResourceLocation("lotas", "misc/bottleshield.png");
 		//#endif
+	}
+	
+	/**
+	 * Method that loads the custom shields for LoTAS from <a href="https://minecrafttas.com">minecrafttas.com</a>
+	 * @author Scribble
+	 */
+	public void loadShieldsMCTAS() {
+		// load shields from server
+		// #if MC>=10900
+		String uuid = Minecraft.getMinecraft().getSession().getProfile().getId().toString();
+
+		String urlname = "https://minecrafttas.com/" + uuid;
+		URL url = null;
+
+		try {
+			url = new URL(urlname);
+			HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
+			connection.setReadTimeout(5000);
+			connection.setInstanceFollowRedirects(false);
+			if (connection.getResponseCode() == HttpsURLConnection.HTTP_MOVED_PERM) {
+				urlname = connection.getHeaderField("Location");
+				// load shield texture from uuid and return
+				ThreadDownloadImageData thread = new ThreadDownloadImageData(null, urlname, null, new IImageBuffer() {
+
+					@Override
+					public void skinAvailable() {
+
+					}
+
+					@Override
+					public java.awt.image.BufferedImage parseUserSkin(java.awt.image.BufferedImage image) {
+						return image;
+					}
+				});
+				LoTASModContainer.shield = new ResourceLocation("shield.png");
+				Minecraft.getMinecraft().getTextureManager().loadTexture(LoTASModContainer.shield, thread);
+				return;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		// when there is no custom shield, set the texture to the normal one
+		LoTASModContainer.shield = new ResourceLocation("lotas", "misc/bottleshield.png");
+		// #endif
 	}
 
 	/**
@@ -175,7 +224,7 @@ public class LoTASModContainer {
 		// Load the file
 		File file = new File("seeddata.txt");
 		try {
-			URL url = new URL("http://mgnet.work/seeds/seeds" + version + ".txt");
+			URL url = new URL("https://data.mgnet.work/lotas/seeds/" + version + ".txt");
 			URLConnection conn = url.openConnection();
 			conn.setReadTimeout(5000);
 			file.createNewFile();
@@ -194,7 +243,7 @@ public class LoTASModContainer {
 			// load icon and add seed to list
 			new Thread(() -> {
 				entry.loc = new ResourceLocation("seeds", seed);
-				ThreadDownloadImageData dw = new ThreadDownloadImageData((File) null, "http://mgnet.work/seeds/" + seed + ".png", null, new ImageBufferDownload());
+				ThreadDownloadImageData dw = new ThreadDownloadImageData((File) null, "https://data.mgnet.work/lotas/seeds/images/" + seed + ".png", null, new ImageBufferDownload());
 				Minecraft.getMinecraft().getTextureManager().loadTexture(entry.loc, dw);
 			}).start();
 			SeedListExtended.seeds.add(entry);

@@ -1,12 +1,12 @@
 import groovy.json.JsonOutput
 
-version = "2.0.0-SNAPSHOT"
+version = "2.0.0"
 group= "de.pfannekuchen.lotas"
 
 subprojects {
     buildscript {
         repositories {
-        	maven { url = "https://mgnet.work/repo" }
+        	maven { url = "https://maven.mgnet.work" }
         	maven { url = "https://jitpack.io" } // updated MCInjector
             mavenCentral()
             maven {

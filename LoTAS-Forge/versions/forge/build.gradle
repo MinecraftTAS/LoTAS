@@ -49,7 +49,7 @@ minecraft {
 }
 
 repositories {
-	maven { url = "https://mgnet.work/repo" }
+	maven { url = "https://maven.mgnet.work" }
 }
 
 dependencies {

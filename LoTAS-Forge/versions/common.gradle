@@ -1,6 +1,6 @@
 buildscript {
     repositories {
-    	maven { url = "https://mgnet.work/repo" }
+    	maven { url = "https://maven.mgnet.work" }
     	maven { url = "https://jitpack.io" }
         mavenCentral()
     }
@@ -15,7 +15,7 @@ apply plugin: 'org.spongepowered.mixin'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-version = "prerelease-2.0.0-7"
+version = "2.0.0"
 group= "de.pfannekuchen.lotas"
 archivesBaseName = "LoTAS"
 
@@ -31,7 +31,7 @@ afterEvaluate {
 }
 
 repositories {
-	maven { url 'https://mgnet.work/repo' }
+	maven { url 'https://maven.mgnet.work' }
 	maven { url 'https://jitpack.io' }
     maven {
         name = "SpongePowered Repo"

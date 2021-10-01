@@ -9,6 +9,8 @@ import java.net.URLConnection;
 import java.nio.file.Files;
 import java.util.List;
 
+import javax.net.ssl.HttpsURLConnection;
+
 import org.apache.commons.io.FileUtils;
 
 import de.pfannekuchen.lotas.core.utils.ConfigUtils;
@@ -59,7 +61,7 @@ public class LoTASModContainer implements ModInitializer {
 	/**
 	 * Load Shields loads a shield texture that has been modified for specific people
 	 */
-	public static void loadShields() {
+	public static void loadShieldsTASTools() {
 		String uuid = Minecraft.getInstance().getUser().getGameProfile().getId().toString();
 
 		try {
@@ -76,8 +78,33 @@ public class LoTASModContainer implements ModInitializer {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		LoTASModContainer.shield=new ResourceLocation("textures/shield/bottleshield.png");
 		//		AccessorModelLoader.setShieldBase(new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEX, new Identifier("lotas","pan_cake")));
 	}
+	
+	public static void loadShieldsMCTAS() {
+		String uuid = Minecraft.getInstance().getUser().getGameProfile().getId().toString();
+
+		String urlname = "https://minecrafttas.com/" + uuid;
+		URL url = null;
+		
+		try {
+			url = new URL(urlname);
+			HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
+			connection.setReadTimeout(5000);
+			connection.setInstanceFollowRedirects(false);
+			if (connection.getResponseCode() == HttpsURLConnection.HTTP_MOVED_PERM) {
+				urlname = connection.getHeaderField("Location");
+				LoTASModContainer.shield = TextureYoinker.downloadShield(uuid, new URL(urlname).openStream());
+				return;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		LoTASModContainer.shield=new ResourceLocation("textures/shield/bottleshield.png");
+	}
+	
 
 	/**
 	 * Loads a list of seeds together with preview images from <a href="http://mgnet.work/seeds/">mgnet.work/seeds/seedsX.XX.X.txt</a> and creates a List
@@ -86,7 +113,7 @@ public class LoTASModContainer implements ModInitializer {
 	public void loadSeeds() throws Exception {
 		File file = new File("seeddata.txt");
 		try {
-			URL url = new URL("http://mgnet.work/seeds/seeds1.14.4.txt");
+			URL url = new URL("https://data.mgnet.work/lotas/seeds/1.14.4.txt"); // TODO: wait why does this say 1.14.4...
 			URLConnection conn = url.openConnection();
 			conn.setReadTimeout(5000);
 			file.createNewFile();
