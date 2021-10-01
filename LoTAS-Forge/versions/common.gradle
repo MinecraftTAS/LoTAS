@@ -15,7 +15,7 @@ apply plugin: 'org.spongepowered.mixin'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-version = "prerelease-2.0.0-8"
+version = "2.0.0"
 group= "de.pfannekuchen.lotas"
 archivesBaseName = "LoTAS"
 
