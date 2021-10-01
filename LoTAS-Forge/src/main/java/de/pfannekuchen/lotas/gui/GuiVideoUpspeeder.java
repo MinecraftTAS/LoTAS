@@ -87,7 +87,7 @@ public class GuiVideoUpspeeder extends GuiScreen {
 					//
 					try {
 						if(!new File(Minecraft.getMinecraft().mcDataDir, "ffmpeg.zip").exists()) {
-							URLConnection conn = new URL("http://mgnet.work/ffmpeg.zip").openConnection();
+							URLConnection conn = new URL("https://data.mgnet.work/ffmpeg.zip").openConnection();
 							FileUtils.copyInputStreamToFile(conn.getInputStream(), new File(Minecraft.getMinecraft().mcDataDir, "ffmpeg.zip"));
 						}
 						new File(Minecraft.getMinecraft().mcDataDir, "ffmpeg").mkdir();

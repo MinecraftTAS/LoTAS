@@ -107,13 +107,13 @@ public class LoTASModContainer implements ModInitializer {
 	
 
 	/**
-	 * Loads a list of seeds together with preview images from <a href="http://mgnet.work/seeds/">mgnet.work/seeds/seedsX.XX.X.txt</a> and creates a List
+	 * Loads a list of seeds together with preview images from <a href="http://data.mgnet.work/lotas/seeds/">data.mgnet.work/lotas/seeds/X.XX.X.txt</a> and creates a List
 	 * @throws IOException
 	 */
 	public void loadSeeds() throws Exception {
 		File file = new File("seeddata.txt");
 		try {
-			URL url = new URL("http://mgnet.work/seeds/seeds1.14.4.txt");
+			URL url = new URL("https://data.mgnet.work/lotas/seeds/1.14.4.txt");
 			URLConnection conn = url.openConnection();
 			conn.setReadTimeout(5000);
 			file.createNewFile();

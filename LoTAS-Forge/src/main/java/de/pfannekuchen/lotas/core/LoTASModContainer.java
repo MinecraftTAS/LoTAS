@@ -92,7 +92,7 @@ public class LoTASModContainer {
 			
 			// Try to download all tas challenge maps
 			try {
-				BufferedReader stream = new BufferedReader(new InputStreamReader(new URL("http://mgnet.work/taschallenges/maps" + version + ".txt").openStream()));
+				BufferedReader stream = new BufferedReader(new InputStreamReader(new URL("https://data.mgnet.work/lotas/taschallenges/" + version + ".txt").openStream()));
 				int maps = Integer.parseInt(stream.readLine().charAt(0) + ""); // First line contains number of maps
 				for (int i = 0; i < maps; i++) {
 					ChallengeMap map = new ChallengeMap();
@@ -100,7 +100,7 @@ public class LoTASModContainer {
 					map.displayName = stream.readLine();
 					map.name = stream.readLine();
 					map.description = stream.readLine();
-					map.map = new URL("http://mgnet.work/taschallenges/" + stream.readLine());
+					map.map = new URL("https://data.mgnet.work/lotas/taschallenges/maps/" + stream.readLine());
 					int board = Integer.parseInt(stream.readLine().charAt(0) + "");
 					map.leaderboard = new String[board];
 					for (int j = 0; j < board; j++) {
@@ -109,7 +109,7 @@ public class LoTASModContainer {
 					
 					// load the icon for the tas challenge
 					ResourceLocation loc = new ResourceLocation("maps", map.name);
-					ThreadDownloadImageData dw = new ThreadDownloadImageData((File) null, "http://mgnet.work/taschallenges/" + map.name + ".png", null, new ImageBufferDownload());
+					ThreadDownloadImageData dw = new ThreadDownloadImageData((File) null, "https://data.mgnet.work/lotas/taschallenges/images/" + map.name + ".png", null, new ImageBufferDownload());
 					Minecraft.getMinecraft().getTextureManager().loadTexture(loc, dw);
 					map.resourceLoc = loc.getResourcePath();
 					
@@ -224,7 +224,7 @@ public class LoTASModContainer {
 		// Load the file
 		File file = new File("seeddata.txt");
 		try {
-			URL url = new URL("http://mgnet.work/seeds/seeds" + version + ".txt");
+			URL url = new URL("https://data.mgnet.work/lotas/seeds/" + version + ".txt");
 			URLConnection conn = url.openConnection();
 			conn.setReadTimeout(5000);
 			file.createNewFile();
@@ -243,7 +243,7 @@ public class LoTASModContainer {
 			// load icon and add seed to list
 			new Thread(() -> {
 				entry.loc = new ResourceLocation("seeds", seed);
-				ThreadDownloadImageData dw = new ThreadDownloadImageData((File) null, "http://mgnet.work/seeds/" + seed + ".png", null, new ImageBufferDownload());
+				ThreadDownloadImageData dw = new ThreadDownloadImageData((File) null, "https://data.mgnet.work/lotas/seeds/images/" + seed + ".png", null, new ImageBufferDownload());
 				Minecraft.getMinecraft().getTextureManager().loadTexture(entry.loc, dw);
 			}).start();
 			SeedListExtended.seeds.add(entry);

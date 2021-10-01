@@ -1,6 +1,6 @@
 buildscript {
     repositories {
-    	maven { url = "https://mgnet.work/repo" }
+    	maven { url = "https://maven.mgnet.work" }
     	maven { url = "https://jitpack.io" }
         mavenCentral()
     }
@@ -31,7 +31,7 @@ afterEvaluate {
 }
 
 repositories {
-	maven { url 'https://mgnet.work/repo' }
+	maven { url 'https://maven.mgnet.work' }
 	maven { url 'https://jitpack.io' }
     maven {
         name = "SpongePowered Repo"

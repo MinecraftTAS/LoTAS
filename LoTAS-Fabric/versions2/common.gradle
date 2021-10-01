@@ -6,7 +6,7 @@ group = "de.pfannekuchen.lotas"
 archivesBaseName = "lotas"
 
 repositories {
-	maven { url 'https://mgnet.work/repo' }
+	maven { url 'https://maven.mgnet.work' }
 	maven { url 'https://jitpack.io' }
 }
 

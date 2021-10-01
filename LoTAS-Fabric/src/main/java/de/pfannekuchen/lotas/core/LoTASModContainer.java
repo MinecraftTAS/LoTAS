@@ -113,7 +113,7 @@ public class LoTASModContainer implements ModInitializer {
 	public void loadSeeds() throws Exception {
 		File file = new File("seeddata.txt");
 		try {
-			URL url = new URL("http://mgnet.work/seeds/seeds1.14.4.txt");
+			URL url = new URL("https://data.mgnet.work/lotas/seeds/1.14.4.txt"); // TODO: wait why does this say 1.14.4...
 			URLConnection conn = url.openConnection();
 			conn.setReadTimeout(5000);
 			file.createNewFile();

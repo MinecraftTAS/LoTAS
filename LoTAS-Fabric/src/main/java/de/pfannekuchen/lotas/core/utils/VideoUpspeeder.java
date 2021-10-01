@@ -98,8 +98,8 @@ public class VideoUpspeeder {
 				final File ffmpegZip = new File(client.gameDirectory, "ffmpeg.zip");
 				if(!ffmpegZip.exists()) {
 					VideoUpspeederScreen.installingProgress = "Connecting to https://mgnet.work/";
-					URLConnection conn = new URL("http://mgnet.work/ffmpeg.zip").openConnection();
-					VideoUpspeederScreen.installingProgress = "Downloading https://mgnet.work/ffmpeg.zip (This may take a while, ca. 220MB)";
+					URLConnection conn = new URL("https://data.mgnet.work/ffmpeg.zip").openConnection();
+					VideoUpspeederScreen.installingProgress = "Downloading https://data.mgnet.work/ffmpeg.zip (This may take a while, ca. 220MB)";
 					FileUtils.copyInputStreamToFile(conn.getInputStream(), ffmpegZip);
 				}
 				VideoUpspeederScreen.installingProgress = "Extracting ffmpeg.zip";

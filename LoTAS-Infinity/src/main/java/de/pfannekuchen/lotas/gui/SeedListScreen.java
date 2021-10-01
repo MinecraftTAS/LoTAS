@@ -91,7 +91,7 @@ public class SeedListScreen extends Screen {
 	public ResourceLocation downloadSeed(String seed) throws IOException {
 		if (seedsId.containsKey(seed + ""))
 			return seedsId.get(seed + "");
-		URL url = new URL("http://mgnet.work/seeds/" + seed + ".png");
+		URL url = new URL("https://data.mgnet.work/lotas/seeds/images/" + seed + ".png");
 		NativeImage image = NativeImage.read(url.openStream());
 		DynamicTexture txt = new DynamicTexture(image);
 		ResourceLocation iff = Minecraft.getInstance().getTextureManager().register(seed + "", txt);
