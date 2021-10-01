@@ -286,8 +286,11 @@ public class MixinMinecraft {
 			once=false;
 		}
 	}
-	
+	//#if MC>=10900
 	@ModifyConstant(method = "runTickMouse", constant = @Constant(longValue = 200L))
+	//#else
+//$$ 	@ModifyConstant(method = "runTick", constant = @Constant(longValue = 200L))
+	//#endif
 	public long fixMouseWheel(long twohundredLong) {
 		return (long) Math.max(4000F / TickrateChangerMod.tickrate, 200L);
 	}
