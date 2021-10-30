@@ -10,6 +10,7 @@ import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
 
+import de.pfannekuchen.lotas.core.LoTASModContainer;
 import de.pfannekuchen.lotas.core.MCVer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityCreature;
@@ -327,6 +328,11 @@ public class AIManipMod {
 		 * @return
 		 */
 		public boolean isFinished() {
+			if(entity==null) {
+				System.err.println("The entity to check is null (isFinished)");
+				return true;
+			}
+			
 			double distance=target.distanceTo(entity.getPositionVector());
 			if (distance < 1) {
 				return true;
@@ -347,6 +353,10 @@ public class AIManipMod {
 		 * If an entity is stuck, the timeouttimer will increase
 		 */
 		public void timeoutTick() {
+			if(entity==null) {
+				System.err.println("The entity to check is null (timeoutTick)");
+				timeouttimer++;
+			}
 			if(prevPos==null) {
 				Vec pos = new Vec(entity.getPositionVector());
 				prevPos=pos;

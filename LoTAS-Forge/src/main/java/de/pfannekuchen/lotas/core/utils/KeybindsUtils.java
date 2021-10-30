@@ -45,8 +45,6 @@ public class KeybindsUtils {
 	public static boolean shouldSavestate;
 	/** Temporary variable used to request a loadstate */
 	public static boolean shouldLoadstate;
-	/** Variable that shows whether the player is currently freecamming */
-	public static boolean isFreecaming;
 	/** Temporary variable that will reset the tickrate when leaving freecam */
 	public static int savedTickrate;
 	/** Temporary variable that will state whether the hold strafe key was pressed a tick before */

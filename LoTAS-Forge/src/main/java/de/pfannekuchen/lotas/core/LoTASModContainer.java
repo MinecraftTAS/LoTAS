@@ -20,6 +20,7 @@ import de.pfannekuchen.lotas.core.utils.KeybindsUtils;
 import de.pfannekuchen.lotas.gui.GuiSeedList.SeedListExtended;
 import de.pfannekuchen.lotas.gui.GuiSeedList.SeedListExtended.SeedEntry;
 import de.pfannekuchen.lotas.gui.InfoHud;
+import de.pfannekuchen.lotas.mods.FreecamMod;
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;
 import de.pfannekuchen.lotas.taschallenges.ChallengeMap;
 import net.minecraft.client.Minecraft;
@@ -34,9 +35,11 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 
 /**
  * Forge Mod Entry Point, initializes stuff here
+ * 
  * @author Pancake
  * @since v1.0
  * @version v2.0
@@ -54,42 +57,48 @@ public class LoTASModContainer {
 	public static int offsetZ = 0;
 	/** Only ever InfoHud instance */
 	public static InfoHud hud;
-	
+
 	/** Minecraft Version */
 	public static String version = ForgeVersion.mcVersion;
-	
+
+	public static FreecamMod freecam = new FreecamMod();
+
 	/**
 	 * Called by MinecraftForge whenever our Mod gets initialized
+	 * 
 	 * @param e FMLInitializationEvent provided by MinecraftForge
 	 */
-	@EventHandler public void onInit(FMLInitializationEvent e) {
+	@EventHandler
+	public void onInit(FMLInitializationEvent e) {
 		loadShieldsMCTAS(); // load custom shields
 		KeybindsUtils.registerKeybinds(); // register keybinds
 		hud = new InfoHud(); // load info gui
 	}
-	
+
 	/**
 	 * Before the Mod Loader launches the Minecraft Gui
+	 * 
 	 * @param e FMLPreInitializationEvent provided by MinecraftForge
 	 */
-	@EventHandler public void onPreInit(FMLPreInitializationEvent e) {
+	@EventHandler
+	public void onPreInit(FMLPreInitializationEvent e) {
 		new Thread(() -> {
 			// Load configuration with suggested config file
 			ConfigUtils.init(new Configuration(e.getSuggestedConfigurationFile()));
-			
+
 			// Load all seeds for the seeds gui
 			try {
 				loadSeeds();
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
-			
+
 			// Load the tickrate if it's supposed to be saved
 			if (ConfigUtils.getBoolean("tools", "saveTickrate")) {
 				TickrateChangerMod.index = ConfigUtils.getInt("hidden", "tickrate");
 				TickrateChangerMod.updateTickrate(TickrateChangerMod.ticks[TickrateChangerMod.index]);
 			}
-			
+
 			// Try to download all tas challenge maps
 			try {
 				BufferedReader stream = new BufferedReader(new InputStreamReader(new URL("https://data.mgnet.work/lotas/taschallenges/" + version + ".txt").openStream()));
@@ -106,15 +115,15 @@ public class LoTASModContainer {
 					for (int j = 0; j < board; j++) {
 						map.leaderboard[j] = stream.readLine();
 					}
-					
+
 					// load the icon for the tas challenge
 					ResourceLocation loc = new ResourceLocation("maps", map.name);
 					ThreadDownloadImageData dw = new ThreadDownloadImageData((File) null, "https://data.mgnet.work/lotas/taschallenges/images/" + map.name + ".png", null, new ImageBufferDownload());
 					Minecraft.getMinecraft().getTextureManager().loadTexture(loc, dw);
 					map.resourceLoc = loc.getResourcePath();
-					
+
 					LoTASModContainer.maps.add(map);
-					
+
 					// one empty line for commenters purposes
 					stream.readLine(); // Empty
 				}
@@ -123,18 +132,21 @@ public class LoTASModContainer {
 				e1.printStackTrace();
 			}
 		}).start();
-		
+
 		// register forge events
 		MinecraftForge.EVENT_BUS.register(new EventUtils());
 	}
-	
+
 	/**
-	 * Method that loads the custom shields for LoTAS from the <a href="https://github.com/ScribbleLP/MC-TASTools/tree/1.12.2/shields">TASTools<a/> repository
+	 * Method that loads the custom shields for LoTAS from the <a href=
+	 * "https://github.com/ScribbleLP/MC-TASTools/tree/1.12.2/shields">TASTools<a/>
+	 * repository
+	 * 
 	 * @author Scribble
 	 */
-	public void loadShieldsTASTools() {	
+	public void loadShieldsTASTools() {
 		// load shields from server
-		//#if MC>=10900
+		// #if MC>=10900
 		String uuid = Minecraft.getMinecraft().getSession().getProfile().getId().toString();
 
 		try {
@@ -168,11 +180,13 @@ public class LoTASModContainer {
 		}
 		// when there is no custom shield, set the texture to the normal one
 		LoTASModContainer.shield = new ResourceLocation("lotas", "misc/bottleshield.png");
-		//#endif
+		// #endif
 	}
-	
+
 	/**
-	 * Method that loads the custom shields for LoTAS from <a href="https://minecrafttas.com">minecrafttas.com</a>
+	 * Method that loads the custom shields for LoTAS from
+	 * <a href="https://minecrafttas.com">minecrafttas.com</a>
+	 * 
 	 * @author Scribble
 	 */
 	public void loadShieldsMCTAS() {
@@ -218,6 +232,7 @@ public class LoTASModContainer {
 
 	/**
 	 * Method that loads the seeds file from the server
+	 * 
 	 * @throws Exception Throws whenever something fails horribly
 	 */
 	public void loadSeeds() throws Exception {
@@ -250,5 +265,4 @@ public class LoTASModContainer {
 			c++;
 		}
 	}
-	
 }

@@ -135,24 +135,6 @@ public class MixinMinecraft {
 		}
 	}
 	
-	private void moveRelatively(float strafe, float up, float forward, float friction) {
-        float f = strafe * strafe + up * up + forward * forward;
-        if (f >= 1.0E-4F)
-        {
-            f = MCVer.sqrt(f);
-            if (f < 1.0F) f = 1.0F;
-            f = friction / f;
-            strafe = strafe * f;
-            up = up * f;
-            forward = forward * f;
-            float f1 = MCVer.sin(MCVer.player((Minecraft) (Object) this).rotationYaw * 0.017453292F);
-            float f2 = MCVer.cos(MCVer.player((Minecraft) (Object) this).rotationYaw * 0.017453292F);
-            MCVer.player((Minecraft) (Object) this).posX += (double)(strafe * f2 - forward * f1);
-            MCVer.player((Minecraft) (Object) this).posY += (double)up;
-            MCVer.player((Minecraft) (Object) this).posZ += (double)(forward * f2 + strafe * f1);
-        }
-	}
-	
     @Inject(method = "runGameLoop", at = @At(value="HEAD"))
     public void injectrunGameLoop(CallbackInfo ci) throws IOException {
     	das--;
@@ -162,55 +144,21 @@ public class MixinMinecraft {
     		TickrateChangerMod.timeSinceZero = System.currentTimeMillis();
     	}
     	
-    	if (TickrateChangerMod.tickrate == 0 && Keyboard.isKeyDown(KeybindsUtils.advanceTicksKeybind.getKeyCode()) && das <= 0 && !KeybindsUtils.isFreecaming) {
+    	if (TickrateChangerMod.tickrate == 0 && Keyboard.isKeyDown(KeybindsUtils.advanceTicksKeybind.getKeyCode()) && das <= 0 && !LoTASModContainer.freecam.isFreecaming()) {
     		TickrateChangerMod.advanceTick();
     		das = 15;
     	}
-    	if (TickrateChangerMod.tickrate == 0 && currentScreen == null && Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
+    	if (TickrateChangerMod.tickrate == 0 && currentScreen == null && Keyboard.isKeyDown(Keyboard.KEY_ESCAPE) && LoTASModContainer.freecam.isFreecaming()) {
     		((Minecraft) (Object) this).displayGuiScreen(new GuiIngameMenu());
-    		TickrateChangerMod.updateTickrate(KeybindsUtils.savedTickrate);
-    		KeybindsUtils.isFreecaming = false; MCVer.player((Minecraft) (Object) this).noClip = false;
-    		Minecraft.getMinecraft().renderGlobal.loadRenderers();
-    	}
-    	
-    	//Controls for freecam
-    	if (KeybindsUtils.isFreecaming) {
-    		if (Keyboard.isKeyDown(gameSettings.keyBindForward.getKeyCode())) {
-    			moveRelatively(0.0F, 0.0F, 0.91F, 1.0F);
-    		} 
-    		if (Keyboard.isKeyDown(gameSettings.keyBindBack.getKeyCode())) {
-    			moveRelatively(0.0F, 0.0F, -0.91F, 1.0F);
-	   		} 
-    		if (Keyboard.isKeyDown(gameSettings.keyBindLeft.getKeyCode())) {
-	   			moveRelatively(0.91F, 0.0F, 0.0F, 1.0F);
-			} 
-    		if (Keyboard.isKeyDown(gameSettings.keyBindRight.getKeyCode())) {
-				moveRelatively(-0.91F, 0.0F, 0.0F, 1.0F);
-			} 
-    		if (Keyboard.isKeyDown(gameSettings.keyBindJump.getKeyCode())) {
-				moveRelatively(0.0F, 0.92F, 0.0F, 1.0F);
-			} 
-    		if (Keyboard.isKeyDown(gameSettings.keyBindSneak.getKeyCode())) {
-				moveRelatively(0.0F, -0.92F, 0.0F, 1.0F);
-			}
+    		LoTASModContainer.freecam.toggle(false);
     	}
     	
     	if (Keyboard.isKeyDown(KeybindsUtils.toggleFreecamKeybind.getKeyCode()) && Minecraft.getMinecraft().currentScreen == null && das <= 0) {
-    		das = 15;
-    		if (KeybindsUtils.isFreecaming) {
-    			KeybindsUtils.isFreecaming = false; MCVer.player((Minecraft) (Object) this).noClip = false;
-    			Minecraft.getMinecraft().renderGlobal.loadRenderers();
-				TickrateChangerMod.updateTickrate(KeybindsUtils.savedTickrate);
-			} else {
-				KeybindsUtils.isFreecaming = true; MCVer.player((Minecraft) (Object) this).noClip = true;
-				MCVer.player((Minecraft) (Object) this).moveForward = 0f;
-				MCVer.player((Minecraft) (Object) this).moveStrafing = 0f;
-				KeybindsUtils.savedTickrate = (int)TickrateChangerMod.tickrate;
-				TickrateChangerMod.updateTickrate(0);
-			}
+    		LoTASModContainer.freecam.toggle();
+    		das=15;
 		}
     	
-    	else if (Keyboard.isKeyDown(KeybindsUtils.toggleAdvanceKeybind.getKeyCode()) && das <= 0 && TickrateChangerMod.advanceClient == false && !KeybindsUtils.isFreecaming && Minecraft.getMinecraft().currentScreen == null) { 
+    	else if (Keyboard.isKeyDown(KeybindsUtils.toggleAdvanceKeybind.getKeyCode()) && das <= 0 && TickrateChangerMod.advanceClient == false && !LoTASModContainer.freecam.isFreecaming() && Minecraft.getMinecraft().currentScreen == null) { 
     		if (TickrateChangerMod.tickrate > 0) {
     			save = TickrateChangerMod.index;
     			TickrateChangerMod.updateTickrate(0);
@@ -221,6 +169,7 @@ public class MixinMinecraft {
     		}
     		das = 15;
     	}
+    	LoTASModContainer.freecam.updatePlayer();
     }
     
     @ModifyVariable(method = "displayGuiScreen", at = @At("STORE"), index = 1, ordinal = 0)
