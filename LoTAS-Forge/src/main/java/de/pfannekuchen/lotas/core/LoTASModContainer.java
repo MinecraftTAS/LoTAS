@@ -20,7 +20,6 @@ import de.pfannekuchen.lotas.core.utils.KeybindsUtils;
 import de.pfannekuchen.lotas.gui.GuiSeedList.SeedListExtended;
 import de.pfannekuchen.lotas.gui.GuiSeedList.SeedListExtended.SeedEntry;
 import de.pfannekuchen.lotas.gui.InfoHud;
-import de.pfannekuchen.lotas.mods.FreecamMod;
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;
 import de.pfannekuchen.lotas.taschallenges.ChallengeMap;
 import net.minecraft.client.Minecraft;
@@ -35,7 +34,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 
 /**
  * Forge Mod Entry Point, initializes stuff here
@@ -60,8 +58,6 @@ public class LoTASModContainer {
 
 	/** Minecraft Version */
 	public static String version = ForgeVersion.mcVersion;
-
-	public static FreecamMod freecam = new FreecamMod();
 
 	/**
 	 * Called by MinecraftForge whenever our Mod gets initialized

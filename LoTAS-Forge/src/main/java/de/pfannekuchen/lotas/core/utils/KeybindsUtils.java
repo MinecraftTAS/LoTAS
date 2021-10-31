@@ -1,16 +1,22 @@
 package de.pfannekuchen.lotas.core.utils;
 
+import java.util.HashMap;
+
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 
 import de.pfannekuchen.lotas.core.LoTASModContainer;
 import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.mods.DupeMod;
+import de.pfannekuchen.lotas.mods.TickrateChangerMod;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiControls;
 import net.minecraft.client.gui.GuiIngameMenu;
 import net.minecraft.client.settings.KeyBinding;
 
 /**
  * Contains all keybinds and handles key inputs
+ * 
  * @author Pancake
  * @since v1.0
  * @version v1.1
@@ -18,17 +24,15 @@ import net.minecraft.client.settings.KeyBinding;
 public class KeybindsUtils {
 
 	/** Keybind that will save a state */
-	public static final KeyBinding saveStateKeybind  = new KeyBinding("Savestate", Keyboard.KEY_J, "Stating");
+	public static final KeyBinding saveStateKeybind = new KeyBinding("Savestate", Keyboard.KEY_J, "Stating");
 	/** Keybind that will load a state */
-	public static final KeyBinding loadStateKeybind  = new KeyBinding("Loadstate", Keyboard.KEY_K, "Stating");
+	public static final KeyBinding loadStateKeybind = new KeyBinding("Loadstate", Keyboard.KEY_K, "Stating");
 	/** Keybind that will load the dupemod */
-	public static final KeyBinding loadDupeKeybind  = new KeyBinding("Load Items/Chests", Keyboard.KEY_O, "Duping");
+	public static final KeyBinding loadDupeKeybind = new KeyBinding("Load Items/Chests", Keyboard.KEY_O, "Duping");
 	/** Keybind that will save the dupemod */
-	public static final KeyBinding saveDupeKeybind  = new KeyBinding("Save Items/Chests", Keyboard.KEY_P, "Duping");
+	public static final KeyBinding saveDupeKeybind = new KeyBinding("Save Items/Chests", Keyboard.KEY_P, "Duping");
 	/** Keybind that will strafe when held */
 	public static final KeyBinding holdStrafeKeybind = new KeyBinding("Auto-Strafe", Keyboard.KEY_H, "Moving");
-	/** Keybind that will enable or disable freecam */
-	public static final KeyBinding toggleFreecamKeybind = new KeyBinding("Freecam", Keyboard.KEY_I, "Moving");
 	/** Keybind that will increase the Tickrate */
 	public static final KeyBinding increaseTickrateKeybind = new KeyBinding("Faster Tickrate", Keyboard.KEY_PERIOD, "Tickrate Changer");
 	/** Keybind that will decrease the Tickrate */
@@ -45,16 +49,22 @@ public class KeybindsUtils {
 	public static boolean shouldSavestate;
 	/** Temporary variable used to request a loadstate */
 	public static boolean shouldLoadstate;
-	/** Temporary variable that will reset the tickrate when leaving freecam */
-	public static int savedTickrate;
-	/** Temporary variable that will state whether the hold strafe key was pressed a tick before */
-	public static boolean wasPressed = false;
 	
+	private static int save;
+	/**
+	 * Temporary variable that will state whether the hold strafe key was pressed a
+	 * tick before
+	 */
+	public static boolean wasPressed = false;
+
+	private static HashMap<Integer, Long> cooldownHashMap = new HashMap<Integer, Long>();
+
 	/**
 	 * Handles a new KeyInputEvent and ticks through all keybinds.
+	 * 
 	 * @throws Exception Throws an whenever something is wrong
 	 */
-	public static void keyEvent() throws Exception {
+	public static void tickKeyEvent() throws Exception {
 		// Savestate and Loadstate handling
 		if (saveStateKeybind.isPressed() && de.pfannekuchen.lotas.taschallenges.ChallengeMap.currentMap == null) {
 			Minecraft.getMinecraft().displayGuiScreen(new GuiIngameMenu());
@@ -83,13 +93,65 @@ public class KeybindsUtils {
 			Minecraft.getMinecraft().displayGuiScreen(LoTASModContainer.hud);
 		}
 	}
-	
+
+	public static void frameKeyEvent() {
+		
+		if (isKeyDown(toggleAdvanceKeybind) && TickrateChangerMod.advanceClient == false && Minecraft.getMinecraft().currentScreen == null) { 
+    		if (TickrateChangerMod.tickrate > 0) {
+    			save = TickrateChangerMod.index;
+    			TickrateChangerMod.updateTickrate(0);
+    			TickrateChangerMod.index = 0;
+    		} else {
+    			TickrateChangerMod.updateTickrate(TickrateChangerMod.ticks[save]);
+    			TickrateChangerMod.index = save;
+    		}
+    	}
+		
+    	if (TickrateChangerMod.tickrate == 0 && isKeyDown(KeybindsUtils.advanceTicksKeybind)) {
+    		TickrateChangerMod.advanceTick();
+    	}
+	}
+
 	/**
-	 * Static method to register all Keybinds to the game.
-	 * Note: Not using Forge API to avoid a crash in 1.8.9.
+	 * Checks whether the keycode is pressed, regardless of any gui screens
+	 * 
+	 * @param keybind
+	 * @return
+	 */
+	private static boolean isKeyDown(KeyBinding keybind) {
+		return isKeyDown(keybind.getKeyCode());
+	}
+
+	private static boolean isKeyDown(int keycode) {
+		boolean down = false;
+
+		if (Minecraft.getMinecraft().currentScreen instanceof GuiControls) {
+			return false;
+		}
+
+		down = keycode >= 0 ? Keyboard.isKeyDown(keycode) : Mouse.isButtonDown(keycode + 100); // Check if it's keyboard key or mouse button
+
+		if (down) {
+			if (cooldownHashMap.containsKey(keycode)) {
+				if (50 * 3 <= Minecraft.getSystemTime() - cooldownHashMap.get(keycode)) {
+					cooldownHashMap.put(keycode, Minecraft.getSystemTime());
+					return true;
+				}
+				return false;
+			} else {
+				cooldownHashMap.put(keycode, Minecraft.getSystemTime());
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Static method to register all Keybinds to the game. Note: Not using Forge API
+	 * to avoid a crash in 1.8.9.
 	 */
 	public static void registerKeybinds() {
-		Minecraft.getMinecraft().gameSettings.keyBindings = org.apache.commons.lang3.ArrayUtils.addAll(Minecraft.getMinecraft().gameSettings.keyBindings, saveStateKeybind, loadStateKeybind, loadDupeKeybind, saveDupeKeybind, holdStrafeKeybind, toggleFreecamKeybind, increaseTickrateKeybind, decreaseTickrateKeybind, advanceTicksKeybind, toggleAdvanceKeybind, toggleTimerKeybind, openInfoHud);
+		Minecraft.getMinecraft().gameSettings.keyBindings = org.apache.commons.lang3.ArrayUtils.addAll(Minecraft.getMinecraft().gameSettings.keyBindings, saveStateKeybind, loadStateKeybind, loadDupeKeybind, saveDupeKeybind, holdStrafeKeybind, increaseTickrateKeybind, decreaseTickrateKeybind, advanceTicksKeybind, toggleAdvanceKeybind, toggleTimerKeybind, openInfoHud);
 	}
-	
+
 }

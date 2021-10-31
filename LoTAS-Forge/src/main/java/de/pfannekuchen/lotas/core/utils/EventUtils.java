@@ -92,7 +92,7 @@ public class EventUtils {
 	public static void onInput2() {
 		/* Handle all keybinds */
 		try {
-			KeybindsUtils.keyEvent(); // Trigger the KeybindsUtils method to handle most of the keybinds
+			KeybindsUtils.tickKeyEvent(); // Trigger the KeybindsUtils method to handle most of the keybinds
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}

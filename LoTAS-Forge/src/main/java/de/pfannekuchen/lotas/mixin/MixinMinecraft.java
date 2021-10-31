@@ -53,8 +53,6 @@ public class MixinMinecraft {
 	
 	private int save = 6;
 	
-	private int das = 0;
-	
 	private boolean isLoadingWorld;
 	
 	@Shadow
@@ -137,39 +135,13 @@ public class MixinMinecraft {
 	
     @Inject(method = "runGameLoop", at = @At(value="HEAD"))
     public void injectrunGameLoop(CallbackInfo ci) throws IOException {
-    	das--;
-    	
+    	//Time offset
     	if (TickrateChangerMod.tickrate == 0) {
     		TickrateChangerMod.timeOffset += System.currentTimeMillis() - TickrateChangerMod.timeSinceZero;
     		TickrateChangerMod.timeSinceZero = System.currentTimeMillis();
     	}
     	
-    	if (TickrateChangerMod.tickrate == 0 && Keyboard.isKeyDown(KeybindsUtils.advanceTicksKeybind.getKeyCode()) && das <= 0 && !LoTASModContainer.freecam.isFreecaming()) {
-    		TickrateChangerMod.advanceTick();
-    		das = 15;
-    	}
-    	if (TickrateChangerMod.tickrate == 0 && currentScreen == null && Keyboard.isKeyDown(Keyboard.KEY_ESCAPE) && LoTASModContainer.freecam.isFreecaming()) {
-    		((Minecraft) (Object) this).displayGuiScreen(new GuiIngameMenu());
-    		LoTASModContainer.freecam.toggle(false);
-    	}
-    	
-    	if (Keyboard.isKeyDown(KeybindsUtils.toggleFreecamKeybind.getKeyCode()) && Minecraft.getMinecraft().currentScreen == null && das <= 0) {
-    		LoTASModContainer.freecam.toggle();
-    		das=15;
-		}
-    	
-    	else if (Keyboard.isKeyDown(KeybindsUtils.toggleAdvanceKeybind.getKeyCode()) && das <= 0 && TickrateChangerMod.advanceClient == false && !LoTASModContainer.freecam.isFreecaming() && Minecraft.getMinecraft().currentScreen == null) { 
-    		if (TickrateChangerMod.tickrate > 0) {
-    			save = TickrateChangerMod.index;
-    			TickrateChangerMod.updateTickrate(0);
-    			TickrateChangerMod.index = 0;
-    		} else {
-    			TickrateChangerMod.updateTickrate(TickrateChangerMod.ticks[save]);
-    			TickrateChangerMod.index = save;
-    		}
-    		das = 15;
-    	}
-    	LoTASModContainer.freecam.updatePlayer();
+    	KeybindsUtils.frameKeyEvent();
     }
     
     @ModifyVariable(method = "displayGuiScreen", at = @At("STORE"), index = 1, ordinal = 0)
