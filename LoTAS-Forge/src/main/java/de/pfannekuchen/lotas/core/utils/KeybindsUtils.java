@@ -1,5 +1,6 @@
 package de.pfannekuchen.lotas.core.utils;
 
+import java.time.Duration;
 import java.util.HashMap;
 
 import org.lwjgl.input.Keyboard;
@@ -7,6 +8,7 @@ import org.lwjgl.input.Mouse;
 
 import de.pfannekuchen.lotas.core.LoTASModContainer;
 import de.pfannekuchen.lotas.core.MCVer;
+import de.pfannekuchen.lotas.core.utils.EventUtils.Timer;
 import de.pfannekuchen.lotas.mods.DupeMod;
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;
 import net.minecraft.client.Minecraft;
@@ -49,7 +51,7 @@ public class KeybindsUtils {
 	public static boolean shouldSavestate;
 	/** Temporary variable used to request a loadstate */
 	public static boolean shouldLoadstate;
-	
+
 	private static int save;
 	/**
 	 * Temporary variable that will state whether the hold strafe key was pressed a
@@ -73,6 +75,7 @@ public class KeybindsUtils {
 			Minecraft.getMinecraft().displayGuiScreen(new GuiIngameMenu());
 			shouldLoadstate = true; // request a loadstate next tick
 		}
+
 		// Dupemod save and load handling.
 		else if (loadDupeKeybind.isPressed()) {
 			DupeMod.loadChests();
@@ -81,6 +84,7 @@ public class KeybindsUtils {
 			DupeMod.saveChests();
 			DupeMod.saveItems();
 		}
+
 		// Autostrafe auto rotation handling
 		if (wasPressed != holdStrafeKeybind.isKeyDown() && wasPressed == true) {
 			KeyBinding.setKeyBindState(32, false); // let go of D when releasing the strafe keybind
@@ -88,28 +92,55 @@ public class KeybindsUtils {
 			MCVer.player(Minecraft.getMinecraft()).rotationYaw -= 45; // rotate the player before starting to strafe
 		}
 		wasPressed = holdStrafeKeybind.isKeyDown(); // update state for next tick
+		
 		// Info Hud handling
 		if (openInfoHud.isPressed()) {
 			Minecraft.getMinecraft().displayGuiScreen(LoTASModContainer.hud);
 		}
+
+		// Timer keybinds
+		if (isKeyDown(KeybindsUtils.toggleTimerKeybind) && de.pfannekuchen.lotas.taschallenges.ChallengeMap.currentMap == null) { // Start/Stop the timer if there are no tas challenges running
+			if (Timer.ticks < 0 || Timer.startTime == null) { // Start the timer
+				Timer.startTime = Duration.ofMillis(System.currentTimeMillis());
+				Timer.ticks = 0;
+			}
+			Timer.running = !Timer.running; // Start/stop the timers state
+		}
 	}
 
+	/**
+	 * Handles keybinds executed every frame
+	 */
 	public static void frameKeyEvent() {
-		
-		if (isKeyDown(toggleAdvanceKeybind) && TickrateChangerMod.advanceClient == false && Minecraft.getMinecraft().currentScreen == null) { 
-    		if (TickrateChangerMod.tickrate > 0) {
-    			save = TickrateChangerMod.index;
-    			TickrateChangerMod.updateTickrate(0);
-    			TickrateChangerMod.index = 0;
-    		} else {
-    			TickrateChangerMod.updateTickrate(TickrateChangerMod.ticks[save]);
-    			TickrateChangerMod.index = save;
-    		}
-    	}
-		
-    	if (TickrateChangerMod.tickrate == 0 && isKeyDown(KeybindsUtils.advanceTicksKeybind)) {
-    		TickrateChangerMod.advanceTick();
-    	}
+
+		if (isKeyDown(toggleAdvanceKeybind) && TickrateChangerMod.advanceClient == false && Minecraft.getMinecraft().currentScreen == null) {
+			if (TickrateChangerMod.tickrate > 0) {
+				save = TickrateChangerMod.index;
+				TickrateChangerMod.updateTickrate(0);
+				TickrateChangerMod.index = 0;
+			} else {
+				TickrateChangerMod.updateTickrate(TickrateChangerMod.ticks[save]);
+				TickrateChangerMod.index = save;
+			}
+		}
+
+		else if (TickrateChangerMod.tickrate == 0 && isKeyDown(KeybindsUtils.advanceTicksKeybind)) {
+			TickrateChangerMod.advanceTick();
+		}
+
+		// Tickrate keybinds
+		boolean flag = false;
+		if (isKeyDown(KeybindsUtils.increaseTickrateKeybind)) {
+			TickrateChangerMod.index++;
+			flag = true;
+		} else if (isKeyDown(KeybindsUtils.decreaseTickrateKeybind)) {
+			TickrateChangerMod.index--;
+			flag = true;
+		}
+		if (flag) {
+			TickrateChangerMod.index = MCVer.clamp(TickrateChangerMod.index, 0, 11); // Update the index of the recommended Tickrates array
+			TickrateChangerMod.updateTickrate(TickrateChangerMod.ticks[TickrateChangerMod.index]); // Update the Tickrate
+		}
 	}
 
 	/**

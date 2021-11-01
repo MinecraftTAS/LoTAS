@@ -87,34 +87,6 @@ public class EventUtils {
 	}
 	
 	/**
-	 * Handles the timer and all other keybind events
-	 */
-	public static void onInput2() {
-		/* Handle all keybinds */
-		try {
-			KeybindsUtils.tickKeyEvent(); // Trigger the KeybindsUtils method to handle most of the keybinds
-		} catch (Exception e1) {
-			e1.printStackTrace();
-		}
-		
-		// Timer keybinds
-		if (KeybindsUtils.toggleTimerKeybind.isPressed() && de.pfannekuchen.lotas.taschallenges.ChallengeMap.currentMap == null) { // Start/Stop the timer if there are no tas challenges running
-			if (Timer.ticks < 0 || Timer.startTime == null) { // Start the timer
-				Timer.startTime = Duration.ofMillis(System.currentTimeMillis());
-				Timer.ticks = 0;
-			}
-			Timer.running = !Timer.running; // Start/stop the timers state
-		}
-		
-		// Tickrate keybinds
-		if (KeybindsUtils.increaseTickrateKeybind.isPressed()) TickrateChangerMod.index++;
-		else if (KeybindsUtils.decreaseTickrateKeybind.isPressed()) TickrateChangerMod.index--;
-		else return;
-		TickrateChangerMod.index = MCVer.clamp(TickrateChangerMod.index, 0, 11); // Update the index of the recommended Tickrates array
-		TickrateChangerMod.updateTickrate(TickrateChangerMod.ticks[TickrateChangerMod.index]); // Update the Tickrate
-	}
-	
-	/**
 	 * Render Event triggered by MinecraftForge that renders all 3D stuff for LoTAS
 	 * @param e RenderWorldLastEvent provided by MinecraftForge.
 	 */

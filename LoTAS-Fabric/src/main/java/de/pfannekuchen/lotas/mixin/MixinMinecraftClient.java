@@ -45,9 +45,6 @@ public class MixinMinecraftClient {
 	@Shadow
 	private LevelRenderer levelRenderer;
 
-	/** Index of the Tickrate Slider stored while Tick Advancing */
-	private int save;
-
 	@Shadow
 	private int rightClickDelay;
 
@@ -236,86 +233,8 @@ public class MixinMinecraftClient {
 			TickrateChangerMod.timeOffset += System.currentTimeMillis() - TickrateChangerMod.timeSinceZero;
 			TickrateChangerMod.timeSinceZero = System.currentTimeMillis();
 		}
-
-		/* Tickrate Zero Toggle */
-		if (KeybindsUtils.toggleAdvanceKeybind.consumeClick() && TickrateChangerMod.advanceClient == false && !KeybindsUtils.isFreecaming && screen == null) {
-			if (TickrateChangerMod.tickrate > 0) {
-				save = TickrateChangerMod.index;
-				TickrateChangerMod.updateTickrate(0);
-				TickrateChangerMod.index = 0;
-			} else {
-				TickrateChangerMod.updateTickrate(TickrateChangerMod.ticks[save]);
-				TickrateChangerMod.index = save;
-			}
-		}
-
-		/* Tickrate Zero */
-		if (TickrateChangerMod.tickrate == 0 && KeybindsUtils.advanceTicksKeybind.consumeClick() && !KeybindsUtils.isFreecaming) {
-			TickrateChangerMod.advanceTick();
-		}
-		/* Tickrate Changer */
-		boolean flag = false;
-		if (KeybindsUtils.increaseTickrateKeybind.consumeClick()) {
-			flag = true;
-			TickrateChangerMod.index++;
-		} else if (KeybindsUtils.decreaseTickrateKeybind.consumeClick()) {
-			flag = true;
-			TickrateChangerMod.index--;
-		}
-		if (flag) {
-			TickrateChangerMod.index = Mth.clamp(TickrateChangerMod.index, 0, 11);
-			TickrateChangerMod.updateTickrate(TickrateChangerMod.ticks[TickrateChangerMod.index]);
-		}
-
-		/* Escape using Freecam disables Freecam */
-		if (TickrateChangerMod.tickrate == 0 && screen == null && Keyboard.isKeyDown(GLFW.GLFW_KEY_ESCAPE)) {
-			((Minecraft) (Object) this).setScreen(new PauseScreen(true));
-			TickrateChangerMod.updateTickrate(KeybindsUtils.savedTickrate);
-			KeybindsUtils.isFreecaming = false;
-			Minecraft.getInstance().player.noPhysics = false;
-			levelRenderer.allChanged();
-		}
-
-		/* Freecam Movement */
-		if (KeybindsUtils.isFreecaming) {
-			if (options.keyUp.isDown()) {
-				move(0.0F, 0.0F, 0.91F, 1.0F);
-			}
-			if (options.keyDown.isDown()) {
-				move(0.0F, 0.0F, -0.91F, 1.0F);
-			}
-			if (options.keyLeft.isDown()) {
-				move(0.91F, 0.0F, 0.0F, 1.0F);
-			}
-			if (options.keyRight.isDown()) {
-				move(-0.91F, 0.0F, 0.0F, 1.0F);
-			}
-			if (options.keyJump.isDown()) {
-				move(0.0F, 0.92F, 0.0F, 1.0F);
-			}
-			//#if MC>=11500
-//$$ 			if (options.keyShift.isDown()) {
-			//#else
-			if (options.keySneak.isDown()) {
-			//#endif
-				move(0.0F, -0.92F, 0.0F, 1.0F);
-			}
-		}
-
-		/* Freecam Toggle */
-		if (KeybindsUtils.toggleFreecamKeybind.consumeClick() && Minecraft.getInstance().screen == null) {
-			if (KeybindsUtils.isFreecaming) {
-				KeybindsUtils.isFreecaming = false;
-				Minecraft.getInstance().player.noPhysics = false;
-				levelRenderer.allChanged();
-				TickrateChangerMod.updateTickrate(KeybindsUtils.savedTickrate);
-			} else {
-				KeybindsUtils.isFreecaming = true;
-				Minecraft.getInstance().player.noPhysics = true;
-				KeybindsUtils.savedTickrate = (int) TickrateChangerMod.tickrate;
-				TickrateChangerMod.updateTickrate(0);
-			}
-		}
+		
+		KeybindsUtils.frameKeyEvent();
 	}
 
 	/**
@@ -323,7 +242,7 @@ public class MixinMinecraftClient {
 	 */
 	@Inject(method = "handleKeybinds", at = @At("RETURN"), cancellable = true)
 	public void keyInputEvent(CallbackInfo ci) {
-		KeybindsUtils.keyEvent();
+		KeybindsUtils.tickKeyEvent();
 	}
 
 	/**

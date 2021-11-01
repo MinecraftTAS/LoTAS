@@ -2,6 +2,7 @@ package de.pfannekuchen.lotas.core.utils;
 
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -13,14 +14,16 @@ import com.google.common.collect.Lists;
 
 import de.pfannekuchen.lotas.core.LoTASModContainer;
 import de.pfannekuchen.lotas.mixin.accessors.AccessorKeyMapping;
-import de.pfannekuchen.lotas.mixin.accessors.AccessorOptions;
 import de.pfannekuchen.lotas.mods.DupeMod;
+import de.pfannekuchen.lotas.mods.TickrateChangerMod;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.PauseScreen;
+import net.minecraft.util.Mth;
 
 /**
  * Contains all keybinds and handles key inputs
+ * 
  * @author Pancake
  * @since v1.0
  * @version v1.1
@@ -37,8 +40,6 @@ public class KeybindsUtils {
 	public static final KeyMapping saveDupeKeybind = new KeyMapping("Save Items/Chests", GLFW.GLFW_KEY_P, "Duping");
 	/* Keybind used for automated strafing */
 	public static final KeyMapping holdStrafeKeybind = new KeyMapping("Auto-Strafe", GLFW.GLFW_KEY_H, "Moving");
-	/* Toggles freecamming */
-	public static final KeyMapping toggleFreecamKeybind = new KeyMapping("Freecam", GLFW.GLFW_KEY_I, "Moving");
 	/* Increases the Tickrate */
 	public static final KeyMapping increaseTickrateKeybind = new KeyMapping("Faster Tickrate", GLFW.GLFW_KEY_PERIOD, "Tickrate Changer");
 	/* Decreases the Tickrate */
@@ -57,17 +58,19 @@ public class KeybindsUtils {
 	public static boolean shouldSavestate;
 	/** Temporary variable used to request a loadstate */
 	public static boolean shouldLoadstate;
-	/** Variable that shows whether the player is currently freecamming */
-	public static boolean isFreecaming;
-	/** Temporary variable that will reset the tickrate when leaving freecam */
-	public static int savedTickrate;
-	/** Temporary variable that will state whether the hold strafe key was pressed a tick before */
+
+	public static int save;
+
+	/**
+	 * Temporary variable that will state whether the hold strafe key was pressed a
+	 * tick before
+	 */
 	public static boolean wasPressed = false;
 
 	/**
 	 * Handles a new KeyInputEvent and ticks through all keybinds.
 	 */
-	public static void keyEvent() {
+	public static void tickKeyEvent() {
 		// Savestate and Loadstate handling
 		while (saveStateKeybind.consumeClick()) {
 			Minecraft.getInstance().setScreen(new PauseScreen(true));
@@ -101,45 +104,81 @@ public class KeybindsUtils {
 			KeyMapping.set(Minecraft.getInstance().options.keyRight.getDefaultKey(), false);
 		}
 		wasPressed = holdStrafeKeybind.isDown();
-		if(test.consumeClick()) {
+		if (test.consumeClick()) {
 //			SpawnManipMod manip=new SpawnManipMod();
 //			manip.debugSpawn();
 		}
 	}
 
 	/**
-	 * Static method to register all Keybinds to the game.
-	 * Note: Not using Fabric API to avoid a crash using Mojang Mappings
-	 * @return 
+	 * Handles keybinds executed every frame
+	 */
+	public static void frameKeyEvent() {
+		/* Tickrate Zero Toggle */
+		if (KeybindsUtils.toggleAdvanceKeybind.consumeClick() && TickrateChangerMod.advanceClient == false && Minecraft.getInstance().screen == null) {
+			if (TickrateChangerMod.tickrate > 0) {
+				save = TickrateChangerMod.index;
+				TickrateChangerMod.updateTickrate(0);
+				TickrateChangerMod.index = 0;
+			} else {
+				TickrateChangerMod.updateTickrate(TickrateChangerMod.ticks[save]);
+				TickrateChangerMod.index = save;
+			}
+		}
+
+		/* Tickrate Zero */
+		if (TickrateChangerMod.tickrate == 0 && KeybindsUtils.advanceTicksKeybind.consumeClick()) {
+			TickrateChangerMod.advanceTick();
+		}
+		/* Tickrate Changer */
+		boolean flag = false;
+		if (KeybindsUtils.increaseTickrateKeybind.consumeClick()) {
+			flag = true;
+			TickrateChangerMod.index++;
+		} else if (KeybindsUtils.decreaseTickrateKeybind.consumeClick()) {
+			flag = true;
+			TickrateChangerMod.index--;
+		}
+		if (flag) {
+			TickrateChangerMod.index = Mth.clamp(TickrateChangerMod.index, 0, 11);
+			TickrateChangerMod.updateTickrate(TickrateChangerMod.ticks[TickrateChangerMod.index]);
+		}
+	}
+
+	/**
+	 * Static method to register all Keybinds to the game. Note: Not using Fabric
+	 * API to avoid a crash using Mojang Mappings
+	 * 
+	 * @return
 	 */
 	public static KeyMapping[] registerKeybinds(KeyMapping[] keyMappings) {
-		Minecraft mc=Minecraft.getInstance();
-		List<KeyMapping> modded=new ArrayList<KeyMapping>(ImmutableList.of(saveStateKeybind,
+		Minecraft mc = Minecraft.getInstance();
+		List<KeyMapping> modded = new ArrayList<KeyMapping>(ImmutableList.of(
+				saveStateKeybind,
 				loadStateKeybind,
 				loadDupeKeybind,
 				saveDupeKeybind,
 				holdStrafeKeybind,
-				toggleFreecamKeybind,
 				increaseTickrateKeybind,
 				decreaseTickrateKeybind,
 				advanceTicksKeybind,
 				toggleAdvanceKeybind,
 				toggleTimerKeybind,
 				openInfoHud));
-		
+
 		addCategories(modded);
-		
+
 		List<KeyMapping> newKeyMappings = Lists.newArrayList(keyMappings);
 		newKeyMappings.removeAll(modded);
 		newKeyMappings.addAll(modded);
-		
+
 		return newKeyMappings.toArray(new KeyMapping[0]);
 	}
-	
+
 	private static void addCategories(List<KeyMapping> modded) {
-		modded.forEach(key->{
-			Map<String, Integer> map=AccessorKeyMapping.getCategorySorting();
-			String categoryName=key.getCategory();
+		modded.forEach(key -> {
+			Map<String, Integer> map = AccessorKeyMapping.getCategorySorting();
+			String categoryName = key.getCategory();
 			if (map.containsKey(categoryName)) {
 				return;
 			}

@@ -195,7 +195,12 @@ public class MixinMinecraft {
 //$$ 	@Inject(method = "runTick", at = @At(value = "INVOKE", target = "Lnet/minecraftforge/fml/common/FMLCommonHandler;fireKeyInput()V", remap = false))
 	//#endif
 	public void injectAtRunTickKebindings(CallbackInfo ci) {
-		EventUtils.onInput2();
+		/* Handle all keybinds */
+		try {
+			KeybindsUtils.tickKeyEvent(); // Trigger the KeybindsUtils method to handle most of the keybinds
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
 	}
 	
 	
