@@ -58,7 +58,7 @@ public class LoTASModContainer {
 
 	/** Minecraft Version */
 	public static String version = ForgeVersion.mcVersion;
-
+	
 	/**
 	 * Called by MinecraftForge whenever our Mod gets initialized
 	 * 

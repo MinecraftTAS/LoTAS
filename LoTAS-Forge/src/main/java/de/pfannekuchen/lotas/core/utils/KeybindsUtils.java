@@ -99,7 +99,7 @@ public class KeybindsUtils {
 		}
 
 		// Timer keybinds
-		if (isKeyDown(KeybindsUtils.toggleTimerKeybind) && de.pfannekuchen.lotas.taschallenges.ChallengeMap.currentMap == null) { // Start/Stop the timer if there are no tas challenges running
+		if (KeybindsUtils.toggleTimerKeybind.isPressed() && de.pfannekuchen.lotas.taschallenges.ChallengeMap.currentMap == null) { // Start/Stop the timer if there are no tas challenges running
 			if (Timer.ticks < 0 || Timer.startTime == null) { // Start the timer
 				Timer.startTime = Duration.ofMillis(System.currentTimeMillis());
 				Timer.ticks = 0;

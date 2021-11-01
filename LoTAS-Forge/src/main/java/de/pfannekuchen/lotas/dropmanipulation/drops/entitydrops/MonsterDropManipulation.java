@@ -19,6 +19,7 @@ import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.monster.EntityGuardian;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntitySlime;
+import net.minecraft.entity.monster.EntitySpider;
 import net.minecraft.entity.monster.EntityWitch;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -28,14 +29,14 @@ import net.minecraft.util.ResourceLocation;
 
 public class MonsterDropManipulation extends GuiDropChanceManipulation.DropManipulation {
 
-    public static ModifiedCheckBoxWidget optimizeCaveSpider = new ModifiedCheckBoxWidget(999, 0, 0, "Optimize Cave Spider Drops", false);
     public static ModifiedCheckBoxWidget optimizeCreeper = new ModifiedCheckBoxWidget(999, 0, 0, "Optimize Creeper Drops", false);
     public static ModifiedCheckBoxWidget optimizeElderGuardian = new ModifiedCheckBoxWidget(999, 0, 0, "Optimize Elder Guardian Drops", false);
     public static ModifiedCheckBoxWidget optimizeEnderman = new ModifiedCheckBoxWidget(999, 0, 0, "Optimize Enderman Drops", false);
     public static ModifiedCheckBoxWidget optimizeSlime = new ModifiedCheckBoxWidget(999, 0, 0, "Optimize Slime Drops", false);
     public static ModifiedCheckBoxWidget optimizeVindicator = new ModifiedCheckBoxWidget(999, 0, 0, "Optimize Vindicator Drops", false);
-    public static ModifiedCheckBoxWidget optimizeSkeleton = new ModifiedCheckBoxWidget(999, 0, 0, "Optimize Skeleton Drops", false);
     public static ModifiedCheckBoxWidget optimizeShulker = new ModifiedCheckBoxWidget(999, 0, 0, "Optimize Shulker Drops", false);
+    public static ModifiedCheckBoxWidget optimizeSkeleton = new ModifiedCheckBoxWidget(999, 0, 0, "Optimize Skeleton Drops", false);
+    public static ModifiedCheckBoxWidget optimizeSpider = new ModifiedCheckBoxWidget(999, 0, 0, "Optimize Spider Drops", false);
     public static ModifiedCheckBoxWidget optimizeGuardian = new ModifiedCheckBoxWidget(999, 0, 0, "Optimize Guardian Drops", false);
     public static ModifiedCheckBoxWidget optimizeWitch = new ModifiedCheckBoxWidget(999, 0, 0, "Optimize Witch Drops", false);
 
@@ -57,21 +58,21 @@ public class MonsterDropManipulation extends GuiDropChanceManipulation.DropManip
 
     @Override
     public List<ItemStack> redirectDrops(Entity entity) {
-        if (entity instanceof EntityCaveSpider && optimizeCaveSpider.isChecked())
+        if ((entity instanceof EntityCaveSpider || entity instanceof EntitySpider) && optimizeSpider.isChecked())
             return ImmutableList.of(new ItemStack(MCVer.getItem("SPIDER_EYE")), new ItemStack(MCVer.getItem("STRING"), 2));
         if (entity instanceof EntityCreeper && optimizeCreeper.isChecked())
             return ImmutableList.of(new ItemStack(MCVer.getItem("GUNPOWDER"), 2));
         if (entity instanceof EntityEnderman && optimizeEnderman.isChecked())
             return ImmutableList.of(new ItemStack(MCVer.getItem("ENDER_PEARL"), 1));
         if (entity instanceof EntitySkeleton && optimizeSkeleton.isChecked())
-            return ImmutableList.of(new ItemStack(MCVer.getItem("ARRROW"), 2), new ItemStack(MCVer.getItem("BONE"), 2));
+            return ImmutableList.of(new ItemStack(MCVer.getItem("ARROW"), 2), new ItemStack(MCVer.getItem("BONE"), 2));
         if (entity instanceof EntitySlime && optimizeSlime.isChecked())
             if (((EntitySlime) entity).getSlimeSize() == 1) return ImmutableList.of(new ItemStack(MCVer.getItem("SLIME_BALL"), 2));
         if (entity instanceof EntityGuardian && optimizeGuardian.isChecked())
             return ImmutableList.of(new ItemStack(MCVer.getItem("PRISMARINE_SHARD"), 2));
         if (entity instanceof EntityWitch && optimizeWitch.isChecked()) {
             if (!((EntityWitch) entity).isChild())
-            	return ImmutableList.of(new ItemStack(MCVer.getItem("GLOWSTONE_DUST")), new ItemStack(MCVer.getItem("STICK")), new ItemStack(MCVer.getItem("REDSTONE")), new ItemStack(MCVer.getItem("GUNPOWDER")), 
+            	return ImmutableList.of(new ItemStack(MCVer.getItem("GLOWSTONE_DUST")), new ItemStack(MCVer.getItem("REDSTONE")), new ItemStack(MCVer.getItem("GUNPOWDER")), 
             			// Witches don't drop potions in 1.8
             			//#if MC>=10900
             			((EntityWitch) entity).isDrinkingPotion() ? entity.getHeldEquipment().iterator().next() : new ItemStack(MCVer.getItem("GLASS_BOTTLE"))
@@ -96,24 +97,25 @@ public class MonsterDropManipulation extends GuiDropChanceManipulation.DropManip
     public void update() {
         updateX(enabled, x);
         updateY(enabled, y);
-        updateY(optimizeCaveSpider, 64);
-        updateY(optimizeEnderman, 80);
-        updateY(optimizeElderGuardian, 96);
-        updateY(optimizeCreeper, 112);
-        updateY(optimizeSlime, 144);
-        updateY(optimizeWitch, 128);
-        updateY(optimizeVindicator, 160);
-        updateY(optimizeSkeleton, 176);
-        updateY(optimizeShulker, 192);
-        updateY(optimizeGuardian, 208);
-        updateX(optimizeCaveSpider, x);
+        int y=64;
+        updateY(optimizeEnderman, y);
+        updateY(optimizeElderGuardian, y+=16);
+        updateY(optimizeCreeper, y+=16);
+        updateY(optimizeSlime, y+=16);
+        updateY(optimizeWitch, y+=16);
+        updateY(optimizeVindicator, y+=16);
+        updateY(optimizeShulker, y+=16);
+        updateY(optimizeSkeleton, y+=16);
+        updateY(optimizeSpider, y+=16);
+        updateY(optimizeGuardian, y+=16);
         updateX(optimizeEnderman, x);
         updateX(optimizeElderGuardian, x);
         updateX(optimizeCreeper, x);
         updateX(optimizeSlime, x);
         updateX(optimizeSkeleton, x);
-        updateX(optimizeVindicator, x);
         updateX(optimizeShulker, x);
+        updateX(optimizeSpider, x);
+        updateX(optimizeVindicator, x);
         updateX(optimizeGuardian, x);
         updateX(optimizeWitch, x);
     }
@@ -122,14 +124,14 @@ public class MonsterDropManipulation extends GuiDropChanceManipulation.DropManip
     public void mouseAction(int mouseX, int mouseY, int button) {
         enabled.mousePressed(Minecraft.getMinecraft(), mouseX, mouseY);
         if (enabled.isChecked()) {
-            optimizeCaveSpider.mousePressed(Minecraft.getMinecraft(), mouseX, mouseY);
             optimizeEnderman.mousePressed(Minecraft.getMinecraft(), mouseX, mouseY);
             optimizeCreeper.mousePressed(Minecraft.getMinecraft(), mouseX, mouseY);
             optimizeElderGuardian.mousePressed(Minecraft.getMinecraft(), mouseX, mouseY);
             optimizeSlime.mousePressed(Minecraft.getMinecraft(), mouseX, mouseY);
             optimizeVindicator.mousePressed(Minecraft.getMinecraft(), mouseX, mouseY);
-            optimizeSkeleton.mousePressed(Minecraft.getMinecraft(), mouseX, mouseY);
             optimizeShulker.mousePressed(Minecraft.getMinecraft(), mouseX, mouseY);
+            optimizeSkeleton.mousePressed(Minecraft.getMinecraft(), mouseX, mouseY);
+            optimizeSpider.mousePressed(Minecraft.getMinecraft(), mouseX, mouseY);
             optimizeGuardian.mousePressed(Minecraft.getMinecraft(), mouseX, mouseY);
             optimizeWitch.mousePressed(Minecraft.getMinecraft(), mouseX, mouseY);
         }
@@ -142,14 +144,14 @@ public class MonsterDropManipulation extends GuiDropChanceManipulation.DropManip
         if (!enabled.isChecked()) {
             GlStateManager.color(.5f, .5f, .5f, .4f);
         } else {
-            optimizeCaveSpider.drawButton(Minecraft.getMinecraft(), mouseX, mouseY, delta);
             optimizeEnderman.drawButton(Minecraft.getMinecraft(), mouseX, mouseY, delta);
             optimizeCreeper.drawButton(Minecraft.getMinecraft(), mouseX, mouseY, delta);
             optimizeElderGuardian.drawButton(Minecraft.getMinecraft(), mouseX, mouseY, delta);
             optimizeSlime.drawButton(Minecraft.getMinecraft(), mouseX, mouseY, delta);
             optimizeVindicator.drawButton(Minecraft.getMinecraft(), mouseX, mouseY, delta);
-            optimizeSkeleton.drawButton(Minecraft.getMinecraft(), mouseX, mouseY, delta);
             optimizeShulker.drawButton(Minecraft.getMinecraft(), mouseX, mouseY, delta);
+            optimizeSkeleton.drawButton(Minecraft.getMinecraft(), mouseX, mouseY, delta);
+            optimizeSpider.drawButton(Minecraft.getMinecraft(), mouseX, mouseY, delta);
             optimizeGuardian.drawButton(Minecraft.getMinecraft(), mouseX, mouseY, delta);
             optimizeWitch.drawButton(Minecraft.getMinecraft(), mouseX, mouseY, delta);
         }
