@@ -43,7 +43,6 @@ public class PassiveDropManipulation extends GuiDropChanceManipulation.DropManip
     public static ModifiedCheckBoxWidget optimizeIronGolem = new ModifiedCheckBoxWidget(999, 0, 0, "Optimize Iron Golem Drops", false);
     public static ModifiedCheckBoxWidget optimizePolarbear = new ModifiedCheckBoxWidget(999, 0, 0, "Optimize Polarbear Drops", false);
 
-
     public PassiveDropManipulation(int x, int y, int width, int height) {
     	PassiveDropManipulation.x = x;
     	PassiveDropManipulation.y = y;

@@ -130,6 +130,7 @@ public class KeybindsUtils {
 		if (TickrateChangerMod.tickrate == 0 && KeybindsUtils.advanceTicksKeybind.consumeClick()) {
 			TickrateChangerMod.advanceTick();
 		}
+		
 		/* Tickrate Changer */
 		boolean flag = false;
 		if (KeybindsUtils.increaseTickrateKeybind.consumeClick()) {

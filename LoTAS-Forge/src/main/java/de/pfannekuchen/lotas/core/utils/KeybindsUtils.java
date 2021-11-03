@@ -12,8 +12,11 @@ import de.pfannekuchen.lotas.core.utils.EventUtils.Timer;
 import de.pfannekuchen.lotas.mods.DupeMod;
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.GuiControls;
 import net.minecraft.client.gui.GuiIngameMenu;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.inventory.GuiEditSign;
 import net.minecraft.client.settings.KeyBinding;
 
 /**
@@ -60,6 +63,8 @@ public class KeybindsUtils {
 	public static boolean wasPressed = false;
 
 	private static HashMap<Integer, Long> cooldownHashMap = new HashMap<Integer, Long>();
+	
+	public static boolean focused;
 
 	/**
 	 * Handles a new KeyInputEvent and ticks through all keybinds.
@@ -113,7 +118,7 @@ public class KeybindsUtils {
 	 */
 	public static void frameKeyEvent() {
 
-		if (isKeyDown(toggleAdvanceKeybind) && TickrateChangerMod.advanceClient == false && Minecraft.getMinecraft().currentScreen == null) {
+		if (isKeyDown(toggleAdvanceKeybind) && TickrateChangerMod.advanceClient == false) {
 			if (TickrateChangerMod.tickrate > 0) {
 				save = TickrateChangerMod.index;
 				TickrateChangerMod.updateTickrate(0);
@@ -130,10 +135,10 @@ public class KeybindsUtils {
 
 		// Tickrate keybinds
 		boolean flag = false;
-		if (isKeyDown(KeybindsUtils.increaseTickrateKeybind)) {
+		if (isKeyDownExceptTextField(KeybindsUtils.increaseTickrateKeybind)) {
 			TickrateChangerMod.index++;
 			flag = true;
-		} else if (isKeyDown(KeybindsUtils.decreaseTickrateKeybind)) {
+		} else if (isKeyDownExceptTextField(KeybindsUtils.decreaseTickrateKeybind)) {
 			TickrateChangerMod.index--;
 			flag = true;
 		}
@@ -153,10 +158,21 @@ public class KeybindsUtils {
 		return isKeyDown(keybind.getKeyCode());
 	}
 
+	private static boolean isKeyDownExceptTextField(KeyBinding keybind) {
+		GuiScreen screen=Minecraft.getMinecraft().currentScreen;
+		
+		if(screen instanceof GuiChat || screen instanceof GuiEditSign || (focused && screen != null)) {
+			return false;
+		}
+		return isKeyDown(keybind);
+	}
+	
 	private static boolean isKeyDown(int keycode) {
 		boolean down = false;
 
-		if (Minecraft.getMinecraft().currentScreen instanceof GuiControls) {
+		GuiScreen screen=Minecraft.getMinecraft().currentScreen;
+		
+		if (screen instanceof GuiControls ) {
 			return false;
 		}
 
