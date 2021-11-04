@@ -58,33 +58,6 @@ public class EventUtils {
 		//#endif
 		return false;
 	}
-
-	/**
-	 * Event for LoTAS that renders the Keybinds onto the screen
-	 * @param e RenderGameOverlayEvent provided by MinecraftForge.
-	 */
-	@SubscribeEvent public void render(RenderGameOverlayEvent e) {
-		if (checkNonText(e)) return; // Check whether the event is not a text render event.
-		
-		/* Render the Keybind Overlay */
-		net.minecraft.client.gui.FontRenderer renderer = MCVer.getFontRenderer(Minecraft.getMinecraft());
-    	int height = new net.minecraft.client.gui.ScaledResolution(Minecraft.getMinecraft()).getScaledHeight();
-		String out1 = "";
-        GameSettings gs = Minecraft.getMinecraft().gameSettings;
-        /* Obtain every pressed key and add it to a string */
-		for (net.minecraft.client.settings.KeyBinding binds : gs.keyBindings) {
-			try {
-				if (binds.isKeyDown()) out1 += org.lwjgl.input.Keyboard.getKeyName(binds.getKeyCode()) + " ";
-			} catch (Exception e3) {
-				
-			}
-		}
-		// Add left and right-click to the string if pressed.
-		if (gs.keyBindAttack.isKeyDown()) out1 += "LC ";
-		if (gs.keyBindUseItem.isKeyDown()) out1 += "RC ";
-		// Render the Keybinds onto the screen
-        renderer.drawStringWithShadow(out1, 5, height - 11, 0xFFFFFF);
-	}
 	
 	/**
 	 * Render Event triggered by MinecraftForge that renders all 3D stuff for LoTAS
