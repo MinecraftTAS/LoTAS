@@ -8,6 +8,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.WorldServer;
 
 @Mixin(MinecraftServer.class)
 public abstract class MixinMinecraftServer {
@@ -32,6 +33,23 @@ public abstract class MixinMinecraftServer {
 		}
 		TickrateChangerMod.ticksPassedServer++;
 		TickrateChangerMod.resetAdvanceServer();
+	}
+	
+	@Redirect(method = "run", at = @At(value = "FIELD", target = "Lnet/minecraft/server/MinecraftServer;worlds:[Lnet/minecraft/world/WorldServer;"))
+	public WorldServer[] fixCrashDuringLoadstate(MinecraftServer server) {
+		if(server.worlds.length==0) {
+			System.out.println("Prevented a forge crash. You are welcome!");
+			return null;
+		}
+		return server.worlds;
+	}
+
+	@Redirect(method = "run", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/WorldServer;areAllPlayersAsleep(V)Z"))
+	public boolean fixCrashDuringLoadstate2(WorldServer world) {
+		if (world == null)
+			return false;
+		else
+			return world.areAllPlayersAsleep();
 	}
 	
 	@Shadow
