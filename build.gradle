@@ -1,0 +1,51 @@
+/* Add Plugins required for LoTAS */
+plugins {
+	// Add Fabric-Loom plugin for the fabric modloader
+	id 'fabric-loom' version '0.10-SNAPSHOT'
+}
+
+// Set Java version compatibility to 16
+sourceCompatibility = targetCompatibility = JavaVersion.VERSION_16
+
+// Update basic properties from gradle.properties
+archivesBaseName = project.archives_base_name
+version = project.mod_version
+group = project.maven_group
+
+/* Add Repositories required for LoTAS */
+repositories {
+	// Add the MGNetwork maven server.
+	maven { url 'https://maven.mgnet.work' }
+}
+
+/* Add Dependencies for LoTAS */
+dependencies {
+	// Add minecraft, mappings and fabric loader with versions from gradle.properties
+	minecraft "com.mojang:minecraft:${project.minecraft_version}"
+	mappings loom.officialMojangMappings()
+	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+}
+
+/* Add some preprocessing to the resources */
+processResources {
+	// Update the version string in the fabric.mod.json file
+	inputs.property "version", project.version
+
+	filesMatching("fabric.mod.json") {
+		expand "version": project.version
+	}
+}
+
+/* Select Java 16 for compiling */
+tasks.withType(JavaCompile).configureEach {
+	// Minecraft 1.17 (21w19a) upwards uses Java 16.
+	it.options.release = 16
+}
+
+/* Add some post processing to the final jar file */
+jar {
+	// Add the LICENSE to the final jar
+	from("LICENSE") {
+		rename { "${it}_${project.archivesBaseName}"}
+	}
+}

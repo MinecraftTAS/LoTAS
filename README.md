@@ -1,36 +1,13 @@
-﻿> [!IMPORTANT]  
-> # This project is no longer actively being developed!
->We are shifting our focus to [TASmod](https://github.com/MinecraftTAS/TASmod).  
->For more information and plans, read this announcement: [Future of Mineraft TAS tools](https://>gist.github.com/ScribbleTAS/43b18e8a92a111e92bf4bb0d9cf49e99)
-
 # LoTAS
-Used to create non-playback, Low optimization Tool-Assisted Speedruns (LoTAS).  
-You essentially play through your route in slow motion while using a recording program such as [OBS](https://obsproject.com) to capture yourself playing the game. Later you speed up the video footage and edit your attempts into a final video.
-then speed up the video footage.  
+### Low Optimization Tool Assisted Speedrun Mod
 
-LoTAS is a collection of tools commonly used for TASing, with a big focus on RNG manipulation.  
+LoTAS is a Mod used to create [Tool Assisted Speedruns](https://en.wikipedia.org/wiki/Tool-assisted_speedrun).
 
-## Tools
-- *Tickrate Changer*: Used for slowing down the game speed
-- *Savestates*: Used for creating backups of your world, basically quick save/quick load
-- *Drop Manipulation*: Manipulates mob drops to always drop the best items
-- *Dragon Manipulation*: Manipulates the dragon phases
-- *Item Duplication (Dupemod)*: Replicates the duping bug from vanilla, without the need to close the game.
-- *Spawn Manipulation*: Spawn entities at a certain location.
-- *AI Manipulation*: Let entities pathfind to a certain place  
-
-*and more...*
 ## Bugs / Feature Requests
 We won't accept any feature-requests at this time, as well as bug reports.
 
 If you need help with setting up LoTAS then join this [Discord](https://discord.gg/minecraft-tas-373166430478401555)
 
-## Translations
-Credits:  
-Simplified Chinese: [RayXu6](https://github.com/Naruyoko), Proofreading by normalzombie  
-Japanese: [Naruyoko](https://github.com/Naruyoko)  
-Korean: Sidite  
-French: azulamazigh  
 
 # FAQ
 ## How do I start?
