@@ -1,5 +1,0 @@
-accessWidener	v1	named
-accessible    field    net/minecraft/client/Minecraft    window    Lcom/mojang/blaze3d/platform/Window;
-accessible    field    net/minecraft/world/entity/Entity    x    D
-accessible    field    net/minecraft/world/entity/Entity    y    D
-accessible    field    net/minecraft/world/entity/Entity    z    D

@@ -1,17 +1,13 @@
-.gradle
-.metadata
-.settings
-.classpath
-.project
-build
-bin
-run
-Private.java
+# Exclude build folders
+bin/
+build/
 
-.idea/
-out/
-
-eclipse/
-
-LoTAS-Forge/versions/*/*.launch
+# Exclude more stuff
+run/
 *.launch
+
+# Exclude project files
+.classpath
+.settings
+.gradle
+.project

@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "de.pfannkuchen.lotas.mixin",
+  "compatibilityLevel": "JAVA_16",
+  "mixins": [
+  ],
+  "client": [
+  	"client.MixinMinecraftHook"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
