@@ -1,9 +1,0 @@
-import groovy.json.JsonOutput
-
-version = "2.1.3"
-group = "de.pfannekuchen.lotas"
-
-apply from: 'versions2/preprocessor.gradle'
-apply from: 'version.gradle'
-
-defaultTasks 'build'
