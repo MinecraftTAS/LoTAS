@@ -18,9 +18,14 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class DrownedDropManipulation extends DropManipulationScreen.DropManipulation {
 
-	public static ImageButton dropGold = new ImageButton(x, y, c -> {
-		DrownedDropManipulation.dropGold.setToggled(!DrownedDropManipulation.dropGold.isToggled());
-	}, new ResourceLocation("lotas", "drops/gold.png"));
+	public static ImageButton drops = new ImageButton(x, y, c -> {
+		DrownedDropManipulation.drops.setToggled(!DrownedDropManipulation.drops.isToggled());
+	}, 
+	//#if MC>=11700
+//$$ 	new ResourceLocation("lotas", "drops/copper.png"));
+	//#else
+	new ResourceLocation("lotas", "drops/gold.png"));
+	//#endif
 
 	public DrownedDropManipulation(int x, int y, int width, int height) {
 		DrownedDropManipulation.x = x;
@@ -46,8 +51,12 @@ public class DrownedDropManipulation extends DropManipulationScreen.DropManipula
 		if (entity instanceof Drowned) {
 			list.add(new ItemStack(Items.ROTTEN_FLESH, 2));
 
-			if (dropGold.isToggled())
+			if (drops.isToggled())
+				//#if MC>=11700
+//$$ 				list.add(new ItemStack(Items.COPPER_INGOT));
+				//#else
 				list.add(new ItemStack(Items.GOLD_INGOT));
+				//#endif
 		}
 		return list;
 	}
@@ -56,15 +65,15 @@ public class DrownedDropManipulation extends DropManipulationScreen.DropManipula
 	public void update() {
 		enabled.x = x;
 		enabled.y = y;
-		dropGold.x = x;
-		dropGold.y = y + 96;
+		drops.x = x;
+		drops.y = y + 96;
 	}
 
 	@Override
 	public void mouseAction(double mouseX, double mouseY, int button) {
 		enabled.mouseClicked(mouseX, mouseY, button);
 		if (enabled.selected()) {
-			dropGold.mouseClicked(mouseX, mouseY, button);
+			drops.mouseClicked(mouseX, mouseY, button);
 		}
 	}
 
@@ -75,8 +84,12 @@ public class DrownedDropManipulation extends DropManipulationScreen.DropManipula
 		if (!enabled.selected()) {
 			MCVer.color4f(.5f, .5f, .5f, .4f);
 		} else {
-			MCVer.drawShadow("Drowned drop: 2 Rotten Flesh" + (dropGold.isToggled() ? ", 1 Gold Ingot" : ""), x, y + 64, 0xFFFFFF);
-			MCVer.render(dropGold, mouseX, mouseY, delta);
+			//#if MC>=11700
+//$$ 			MCVer.drawShadow("Drowned drop: 2 Rotten Flesh" + (drops.isToggled() ? ", 1 Copper Ingot" : ""), x, y + 64, 0xFFFFFF);
+			//#else
+			MCVer.drawShadow("Drowned drop: 2 Rotten Flesh" + (drops.isToggled() ? ", 1 Gold Ingot" : ""), x, y + 64, 0xFFFFFF);
+			//#endif
+			MCVer.render(drops, mouseX, mouseY, delta);
 		}
 
 		MCVer.bind(Minecraft.getInstance().getTextureManager(),new ResourceLocation("lotas", "drops/drowned.png"));
