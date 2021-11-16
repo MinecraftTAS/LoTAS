@@ -1,8 +1,11 @@
 package de.pfannkuchen.lotas.gui.api;
 
+import org.lwjgl.opengl.GL11;
+
 import com.mojang.blaze3d.vertex.PoseStack;
 
-import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.network.chat.TextComponent;
 
 /*
  * WARNING: EXAMPLE CODE
@@ -14,26 +17,30 @@ import net.minecraft.client.gui.screens.Screen;
  */
 public class MainLoScreen extends LoScreen {
 
+	int width;
+	int height;
+	
 	@Override
 	public void update(double width, double height) {
-		// TODO Auto-generated method stub
-		
+		this.width = (int) width;
+		this.height = (int) height;
 	}
 
 	@Override
-	public void render(double curX, double curY) {
-		Screen.drawString(new PoseStack(), mc.font, "Hell yeah this kinda works now!", (int) curX / 4, (int) curY / 4, 0xFFFFFF);
+	public void render(PoseStack stack, double curX, double curY) {
+		GL11.glEnable(GL11.GL_BLEND);
+     	GL11.glBlendFunc(770, 771);
+		GuiComponent.drawString(stack, mc.font, new TextComponent("Test"), (width) - 80, 0, 0x1c1a1e);
+		GuiComponent.fill(stack, width - (width / 4), 0, width / 4, height, 0xFF1c1a1e);
 	}
 
 	@Override
 	public void drag(double prevCurX, double prevCurY, double curX, double curY) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void click(double curX, double curY, int button) {
-		// TODO Auto-generated method stub
 		
 	}
 	

@@ -7,7 +7,7 @@
   ],
   "client": [
   	"client.MixinMinecraftHook",
-  	"client.MixinGameRendererHook"
+  	"client.MixinGuiHook"
   ],
   "injectors": {
     "defaultRequire": 1
