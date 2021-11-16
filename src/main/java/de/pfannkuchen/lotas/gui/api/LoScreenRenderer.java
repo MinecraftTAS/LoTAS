@@ -3,6 +3,7 @@ package de.pfannkuchen.lotas.gui.api;
 import org.jetbrains.annotations.Nullable;
 
 import com.mojang.blaze3d.platform.Window;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -77,10 +78,11 @@ public class LoScreenRenderer {
 	
 	/**
 	 * Renders the next LoScreen
+	 * @param stack Pose Stack for rendering
 	 * @param mc Instance of Minecraft
 	 */
-	public void onGuiRender(Minecraft mc) {
-		if (this.screen != null) this.screen.render(lastPosX, lastPosY);
+	public void onGuiRender(PoseStack stack, Minecraft mc) {
+		if (this.screen != null) this.screen.render(stack, lastPosX, lastPosY);
 	}
 
 	/**
@@ -89,8 +91,9 @@ public class LoScreenRenderer {
 	 */
 	public void onDisplayResize(Minecraft mc) {
 		final Window w = mc.getWindow();
-		this.lastWidth = w.getWidth();
-		this.lastHeight = w.getHeight();
+		// TODO: What fucking size goes here???
+		this.lastWidth = w.getGuiScaledWidth();
+		this.lastHeight = w.getGuiScaledHeight();
 		if (this.screen != null) this.screen.update(this.lastWidth, this.lastHeight);
 	}
 	

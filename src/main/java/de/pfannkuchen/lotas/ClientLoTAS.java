@@ -1,5 +1,7 @@
 package de.pfannkuchen.lotas;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+
 import de.pfannkuchen.lotas.gui.api.LoScreenRenderer;
 import de.pfannkuchen.lotas.gui.api.MainLoScreen;
 import net.fabricmc.api.ClientModInitializer;
@@ -30,11 +32,10 @@ public class ClientLoTAS implements ClientModInitializer {
 	 * @param mc Instance of Minecraft
 	 */
 	public void onRenderInitialize(Minecraft mc) {
-		// Initialize LoScreen
-		loscreenrenderer.onGameInitialize(mc);
-		// EXAMPLE CODE!!
-		loscreenrenderer.setScreen(new MainLoScreen());
-		// END
+		// Initialize LoScreens
+		ClientLoTAS.loscreenrenderer.onGameInitialize(mc);
+		// WARNING: EXAMPLE CODE
+		ClientLoTAS.loscreenrenderer.setScreen(new MainLoScreen());
 	}
 	
 	/**
@@ -50,7 +51,7 @@ public class ClientLoTAS implements ClientModInitializer {
 	 * @param mc Instance of Minecraft
 	 */
 	public void onTick(Minecraft mc) {
-		
+
 	}
 	
 	/**
@@ -58,17 +59,18 @@ public class ClientLoTAS implements ClientModInitializer {
 	 * @param mc Instance of Minecraft
 	 */
 	public void onGameLoop(Minecraft mc) {
-		// Update LoScreen
-		loscreenrenderer.onGameLoop(mc);
+		// Update LoScreens
+		ClientLoTAS.loscreenrenderer.onGameLoop(mc);
 	}
 
 	/**
 	 * Executed after the gui screens are rendered. Only executed while in a world
+	 * @param stack Pose Stack for rendering
 	 * @param mc Instance of Minecraft
 	 */
-	public void onRenderScreen(Minecraft mc) {
+	public void onRenderScreen(PoseStack stack, Minecraft mc) {
 		// Render LoScreen
-		loscreenrenderer.onGuiRender(mc);
+		loscreenrenderer.onGuiRender(stack, mc);
 	}
 	
 	/**
