@@ -53,11 +53,8 @@ public class MixinRenderEvent {
 			RenderUtils.applyRenderOffset(poseStack);
 			
 			Vec3 targetPos=SpawnManipMod.getTargetPos();
-			double renderX = ((int)targetPos.x);
-			double renderY = ((int)targetPos.y);
-			double renderZ = ((int)targetPos.z);
 
-			MCVer.translated(poseStack, renderX, renderY, renderZ);
+			MCVer.translated(poseStack, targetPos.x, targetPos.y, targetPos.z);
 			MCVer.scaled(poseStack, 1, 2, 1);
 			RenderUtils.drawOutlinedBox(poseStack);
 //			RenderUtils.drawCrossBox();
@@ -119,27 +116,9 @@ public class MixinRenderEvent {
 			RenderUtils.applyRenderOffset(poseStack);
 
 			
-			int offsetX=0;
-			int offsetZ=0;
-			
-			//#if MC>=11601
-			//#if MC<=11601
-//$$ 			offsetX=1;
-//$$ 			offsetZ=1;
-			//#endif
-			//#endif
-			//#if MC>=11605
-			//#if MC<=11605
-//$$ 			offsetZ=1;
-			//#endif
-			//#endif
-			
 			Vec3 targetPos=AIManipMod.getTargetPos();
-			renderX = (int)targetPos.x-offsetX;
-			renderY = (int)targetPos.y;
-			renderZ = (int)targetPos.z-offsetZ;
 
-			MCVer.translated(poseStack, renderX, renderY, renderZ);
+			MCVer.translated(poseStack, targetPos.x, targetPos.y, targetPos.z);
 			
 			RenderUtils.drawOutlinedBox(poseStack);
 //			RenderUtils.drawCrossBox();
