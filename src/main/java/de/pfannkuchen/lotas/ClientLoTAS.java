@@ -2,8 +2,8 @@ package de.pfannkuchen.lotas;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 
+import de.pfannkuchen.lotas.gui.MainLoScreen;
 import de.pfannkuchen.lotas.gui.api.LoScreenRenderer;
-import de.pfannkuchen.lotas.gui.api.MainLoScreen;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
