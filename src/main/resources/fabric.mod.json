@@ -1,35 +1,35 @@
 {
-  "schemaVersion": 1,
-  "id": "lotas",
-  "version": "${version}",
-  "name": "LoTAS",
-  "description": "Low Optimization Tool Assisted Speedrun Mod! A mod that allows players to create tool assisted speedruns/superplays in Minecraft.",
-  "authors": [
-    "MCPfannkuchenYT (Pancake)",
-    "ScribbleLP"
-  ],
-  "contact": {
-    "homepage": "https://lotas.mgnet.work/",
-    "sources": "https://github.com/MCPfannkuchenYT/LoTAS"
-  },
+	"schemaVersion": 1,
+	"id": "lotas",
+	"version": "${version}",
+	"name": "LoTAS",
+	"description": "Low Optimization Tool Assisted Speedrun Mod! A mod that allows players to create tool assisted speedruns/superplays in Minecraft.",
+	"authors": [
+		"MCPfannkuchenYT (Pancake)",
+		"ScribbleLP"
+	],
+	"contact": {
+		"homepage": "https://lotas.mgnet.work/",
+		"sources": "https://github.com/MCPfannkuchenYT/LoTAS"
+	},
 
-  "license": "GPLv3",
-  "icon": "assets/modid/potion.png",
-  "environment": "*",
-  "entrypoints": {
-    "main": [
-      "de.pfannkuchen.lotas.LoTAS"
-    ],
-    "client": [
-      "de.pfannkuchen.lotas.ClientLoTAS"
-    ]
-  },
-  "mixins": [
-    "lotas.mixin.json"
-  ],
-  "depends": {
-    "fabricloader": ">=0.11.3",
-    "minecraft": "1.17.x",
-    "java": ">=16"
-  }
+	"license": "GPLv3",
+	"icon": "assets/modid/potion.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"de.pfannkuchen.lotas.LoTAS"
+		],
+		"client": [
+			"de.pfannkuchen.lotas.ClientLoTAS"
+		]
+	},
+	"mixins": [
+		"lotas.mixin.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.11.3",
+		"minecraft": "1.17.x",
+		"java": ">=16"
+	}
 }

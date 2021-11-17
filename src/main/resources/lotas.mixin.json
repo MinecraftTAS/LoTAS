@@ -1,16 +1,17 @@
 {
-  "required": true,
-  "minVersion": "0.8",
-  "package": "de.pfannkuchen.lotas.mixin",
-  "compatibilityLevel": "JAVA_16",
-  "mixins": [
-  ],
-  "client": [
-  	"client.MixinMinecraftHook",
-  	"client.MixinGuiHook",
-  	"client.MixinOptionsHook"
-  ],
-  "injectors": {
-    "defaultRequire": 1
-  }
+	"required": true,
+	"minVersion": "0.8",
+	"package": "de.pfannkuchen.lotas.mixin",
+	"compatibilityLevel": "JAVA_16",
+	"mixins": [
+	],
+	"client": [
+		"client.MixinGuiHook",
+		"client.MixinKeyMappingsAccessor",
+		"client.MixinMinecraftHook",
+		"client.MixinOptionsHook"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
 }
