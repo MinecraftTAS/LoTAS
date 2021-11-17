@@ -40,7 +40,7 @@ public class LoScreenRenderer {
 		if (screen != null) {
 			screen.mc = this.mc;
 			screen.init();
-			screen.update(lastWidth, lastHeight);
+			screen.update(this.lastWidth, this.lastHeight);
 		}
 	}
 	
@@ -50,8 +50,8 @@ public class LoScreenRenderer {
 	 */
 	public void onGameLoop(Minecraft mc) {
 		// Update Inputs
-		final double posX = this.mc.mouseHandler.xpos() * (double) this.mc.getWindow().getGuiScaledWidth() / (double) this.mc.getWindow().getScreenWidth();
-		final double posY = this.mc.mouseHandler.ypos() * (double) this.mc.getWindow().getGuiScaledHeight() / (double) this.mc.getWindow().getScreenHeight();
+		final double posX = mc.mouseHandler.xpos() * (double) mc.getWindow().getGuiScaledWidth() / (double) mc.getWindow().getScreenWidth();
+		final double posY = mc.mouseHandler.ypos() * (double) mc.getWindow().getGuiScaledHeight() / (double) mc.getWindow().getScreenHeight();
 		final boolean isLeftPressed = mc.mouseHandler.isLeftPressed();
 		final boolean isMiddlePressed = mc.mouseHandler.isMiddlePressed();
 		final boolean isRightPressed = mc.mouseHandler.isRightPressed();

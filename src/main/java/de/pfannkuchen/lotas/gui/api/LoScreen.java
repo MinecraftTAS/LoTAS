@@ -19,18 +19,18 @@ public abstract class LoScreen {
 	/**
 	 * Accessable Minecraft Instance.
 	 */
-	public Minecraft mc;
+	protected Minecraft mc;
 	
 	/**
 	 * List of Widgets managed by the LoScreen itself.
 	 */
-	public List<LoScreen> widgets = new LinkedList<>();
+	private List<LoScreen> widgets = new LinkedList<>();
 	
 	/**
 	 * Adds a Widget and updates its minecraft variable
 	 * @param widget Widget to add
 	 */
-	public final void addWidget(LoScreen widget) {
+	protected final void addWidget(LoScreen widget) {
 		this.widgets.add(widget);
 		widget.mc = this.mc;
 		widget.init();
@@ -39,14 +39,14 @@ public abstract class LoScreen {
 	/**
 	 * Initializes the Gui and it's widgets.
 	 */
-	public abstract void init();
+	protected abstract void init();
 	
 	/**
 	 * Updates the Gui and it's widgets.
 	 * @param width Scaled Width of the Minecraft screen
 	 * @param height Scaled Height of the Minecraft screen
 	 */
-	public void update(double width, double height) {
+	protected void update(double width, double height) {
 		widgets.forEach(w -> w.update(width, height));
 	}
 	
@@ -56,7 +56,7 @@ public abstract class LoScreen {
 	 * @param curX Current cursor x position
 	 * @param curY Current cursor y position
 	 */
-	public void render(PoseStack stack, double curX, double curY) {
+	protected void render(PoseStack stack, double curX, double curY) {
 		widgets.forEach(w -> w.render(stack, curX, curY));
 	}
 	
@@ -67,7 +67,7 @@ public abstract class LoScreen {
 	 * @param curX Current cursor x position
 	 * @param curY Current cursor y position
 	 */
-	public void drag(double prevCurX, double prevCurY, double curX, double curY) {
+	protected void drag(double prevCurX, double prevCurY, double curX, double curY) {
 		widgets.forEach(w -> w.drag(prevCurX, prevCurY, curX, curY));
 	}
 	
@@ -77,7 +77,7 @@ public abstract class LoScreen {
 	 * @param curY Current cursor y position
 	 * @param button Button clicked with
 	 */
-	public void click(double curX, double curY, int button) {
+	protected void click(double curX, double curY, int button) {
 		widgets.forEach(w -> w.click(curX, curY, button));
 	}
 	
