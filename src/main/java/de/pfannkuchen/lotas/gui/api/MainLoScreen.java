@@ -1,11 +1,8 @@
 package de.pfannkuchen.lotas.gui.api;
 
-import org.lwjgl.opengl.GL11;
-
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import net.minecraft.client.gui.GuiComponent;
-import net.minecraft.network.chat.TextComponent;
 
 /*
  * WARNING: EXAMPLE CODE
@@ -28,10 +25,8 @@ public class MainLoScreen extends LoScreen {
 
 	@Override
 	public void render(PoseStack stack, double curX, double curY) {
-		GL11.glEnable(GL11.GL_BLEND);
-     	GL11.glBlendFunc(770, 771);
-		GuiComponent.drawString(stack, mc.font, new TextComponent("Test"), (width) - 80, 0, 0x1c1a1e);
-		GuiComponent.fill(stack, width - (width / 4), 0, width / 4, height, 0xFF1c1a1e);
+		final int rightWidgetWidth = width / 4;
+		GuiComponent.fill(stack, width - rightWidgetWidth, 0, width, height, 0xFF1c1a1e);
 	}
 
 	@Override
