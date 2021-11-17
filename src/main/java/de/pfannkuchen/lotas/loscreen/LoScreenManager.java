@@ -1,4 +1,4 @@
-package de.pfannkuchen.lotas.gui.api;
+package de.pfannkuchen.lotas.loscreen;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -14,7 +14,7 @@ import net.minecraft.client.Minecraft;
  * @author Pancake
  */
 @Environment(EnvType.CLIENT)
-public class LoScreenRenderer {
+public class LoScreenManager {
 	
 	// Currently drawn LoScreen
 	private LoScreen screen;

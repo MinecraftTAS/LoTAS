@@ -2,18 +2,17 @@ package de.pfannkuchen.lotas.gui.widgets;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 
-import de.pfannkuchen.lotas.gui.api.LoScreen;
+import de.pfannkuchen.lotas.loscreen.LoScreen;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.network.chat.TextComponent;
 
-/*
- * WARNING: EXAMPLE CODE
- */
-
 /**
- * This is the Main LoWidget that shows a list of items on the right. Currently it is only an example though.
+ * This is the Main LoWidget that shows a list of items on the right.
  * @author Pancake
  */
+@Environment(EnvType.CLIENT)
 public class MainLoWidget extends LoScreen {
 
 	// Width of the right panel

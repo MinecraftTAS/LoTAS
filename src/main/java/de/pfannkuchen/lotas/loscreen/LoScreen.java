@@ -1,4 +1,4 @@
-package de.pfannkuchen.lotas.gui.api;
+package de.pfannkuchen.lotas.loscreen;
 
 import java.util.LinkedList;
 import java.util.List;
