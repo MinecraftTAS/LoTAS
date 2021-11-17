@@ -49,19 +49,26 @@ public class LoScreenRenderer {
 	 * @param mc Instance of Minecraft
 	 */
 	public void onGameLoop(Minecraft mc) {
+		// Update Screen size
+		final Window w = mc.getWindow();
+		final double width = (double) w.getGuiScaledWidth() + 2;
+		final double height = (double) w.getGuiScaledHeight() + 2;
 		// Update Inputs
-		final double posX = mc.mouseHandler.xpos() * (double) mc.getWindow().getGuiScaledWidth() / (double) mc.getWindow().getScreenWidth();
-		final double posY = mc.mouseHandler.ypos() * (double) mc.getWindow().getGuiScaledHeight() / (double) mc.getWindow().getScreenHeight();
+		final double posX = mc.mouseHandler.xpos() * width / (double) mc.getWindow().getScreenWidth();
+		final double posY = mc.mouseHandler.ypos() * height / (double) mc.getWindow().getScreenHeight();
 		final boolean isLeftPressed = mc.mouseHandler.isLeftPressed();
 		final boolean isMiddlePressed = mc.mouseHandler.isMiddlePressed();
 		final boolean isRightPressed = mc.mouseHandler.isRightPressed();
 		// Check whether clicks/moves have passed.
 		if (screen != null) {
+			if (width != lastWidth || height != lastHeight) this.screen.update(width, height);
 			if (!isLeftPressed && this.wasLeftPressed) this.screen.click(posX, posY, 0);
 			if (!isMiddlePressed && this.wasMiddlePressed) this.screen.click(posX, posY, 2);
 			if (!isRightPressed && this.wasRightPressed) this.screen.click(posX, posY, 1);
 			if (isLeftPressed || isRightPressed || isMiddlePressed) this.screen.drag(this.lastPosX, this.lastPosY, posX, posY);
 		}
+		this.lastWidth = width;
+		this.lastHeight = height;
 		this.wasLeftPressed = isLeftPressed;
 		this.wasMiddlePressed = isMiddlePressed;
 		this.wasRightPressed = isRightPressed;
@@ -84,17 +91,6 @@ public class LoScreenRenderer {
 	 */
 	public void onGuiRender(PoseStack stack, Minecraft mc) {
 		if (this.screen != null) this.screen.render(stack, lastPosX, lastPosY);
-	}
-
-	/**
-	 * Resizes the LoScreen.
-	 * @param mc Instance of Minecraft
-	 */
-	public void onDisplayResize(Minecraft mc) {
-		final Window w = mc.getWindow();
-		this.lastWidth = (double) w.getGuiScaledWidth() + 2;
-		this.lastHeight = (double) w.getGuiScaledHeight() + 2;
-		if (this.screen != null) this.screen.update(this.lastWidth, this.lastHeight);
 	}
 	
 }
