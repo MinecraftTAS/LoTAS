@@ -3,9 +3,11 @@ package de.pfannkuchen.lotas;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import de.pfannkuchen.lotas.loscreen.LoScreenManager;
+import de.pfannkuchen.lotas.mods.KeybindManager;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 
 /**
@@ -19,11 +21,14 @@ public class ClientLoTAS implements ClientModInitializer {
 	public static ClientLoTAS instance;
 	// LoScreen Manager Singleton
 	public static LoScreenManager loscreenmanager;
+	// Keybind Manager Singleton
+	public static KeybindManager keybindmanager;
 	
 	@Override
 	public void onInitializeClient() {
 		ClientLoTAS.instance = this;
 		ClientLoTAS.loscreenmanager = new LoScreenManager();
+		ClientLoTAS.keybindmanager = new KeybindManager();
 	}
 
 	/**
@@ -68,6 +73,15 @@ public class ClientLoTAS implements ClientModInitializer {
 	public void onRenderScreen(PoseStack stack, Minecraft mc) {
 		// Render LoScreen
 		loscreenmanager.onGuiRender(stack, mc);
+	}
+	
+	/**
+	 * Executed after the options are being initialized.
+	 * @param keyMappings Standard Key Mappings
+	 * @return Modified Key Mappings
+	 */
+	public KeyMapping[] onKeybindInitialize(KeyMapping[] keyMappings) {
+		return keybindmanager.onKeybindInitialize(keyMappings);
 	}
 	
 }
