@@ -12,7 +12,7 @@ import net.minecraft.client.KeyMapping;
 
 /**
  * This mixin accessor makes the categories array for {@link KeybindManager} accessible.
- * @author Pancake
+ * @author Scribble
  */
 @Mixin(KeyMapping.class)
 @Environment(EnvType.CLIENT)

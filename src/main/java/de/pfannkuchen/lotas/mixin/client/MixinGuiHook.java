@@ -17,7 +17,7 @@ import net.minecraft.client.gui.Gui;
 
 /**
  * This mixin hooks up the screen render event to {@link ClientLoTAS}.
- * @author Pancake
+ * @author Scribble
  */
 @Mixin(Gui.class)
 @Environment(EnvType.CLIENT)
