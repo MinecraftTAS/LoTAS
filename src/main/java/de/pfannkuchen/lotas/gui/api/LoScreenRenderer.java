@@ -39,6 +39,7 @@ public class LoScreenRenderer {
 		this.screen = screen;
 		if (screen != null) {
 			screen.mc = this.mc;
+			screen.init();
 			screen.update(lastWidth, lastHeight);
 		}
 	}
