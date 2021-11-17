@@ -10,6 +10,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import de.pfannkuchen.lotas.ClientLoTAS;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 
@@ -18,6 +20,7 @@ import net.minecraft.client.gui.Gui;
  * @author Pancake
  */
 @Mixin(Gui.class)
+@Environment(EnvType.CLIENT)
 public class MixinGuiHook {
 
 	// Shadow Field seen in Gui.class
