@@ -1,4 +1,4 @@
-﻿# LoTAS
+# LoTAS
 ### Low Optimization Tool Assisted Speedrun Mod
 
 LoTAS is a Mod used to create [Tool Assisted Speedruns](https://en.wikipedia.org/wiki/Tool-assisted_speedrun).
