@@ -5,6 +5,8 @@ import java.util.Map;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
+import com.mojang.blaze3d.platform.InputConstants.Key;
+
 import de.pfannkuchen.lotas.mods.KeybindManager;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -26,5 +28,12 @@ public interface MixinKeyMappingsAccessor {
 	public static Map<String, Integer> getCategorySorting() {
 		throw new AssertionError();
 	}
+	
+	/**
+	 * This Accessor opens the private field containing the Key for the Key Mapping
+	 * @return
+	 */
+	@Accessor
+	public Key getKey();
 	
 }

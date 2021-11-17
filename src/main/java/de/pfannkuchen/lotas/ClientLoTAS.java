@@ -2,6 +2,8 @@ package de.pfannkuchen.lotas;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 
+import de.pfannkuchen.lotas.gui.EmptyScreen;
+import de.pfannkuchen.lotas.gui.MainLoScreen;
 import de.pfannkuchen.lotas.loscreen.LoScreenManager;
 import de.pfannkuchen.lotas.mods.KeybindManager;
 import net.fabricmc.api.ClientModInitializer;
@@ -28,7 +30,7 @@ public class ClientLoTAS implements ClientModInitializer {
 	public void onInitializeClient() {
 		ClientLoTAS.instance = this;
 		ClientLoTAS.loscreenmanager = new LoScreenManager();
-		ClientLoTAS.keybindmanager = new KeybindManager();
+		ClientLoTAS.keybindmanager = new KeybindManager(); // Also initializes this
 	}
 
 	/**
@@ -63,6 +65,8 @@ public class ClientLoTAS implements ClientModInitializer {
 	public void onGameLoop(Minecraft mc) {
 		// Update LoScreens
 		ClientLoTAS.loscreenmanager.onGameLoop(mc);
+		// Update Keybindings
+		ClientLoTAS.keybindmanager.onGameLoop(mc);
 	}
 
 	/**
@@ -82,6 +86,22 @@ public class ClientLoTAS implements ClientModInitializer {
 	 */
 	public KeyMapping[] onKeybindInitialize(KeyMapping[] keyMappings) {
 		return keybindmanager.onKeybindInitialize(keyMappings);
+	}
+
+	/**
+	 * Toggles on or off the LoTAS Menu and opens a Gui Screen in case there isn't one to regain the cursor.
+	 * @param mc Instance of Minecraft
+	 */
+	public void toggleLoTASMenu(Minecraft mc) {
+		if (mc.level == null) return;
+		if (loscreenmanager.isScreenOpened()) {
+			loscreenmanager.setScreen(null);
+			// remove the temporary mc screen
+			if (mc.screen instanceof EmptyScreen) mc.setScreen(null);
+		} else {
+			loscreenmanager.setScreen(new MainLoScreen());
+			if (mc.screen == null) mc.setScreen(new EmptyScreen());
+		}
 	}
 	
 }

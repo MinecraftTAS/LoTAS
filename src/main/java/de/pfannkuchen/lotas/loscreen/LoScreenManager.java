@@ -32,6 +32,14 @@ public class LoScreenManager {
 	private double lastPosY;
 	
 	/**
+	 * Returns whether a screen is opened.
+	 * @return Is screen opened?
+	 */
+	public boolean isScreenOpened() {
+		return screen != null;
+	}
+	
+	/**
 	 * Updates the current LoScreen and adds the Minecraft Instance. Can be null.
 	 * @param screen Update LoScreen
 	 */
