@@ -72,6 +72,7 @@ public class ClientLoTAS implements ClientModInitializer {
 	/**
 	 * Executed after the gui screens are rendered. Only executed while in a world
 	 * @param stack Pose Stack for rendering
+	 * @param delta Render Partial Ticks
 	 * @param mc Instance of Minecraft
 	 */
 	public void onRenderScreen(PoseStack stack, Minecraft mc) {
