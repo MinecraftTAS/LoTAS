@@ -54,13 +54,4 @@ public class MixinMinecraftHook {
 		ClientLoTAS.instance.onGameLoop((Minecraft) (Object) this);
 	}
 	
-	/**
-	 * Triggers an Event in {@link ClientLoTAS#onDisplayResize(Minecraft)} every time the display was resized.
-	 * @param ci Callback Info
-	 */
-	@Inject(method = "resizeDisplay", at = @At("HEAD"))
-	public void hookResizeDisplayEvent(CallbackInfo ci) {
-		ClientLoTAS.instance.onDisplayResize((Minecraft) (Object) this);
-	}
-	
 }

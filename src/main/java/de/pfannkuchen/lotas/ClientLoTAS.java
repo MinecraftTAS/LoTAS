@@ -73,13 +73,4 @@ public class ClientLoTAS implements ClientModInitializer {
 		loscreenrenderer.onGuiRender(stack, mc);
 	}
 	
-	/**
-	 * Executed after the gui screens are rendered. Only executed while in a world
-	 * @param mc Instance of Minecraft
-	 */
-	public void onDisplayResize(Minecraft mc) {
-		// Resize LoScreen
-		loscreenrenderer.onDisplayResize(mc);
-	}
-	
 }
