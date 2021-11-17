@@ -20,7 +20,7 @@ public class KeybindManager {
 	/**
 	 * Keybinding for opening and closing the LoTAS Menu LoScreen.
 	 */
-	private KeyMapping openLoTASMenuKeybind = new KeyMapping("Open LoTAS Menu", GLFW.GLFW_KEY_R, "key.categories.lotas");
+	private KeyMapping openLoTASMenuKeybind = new KeyMapping("key.openlotasmenu", GLFW.GLFW_KEY_R, "key.categories.lotas");
 	
 	/**
 	 * Categories for all keybinds used
