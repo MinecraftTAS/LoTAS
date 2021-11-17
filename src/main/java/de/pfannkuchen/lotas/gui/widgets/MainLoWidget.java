@@ -35,6 +35,10 @@ public class MainLoWidget extends LoScreen {
 	// Text
 	private TextComponent titleText;
 	
+	// Render Counter
+	private float animationProgress;
+	private float animationProgressInterpolated;
+	
 	/**
 	 * Initializes the right list with some parameters
 	 * @param widgetWidth Width of the Widget in .percentage
@@ -68,14 +72,31 @@ public class MainLoWidget extends LoScreen {
 		this.screenHeight = (int) height;
 	}
 	
+	/**
+	 * Ease Interpolation
+	 * @param t Progress
+	 * @param b Offset
+	 * @param c Goal
+	 * @param d Dividor for Progress
+	 * @return Ease-out-quad variable
+	 */
+	private float ease(float t, float b, float c, float d) {
+		return -c *(t/=d)*(t-2) + b;
+	}
+	
 	@Override
 	public void render(PoseStack stack, double curX, double curY) {
+		animationProgressInterpolated = Math.min(3, animationProgressInterpolated + mc.getDeltaFrameTime() / 4);
+		animationProgress = ease(animationProgressInterpolated, 0, 6, 3);
 		final boolean isMouseOver = curX > (this.screenWidth - this.widgetWidth);
 		// Render Background
-		GuiComponent.fill(stack, this.screenWidth - this.widgetWidth, 0, this.screenWidth, this.screenHeight, this.backgroundColor);
-		GuiComponent.fill(stack, this.screenWidth - this.widgetWidth - this.borderWidth, 0, this.screenWidth - this.widgetWidth, this.screenHeight, isMouseOver ? this.focusedBorderColor : this.borderColor);
+		GuiComponent.fill(stack, (int) (this.screenWidth - (this.widgetWidth * (animationProgress / 6))), 0, this.screenWidth, this.screenHeight, this.backgroundColor);
+		GuiComponent.fill(stack, (int) (this.screenWidth - ((this.widgetWidth - this.borderWidth) * (animationProgress / 6))) - this.borderWidth, 0, (int) (this.screenWidth - ((this.widgetWidth - this.borderWidth) * (animationProgress / 6))), this.screenHeight, isMouseOver ? this.focusedBorderColor : this.borderColor);
 		// Render Text
-		GuiComponent.drawCenteredString(stack, this.mc.font, this.titleText, this.screenWidth - (this.widgetWidth / 2), this.titleHeight, this.titleColor);
+		stack.pushPose();
+		stack.scale(2f, 2f, 2f);
+		GuiComponent.drawCenteredString(stack, this.mc.font, this.titleText, (int) ((this.screenWidth - ((this.widgetWidth / 2) * (animationProgress / 6))) /2), this.titleHeight/2, this.titleColor);
+		stack.popPose();
 	}
 
 	@Override
