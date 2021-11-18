@@ -328,10 +328,10 @@ public class InfoHud extends GuiScreen {
 				}
 			}
 			if(Minecraft.getMinecraft().currentScreen instanceof InfoHud) {
-				Minecraft.getMinecraft().fontRenderer.drawStringWithShadow("Leftclick to move", width-ypos, xpos- 30, 0x60FF00);
-				Minecraft.getMinecraft().fontRenderer.drawStringWithShadow("Middleclick to enable", width-ypos, xpos-20, 0x60FF00);
-				Minecraft.getMinecraft().fontRenderer.drawStringWithShadow("Rightclick to add black background", width-ypos, xpos-10, 0x60FF00);
-				Minecraft.getMinecraft().fontRenderer.drawStringWithShadow("Hold Shift to snap to grid", width-ypos, xpos, 0x60FF00);
+				MCVer.getFontRenderer(mc).drawStringWithShadow("Leftclick to move", width-ypos, xpos- 30, 0x60FF00);
+				MCVer.getFontRenderer(mc).drawStringWithShadow("Middleclick to enable", width-ypos, xpos-20, 0x60FF00);
+				MCVer.getFontRenderer(mc).drawStringWithShadow("Rightclick to add black background", width-ypos, xpos-10, 0x60FF00);
+				MCVer.getFontRenderer(mc).drawStringWithShadow("Hold Shift to snap to grid", width-ypos, xpos, 0x60FF00);
 			}
 		}
 	}
