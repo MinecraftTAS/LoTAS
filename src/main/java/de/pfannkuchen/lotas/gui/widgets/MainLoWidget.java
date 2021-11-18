@@ -87,18 +87,6 @@ public class MainLoWidget extends LoScreen {
 		this.onClick = onClick;
 	}
 	
-	/**
-	 * Ease Interpolation
-	 * @param t Progress
-	 * @param b Offset
-	 * @param c Goal
-	 * @param d Dividor for Progress
-	 * @return Ease-out-quad variable
-	 */
-	private double ease(double t, double b, double c, double d) {
-		return -c *(t/=d)*(t-2) + b;
-	}
-	
 	@Override
 	protected void click(double curX, double curY, int button) {
 		double categoryY = CATEGORY_Y;

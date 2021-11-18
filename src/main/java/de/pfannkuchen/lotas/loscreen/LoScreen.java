@@ -139,4 +139,17 @@ public abstract class LoScreen {
 		stack.popPose();
 	}
 	
+	
+	/**
+	 * Ease Interpolation
+	 * @param t Progress
+	 * @param b Offset
+	 * @param c Goal
+	 * @param d Dividor for Progress
+	 * @return Ease-out-quad variable
+	 */
+	protected final double ease(double t, double b, double c, double d) {
+		return -c *(t/=d)*(t-2) + b;
+	}
+	
 }
