@@ -31,6 +31,8 @@ public class LoScreenManager {
 	// Last mouse position
 	private double lastPosX;
 	private double lastPosY;
+	// Screen Size
+	private double savedGuiScale = -1;
 	
 	/**
 	 * Returns whether a screen is opened.
@@ -48,8 +50,13 @@ public class LoScreenManager {
 		this.screen = screen;
 		if (screen != null) {
 			screen.mc = this.mc;
+			this.savedGuiScale = this.mc.getWindow().getGuiScale();
+			this.mc.getWindow().setGuiScale(1);
 			screen.init();
 			screen.update(this.lastWidth, this.lastHeight);
+		} else if (savedGuiScale != -1) {
+			this.mc.getWindow().setGuiScale(savedGuiScale);
+			savedGuiScale = -1;
 		}
 	}
 	
