@@ -6,6 +6,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
+import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.WorldServer;
@@ -37,11 +38,11 @@ public abstract class MixinMinecraftServer {
 	
 	@Redirect(method = "run", at = @At(value = "FIELD", target = "Lnet/minecraft/server/MinecraftServer;worlds:[Lnet/minecraft/world/WorldServer;"))
 	public WorldServer[] fixCrashDuringLoadstate(MinecraftServer server) {
-		if(server.worlds.length==0) {
+		if(MCVer.getWorlds(server).length==0) {
 			System.out.println("Prevented a forge crash. You are welcome!");
 			return null;
 		}
-		return server.worlds;
+		return MCVer.getWorlds(server);
 	}
 
 	@Redirect(method = "run", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/WorldServer;areAllPlayersAsleep(V)Z"))
