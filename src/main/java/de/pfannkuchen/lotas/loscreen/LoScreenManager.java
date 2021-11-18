@@ -21,8 +21,8 @@ public class LoScreenManager {
 	// Shared Minecraft Instance
 	private Minecraft mc;
 	// Last resolution in case of resizing
-	private double lastWidth;
-	private double lastHeight;
+	private int lastWidth;
+	private int lastHeight;
 	// Last state of mouse buttons
 	private boolean wasLeftPressed;
 	private boolean wasMiddlePressed;
@@ -59,11 +59,11 @@ public class LoScreenManager {
 	public void onGameLoop(Minecraft mc) {
 		// Update Screen size
 		final Window w = mc.getWindow();
-		final double width = (double) w.getGuiScaledWidth() + 2;
-		final double height = (double) w.getGuiScaledHeight() + 2;
+		final int width = w.getWidth();
+		final int height = w.getHeight();
 		// Update Inputs
-		final double posX = mc.mouseHandler.xpos() * width / (double) mc.getWindow().getScreenWidth();
-		final double posY = mc.mouseHandler.ypos() * height / (double) mc.getWindow().getScreenHeight();
+		final double posX = mc.mouseHandler.xpos() / width;
+		final double posY = mc.mouseHandler.ypos() / height;
 		final boolean isLeftPressed = mc.mouseHandler.isLeftPressed();
 		final boolean isMiddlePressed = mc.mouseHandler.isMiddlePressed();
 		final boolean isRightPressed = mc.mouseHandler.isRightPressed();
