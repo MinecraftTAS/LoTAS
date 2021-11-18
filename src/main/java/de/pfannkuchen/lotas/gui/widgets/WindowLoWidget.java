@@ -33,8 +33,8 @@ public class WindowLoWidget extends LoScreen {
 	private TextComponent title;
 	private double width;
 	private double height;
-	private double x = 0.2;
-	private double y = 0.2;
+	public double x = 0.2;
+	public double y = 0.2;
 	// Whether the close buttons should have a shadow
 	private boolean showXShadow = false;
 	// Animation Progress
@@ -43,6 +43,10 @@ public class WindowLoWidget extends LoScreen {
 	private boolean topOBottom = rng.nextBoolean();
 	private boolean horizontal = rng.nextBoolean();
 	private boolean vertical = rng.nextBoolean();
+	// Movement stuff
+	private boolean isDragging;
+	private double draggingOffsetX;
+	private double draggingOffsetY;
 	
 	// Editable Properties
 	public boolean active = false;
@@ -58,33 +62,30 @@ public class WindowLoWidget extends LoScreen {
 
 	@Override 
 	protected void init() {
+		// Force horizontal animation if none given
 		if (!vertical && !horizontal) horizontal = true;
 	}
 	
 	@Override
 	protected void click(double curX, double curY, int button) {
 		if (!this.active) return;
+		// Close Window in X press
 		if (curX > this.x+this.width-BORDER_WIDTH*5 && curX < this.x+width+BORDER_WIDTH*2 && curY > this.y && curY < this.y+0.03) 
 			this.active = false;
-		this.isDragging = false;
+		this.isDragging = false; // Reset dragging
 	}
-	
-	boolean isDragging;
-	double curXStored;
-	double curYStored;
-	double draggingOffsetX;
-	double draggingOffsetY;
 	
 	@Override
 	protected void drag(double prevCurX, double prevCurY, double curX, double curY) {
 		if (!this.active) return;
+		// Check whether the drag has started
 		if (curX > this.x && curX < this.x+this.width && curY > this.y && curY < this.y+MENU_HEIGHT && !this.isDragging) {
 			this.isDragging = true;
-			this.curXStored = curX;
-			this.curYStored = curY;
+			// Store offset of cursor on the title bar
 			this.draggingOffsetX = curX - this.x;
 			this.draggingOffsetY = curY - this.y;
 		}
+		// Move the window while dragged
 		if (isDragging) {
 			this.x = curX - this.draggingOffsetX;
 			this.y = curY - this.draggingOffsetY;
