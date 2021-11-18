@@ -1,5 +1,7 @@
 package de.pfannkuchen.lotas.gui.widgets;
 
+import java.util.Random;
+
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import de.pfannkuchen.lotas.loscreen.LoScreen;
@@ -24,6 +26,8 @@ public class WindowLoWidget extends LoScreen {
 	private static final int TITLE_COLOR = 0xff035257;
 	// x
 	private static final TextComponent X_TEXT = new TextComponent("x");
+	// Random
+	private static final Random rng = new Random();
 	
 	// Window Sizes
 	private TextComponent title;
@@ -33,6 +37,12 @@ public class WindowLoWidget extends LoScreen {
 	private double y = 0.2;
 	// Whether the close buttons should have a shadow
 	private boolean showXShadow = false;
+	// Animation Progress
+	private double animationProgress;
+	private boolean leftORight = rng.nextBoolean();
+	private boolean topOBottom = rng.nextBoolean();
+	private boolean horizontal = rng.nextBoolean();
+	private boolean vertical = rng.nextBoolean();
 	
 	// Editable Properties
 	public boolean active = false;
@@ -47,15 +57,16 @@ public class WindowLoWidget extends LoScreen {
 	}
 
 	@Override 
-	protected void init() {}
+	protected void init() {
+		if (!vertical && !horizontal) horizontal = true;
+	}
 	
 	@Override
 	protected void click(double curX, double curY, int button) {
-		if (!active) return;
-		if (curX > x+width-BORDER_WIDTH*5 && curX < x+width+BORDER_WIDTH*2 && curY > y && curY < y+0.03) {
-			active = false;
-		}
-		isDragging = false;
+		if (!this.active) return;
+		if (curX > this.x+this.width-BORDER_WIDTH*5 && curX < this.x+width+BORDER_WIDTH*2 && curY > this.y && curY < this.y+0.03) 
+			this.active = false;
+		this.isDragging = false;
 	}
 	
 	boolean isDragging;
@@ -66,13 +77,13 @@ public class WindowLoWidget extends LoScreen {
 	
 	@Override
 	protected void drag(double prevCurX, double prevCurY, double curX, double curY) {
-		if (!active) return;
-		if (curX > x && curX < x+width && curY > y && curY < y+MENU_HEIGHT && !isDragging) {
+		if (!this.active) return;
+		if (curX > this.x && curX < this.x+this.width && curY > this.y && curY < this.y+MENU_HEIGHT && !this.isDragging) {
 			this.isDragging = true;
 			this.curXStored = curX;
 			this.curYStored = curY;
-			this.draggingOffsetX = curX - x;
-			this.draggingOffsetY = curY - y;
+			this.draggingOffsetX = curX - this.x;
+			this.draggingOffsetY = curY - this.y;
 		}
 		if (isDragging) {
 			this.x = curX - this.draggingOffsetX;
@@ -82,21 +93,28 @@ public class WindowLoWidget extends LoScreen {
 	
 	@Override
 	protected void render(PoseStack stack, double curX, double curY) {
-		if (!active) return;
+		if (!this.active) return;
+		this.animationProgress = Math.min(6, this.animationProgress + mc.getDeltaFrameTime()); // Move the animation
+		if (this.animationProgress != 6) {
+			stack.translate(
+					vertical ? ((leftORight ? -1000 : 1000) + ease(this.animationProgress, 0, 1, 6)*(leftORight ? +1000 : -1000)) : 0,
+					horizontal ? ((topOBottom ? -1000 : 1000) + ease(this.animationProgress, 0, 1, 6)*(topOBottom ? +1000 : -1000)) : 0,
+					0);
+		}
 		// Render Background and Border
-		this.fill(stack, x+0.01, y+0.01, x+width+BORDER_WIDTH*2+0.01, y+height+MENU_HEIGHT+BORDER_HEIGHT+0.01, 0xAA000000);
-		this.fill(stack, x, y, x+width+BORDER_WIDTH*2, y+height+MENU_HEIGHT+BORDER_HEIGHT, BORDER_COLOR);
-		this.fill(stack, x+BORDER_WIDTH, y+MENU_HEIGHT, x+width+BORDER_WIDTH, y+height+MENU_HEIGHT, BACKGROUND_COLOR);
+		this.fill(stack, this.x+0.01, this.y+0.01, this.x+this.width+BORDER_WIDTH*2+0.01, this.y+this.height+MENU_HEIGHT+BORDER_HEIGHT+0.01, 0xAA000000);
+		this.fill(stack, this.x, this.y, this.x+this.width+BORDER_WIDTH*2, this.y+this.height+MENU_HEIGHT+BORDER_HEIGHT, BORDER_COLOR);
+		this.fill(stack, this.x+BORDER_WIDTH, this.y+MENU_HEIGHT, this.x+this.width+BORDER_WIDTH, this.y+this.height+MENU_HEIGHT, BACKGROUND_COLOR);
 		// X Hover
-		if (curX > x+width-BORDER_WIDTH*5 && curX < x+width+BORDER_WIDTH*2 && curY > y && curY < y+0.03) {
-			this.fill(stack, x+width-0.0135, y+.005, x+width, y+0.0275, BACKGROUND_COLOR);
+		if (curX > this.x+this.width-BORDER_WIDTH*5 && curX < this.x+this.width+BORDER_WIDTH*2 && curY > this.y && curY < this.y+0.03) {
+			this.fill(stack, this.x+this.width-0.0135, this.y+.005, this.x+this.width, y+0.0275, BACKGROUND_COLOR);
 			showXShadow = true;
 		} else {
 			showXShadow = false;
 		}
 		// Render Title and X
-		this.draw(stack, title, x+0.006, y+0.007, 20, TITLE_COLOR, false);
-		this.draw(stack, X_TEXT, x+width-BORDER_WIDTH*3.5, y+0.0065, 20, TITLE_COLOR, showXShadow);
+		this.draw(stack, this.title, this.x+0.006, this.y+0.007, 20, TITLE_COLOR, false);
+		this.draw(stack, X_TEXT, this.x+width-BORDER_WIDTH*3.5, this.y+0.0065, 20, TITLE_COLOR, showXShadow);
 		super.render(stack, curX, curY);
 	}
 	
