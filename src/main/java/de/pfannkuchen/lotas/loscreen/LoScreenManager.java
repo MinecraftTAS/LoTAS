@@ -1,6 +1,7 @@
 package de.pfannkuchen.lotas.loscreen;
 
 import org.jetbrains.annotations.Nullable;
+import org.lwjgl.glfw.GLFW;
 
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -64,9 +65,9 @@ public class LoScreenManager {
 		// Update Inputs
 		final double posX = mc.mouseHandler.xpos() / width;
 		final double posY = mc.mouseHandler.ypos() / height;
-		final boolean isLeftPressed = mc.mouseHandler.isLeftPressed();
-		final boolean isMiddlePressed = mc.mouseHandler.isMiddlePressed();
-		final boolean isRightPressed = mc.mouseHandler.isRightPressed();
+		final boolean isLeftPressed = GLFW.glfwGetMouseButton(mc.getWindow().getWindow(), GLFW.GLFW_MOUSE_BUTTON_LEFT) == GLFW.GLFW_PRESS;
+		final boolean isMiddlePressed = GLFW.glfwGetMouseButton(mc.getWindow().getWindow(), GLFW.GLFW_MOUSE_BUTTON_MIDDLE) == GLFW.GLFW_PRESS;
+		final boolean isRightPressed = GLFW.glfwGetMouseButton(mc.getWindow().getWindow(), GLFW.GLFW_MOUSE_BUTTON_RIGHT) == GLFW.GLFW_PRESS;
 		// Check whether clicks/moves have passed.
 		if (screen != null) {
 			if (width != lastWidth || height != lastHeight) this.screen.update(width, height);
