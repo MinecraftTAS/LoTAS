@@ -1,7 +1,6 @@
 package de.pfannkuchen.lotas.gui;
 
 import de.pfannkuchen.lotas.gui.widgets.MainLoWidget;
-import de.pfannkuchen.lotas.gui.widgets.WindowLoWidget;
 import de.pfannkuchen.lotas.loscreen.LoScreen;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -21,9 +20,6 @@ public class MainLoScreen extends LoScreen {
 			else a = new TextComponent("\u00A7\u00A7\u00A7l" + a.getString());
 			return a;
 		}));
-		WindowLoWidget widget = new WindowLoWidget(new TextComponent("Subscribe"), .3, .2);
-		widget.active = true;
-		addWidget(widget);
 	}
 	
 }
