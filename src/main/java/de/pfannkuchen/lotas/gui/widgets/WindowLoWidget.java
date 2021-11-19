@@ -13,17 +13,15 @@ import net.minecraft.network.chat.TextComponent;
  */
 public class WindowLoWidget extends LoScreen {
 
-	// Height of the Title Bar
-	private static final double MENU_HEIGHT = 0.030;
 	// Width and Height of the border around the Menu
-	private static final double BORDER_WIDTH = 0.003125;
-	private static final double BORDER_HEIGHT = 0.00555;
+	private static final double BORDER_WIDTH = 0.0015625;
+	private static final double BORDER_HEIGHT = 0.00277;
 	// Background Color
-	private static final int BACKGROUND_COLOR = 0xff1c1a1e;
+	private static final int BACKGROUND_COLOR = 0xff0a0a0b;
 	// Border Color
-	private static final int BORDER_COLOR = 0xff100e11;
+	private static final int BORDER_COLOR = 0xff1b1c21;
 	// Title Color
-	private static final int TITLE_COLOR = 0xff035257;
+	private static final int TITLE_COLOR = 0xff149b5b;
 	// x
 	private static final TextComponent X_TEXT = new TextComponent("x");
 	// Random
@@ -31,8 +29,8 @@ public class WindowLoWidget extends LoScreen {
 	
 	// Window Sizes
 	private TextComponent title;
-	private double width;
-	private double height;
+	protected double width;
+	protected double height;
 	public double x = 0.2;
 	public double y = 0.2;
 	// Whether the close buttons should have a shadow
@@ -70,7 +68,7 @@ public class WindowLoWidget extends LoScreen {
 	protected void click(double curX, double curY, int button) {
 		if (!this.active) return;
 		// Close Window in X press
-		if (curX > this.x+this.width-BORDER_WIDTH*5 && curX < this.x+width+BORDER_WIDTH*2 && curY > this.y && curY < this.y+0.03) 
+		if (curX > this.x+this.width-0.015 && curX < this.x+this.width && curY > this.y && curY < this.y+(0.015/9*16))
 			this.active = false;
 		this.isDragging = false; // Reset dragging
 	}
@@ -79,7 +77,7 @@ public class WindowLoWidget extends LoScreen {
 	protected void drag(double prevCurX, double prevCurY, double curX, double curY) {
 		if (!this.active) return;
 		// Check whether the drag has started
-		if (curX > this.x && curX < this.x+this.width && curY > this.y && curY < this.y+MENU_HEIGHT && !this.isDragging) {
+		if (curX > this.x && curX < this.x+this.width && curY > this.y && curY < this.y+(0.015/9*16) && !this.isDragging) {
 			this.isDragging = true;
 			// Store offset of cursor on the title bar
 			this.draggingOffsetX = curX - this.x;
@@ -103,19 +101,19 @@ public class WindowLoWidget extends LoScreen {
 					0);
 		}
 		// Render Background and Border
-		this.fill(stack, this.x+0.01, this.y+0.01, this.x+this.width+BORDER_WIDTH*2+0.01, this.y+this.height+MENU_HEIGHT+BORDER_HEIGHT+0.01, 0xAA000000);
-		this.fill(stack, this.x, this.y, this.x+this.width+BORDER_WIDTH*2, this.y+this.height+MENU_HEIGHT+BORDER_HEIGHT, BORDER_COLOR);
-		this.fill(stack, this.x+BORDER_WIDTH, this.y+MENU_HEIGHT, this.x+this.width+BORDER_WIDTH, this.y+this.height+MENU_HEIGHT, BACKGROUND_COLOR);
+		this.fill(stack, this.x-BORDER_WIDTH+0.005, this.y-BORDER_HEIGHT+0.01, this.x+this.width+BORDER_WIDTH*1.25+0.005, this.y+this.height+BORDER_HEIGHT*1.25+0.01, 0xAA000000);
+		this.fill(stack, this.x-BORDER_WIDTH, this.y-BORDER_HEIGHT, this.x+this.width+BORDER_WIDTH*1.25, this.y+this.height+BORDER_HEIGHT*1.25, BORDER_COLOR);
+		this.fill(stack, this.x, this.y, this.x+this.width, this.y+this.height, BACKGROUND_COLOR);
 		// X Hover
-		if (curX > this.x+this.width-BORDER_WIDTH*5 && curX < this.x+this.width+BORDER_WIDTH*2 && curY > this.y && curY < this.y+0.03) {
-			this.fill(stack, this.x+this.width-0.0135, this.y+.005, this.x+this.width, y+0.0275, BACKGROUND_COLOR);
+		if (curX > this.x+this.width-0.015 && curX < this.x+this.width && curY > this.y && curY < this.y+(0.015/9*16)) {
+			this.fill(stack, this.x+this.width-0.015, this.y, this.x+this.width, this.y+(0.015/9*16), BORDER_COLOR);
 			showXShadow = true;
 		} else {
 			showXShadow = false;
 		}
 		// Render Title and X
 		this.draw(stack, this.title, this.x+0.006, this.y+0.007, 20, TITLE_COLOR, false);
-		this.draw(stack, X_TEXT, this.x+width-BORDER_WIDTH*3.5, this.y+0.0065, 20, TITLE_COLOR, showXShadow);
+		this.draw(stack, X_TEXT, this.x+width-0.0096, this.y+0.0045, 20, TITLE_COLOR, showXShadow);
 		super.render(stack, curX, curY);
 	}
 	

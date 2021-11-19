@@ -22,13 +22,13 @@ public class MainLoWidget extends LoScreen {
 	private static final double BORDER_WIDTH = 0.0045;
 	
 	// Background Color
-	private static final int BACKGROUND_COLOR = 0xff1c1a1e;
+	private static final int BACKGROUND_COLOR = 0xff161618;
 	// Background Color when focused
-	private static final int BACKGROUND_FOCUS_COLOR = 0xff100e11;
+	private static final int BACKGROUND_FOCUS_COLOR = 0xff1b1c21;
 	// Border Color
-	private static final int BORDER_COLOR = 0xff025a5f;
+	private static final int BORDER_COLOR = 0xff108950;
 	// Border Color when focused
-	private static final int BORDER_FOCUS_COLOR = 0xff038386;
+	private static final int BORDER_FOCUS_COLOR = 0xff19b36a;
 	
 	// Title Position. X-Offset by BACKGROUND_WIDTH
 	private static final double TITLE_X = 0.045;
@@ -47,9 +47,9 @@ public class MainLoWidget extends LoScreen {
 	// Category Size
 	private static final int CATEGORY_SIZE = 30;
 	// Category Color
-	private static final int CATEGORY_COLOR = 0xff025a5f;
+	private static final int CATEGORY_COLOR = 0xff149b5b;
 	// Category Color when focused
-	private static final int CATEGORY_FOCUS_COLOR = 0xff27b6bc;
+	private static final int CATEGORY_FOCUS_COLOR = 0xff22e187;
 	// Category Texts
 	private static final TextComponent[] CATEGORIES = new TextComponent[] {
 		new TextComponent("Tickrate Changing"),
@@ -69,7 +69,7 @@ public class MainLoWidget extends LoScreen {
 	// Version Size
 	private static final int VERSION_SIZE = 30;
 	// Version Color
-	private static final int VERSION_COLOR = 0xff989898;
+	private static final int VERSION_COLOR = 0xff8f8f8f;
 	// Version Text
 	private static final TextComponent VERSION1 = new TextComponent("LoTAS 3.0.0-SNAPSHOT");
 	private static final TextComponent VERSION2 = new TextComponent("Development Build");
