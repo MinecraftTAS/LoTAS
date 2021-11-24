@@ -29,8 +29,8 @@ public class WindowLoWidget extends LoScreen {
 	
 	// Window Sizes
 	private TextComponent title;
-	protected double width;
-	protected double height;
+	protected double windowWidth;
+	protected double windowHeight;
 	public double x = 0.2;
 	public double y = 0.2;
 	// Whether the close buttons should have a shadow
@@ -52,10 +52,10 @@ public class WindowLoWidget extends LoScreen {
 	/**
 	 * Initializes the Window with a Title and Size
 	 */
-	public WindowLoWidget(TextComponent title, double width, double height) {
+	public WindowLoWidget(TextComponent title, double windowWidth, double windowHeight) {
 		this.title = title;
-		this.width = width;
-		this.height = height;
+		this.windowWidth = windowWidth;
+		this.windowHeight = windowHeight;
 	}
 
 	@Override 
@@ -68,16 +68,17 @@ public class WindowLoWidget extends LoScreen {
 	protected void click(double curX, double curY, int button) {
 		if (!this.active) return;
 		// Close Window in X press
-		if (curX > this.x+this.width-0.015 && curX < this.x+this.width && curY > this.y && curY < this.y+(0.015/9*16))
+		if (curX > this.x+this.windowWidth-0.015 && curX < this.x+this.windowWidth && curY > this.y && curY < this.y+(0.015/9*16))
 			this.active = false;
 		this.isDragging = false; // Reset dragging
+		super.click(curX-this.x, curY-this.y, button);
 	}
 	
 	@Override
 	protected void drag(double prevCurX, double prevCurY, double curX, double curY) {
 		if (!this.active) return;
 		// Check whether the drag has started
-		if (curX > this.x && curX < this.x+this.width && curY > this.y && curY < this.y+(0.015/9*16) && !this.isDragging) {
+		if (curX > this.x && curX < this.x+this.windowWidth && curY > this.y && curY < this.y+(0.015/9*16) && !this.isDragging) {
 			this.isDragging = true;
 			// Store offset of cursor on the title bar
 			this.draggingOffsetX = curX - this.x;
@@ -88,6 +89,7 @@ public class WindowLoWidget extends LoScreen {
 			this.x = curX - this.draggingOffsetX;
 			this.y = curY - this.draggingOffsetY;
 		}
+		super.drag(prevCurX-this.x, prevCurY-this.y, curX-this.x, curY-this.y);
 	}
 	
 	@Override
@@ -101,20 +103,21 @@ public class WindowLoWidget extends LoScreen {
 					0);
 		}
 		// Render Background and Border
-		this.fill(stack, this.x-BORDER_WIDTH+0.005, this.y-BORDER_HEIGHT+0.01, this.x+this.width+BORDER_WIDTH*1.25+0.005, this.y+this.height+BORDER_HEIGHT*1.25+0.01, 0xAA000000);
-		this.fill(stack, this.x-BORDER_WIDTH, this.y-BORDER_HEIGHT, this.x+this.width+BORDER_WIDTH*1.25, this.y+this.height+BORDER_HEIGHT*1.25, BORDER_COLOR);
-		this.fill(stack, this.x, this.y, this.x+this.width, this.y+this.height, BACKGROUND_COLOR);
+		this.fill(stack, this.x-BORDER_WIDTH+0.005, this.y-BORDER_HEIGHT+0.01, this.x+this.windowWidth+BORDER_WIDTH*1.25+0.005, this.y+this.windowHeight+BORDER_HEIGHT*1.25+0.01, 0xAA000000);
+		this.fill(stack, this.x-BORDER_WIDTH, this.y-BORDER_HEIGHT, this.x+this.windowWidth+BORDER_WIDTH*1.25, this.y+this.windowHeight+BORDER_HEIGHT*1.25, BORDER_COLOR);
+		this.fill(stack, this.x, this.y, this.x+this.windowWidth, this.y+this.windowHeight, BACKGROUND_COLOR);
 		// X Hover
-		if (curX > this.x+this.width-0.015 && curX < this.x+this.width && curY > this.y && curY < this.y+(0.015/9*16)) {
-			this.fill(stack, this.x+this.width-0.015, this.y, this.x+this.width, this.y+(0.015/9*16), BORDER_COLOR);
+		if (curX > this.x+this.windowWidth-0.015 && curX < this.x+this.windowWidth && curY > this.y && curY < this.y+(0.015/9*16)) {
+			this.fill(stack, this.x+this.windowWidth-0.015, this.y, this.x+this.windowWidth, this.y+(0.015/9*16), BORDER_COLOR);
 			showXShadow = true;
 		} else {
 			showXShadow = false;
 		}
 		// Render Title and X
 		this.draw(stack, this.title, this.x+0.006, this.y+0.007, 20, TITLE_COLOR, false);
-		this.draw(stack, X_TEXT, this.x+width-0.0096, this.y+0.0045, 20, TITLE_COLOR, showXShadow);
-		super.render(stack, curX, curY);
+		this.draw(stack, X_TEXT, this.x+windowWidth-0.0096, this.y+0.0045, 20, TITLE_COLOR, showXShadow);
+		stack.translate(this.x*this.width, this.y*this.height, 0);
+		super.render(stack, curX-this.x, curY-this.y);
 	}
 	
 }
