@@ -5,12 +5,15 @@ import java.util.function.Function;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import de.pfannkuchen.lotas.loscreen.LoScreen;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.network.chat.TextComponent;
 
 /**
  * Slideable Slider
  * @author Pancake
  */
+@Environment(EnvType.CLIENT)
 public class SliderLoWidget extends LoScreen {
 
 	// Background Color
