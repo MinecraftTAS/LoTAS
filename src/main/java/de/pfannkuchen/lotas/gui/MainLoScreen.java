@@ -40,6 +40,7 @@ public class MainLoScreen extends LoScreen {
 			switch (widgetname) {
 				case "Tickrate Changing":
 					tickratechangerwidget.changeVisibility(enable);
+					tickratechangerwidget.updateTickrate(LoTAS.tickratechanger.getTickrate());
 					break;
 				default:
 					throw new AssertionError();
