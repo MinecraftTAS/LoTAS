@@ -3,7 +3,6 @@ package de.pfannkuchen.lotas.gui;
 import de.pfannkuchen.lotas.LoTAS;
 import de.pfannkuchen.lotas.gui.widgets.MainLoWidget;
 import de.pfannkuchen.lotas.gui.widgets.TickrateChangerLoWidget;
-import de.pfannkuchen.lotas.gui.widgets.WindowLoWidget;
 import de.pfannkuchen.lotas.loscreen.LoScreen;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -22,7 +21,8 @@ public class MainLoScreen extends LoScreen {
 		TickrateChangerLoWidget tickratechangerwidget = new TickrateChangerLoWidget(c -> {
 			LoTAS.tickratechanger.requestTickrateUpdate(c);
 		});
-		tickratechangerwidget.active = false;
+		addWidget(tickratechangerwidget);
+		tickratechangerwidget.updateTickrate(LoTAS.tickratechanger.getTickrate());
 		
 		addWidget(new MainLoWidget((a, b) -> {
 			boolean enable; // Whether the widget should be enabled or disabled
@@ -37,20 +37,16 @@ public class MainLoScreen extends LoScreen {
 				enable = true;
 			}
 			// Find the widget
-			WindowLoWidget widget;
 			switch (widgetname) {
 				case "Tickrate Changing":
-					widget = tickratechangerwidget;
+					tickratechangerwidget.changeVisibility(enable);
 					break;
 				default:
 					throw new AssertionError();
 			}
 			// Enable/disable widget
-			widget.active = enable;
 			return a;
 		}));
-		
-		addWidget(tickratechangerwidget);
 	}
 	
 }

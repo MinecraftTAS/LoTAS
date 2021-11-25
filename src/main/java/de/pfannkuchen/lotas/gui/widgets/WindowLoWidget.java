@@ -25,8 +25,6 @@ public class WindowLoWidget extends LoScreen {
 	private static final int BORDER_COLOR = 0xff1b1c21;
 	// Title Color
 	private static final int TITLE_COLOR = 0xff149b5b;
-	// x
-	private static final TextComponent X_TEXT = new TextComponent("x");
 	// Random
 	private static final Random rng = new Random();
 	
@@ -36,8 +34,6 @@ public class WindowLoWidget extends LoScreen {
 	protected double windowHeight;
 	public double x = 0.2;
 	public double y = 0.2;
-	// Whether the close buttons should have a shadow
-	private boolean showXShadow = false;
 	// Animation Progress
 	private double animationProgress;
 	private boolean leftORight = rng.nextBoolean();
@@ -70,9 +66,6 @@ public class WindowLoWidget extends LoScreen {
 	@Override
 	protected void click(double curX, double curY, int button) {
 		if (!this.active) return;
-		// Close Window in X press
-		if (curX > this.x+this.windowWidth-0.015 && curX < this.x+this.windowWidth && curY > this.y && curY < this.y+(0.015/9*16))
-			this.active = false;
 		this.isDragging = false; // Reset dragging
 		super.click(curX-this.x, curY-this.y, button);
 	}
@@ -109,16 +102,8 @@ public class WindowLoWidget extends LoScreen {
 		this.fill(stack, this.x-BORDER_WIDTH+0.005, this.y-BORDER_HEIGHT+0.01, this.x+this.windowWidth+BORDER_WIDTH*1.25+0.005, this.y+this.windowHeight+BORDER_HEIGHT*1.25+0.01, 0xAA000000);
 		this.fill(stack, this.x-BORDER_WIDTH, this.y-BORDER_HEIGHT, this.x+this.windowWidth+BORDER_WIDTH*1.25, this.y+this.windowHeight+BORDER_HEIGHT*1.25, BORDER_COLOR);
 		this.fill(stack, this.x, this.y, this.x+this.windowWidth, this.y+this.windowHeight, BACKGROUND_COLOR);
-		// X Hover
-		if (curX > this.x+this.windowWidth-0.015 && curX < this.x+this.windowWidth && curY > this.y && curY < this.y+(0.015/9*16)) {
-			this.fill(stack, this.x+this.windowWidth-0.015, this.y, this.x+this.windowWidth, this.y+(0.015/9*16), BORDER_COLOR);
-			showXShadow = true;
-		} else {
-			showXShadow = false;
-		}
-		// Render Title and X
+		// Render Title
 		this.draw(stack, this.title, this.x+0.006, this.y+0.007, 20, TITLE_COLOR, false);
-		this.draw(stack, X_TEXT, this.x+windowWidth-0.0096, this.y+0.0045, 20, TITLE_COLOR, showXShadow);
 		stack.translate(this.x*this.width, this.y*this.height, 0);
 		super.render(stack, curX-this.x, curY-this.y);
 	}
