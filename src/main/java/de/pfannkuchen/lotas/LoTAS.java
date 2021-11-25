@@ -3,6 +3,7 @@ package de.pfannkuchen.lotas;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import de.pfannkuchen.lotas.mods.TickrateChanger;
 import net.fabricmc.api.ModInitializer;
 
 /**
@@ -15,6 +16,8 @@ public class LoTAS implements ModInitializer {
 	public static final Logger LOGGER = LogManager.getLogger("lotas");
 	// LoTAS Singleton
 	public static LoTAS instance;
+	// Tickrate Changer Singleton
+	public static TickrateChanger tickratechanger;
 	
 	/**
 	 * Executed after the game launches.
@@ -22,6 +25,7 @@ public class LoTAS implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		LoTAS.instance = this; // Prepare the singleton
+		LoTAS.tickratechanger = new TickrateChanger();
 	}
 	
 }
