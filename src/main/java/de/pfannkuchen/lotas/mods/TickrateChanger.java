@@ -52,6 +52,8 @@ public class TickrateChanger {
 			long time = System.currentTimeMillis() - this.timeSinceTC;
 			fakeTimeSinceTC += time * this.gamespeed;
 			timeSinceTC = System.currentTimeMillis();
+			// Update the LoScreen Widget Tickrate
+			// FIXME: Keep LoScreen within .gui and .loscreen
 		}
 	}
 	

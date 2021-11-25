@@ -22,7 +22,7 @@ public class MixinLevelRenderer {
 	 * @param f Ignored original value
 	 * @return Manipulated value
 	 */
-	@ModifyVariable(method = "renderWorldBorder", at = @At(value = "STORE"), index = 19, ordinal = 3, print = true)
+	@ModifyVariable(method = "renderWorldBorder", at = @At(value = "STORE"), index = 19, ordinal = 3)
 	public float injectf3(float f) {
 		return (LoTAS.tickratechanger.getMilliseconds() % 3000L) / 3000.0F;
 	}
