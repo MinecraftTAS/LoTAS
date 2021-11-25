@@ -31,16 +31,28 @@ public class TickrateChanger {
 	public MinecraftServer mcserver;
 	
 	// Tickrate Variables in various formats
-	private double tickrate;
-	private long msPerTick;
-	private double gamespeed;
+	private double tickrate = 20.0;
+	private double msPerTick = 50.0;
+	private double gamespeed = 1.0;
+	
+	// Tickrate Changer Millisecond 
+	@Environment(EnvType.CLIENT)
+	public long timeSinceTC = System.currentTimeMillis();
+	@Environment(EnvType.CLIENT)
+	public long fakeTimeSinceTC = System.currentTimeMillis();
 	
 	/**
 	 * Updates the Client tickrate when receiving a packet
 	 */
 	@Environment(EnvType.CLIENT)
 	public void onClientPacket(ClientboundCustomPayloadPacket p) {
-		if (TICKRATE_CHANGER_RL.equals(p.getIdentifier())) internallyUpdateTickrate(p.getData().readDouble());
+		if (TICKRATE_CHANGER_RL.equals(p.getIdentifier())) {
+			internallyUpdateTickrate(p.getData().readDouble());
+			// Update the local time
+			long time = System.currentTimeMillis() - this.timeSinceTC;
+			fakeTimeSinceTC += time * this.gamespeed;
+			timeSinceTC = System.currentTimeMillis();
+		}
 	}
 	
 	/**
@@ -57,7 +69,6 @@ public class TickrateChanger {
 	 */
 	@Environment(EnvType.CLIENT)
 	public void requestTickrateUpdate(double tickrate) {
-		System.out.println("test");
 		FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
 		buf.writeDouble(tickrate);
 		ServerboundCustomPayloadPacket p = new ServerboundCustomPayloadPacket(TICKRATE_CHANGER_RL, buf);
@@ -85,19 +96,29 @@ public class TickrateChanger {
 	 * @param tickrate Tickrate to update to
 	 */
 	private void internallyUpdateTickrate(double tickrate) {
-		System.out.println("Updating Tickrate to " + tickrate + "!");
 		this.tickrate = tickrate;
-		this.msPerTick = (long) (1000L / tickrate);
+		this.msPerTick = 1000.0 / tickrate;
 		this.gamespeed = tickrate / 20;
 	}
 
+	/**
+	 * Client-side only slowed down millisecond counter
+	 * @return
+	 */
+	@Environment(EnvType.CLIENT)
+	public long getMilliseconds() {
+		long time = System.currentTimeMillis() - this.timeSinceTC;
+		time *= this.gamespeed;
+		return this.fakeTimeSinceTC + time;
+	}
+	
 	// Place Getters here to not confuse with public variables that shall not be set
 	
 	public double getTickrate() {
 		return this.tickrate;
 	}
 
-	public long getMsPerTick() {
+	public double getMsPerTick() {
 		return this.msPerTick;
 	}
 
