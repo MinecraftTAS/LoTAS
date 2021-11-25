@@ -4,9 +4,12 @@
 	"package": "de.pfannkuchen.lotas.mixin",
 	"compatibilityLevel": "JAVA_16",
 	"mixins": [
+		"MixinMinecraftServer",
+		"MixinPlayNetworkHandler"
 	],
 	"client": [
 		"client.workaround.MixinClientLanguageWorkaround",
+		"client.MixinClientPlayNetworkHandler",
 		"client.MixinGuiHook",
 		"client.MixinKeyMappingsAccessor",
 		"client.MixinMinecraftHook",

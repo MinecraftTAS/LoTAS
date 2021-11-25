@@ -1,5 +1,6 @@
 package de.pfannkuchen.lotas.gui;
 
+import de.pfannkuchen.lotas.LoTAS;
 import de.pfannkuchen.lotas.gui.widgets.MainLoWidget;
 import de.pfannkuchen.lotas.gui.widgets.TickrateChangerLoWidget;
 import de.pfannkuchen.lotas.gui.widgets.WindowLoWidget;
@@ -19,7 +20,7 @@ public class MainLoScreen extends LoScreen {
 	protected void init() {
 		// Add the Tickrate Changer Widget
 		TickrateChangerLoWidget tickratechangerwidget = new TickrateChangerLoWidget(c -> {
-			System.out.println("Tickrate updated to: " + c);
+			LoTAS.tickratechanger.requestTickrateUpdate(c);
 		});
 		tickratechangerwidget.active = false;
 		
