@@ -37,9 +37,9 @@ public class TickrateChanger {
 	
 	// Tickrate Changer Millisecond 
 	@Environment(EnvType.CLIENT)
-	public long timeSinceTC = System.currentTimeMillis();
+	private long timeSinceTC = System.currentTimeMillis();
 	@Environment(EnvType.CLIENT)
-	public long fakeTimeSinceTC = System.currentTimeMillis();
+	private long fakeTimeSinceTC = System.currentTimeMillis();
 	
 	/**
 	 * Updates the Client tickrate when receiving a packet
