@@ -22,30 +22,30 @@ public class TickrateChangerLoWidget extends WindowLoWidget {
 			0.5, 1, 2, 4, 5, 10, 20
 	};
 	// Tickrate index selected
-	private int index = 6;
+	private static int index = 6;
 	// Tickrate Slider
-	SliderLoWidget slider;
+	private static SliderLoWidget slider;
 	// Update Event
-	Consumer<Double> update;
+	private static Consumer<Double> update;
 	
 	/**
 	 * Initializes a Tickrate Changer Widget
 	 */
 	public TickrateChangerLoWidget(Consumer<Double> update) {
 		super(new TextComponent("Tickrate Changer"), .15, .135);
-		this.update = update;
+		TickrateChangerLoWidget.update = update;
 	}
 
 	@Override
 	protected void init() {
-		addWidget(slider = new SliderLoWidget(true, 0.015, 0.095, .12, 1, c -> {
+		addWidget(slider = new SliderLoWidget(true, 0.015, 0.095, .12, index / ((double) TICKRATES.length), c -> {
 			return new TextComponent("Tickrate: " + updateTickrate((int) (c*TICKRATES.length), true));
-		}, new TextComponent("Tickrate: 20.0")));
+		}, new TextComponent("Tickrate: " + TICKRATES[index])));
 		addWidget( new ButtonLoWidget(true, 0.005, 0.035, .065, () -> {
-			updateTickrate(this.index+1, false);
+			updateTickrate(TickrateChangerLoWidget.index+1, false);
 		}, new TextComponent("+")));
 		addWidget(new ButtonLoWidget(true, 0.08, 0.035, .065, () -> {
-			updateTickrate(this.index-1, false);
+			updateTickrate(TickrateChangerLoWidget.index-1, false);
 		}, new TextComponent("-")));
 		// Load elements from config
 		ConfigManager config = LoTAS.configmanager;
@@ -60,11 +60,11 @@ public class TickrateChangerLoWidget extends WindowLoWidget {
 	 * @param index tickrate index
 	 * @return new tickrate
 	 */
-	private double updateTickrate(int index, boolean isSlider) {
+	private static double updateTickrate(int index, boolean isSlider) {
 		// Clamp and update tickrate
 		index = Math.min(Math.max(0, index), TICKRATES.length-1);
-		if (index == this.index) return TICKRATES[index];
-		this.index = index;
+		if (index == TickrateChangerLoWidget.index) return TICKRATES[index];
+		TickrateChangerLoWidget.index = index;
 		// Update Slider
 		if (!isSlider) {
 			slider.value = new TextComponent("Tickrate: " + TICKRATES[index]);
@@ -81,7 +81,7 @@ public class TickrateChangerLoWidget extends WindowLoWidget {
 	 * WARNING: Widget needs to be initialized first
 	 * @param tickrate tickrate
 	 */
-	public void updateTickrate(double tickrate) {
+	public static void updateTickrate(double tickrate) {
 		// Find closest index
 		int bestIndex = -1;
 		double closestMatch = Double.MAX_VALUE;
