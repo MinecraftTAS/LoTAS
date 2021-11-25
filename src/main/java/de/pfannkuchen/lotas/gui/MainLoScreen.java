@@ -22,7 +22,11 @@ public class MainLoScreen extends LoScreen {
 			return a;
 		}));
 		
-		addWidget(new TickrateChangerLoWidget());
+		TickrateChangerLoWidget t = new TickrateChangerLoWidget(c -> {
+			System.out.println("Tickrate updated to: " + c);
+		});
+		addWidget(t);
+		t.updateTickrate(4.0);
 	}
 	
 }
