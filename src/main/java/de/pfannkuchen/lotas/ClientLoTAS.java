@@ -11,6 +11,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
+import net.minecraft.network.protocol.game.ClientboundCustomPayloadPacket;
 
 /**
  * LoTAS Fabric Mod Core for the Client only.
@@ -40,6 +41,8 @@ public class ClientLoTAS implements ClientModInitializer {
 	public void onRenderInitialize(Minecraft mc) {
 		// Initialize LoScreens
 		ClientLoTAS.loscreenmanager.onGameInitialize(mc);
+		// Update Tickrate Changer Minecraft Instance
+		LoTAS.tickratechanger.mc = mc;
 	}
 	
 	/**
@@ -103,6 +106,14 @@ public class ClientLoTAS implements ClientModInitializer {
 			loscreenmanager.setScreen(new MainLoScreen());
 			if (mc.screen == null) mc.setScreen(new EmptyScreen());
 		}
+	}
+
+	/**
+	 * Executed every time the client receives a custom payload packet.
+	 * @param packet Packet In
+	 */
+	public void onClientPayload(ClientboundCustomPayloadPacket packet) {
+		LoTAS.tickratechanger.onClientPacket(packet);
 	}
 	
 }
