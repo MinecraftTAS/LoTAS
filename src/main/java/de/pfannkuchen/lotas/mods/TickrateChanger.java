@@ -3,15 +3,21 @@
  * 
  * As noted by the @Environment annotations in front of methods, this code works on both client and server.
  * 
- * When first initializing the Tickrate Changer it prepares packet listeners for Requesting a tickrate change and Tickrate change. #<init>
  * Every time the clients wants to change the tickrate it sends a Request Tickrate Change Packet to the server. #requestTickrateUpdate ~~> #requestTickrateUpdate
- * The server proceeds by changing it's tickrate and sends a tickrate change packet to the client from it's listener. #<init> -> #updateTickrate
- * The clients listener finally updates the client tickrate too. #<init> -> #internallyUpdateTickrate
+ * The server proceeds by changing it's tickrate and sends a tickrate change packet to the client from it's listener. #onServerPacket -> #updateTickrate
+ * The clients listener finally updates the client tickrate too. #onClientPacket -> #internallyUpdateTickrate
  */
 package de.pfannkuchen.lotas.mods;
 
+import io.netty.buffer.Unpooled;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.game.ClientboundCustomPayloadPacket;
+import net.minecraft.network.protocol.game.ServerboundCustomPayloadPacket;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 
 /**
  * Main Tickrate Changer
@@ -19,17 +25,31 @@ import net.fabricmc.api.Environment;
  */
 public class TickrateChanger {
 
+	private static final ResourceLocation TICKRATE_CHANGER_RL = new ResourceLocation("lotas", "tickratechanger");
+	@Environment(EnvType.CLIENT)
+	public Minecraft mc;
+	public MinecraftServer mcserver;
+	
 	// Tickrate Variables in various formats
 	private double tickrate;
 	private long msPerTick;
 	private double gamespeed;
 	
 	/**
-	 * Initializes the Tickrate Changer and adds an event handler for incoming/outgoing packets
+	 * Updates the Client tickrate when receiving a packet
 	 */
-	public TickrateChanger() {
-		// TODO: Setup Tickrate packet listener
+	@Environment(EnvType.CLIENT)
+	public void onClientPacket(ClientboundCustomPayloadPacket p) {
+		if (TICKRATE_CHANGER_RL.equals(p.getIdentifier())) internallyUpdateTickrate(p.getData().readDouble());
 	}
+	
+	/**
+	 * Updates the Server tickrate and resend when receiving a packet
+	 */
+	public void onServerPacket(ServerboundCustomPayloadPacket p) {
+		if (TICKRATE_CHANGER_RL.equals(p.getIdentifier())) updateTickrate(p.getData().readDouble());
+	}
+	
 	
 	/**
 	 * Client-Side only tickrate update request. Sends a packet to the server updating the tickrate.
@@ -37,18 +57,27 @@ public class TickrateChanger {
 	 */
 	@Environment(EnvType.CLIENT)
 	public void requestTickrateUpdate(double tickrate) {
-		// TODO: Send Tickrate request packet
+		System.out.println("test");
+		FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
+		buf.writeDouble(tickrate);
+		ServerboundCustomPayloadPacket p = new ServerboundCustomPayloadPacket(TICKRATE_CHANGER_RL, buf);
+		mc.getConnection().send(p);
 	}
 	
 	/**
 	 * Server-Side only tickrate update. Sends a packet to all players
 	 * @param tickrate Tickrate to update to
 	 */
-	@Environment(EnvType.SERVER)
 	public void updateTickrate(double tickrate) {
 		if (tickrate < 0.1) return;
 		internallyUpdateTickrate(tickrate);
-		// TODO: Send Tickrate update packet
+		// Update Tickrate for all Clients
+		mcserver.getPlayerList().getPlayers().forEach(c -> {
+			FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
+			buf.writeDouble(tickrate);
+			ClientboundCustomPayloadPacket p = new ClientboundCustomPayloadPacket(TICKRATE_CHANGER_RL, buf);
+			c.connection.send(p);
+		});
 	}
 	
 	/**
@@ -56,6 +85,7 @@ public class TickrateChanger {
 	 * @param tickrate Tickrate to update to
 	 */
 	private void internallyUpdateTickrate(double tickrate) {
+		System.out.println("Updating Tickrate to " + tickrate + "!");
 		this.tickrate = tickrate;
 		this.msPerTick = (long) (1000L / tickrate);
 		this.gamespeed = tickrate / 20;
