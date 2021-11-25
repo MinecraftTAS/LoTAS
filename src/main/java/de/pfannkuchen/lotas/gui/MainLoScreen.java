@@ -22,7 +22,7 @@ public class MainLoScreen extends LoScreen {
 			LoTAS.tickratechanger.requestTickrateUpdate(c);
 		});
 		addWidget(tickratechangerwidget);
-		tickratechangerwidget.updateTickrate(LoTAS.tickratechanger.getTickrate());
+		TickrateChangerLoWidget.updateTickrate(LoTAS.tickratechanger.getTickrate());
 		
 		addWidget(new MainLoWidget((a, b) -> {
 			boolean enable; // Whether the widget should be enabled or disabled
@@ -40,7 +40,7 @@ public class MainLoScreen extends LoScreen {
 			switch (widgetname) {
 				case "Tickrate Changing":
 					tickratechangerwidget.changeVisibility(enable);
-					tickratechangerwidget.updateTickrate(LoTAS.tickratechanger.getTickrate());
+					TickrateChangerLoWidget.updateTickrate(LoTAS.tickratechanger.getTickrate());
 					break;
 				default:
 					throw new AssertionError();
