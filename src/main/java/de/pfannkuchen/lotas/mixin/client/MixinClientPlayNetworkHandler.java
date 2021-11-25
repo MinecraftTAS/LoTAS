@@ -12,7 +12,7 @@ import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.network.protocol.game.ClientboundCustomPayloadPacket;
 
 /**
- * This mixin is purely responsible for the hooking up the events in {@link ClientLoTAS}.
+ * This mixin is purely responsible for the hooking up the events in {@link ClientLoTAS}. It also cancelles the logger
  * @author Pancake
  */
 @Mixin(ClientPacketListener.class)
@@ -23,9 +23,10 @@ public class MixinClientPlayNetworkHandler {
 	 * Triggers an Event in {@link ClientLoTAS#onClientPayload(ClientboundCustomPayloadPacket)} before the game enters the game loop
 	 * @param ci Callback Info
 	 */
-	@Inject(method = "handleCustomPayload", at = @At("HEAD"))
+	@Inject(method = "handleCustomPayload", at = @At("HEAD"), cancellable = true)
 	public void hookCustomPayloadEvent(ClientboundCustomPayloadPacket packet, CallbackInfo ci) {
 		ClientLoTAS.instance.onClientPayload(packet);
+		ci.cancel();
 	}
 	
 }
