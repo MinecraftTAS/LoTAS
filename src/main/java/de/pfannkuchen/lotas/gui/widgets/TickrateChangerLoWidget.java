@@ -17,7 +17,7 @@ public class TickrateChangerLoWidget extends WindowLoWidget {
 			0.5, 1, 2, 4, 5, 10, 20
 	};
 	// Tickrate index selected
-	private int index;
+	private int index = 6;
 	// Tickrate Slider
 	SliderLoWidget slider;
 	// Update Event
@@ -89,8 +89,9 @@ public class TickrateChangerLoWidget extends WindowLoWidget {
 	
 	@Override
 	protected void render(PoseStack stack, double curX, double curY) {
-
+		stack.pushPose();
 		super.render(stack, curX, curY);
+		stack.popPose();
 	}
 	
 }

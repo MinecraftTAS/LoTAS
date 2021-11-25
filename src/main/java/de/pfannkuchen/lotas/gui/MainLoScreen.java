@@ -2,6 +2,7 @@ package de.pfannkuchen.lotas.gui;
 
 import de.pfannkuchen.lotas.gui.widgets.MainLoWidget;
 import de.pfannkuchen.lotas.gui.widgets.TickrateChangerLoWidget;
+import de.pfannkuchen.lotas.gui.widgets.WindowLoWidget;
 import de.pfannkuchen.lotas.loscreen.LoScreen;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -16,17 +17,39 @@ public class MainLoScreen extends LoScreen {
 	
 	@Override
 	protected void init() {
+		// Add the Tickrate Changer Widget
+		TickrateChangerLoWidget tickratechangerwidget = new TickrateChangerLoWidget(c -> {
+			System.out.println("Tickrate updated to: " + c);
+		});
+		tickratechangerwidget.active = false;
+		
 		addWidget(new MainLoWidget((a, b) -> {
-			if (a.getString().startsWith("\u00A7\u00A7\u00A7l")) a = new TextComponent(a.getString().replaceAll("\u00A7\u00A7\u00A7l", ""));
-			else a = new TextComponent("\u00A7\u00A7\u00A7l" + a.getString());
+			boolean enable; // Whether the widget should be enabled or disabled
+			String widgetname;
+			if (a.getString().startsWith("\u00A7\u00A7\u00A7l")) {
+				a = new TextComponent(a.getString().replaceAll("\u00A7\u00A7\u00A7l", ""));
+				enable = false;
+				widgetname = a.getString();
+			} else {
+				widgetname = a.getString();
+				a = new TextComponent("\u00A7\u00A7\u00A7l" + a.getString());
+				enable = true;
+			}
+			// Find the widget
+			WindowLoWidget widget;
+			switch (widgetname) {
+				case "Tickrate Changing":
+					widget = tickratechangerwidget;
+					break;
+				default:
+					throw new AssertionError();
+			}
+			// Enable/disable widget
+			widget.active = enable;
 			return a;
 		}));
 		
-		TickrateChangerLoWidget t = new TickrateChangerLoWidget(c -> {
-			System.out.println("Tickrate updated to: " + c);
-		});
-		addWidget(t);
-		t.updateTickrate(4.0);
+		addWidget(tickratechangerwidget);
 	}
 	
 }
