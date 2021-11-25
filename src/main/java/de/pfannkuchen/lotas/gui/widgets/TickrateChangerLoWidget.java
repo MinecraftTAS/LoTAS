@@ -4,12 +4,15 @@ import java.util.function.Consumer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.network.chat.TextComponent;
 
 /**
  * Tickrate Changer Widget
  * @author Pancake
  */
+@Environment(EnvType.CLIENT)
 public class TickrateChangerLoWidget extends WindowLoWidget {
 
 	// Tickrates to clamp to

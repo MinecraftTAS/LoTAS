@@ -5,12 +5,15 @@ import java.util.Random;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import de.pfannkuchen.lotas.loscreen.LoScreen;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.network.chat.TextComponent;
 
 /**
  * Moveable Window Widget with Title
  * @author Pancake
  */
+@Environment(EnvType.CLIENT)
 public class WindowLoWidget extends LoScreen {
 
 	// Width and Height of the border around the Menu
