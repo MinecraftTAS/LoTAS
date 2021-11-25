@@ -3,12 +3,15 @@ package de.pfannkuchen.lotas.gui.widgets;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import de.pfannkuchen.lotas.loscreen.LoScreen;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.network.chat.TextComponent;
 
 /**
  * Button Widget
  * @author Pancake
  */
+@Environment(EnvType.CLIENT)
 public class ButtonLoWidget extends LoScreen {
 
 	// Background Color
