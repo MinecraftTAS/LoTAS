@@ -8,6 +8,12 @@
 		"MixinPlayNetworkHandler"
 	],
 	"client": [
+		"client.tickratechanger.MixinItemRenderer",
+		"client.tickratechanger.MixinLevelRenderer",
+		"client.tickratechanger.MixinSoundEngine",
+		"client.tickratechanger.MixinSubtitleOverlay",
+		"client.tickratechanger.MixinTimer",
+		"client.tickratechanger.MixinToastInstance",
 		"client.workaround.MixinClientLanguageWorkaround",
 		"client.MixinClientPlayNetworkHandler",
 		"client.MixinGuiHook",
