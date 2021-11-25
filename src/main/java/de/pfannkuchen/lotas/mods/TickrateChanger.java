@@ -9,6 +9,7 @@
  */
 package de.pfannkuchen.lotas.mods;
 
+import de.pfannkuchen.lotas.gui.widgets.TickrateChangerLoWidget;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -52,8 +53,8 @@ public class TickrateChanger {
 			long time = System.currentTimeMillis() - this.timeSinceTC;
 			fakeTimeSinceTC += time * this.gamespeed;
 			timeSinceTC = System.currentTimeMillis();
-			// Update the LoScreen Widget Tickrate
-			// FIXME: Keep LoScreen within .gui and .loscreen
+			// Update the Tickrate Changer LoWidget
+			TickrateChangerLoWidget.updateTickrate(tickrate);
 		}
 	}
 	
