@@ -6,6 +6,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import de.pfannkuchen.lotas.mods.ConfigManager;
+import de.pfannkuchen.lotas.mods.TickAdvance;
 import de.pfannkuchen.lotas.mods.TickrateChanger;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.network.protocol.game.ServerboundCustomPayloadPacket;
@@ -23,6 +24,8 @@ public class LoTAS implements ModInitializer {
 	public static LoTAS instance;
 	// Tickrate Changer Singleton
 	public static TickrateChanger tickratechanger;
+	// Tick Advance Singleton
+	public static TickAdvance tickadvance;
 	// Config Manager Singleton
 	public static ConfigManager configmanager;
 	
@@ -33,6 +36,7 @@ public class LoTAS implements ModInitializer {
 	public void onInitialize() {
 		LoTAS.instance = this; // Prepare the singleton
 		LoTAS.tickratechanger = new TickrateChanger();
+		LoTAS.tickadvance = new TickAdvance();
 		LoTAS.configmanager = new ConfigManager(new File("lotas_develop.properties"));
 	}
 	
@@ -43,6 +47,8 @@ public class LoTAS implements ModInitializer {
 	public void onServerLoad(MinecraftServer server) {
 		// Update Tickrate Changer Instance
 		LoTAS.tickratechanger.mcserver = server;
+		// Update Tick Advance Instance
+		LoTAS.tickadvance.mcserver = server;
 	}
 	
 	/**
@@ -52,6 +58,8 @@ public class LoTAS implements ModInitializer {
 	public void onServerPayload(ServerboundCustomPayloadPacket packet) {
 		// Update Tickrate Changer Handler
 		LoTAS.tickratechanger.onServerPacket(packet);
+		// Update Tick Advance Handler
+		LoTAS.tickadvance.onServerPacket(packet);
 	}
 	
 }

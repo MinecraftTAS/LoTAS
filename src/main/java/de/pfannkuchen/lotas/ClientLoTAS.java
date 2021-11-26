@@ -43,6 +43,8 @@ public class ClientLoTAS implements ClientModInitializer {
 		ClientLoTAS.loscreenmanager.onGameInitialize(mc);
 		// Update Tickrate Changer Minecraft Instance
 		LoTAS.tickratechanger.mc = mc;
+		// Update Tick Advance Minecraft Instance
+		LoTAS.tickadvance.mc = mc;
 	}
 	
 	/**
@@ -113,7 +115,10 @@ public class ClientLoTAS implements ClientModInitializer {
 	 * @param packet Packet In
 	 */
 	public void onClientPayload(ClientboundCustomPayloadPacket packet) {
+		// Update Tickrate Changer Callback
 		LoTAS.tickratechanger.onClientPacket(packet);
+		/// Update Tick Advance Callback
+		LoTAS.tickadvance.onClientPacket(packet);
 	}
 	
 }
