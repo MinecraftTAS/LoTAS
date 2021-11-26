@@ -25,8 +25,6 @@ public class TickrateChangerLoWidget extends WindowLoWidget {
 	private static int index = 6;
 	// Tickrate Slider
 	private static SliderLoWidget slider;
-	// Tick advance toggle button
-	private static ToggleButtonLoWidget tickadvancebtn;
 	// Update Event
 	private static Consumer<Double> update;
 	
@@ -34,7 +32,7 @@ public class TickrateChangerLoWidget extends WindowLoWidget {
 	 * Initializes a Tickrate Changer Widget
 	 */
 	public TickrateChangerLoWidget(Consumer<Double> update) {
-		super(new TextComponent("Tickrate Changer"), .15, .185);
+		super(new TextComponent("Tickrate Changer"), .15, .135);
 		TickrateChangerLoWidget.update = update;
 	}
 
@@ -49,16 +47,11 @@ public class TickrateChangerLoWidget extends WindowLoWidget {
 		addWidget(new ButtonLoWidget(true, 0.08, 0.035, .065, () -> {
 			updateTickrate(TickrateChangerLoWidget.index-1, false);
 		}, new TextComponent("-")));
-		addWidget(tickadvancebtn = new ToggleButtonLoWidget(true, 0.005, 0.138, 0.14, b -> {
-			LoTAS.tickadvance.requestTickadvance(b);
-		}, new TextComponent("Toggle Tickadvance")));
 		// Load elements from config
 		ConfigManager config = LoTAS.configmanager;
 		this.x = config.getDouble("tickratechangerwidget", "x");
 		this.y = config.getDouble("tickratechangerwidget", "y");
 		this.active = config.getBoolean("tickratechangerwidget", "active");
-		// Load tick advance from tick advance class
-		tickadvancebtn.down = LoTAS.tickadvance.isTickadvance();
 		super.init();
 	}
 	
@@ -101,14 +94,6 @@ public class TickrateChangerLoWidget extends WindowLoWidget {
 		}
 		// Update Tickrate
 		updateTickrate(bestIndex, false);
-	}
-	
-	/**
-	 * Updates the Tick Advance Widget
-	 * @param tickadvance tickadvance
-	 */
-	public static void updateTickAdvance(boolean tickadvance) {
-		if (tickadvancebtn != null) tickadvancebtn.down = tickadvance;
 	}
 	
 	/**
