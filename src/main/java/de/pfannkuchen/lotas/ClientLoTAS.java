@@ -60,7 +60,8 @@ public class ClientLoTAS implements ClientModInitializer {
 	 * @param mc Instance of Minecraft
 	 */
 	public void onTick(Minecraft mc) {
-
+		// Tick Tick Advance
+		LoTAS.tickadvance.onTick(mc);
 	}
 	
 	/**
