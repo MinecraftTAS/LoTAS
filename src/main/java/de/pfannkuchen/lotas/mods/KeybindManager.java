@@ -7,6 +7,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.lwjgl.glfw.GLFW;
 
 import de.pfannkuchen.lotas.ClientLoTAS;
+import de.pfannkuchen.lotas.LoTAS;
 import de.pfannkuchen.lotas.mixin.client.MixinKeyMappingsAccessor;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -26,6 +27,16 @@ public class KeybindManager {
 	private KeyMapping openLoTASMenuKeybind = new KeyMapping("key.openlotasmenu", GLFW.GLFW_KEY_R, "key.categories.lotas");
 	
 	/**
+	 * Keybinding for advancing a single tick while being in Tick Advance.
+	 */
+	private KeyMapping tickadvanceKeybind = new KeyMapping("key.tickadvance", GLFW.GLFW_KEY_TAB, "key.categories.lotas");
+	
+	/**
+	 * Keybinding for advancing a single tick while being in Tick Advance.
+	 */
+	private KeyMapping toggleTickadvance = new KeyMapping("key.toggletickadvance", GLFW.GLFW_KEY_F8, "key.categories.lotas");
+	
+	/**
 	 * Categories for all keybinds used.
 	 */
 	private String[] keybindCategories = new String[] {"key.categories.lotas"};
@@ -38,7 +49,7 @@ public class KeybindManager {
 		final Map<String, Integer> categories = MixinKeyMappingsAccessor.getCategorySorting();
 		for (int i = 0; i < keybindCategories.length; i++) categories.put(keybindCategories[i], i+8);
 		// Finish by adding Keybinds
-		return ArrayUtils.addAll(keyMappings, openLoTASMenuKeybind);
+		return ArrayUtils.addAll(keyMappings, openLoTASMenuKeybind, tickadvanceKeybind, toggleTickadvance);
 	}
 	
 	/**
@@ -48,6 +59,10 @@ public class KeybindManager {
 	public void onGameLoop(Minecraft mc) {
 		if (isKeyDown(mc, openLoTASMenuKeybind))
 			ClientLoTAS.instance.toggleLoTASMenu(mc);
+		else if (isKeyDown(mc, tickadvanceKeybind))
+			LoTAS.tickadvance.requestTickadvance();
+		else if (isKeyDown(mc, toggleTickadvance))
+			LoTAS.tickadvance.requestTickadvanceToggle();
 	}
 	
 	/**
@@ -63,7 +78,7 @@ public class KeybindManager {
 	 */
 	private boolean isKeyDown(Minecraft mc, KeyMapping map) {
 		boolean wasPressed = keys.containsKey(map) ? keys.get(map) : false;
-		boolean isPressed = GLFW.glfwGetKey(mc.getWindow().getWindow(), ((MixinKeyMappingsAccessor) openLoTASMenuKeybind).getKey().getValue()) == GLFW.GLFW_PRESS;
+		boolean isPressed = GLFW.glfwGetKey(mc.getWindow().getWindow(), ((MixinKeyMappingsAccessor) map).getKey().getValue()) == GLFW.GLFW_PRESS;
 		keys.put(map, isPressed);
 		return !wasPressed && isPressed;
 	}

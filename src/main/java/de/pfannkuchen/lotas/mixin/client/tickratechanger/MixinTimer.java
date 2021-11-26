@@ -28,7 +28,7 @@ public class MixinTimer {
 
     @Overwrite
     public int advanceTime(long l) {
-        this.tickDelta = (float)(l - this.lastMs) / (float) LoTAS.tickratechanger.getMsPerTick();
+        this.tickDelta = (float)(l - this.lastMs) / (float) ((LoTAS.tickadvance.isTickadvanceEnabled() && !LoTAS.tickadvance.shouldTick) ? Float.MAX_VALUE : LoTAS.tickratechanger.getMsPerTick());
         this.lastMs = l;
         this.partialTick += this.tickDelta;
         int i = (int)this.partialTick;
