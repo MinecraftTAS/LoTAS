@@ -121,7 +121,7 @@ public class LoScreenManager {
 	 * @return Should cancel
 	 */
 	public boolean onScreenUpdate(Screen vanillaScreen, Minecraft mc) {
-		if (vanillaScreen instanceof EmptyScreen) return false; // don't close on intended screen
+		if (vanillaScreen instanceof EmptyScreen || mc.screen instanceof EmptyScreen) return false; // don't close on intended screen
 		if (this.screen != null) {
 			setScreen(null);
 			return true;
