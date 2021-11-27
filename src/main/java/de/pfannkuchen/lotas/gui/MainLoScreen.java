@@ -1,6 +1,7 @@
 package de.pfannkuchen.lotas.gui;
 
 import de.pfannkuchen.lotas.LoTAS;
+import de.pfannkuchen.lotas.gui.widgets.DupeModLoWidget;
 import de.pfannkuchen.lotas.gui.widgets.MainLoWidget;
 import de.pfannkuchen.lotas.gui.widgets.TickrateChangerLoWidget;
 import de.pfannkuchen.lotas.loscreen.LoScreen;
@@ -24,6 +25,14 @@ public class MainLoScreen extends LoScreen {
 		addWidget(tickratechangerwidget);
 		TickrateChangerLoWidget.updateTickrate(LoTAS.tickratechanger.getTickrate());
 		
+		// Add the Dupe Mod Widget
+		DupeModLoWidget dupemodwidget = new DupeModLoWidget(() -> {
+			System.out.println("Saving");
+		}, () -> {
+			System.out.println("Loading");
+		});
+		addWidget(dupemodwidget);
+		
 		addWidget(new MainLoWidget((a, b) -> {
 			boolean enable; // Whether the widget should be enabled or disabled
 			String widgetname;
@@ -41,6 +50,9 @@ public class MainLoScreen extends LoScreen {
 				case "Tickrate Changing":
 					tickratechangerwidget.changeVisibility(enable);
 					TickrateChangerLoWidget.updateTickrate(LoTAS.tickratechanger.getTickrate());
+					break;
+				case "Duping":
+					dupemodwidget.changeVisibility(enable);
 					break;
 				default:
 					throw new AssertionError();
