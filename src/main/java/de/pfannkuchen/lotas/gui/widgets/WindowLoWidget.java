@@ -76,6 +76,7 @@ public class WindowLoWidget extends LoScreen {
 			this.y = rng.nextDouble(0.7);
 		// Force horizontal animation if none given
 		if (!vertical && !horizontal) horizontal = true;
+		super.init();
 	}
 	
 	@Override

@@ -6,9 +6,11 @@ import org.lwjgl.glfw.GLFW;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.vertex.PoseStack;
 
+import de.pfannkuchen.lotas.gui.EmptyScreen;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
 
 /**
  * Renders and manages the LoScreens.
@@ -39,7 +41,7 @@ public class LoScreenManager {
 	 * @return Is screen opened?
 	 */
 	public boolean isScreenOpened() {
-		return screen != null;
+		return this.screen != null;
 	}
 	
 	/**
@@ -52,12 +54,13 @@ public class LoScreenManager {
 			screen.mc = this.mc;
 			this.savedGuiScale = this.mc.getWindow().getGuiScale();
 			this.mc.getWindow().setGuiScale(1);
-			screen.init();
-			screen.update(this.lastWidth, this.lastHeight);
+			screen.reset(this.lastWidth, this.lastHeight);
 		} else if (savedGuiScale != -1) {
 			this.mc.getWindow().setGuiScale(savedGuiScale);
 			savedGuiScale = -1;
 		}
+		// Reinitialize current vanilla screen
+		if (this.mc.screen != null) this.mc.screen.resize(this.mc, this.mc.getWindow().getGuiScaledWidth(), this.mc.getWindow().getGuiScaledHeight());
 	}
 	
 	/**
@@ -77,14 +80,16 @@ public class LoScreenManager {
 		final boolean isRightPressed = GLFW.glfwGetMouseButton(mc.getWindow().getWindow(), GLFW.GLFW_MOUSE_BUTTON_RIGHT) == GLFW.GLFW_PRESS;
 		// Check whether clicks/moves have passed.
 		if (screen != null) {
-			if (width != lastWidth || height != lastHeight) this.screen.update(width, height);
+			if (width != lastWidth || height != lastHeight) {
+				this.lastWidth = width;
+				this.lastHeight = height;
+				this.setScreen(this.screen);
+			}
 			if (!isLeftPressed && this.wasLeftPressed) this.screen.click(posX, posY, 0);
 			if (!isMiddlePressed && this.wasMiddlePressed) this.screen.click(posX, posY, 2);
 			if (!isRightPressed && this.wasRightPressed) this.screen.click(posX, posY, 1);
 			if (isLeftPressed || isRightPressed || isMiddlePressed) this.screen.drag(this.lastPosX, this.lastPosY, posX, posY);
 		}
-		this.lastWidth = width;
-		this.lastHeight = height;
 		this.wasLeftPressed = isLeftPressed;
 		this.wasMiddlePressed = isMiddlePressed;
 		this.wasRightPressed = isRightPressed;
@@ -107,6 +112,21 @@ public class LoScreenManager {
 	 */
 	public void onGuiRender(PoseStack stack, Minecraft mc) {
 		if (this.screen != null) this.screen.render(stack, lastPosX, lastPosY);
+	}
+
+	/**
+	 * Closes the LoScreen when the vanilla one changes
+	 * @param vanillaScreen Screen updated to
+	 * @param mc Instance of Minecraft
+	 * @return Should cancel
+	 */
+	public boolean onScreenUpdate(Screen vanillaScreen, Minecraft mc) {
+		if (vanillaScreen instanceof EmptyScreen) return false; // don't close on intended screen
+		if (this.screen != null) {
+			setScreen(null);
+			return true;
+		}
+		return false;	
 	}
 	
 }

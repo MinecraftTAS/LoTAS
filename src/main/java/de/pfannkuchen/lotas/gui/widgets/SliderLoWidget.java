@@ -61,9 +61,6 @@ public class SliderLoWidget extends LoScreen {
 	}
 	
 	@Override
-	protected void init() {}
-	
-	@Override
 	protected void click(double curX, double curY, int button) {
 		if (!this.active) return;
 		this.isDragging = false; // Reset dragging

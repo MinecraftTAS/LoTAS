@@ -11,6 +11,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.protocol.game.ClientboundCustomPayloadPacket;
 
 /**
@@ -47,6 +48,17 @@ public class ClientLoTAS implements ClientModInitializer {
 		LoTAS.tickadvance.mc = mc;
 		// Update Dupe Mod Minecraft Instance
 		LoTAS.dupemod.mc = mc;
+	}
+	
+	/**
+	 * Executed every time the Minecraft Screen changes
+	 * @param screen New Screen
+	 * @param mc Instance of Minecraft
+	 * @return Should cancel
+	 */
+	public boolean onGuiUpdate(Screen screen, Minecraft mc) {
+		// Trigger LoScreen Event
+		return loscreenmanager.onScreenUpdate(screen, mc);
 	}
 	
 	/**

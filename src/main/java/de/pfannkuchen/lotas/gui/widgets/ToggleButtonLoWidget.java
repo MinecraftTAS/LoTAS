@@ -58,9 +58,6 @@ public class ToggleButtonLoWidget extends LoScreen {
 	}
 	
 	@Override
-	protected void init() {}
-	
-	@Override
 	protected void click(double curX, double curY, int button) {
 		if (!this.active) return;
 		// Trigger click event when mouse is over the button
