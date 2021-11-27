@@ -12,7 +12,7 @@ import net.minecraft.network.chat.TextComponent;
  */
 @Environment(EnvType.CLIENT)
 public class TickrateChangerLoWidget extends WindowLoWidget {
-
+	
 	// Tickrates to clamp to
 	private static final double[] TICKRATES = {
 			0.5, 1, 2, 4, 5, 10, 20

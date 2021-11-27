@@ -4,6 +4,7 @@ import java.util.function.BiFunction;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 
+import de.pfannkuchen.lotas.LoTAS;
 import de.pfannkuchen.lotas.loscreen.LoScreen;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -51,17 +52,7 @@ public class MainLoWidget extends LoScreen {
 	// Category Color when focused
 	private static final int CATEGORY_FOCUS_COLOR = 0xff22e187;
 	// Category Texts
-	private static final TextComponent[] CATEGORIES = new TextComponent[] {
-		new TextComponent("Tickrate Changing"),
-		new TextComponent("Duping"),
-		new TextComponent("Savestating"),
-		new TextComponent("Dragon Manipulation"),
-		new TextComponent("Drop Manipulation"),
-		new TextComponent("AI Manipulation"),
-		new TextComponent("Spawn Manipulation"),
-		new TextComponent("Misc Manipulation"),
-		new TextComponent("Configuration")
-	};
+	private static TextComponent[] CATEGORIES;
 	
 	// Version Position. X-Offset by BACKGROUND_WIDTH
 	private static final double VERSION_X = 0.013;
@@ -85,6 +76,18 @@ public class MainLoWidget extends LoScreen {
 	 */
 	public MainLoWidget(BiFunction<TextComponent, Integer, TextComponent> onClick) {
 		this.onClick = onClick;
+		// Update messages to fit with already opened windows
+		CATEGORIES = new TextComponent[] {
+			LoTAS.configmanager.getBoolean("tickratechangerwidget", "active") ? new TextComponent("\u00A7\u00A7\u00A7lTickrate Changing") : new TextComponent("Tickrate Changing"),
+			LoTAS.configmanager.getBoolean("dupemodwidget", "active") ? new TextComponent("\u00A7\u00A7\u00A7lDuping") : new TextComponent("Duping"),
+			new TextComponent("Savestating"),
+			new TextComponent("Dragon Manipulation"),
+			new TextComponent("Drop Manipulation"),
+			new TextComponent("AI Manipulation"),
+			new TextComponent("Spawn Manipulation"),
+			new TextComponent("Misc Manipulation"),
+			new TextComponent("Configuration")
+		};
 	}
 	
 	@Override
@@ -126,8 +129,5 @@ public class MainLoWidget extends LoScreen {
 		this.draw(stack, VERSION2, 1 - BACKGROUND_WIDTH * ease(this.animationProgress, 0, 1, 6) + VERSION_X, VERSION_Y+0.03, VERSION_SIZE, VERSION_COLOR, false);
 		super.render(stack, curX, curY);
 	}
-
-	@Override
-	public void init() {}
 	
 }

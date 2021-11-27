@@ -4,8 +4,7 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.Redirect;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 
@@ -13,27 +12,33 @@ import de.pfannkuchen.lotas.ClientLoTAS;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.GameRenderer;
 
 /**
  * This mixin hooks up the screen render event to {@link ClientLoTAS}.
- * @author Scribble
+ * @author Pancake
  */
-@Mixin(Gui.class)
+@Mixin(GameRenderer.class)
 @Environment(EnvType.CLIENT)
 public class MixinGuiHook {
 
-	// Shadow Field seen in Gui.class
+	// Shadow Field seen in GameRenderer.class
 	@Shadow @Final
 	public Minecraft minecraft;
 	
 	/**
 	 * Triggers an Event in {@link ClientLoTAS#onRenderScreen(Minecraft)} after the gui screens are being rendered.
 	 * Only triggers while in a minecraft world
-	 * @param ci Callback Info
+	 * @param in Original Screen
+	 * @param stack Pose Stack
+	 * @param i Width
+	 * @param j Height
+	 * @param f Partial Ticks
 	 */
-	@Inject(method = "render", at = @At(value = "INVOKE", shift = At.Shift.AFTER, target = "Lnet/minecraft/client/gui/Gui;renderEffects(Lcom/mojang/blaze3d/vertex/PoseStack;)V"))
-	public void renderScreenEvent(PoseStack stack, float f, CallbackInfo ci) {
+	@Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/Screen;render(Lcom/mojang/blaze3d/vertex/PoseStack;IIF)V"))
+	public void renderScreenEvent(Screen in, PoseStack stack, int i, int j, float f) {
+		in.render(stack, i, j, f);
 		if (minecraft.level != null) ClientLoTAS.instance.onRenderScreen(stack, minecraft);
 	}
 	
