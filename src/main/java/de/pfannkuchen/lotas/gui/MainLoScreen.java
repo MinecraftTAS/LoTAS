@@ -27,9 +27,9 @@ public class MainLoScreen extends LoScreen {
 		
 		// Add the Dupe Mod Widget
 		DupeModLoWidget dupemodwidget = new DupeModLoWidget(() -> {
-			System.out.println("Saving");
+			LoTAS.dupemod.requestDupe(true);
 		}, () -> {
-			System.out.println("Loading");
+			LoTAS.dupemod.requestDupe(false);
 		});
 		addWidget(dupemodwidget);
 		
