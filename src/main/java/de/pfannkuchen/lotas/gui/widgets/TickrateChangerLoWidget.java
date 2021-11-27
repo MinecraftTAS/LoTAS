@@ -37,7 +37,7 @@ public class TickrateChangerLoWidget extends WindowLoWidget {
 		addWidget(slider = new SliderLoWidget(true, 0.015, 0.095, .12, index / ((double) TICKRATES.length), c -> {
 			return new TextComponent("Tickrate: " + updateTickrate((int) (c*TICKRATES.length), true));
 		}, new TextComponent("Tickrate: " + TICKRATES[index])));
-		addWidget( new ButtonLoWidget(true, 0.005, 0.035, .065, () -> {
+		addWidget(new ButtonLoWidget(true, 0.005, 0.035, .065, () -> {
 			updateTickrate(TickrateChangerLoWidget.index+1, false);
 		}, new TextComponent("+")));
 		addWidget(new ButtonLoWidget(true, 0.08, 0.035, .065, () -> {
