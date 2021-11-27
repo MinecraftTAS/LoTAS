@@ -56,7 +56,9 @@ public abstract class LoScreen {
 	/**
 	 * Initializes the Gui and it's widgets.
 	 */
-	protected abstract void init();
+	protected void init() {
+		this.widgets.forEach(w -> w.init());
+	}
 	
 	/**
 	 * Updates the Gui and it's widgets.
@@ -67,6 +69,8 @@ public abstract class LoScreen {
 		this.width = width;
 		this.height = height;
 		this.guiscale = mc.getWindow().getGuiScale();
+		this.widgets.clear();
+		this.init();
 		this.widgets.forEach(w -> w.update(width, height));
 	}
 	
@@ -150,6 +154,17 @@ public abstract class LoScreen {
 	 */
 	protected final double ease(double t, double b, double c, double d) {
 		return -c *(t/=d)*(t-2) + b;
+	}
+
+	/**
+	 * Resets all Widgets and recreates the Gui from scratch
+	 * @param width
+	 * @param height
+	 */
+	public void reset(int width, int height) {
+		this.widgets.clear();
+		this.init();
+		this.update(width, height);
 	}
 	
 }

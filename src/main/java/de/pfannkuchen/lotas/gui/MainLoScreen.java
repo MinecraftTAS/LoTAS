@@ -60,6 +60,7 @@ public class MainLoScreen extends LoScreen {
 			// Enable/disable widget
 			return a;
 		}));
+		super.init();
 	}
 	
 }
