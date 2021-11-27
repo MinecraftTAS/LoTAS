@@ -4,7 +4,9 @@ import java.util.Random;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 
+import de.pfannkuchen.lotas.LoTAS;
 import de.pfannkuchen.lotas.loscreen.LoScreen;
+import de.pfannkuchen.lotas.mods.ConfigManager;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.network.chat.TextComponent;
@@ -30,6 +32,7 @@ public class WindowLoWidget extends LoScreen {
 	
 	// Window Sizes
 	private TextComponent title;
+	private String id;
 	protected double windowWidth;
 	protected double windowHeight;
 	public double x = 0.2;
@@ -46,12 +49,13 @@ public class WindowLoWidget extends LoScreen {
 	private double draggingOffsetY;
 	
 	// Editable Properties
-	public boolean active = false;
+	private boolean active = false;
 	
 	/**
 	 * Initializes the Window with a Title and Size
 	 */
-	public WindowLoWidget(TextComponent title, double windowWidth, double windowHeight) {
+	public WindowLoWidget(String id, TextComponent title, double windowWidth, double windowHeight) {
+		this.id = id;
 		this.title = title;
 		this.windowWidth = windowWidth;
 		this.windowHeight = windowHeight;
@@ -59,6 +63,11 @@ public class WindowLoWidget extends LoScreen {
 
 	@Override 
 	protected void init() {
+		// Load elements from config
+		ConfigManager config = LoTAS.configmanager;
+		this.x = config.getDouble(id, "x");
+		this.y = config.getDouble(id, "y");
+		this.active = config.getBoolean(id, "active");
 		// Force horizontal animation if none given
 		if (!vertical && !horizontal) horizontal = true;
 	}
@@ -68,6 +77,12 @@ public class WindowLoWidget extends LoScreen {
 		if (!this.active) return;
 		this.isDragging = false; // Reset dragging
 		super.click(curX-this.x, curY-this.y, button);
+		// Save Config AFTER super method
+		ConfigManager config = LoTAS.configmanager;
+		config.setDouble(id, "x", this.x);
+		config.setDouble(id, "y", this.y);
+		config.setBoolean(id, "active", this.active);
+		config.save();
 	}
 	
 	@Override
@@ -91,6 +106,7 @@ public class WindowLoWidget extends LoScreen {
 	@Override
 	protected void render(PoseStack stack, double curX, double curY) {
 		if (!this.active) return;
+		stack.pushPose();
 		this.animationProgress = Math.min(6, this.animationProgress + mc.getDeltaFrameTime()); // Move the animation
 		if (this.animationProgress != 6) {
 			stack.translate(
@@ -106,6 +122,18 @@ public class WindowLoWidget extends LoScreen {
 		this.draw(stack, this.title, this.x+0.006, this.y+0.007, 20, TITLE_COLOR, false);
 		stack.translate(this.x*this.width, this.y*this.height, 0);
 		super.render(stack, curX-this.x, curY-this.y);
+		stack.popPose();
+	}
+	
+	/**
+	 * Enables or Disables a widget and stores it into the config
+	 * @param enable Whether the widget is to enable or disable
+	 */
+	public void changeVisibility(boolean enable) {
+		this.active = enable;
+		ConfigManager config = LoTAS.configmanager;
+		config.setBoolean(id, "active", this.active);
+		config.save();
 	}
 	
 }
