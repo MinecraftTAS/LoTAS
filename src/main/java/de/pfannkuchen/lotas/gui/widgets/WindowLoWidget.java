@@ -38,7 +38,7 @@ public class WindowLoWidget extends LoScreen {
 	public double x = 0.2;
 	public double y = 0.2;
 	// Animation Progress
-	private double animationProgress;
+	private double animationProgress = 6;
 	private boolean leftORight = rng.nextBoolean();
 	private boolean topOBottom = rng.nextBoolean();
 	private boolean horizontal = rng.nextBoolean();
@@ -137,6 +137,7 @@ public class WindowLoWidget extends LoScreen {
 	 */
 	public void changeVisibility(boolean enable) {
 		this.active = enable;
+		if (enable) animationProgress = 0;
 		ConfigManager config = LoTAS.configmanager;
 		config.setBoolean(id, "active", this.active);
 		config.save();
