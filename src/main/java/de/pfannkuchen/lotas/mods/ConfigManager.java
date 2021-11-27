@@ -86,7 +86,7 @@ public class ConfigManager {
 	 * @see #init() for loading the configuartion.
 	 */
 	public double getDouble(String category, String key) {
-		return Double.valueOf(props.getProperty(category + ":" + key, "0.1"));
+		return Double.valueOf(props.getProperty(category + ":" + key, "-1"));
 	}
 	
 	/**
