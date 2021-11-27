@@ -2,10 +2,6 @@ package de.pfannkuchen.lotas.gui.widgets;
 
 import java.util.function.Consumer;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-
-import de.pfannkuchen.lotas.LoTAS;
-import de.pfannkuchen.lotas.mods.ConfigManager;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.network.chat.TextComponent;
@@ -32,7 +28,7 @@ public class TickrateChangerLoWidget extends WindowLoWidget {
 	 * Initializes a Tickrate Changer Widget
 	 */
 	public TickrateChangerLoWidget(Consumer<Double> update) {
-		super(new TextComponent("Tickrate Changer"), .15, .135);
+		super("tickratechangerwidget", new TextComponent("Tickrate Changer"), .15, .135);
 		TickrateChangerLoWidget.update = update;
 	}
 
@@ -47,11 +43,6 @@ public class TickrateChangerLoWidget extends WindowLoWidget {
 		addWidget(new ButtonLoWidget(true, 0.08, 0.035, .065, () -> {
 			updateTickrate(TickrateChangerLoWidget.index-1, false);
 		}, new TextComponent("-")));
-		// Load elements from config
-		ConfigManager config = LoTAS.configmanager;
-		this.x = config.getDouble("tickratechangerwidget", "x");
-		this.y = config.getDouble("tickratechangerwidget", "y");
-		this.active = config.getBoolean("tickratechangerwidget", "active");
 		super.init();
 	}
 	
@@ -94,38 +85,6 @@ public class TickrateChangerLoWidget extends WindowLoWidget {
 		}
 		// Update Tickrate
 		updateTickrate(bestIndex, false);
-	}
-	
-	/**
-	 * Save Configuration after releasing the mouse
-	 */
-	@Override
-	protected void click(double curX, double curY, int button) {
-		super.click(curX, curY, button);
-		// Save Config AFTER super method
-		ConfigManager config = LoTAS.configmanager;
-		config.setDouble("tickratechangerwidget", "x", this.x);
-		config.setDouble("tickratechangerwidget", "y", this.y);
-		config.setBoolean("tickratechangerwidget", "active", this.active);
-		config.save();
-	}
-		
-	@Override
-	protected void render(PoseStack stack, double curX, double curY) {
-		stack.pushPose();
-		super.render(stack, curX, curY);
-		stack.popPose();
-	}
-
-	/**
-	 * Enables or Disables a widget and stores it into the config
-	 * @param enable Whether the widget is to enable or disable
-	 */
-	public void changeVisibility(boolean enable) {
-		this.active = enable;
-		ConfigManager config = LoTAS.configmanager;
-		config.setBoolean("tickratechangerwidget", "active", this.active);
-		config.save();
 	}
 	
 }
