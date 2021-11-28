@@ -48,6 +48,8 @@ public class ClientLoTAS implements ClientModInitializer {
 		LoTAS.tickadvance.mc = mc;
 		// Update Dupe Mod Minecraft Instance
 		LoTAS.dupemod.mc = mc;
+		// Update Savestate Mod Minecraft Instance
+		LoTAS.savestatemod.mc = mc;
 	}
 	
 	/**
@@ -136,6 +138,8 @@ public class ClientLoTAS implements ClientModInitializer {
 		LoTAS.tickadvance.onClientPacket(packet);
 		// Update Dupe Mod Callback
 		LoTAS.dupemod.onClientPacket(packet);
+		// Update Savestate Mod Callback
+		LoTAS.savestatemod.onClientPacket(packet);
 	}
 	
 }
