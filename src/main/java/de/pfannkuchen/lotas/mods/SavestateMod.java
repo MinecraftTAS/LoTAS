@@ -9,6 +9,7 @@ import java.io.IOException;
 import org.apache.commons.io.FileUtils;
 
 import de.pfannkuchen.lotas.ClientLoTAS;
+import de.pfannkuchen.lotas.LoTAS;
 import de.pfannkuchen.lotas.gui.StateLoScreen;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.api.EnvType;
@@ -28,7 +29,7 @@ import net.minecraft.world.level.storage.LevelResource;
  */
 public class SavestateMod {
 
-	private static final ResourceLocation SAVESTATE_MOD_RL = new ResourceLocation("lotas", "savestatemod");
+	static final ResourceLocation SAVESTATE_MOD_RL = new ResourceLocation("lotas", "savestatemod");
 	@Environment(EnvType.CLIENT)
 	public Minecraft mc;
 	public MinecraftServer mcserver;
@@ -49,11 +50,10 @@ public class SavestateMod {
 	public void onClientPacket(ClientboundCustomPayloadPacket p) {
 		if (SAVESTATE_MOD_RL.equals(p.getIdentifier())) {
 			FriendlyByteBuf buf = p.getData();
-			int state = buf.readInt();
 			boolean lockOUnlock = buf.readBoolean();
 			if (lockOUnlock)
 				ClientLoTAS.loscreenmanager.setScreen(new StateLoScreen());
-			else 
+			else
 				StateLoScreen.allowUnlocking();
 		}
 	}
@@ -109,18 +109,24 @@ public class SavestateMod {
 		}
 	}
 	
+	public void freezeClient(boolean freezeOrNot, MinecraftServer mcserver) {
+		mcserver.getPlayerList().getPlayers().forEach(c -> {
+			// Freeze Client Packet
+			FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
+			buf.writeBoolean(freezeOrNot); // Write True - Lock
+			c.connection.send(new ClientboundCustomPayloadPacket(SAVESTATE_MOD_RL, buf));
+			// Fake Tickrate Packet
+			LoTAS.tickadvance.updateTickadvanceStatus(freezeOrNot);
+		});
+	}
+	
 	/**
 	 * Saves a new state of the world
 	 */
 	@SuppressWarnings("resource")
 	private void savestate(MinecraftServer mcserver) {
 		// Freeze Client
-		mcserver.getPlayerList().getPlayers().forEach(c -> {
-			FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
-			buf.writeInt(1); // Write State 1 - Savestating
-			buf.writeBoolean(true); // Write True - Lock
-			c.connection.send(new ClientboundCustomPayloadPacket(SAVESTATE_MOD_RL, buf));
-		});
+		freezeClient(true, mcserver);
 		// Save Playerdata
 		mcserver.getPlayerList().saveAll();
 		// Save Worlds
@@ -138,12 +144,7 @@ public class SavestateMod {
 			e.printStackTrace();
 		}
 		// Unfreeze Client
-		mcserver.getPlayerList().getPlayers().forEach(c -> {
-			FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
-			buf.writeInt(1); // Write State 1 - Savestating
-			buf.writeBoolean(false); // Write False - Unlock
-			c.connection.send(new ClientboundCustomPayloadPacket(SAVESTATE_MOD_RL, buf));
-		});
+		freezeClient(false, mcserver);
 	}
 	
 	/**
@@ -160,12 +161,7 @@ public class SavestateMod {
 	 */
 	private void deletestate(int i, MinecraftServer mcserver) {
 		// Freeze Client
-		mcserver.getPlayerList().getPlayers().forEach(c -> {
-			FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
-			buf.writeInt(3); // Write State 3 - Deletestating
-			buf.writeBoolean(true); // Write True - Lock
-			c.connection.send(new ClientboundCustomPayloadPacket(SAVESTATE_MOD_RL, buf));
-		});
+		freezeClient(true, mcserver);
 		// Prepare folders
 		prepareFolders(mcserver);
 		File worldSavestateDir = new File(savestatesDir, i + "");
@@ -182,12 +178,7 @@ public class SavestateMod {
 			if (id > i) file.renameTo(new File(file.getParentFile(), (id-1) + ""));
 		}
 		// Unfreeze Client
-		mcserver.getPlayerList().getPlayers().forEach(c -> {
-			FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
-			buf.writeInt(3); // Write State 3 - Deletestating
-			buf.writeBoolean(false); // Write False - Unlock
-			c.connection.send(new ClientboundCustomPayloadPacket(SAVESTATE_MOD_RL, buf));
-		});
+		freezeClient(false, mcserver);
 	}
 
 	/**

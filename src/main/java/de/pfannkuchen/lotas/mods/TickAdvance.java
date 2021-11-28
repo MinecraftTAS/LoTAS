@@ -17,8 +17,8 @@ import net.minecraft.server.MinecraftServer;
  */
 public class TickAdvance {
 
-	private static final ResourceLocation TICK_ADVANCE_RL = new ResourceLocation("lotas", "tickadvance");
-	private static final ResourceLocation TICK_RL = new ResourceLocation("lotas", "tick");
+	static final ResourceLocation TICK_ADVANCE_RL = new ResourceLocation("lotas", "tickadvance");
+	static final ResourceLocation TICK_RL = new ResourceLocation("lotas", "tick");
 	@Environment(EnvType.CLIENT)
 	public Minecraft mc;
 	public MinecraftServer mcserver;

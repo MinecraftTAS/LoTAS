@@ -7,7 +7,6 @@ import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import de.pfannkuchen.lotas.gui.EmptyScreen;
-import de.pfannkuchen.lotas.gui.StateLoScreen;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
@@ -53,7 +52,7 @@ public class LoScreenManager {
 		this.screen = screen;
 		if (screen != null) {
 			screen.mc = this.mc;
-			if (this.savedGuiScale == -1) this.savedGuiScale = this.mc.getWindow().getGuiScale(); // FIXME: This doesn't seem to work all that well.
+			if (this.savedGuiScale == -1) this.savedGuiScale = this.mc.getWindow().getGuiScale();
 			this.mc.getWindow().setGuiScale(1);
 			screen.reset(this.lastWidth, this.lastHeight);
 			if (mc.screen == null) mc.setScreen(new EmptyScreen());
@@ -124,12 +123,9 @@ public class LoScreenManager {
 	 * @return Should cancel
 	 */
 	public boolean onScreenUpdate(Screen vanillaScreen, Minecraft mc) {
-		if (vanillaScreen instanceof EmptyScreen || mc.screen instanceof EmptyScreen) return false; // don't close on intended screen
-		if (this.screen != null) {
-			if (this.screen instanceof StateLoScreen) return true; // FIXME: Add property instead of this.
-			setScreen(null);
+		if (vanillaScreen instanceof EmptyScreen) return false; // don't close on intended screen
+		if (this.screen != null)
 			return true;
-		}
 		return false;	
 	}
 	
