@@ -3,6 +3,7 @@ package de.pfannkuchen.lotas.gui;
 import de.pfannkuchen.lotas.LoTAS;
 import de.pfannkuchen.lotas.gui.widgets.DupeModLoWidget;
 import de.pfannkuchen.lotas.gui.widgets.MainLoWidget;
+import de.pfannkuchen.lotas.gui.widgets.SavestatesLoWidget;
 import de.pfannkuchen.lotas.gui.widgets.TickrateChangerLoWidget;
 import de.pfannkuchen.lotas.loscreen.LoScreen;
 import net.fabricmc.api.EnvType;
@@ -27,6 +28,15 @@ public class MainLoScreen extends LoScreen {
 		DupeModLoWidget dupemodwidget = new DupeModLoWidget(() -> LoTAS.dupemod.requestDupe(true), () -> LoTAS.dupemod.requestDupe(false));
 		addWidget(dupemodwidget);
 		
+		// Add the Savestate Widget
+		SavestatesLoWidget savestateswidget = new SavestatesLoWidget(
+				() -> LoTAS.savestatemod.getStateCount(), 
+				() -> LoTAS.savestatemod.requestState(true, -1), 
+				i -> LoTAS.savestatemod.requestState(false, i),
+				i -> LoTAS.savestatemod.requestDelete(i),
+				LoTAS.savestatemod.getStateCount()-1);
+		addWidget(savestateswidget);
+		
 		addWidget(new MainLoWidget((a, b) -> {
 			boolean enable; // Whether the widget should be enabled or disabled
 			String widgetname;
@@ -47,6 +57,9 @@ public class MainLoScreen extends LoScreen {
 					break;
 				case "Duping":
 					dupemodwidget.changeVisibility(enable);
+					break;
+				case "Savestating":
+					savestateswidget.changeVisibility(enable);
 					break;
 				default:
 					throw new AssertionError();

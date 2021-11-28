@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger;
 
 import de.pfannkuchen.lotas.mods.ConfigManager;
 import de.pfannkuchen.lotas.mods.DupeMod;
+import de.pfannkuchen.lotas.mods.SavestateMod;
 import de.pfannkuchen.lotas.mods.TickAdvance;
 import de.pfannkuchen.lotas.mods.TickrateChanger;
 import net.fabricmc.api.ModInitializer;
@@ -31,6 +32,8 @@ public class LoTAS implements ModInitializer {
 	public static ConfigManager configmanager;
 	// Dupe Mod Singleton
 	public static DupeMod dupemod;
+	// Savestate Mod Singleton
+	public static SavestateMod savestatemod;
 	
 	/**
 	 * Executed after the game launches.
@@ -42,6 +45,7 @@ public class LoTAS implements ModInitializer {
 		LoTAS.tickadvance = new TickAdvance();
 		LoTAS.configmanager = new ConfigManager(new File("lotas_develop.properties"));
 		LoTAS.dupemod = new DupeMod();
+		LoTAS.savestatemod = new SavestateMod();
 	}
 	
 	/**
@@ -55,6 +59,8 @@ public class LoTAS implements ModInitializer {
 		LoTAS.tickadvance.mcserver = server;
 		// Update Dupe Mod Handler
 		LoTAS.dupemod.mcserver = server;
+		// Update Savestate Mod Handler
+		LoTAS.savestatemod.mcserver = server;
 	}
 	
 	/**
@@ -68,6 +74,8 @@ public class LoTAS implements ModInitializer {
 		LoTAS.tickadvance.onServerPacket(packet);
 		// Update Dupe Mod Handler
 		LoTAS.dupemod.onServerPacket(packet);
+		// Update Savestate Mod Handler
+		LoTAS.savestatemod.onServerPacket(packet);
 	}
 	
 }
