@@ -70,7 +70,6 @@ public class DupeMod {
 				for (ServerPlayer player : players) {
 					CompoundTag tag = new CompoundTag();
 					player.saveWithoutId(tag);
-					System.out.println(tag);
 					this.onlineClients.put(player, tag);
 				}
 			} else {

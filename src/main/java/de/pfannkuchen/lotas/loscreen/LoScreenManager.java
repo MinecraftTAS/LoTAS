@@ -55,9 +55,11 @@ public class LoScreenManager {
 			this.savedGuiScale = this.mc.getWindow().getGuiScale();
 			this.mc.getWindow().setGuiScale(1);
 			screen.reset(this.lastWidth, this.lastHeight);
+			if (mc.screen == null) mc.setScreen(new EmptyScreen());
 		} else if (savedGuiScale != -1) {
 			this.mc.getWindow().setGuiScale(savedGuiScale);
 			savedGuiScale = -1;
+			if (mc.screen instanceof EmptyScreen) mc.setScreen(null);
 		}
 		// Reinitialize current vanilla screen
 		if (this.mc.screen != null) this.mc.screen.resize(this.mc, this.mc.getWindow().getGuiScaledWidth(), this.mc.getWindow().getGuiScaledHeight());
@@ -127,6 +129,14 @@ public class LoScreenManager {
 			return true;
 		}
 		return false;	
+	}
+	
+	/**
+	 * Getter
+	 * @return the screen
+	 */
+	public LoScreen getScreen() {
+		return this.screen;
 	}
 	
 }
