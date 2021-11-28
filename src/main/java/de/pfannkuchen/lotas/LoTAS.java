@@ -64,6 +64,15 @@ public class LoTAS implements ModInitializer {
 	}
 	
 	/**
+	 * Executed after/before every server tick
+	 * @param server Server Instance
+	 */
+	public void onServerTick(MinecraftServer server) {
+		// Tick Savestate Mod
+		LoTAS.savestatemod.afterServerTick(server);
+	}
+	
+	/**
 	 * Executed every time the server receives a custom payload packet.
 	 * @param packet Packet In
 	 */
