@@ -3,7 +3,6 @@ package de.pfannkuchen.lotas.gui;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import de.pfannkuchen.lotas.ClientLoTAS;
-import de.pfannkuchen.lotas.LoTAS;
 import de.pfannkuchen.lotas.loscreen.LoScreen;
 
 /**
@@ -20,30 +19,24 @@ public class StateLoScreen extends LoScreen {
 	private double animationProgress;
 	
 	@Override
-	protected void init() {
-		StateLoScreen.allowUnlocking = false; // Lock the screen
-		super.init();
-	}
-	
-	@Override
 	protected void render(PoseStack stack, double curX, double curY) {
-		this.animationProgress = Math.min(6, this.animationProgress + mc.getDeltaFrameTime()/LoTAS.tickratechanger.getGamespeed()); // Move the animation
-		// Animate and close once animatino is done
+		// Animate
 		if (StateLoScreen.allowUnlocking) {
-			animationProgress -= mc.getDeltaFrameTime()/LoTAS.tickratechanger.getGamespeed()*2;
-			if (animationProgress < 0) {
-				ClientLoTAS.loscreenmanager.setScreen(null);
-				return;
-			}
+			this.animationProgress = Math.min(6, this.animationProgress + 0.015);
+		} else {
+			this.animationProgress = Math.min(3, this.animationProgress + 0.015);
+		}
+		// Close once animation is done
+		if (this.animationProgress >= 6) {
+			ClientLoTAS.loscreenmanager.setScreen(null);
+			StateLoScreen.allowUnlocking = false;
+			return;
 		}
 		// Render 16*9 squares with the animation affecting them
-		double widthOfBox = (1.0 / 16.0) * this.ease(this.animationProgress, 0, 1, 6);
-		double heightOfBox = (1.0 / 9.0) * this.ease(this.animationProgress, 0, 1, 6);
-		double widthPerBox = (1.0 / 16.0);
-		double heightPerBox = (1.0 / 9.0);
-		for (int x = 0; x < 16; x++) 
-			for (int y = 0; y < 9; y++) 
-				this.fill(stack, widthPerBox*x, heightPerBox*y, widthPerBox*x+widthOfBox, heightPerBox*y+heightOfBox, BACKGROUND_COLOR);
+		double endX = (this.ease(this.animationProgress, 0, 1, 3)*1.1)/16;
+		for (int i = 0; i < 16; i++) {
+			this.fill(stack, (1/16.0)*i, 0, (1/16.0)*i+endX, 1, BACKGROUND_COLOR);
+		}
 		super.render(stack, curX, curY);
 	}
 	
