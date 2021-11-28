@@ -9,7 +9,7 @@ import java.io.IOException;
 import org.apache.commons.io.FileUtils;
 
 import de.pfannkuchen.lotas.ClientLoTAS;
-import de.pfannkuchen.lotas.gui.SavestateLoScreen;
+import de.pfannkuchen.lotas.gui.StateLoScreen;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -52,11 +52,9 @@ public class SavestateMod {
 			int state = buf.readInt();
 			boolean lockOUnlock = buf.readBoolean();
 			if (lockOUnlock)
-				ClientLoTAS.loscreenmanager.setScreen(new SavestateLoScreen());
-			else if (state == 4)
-				ClientLoTAS.loscreenmanager.setScreen(null);
+				ClientLoTAS.loscreenmanager.setScreen(new StateLoScreen());
 			else 
-				SavestateLoScreen.allowUnlocking();
+				StateLoScreen.allowUnlocking();
 		}
 	}
 	
@@ -77,15 +75,6 @@ public class SavestateMod {
 				case 3:
 					deletestate = buf.readInt();
 					break;
-				case 4:
-					// Unfreeze All clients
-					mcserver.getPlayerList().getPlayers().forEach(c -> {
-						FriendlyByteBuf buf2 = new FriendlyByteBuf(Unpooled.buffer());
-						buf2.writeInt(4); // Write State 4 - Unfreeze without further information
-						buf2.writeBoolean(false); // Write True - Unlock
-						c.connection.send(new ClientboundCustomPayloadPacket(SAVESTATE_MOD_RL, buf2));
-					});
-					break;
 			}
 		}
 	}
@@ -93,10 +82,10 @@ public class SavestateMod {
 	/**
 	 * Server-Side: Prepares all folders if not already set
 	 */
-	private void prepareFolders() {
-		worldDir = mcserver.getWorldPath(LevelResource.ROOT).toFile().getParentFile();
-		savestatesDir = new File(worldDir.getParentFile(), worldDir.getName() + " Savestates");
-		savestatesDir.mkdirs();
+	private void prepareFolders(MinecraftServer mcserver) {
+		this.worldDir = mcserver.getWorldPath(LevelResource.ROOT).toFile().getParentFile();
+		this.savestatesDir = new File(this.worldDir.getParentFile(), this.worldDir.getName() + " Savestates");
+		this.savestatesDir.mkdirs();
 	}
 
 	/**
@@ -140,11 +129,11 @@ public class SavestateMod {
 		for (ServerLevel world : mcserver.getAllLevels())
 			world.getChunkSource().chunkMap.flushWorker();
 		// Prepare Folders
-		prepareFolders();
-		File worldSavestateDir = new File(savestatesDir, savestatesDir.listFiles().length + "");
+		prepareFolders(mcserver);
+		File worldSavestateDir = new File(this.savestatesDir, this.savestatesDir.listFiles().length + "");
 		// Copy full folder
 		try {
-			FileUtils.copyDirectory(worldDir, worldSavestateDir);
+			FileUtils.copyDirectory(this.worldDir, worldSavestateDir);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -178,7 +167,7 @@ public class SavestateMod {
 			c.connection.send(new ClientboundCustomPayloadPacket(SAVESTATE_MOD_RL, buf));
 		});
 		// Prepare folders
-		prepareFolders();
+		prepareFolders(mcserver);
 		File worldSavestateDir = new File(savestatesDir, i + "");
 		// Delete Folder if it exists
 		try {
@@ -188,7 +177,7 @@ public class SavestateMod {
 			e.printStackTrace();
 		}
 		// Re-enumerate all other savestates ahead
-		for (File file : savestatesDir.listFiles()) {
+		for (File file : this.savestatesDir.listFiles()) {
 			int id = Integer.parseInt(file.getName());
 			if (id > i) file.renameTo(new File(file.getParentFile(), (id-1) + ""));
 		}
@@ -222,7 +211,7 @@ public class SavestateMod {
 	
 	/**
 	 * Client-Side only state request. Sends a packet to the server contains a save or load int and an index to load
-	 * @param state state 1 is save, state 2 is load, state 3 is delete, state 4 is continue
+	 * @param state state 1 is save, state 2 is load, state 3 is delete
 	 * @param index Index of Loadstate
 	 */
 	@Environment(EnvType.CLIENT)
