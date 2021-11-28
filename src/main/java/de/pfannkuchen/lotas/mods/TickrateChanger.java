@@ -26,7 +26,7 @@ import net.minecraft.server.MinecraftServer;
  */
 public class TickrateChanger {
 
-	private static final ResourceLocation TICKRATE_CHANGER_RL = new ResourceLocation("lotas", "tickratechanger");
+	static final ResourceLocation TICKRATE_CHANGER_RL = new ResourceLocation("lotas", "tickratechanger");
 	@Environment(EnvType.CLIENT)
 	public Minecraft mc;
 	public MinecraftServer mcserver;

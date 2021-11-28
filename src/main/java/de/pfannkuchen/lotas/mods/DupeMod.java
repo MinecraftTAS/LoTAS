@@ -30,7 +30,7 @@ import net.minecraft.server.level.ServerPlayer;
  */
 public class DupeMod {
 
-	private static final ResourceLocation DUPE_MOD_RL = new ResourceLocation("lotas", "dupemod");
+	static final ResourceLocation DUPE_MOD_RL = new ResourceLocation("lotas", "dupemod");
 	@Environment(EnvType.CLIENT)
 	public Minecraft mc;
 	public MinecraftServer mcserver;
