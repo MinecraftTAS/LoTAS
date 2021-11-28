@@ -2,7 +2,6 @@ package de.pfannkuchen.lotas;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 
-import de.pfannkuchen.lotas.gui.EmptyScreen;
 import de.pfannkuchen.lotas.gui.MainLoScreen;
 import de.pfannkuchen.lotas.loscreen.LoScreenManager;
 import de.pfannkuchen.lotas.mods.KeybindManager;
@@ -118,12 +117,10 @@ public class ClientLoTAS implements ClientModInitializer {
 	public void toggleLoTASMenu(Minecraft mc) {
 		if (mc.level == null) return;
 		if (loscreenmanager.isScreenOpened()) {
-			loscreenmanager.setScreen(null);
-			// remove the temporary mc screen
-			if (mc.screen instanceof EmptyScreen) mc.setScreen(null);
+			if (loscreenmanager.getScreen() instanceof MainLoScreen) 
+				loscreenmanager.setScreen(null);
 		} else {
 			loscreenmanager.setScreen(new MainLoScreen());
-			if (mc.screen == null) mc.setScreen(new EmptyScreen());
 		}
 	}
 
