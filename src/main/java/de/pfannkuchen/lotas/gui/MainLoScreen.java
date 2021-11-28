@@ -19,18 +19,12 @@ public class MainLoScreen extends LoScreen {
 	@Override
 	protected void init() {
 		// Add the Tickrate Changer Widget
-		TickrateChangerLoWidget tickratechangerwidget = new TickrateChangerLoWidget(c -> {
-			LoTAS.tickratechanger.requestTickrateUpdate(c);
-		});
+		TickrateChangerLoWidget tickratechangerwidget = new TickrateChangerLoWidget(c -> LoTAS.tickratechanger.requestTickrateUpdate(c));
 		addWidget(tickratechangerwidget);
 		TickrateChangerLoWidget.updateTickrate(LoTAS.tickratechanger.getTickrate());
 		
 		// Add the Dupe Mod Widget
-		DupeModLoWidget dupemodwidget = new DupeModLoWidget(() -> {
-			LoTAS.dupemod.requestDupe(true);
-		}, () -> {
-			LoTAS.dupemod.requestDupe(false);
-		});
+		DupeModLoWidget dupemodwidget = new DupeModLoWidget(() -> LoTAS.dupemod.requestDupe(true), () -> LoTAS.dupemod.requestDupe(false));
 		addWidget(dupemodwidget);
 		
 		addWidget(new MainLoWidget((a, b) -> {

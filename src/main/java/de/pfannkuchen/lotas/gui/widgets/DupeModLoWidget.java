@@ -12,16 +12,16 @@ import net.minecraft.network.chat.TextComponent;
 public class DupeModLoWidget extends WindowLoWidget {
 	
 	// Update Event
-	private static Runnable onSave;
-	private static Runnable onLoad;
+	private Runnable onSave;
+	private Runnable onLoad;
 	
 	/**
 	 * Initializes a Tickrate Changer Widget
 	 */
 	public DupeModLoWidget(Runnable onSave, Runnable onLoad) {
 		super("dupemodwidget", new TextComponent("Dupe Mod"), .15, .135);
-		DupeModLoWidget.onSave = onSave;
-		DupeModLoWidget.onLoad = onLoad;
+		this.onSave = onSave;
+		this.onLoad = onLoad;
 	}
 
 	@Override

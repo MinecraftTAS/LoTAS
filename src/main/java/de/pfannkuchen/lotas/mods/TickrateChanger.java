@@ -44,6 +44,7 @@ public class TickrateChanger {
 	
 	/**
 	 * Updates the Client tickrate when receiving a packet
+	 * @param p Incoming Packet
 	 */
 	@Environment(EnvType.CLIENT)
 	public void onClientPacket(ClientboundCustomPayloadPacket p) {
@@ -60,6 +61,7 @@ public class TickrateChanger {
 	
 	/**
 	 * Updates the Server tickrate and resend when receiving a packet
+	 * @param p Incoming Packet
 	 */
 	public void onServerPacket(ServerboundCustomPayloadPacket p) {
 		if (TICKRATE_CHANGER_RL.equals(p.getIdentifier())) updateTickrate(p.getData().readDouble());

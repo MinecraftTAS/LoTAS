@@ -41,6 +41,7 @@ public class DupeMod {
 	
 	/**
 	 * Saves or Loads when receiving a packet
+	 * @param p Incoming Packet
 	 */
 	@Environment(EnvType.CLIENT)
 	public void onClientPacket(ClientboundCustomPayloadPacket p) {
@@ -57,6 +58,7 @@ public class DupeMod {
 	
 	/**
 	 * Resend when receiving a packet
+	 * @param p Incoming Packet
 	 */
 	public void onServerPacket(ServerboundCustomPayloadPacket p) {
 		if (DUPE_MOD_RL.equals(p.getIdentifier())) {
@@ -92,7 +94,7 @@ public class DupeMod {
 	
 	/**
 	 * Client-Side only dupe request. Sends a packet to the server contains a save or load boolean
-	 * @param 
+	 * @param saveOLoad Whether player data should be loaded or saved
 	 */
 	@Environment(EnvType.CLIENT)
 	public void requestDupe(boolean saveOLoad) {
