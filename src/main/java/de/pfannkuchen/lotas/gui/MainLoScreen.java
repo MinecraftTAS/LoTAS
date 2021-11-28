@@ -31,9 +31,9 @@ public class MainLoScreen extends LoScreen {
 		// Add the Savestate Widget
 		SavestatesLoWidget savestateswidget = new SavestatesLoWidget(
 				() -> LoTAS.savestatemod.getStateCount(), 
-				() -> LoTAS.savestatemod.requestState(true, -1), 
-				i -> LoTAS.savestatemod.requestState(false, i),
-				i -> LoTAS.savestatemod.requestDelete(i),
+				() -> LoTAS.savestatemod.requestState(1, -1), 
+				i -> LoTAS.savestatemod.requestState(2, i),
+				i -> LoTAS.savestatemod.requestState(3, i),
 				LoTAS.savestatemod.getStateCount()-1);
 		addWidget(savestateswidget);
 		
