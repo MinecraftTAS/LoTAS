@@ -15,7 +15,6 @@
 		"client.tickratechanger.MixinSubtitleOverlay",
 		"client.tickratechanger.MixinTimer",
 		"client.tickratechanger.MixinToastInstance",
-		"client.workaround.MixinClientLanguageWorkaround",
 		"client.MixinClientPlayNetworkHandler",
 		"client.MixinGuiHook",
 		"client.MixinKeyMappingsAccessor",

@@ -17,7 +17,7 @@ import net.fabricmc.api.Environment;
 public class MixinToastInstance {
 
 	/**
-	 * Slows down the Toaster™ Timer
+	 * Slows down the Toaster Timer
 	 * @param animationTimer Original value
 	 * @return Manipulated value
 	 */
