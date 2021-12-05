@@ -35,13 +35,13 @@ public class TickrateChangerLoWidget extends WindowLoWidget {
 	@Override
 	protected void init() {
 		addWidget(slider = new SliderLoWidget(true, 0.015, 0.095, .12, index / ((double) TICKRATES.length), c -> {
-			return new TextComponent("Tickrate: " + updateTickrate((int) (c*TICKRATES.length), true));
+			return new TextComponent("Tickrate: " + updateTickrate((int) (c*TICKRATES.length), true, true));
 		}, new TextComponent("Tickrate: " + TICKRATES[index])));
 		addWidget(new ButtonLoWidget(true, 0.005, 0.035, .065, () -> {
-			updateTickrate(TickrateChangerLoWidget.index+1, false);
+			updateTickrate(TickrateChangerLoWidget.index+1, false, true);
 		}, new TextComponent("+")));
 		addWidget(new ButtonLoWidget(true, 0.08, 0.035, .065, () -> {
-			updateTickrate(TickrateChangerLoWidget.index-1, false);
+			updateTickrate(TickrateChangerLoWidget.index-1, false, true);
 		}, new TextComponent("-")));
 		super.init();
 	}
@@ -51,7 +51,7 @@ public class TickrateChangerLoWidget extends WindowLoWidget {
 	 * @param index tickrate index
 	 * @return new tickrate
 	 */
-	private static double updateTickrate(int index, boolean isSlider) {
+	private static double updateTickrate(int index, boolean isSlider, boolean shouldTrigger) {
 		// Clamp and update tickrate
 		index = Math.min(Math.max(0, index), TICKRATES.length-1);
 		if (index == TickrateChangerLoWidget.index) return TICKRATES[index];
@@ -62,7 +62,7 @@ public class TickrateChangerLoWidget extends WindowLoWidget {
 			slider.progress = index / ((double) TICKRATES.length);
 		}
 		// Trigger Event
-		if (update != null) update.accept(TICKRATES[index]);
+		if (update != null && shouldTrigger) update.accept(TICKRATES[index]);
 		// Return new tickrate
 		return TICKRATES[index];
 	}
@@ -84,7 +84,7 @@ public class TickrateChangerLoWidget extends WindowLoWidget {
 			}
 		}
 		// Update Tickrate
-		updateTickrate(bestIndex, false);
+		updateTickrate(bestIndex, false, false);
 	}
 	
 }

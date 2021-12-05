@@ -21,14 +21,15 @@ import net.minecraft.server.packs.resources.Resource;
 /**
  * This workaround loads the language files for LoTAS
  * @author Pancake
+ FIXME: refmap issues
  */
 @Mixin(ClientLanguage.class)
 @Environment(EnvType.CLIENT)
 public class MixinClientLanguageWorkaround {
-
+/*
 	/**
 	 * Temporary Input Stream in case LoTAS adds something to the loaded language
-	 */
+	 *
 	@Unique
 	private static InputStream stream;
 
@@ -37,7 +38,7 @@ public class MixinClientLanguageWorkaround {
 	 * @param string2 Namepsace
 	 * @param string Resource
 	 * @return non-modified resource location
-	 */
+	 *
 	@Redirect(method = "loadFrom", at = @At(value = "NEW", target = "Lnet/minecraft/resources/ResourceLocation;(Ljava/lang/String;Ljava/lang/String;)Lnet/minecraft/resources/ResourceLocation;"))
 	private static ResourceLocation onLanguageLoadFromResourceLoad(String string2, String string) {
 		stream = ClientLoTAS.class.getResourceAsStream("/assets/lotas/" + string);
@@ -48,7 +49,7 @@ public class MixinClientLanguageWorkaround {
 	 * Tries to load the new Language JSON provided by {@link  #onLanguageLoadFromResourceLoad(String, String)} and add it's content to the parameter map.
 	 * @param list List of resource to load from
 	 * @param map Map with translations
-	 */
+	 *
 	@Redirect(method = "loadFrom", at = @At(value = "INVOKE", target = "appendFrom"))
 	private static void onLanguageLoadFromContentLoad(List<Resource> list, Map<String, String> map) {
 		if (stream != null) Language.loadFromJson(stream, map::put);
@@ -59,11 +60,12 @@ public class MixinClientLanguageWorkaround {
 	 * Need to add this shadow method in order to load vanilla and lotas translations when readirecting the original appendFrom call
 	 * @param list List of Resources to load translations from
 	 * @param map Map with translation to fill up
-	 */
+	 *
 	@Shadow
 	private static void appendFrom(List<Resource> list, Map<String, String> map) {
 		throw new AssertionError();
 	}
 
+*/
 
 }

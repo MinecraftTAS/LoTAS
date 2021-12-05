@@ -71,9 +71,9 @@ public class WindowLoWidget extends LoScreen {
 		// Update Config
 		Random rng = new Random();
 		if (this.x == -1)
-			this.x = rng.nextDouble(0.7);
+			this.x = rng.nextDouble()*0.7;
 		if (this.y == -1)
-			this.y = rng.nextDouble(0.7);
+			this.y = rng.nextDouble()*0.7;
 		// Force horizontal animation if none given
 		if (!vertical && !horizontal) horizontal = true;
 		super.init();
