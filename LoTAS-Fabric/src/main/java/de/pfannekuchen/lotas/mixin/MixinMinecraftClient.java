@@ -1,8 +1,10 @@
 package de.pfannekuchen.lotas.mixin;
 
 import java.io.IOException;
+import java.util.OptionalLong;
+import java.util.Properties;
+import java.util.UUID;
 
-import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -16,7 +18,6 @@ import de.pfannekuchen.lotas.core.LoTASModContainer;
 import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.core.utils.ConfigUtils;
 import de.pfannekuchen.lotas.core.utils.KeybindsUtils;
-import de.pfannekuchen.lotas.core.utils.Keyboard;
 import de.pfannekuchen.lotas.core.utils.Timer;
 import de.pfannekuchen.lotas.mods.AIManipMod;
 import de.pfannekuchen.lotas.mods.SavestateMod;
@@ -24,13 +25,19 @@ import de.pfannekuchen.lotas.mods.TickrateChangerMod;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
+import net.minecraft.client.gui.screens.GenericDirtMessageScreen;
 import net.minecraft.client.gui.screens.PauseScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.texture.DynamicTexture;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.Difficulty;
+import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.GameType;
+import net.minecraft.world.level.LevelSettings;
 
 /**
  * Changes to the Minecraft Classes
@@ -138,6 +145,22 @@ public class MixinMinecraftClient {
 			SavestateMod.savestate(null);
 		}
 
+		//#if MC>=11600
+//$$ 		if (LoTASModContainer.i != -1) {
+//$$ 			if (Minecraft.getInstance().level != null) {
+//$$ 				Minecraft.getInstance().getSingleplayerServer().halt(true);
+//$$ 			}
+//$$
+//$$ 			Minecraft.getInstance().forceSetScreen(new GenericDirtMessageScreen(new TranslatableComponent("createWorld.preparing")));
+//$$ 			LevelSettings levelSettings2;
+//$$ 			levelSettings2 = new LevelSettings(UUID.randomUUID().toString().substring(0, 10), GameType.CREATIVE, false, Difficulty.EASY, true, new GameRules(), net.minecraft.world.level.DataPackConfig.DEFAULT);
+//$$
+//$$ 			Minecraft.getInstance().createLevel(UUID.randomUUID().toString().substring(0, 10), levelSettings2, net.minecraft.core.RegistryAccess.RegistryHolder.builtin(), net.minecraft.world.level.levelgen.WorldGenSettings.create(net.minecraft.core.RegistryAccess.builtin(), new Properties()).withSeed(true, OptionalLong.of(LoTASModContainer.i)));
+//$$ 			LoTASModContainer.i = -1;
+//$$ 			System.gc();
+//$$ 		}
+		//#endif
+		
 		/* Auto Strafing */
 		if (player != null) {
 			//#if MC>=11600

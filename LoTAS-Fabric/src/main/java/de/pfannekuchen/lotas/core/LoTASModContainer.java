@@ -1,9 +1,12 @@
 package de.pfannekuchen.lotas.core;
 
 import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.file.Files;
@@ -35,9 +38,12 @@ public class LoTASModContainer implements ModInitializer {
 	/** The only info gui */
 	public static InfoHud hud;
 	
+	public static long i = -1;
+	
 	/**
 	 * Called by the Fabric Loader, whenever the Mod is being initialized
 	 */
+	@SuppressWarnings("deprecation")
 	@Override
 	public void onInitialize() {
 		hud = new InfoHud();
@@ -56,6 +62,28 @@ public class LoTASModContainer implements ModInitializer {
 			System.err.println("Couldn't load Configuration");
 			e.printStackTrace();
 		}
+		/* Open the cubiomes helper thread */
+		new Thread(() -> {
+			try {
+				ServerSocket s = new ServerSocket(4200);
+				while (true) {
+					try {
+						Socket sock = s.accept();
+						if (sock != null) {
+							DataInputStream stream = new DataInputStream(sock.getInputStream());
+							i = Long.parseLong(stream.readLine());
+							
+							stream.close();
+							sock.close();
+						}						
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}).start();
 	}
 
 	/**
