@@ -41,6 +41,8 @@ public class SavestateMod {
 	// Server-side folder structure
 	private File savestatesDir;
 	private File worldDir;
+	// Client-side state count
+	private int stateCount;
 	
 	/**
 	 * Saves or Loads when receiving a packet
@@ -51,6 +53,7 @@ public class SavestateMod {
 		if (SAVESTATE_MOD_RL.equals(p.getIdentifier())) {
 			FriendlyByteBuf buf = p.getData();
 			boolean lockOUnlock = buf.readBoolean();
+			stateCount = buf.readInt();
 			if (lockOUnlock)
 				ClientLoTAS.loscreenmanager.setScreen(new StateLoScreen());
 			else
@@ -114,6 +117,7 @@ public class SavestateMod {
 			// Freeze Client Packet
 			FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
 			buf.writeBoolean(freezeOrNot); // Write True - Lock
+			buf.writeInt(stateCount); // Write amount of states too
 			c.connection.send(new ClientboundCustomPayloadPacket(SAVESTATE_MOD_RL, buf));
 			// Fake Tickrate Packet
 			LoTAS.tickadvance.updateTickadvanceStatus(freezeOrNot);
@@ -137,6 +141,7 @@ public class SavestateMod {
 		// Prepare Folders
 		prepareFolders(mcserver);
 		File worldSavestateDir = new File(this.savestatesDir, this.savestatesDir.listFiles().length + "");
+		this.stateCount = this.savestatesDir.listFiles().length;
 		// Copy full folder
 		try {
 			FileUtils.copyDirectory(this.worldDir, worldSavestateDir);
@@ -165,6 +170,7 @@ public class SavestateMod {
 		// Prepare folders
 		prepareFolders(mcserver);
 		File worldSavestateDir = new File(savestatesDir, i + "");
+		this.stateCount = this.savestatesDir.listFiles().length;
 		// Delete Folder if it exists
 		try {
 			if (worldSavestateDir.exists()) 
@@ -188,7 +194,7 @@ public class SavestateMod {
 	 */
 	@Environment(EnvType.CLIENT)
 	public String getSavestateInfo(int index) {
-		return index + " - Did cool stuff.";
+		return "Savestate " + index;
 	}
 	
 	/**
@@ -197,7 +203,7 @@ public class SavestateMod {
 	 */
 	@Environment(EnvType.CLIENT)
 	public int getStateCount() {
-		return 4;
+		return stateCount;
 	}
 	
 	/**
