@@ -6,8 +6,9 @@ import org.lwjgl.glfw.GLFW;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.vertex.PoseStack;
 
-import de.pfannkuchen.lotas.ClientLoTAS;
+import de.pfannkuchen.lotas.LoTAS;
 import de.pfannkuchen.lotas.gui.EmptyScreen;
+import de.pfannkuchen.lotas.gui.MainLoScreen;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
@@ -34,6 +35,8 @@ public class LoScreenManager {
 	// Last mouse position
 	private double lastPosX;
 	private double lastPosY;
+	// Last tickadvance state
+	private boolean lastTickadvance;
 	
 	/**
 	 * Returns whether a screen is opened.
@@ -119,7 +122,7 @@ public class LoScreenManager {
 	public boolean onScreenUpdate(Screen vanillaScreen, Minecraft mc) {
 		if (vanillaScreen instanceof EmptyScreen) return false; // don't close on intended screen
 		if (this.screen != null && vanillaScreen == null) { // close the screen
-			ClientLoTAS.instance.toggleLoTASMenu(mc);
+			this.toggleLoTASMenu(mc);
 			return true;
 		}
 		if (this.screen != null)
@@ -133,6 +136,26 @@ public class LoScreenManager {
 	 */
 	public LoScreen getScreen() {
 		return this.screen;
+	}
+
+	/**
+	 * Toggles on or off the LoTAS Menu and opens a Gui Screen in case there isn't one to regain the cursor.
+	 * @param mc Instance of Minecraft
+	 */
+	public void toggleLoTASMenu(Minecraft mc) {
+		if (mc.level == null) return;
+		if (isScreenOpened()) {
+			if (getScreen() instanceof MainLoScreen) {
+				setScreen(null);
+				// Disable tick advance if it was not on before
+				if (!this.lastTickadvance) LoTAS.tickadvance.requestTickadvanceToggle();
+			}
+		} else {
+			setScreen(new MainLoScreen());
+			// Update tick advance if it is not enabled already
+			this.lastTickadvance = LoTAS.tickadvance.isTickadvanceEnabled();
+			if (!this.lastTickadvance) LoTAS.tickadvance.requestTickadvanceToggle();
+		}
 	}
 	
 }

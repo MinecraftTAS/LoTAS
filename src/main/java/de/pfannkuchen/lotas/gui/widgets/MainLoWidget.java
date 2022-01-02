@@ -4,6 +4,7 @@ import java.util.function.BiFunction;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 
+import de.pfannkuchen.lotas.ClientLoTAS;
 import de.pfannkuchen.lotas.LoTAS;
 import de.pfannkuchen.lotas.loscreen.LoScreen;
 import net.fabricmc.api.EnvType;
@@ -105,7 +106,7 @@ public class MainLoWidget extends LoScreen {
 	
 	@Override
 	public void render(PoseStack stack, double curX, double curY) {
-		this.animationProgress = Math.min(6, this.animationProgress + mc.getDeltaFrameTime()); // Move the animation
+		this.animationProgress = Math.min(6, this.animationProgress + ClientLoTAS.internaltimer.tickDelta); // Move the animation
 		final boolean isMouseOver = curX > 1 - BACKGROUND_WIDTH; // Check whether the mouse is over the widget
 		// Render the background and the border
 		this.fill(stack, 1 - BORDER_WIDTH - BACKGROUND_WIDTH * ease(this.animationProgress, 0, 1, 6), 0, 1, 1, isMouseOver ? BORDER_FOCUS_COLOR : BORDER_COLOR); // Border
