@@ -6,6 +6,7 @@ import org.lwjgl.glfw.GLFW;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.vertex.PoseStack;
 
+import de.pfannkuchen.lotas.ClientLoTAS;
 import de.pfannkuchen.lotas.gui.EmptyScreen;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -117,6 +118,10 @@ public class LoScreenManager {
 	 */
 	public boolean onScreenUpdate(Screen vanillaScreen, Minecraft mc) {
 		if (vanillaScreen instanceof EmptyScreen) return false; // don't close on intended screen
+		if (this.screen != null && vanillaScreen == null) { // close the screen
+			ClientLoTAS.instance.toggleLoTASMenu(mc);
+			return true;
+		}
 		if (this.screen != null)
 			return true;
 		return false;	
