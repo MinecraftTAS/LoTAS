@@ -1,22 +1,22 @@
 package de.pfannkuchen.lotas.mixin.client.workaround;
 
-import java.io.InputStream;
-import java.util.List;
-import java.util.Map;
+//import java.io.InputStream;
+//import java.util.List;
+//import java.util.Map;
 
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
+//import org.spongepowered.asm.mixin.Shadow;
+//import org.spongepowered.asm.mixin.Unique;
+//import org.spongepowered.asm.mixin.injection.At;
+//import org.spongepowered.asm.mixin.injection.Redirect;
 
-import de.pfannkuchen.lotas.ClientLoTAS;
+//import de.pfannkuchen.lotas.ClientLoTAS;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.resources.language.ClientLanguage;
-import net.minecraft.locale.Language;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.resources.Resource;
+//import net.minecraft.locale.Language;
+//import net.minecraft.resources.ResourceLocation;
+//import net.minecraft.server.packs.resources.Resource;
 
 /**
  * This workaround loads the language files for LoTAS
