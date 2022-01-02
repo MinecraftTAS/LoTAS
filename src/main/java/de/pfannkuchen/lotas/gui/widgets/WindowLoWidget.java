@@ -4,6 +4,7 @@ import java.util.Random;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 
+import de.pfannkuchen.lotas.ClientLoTAS;
 import de.pfannkuchen.lotas.LoTAS;
 import de.pfannkuchen.lotas.loscreen.LoScreen;
 import de.pfannkuchen.lotas.mods.ConfigManager;
@@ -114,7 +115,7 @@ public class WindowLoWidget extends LoScreen {
 	protected void render(PoseStack stack, double curX, double curY) {
 		if (!this.active) return;
 		stack.pushPose();
-		this.animationProgress = Math.min(6, this.animationProgress + mc.getDeltaFrameTime()); // Move the animation
+		this.animationProgress = Math.min(6, this.animationProgress + ClientLoTAS.internaltimer.tickDelta); // Move the animation
 		if (this.animationProgress != 6) {
 			stack.translate(
 					vertical ? ((leftORight ? -1000 : 1000) + ease(this.animationProgress, 0, 1, 6)*(leftORight ? +1000 : -1000)) : 0,
