@@ -127,7 +127,7 @@ public class WindowLoWidget extends LoScreen {
 		this.fill(stack, this.x, this.y, this.x+this.windowWidth, this.y+this.windowHeight, BACKGROUND_COLOR);
 		// Render Title
 		this.draw(stack, this.title, this.x+0.006, this.y+0.007, 20, TITLE_COLOR, false);
-		stack.translate(this.x*this.width, this.y*this.height, 0);
+		stack.translate(this.x*this.width/this.guiscale, this.y*this.height/this.guiscale, 0);
 		super.render(stack, curX-this.x, curY-this.y);
 		stack.popPose();
 	}
