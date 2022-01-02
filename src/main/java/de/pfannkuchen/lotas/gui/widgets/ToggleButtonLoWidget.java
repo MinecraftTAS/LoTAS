@@ -4,6 +4,7 @@ import java.util.function.Consumer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 
+import de.pfannkuchen.lotas.ClientLoTAS;
 import de.pfannkuchen.lotas.loscreen.LoScreen;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -76,8 +77,8 @@ public class ToggleButtonLoWidget extends LoScreen {
 		// Render Background
 		this.fill(stack, this.x, this.y, this.x+this.length, this.y+.04, COLOR);
 		// Animation
-		if (down) this.animationProgress = Math.min(6, this.animationProgress + this.mc.getDeltaFrameTime());
-		else this.animationProgress = Math.max(0, this.animationProgress - this.mc.getDeltaFrameTime());
+		if (down) this.animationProgress = Math.min(6, this.animationProgress + ClientLoTAS.internaltimer.tickDelta);
+		else this.animationProgress = Math.max(0, this.animationProgress - ClientLoTAS.internaltimer.tickDelta);
 		// Render Animation
 		byte alpha = (byte) (ease(this.animationProgress, 0, 1, 6)*255);
 		this.fill(stack, this.x, this.y, this.x+this.length, this.y+.04, (isMouseOver ? MOUSEOVER_FOCUS_COLOR : FOCUS_COLOR) - 0xFF000000 + (alpha << 24));

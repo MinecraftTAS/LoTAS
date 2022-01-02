@@ -2,12 +2,13 @@ package de.pfannkuchen.lotas;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 
-import de.pfannkuchen.lotas.gui.MainLoScreen;
 import de.pfannkuchen.lotas.loscreen.LoScreenManager;
 import de.pfannkuchen.lotas.mods.KeybindManager;
+import de.pfannkuchen.lotas.util.InternalTimer;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.Util;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
@@ -26,12 +27,15 @@ public class ClientLoTAS implements ClientModInitializer {
 	public static LoScreenManager loscreenmanager;
 	// Keybind Manager Singleton
 	public static KeybindManager keybindmanager;
+	// Internal Timer Singleton
+	public static InternalTimer internaltimer;
 	
 	@Override
 	public void onInitializeClient() {
 		ClientLoTAS.instance = this;
 		ClientLoTAS.loscreenmanager = new LoScreenManager();
 		ClientLoTAS.keybindmanager = new KeybindManager(); // Also initializes this
+		ClientLoTAS.internaltimer = new InternalTimer();
 	}
 
 	/**
@@ -88,6 +92,8 @@ public class ClientLoTAS implements ClientModInitializer {
 		ClientLoTAS.loscreenmanager.onGameLoop(mc);
 		// Update Keybindings
 		ClientLoTAS.keybindmanager.onGameLoop(mc);
+		// Update internal timer
+		ClientLoTAS.internaltimer.advanceTime(Util.getMillis());
 	}
 
 	/**
@@ -108,20 +114,6 @@ public class ClientLoTAS implements ClientModInitializer {
 	 */
 	public KeyMapping[] onKeybindInitialize(KeyMapping[] keyMappings) {
 		return keybindmanager.onKeybindInitialize(keyMappings);
-	}
-
-	/**
-	 * Toggles on or off the LoTAS Menu and opens a Gui Screen in case there isn't one to regain the cursor.
-	 * @param mc Instance of Minecraft
-	 */
-	public void toggleLoTASMenu(Minecraft mc) {
-		if (mc.level == null) return;
-		if (loscreenmanager.isScreenOpened()) {
-			if (loscreenmanager.getScreen() instanceof MainLoScreen) 
-				loscreenmanager.setScreen(null);
-		} else {
-			loscreenmanager.setScreen(new MainLoScreen());
-		}
 	}
 
 	/**
