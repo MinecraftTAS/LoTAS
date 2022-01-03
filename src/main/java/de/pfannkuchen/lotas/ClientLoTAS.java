@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 
 import de.pfannkuchen.lotas.loscreen.LoScreenManager;
 import de.pfannkuchen.lotas.mods.KeybindManager;
+import de.pfannkuchen.lotas.mods.RecorderMod;
 import de.pfannkuchen.lotas.util.InternalTimer;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
@@ -29,6 +30,8 @@ public class ClientLoTAS implements ClientModInitializer {
 	public static KeybindManager keybindmanager;
 	// Internal Timer Singleton
 	public static InternalTimer internaltimer;
+	// Recorder Mod Singleton
+	public static RecorderMod recordermod;
 	
 	@Override
 	public void onInitializeClient() {
@@ -36,6 +39,7 @@ public class ClientLoTAS implements ClientModInitializer {
 		ClientLoTAS.loscreenmanager = new LoScreenManager();
 		ClientLoTAS.keybindmanager = new KeybindManager(); // Also initializes this
 		ClientLoTAS.internaltimer = new InternalTimer();
+		ClientLoTAS.recordermod = new RecorderMod();
 	}
 
 	/**
@@ -67,6 +71,15 @@ public class ClientLoTAS implements ClientModInitializer {
 	}
 	
 	/**
+	 * Executed after every screen caught key press
+	 * @param key Key that was pressed
+	 */
+	public void onKeyPress(int key) {
+		// Trigger a Key Press Event for LoScreens
+		ClientLoTAS.loscreenmanager.onKeyPress(key);
+	}
+	
+	/**
 	 * Executed before the JVM stops.
 	 * @param mc Instance of Minecraft
 	 */
@@ -94,12 +107,13 @@ public class ClientLoTAS implements ClientModInitializer {
 		ClientLoTAS.keybindmanager.onGameLoop(mc);
 		// Update internal timer
 		ClientLoTAS.internaltimer.advanceTime(Util.getMillis());
+		// Update Recorder
+		ClientLoTAS.recordermod.onRender(mc);	
 	}
 
 	/**
-	 * Executed after the gui screens are rendered. Only executed while in a world
+	 * Executed after the gui screens are rendered.
 	 * @param stack Pose Stack for rendering
-	 * @param delta Render Partial Ticks
 	 * @param mc Instance of Minecraft
 	 */
 	public void onRenderScreen(PoseStack stack, Minecraft mc) {

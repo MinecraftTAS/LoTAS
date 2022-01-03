@@ -39,7 +39,7 @@ public class MixinGuiHook {
 	@Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/Screen;render(Lcom/mojang/blaze3d/vertex/PoseStack;IIF)V"))
 	public void renderScreenEvent(Screen in, PoseStack stack, int i, int j, float f) {
 		in.render(stack, i, j, f);
-		if (minecraft.level != null) ClientLoTAS.instance.onRenderScreen(stack, minecraft);
+		ClientLoTAS.instance.onRenderScreen(stack, minecraft);
 	}
 	
 }

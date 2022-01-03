@@ -157,5 +157,15 @@ public class LoScreenManager {
 			if (!this.lastTickadvance) LoTAS.tickadvance.requestTickadvanceToggle();
 		}
 	}
+
+	/**
+	 * Sends a keypress to all LoScreens
+	 * @param key Key that was pressed
+	 */
+	public void onKeyPress(int key) {
+		if (screen != null) {
+			screen.press(key);
+		}
+	}
 	
 }
