@@ -3,10 +3,14 @@ package de.pfannkuchen.lotas.util;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+
 /**
  * A Thread safe list of byte buffers which can be exchanged, locked and.. well.. used...
  * @author Pancake
  */
+@Environment(EnvType.CLIENT) // Currently only used on the Client, remove if nessecary
 public class BufferExchangeList {
 
 	private ByteBuffer[] buffers;

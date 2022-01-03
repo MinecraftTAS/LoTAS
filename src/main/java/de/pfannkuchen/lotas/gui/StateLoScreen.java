@@ -4,11 +4,14 @@ import com.mojang.blaze3d.vertex.PoseStack;
 
 import de.pfannkuchen.lotas.ClientLoTAS;
 import de.pfannkuchen.lotas.loscreen.LoScreen;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
 /**
  * Locks the players in the savestate loscreen
  * @author Pancake
  */
+@Environment(EnvType.CLIENT)
 public class StateLoScreen extends LoScreen {
 
 	// Background Color
