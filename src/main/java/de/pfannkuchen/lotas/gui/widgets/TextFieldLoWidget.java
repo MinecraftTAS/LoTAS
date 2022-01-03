@@ -4,6 +4,7 @@ import java.util.function.Consumer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 
+import de.pfannkuchen.lotas.ClientLoTAS;
 import de.pfannkuchen.lotas.loscreen.LoScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.TextComponent;
@@ -93,8 +94,11 @@ public class TextFieldLoWidget extends LoScreen {
 	@Override
 	protected void render(PoseStack stack, double curX, double curY) {
 		if (!active) return;
+		if (mouseOver) this.animationProgress = Math.min(6, this.animationProgress + ClientLoTAS.internaltimer.tickDelta);
+		else this.animationProgress = Math.max(0, this.animationProgress - ClientLoTAS.internaltimer.tickDelta);
+		byte alpha = (byte) (ease(this.animationProgress, 0, 1, 6)*255);
 		this.mouseOver = curX > (this.x-0.01) && curX < (this.x+this.length+0.01) && curY > (this.y-0.015) && curY < (this.y+0.044);
-		if (mouseOver) fill(stack, this.x-0.01, this.y-0.015, this.x+this.length+0.01, this.y+0.044, FOCUS_BACKGROUND_COLOR);
+		fill(stack, this.x-0.01, this.y-0.015, this.x+this.length+0.01, this.y+0.044, FOCUS_BACKGROUND_COLOR - 0xff000000 + (alpha << 24));
 		draw(stack, new TextComponent(this.content + (this.mouseOver ? "_" : "")), this.x, this.y, 20, TEXT_COLOR, false);
 		fill(stack, this.x, this.y+0.025, this.x+this.length, this.y+0.028, this.mouseOver ? FOCUS_LINE_COLOR : LINE_COLOR);
 		super.render(stack, curX, curY);
