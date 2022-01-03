@@ -67,18 +67,28 @@ public class RecorderLoScreen extends LoScreen {
 			return new TextComponent("Bitrate: " + String.format(Locale.ENGLISH, "%.1fM", bitrate));
 		}, new TextComponent("Bitrate: 16.0M")));
 		
-		addWidget(new ButtonLoWidget(true, .02, .94, .96, () -> {
+		addWidget(new ButtonLoWidget(true, .02, .94, .75, () -> {
 			if (complaint == null) {
 				ClientLoTAS.recordermod.startRecording(this.mc);
 				ClientLoTAS.loscreenmanager.setScreen(null);
 				this.mc.setScreen(new TitleScreen());
 			}
 		}, new TextComponent("Start Recording...")));
+		addWidget(new ButtonLoWidget(true, .78, .94, .2, () -> {
+			ClientLoTAS.loscreenmanager.setScreen(null);
+			this.mc.setScreen(new TitleScreen());
+		}, new TextComponent("Cancel")));
 		super.init();
 	}
 	
 	@Override
 	protected void render(PoseStack stack, double curX, double curY) {
+		this.animationProgress = Math.min(12, this.animationProgress + ClientLoTAS.internaltimer.tickDelta); // Move the animation
+		if (this.animationProgress != 12)
+			stack.translate(
+					0,
+					-1000+ease(this.animationProgress, 0, 1, 12)*1000,
+					0);
 		fill(stack, 0, 0, 1, 1, BACKGROUND_COLOR);
 		draw(stack, new TextComponent("LoTAS Recorder"), 0.06, .08, 60, TITLE_COLOR, false);
 		draw(stack, new TextComponent("Path to ffmpeg"), 0.06, .22, 30, LABEL_COLOR, false);
