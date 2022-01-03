@@ -2,6 +2,8 @@ package de.pfannkuchen.lotas.gui.widgets;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.network.chat.TextComponent;
@@ -11,6 +13,7 @@ import net.minecraft.resources.ResourceLocation;
  * A VANILLA Custom Image Button with a background
  * @author Pancake
  */
+@Environment(EnvType.CLIENT)
 public class CustomImageButton extends ImageButton {
 
 	private Button internalButton;

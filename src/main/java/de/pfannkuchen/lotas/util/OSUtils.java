@@ -1,10 +1,14 @@
 package de.pfannkuchen.lotas.util;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+
 /**
  * Checks the operating system
  * @author Pancake
  *
  */
+@Environment(EnvType.CLIENT) // Currently only used on the Client, remove if nessecary
 public class OSUtils {
 	public enum OS {
 		WINDOWS, LINUX, MACOS
