@@ -75,6 +75,14 @@ public abstract class LoScreen {
 	}
 	
 	/**
+	 * Called after every keypress
+	 * @param key Pressed Key
+	 */
+	protected void press(int key) {
+		this.widgets.forEach(w -> w.press(key));
+	}
+	
+	/**
 	 * Renders the Gui and it's widgets.
 	 * @param stack Pose Stack for rendering
 	 * @param curX Current cursor x position
