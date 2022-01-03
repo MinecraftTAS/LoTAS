@@ -11,6 +11,8 @@ import de.pfannkuchen.lotas.gui.widgets.ButtonLoWidget;
 import de.pfannkuchen.lotas.gui.widgets.SliderLoWidget;
 import de.pfannkuchen.lotas.gui.widgets.TextFieldLoWidget;
 import de.pfannkuchen.lotas.loscreen.LoScreen;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.network.chat.TextComponent;
 
@@ -18,6 +20,7 @@ import net.minecraft.network.chat.TextComponent;
  * LoScreen shown when starting a new recording
  * @author Pancake
  */
+@Environment(EnvType.CLIENT)
 public class RecorderLoScreen extends LoScreen {
 
 	// Label Color
