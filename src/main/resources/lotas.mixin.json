@@ -9,6 +9,7 @@
 		"MixinPlayNetworkHandler"
 	],
 	"client": [
+		"client.gui.MixinTitleScreen",
 		"client.tickratechanger.MixinItemRenderer",
 		"client.tickratechanger.MixinLevelRenderer",
 		"client.tickratechanger.MixinSoundEngine",
@@ -19,7 +20,8 @@
 		"client.MixinGuiHook",
 		"client.MixinKeyMappingsAccessor",
 		"client.MixinMinecraftHook",
-		"client.MixinOptionsHook"
+		"client.MixinOptionsHook",
+		"client.MixinKeyboardHandler"
 	],
 	"injectors": {
 		"defaultRequire": 1
