@@ -3,10 +3,19 @@
  */
 package de.pfannkuchen.lotas.mods;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.ArrayUtils;
+
+import com.mojang.blaze3d.platform.NativeImage;
 
 import de.pfannkuchen.lotas.ClientLoTAS;
 import de.pfannkuchen.lotas.LoTAS;
@@ -15,6 +24,7 @@ import io.netty.buffer.Unpooled;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.game.ClientboundCustomPayloadPacket;
 import net.minecraft.network.protocol.game.ServerboundCustomPayloadPacket;
@@ -29,54 +39,158 @@ import net.minecraft.world.level.storage.LevelResource;
  */
 public class SavestateMod {
 
+	/**
+	 * State information holder
+	 * @author Pancake
+	 */
+	public static class State {
+		
+		// Information of any state
+		private String name;
+		private long timestamp;
+		
+		// Data of the state
+		private File savelocation;
+		private int[] screenshot;
+	
+		// Client-side resource location
+		@Environment(EnvType.CLIENT)
+		public ResourceLocation texture;
+		
+		public State(String name, long timestamp, String savelocation, int[] screenshot) {
+			this.name = name;
+			this.timestamp = timestamp;
+			this.savelocation = new File(savelocation);
+			this.screenshot = screenshot;
+		}
+
+		public byte[] serialize() {
+			FriendlyByteBuf buffer = new FriendlyByteBuf(Unpooled.buffer());
+			buffer.writeUtf(this.name);
+			buffer.writeLong(this.timestamp);
+			buffer.writeUtf(this.savelocation.getAbsolutePath());
+			buffer.writeVarIntArray(this.screenshot);
+			return buffer.array();
+		}
+		
+		public static State deserialize(byte[] data) {
+			FriendlyByteBuf buffer = new FriendlyByteBuf(Unpooled.wrappedBuffer(data));
+			String s1 = buffer.readUtf();
+			long l2 = buffer.readLong();
+			String s3 = buffer.readUtf();
+			int[] a4 = buffer.readVarIntArray();
+			State s = new State(s1, l2, s3, a4);
+			return s;
+		}
+		
+		public String getName() {
+			return name;
+		}
+
+		public long getTimestamp() {
+			return timestamp;
+		}
+
+		public File getSavelocation() {
+			return savelocation;
+		}
+
+		public int[] getScreenshot() {
+			return screenshot;
+		}
+	}
+	
 	static final ResourceLocation SAVESTATE_MOD_RL = new ResourceLocation("lotas", "savestatemod");
 	@Environment(EnvType.CLIENT)
 	public Minecraft mc;
 	public MinecraftServer mcserver;
 	
 	// Server-side Todo list
-	private boolean savestate = false;
-	private int loadstate = -1;
-	private int deletestate = -1;
+	private String doSavestate = null;
+	private int[] doSavestatePicture = null;
+	private int doLoadstate = -1;
+	private int doDeletestate = -1;
 	// Server-side folder structure
 	private File savestatesDir;
 	private File worldDir;
-	// Client-side state count
-	private int stateCount;
+	// Mirrored State List
+	private State[] states = new State[0];
 	
 	/**
-	 * Saves or Loads when receiving a packet
+	 * Save/Loadstates and updates the state list on incoming packet
 	 * @param p Incoming Packet
 	 */
 	@Environment(EnvType.CLIENT)
 	public void onClientPacket(ClientboundCustomPayloadPacket p) {
 		if (SAVESTATE_MOD_RL.equals(p.getIdentifier())) {
 			FriendlyByteBuf buf = p.getData();
+			// Should the Client screen be locked or unlocked
 			boolean lockOUnlock = buf.readBoolean();
-			stateCount = buf.readInt();
-			if (lockOUnlock)
-				ClientLoTAS.loscreenmanager.setScreen(new StateLoScreen());
-			else
-				StateLoScreen.allowUnlocking();
+			// TODO: Reimplement the locking screen
+//			if (lockOUnlock)
+//				ClientLoTAS.loscreenmanager.setScreen(new StateLoScreen());
+//			else
+//				StateLoScreen.allowUnlocking();
+			// Should a savestate or a loadstate occur
+			int opcode = buf.readInt();
+			if (opcode == 0) {
+				if (lockOUnlock) {
+					LoTAS.LOGGER.info("The Server will savestate now.");
+				} else {
+					LoTAS.LOGGER.info("The Server finished savestating.");
+				}
+			} else if (opcode == 1) {
+				if (lockOUnlock) {
+					LoTAS.LOGGER.info("The Server will loadstate now.");
+				} else {
+					LoTAS.LOGGER.info("The Server finished loadstating.");
+				}
+			} else if (opcode == 2) {
+				if (lockOUnlock) {
+					LoTAS.LOGGER.info("The Server will deletestate now.");
+				} else {
+					LoTAS.LOGGER.info("The Server finished deletestating.");
+				}
+			}
+			// Unload previous textures
+			for (State s : states) if (s.texture != null) mc.getTextureManager().release(s.texture);
+			// Update the State List
+			this.states = new State[buf.readVarInt()];
+			for (int i = 0; i < states.length; i++) {
+				this.states[i] = State.deserialize(buf.readByteArray());
+			}
+			LoTAS.LOGGER.info("The Client has " + states.length + " savestates stored in the mirrored list. Reloading all textures...");
+			for (State s : states) {
+				NativeImage n = new NativeImage(256, 144, true);
+				BufferedImage img = new BufferedImage(256, 144, BufferedImage.TYPE_INT_ARGB);
+				img.setRGB(0, 0, 256, 144, s.screenshot, 0, 256);
+				for (int i = 0; i < 256; i++) {
+					for (int j = 0; j < 144; j++) {
+						n.setPixelRGBA(i, j, img.getRGB(i, j));
+					}
+				}
+				mc.getTextureManager().register(new ResourceLocation("lotas", s.name + s.timestamp), new DynamicTexture(n));
+			}
 		}
 	}
 	
 	/**
-	 * Resend when receiving a packet
+	 * Triggers a Load/Delete/Savestate when a client packet is incoming and then resends the packet to all clients.
 	 * @param p Incoming Packet
 	 */
 	public void onServerPacket(ServerboundCustomPayloadPacket p) {
 		if (SAVESTATE_MOD_RL.equals(p.getIdentifier())) {
 			FriendlyByteBuf buf = p.getData();
 			switch (buf.readInt()) {
+				case 0:
+					doSavestate = buf.readUtf();
+					doSavestatePicture = buf.readVarIntArray();
+					break;
 				case 1:
-					savestate = true;
+					doLoadstate = buf.readInt();
 					break;
 				case 2:
-					loadstate = buf.readInt();
-					break;
-				case 3:
-					deletestate = buf.readInt();
+					doDeletestate = buf.readInt();
 					break;
 			}
 		}
@@ -88,7 +202,15 @@ public class SavestateMod {
 	private void prepareFolders(MinecraftServer mcserver) {
 		this.worldDir = mcserver.getWorldPath(LevelResource.ROOT).toFile().getParentFile();
 		this.savestatesDir = new File(this.worldDir.getParentFile(), this.worldDir.getName() + " Savestates");
-		this.savestatesDir.mkdirs();
+		if (!this.savestatesDir.exists()) {
+			this.states = new State[0];
+			this.savestatesDir.mkdirs();
+			try {
+				Files.write(new File(this.savestatesDir, "states.dat").toPath(), new FriendlyByteBuf(Unpooled.buffer()).writeVarInt(0).array(), StandardOpenOption.CREATE_NEW);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	/**
@@ -96,31 +218,41 @@ public class SavestateMod {
 	 */
 	public void afterServerTick(MinecraftServer mcserver) {
 		// Savestate
-		if (this.savestate) {
+		if (this.doSavestate != null) {
 			savestate(mcserver);
-			this.savestate = false;
+			this.doSavestate = null;
 		}
 		// Loadstate
-		if (this.loadstate != -1) {
-			loadstate(this.loadstate, mcserver);
-			this.loadstate = -1;
+		if (this.doLoadstate != -1) {
+			loadstate(this.doLoadstate, mcserver);
+			this.doLoadstate = -1;
 		}
 		// Deletestate
-		if (this.deletestate != -1) {
-			deletestate(this.deletestate, mcserver);
-			this.deletestate = -1;
+		if (this.doDeletestate != -1) {
+			deletestate(this.doDeletestate, mcserver);
+			this.doDeletestate = -1;
 		}
 	}
 	
-	public void freezeClient(boolean freezeOrNot, MinecraftServer mcserver) {
+	/**
+	 * Sends a packet to the client about the stating progress
+	 * @param lockOUnlock Whether the client should be locked or not
+	 * @param opcode The Opcode of the operation
+	 * @param mcserver The Server to which all packets shall be send
+	 */
+	public void sendPacketToClient(boolean lockOUnlock, int opcode, MinecraftServer mcserver) {
 		mcserver.getPlayerList().getPlayers().forEach(c -> {
 			// Freeze Client Packet
 			FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
-			buf.writeBoolean(freezeOrNot); // Write True - Lock
-			buf.writeInt(stateCount); // Write amount of states too
+			buf.writeBoolean(lockOUnlock); // Write the lock state of the client
+			buf.writeInt(opcode); // Write the action of the server
+			buf.writeVarInt(this.states.length);
+			for (State s : this.states) {
+				buf.writeByteArray(s.serialize());
+			}
 			c.connection.send(new ClientboundCustomPayloadPacket(SAVESTATE_MOD_RL, buf));
-			// Fake Tickrate Packet
-			LoTAS.tickadvance.updateTickadvanceStatus(freezeOrNot);
+			// Lock or Unlock the tickrate
+			LoTAS.tickadvance.updateTickadvanceStatus(lockOUnlock);
 		});
 	}
 	
@@ -130,7 +262,7 @@ public class SavestateMod {
 	@SuppressWarnings("resource")
 	private void savestate(MinecraftServer mcserver) {
 		// Freeze Client
-		freezeClient(true, mcserver);
+		sendPacketToClient(true, 0, mcserver);
 		// Save Playerdata
 		mcserver.getPlayerList().saveAll();
 		// Save Worlds
@@ -140,16 +272,30 @@ public class SavestateMod {
 			world.getChunkSource().chunkMap.flushWorker();
 		// Prepare Folders
 		prepareFolders(mcserver);
-		File worldSavestateDir = new File(this.savestatesDir, this.savestatesDir.listFiles().length + "");
-		this.stateCount = this.savestatesDir.listFiles().length;
-		// Copy full folder
+		File worldSavestateDir = new File(this.savestatesDir, (this.savestatesDir.listFiles().length - 1) + "");
 		try {
+			// Reread state file
+			FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.wrappedBuffer(Files.readAllBytes(new File(this.savestatesDir, "states.dat").toPath())));
+			this.states = new State[buf.readVarInt()];
+			for (int ii = 0; ii < states.length; ii++) {
+				this.states[ii] = State.deserialize(buf.readByteArray());
+			}
+			// Copy full folder
 			FileUtils.copyDirectory(this.worldDir, worldSavestateDir);
+			// Add the savesate to the list of states
+			this.states = ArrayUtils.add(this.states, new State(this.doSavestate, Instant.now().getEpochSecond(), worldSavestateDir.getAbsolutePath(), this.doSavestatePicture));
+			// Write savestate file
+			FriendlyByteBuf buf2 = new FriendlyByteBuf(Unpooled.buffer());
+			buf2.writeVarInt(this.states.length);
+			for (State s : this.states) {
+				buf2.writeByteArray(s.serialize());
+			}
+			Files.write(new File(this.savestatesDir, "states.dat").toPath(), buf2.array(), StandardOpenOption.CREATE);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		// Unfreeze Client
-		freezeClient(false, mcserver);
+		sendPacketToClient(false, 0, mcserver);
 	}
 	
 	/**
@@ -166,25 +312,42 @@ public class SavestateMod {
 	 */
 	private void deletestate(int i, MinecraftServer mcserver) {
 		// Freeze Client
-		freezeClient(true, mcserver);
+		sendPacketToClient(true, 2, mcserver);
 		// Prepare folders
 		prepareFolders(mcserver);
 		File worldSavestateDir = new File(savestatesDir, i + "");
-		this.stateCount = this.savestatesDir.listFiles().length;
-		// Delete Folder if it exists
 		try {
+			// Reread state file
+			FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.wrappedBuffer(Files.readAllBytes(new File(this.savestatesDir, "states.dat").toPath())));
+			this.states = new State[buf.readVarInt()];
+			for (int ii = 0; ii < states.length; ii++) {
+				this.states[ii] = State.deserialize(buf.readByteArray());
+			}
+			// Delete Folder if it exists
 			if (worldSavestateDir.exists()) 
 				FileUtils.deleteDirectory(worldSavestateDir);
+			// Remove the savestate from the array
+			ArrayList<State> stateList = new ArrayList<>(Arrays.asList(this.states));
+			stateList.remove(i);
+			this.states = stateList.toArray(State[]::new);
+			// Write savestate file
+			FriendlyByteBuf buf2 = new FriendlyByteBuf(Unpooled.buffer());
+			buf2.writeVarInt(this.states.length);
+			for (State s : this.states) {
+				buf2.writeByteArray(s.serialize());
+			}
+			Files.write(new File(this.savestatesDir, "states.dat").toPath(), buf2.array(), StandardOpenOption.CREATE);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		// Re-enumerate all other savestates ahead
 		for (File file : this.savestatesDir.listFiles()) {
+			if (file.getName().equals("states.dat")) continue;
 			int id = Integer.parseInt(file.getName());
 			if (id > i) file.renameTo(new File(file.getParentFile(), (id-1) + ""));
 		}
 		// Unfreeze Client
-		freezeClient(false, mcserver);
+		sendPacketToClient(false, 2, mcserver);
 	}
 
 	/**
@@ -193,8 +356,8 @@ public class SavestateMod {
 	 * @return Description of state
 	 */
 	@Environment(EnvType.CLIENT)
-	public String getSavestateInfo(int index) {
-		return "Savestate " + index;
+	public State getSavestateInfo(int index) {
+		return states[index];
 	}
 	
 	/**
@@ -203,19 +366,25 @@ public class SavestateMod {
 	 */
 	@Environment(EnvType.CLIENT)
 	public int getStateCount() {
-		return stateCount;
+		return states.length;
 	}
 	
 	/**
 	 * Client-Side only state request. Sends a packet to the server contains a save or load int and an index to load
-	 * @param state state 1 is save, state 2 is load, state 3 is delete
-	 * @param index Index of Loadstate
+	 * @param state state 0 is save, state 1 is load, state 2 is delete
+	 * @param index Index of Load/Deletestate
+	 * @param name Name of the Savestate
+	 * @param is 256x144 image of the world
 	 */
 	@Environment(EnvType.CLIENT)
-	public void requestState(int state, int index) {
+	public void requestState(int state, int index, String name, int[] is) {
 		FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
 		buf.writeInt(state);
-		buf.writeInt(index);
+		if (state == 0) {
+			buf.writeUtf(name);
+			buf.writeVarIntArray(is);
+		} else 
+			buf.writeInt(index);
 		this.mc.getConnection().send(new ServerboundCustomPayloadPacket(SAVESTATE_MOD_RL, buf));
 	}
 	
