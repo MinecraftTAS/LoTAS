@@ -1,9 +1,12 @@
 package de.pfannkuchen.lotas.gui.widgets;
 
-import java.util.concurrent.Callable;
-import java.util.function.Consumer;
+import java.time.Instant;
+import java.util.Date;
+
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import de.pfannkuchen.lotas.LoTAS;
+import de.pfannkuchen.lotas.util.LoTASHelper;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.network.chat.TextComponent;
@@ -15,52 +18,41 @@ import net.minecraft.network.chat.TextComponent;
 @Environment(EnvType.CLIENT)
 public class SavestatesLoWidget extends WindowLoWidget {
 	
-	// Callbacks
-	private Callable<Integer> countCallback;
-	private Runnable onSave;
-	private Consumer<Integer> onLoad;
-	private Consumer<Integer> onDelete;
-	// Buttons
-	private SliderLoWidget slider;
-	private ButtonLoWidget load;
-	private ButtonLoWidget delete;
-	private ButtonLoWidget save;
-	// Data
-	private int stateCount;
-	private int currentState;
-	
 	/**
 	 * Initializes a Tickrate Changer Widget
 	 */
-	public SavestatesLoWidget(Callable<Integer> countCallback, Runnable onSave, Consumer<Integer> onLoad, Consumer<Integer> onDelete, int currentState) {
-		super("savestatewidget", new TextComponent("Savestates"), .3, .135);
-		this.countCallback = countCallback;
-		this.onSave = onSave;
-		this.onLoad = onLoad;
-		this.onDelete = onDelete;
-		this.currentState = currentState;
+	public SavestatesLoWidget() {
+		super("savestatewidget", new TextComponent("Savestates"), .237, .037);
 	}
 
 	@Override
 	protected void init() {
-		try { this.stateCount = this.countCallback.call(); } catch (Exception e) { /* This cannot be thrown */ }
-		addWidget(slider = new SliderLoWidget(true, 0.01, 0.04, 0.28, 1, progress -> {
-			int state = (int) (progress * (stateCount-1));
-			if (state == this.stateCount-1) {
-				this.load.value = new TextComponent("Loadstate");
-				this.delete.active = false;
-				this.save.active = true;
-			} else {
-				this.load.value = new TextComponent("Load this state");
-				this.delete.active = true;
-				this.save.active = false;
-			}
-			return new TextComponent(LoTAS.savestatemod.getSavestateInfo(state));
-		}, this.stateCount == -1 ? new TextComponent("No savestate available") : new TextComponent(LoTAS.savestatemod.getSavestateInfo(this.stateCount-1))));
-		addWidget(this.load = new ButtonLoWidget(true, 0.005, 0.085, 0.14, () -> this.onLoad.accept((int) (this.slider.progress * (this.stateCount-1))) /* Add a small callback to obtain the selected index too.*/, new TextComponent("Loadstate")));
-		addWidget(this.delete = new ButtonLoWidget(this.currentState == this.stateCount-1 ? false : true, 0.155, 0.085, 0.14, () -> this.onDelete.accept((int) (this.slider.progress * (this.stateCount-1))) /* Add a small callback to obtain the selected index too.*/, new TextComponent("Delete this state")));
-		addWidget(this.save = new ButtonLoWidget(this.currentState == this.stateCount-1 ? true : false, 0.155, 0.085, 0.14, this.onSave /* Call directly */, new TextComponent("Savestate")));
+		addWidget(new ButtonLoWidget(true, 0.002, (LoTAS.savestatemod.getStateCount()*0.1)+0.04, 0.233, () -> {
+			LoTAS.savestatemod.requestState(0, -1, "no name given", LoTASHelper.takeScreenshot(mc, 256, 144));
+		}, new TextComponent("Savestate")));
 		super.init();
+	}
+	
+	@Override
+	protected void render(PoseStack stack, double curX, double curY) {
+		super.render(stack, curX, curY);
+		// Render the savestate panels
+		this.windowHeight = (LoTAS.savestatemod.getStateCount()*0.1)+0.083;
+		for (int i = 0; i < LoTAS.savestatemod.getStateCount(); i++) {
+			// Render Box
+			fill(stack, this.x+0.001, this.y+0.035+(i*0.1), this.x+0.235, this.y+0.1+(i*0.1)+0.035, (i % 2) == 0 ? 0xff1b1c21 : 0xff0a0a0b);
+//			fill(stack, this.x+0.011, this.y+0.045+(i*0.1), this.x+0.09, this.y+0.09+(i*0.1)+0.035, (i % 2) != 0 ? 0xff1b1c21 : 0xff0a0a0b);
+			// Render Info
+			draw(stack, new TextComponent("example savestate"), this.x+0.1, this.y+(i*0.1)+0.045, 20, 0xff8f8f8f, false);
+			draw(stack, new TextComponent(Date.from(Instant.now()).toLocaleString()), this.x+0.1, this.y+(i*0.1)+0.065, 20, 0xff8f8f8f, false);
+			// Render Button
+			fill(stack, this.x+0.095, this.y+0.095+(i*0.1), this.x+0.16, this.y+0.09+0.035+(i*0.1), (i % 2) != 0 ? 0xff1b1c21 : 0xff0a0a0b);
+			fill(stack, this.x+0.164, this.y+0.095+(i*0.1), this.x+0.23, this.y+0.09+0.035+(i*0.1), (i % 2) != 0 ? 0xff1b1c21 : 0xff0a0a0b);
+			this.draw(stack, new TextComponent("Loadstate"), this.x+0.095+0.0065, this.y+0.1+(i*0.1), 20, 0xff149b5b, false);
+			this.draw(stack, new TextComponent("Deletestate"), this.x+0.095+0.0724, this.y+0.1+(i*0.1), 20, 0xff149b5b, false);
+			// Render Image
+		}
+		
 	}
 	
 }
