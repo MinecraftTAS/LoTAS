@@ -17,4 +17,12 @@ public class EmptyScreen extends Screen {
 		super(new TextComponent("Empty Screen"));
 	}
 	
+	/**
+	 * This will cause the server to be controlled by tickrate zero, instead of the screen window. Breaks server support a bit less
+	 */
+	@Override
+	public boolean isPauseScreen() {
+		return false;
+	}
+	
 }
