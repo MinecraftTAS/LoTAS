@@ -119,6 +119,8 @@ public class ClientLoTAS implements ClientModInitializer {
 	public void onRenderScreen(PoseStack stack, Minecraft mc) {
 		// Render LoScreen
 		loscreenmanager.onGuiRender(stack, mc);
+		// Render Savestate
+		LoTAS.savestatemod.onRender();
 	}
 	
 	/**
