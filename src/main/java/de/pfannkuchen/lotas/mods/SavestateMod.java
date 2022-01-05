@@ -6,8 +6,13 @@ package de.pfannkuchen.lotas.mods;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileVisitResult;
+import java.nio.file.FileVisitor;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,10 +21,9 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.ArrayUtils;
 
 import com.mojang.blaze3d.platform.NativeImage;
+import com.mojang.blaze3d.systems.RenderSystem;
 
-import de.pfannkuchen.lotas.ClientLoTAS;
 import de.pfannkuchen.lotas.LoTAS;
-import de.pfannkuchen.lotas.gui.StateLoScreen;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -110,6 +114,8 @@ public class SavestateMod {
 	private int[] doSavestatePicture = null;
 	private int doLoadstate = -1;
 	private int doDeletestate = -1;
+	// Client-side Todo list
+	private boolean shouldReload;
 	// Server-side folder structure
 	private File savestatesDir;
 	private File worldDir;
@@ -124,55 +130,72 @@ public class SavestateMod {
 	public void onClientPacket(ClientboundCustomPayloadPacket p) {
 		if (SAVESTATE_MOD_RL.equals(p.getIdentifier())) {
 			FriendlyByteBuf buf = p.getData();
-			// Should the Client screen be locked or unlocked
-			boolean lockOUnlock = buf.readBoolean();
-			// TODO: Reimplement the locking screen
+			// Switch between packet types
+			if (buf.readInt() == 0) {
+				// Should the Client screen be locked or unlocked
+				boolean lockOUnlock = buf.readBoolean();
+				// TODO: Reimplement the locking screen
 //			if (lockOUnlock)
 //				ClientLoTAS.loscreenmanager.setScreen(new StateLoScreen());
 //			else
 //				StateLoScreen.allowUnlocking();
-			// Should a savestate or a loadstate occur
-			int opcode = buf.readInt();
-			if (opcode == 0) {
-				if (lockOUnlock) {
-					LoTAS.LOGGER.info("The Server will savestate now.");
-				} else {
-					LoTAS.LOGGER.info("The Server finished savestating.");
-				}
-			} else if (opcode == 1) {
-				if (lockOUnlock) {
-					LoTAS.LOGGER.info("The Server will loadstate now.");
-				} else {
-					LoTAS.LOGGER.info("The Server finished loadstating.");
-				}
-			} else if (opcode == 2) {
-				if (lockOUnlock) {
-					LoTAS.LOGGER.info("The Server will deletestate now.");
-				} else {
-					LoTAS.LOGGER.info("The Server finished deletestating.");
-				}
-			}
-			// Unload previous textures
-			for (State s : states) if (s.texture != null) mc.getTextureManager().release(s.texture);
-			// Update the State List
-			this.states = new State[buf.readVarInt()];
-			for (int i = 0; i < states.length; i++) {
-				this.states[i] = State.deserialize(buf.readByteArray());
-			}
-			LoTAS.LOGGER.info("The Client has " + states.length + " savestates stored in the mirrored list. Reloading all textures...");
-			for (State s : states) {
-				NativeImage n = new NativeImage(256, 144, true);
-				BufferedImage img = new BufferedImage(256, 144, BufferedImage.TYPE_INT_ARGB);
-				img.setRGB(0, 0, 256, 144, s.screenshot, 0, 256);
-				for (int i = 0; i < 256; i++) {
-					for (int j = 0; j < 144; j++) {
-						n.setPixelRGBA(i, j, img.getRGB(i, j));
+				// Should a savestate or a loadstate occur
+				int opcode = buf.readInt();
+				if (opcode == 0) {
+					if (lockOUnlock) {
+						LoTAS.LOGGER.info("The Server will savestate now.");
+					} else {
+						LoTAS.LOGGER.info("The Server finished savestating.");
+					}
+				} else if (opcode == 1) {
+					if (lockOUnlock) {
+						LoTAS.LOGGER.info("The Server will loadstate now.");
+					} else {
+						LoTAS.LOGGER.info("The Server finished loadstating.");
+					}
+				} else if (opcode == 2) {
+					if (lockOUnlock) {
+						LoTAS.LOGGER.info("The Server will deletestate now.");
+					} else {
+						LoTAS.LOGGER.info("The Server finished deletestating.");
 					}
 				}
-				mc.getTextureManager().register(new ResourceLocation("lotas", s.name + s.timestamp), new DynamicTexture(n));
+				// Unload previous textures
+				for (State s : states) if (s.texture != null) mc.getTextureManager().release(s.texture);
+				// Update the State List
+				this.states = new State[buf.readVarInt()];
+			} else {
+				// Second packet type contains the state
+				int index = buf.readInt();
+				this.states[index] = State.deserialize(buf.readByteArray());
+				if (index == (this.states.length - 1)) {
+					LoTAS.LOGGER.info("The Client has " + states.length + " savestates stored in the mirrored list. Reloading all textures...");
+					shouldReload = true;
+				}
 			}
 		}
 	}
+	
+	/**
+	 * Reloads the texture if needed in the render thread
+	 */
+	@Environment(EnvType.CLIENT)
+	public void onRender() {
+		if (!shouldReload) return;
+		shouldReload = false;
+		for (State s : this.states) {
+			NativeImage n = new NativeImage(256, 144, true);
+			BufferedImage img = new BufferedImage(256, 144, BufferedImage.TYPE_INT_ARGB);
+			img.setRGB(0, 0, 256, 144, s.screenshot, 0, 256);
+			for (int i = 0; i < 256; i++) {
+				for (int j = 0; j < 144; j++) {
+					n.setPixelRGBA(i, j, img.getRGB(i, j));
+				}
+			}
+			mc.getTextureManager().register(new ResourceLocation("lotas", (s.name + s.timestamp).replace(' ', '_').replaceAll("[^a-z0-9_.-]", "")), new DynamicTexture(n));
+		}
+	}
+	
 	
 	/**
 	 * Triggers a Load/Delete/Savestate when a client packet is incoming and then resends the packet to all clients.
@@ -244,13 +267,21 @@ public class SavestateMod {
 		mcserver.getPlayerList().getPlayers().forEach(c -> {
 			// Freeze Client Packet
 			FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
+			buf.writeInt(0); // WRITE THE PACKET TYPE FIRST
 			buf.writeBoolean(lockOUnlock); // Write the lock state of the client
 			buf.writeInt(opcode); // Write the action of the server
 			buf.writeVarInt(this.states.length);
-			for (State s : this.states) {
-				buf.writeByteArray(s.serialize());
-			}
 			c.connection.send(new ClientboundCustomPayloadPacket(SAVESTATE_MOD_RL, buf));
+			// Send all state packets
+			int i = 0;
+			for (State s : this.states) {
+				buf = new FriendlyByteBuf(Unpooled.buffer());
+				buf.writeInt(1); // WRITE THE PACKET TYPE FIRST
+				buf.writeInt(i); // Index of the savestate
+				buf.writeByteArray(s.serialize()); // Serialized savestate
+				c.connection.send(new ClientboundCustomPayloadPacket(SAVESTATE_MOD_RL, buf));
+				i++;
+			}
 			// Lock or Unlock the tickrate
 			LoTAS.tickadvance.updateTickadvanceStatus(lockOUnlock);
 		});
@@ -281,7 +312,31 @@ public class SavestateMod {
 				this.states[ii] = State.deserialize(buf.readByteArray());
 			}
 			// Copy full folder
-			FileUtils.copyDirectory(this.worldDir, worldSavestateDir);
+			Files.walkFileTree(this.worldDir.toPath(), new FileVisitor<Path>() {
+
+				@Override
+				public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+					try {
+						worldSavestateDir.toPath().resolve(SavestateMod.this.worldDir.toPath().relativize(dir)).toFile().mkdirs();
+					} catch (Exception e) {
+						System.err.println("Unable to mkdir: " + dir);
+					}
+					return FileVisitResult.CONTINUE;
+				}
+
+				@Override
+				public FileVisitResult visitFile(Path dir, BasicFileAttributes attrs) throws IOException {
+					try {
+						Files.copy(dir, worldSavestateDir.toPath().resolve(SavestateMod.this.worldDir.toPath().relativize(dir)), StandardCopyOption.REPLACE_EXISTING);
+					} catch (Exception e) {
+						System.err.println("Unable to copy: " + dir);
+					}
+					return FileVisitResult.CONTINUE;
+				}
+
+				@Override public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException { return FileVisitResult.CONTINUE; }
+				@Override public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException { return FileVisitResult.CONTINUE; }
+			});
 			// Add the savesate to the list of states
 			this.states = ArrayUtils.add(this.states, new State(this.doSavestate, Instant.now().getEpochSecond(), worldSavestateDir.getAbsolutePath(), this.doSavestatePicture));
 			// Write savestate file
