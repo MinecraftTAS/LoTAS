@@ -29,13 +29,4 @@ public class MixinClientPlayNetworkHandler {
 		ci.cancel();
 	}
 	
-	/**
-	 * Triggers an Event in {@link ClientLoTAS#onClientDisconnect()} if the player disconnects
-	 * @param ci Callback Info
-	 */
-	@Inject(method = "onDisconnect", at = @At("HEAD"))
-	public void hookDisconnectEvent(CallbackInfo ci) {
-		ClientLoTAS.instance.onClientDisconnect();
-	}
-	
 }
