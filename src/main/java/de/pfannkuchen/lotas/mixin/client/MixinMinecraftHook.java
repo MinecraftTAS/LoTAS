@@ -65,4 +65,13 @@ public class MixinMinecraftHook {
 		if (ClientLoTAS.instance.onGuiUpdate(screen, (Minecraft) (Object) this)) ci.cancel();
 	}
 	
+	/**
+	 * Triggers an Event in {@link ClientLoTAS#onClientDisconnect()} if the player disconnects
+	 * @param ci Callback Info
+	 */
+	@Inject(method = "clearLevel(Lnet/minecraft/client/gui/screens/Screen;)V", at = @At("HEAD"))
+	public void hookDisconnectEvent(CallbackInfo ci) {
+		ClientLoTAS.instance.onClientDisconnect();
+	}
+	
 }
