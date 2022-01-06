@@ -146,5 +146,19 @@ public class ClientLoTAS implements ClientModInitializer {
 		// Update Savestate Mod Callback
 		LoTAS.savestatemod.onClientPacket(packet);
 	}
+
+	/**
+	 * Executed if the client disconnects
+	 */
+	public void onClientDisconnect() {
+		// Update Dupe Mod
+		LoTAS.dupemod.onDisconnect();
+		// Update Tick Advance
+		LoTAS.tickadvance.onDisconnect();
+		// Update Tickrate Changer
+		LoTAS.tickratechanger.onDisconnect();
+		// Update Savestate Mod
+		LoTAS.savestatemod.onDisconnect();
+	}
 	
 }

@@ -19,6 +19,7 @@ import net.minecraft.network.protocol.game.ClientboundCustomPayloadPacket;
 import net.minecraft.network.protocol.game.ServerboundCustomPayloadPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
 
 /**
  * Main Tickrate Changer
@@ -115,6 +116,24 @@ public class TickrateChanger {
 		long time = System.currentTimeMillis() - this.timeSinceTC;
 		time *= this.gamespeed;
 		return this.fakeTimeSinceTC + time;
+	}
+	
+	/**
+	 * Clears local data on disconnect
+	 */
+	@Environment(EnvType.CLIENT)
+	public void onDisconnect() {
+		internallyUpdateTickrate(20.0);
+	}
+	
+	/**
+	 * Updates client data on connect
+	 */
+	public void onConnect(ServerPlayer c) {
+		FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
+		buf.writeDouble(tickrate);
+		ClientboundCustomPayloadPacket p = new ClientboundCustomPayloadPacket(TICKRATE_CHANGER_RL, buf);
+		c.connection.send(p);
 	}
 	
 	// Place Getters here to not confuse with public variables that shall not be set

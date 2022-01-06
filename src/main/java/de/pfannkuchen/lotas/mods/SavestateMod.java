@@ -34,6 +34,7 @@ import net.minecraft.network.protocol.game.ServerboundCustomPayloadPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.storage.LevelResource;
 
 /**
@@ -440,6 +441,38 @@ public class SavestateMod {
 		} else 
 			buf.writeInt(index);
 		this.mc.getConnection().send(new ServerboundCustomPayloadPacket(SAVESTATE_MOD_RL, buf));
+	}
+	
+	/**
+	 * Clears local data on disconnect
+	 */
+	@Environment(EnvType.CLIENT)
+	public void onDisconnect() {
+		this.shouldReload = false;
+		this.states = new State[0];
+	}
+	
+	/**
+	 * Updates client data on connect
+	 */
+	public void onConnect(ServerPlayer c) {
+		// Freeze Client Packet
+		FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
+		buf.writeInt(0); // WRITE THE PACKET TYPE FIRST
+		buf.writeBoolean(false); // Write the lock state of the client
+		buf.writeInt(-1); // Write the action of the server
+		buf.writeVarInt(this.states.length);
+		c.connection.send(new ClientboundCustomPayloadPacket(SAVESTATE_MOD_RL, buf));
+		// Send all state packets
+		int i = 0;
+		for (State s : this.states) {
+			buf = new FriendlyByteBuf(Unpooled.buffer());
+			buf.writeInt(1); // WRITE THE PACKET TYPE FIRST
+			buf.writeInt(i); // Index of the savestate
+			buf.writeByteArray(s.serialize()); // Serialized savestate
+			c.connection.send(new ClientboundCustomPayloadPacket(SAVESTATE_MOD_RL, buf));
+			i++;
+		}
 	}
 	
 }

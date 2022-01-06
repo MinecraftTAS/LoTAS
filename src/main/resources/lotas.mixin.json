@@ -6,7 +6,8 @@
 	"mixins": [
 		"tickratechanger.MixinMinecraftServer",
 		"MixinMinecraftServer",
-		"MixinPlayNetworkHandler"
+		"MixinPlayNetworkHandler",
+		"MixinPlayerList"
 	],
 	"client": [
 		"client.gui.MixinTitleScreen",

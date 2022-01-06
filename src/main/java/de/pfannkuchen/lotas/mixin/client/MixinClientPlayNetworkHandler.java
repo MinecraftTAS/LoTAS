@@ -20,13 +20,22 @@ import net.minecraft.network.protocol.game.ClientboundCustomPayloadPacket;
 public class MixinClientPlayNetworkHandler {
 
 	/**
-	 * Triggers an Event in {@link ClientLoTAS#onClientPayload(ClientboundCustomPayloadPacket)} before the game enters the game loop
+	 * Triggers an Event in {@link ClientLoTAS#onClientPayload(ClientboundCustomPayloadPacket)} whenever a custom payload packet is received
 	 * @param ci Callback Info
 	 */
 	@Inject(method = "handleCustomPayload", at = @At("HEAD"), cancellable = true)
 	public void hookCustomPayloadEvent(ClientboundCustomPayloadPacket packet, CallbackInfo ci) {
 		ClientLoTAS.instance.onClientPayload(packet);
 		ci.cancel();
+	}
+	
+	/**
+	 * Triggers an Event in {@link ClientLoTAS#onClientDisconnect()} if the player disconnects
+	 * @param ci Callback Info
+	 */
+	@Inject(method = "onDisconnect", at = @At("HEAD"))
+	public void hookDisconnectEvent(CallbackInfo ci) {
+		ClientLoTAS.instance.onClientDisconnect();
 	}
 	
 }

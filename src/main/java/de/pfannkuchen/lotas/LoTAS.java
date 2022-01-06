@@ -13,6 +13,7 @@ import de.pfannkuchen.lotas.mods.TickrateChanger;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.network.protocol.game.ServerboundCustomPayloadPacket;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
 
 /**
  * LoTAS Fabric Mod Core.
@@ -85,6 +86,20 @@ public class LoTAS implements ModInitializer {
 		LoTAS.dupemod.onServerPacket(packet);
 		// Update Savestate Mod Handler
 		LoTAS.savestatemod.onServerPacket(packet);
+	}
+
+	/**
+	 * Executed if a client connects
+	 */
+	public void onClientConnect(ServerPlayer c) {
+		// Update Dupe Mod
+		LoTAS.dupemod.onConnect(c);
+		// Update Tick Advance
+		LoTAS.tickadvance.onConnect(c);
+		// Update Tickrate Changer
+		LoTAS.tickratechanger.onConnect(c);
+		// Update Savestate Mod
+		LoTAS.savestatemod.onConnect(c);
 	}
 	
 }
