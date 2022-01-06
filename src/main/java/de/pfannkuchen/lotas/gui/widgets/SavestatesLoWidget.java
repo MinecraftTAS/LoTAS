@@ -44,9 +44,10 @@ public class SavestatesLoWidget extends WindowLoWidget {
 		this.windowHeight = (LoTAS.savestatemod.getStateCount()*0.1)+0.083;
 		for (int i = 0; i < LoTAS.savestatemod.getStateCount(); i++) {
 			State s = LoTAS.savestatemod.getSavestateInfo(i);
+			if (s == null) continue;
 			// Render Box
 			fill(stack, this.x+0.001, this.y+0.035+(i*0.1), this.x+0.235, this.y+0.1+(i*0.1)+0.035, (i % 2) == 0 ? 0xff1b1c21 : 0xff0a0a0b);
-//			fill(stack, this.x+0.011, this.y+0.045+(i*0.1), this.x+0.09, this.y+0.09+(i*0.1)+0.035, (i % 2) != 0 ? 0xff1b1c21 : 0xff0a0a0b);
+			fill(stack, this.x+0.011, this.y+0.045+(i*0.1), this.x+0.09, this.y+0.09+(i*0.1)+0.035, (i % 2) != 0 ? 0xff1b1c21 : 0xff0a0a0b);
 			// Render Info
 			draw(stack, new TextComponent(s.getName()), this.x+0.1, this.y+(i*0.1)+0.045, 20, 0xff8f8f8f, false);
 			draw(stack, new TextComponent(new SimpleDateFormat().format(Date.from(Instant.ofEpochSecond(s.getTimestamp())))), this.x+0.1, this.y+(i*0.1)+0.065, 20, 0xff8f8f8f, false);
