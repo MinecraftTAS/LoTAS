@@ -5,6 +5,9 @@
 	"compatibilityLevel": "JAVA_17",
 	"mixins": [
 		"tickratechanger.MixinMinecraftServer",
+		"misc.MixinCustomPacketInflater",
+		"misc.MixinCustomPacketInflaterClient",
+		"misc.MixinPacketInflater",
 		"MixinMinecraftServer",
 		"MixinPlayNetworkHandler",
 		"MixinPlayerList"
