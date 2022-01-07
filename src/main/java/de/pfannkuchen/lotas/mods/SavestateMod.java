@@ -107,7 +107,6 @@ public class SavestateMod {
 	static final ResourceLocation SAVESTATE_MOD_RL = new ResourceLocation("lotas", "savestatemod");
 	@Environment(EnvType.CLIENT)
 	public Minecraft mc;
-	public MinecraftServer mcserver;
 	
 	// Server-side Todo list
 	private String doSavestate = null;
@@ -456,8 +455,20 @@ public class SavestateMod {
 	 * Updates client data on connect
 	 */
 	public void onConnect(ServerPlayer c) {
+		// Load everything
+		FriendlyByteBuf buf;
+		try {
+			prepareFolders(c.getServer());
+			buf = new FriendlyByteBuf(Unpooled.wrappedBuffer(Files.readAllBytes(new File(this.savestatesDir, "states.dat").toPath())));
+			this.states = new State[buf.readVarInt()];
+			for (int ii = 0; ii < states.length; ii++) {
+				this.states[ii] = State.deserialize(buf.readByteArray());
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		// Freeze Client Packet
-		FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
+		buf = new FriendlyByteBuf(Unpooled.buffer());
 		buf.writeInt(0); // WRITE THE PACKET TYPE FIRST
 		buf.writeBoolean(false); // Write the lock state of the client
 		buf.writeInt(-1); // Write the action of the server

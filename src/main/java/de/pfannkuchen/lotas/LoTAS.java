@@ -60,8 +60,6 @@ public class LoTAS implements ModInitializer {
 		LoTAS.tickadvance.mcserver = server;
 		// Update Dupe Mod Handler
 		LoTAS.dupemod.mcserver = server;
-		// Update Savestate Mod Handler
-		LoTAS.savestatemod.mcserver = server;
 	}
 	
 	/**
