@@ -24,22 +24,22 @@ public class KeybindManager {
 	/**
 	 * Keybinding for opening and closing the LoTAS Menu LoScreen.
 	 */
-	private KeyMapping openLoTASMenuKeybind = new KeyMapping("key.openlotasmenu", GLFW.GLFW_KEY_R, "key.categories.lotas");
+	private KeyMapping openLoTASMenuKeybind = new KeyMapping("Open LoTAS Menu", GLFW.GLFW_KEY_R, "LoTAS Keybinds");
 	
 	/**
 	 * Keybinding for advancing a single tick while being in Tick Advance.
 	 */
-	private KeyMapping tickadvanceKeybind = new KeyMapping("key.tickadvance", GLFW.GLFW_KEY_TAB, "key.categories.lotas");
+	private KeyMapping tickadvanceKeybind = new KeyMapping("Advance a tick", GLFW.GLFW_KEY_TAB, "LoTAS Keybinds");
 	
 	/**
 	 * Keybinding for advancing a single tick while being in Tick Advance.
 	 */
-	private KeyMapping toggleTickadvance = new KeyMapping("key.toggletickadvance", GLFW.GLFW_KEY_F8, "key.categories.lotas");
+	private KeyMapping toggleTickadvance = new KeyMapping("Toggle tick advance", GLFW.GLFW_KEY_F8, "LoTAS Keybinds");
 	
 	/**
 	 * Categories for all keybinds used.
 	 */
-	private String[] keybindCategories = new String[] {"key.categories.lotas"};
+	private String[] keybindCategories = new String[] {"LoTAS Keybinds"};
 	
 	/**
 	 * Initializes the Keybind Manager, registers categories and keybinds.
