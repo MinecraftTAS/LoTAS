@@ -57,11 +57,11 @@ public class KeybindManager {
 	 * @param mc Instance of Minecraft
 	 */
 	public void onGameLoop(Minecraft mc) {
-		if (isKeyDown(mc, openLoTASMenuKeybind))
+		if (isKeyDown(mc, openLoTASMenuKeybind) && mc.level != null)
 			ClientLoTAS.loscreenmanager.toggleLoTASMenu(mc);
-		else if (isKeyDown(mc, tickadvanceKeybind))
+		else if (isKeyDown(mc, tickadvanceKeybind) && mc.level != null)
 			LoTAS.tickadvance.requestTickadvance();
-		else if (isKeyDown(mc, toggleTickadvance))
+		else if (isKeyDown(mc, toggleTickadvance) && mc.level != null)
 			LoTAS.tickadvance.requestTickadvanceToggle();
 	}
 	
