@@ -1,5 +1,21 @@
 /**
- * Here goes the logic of the Savestate Mod.. eventually...
+ * Here is the logic of the Savestate Mod..
+ * 
+ * The Class 'State' represents a savestate. It contains some data such as name, timestamp, picture and more. 
+ * There is a list of states, which is being synchronized between the client and the server whenever a sld occurs (save load delete)
+ * 
+ * in onClientPacket the client reacts to the server, once it sends a packet. There are 2 types of packets which have to come after each other.
+ * The First one contains the action and the amount of states. It locks the client during the savestate and lets the client update the state list.
+ * The second packet contains the actual State after the first packet mentions how many state there are.
+ * 
+ * The Client can only receive these packets before and after the server savestate(), loadstate() or deletestate()s. This is being triggered at the end of a tick 
+ * if a packet is being recieved from any client. Then this is being stored in the "Server Todolist" and processed after the tick as mentioned.
+ * 
+ * The Client can request and action in requestState().
+ * 
+ * Another thing to note is that the images have to be registered to minecraft for future rendering. The
+ * Client has a "Todo list" for that too and registeres the textures in the render loop, so that opengl is available.
+ * 
  */
 package de.pfannkuchen.lotas.mods;
 
