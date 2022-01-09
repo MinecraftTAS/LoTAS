@@ -11,6 +11,7 @@ import de.pfannkuchen.lotas.mods.ConfigManager;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.util.Mth;
 
 /**
  * Moveable Window Widget with Title
@@ -105,8 +106,8 @@ public class WindowLoWidget extends LoScreen {
 		}
 		// Move the window while dragged
 		if (isDragging) {
-			this.x = curX - this.draggingOffsetX;
-			this.y = curY - this.draggingOffsetY;
+			this.x = Mth.clamp(curX - this.draggingOffsetX, 0, 0.76);
+			this.y = Mth.clamp(curY - this.draggingOffsetY, 0, 0.95);
 		}
 		super.drag(prevCurX-this.x, prevCurY-this.y, curX-this.x, curY-this.y);
 	}
