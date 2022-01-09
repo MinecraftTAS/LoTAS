@@ -21,18 +21,19 @@ public class CustomImageButton extends ImageButton {
 	
 	/**
 	 * Creates a new button with a given image
-	 * FIXME: no i will not figure out what these parameters do..
-	 * @param i
-	 * @param j
-	 * @param k
-	 * @param l
-	 * @param m
-	 * @param n
+	 * @param i X Position
+	 * @param j Y Position
+	 * @param k Width
+	 * @param l Height
+	 * @param m UVX
+	 * @param n UVY
 	 * @param o
-	 * @param streaming
-	 * @param p
-	 * @param q
-	 * @param object
+	 * @param streaming Resource location
+	 * @param p uv end X
+	 * @param q uv end Y
+	 * @param onPress press action
+	 * @param onTooltip hover action
+	 * @param toggled Is toggled or not
 	 */
 	public CustomImageButton(int i, int j, int k, int l, int m, int n, int o, ResourceLocation streaming, int p, int q, OnPress onPress, OnTooltip onTooltip, boolean toggled) {
 		super(i+2, j+2, k-4, l-4, m, n, o, streaming, p, q, b -> {}, onTooltip, TextComponent.EMPTY);

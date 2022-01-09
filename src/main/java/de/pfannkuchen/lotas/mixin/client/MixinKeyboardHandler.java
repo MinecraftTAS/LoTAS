@@ -20,7 +20,11 @@ public class MixinKeyboardHandler {
 
 	/**
 	 * Triggers an Event in {@link ClientLoTAS#onKeyPressed(Integer)} whenever a screen catches a key event
-	 * FIXME: figure out all parameters
+	 * @param l The Game Window
+	 * @param key The Pressed Key
+	 * @param j Key Code
+	 * @param k Key Action
+	 * @param m Mods
 	 */
 	@Inject(method = "keyPress", at = @At("HEAD"))
 	public void onKeyPressed(long l, int key, int j, int k, int m, CallbackInfo ci) {
@@ -29,7 +33,9 @@ public class MixinKeyboardHandler {
 	
 	/**
 	 * Triggers an Event in {@link ClientLoTAS#onKeyPressed(Integer)} whenever a screen catches a key event
-	 * FIXME: figure out all parameters
+	 * @param l The Game Window
+	 * @param key The Pressed Key
+	 * @param j Key Code
 	 */
 	@Inject(method = "charTyped", at = @At("HEAD"))
 	public void onCharTyped(long l, int key, int j, CallbackInfo ci) {
