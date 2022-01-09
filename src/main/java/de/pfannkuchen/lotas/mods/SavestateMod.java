@@ -39,9 +39,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import com.mojang.blaze3d.platform.NativeImage;
 import com.mojang.blaze3d.systems.RenderSystem;
 
-import de.pfannkuchen.lotas.ClientLoTAS;
 import de.pfannkuchen.lotas.LoTAS;
-import de.pfannkuchen.lotas.gui.StateLoScreen;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -153,14 +151,7 @@ public class SavestateMod {
 				// Should the Client screen be locked or unlocked
 				boolean lockOUnlock = buf.readBoolean();
 				RenderSystem.recordRenderCall(() -> {
-					try {
-						if (lockOUnlock)
-							ClientLoTAS.loscreenmanager.setScreen(new StateLoScreen());
-						else
-							StateLoScreen.allowUnlocking();
-					} catch (Exception e) {
-						e.printStackTrace(); // just to be sure, this didn't happen after I implemented the recordRenderCall()
-					}
+					lock(lockOUnlock);
 				});
 				// Should a savestate or a loadstate occur
 				int opcode = buf.readInt();
@@ -199,6 +190,21 @@ public class SavestateMod {
 		}
 	}
 	
+	/**
+	 * Locks the Client while not loading the Clientside classes on the server
+	 */
+	@Environment(EnvType.CLIENT)
+	private void lock(boolean lockOUnlock) {
+		try {
+			if (lockOUnlock)
+				de.pfannkuchen.lotas.ClientLoTAS.loscreenmanager.setScreen(new de.pfannkuchen.lotas.gui.StateLoScreen());
+			else
+				de.pfannkuchen.lotas.gui.StateLoScreen.allowUnlocking();
+		} catch (Exception e) {
+			e.printStackTrace(); // just to be sure, this didn't happen after I implemented the recordRenderCall()
+		}		
+	}
+
 	/**
 	 * Reloads the texture if needed in the render thread
 	 */
