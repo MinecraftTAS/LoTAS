@@ -37,8 +37,11 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.ArrayUtils;
 
 import com.mojang.blaze3d.platform.NativeImage;
+import com.mojang.blaze3d.systems.RenderSystem;
 
+import de.pfannkuchen.lotas.ClientLoTAS;
 import de.pfannkuchen.lotas.LoTAS;
+import de.pfannkuchen.lotas.gui.StateLoScreen;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -149,11 +152,16 @@ public class SavestateMod {
 			if (buf.readInt() == 0) {
 				// Should the Client screen be locked or unlocked
 				boolean lockOUnlock = buf.readBoolean();
-				// TODO: Reimplement the locking screen
-//			if (lockOUnlock)
-//				ClientLoTAS.loscreenmanager.setScreen(new StateLoScreen());
-//			else
-//				StateLoScreen.allowUnlocking();
+				RenderSystem.recordRenderCall(() -> {
+					try {
+						if (lockOUnlock)
+							ClientLoTAS.loscreenmanager.setScreen(new StateLoScreen());
+						else
+							StateLoScreen.allowUnlocking();
+					} catch (Exception e) {
+						e.printStackTrace(); // just to be sure, this didn't happen after I implemented the recordRenderCall()
+					}
+				});
 				// Should a savestate or a loadstate occur
 				int opcode = buf.readInt();
 				if (opcode == 0) {
@@ -218,6 +226,8 @@ public class SavestateMod {
 	 */
 	public void onServerPacket(ServerboundCustomPayloadPacket p) {
 		if (SAVESTATE_MOD_RL.equals(p.getIdentifier())) {
+			// The Server has to be in tickrate zero AFTER THE ACTION for this to work
+			if (LoTAS.tickadvance.isTickadvanceEnabled()) LoTAS.tickadvance.updateTickadvanceStatus(false);
 			FriendlyByteBuf buf = p.getData();
 			switch (buf.readInt()) {
 				case 0:
@@ -297,8 +307,8 @@ public class SavestateMod {
 				c.connection.send(new ClientboundCustomPayloadPacket(SAVESTATE_MOD_RL, buf));
 				i++;
 			}
-			// Lock or Unlock the tickrate
-			LoTAS.tickadvance.updateTickadvanceStatus(lockOUnlock);
+			if (lockOUnlock)
+				LoTAS.tickadvance.updateTickadvanceStatus(true);
 		});
 	}
 	
