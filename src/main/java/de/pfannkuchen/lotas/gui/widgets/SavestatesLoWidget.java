@@ -36,7 +36,7 @@ public class SavestatesLoWidget extends WindowLoWidget {
 	@Override
 	protected void init() {
 		addWidget(this.savestateBtn = new ButtonLoWidget(true, 0.002, (LoTAS.savestatemod.getStateCount()*0.1)+0.04, 0.233, () -> {
-			ClientLoTAS.loscreenmanager.toggleLoTASMenu(this.mc);
+			ClientLoTAS.loscreenmanager.setScreen(null);
 			LoTAS.savestatemod.requestState(0, -1, "no name given", LoTASHelper.takeScreenshot(this.mc, 256, 144));
 		}, new TextComponent("Savestate")));
 		super.init();
