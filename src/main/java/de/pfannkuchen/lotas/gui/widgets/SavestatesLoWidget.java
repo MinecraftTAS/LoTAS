@@ -21,6 +21,11 @@ import net.minecraft.network.chat.TextComponent;
 @Environment(EnvType.CLIENT)
 public class SavestatesLoWidget extends WindowLoWidget {
 	
+	/* 
+	 * Savestate button for later realigning
+	 */
+	private ButtonLoWidget savestateBtn;
+	
 	/**
 	 * Initializes a Tickrate Changer Widget
 	 */
@@ -30,7 +35,7 @@ public class SavestatesLoWidget extends WindowLoWidget {
 
 	@Override
 	protected void init() {
-		addWidget(new ButtonLoWidget(true, 0.002, (LoTAS.savestatemod.getStateCount()*0.1)+0.04, 0.233, () -> {
+		addWidget(this.savestateBtn = new ButtonLoWidget(true, 0.002, (LoTAS.savestatemod.getStateCount()*0.1)+0.04, 0.233, () -> {
 			ClientLoTAS.loscreenmanager.toggleLoTASMenu(this.mc);
 			LoTAS.savestatemod.requestState(0, -1, "no name given", LoTASHelper.takeScreenshot(this.mc, 256, 144));
 		}, new TextComponent("Savestate")));
@@ -42,6 +47,7 @@ public class SavestatesLoWidget extends WindowLoWidget {
 		super.render(stack, curX, curY);
 		// Render the savestate panels
 		this.windowHeight = (LoTAS.savestatemod.getStateCount()*0.1)+0.083;
+		this.savestateBtn.y = (LoTAS.savestatemod.getStateCount()*0.1)+0.04;
 		for (int i = 0; i < LoTAS.savestatemod.getStateCount(); i++) {
 			State s = LoTAS.savestatemod.getSavestateInfo(i);
 			if (s == null) continue;
