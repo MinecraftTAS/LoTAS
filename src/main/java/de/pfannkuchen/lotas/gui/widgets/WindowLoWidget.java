@@ -51,7 +51,7 @@ public class WindowLoWidget extends LoScreen {
 	private double draggingOffsetY;
 	
 	// Editable Properties
-	private boolean active = false;
+	protected boolean active = false;
 	
 	/**
 	 * Initializes the Window with a Title and Size

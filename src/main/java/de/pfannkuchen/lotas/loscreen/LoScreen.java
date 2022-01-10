@@ -127,6 +127,20 @@ public abstract class LoScreen {
 	}
 
 	/**
+	 * Renders a texture
+	 * @param stack Pose Stack ._.
+	 * @param x1 Percentage X
+	 * @param y1 Percentage Y
+	 * @param x2 End Percentage X
+	 * @param y2 End Percentage Y
+	 * @param u UV Coordinates
+	 * @param v UV Coordinates
+	 */
+	protected final void render(PoseStack stack, double x1, double y1, double x2, double y2, double u, double v) {
+		GuiComponent.blit(stack, (int) (x1*this.width/this.guiscale), (int) (y1*this.height/this.guiscale), 0, 0, (int) (x2*this.width/this.guiscale), (int) (y2*this.height/this.guiscale), (int) (this.width/12.6/this.guiscale), (int) (this.height/12.7/this.guiscale));
+	}
+	
+	/**
 	 * Draws a Text Component onto the screen
 	 * @param stack Pose Stack ._.
 	 * @param text Text to print
