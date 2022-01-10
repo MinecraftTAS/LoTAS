@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.Date;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import de.pfannkuchen.lotas.ClientLoTAS;
@@ -44,6 +45,7 @@ public class SavestatesLoWidget extends WindowLoWidget {
 	
 	@Override
 	protected void render(PoseStack stack, double curX, double curY) {
+		if (!this.active) return;
 		super.render(stack, curX, curY);
 		// Render the savestate panels
 		this.windowHeight = (LoTAS.savestatemod.getStateCount()*0.1)+0.083;
@@ -53,7 +55,6 @@ public class SavestatesLoWidget extends WindowLoWidget {
 			if (s == null) continue;
 			// Render Box
 			fill(stack, this.x+0.001, this.y+0.035+(i*0.1), this.x+0.235, this.y+0.1+(i*0.1)+0.035, (i % 2) == 0 ? 0xff1b1c21 : 0xff0a0a0b);
-			fill(stack, this.x+0.011, this.y+0.045+(i*0.1), this.x+0.09, this.y+0.09+(i*0.1)+0.035, (i % 2) != 0 ? 0xff1b1c21 : 0xff0a0a0b);
 			// Render Info
 			draw(stack, new TextComponent(s.getName()), this.x+0.1, this.y+(i*0.1)+0.045, 20, 0xff8f8f8f, false);
 			draw(stack, new TextComponent(new SimpleDateFormat().format(Date.from(Instant.ofEpochSecond(s.getTimestamp())))), this.x+0.1, this.y+(i*0.1)+0.065, 20, 0xff8f8f8f, false);
@@ -63,6 +64,10 @@ public class SavestatesLoWidget extends WindowLoWidget {
 			this.draw(stack, new TextComponent("Loadstate"), this.x+0.095+0.0065, this.y+0.1+(i*0.1), 20, 0xff149b5b, false);
 			this.draw(stack, new TextComponent("Deletestate"), this.x+0.095+0.0724, this.y+0.1+(i*0.1), 20, 0xff149b5b, false);
 			// Render Image
+			if (s.texture != null) {				
+				RenderSystem.setShaderTexture(0, s.texture);
+				render(stack, this.x+0.011, this.y+0.045+(i*0.1), 0.079, 0.079, 0, 0);
+			}
 		}
 		
 	}
