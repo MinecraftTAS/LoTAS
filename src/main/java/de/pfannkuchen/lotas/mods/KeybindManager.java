@@ -29,7 +29,7 @@ public class KeybindManager {
 	/**
 	 * Keybinding for advancing a single tick while being in Tick Advance.
 	 */
-	private KeyMapping tickadvanceKeybind = new KeyMapping("Advance a tick", GLFW.GLFW_KEY_TAB, "LoTAS Keybinds");
+	private KeyMapping tickadvanceKeybind = new KeyMapping("Advance a tick", GLFW.GLFW_KEY_F9, "LoTAS Keybinds");
 	
 	/**
 	 * Keybinding for advancing a single tick while being in Tick Advance.
