@@ -21,12 +21,24 @@ public class LoTASHelper {
 	 * @param height Scaled Height of the image
 	 * @return The Screenshot taken from a Buffered Image
 	 */
-	@SuppressWarnings("deprecation")
 	public static int[] takeScreenshot(Minecraft mc, int width, int height) {
 		BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 		BufferedImage oimg = new BufferedImage(mc.getWindow().getScreenWidth(), mc.getWindow().getScreenHeight(), BufferedImage.TYPE_INT_RGB);
 		NativeImage nimg = Screenshot.takeScreenshot(mc.getMainRenderTarget());
-		oimg.setRGB(0, 0, oimg.getWidth(), oimg.getHeight(), nimg.makePixelArray(), 0, oimg.getWidth()); // FIXME: panic panic panic panic panic panic panic panic deprecated aaaaaaaaahhhhhhhhhhhh
+		
+		int[] is = new int[nimg.getWidth() * nimg.getHeight()];
+        for (int i = 0; i < nimg.getHeight(); ++i) {
+            for (int j = 0; j < nimg.getWidth(); ++j) {
+                int k = nimg.getPixelRGBA(j, i);
+                int l = NativeImage.getA(k);
+                int m = NativeImage.getB(k);
+                int n = NativeImage.getG(k);
+                int o = NativeImage.getR(k);
+                is[j + i * nimg.getWidth()] = l << 24 | o << 16 | n << 8 | m;
+            }
+        }
+		
+		oimg.setRGB(0, 0, oimg.getWidth(), oimg.getHeight(), is, 0, oimg.getWidth());
 		Graphics2D g = img.createGraphics();
 		g.drawImage(oimg, 0, 0, width, height, 0, 0, oimg.getWidth(), oimg.getHeight(), null);
 		int[] outArray = new int[width*height];
