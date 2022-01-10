@@ -31,9 +31,9 @@ public class LoTASHelper {
             for (int j = 0; j < nimg.getWidth(); ++j) {
                 int k = nimg.getPixelRGBA(j, i);
                 int l = NativeImage.getA(k);
-                int m = NativeImage.getB(k);
+                int o = NativeImage.getB(k);
                 int n = NativeImage.getG(k);
-                int o = NativeImage.getR(k);
+                int m = NativeImage.getR(k);
                 is[j + i * nimg.getWidth()] = l << 24 | o << 16 | n << 8 | m;
             }
         }
