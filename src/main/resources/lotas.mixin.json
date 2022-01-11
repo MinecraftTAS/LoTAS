@@ -22,10 +22,11 @@
 		"client.tickratechanger.MixinToastInstance",
 		"client.MixinClientPlayNetworkHandler",
 		"client.MixinGuiHook",
+		"client.MixinKeyboardHandler",
 		"client.MixinKeyMappingsAccessor",
 		"client.MixinMinecraftHook",
-		"client.MixinOptionsHook",
-		"client.MixinKeyboardHandler"
+		"client.MixinMouseHandler",
+		"client.MixinOptionsHook"
 	],
 	"injectors": {
 		"defaultRequire": 1

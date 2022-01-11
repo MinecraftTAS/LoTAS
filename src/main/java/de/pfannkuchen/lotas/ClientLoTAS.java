@@ -80,6 +80,15 @@ public class ClientLoTAS implements ClientModInitializer {
 	}
 
 	/**
+	 * Executed after every screen caught mouse scroll
+	 * @param e Scroll amount
+	 */
+	public void onMouseScroll(double e) {
+		// Trigger a mouse scroll event for LoScreens
+		ClientLoTAS.loscreenmanager.onMouseScroll(e);
+	}
+	
+	/**
 	 * Executed before the JVM stops.
 	 * @param mc Instance of minecraft
 	 */
