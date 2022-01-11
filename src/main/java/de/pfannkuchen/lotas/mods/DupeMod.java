@@ -1,9 +1,9 @@
 /**
- * Here is the logic of the Dupe Mod:
+ * Here is the logic of the dupe mod:
  *
  * As noted by the @Environment annotations in front of methods, this code works on both client and server.
  *
- * Every time the clients wants to load or save playerdata it sends a Request Playerdata Update Packet to the server. #requestDupe
+ * Every time the clients wants to load or save playerdata it sends a request playerdata update packet to the server. #requestDupe
  * The server proceeds sending a update packet to the clients causing them to process the packet on their own. The server processes the packet too. #onServerPacket
  * The clients listener finally saves or loads the playerdata. #onClientPacket
  */
@@ -25,7 +25,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 
 /**
- * Main Dupe Mod
+ * Main dupe mod
  * @author Pancake
  */
 public class DupeMod {
@@ -40,8 +40,8 @@ public class DupeMod {
 	private HashMap<ServerPlayer, CompoundTag> onlineClients = new HashMap<>();
 
 	/**
-	 * Saves or Loads when receiving a packet
-	 * @param p Incoming Packet
+	 * Saves or loads when receiving a packet
+	 * @param p Incoming packet
 	 */
 	@Environment(EnvType.CLIENT)
 	public void onClientPacket(ClientboundCustomPayloadPacket p) {
@@ -58,7 +58,7 @@ public class DupeMod {
 
 	/**
 	 * Resend when receiving a packet
-	 * @param p Incoming Packet
+	 * @param p Incoming packet
 	 */
 	public void onServerPacket(ServerboundCustomPayloadPacket p) {
 		if (DUPE_MOD_RL.equals(p.getIdentifier())) {

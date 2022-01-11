@@ -10,7 +10,7 @@ import net.fabricmc.api.Environment;
  * A Thread safe list of byte buffers which can be exchanged, locked and.. well.. used...
  * @author Pancake
  */
-@Environment(EnvType.CLIENT) // Currently only used on the Client, remove if nessecary
+@Environment(EnvType.CLIENT) // Currently only used on the client, remove if necessary
 public class BufferExchangeList {
 
 	private ByteBuffer[] buffers;
@@ -77,7 +77,7 @@ public class BufferExchangeList {
 	}
 
 	/**
-	 * Locks and updates the state of a Buffer
+	 * Locks and updates the state of a buffer
 	 * @param i Index to lock
 	 * @param fill Whether fill or not
 	 * @return Byte Buffer locked
@@ -91,15 +91,15 @@ public class BufferExchangeList {
 	}
 
 	/**
-	 * Unlockes a Byte Buffer
-	 * @param index Index to Lock
+	 * Unlockes a byte buffer
+	 * @param index Index to lock
 	 */
 	public void unlock(int index) {
 		this.locked[index] = false;
 	}
 
 	/**
-	 * Clears the entire List
+	 * Clears the entire list
 	 */
 	public void clear() {
 		Arrays.fill(this.locked, false);

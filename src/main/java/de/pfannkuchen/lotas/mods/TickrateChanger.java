@@ -1,9 +1,9 @@
 /**
- * Here is the logic of the Tickrate Changer:
+ * Here is the logic of the tickrate changer:
  *
  * As noted by the @Environment annotations in front of methods, this code works on both client and server.
  *
- * Every time the clients wants to change the tickrate it sends a Request Tickrate Change Packet to the server. #requestTickrateUpdate ~~> #requestTickrateUpdate
+ * Every time the clients wants to change the tickrate it sends a request tickrate change packet to the server. #requestTickrateUpdate ~~> #requestTickrateUpdate
  * The server proceeds by changing it's tickrate and sends a tickrate change packet to the client from it's listener. #onServerPacket -> #updateTickrate
  * The clients listener finally updates the client tickrate too. #onClientPacket -> #internallyUpdateTickrate
  */
@@ -22,7 +22,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 
 /**
- * Main Tickrate Changer
+ * Main tickrate changer
  * @author Pancake
  */
 public class TickrateChanger {
@@ -136,7 +136,7 @@ public class TickrateChanger {
 		c.connection.send(p);
 	}
 
-	// Place Getters here to not confuse with public variables that shall not be set
+	// Place getters here to not confuse with public variables that shall not be set
 
 	public double getTickrate() {
 		return this.tickrate;

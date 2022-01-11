@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 /**
- * The Configuration can read and store keys in a file using Java's Configuration.
+ * The Configuration can read and store keys in a file using java's configuration.
  * @author Pancake
  */
 public class ConfigManager {

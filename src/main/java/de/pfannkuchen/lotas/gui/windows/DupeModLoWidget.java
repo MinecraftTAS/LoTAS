@@ -7,7 +7,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.network.chat.TextComponent;
 
 /**
- * Dupe Mod Widget
+ * Dupe mod window lowidget
  * @author Pancake
  */
 @Environment(EnvType.CLIENT)
@@ -18,7 +18,7 @@ public class DupeModLoWidget extends WindowLoWidget {
 	private Runnable onLoad;
 
 	/**
-	 * Initializes a Tickrate Changer Widget
+	 * Initializes a tickrate changer widget
 	 */
 	public DupeModLoWidget(Runnable onSave, Runnable onLoad) {
 		super("dupemodwidget", new TextComponent("Dupe Mod"), .15, .135);

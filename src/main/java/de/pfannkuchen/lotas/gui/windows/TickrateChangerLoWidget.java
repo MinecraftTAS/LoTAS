@@ -10,7 +10,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.network.chat.TextComponent;
 
 /**
- * Tickrate Changer Widget
+ * Tickrate changer Widget
  * @author Pancake
  */
 @Environment(EnvType.CLIENT)
@@ -28,7 +28,7 @@ public class TickrateChangerLoWidget extends WindowLoWidget {
 	private static Consumer<Double> update;
 
 	/**
-	 * Initializes a Tickrate Changer Widget
+	 * Initializes a tickrate changer widget
 	 */
 	public TickrateChangerLoWidget(Consumer<Double> update) {
 		super("tickratechangerwidget", new TextComponent("Tickrate Changer"), .15, .135);
@@ -57,12 +57,12 @@ public class TickrateChangerLoWidget extends WindowLoWidget {
 		index = Math.min(Math.max(0, index), TickrateChangerLoWidget.TICKRATES.length-1);
 		if (index == TickrateChangerLoWidget.index) return TickrateChangerLoWidget.TICKRATES[index];
 		TickrateChangerLoWidget.index = index;
-		// Update Slider
+		// Update slider
 		if (!isSlider && TickrateChangerLoWidget.slider != null) {
 			TickrateChangerLoWidget.slider.value = new TextComponent("Tickrate: " + TickrateChangerLoWidget.TICKRATES[index]);
 			TickrateChangerLoWidget.slider.progress = index / (double) TickrateChangerLoWidget.TICKRATES.length;
 		}
-		// Trigger Event
+		// Trigger event
 		if (TickrateChangerLoWidget.update != null && shouldTrigger) TickrateChangerLoWidget.update.accept(TickrateChangerLoWidget.TICKRATES[index]);
 		// Return new tickrate
 		return TickrateChangerLoWidget.TICKRATES[index];
@@ -84,7 +84,7 @@ public class TickrateChangerLoWidget extends WindowLoWidget {
 				closestMatch = diff;
 			}
 		}
-		// Update Tickrate
+		// Update tickrate
 		TickrateChangerLoWidget.updateTickrate(bestIndex, false, false);
 	}
 

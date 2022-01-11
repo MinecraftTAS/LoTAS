@@ -16,7 +16,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.protocol.game.ClientboundCustomPayloadPacket;
 
 /**
- * LoTAS Fabric Mod Core for the Client only.
+ * LoTAS fabric mod core for the client only.
  * @author Pancake
  */
 @Environment(EnvType.CLIENT)
@@ -44,7 +44,7 @@ public class ClientLoTAS implements ClientModInitializer {
 
 	/**
 	 * Executed after the rendering engine launches.
-	 * @param mc Instance of Minecraft
+	 * @param mc Instance of minecraft
 	 */
 	public void onRenderInitialize(Minecraft mc) {
 		// Initialize LoScreens
@@ -60,9 +60,9 @@ public class ClientLoTAS implements ClientModInitializer {
 	}
 
 	/**
-	 * Executed every time the Minecraft Screen changes
+	 * Executed every time the minecraft screen changes
 	 * @param screen New Screen
-	 * @param mc Instance of Minecraft
+	 * @param mc Instance of minecraft
 	 * @return Should cancel
 	 */
 	public boolean onGuiUpdate(Screen screen, Minecraft mc) {
@@ -75,13 +75,13 @@ public class ClientLoTAS implements ClientModInitializer {
 	 * @param key Key that was pressed
 	 */
 	public void onKeyPress(int key) {
-		// Trigger a Key Press Event for LoScreens
+		// Trigger a key press event for LoScreens
 		ClientLoTAS.loscreenmanager.onKeyPress(key);
 	}
 
 	/**
 	 * Executed before the JVM stops.
-	 * @param mc Instance of Minecraft
+	 * @param mc Instance of minecraft
 	 */
 	public void onShutdown(Minecraft mc) {
 
@@ -89,7 +89,7 @@ public class ClientLoTAS implements ClientModInitializer {
 
 	/**
 	 * Executed every tick of the game.
-	 * @param mc Instance of Minecraft
+	 * @param mc Instance of minecraft
 	 */
 	public void onTick(Minecraft mc) {
 		// Tick Tick Advance
@@ -98,12 +98,12 @@ public class ClientLoTAS implements ClientModInitializer {
 
 	/**
 	 * Executed every time the game logic loops.
-	 * @param mc Instance of Minecraft
+	 * @param mc Instance of minecraft
 	 */
 	public void onGameLoop(Minecraft mc) {
 		// Update LoScreens
 		ClientLoTAS.loscreenmanager.onGameLoop(mc);
-		// Update Keybindings
+		// Update Key bindings
 		ClientLoTAS.keybindmanager.onGameLoop(mc);
 		// Update internal timer
 		ClientLoTAS.internaltimer.advanceTime(Util.getMillis());
@@ -114,7 +114,7 @@ public class ClientLoTAS implements ClientModInitializer {
 	/**
 	 * Executed after the gui screens are rendered.
 	 * @param stack Pose Stack for rendering
-	 * @param mc Instance of Minecraft
+	 * @param mc Instance of minecraft
 	 */
 	public void onRenderScreen(PoseStack stack, Minecraft mc) {
 		// Render LoScreen
