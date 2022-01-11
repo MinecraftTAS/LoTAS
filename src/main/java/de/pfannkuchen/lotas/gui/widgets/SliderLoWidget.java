@@ -26,21 +26,21 @@ public class SliderLoWidget extends LoScreen {
 	private static final int TEXT_COLOR = 0xff108950;
 
 	// Position of the Slider
-	double x;
-	double y;
+	public double x;
+	public double y;
 	// Length of the Slider
-	double length;
+	public double length;
 	// Progress of the Slider
-	double progress;
+	public double progress;
 
 	// Whether the Slider should be shown
-	boolean active;
+	public boolean active;
 	// Whether it's currently being dragged
-	boolean isDragging = false;
+	public boolean isDragging = false;
 	// Move Handler
-	Function<Double, TextComponent> onMove;
+	public Function<Double, TextComponent> onMove;
 	// Value of the progress
-	TextComponent value;
+	public TextComponent value;
 
 	/**
 	 * Initializes a new Slider

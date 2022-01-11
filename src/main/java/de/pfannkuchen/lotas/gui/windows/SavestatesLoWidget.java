@@ -1,4 +1,4 @@
-package de.pfannkuchen.lotas.gui.widgets;
+package de.pfannkuchen.lotas.gui.windows;
 
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -9,6 +9,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 
 import de.pfannkuchen.lotas.ClientLoTAS;
 import de.pfannkuchen.lotas.LoTAS;
+import de.pfannkuchen.lotas.gui.widgets.ButtonLoWidget;
+import de.pfannkuchen.lotas.gui.widgets.WindowLoWidget;
 import de.pfannkuchen.lotas.mods.SavestateMod.State;
 import de.pfannkuchen.lotas.util.LoTASHelper;
 import net.fabricmc.api.EnvType;

@@ -9,7 +9,7 @@
  */
 package de.pfannkuchen.lotas.mods;
 
-import de.pfannkuchen.lotas.gui.widgets.TickrateChangerLoWidget;
+import de.pfannkuchen.lotas.gui.windows.TickrateChangerLoWidget;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

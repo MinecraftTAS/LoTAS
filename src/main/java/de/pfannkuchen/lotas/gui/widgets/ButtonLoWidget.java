@@ -21,19 +21,19 @@ public class ButtonLoWidget extends LoScreen {
 	private static final int FOCUS_COLOR = 0xff108950;
 
 	// Position of the Button
-	double x;
-	double y;
+	public double x;
+	public double y;
 	// Length of the Button
-	double length;
+	public double length;
 
 	// Whether the Button should be shown
-	boolean active;
+	public boolean active;
 	// Move Handler
-	Runnable onClick;
+	public Runnable onClick;
 	// Value of the button
-	TextComponent value;
+	public TextComponent value;
 	// Hover animation
-	float animationProgress;
+	public float animationProgress;
 
 	/**
 	 * Initializes a new Button
