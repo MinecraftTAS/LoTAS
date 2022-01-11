@@ -1,5 +1,5 @@
 /**
- * Here is the logic of the Recorder Mod:
+ * Here is the logic of the recorder mod:
  */
 package de.pfannkuchen.lotas.mods;
 
@@ -28,57 +28,57 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.TextComponent;
 
 /**
- * TAS Recorder Mod
+ * TAS recorder mod
  * @author Pancake
  */
 @Environment(EnvType.CLIENT)
 public class RecorderMod {
 
 	/**
-	 * The Windows Videos folder
+	 * The windows videos folder
 	 */
 	private final File VIDEOS_DIR = new File(System.getenv("userprofile"), "Videos");
 
 	/**
-	 * The FFMpeg exe
+	 * The FFMpeg executable
 	 */
 	private File FFMPEG;
 
 	/**
-	 * Command Line arguments for FFmpeg
+	 * Command line arguments for FFmpeg
 	 */
 	private String COMMAND_LINE = "-y %IN% -f rawvideo -c:v rawvideo -s %SIZE% -pix_fmt rgb24 -r 60 -i - -vf vflip %OUT% -pix_fmt yuv420p", COMMAND_LINE_IN, COMMAND_LINE_OUT;
 
 	/**
-	 * The Not Allowed Guis that may be filtered out
+	 * The not allowed guis that may be filtered out
 	 */
 	private final List<String> NOT_ALLOWED_GUI = Arrays.asList("AdvancementsScreen", "ConnectScreen", "DemoIntroScreen", "GenericDirtMessageScreen", "LevelLoadingScreen", "OptionsScreen",
 			"OptionsSubScreen", "ControlsScreen", "LanguageSelectScreen", "MouseSettingsScreen", "SimpleOptionsSubScreen", "AccessibilityOptionsScreen", "ChatOptionsScreen", "SkinCustomizationScreen",
 			"SoundOptionsScreen", "VideoSettingsScreen", "PackSelectionScreen", "PauseScreen", "PopupScreen", "ProgressScreen", "ReceivingLevelScreen", "ShareToLanScreen", "StatsScreen");
 
 	/**
-	 * Thread-Safe Atomic Boolean to see if the recording is running
+	 * Thread-safe atomic boolean to see if the recording is running
 	 */
 	private AtomicBoolean isRecording = new AtomicBoolean(false);
 
 	/**
-	 * Width and Height of the Screen
+	 * Width and height of the Screen
 	 */
 	private int width, height;
 
 	/**
-	 * Thread-Safe List for raw screenshots
+	 * Thread-safe list for raw screenshots
 	 */
 	private BufferExchangeList list;
 
 	/**
-	 * Whether a Screenshot should be taken or not.
+	 * Whether a screenshot should be taken or not.
 	 */
 	private boolean takeScreenshot;
 
 	/**
 	 * Restart the recording if the screen resizes
-	 * @param mc Instance of Minecraft
+	 * @param mc Instance of minecraft
 	 */
 	public void onResize(Minecraft mc) {
 		this.stopRecording();
@@ -86,21 +86,21 @@ public class RecorderMod {
 	}
 
 	/**
-	 * Takes Screenshots if nessecary
-	 * @param mc Instance of Minecraft
+	 * Takes screenshots if necessary
+	 * @param mc Instance of minecraft
 	 */
 	public void onRender(Minecraft mc) {
 		if (mc == null) return;
 		// Check screen resolutions
 		if ((this.width != mc.getWindow().getScreenWidth() || this.height != mc.getWindow().getScreenHeight()) && this.isRecording.get()) this.onResize(mc);
 		Screen screen = mc.screen;
-		// Update GuiScreen with NULL if the Gui is an allowed gui.
+		// Update gui screen with NULL if the gui is an allowed gui.
 		// Done to pass the next check screen == null
 		if (mc.level == null) return;
 		if (screen != null) if (!this.NOT_ALLOWED_GUI.contains(screen.getClass().getSimpleName())) screen = null;
 		if (this.takeScreenshot && screen == null && !ClientLoTAS.loscreenmanager.isScreenOpened()) {
 			this.takeScreenshot = false;
-			// Take a screenshot into the Screenshot List
+			// Take a screenshot into the screenshot list
 			if (this.list.containsUnfilledUnlocked()) {
 				int unfilled = this.list.findUnfilled();
 				ByteBuffer b = this.list.getAndLock(unfilled, true);
@@ -112,7 +112,7 @@ public class RecorderMod {
 
 	/**
 	 * Starts the recording
-	 * @param mc Instance of Minecraft
+	 * @param mc Instance of minecraft
 	 */
 	public void startRecording(Minecraft mc) {
 		this.FFMPEG = new File(LoTAS.configmanager.getString("recorder", "ffmpeg"));
@@ -124,7 +124,7 @@ public class RecorderMod {
 		this.height = mc.getWindow().getScreenHeight();
 		this.list = new BufferExchangeList(32, this.width*this.height*3);
 		this.isRecording.set(true);
-		/* Starts a Thread for sending the images from the buffer list and ffmpeg */
+		/* Starts a thread for sending the images from the buffer list and ffmpeg */
 		new Thread(() -> {
 			try {
 				// ffmpeg command line
@@ -140,7 +140,7 @@ public class RecorderMod {
 
 				LoTAS.LOGGER.info("Recording started");
 
-				// resuse buffers and arrays for optimal memory usage
+				// reuse buffers and arrays for optimal memory usage
 				ByteBuffer b;
 				byte[] array = new byte[this.width*this.height*3];
 				while (this.isRecording.get()) {

@@ -14,32 +14,32 @@ import net.minecraft.network.chat.TextComponent;
 import net.minecraft.util.Mth;
 
 /**
- * Moveable Window Widget with Title
+ * window lowidget with title
  * @author Pancake
  */
 @Environment(EnvType.CLIENT)
 public class WindowLoWidget extends LoScreen {
 
-	// Width and Height of the border around the Menu
+	// Width and height of the border around the window
 	private static final double BORDER_WIDTH = 0.0015625;
 	private static final double BORDER_HEIGHT = 0.00277;
-	// Background Color
+	// Background color
 	private static final int BACKGROUND_COLOR = 0xff0a0a0b;
-	// Border Color
+	// Border color
 	private static final int BORDER_COLOR = 0xff1b1c21;
-	// Title Color
+	// Title color
 	private static final int TITLE_COLOR = 0xff149b5b;
 	// Random
 	private static final Random rng = new Random();
 
-	// Window Sizes
+	// Window sizes
 	private TextComponent title;
 	private String id;
 	protected double windowWidth;
 	protected double windowHeight;
 	public double x = 0.2;
 	public double y = 0.2;
-	// Animation Progress
+	// Animation progress
 	private double animationProgress = 6;
 	private boolean leftORight = WindowLoWidget.rng.nextBoolean();
 	private boolean topOBottom = WindowLoWidget.rng.nextBoolean();
@@ -50,11 +50,11 @@ public class WindowLoWidget extends LoScreen {
 	private double draggingOffsetX;
 	private double draggingOffsetY;
 
-	// Editable Properties
+	// Editable properties
 	protected boolean active = false;
 
 	/**
-	 * Initializes the Window with a Title and Size
+	 * Initializes the window with a title and size
 	 */
 	public WindowLoWidget(String id, TextComponent title, double windowWidth, double windowHeight) {
 		this.id = id;
@@ -65,12 +65,12 @@ public class WindowLoWidget extends LoScreen {
 
 	@Override
 	protected void init() {
-		// Load elements from config
+		// Load elements from configuration
 		ConfigManager config = LoTAS.configmanager;
 		this.x = config.getDouble(this.id, "x");
 		this.y = config.getDouble(this.id, "y");
 		this.active = config.getBoolean(this.id, "active");
-		// Update Config
+		// Update configuration
 		Random rng = new Random();
 		if (this.x == -1)
 			this.x = rng.nextDouble()*0.7;
@@ -86,7 +86,7 @@ public class WindowLoWidget extends LoScreen {
 		if (!this.active) return;
 		this.isDragging = false; // Reset dragging
 		super.click(curX-this.x, curY-this.y, button);
-		// Save Config AFTER super method
+		// Save configuration AFTER super method
 		ConfigManager config = LoTAS.configmanager;
 		config.setDouble(this.id, "x", this.x);
 		config.setDouble(this.id, "y", this.y);
@@ -123,11 +123,11 @@ public class WindowLoWidget extends LoScreen {
 							this.horizontal ? (this.topOBottom ? -1000 : 1000) + this.ease(this.animationProgress, 0, 1, 6)*(this.topOBottom ? +1000 : -1000) : 0,
 									0);
 		}
-		// Render Background and Border
+		// Render background and border
 		this.fill(stack, this.x-WindowLoWidget.BORDER_WIDTH+0.005, this.y-WindowLoWidget.BORDER_HEIGHT+0.01, this.x+this.windowWidth+WindowLoWidget.BORDER_WIDTH*1.25+0.005, this.y+this.windowHeight+WindowLoWidget.BORDER_HEIGHT*1.25+0.01, 0xAA000000);
 		this.fill(stack, this.x-WindowLoWidget.BORDER_WIDTH, this.y-WindowLoWidget.BORDER_HEIGHT, this.x+this.windowWidth+WindowLoWidget.BORDER_WIDTH*1.25, this.y+this.windowHeight+WindowLoWidget.BORDER_HEIGHT*1.25, WindowLoWidget.BORDER_COLOR);
 		this.fill(stack, this.x, this.y, this.x+this.windowWidth, this.y+this.windowHeight, WindowLoWidget.BACKGROUND_COLOR);
-		// Render Title
+		// Render title
 		this.draw(stack, this.title, this.x+0.006, this.y+0.007, 20, WindowLoWidget.TITLE_COLOR, false);
 		stack.translate(this.x*this.width/this.guiscale, this.y*this.height/this.guiscale, 0);
 		super.render(stack, curX-this.x, curY-this.y);
@@ -135,8 +135,8 @@ public class WindowLoWidget extends LoScreen {
 	}
 
 	/**
-	 * Enables or Disables a widget and stores it into the config
-	 * @param enable Whether the widget is to enable or disable
+	 * Enables or disables a widget and stores it into the configuration
+	 * @param enable Whether the widget should be enabled or disabled
 	 */
 	public void changeVisibility(boolean enable) {
 		this.active = enable;

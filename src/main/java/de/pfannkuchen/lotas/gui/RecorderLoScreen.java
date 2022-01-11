@@ -23,13 +23,13 @@ import net.minecraft.network.chat.TextComponent;
 @Environment(EnvType.CLIENT)
 public class RecorderLoScreen extends LoScreen {
 
-	// Label Color
+	// Label color
 	private static final int LABEL_COLOR = 0xff149b5b;
-	// Title Color
+	// Title color
 	private static final int TITLE_COLOR = 0xffffffff;
-	// Background Color
+	// Background color
 	private static final int BACKGROUND_COLOR = 0xff161618;
-	// Error Color
+	// Error color
 	private static final int ERROR_COLOR = 0xffd74747;
 
 	// Variables for printing
@@ -39,7 +39,7 @@ public class RecorderLoScreen extends LoScreen {
 	// Hover animation
 	float animationProgress;
 
-	// Complating for why we cannot start recording
+	// Complaining text component
 	TextComponent complaint;
 
 	/**

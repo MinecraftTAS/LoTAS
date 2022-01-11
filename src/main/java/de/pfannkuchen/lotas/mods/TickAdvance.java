@@ -12,8 +12,8 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 
 /**
- * Tick Advance for Minecraft.
- * ~ same logic as Tickrate Changer
+ * Tick advance for minecraft.
+ * ~ same logic as tickrate changer
  * @author Pancake
  */
 public class TickAdvance {
@@ -24,13 +24,13 @@ public class TickAdvance {
 	public Minecraft mc;
 	public MinecraftServer mcserver;
 
-	// Is Tick Advance enabled
+	// Is tick advance enabled
 	private boolean tickadvance;
 	// Should tick advance
 	public boolean shouldTick;
 
 	/**
-	 * Updates the Client tickadvance status when receiving a packet
+	 * Updates the client tickadvance status when receiving a packet
 	 */
 	@Environment(EnvType.CLIENT)
 	public void onClientPacket(ClientboundCustomPayloadPacket p) {
@@ -41,7 +41,7 @@ public class TickAdvance {
 	}
 
 	/**
-	 * Updates the Server tickadvance status and resend when receiving a packet
+	 * Updates the server tickadvance status and resend when receiving a packet
 	 */
 	public void onServerPacket(ServerboundCustomPayloadPacket p) {
 		if (TICK_ADVANCE_RL.equals(p.getIdentifier()))
@@ -60,7 +60,7 @@ public class TickAdvance {
 	}
 
 	/**
-	 * Client-Side only tickadvance update request. Sends a packet to the server toggeling tickadvance.
+	 * Client-side only tickadvance update request. Sends a packet to the server toggeling tickadvance.
 	 * @param tickadvance Tickadvance Status
 	 */
 	@Environment(EnvType.CLIENT)
@@ -123,7 +123,7 @@ public class TickAdvance {
 		c.connection.send(new ClientboundCustomPayloadPacket(TICK_ADVANCE_RL, buf));
 	}
 
-	// Place Getters here to not confuse with public variables that shall not be set
+	// Place getters here to not confuse with public variables that shall not be set
 
 	public boolean isTickadvanceEnabled() {
 		return this.tickadvance;

@@ -10,7 +10,7 @@ import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 
 /**
- * A VANILLA Custom Image Button with a background
+ * A VANILLA custom image button with a background
  * @author Pancake
  */
 @Environment(EnvType.CLIENT)
@@ -21,8 +21,8 @@ public class CustomImageButton extends ImageButton {
 
 	/**
 	 * Creates a new button with a given image
-	 * @param i X Position
-	 * @param j Y Position
+	 * @param i X position
+	 * @param j Y position
 	 * @param k Width
 	 * @param l Height
 	 * @param m UVX
@@ -38,7 +38,7 @@ public class CustomImageButton extends ImageButton {
 	public CustomImageButton(int i, int j, int k, int l, int m, int n, int o, ResourceLocation streaming, int p, int q, OnPress onPress, OnTooltip onTooltip, boolean toggled) {
 		super(i+2, j+2, k-4, l-4, m, n, o, streaming, p, q, b -> {}, onTooltip, TextComponent.EMPTY);
 		this.isToggled = toggled;
-		// Trigger the onPress differenently
+		// Trigger the onPress differently
 		this.internalButton = new Button(i, j, k, l, TextComponent.EMPTY, b -> {
 			this.isToggled = !this.isToggled;
 			onPress.onPress(CustomImageButton.this);

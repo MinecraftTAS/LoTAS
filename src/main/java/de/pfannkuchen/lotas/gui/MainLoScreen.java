@@ -11,7 +11,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.network.chat.TextComponent;
 
 /**
- * This is the Main LoScreen that opens on the LoTAS Edit button.
+ * This is the main loscreen that opens on the LoTAS edit button.
  * @author Pancake
  */
 @Environment(EnvType.CLIENT)
@@ -19,16 +19,16 @@ public class MainLoScreen extends LoScreen {
 
 	@Override
 	protected void init() {
-		// Add the Tickrate Changer Widget
+		// Add the tickrate changer Widget
 		TickrateChangerLoWidget tickratechangerwidget = new TickrateChangerLoWidget(c -> LoTAS.tickratechanger.requestTickrateUpdate(c));
 		this.addWidget(tickratechangerwidget);
 		TickrateChangerLoWidget.updateTickrate(LoTAS.tickratechanger.getTickrate());
 
-		// Add the Dupe Mod Widget
+		// Add the dupe mod Widget
 		DupeModLoWidget dupemodwidget = new DupeModLoWidget(() -> LoTAS.dupemod.requestDupe(true), () -> LoTAS.dupemod.requestDupe(false));
 		this.addWidget(dupemodwidget);
 
-		// Add the Savestate Widget
+		// Add the savestate Widget
 		SavestatesLoWidget savestateswidget = new SavestatesLoWidget();
 		this.addWidget(savestateswidget);
 

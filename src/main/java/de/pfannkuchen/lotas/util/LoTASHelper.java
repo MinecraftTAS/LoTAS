@@ -15,11 +15,11 @@ import net.minecraft.client.Screenshot;
 public class LoTASHelper {
 
 	/**
-	 * Takes a Screenshot and resizes it to the given Resolution. May cause lag spike
-	 * @param mc Instance of Minecraft
-	 * @param width Scaled Width of the image
-	 * @param height Scaled Height of the image
-	 * @return The Screenshot taken from a Buffered Image
+	 * Takes a screenshot and resizes it to the given resolution. May cause lag spike
+	 * @param mc Instance of minecraft
+	 * @param width Scaled width of the image
+	 * @param height Scaled height of the image
+	 * @return The Screenshot taken from a buffered image
 	 */
 	public static int[] takeScreenshot(Minecraft mc, int width, int height) {
 		BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);

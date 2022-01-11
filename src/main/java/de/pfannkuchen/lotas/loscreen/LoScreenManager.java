@@ -15,7 +15,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 
 /**
- * Renders and manages the LoScreens.
+ * Renders and manages the loscreens.
  * @author Pancake
  */
 @Environment(EnvType.CLIENT)
@@ -23,7 +23,7 @@ public class LoScreenManager {
 
 	// Currently drawn LoScreen
 	private LoScreen screen;
-	// Shared Minecraft Instance
+	// Shared minecraft instance
 	private Minecraft mc;
 	// Last resolution in case of resizing
 	private int lastWidth;
@@ -47,7 +47,7 @@ public class LoScreenManager {
 	}
 
 	/**
-	 * Updates the current LoScreen and adds the Minecraft Instance. Can be null.
+	 * Updates the current LoScreen and adds the minecraft instance. Can be null.
 	 * @param screen Update LoScreen
 	 */
 	public void setScreen(@Nullable LoScreen screen) {
@@ -63,15 +63,15 @@ public class LoScreenManager {
 	}
 
 	/**
-	 * Updates the Screen.
-	 * @param mc Instance of Minecraft
+	 * Updates the screen.
+	 * @param mc Instance of minecraft
 	 */
 	public void onGameLoop(Minecraft mc) {
-		// Update Screen size
+		// Update screen size
 		final Window w = mc.getWindow();
 		final int width = w.getWidth();
 		final int height = w.getHeight();
-		// Update Inputs
+		// Update inputs
 		final double posX = mc.mouseHandler.xpos() / width;
 		final double posY = mc.mouseHandler.ypos() / height;
 		final boolean isLeftPressed = GLFW.glfwGetMouseButton(mc.getWindow().getWindow(), GLFW.GLFW_MOUSE_BUTTON_LEFT) == GLFW.GLFW_PRESS;
@@ -97,8 +97,8 @@ public class LoScreenManager {
 	}
 
 	/**
-	 * Updates the Minecraft Instance once the game launches
-	 * @param mc Instance of Minecraft
+	 * Updates the minecraft instance once the game launches
+	 * @param mc Instance of minecraft
 	 */
 	public void onGameInitialize(Minecraft mc) {
 		this.mc = mc;
@@ -107,7 +107,7 @@ public class LoScreenManager {
 	/**
 	 * Renders the next LoScreen
 	 * @param stack Pose Stack for rendering
-	 * @param mc Instance of Minecraft
+	 * @param mc Instance of minecraft
 	 */
 	public void onGuiRender(PoseStack stack, Minecraft mc) {
 		if (this.screen != null) this.screen.render(stack, this.lastPosX, this.lastPosY);
@@ -116,7 +116,7 @@ public class LoScreenManager {
 	/**
 	 * Closes the LoScreen when the vanilla one changes
 	 * @param vanillaScreen Screen updated to
-	 * @param mc Instance of Minecraft
+	 * @param mc Instance of minecraft
 	 * @return Should cancel
 	 */
 	public boolean onScreenUpdate(Screen vanillaScreen, Minecraft mc) {
@@ -139,8 +139,8 @@ public class LoScreenManager {
 	}
 
 	/**
-	 * Toggles on or off the LoTAS Menu and opens a Gui Screen in case there isn't one to regain the cursor.
-	 * @param mc Instance of Minecraft
+	 * Toggles on or off the LoTAS Menu and opens a gui Screen in case there isn't one to regain the cursor.
+	 * @param mc Instance of minecraft
 	 */
 	public void toggleLoTASMenu(Minecraft mc) {
 		if (mc.level == null) return;
@@ -159,7 +159,7 @@ public class LoScreenManager {
 	}
 
 	/**
-	 * Sends a keypress to all LoScreens
+	 * Sends a key press to all LoScreens
 	 * @param key Key that was pressed
 	 */
 	public void onKeyPress(int key) {

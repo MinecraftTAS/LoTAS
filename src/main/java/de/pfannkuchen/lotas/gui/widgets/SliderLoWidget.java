@@ -10,43 +10,43 @@ import net.fabricmc.api.Environment;
 import net.minecraft.network.chat.TextComponent;
 
 /**
- * Slideable Slider
+ * Slider lowidget
  * @author Pancake
  */
 @Environment(EnvType.CLIENT)
 public class SliderLoWidget extends LoScreen {
 
-	// Background Color
+	// Background color
 	private static final int BACKGROUND_COLOR = 0xff2a2a2a;
-	// Border Color
+	// Border color
 	private static final int BORDER_COLOR = 0xff108950;
-	// Border Color but focused
+	// Border color but focused
 	private static final int BORDER_FOCUS_COLOR = 0xff19b36a;
-	// Text Color
+	// Text color
 	private static final int TEXT_COLOR = 0xff108950;
 
-	// Position of the Slider
+	// Position of the slider
 	public double x;
 	public double y;
-	// Length of the Slider
+	// Length of the slider
 	public double length;
-	// Progress of the Slider
+	// Progress of the slider
 	public double progress;
 
-	// Whether the Slider should be shown
+	// Whether the slider should be shown
 	public boolean active;
 	// Whether it's currently being dragged
 	public boolean isDragging = false;
-	// Move Handler
+	// Move handler
 	public Function<Double, TextComponent> onMove;
 	// Value of the progress
 	public TextComponent value;
 
 	/**
-	 * Initializes a new Slider
-	 * @param active Whether the Slider is active by default
-	 * @param x Position
-	 * @param y Position
+	 * Initializes a new slider
+	 * @param active Whether the slider is active by default
+	 * @param x position
+	 * @param y position
 	 * @param length Length of the slider (in screen width percentage)
 	 * @param Callback after slider is moved
 	 */
@@ -90,12 +90,12 @@ public class SliderLoWidget extends LoScreen {
 	protected void render(PoseStack stack, double curX, double curY) {
 		if (!this.active) return;
 		this.fill(stack, this.x, this.y-.0015, this.x+this.length, this.y+.0015, SliderLoWidget.BACKGROUND_COLOR); // Render Background
-		// Render Dot with different color when hovered
+		// Render dot with different color when hovered
 		if (curX > this.x-0.005+this.length*this.progress && curX < this.x+0.005+this.length*this.progress && curY > this.y-0.005/9.0f*16.0f && curY < this.y+0.005/9.0f*16.0f && !this.isDragging)
 			this.fill(stack, this.x-0.005+this.length*this.progress, this.y-0.005/9.0f*16.0f, this.x+0.005+this.length*this.progress, this.y+0.005/9.0f*16.0f, SliderLoWidget.BORDER_FOCUS_COLOR);
 		else
 			this.fill(stack, this.x-0.005+this.length*this.progress, this.y-0.005/9.0f*16.0f, this.x+0.005+this.length*this.progress, this.y+0.005/9.0f*16.0f, SliderLoWidget.BORDER_COLOR);
-		// Render Value
+		// Render value
 		this.draw(stack, this.value, this.x, this.y+0.0165, 20, SliderLoWidget.TEXT_COLOR, false);
 		super.render(stack, curX, curY);
 	}

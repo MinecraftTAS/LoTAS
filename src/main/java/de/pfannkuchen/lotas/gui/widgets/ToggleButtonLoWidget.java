@@ -11,28 +11,28 @@ import net.fabricmc.api.Environment;
 import net.minecraft.network.chat.TextComponent;
 
 /**
- * Button Widget
+ * Toggle button lowidget
  * @author Pancake
  */
 @Environment(EnvType.CLIENT)
 public class ToggleButtonLoWidget extends LoScreen {
 
-	// Background Color
+	// Background color
 	private static final int COLOR = 0xff1b1c21;
-	// Background Color but focused
+	// Background color but focused
 	private static final int FOCUS_COLOR = 0xff108950;
 	// Border Color but focused
 	private static final int MOUSEOVER_FOCUS_COLOR = 0xff19b36a;
 
-	// Position of the Button
+	// Position of the button
 	double x;
 	double y;
-	// Length of the Button
+	// Length of the button
 	double length;
 
-	// Whether the Button should be shown
+	// Whether the button should be shown
 	boolean active;
-	// Move Handler
+	// Move handler
 	Consumer<Boolean> onClick;
 	// Value of the button
 	TextComponent value;
@@ -42,8 +42,8 @@ public class ToggleButtonLoWidget extends LoScreen {
 	boolean down;
 
 	/**
-	 * Initializes a new Button
-	 * @param active Whether the Button is active by default
+	 * Initializes a new button
+	 * @param active Whether the button is active by default
 	 * @param x Position
 	 * @param y Position
 	 * @param length Length of the button (in screen width percentage)
@@ -74,15 +74,15 @@ public class ToggleButtonLoWidget extends LoScreen {
 		if (!this.active) return;
 		boolean isMouseOver = curX > this.x && curY > this.y && curX < this.x+this.length && curY < this.y+.05;
 		double size	= this.mc.font.width(this.value)/1920.0;
-		// Render Background
+		// Render background
 		this.fill(stack, this.x, this.y, this.x+this.length, this.y+.04, ToggleButtonLoWidget.COLOR);
 		// Animation
 		if (this.down) this.animationProgress = Math.min(6, this.animationProgress + ClientLoTAS.internaltimer.tickDelta);
 		else this.animationProgress = Math.max(0, this.animationProgress - ClientLoTAS.internaltimer.tickDelta);
-		// Render Animation
+		// Render animation
 		byte alpha = (byte) (this.ease(this.animationProgress, 0, 1, 6)*255);
 		this.fill(stack, this.x, this.y, this.x+this.length, this.y+.04, (isMouseOver ? ToggleButtonLoWidget.MOUSEOVER_FOCUS_COLOR : ToggleButtonLoWidget.FOCUS_COLOR) - 0xFF000000 + (alpha << 24));
-		// Render Centered Text
+		// Render centered text
 		if (this.animationProgress > 3) this.draw(stack, this.value, this.x-size+this.length/2, this.y+0.012, 20, ToggleButtonLoWidget.COLOR - 0xFF000000 + (alpha << 24), false);
 		else this.draw(stack, this.value, this.x-size+this.length/2, this.y+0.012, 20, isMouseOver ? ToggleButtonLoWidget.MOUSEOVER_FOCUS_COLOR : ToggleButtonLoWidget.FOCUS_COLOR, false);
 		super.render(stack, curX, curY);
