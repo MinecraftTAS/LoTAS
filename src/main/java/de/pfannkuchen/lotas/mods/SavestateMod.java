@@ -132,6 +132,7 @@ public class SavestateMod {
 	private int doDeletestate = -1;
 	// Client-side Todo list
 	private boolean shouldReload;
+	private State[] unload = null;
 	// Server-side folder structure
 	private File savestatesDir;
 	private File worldDir;
@@ -174,8 +175,7 @@ public class SavestateMod {
 						LoTAS.LOGGER.info("The Server finished deletestating.");
 					}
 				}
-				// Unload previous textures
-				for (State s : states) if (s.texture != null) mc.getTextureManager().release(s.texture);
+				this.unload = this.states;
 				// Update the State List
 				this.states = new State[buf.readVarInt()];
 			} else {
@@ -212,17 +212,21 @@ public class SavestateMod {
 	public void onRender() {
 		if (!shouldReload) return;
 		shouldReload = false;
-		for (State s : this.states) {
-			NativeImage n = new NativeImage(256, 144, true);
-			BufferedImage img = new BufferedImage(256, 144, BufferedImage.TYPE_INT_ARGB);
-			img.setRGB(0, 0, 256, 144, s.screenshot, 0, 256);
-			for (int i = 0; i < 256; i++) {
-				for (int j = 0; j < 144; j++) {
-					n.setPixelRGBA(i, j, img.getRGB(i, j));
+		RenderSystem.recordRenderCall(() -> {
+			if (this.unload != null) for (State s : this.unload) if (s.texture != null) mc.getTextureManager().release(s.texture);
+			this.unload = null;
+			for (State s : this.states) {
+				NativeImage n = new NativeImage(256, 144, true);
+				BufferedImage img = new BufferedImage(256, 144, BufferedImage.TYPE_INT_ARGB);
+				img.setRGB(0, 0, 256, 144, s.screenshot, 0, 256);
+				for (int i = 0; i < 256; i++) {
+					for (int j = 0; j < 144; j++) {
+						n.setPixelRGBA(i, j, img.getRGB(i, j));
+					}
 				}
+				mc.getTextureManager().register(s.texture = new ResourceLocation("lotas", (s.name + s.timestamp).replace(' ', '_').replaceAll("[^a-z0-9_.-]", "")), new DynamicTexture(n));
 			}
-			mc.getTextureManager().register(s.texture = new ResourceLocation("lotas", (s.name + s.timestamp).replace(' ', '_').replaceAll("[^a-z0-9_.-]", "")), new DynamicTexture(n));
-		}
+		});
 	}
 	
 	
@@ -479,7 +483,8 @@ public class SavestateMod {
 	 */
 	@Environment(EnvType.CLIENT)
 	public void onDisconnect() {
-		this.shouldReload = false;
+		this.shouldReload = true;
+		this.unload = this.states;
 		this.states = new State[0];
 	}
 	
