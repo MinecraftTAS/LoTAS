@@ -16,6 +16,7 @@ import de.pfannkuchen.lotas.util.LoTASHelper;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.util.Mth;
 
 /**
  * Savestate window lowidget
@@ -24,6 +25,8 @@ import net.minecraft.network.chat.TextComponent;
 @Environment(EnvType.CLIENT)
 public class SavestatesLoWidget extends WindowLoWidget {
 
+	private static int offset;
+	
 	/*
 	 * Savestate button for later realigning
 	 */
@@ -44,16 +47,30 @@ public class SavestatesLoWidget extends WindowLoWidget {
 		}, new TextComponent("Savestate")));
 		super.init();
 	}
+	
+	@Override
+	protected void scroll(double scroll) {
+		SavestatesLoWidget.offset -= scroll;
+		SavestatesLoWidget.offset = Mth.clamp(SavestatesLoWidget.offset, 0, LoTAS.savestatemod.getStateCount() - 6);
+		super.scroll(scroll);
+	}
 
 	@Override
 	protected void render(PoseStack stack, double curX, double curY) {
 		if (!this.active) return;
 		super.render(stack, curX, curY);
+		stack.pushPose();
+		if (this.animationProgress != 6) {
+			stack.translate(
+					this.vertical ? (this.leftORight ? -1000 : 1000) + this.ease(this.animationProgress, 0, 1, 6)*(this.leftORight ? +1000 : -1000) : 0,
+							this.horizontal ? (this.topOBottom ? -1000 : 1000) + this.ease(this.animationProgress, 0, 1, 6)*(this.topOBottom ? +1000 : -1000) : 0,
+									0);
+		}
 		// Render the savestate panels
-		this.windowHeight = LoTAS.savestatemod.getStateCount()*0.1+0.083;
-		this.savestateBtn.y = LoTAS.savestatemod.getStateCount()*0.1+0.04;
-		for (int i = 0; i < LoTAS.savestatemod.getStateCount(); i++) {
-			State s = LoTAS.savestatemod.getSavestateInfo(i);
+		this.windowHeight = Math.min(LoTAS.savestatemod.getStateCount(), 6)*0.1+0.083;
+		this.savestateBtn.y = Math.min(LoTAS.savestatemod.getStateCount(), 6)*0.1+0.04;
+		for (int i = 0; i < Math.min(LoTAS.savestatemod.getStateCount(), 6); i++) {
+			State s = LoTAS.savestatemod.getSavestateInfo(i+offset);
 			if (s == null) continue;
 			// Render box
 			this.fill(stack, this.x+0.001, this.y+0.035+i*0.1, this.x+0.235, this.y+0.1+i*0.1+0.035, i % 2 == 0 ? 0xff1b1c21 : 0xff0a0a0b);
@@ -71,7 +88,7 @@ public class SavestatesLoWidget extends WindowLoWidget {
 				this.render(stack, this.x+0.011, this.y+0.045+i*0.1, 0.079, 0.079, 0, 0);
 			}
 		}
-
+		stack.popPose();
 	}
 
 }
