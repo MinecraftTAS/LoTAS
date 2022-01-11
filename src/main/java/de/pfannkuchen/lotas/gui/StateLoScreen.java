@@ -14,11 +14,11 @@ import net.minecraft.network.chat.TextComponent;
  */
 @Environment(EnvType.CLIENT)
 public class StateLoScreen extends LoScreen {
-	// Background Color
+	// Background color
 	private static final int BACKGROUND_COLOR = 0xff161618;
-	// Border Color
+	// Border color
 	private static final int BORDER_COLOR = 0xff108950;
-	// Title Color
+	// Title color
 	private static final int TITLE_COLOR = 0xFFFFFFFF;
 	// Whether the screen is able to be removed
 	private static boolean allowUnlocking = false;
@@ -58,7 +58,7 @@ public class StateLoScreen extends LoScreen {
 		this.fill(stack, 1 - 0.0045 - 0.215 - 0.785*ease, 0, 1, 1, StateLoScreen.BORDER_COLOR); // Border
 		this.fill(stack, 1 - 0.215 - 0.785*ease, 0, 1, 1, StateLoScreen.BACKGROUND_COLOR); // Background
 		this.draw(stack, new TextComponent("Performing State Action..."), 1 + .05 - 0.785*ease, 0.25, 70, StateLoScreen.TITLE_COLOR, false); // Title
-		// Render Progress Bar
+		// Render progress bar
 		this.fill(stack, 0.19, 0.72*(1*ease), 0.81, 0.76*(1*ease), StateLoScreen.BORDER_COLOR);
 		this.fill(stack, 0.19215, 0.723*(1*ease), 0.8079, 0.757*(1*ease), StateLoScreen.BACKGROUND_COLOR);
 		this.fill(stack, 0.193, 0.726*(1*ease), 0.193+0.614*ease2, 0.754*(1*ease), StateLoScreen.BORDER_COLOR);

@@ -19,7 +19,7 @@ import net.minecraft.network.chat.TextComponent;
 public abstract class LoScreen {
 
 	/**
-	 * Accessable Minecraft Instance.
+	 * Accessable minecraft instance.
 	 */
 	protected Minecraft mc;
 
@@ -29,17 +29,17 @@ public abstract class LoScreen {
 	private List<LoScreen> widgets = new LinkedList<>();
 
 	/**
-	 * Screen Width
+	 * Screen width
 	 */
 	protected int width;
 
 	/**
-	 * Screen Height
+	 * Screen height
 	 */
 	protected int height;
 
 	/**
-	 * Gui Scale
+	 * Gui scale
 	 */
 	protected double guiscale;
 
@@ -54,16 +54,16 @@ public abstract class LoScreen {
 	}
 
 	/**
-	 * Initializes the Gui and it's widgets.
+	 * Initializes the gui and it's widgets.
 	 */
 	protected void init() {
 		this.widgets.forEach(LoScreen::init);
 	}
 
 	/**
-	 * Updates the Gui and it's widgets.
-	 * @param width Scaled Width of the Minecraft screen
-	 * @param height Scaled Height of the Minecraft screen
+	 * Updates the gui and it's widgets.
+	 * @param width Scaled width of the minecraft screen
+	 * @param height Scaled height of the minecraft screen
 	 */
 	protected void update(int width, int height) {
 		this.width = width;
@@ -75,7 +75,7 @@ public abstract class LoScreen {
 	}
 
 	/**
-	 * Called after every keypress
+	 * Called after every key press
 	 * @param key Pressed Key
 	 */
 	protected void press(int key) {
@@ -83,7 +83,7 @@ public abstract class LoScreen {
 	}
 
 	/**
-	 * Renders the Gui and it's widgets.
+	 * Renders the gui and it's widgets.
 	 * @param stack Pose Stack for rendering
 	 * @param curX Current cursor x position
 	 * @param curY Current cursor y position
@@ -93,7 +93,7 @@ public abstract class LoScreen {
 	}
 
 	/**
-	 * Event for the cursor once it drags. Updates the Gui and it's widgets.
+	 * Event for the cursor once it drags. Updates the gui and it's widgets.
 	 * @param prevCurX Previous cursor x position
 	 * @param prevCurY Previous cursor y position
 	 * @param curX Current cursor x position
@@ -104,7 +104,7 @@ public abstract class LoScreen {
 	}
 
 	/**
-	 * Event for the cursor once it clicks. Updates the Gui and it's widgets.
+	 * Event for the cursor once it clicks. Updates the gui and it's widgets.
 	 * @param curX Current cursor x position
 	 * @param curY Current cursor y position
 	 * @param button Button clicked with
@@ -141,12 +141,12 @@ public abstract class LoScreen {
 	}
 
 	/**
-	 * Draws a Text Component onto the screen
+	 * Draws a text component onto the screen
 	 * @param stack Pose Stack ._.
 	 * @param text Text to print
 	 * @param x Percentage X
 	 * @param y Percentage Y
-	 * @param size Size in pt
+	 * @param size Size in percent
 	 * @param color Color
 	 * @param shadow Shadow?
 	 */
@@ -155,7 +155,7 @@ public abstract class LoScreen {
 		// Move by gui scale first
 		stack.scale((float) (1f/this.guiscale), (float) (1f/this.guiscale), 1.0f);
 		stack.translate(x*this.width, y*this.height, 0);
-		// Resize for pt size
+		// Resize for percent size
 		final float scaleX = size/192.0f*this.width/100f;
 		final float scaleY = size/108.0f*(this.width/16*9)/100f;
 		stack.scale(scaleX, scaleY, 1.0f);
@@ -167,11 +167,11 @@ public abstract class LoScreen {
 
 
 	/**
-	 * Ease Interpolation
+	 * Ease interpolation
 	 * @param t Progress
 	 * @param b Offset
 	 * @param c Goal
-	 * @param d Dividor for Progress
+	 * @param d Divider for progress
 	 * @return Ease-out-quad variable
 	 */
 	protected final double ease(double t, double b, double c, double d) {
@@ -179,7 +179,7 @@ public abstract class LoScreen {
 	}
 
 	/**
-	 * Resets all Widgets and recreates the Gui from scratch
+	 * Resets all Widgets and recreates the gui from scratch
 	 * @param width
 	 * @param height
 	 */

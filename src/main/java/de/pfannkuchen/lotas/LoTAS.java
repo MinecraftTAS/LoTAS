@@ -16,7 +16,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 
 /**
- * LoTAS Fabric Mod Core.
+ * LoTAS fabric mod core.
  * @author Pancake
  */
 public class LoTAS implements ModInitializer {

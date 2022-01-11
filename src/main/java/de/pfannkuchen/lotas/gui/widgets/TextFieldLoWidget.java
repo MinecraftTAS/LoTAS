@@ -12,43 +12,43 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.TextComponent;
 
 /**
- * Editable Text Field
+ * Editable text field
  * @author Pancake
  */
 @Environment(EnvType.CLIENT)
 public class TextFieldLoWidget extends LoScreen {
 
-	// Content Text Color
+	// Content text color
 	private static final int TEXT_COLOR = 0xffffffff;
-	// Label Color
+	// Label color
 	private static final int LINE_COLOR = 0xff149b5b;
-	// Label Color when mouse is over the box
+	// Label color when mouse is over the box
 	private static final int FOCUS_LINE_COLOR = 0xff22e187;
-	// Background Color when mouse is over the box
+	// Background color when mouse is over the box
 	private static final int FOCUS_BACKGROUND_COLOR = 0xff1b1c21;
 
-	// Position of the Text Field
+	// Position of the text field
 	double x;
 	double y;
-	// Length of the Text Field
+	// Length of the text field
 	double length;
-	// Content of the Text Field
+	// Content of the text field
 	String content;
 
-	// Whether the Text Field should be drawn or not
+	// Whether the text field should be drawn or not
 	boolean active;
 	// Whether the mouse is over the text field or not
 	boolean mouseOver;
-	// Update Event
+	// Update event
 	Consumer<String> onChange;
 	// Hover animation
 	float animationProgress;
 
 	/**
-	 * Initializes a new Text Field
-	 * @param active Whether the Text Field is active by default
-	 * @param x Position
-	 * @param y Position
+	 * Initializes a new text field
+	 * @param active Whether the text field is active by default
+	 * @param x position
+	 * @param y position
 	 * @param length Length of the text field (in screen width percentage)
 	 * @param Callback after text field content is changed
 	 */

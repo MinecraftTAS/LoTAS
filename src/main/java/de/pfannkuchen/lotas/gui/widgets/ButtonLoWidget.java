@@ -9,26 +9,26 @@ import net.fabricmc.api.Environment;
 import net.minecraft.network.chat.TextComponent;
 
 /**
- * Button Widget
+ * Button widget
  * @author Pancake
  */
 @Environment(EnvType.CLIENT)
 public class ButtonLoWidget extends LoScreen {
 
-	// Background Color
+	// Background color
 	private static final int COLOR = 0xff1b1c21;
-	// Background Color but focused
+	// Background color but focused
 	private static final int FOCUS_COLOR = 0xff108950;
 
-	// Position of the Button
+	// Position of the button
 	public double x;
 	public double y;
-	// Length of the Button
+	// Length of the button
 	public double length;
 
-	// Whether the Button should be shown
+	// Whether the button should be shown
 	public boolean active;
-	// Move Handler
+	// Move handler
 	public Runnable onClick;
 	// Value of the button
 	public TextComponent value;
@@ -36,10 +36,10 @@ public class ButtonLoWidget extends LoScreen {
 	public float animationProgress;
 
 	/**
-	 * Initializes a new Button
-	 * @param active Whether the Button is active by default
-	 * @param x Position
-	 * @param y Position
+	 * Initializes a new button
+	 * @param active Whether the button is active by default
+	 * @param x position
+	 * @param y position
 	 * @param length Length of the button (in screen width percentage)
 	 * @param Callback after button is clicked
 	 */
@@ -68,15 +68,15 @@ public class ButtonLoWidget extends LoScreen {
 		if (!this.active) return;
 		boolean mouseOver = curX > this.x && curY > this.y && curX < this.x+this.length && curY < this.y+.05;
 		double size	= this.mc.font.width(this.value)/1920.0;
-		// Render Background
+		// Render background
 		this.fill(stack, this.x, this.y, this.x+this.length, this.y+.04, ButtonLoWidget.COLOR);
 		// Animation
 		if (mouseOver) this.animationProgress = Math.min(6, this.animationProgress + ClientLoTAS.internaltimer.tickDelta);
 		else this.animationProgress = Math.max(0, this.animationProgress - ClientLoTAS.internaltimer.tickDelta);
-		// Render Animation
+		// Render animation
 		byte alpha = (byte) (this.ease(this.animationProgress, 0, 1, 6)*255);
 		this.fill(stack, this.x, this.y, this.x+this.length, this.y+.04, ButtonLoWidget.FOCUS_COLOR - 0xFF000000 + (alpha << 24));
-		// Render Centered Text
+		// Render centered Text
 		if (this.animationProgress > 3) this.draw(stack, this.value, this.x-size+this.length/2, this.y+0.012, 20, ButtonLoWidget.COLOR - 0xFF000000 + (alpha << 24), false);
 		else this.draw(stack, this.value, this.x-size+this.length/2, this.y+0.012, 20, ButtonLoWidget.FOCUS_COLOR, false);
 		super.render(stack, curX, curY);

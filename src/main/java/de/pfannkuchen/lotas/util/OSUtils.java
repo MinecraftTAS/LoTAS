@@ -8,7 +8,7 @@ import net.fabricmc.api.Environment;
  * @author Pancake
  *
  */
-@Environment(EnvType.CLIENT) // Currently only used on the Client, remove if nessecary
+@Environment(EnvType.CLIENT) // Currently only used on the Client, remove if necessary
 public class OSUtils {
 	public enum OS {
 		WINDOWS, LINUX, MACOS
@@ -18,7 +18,7 @@ public class OSUtils {
 	private static OS os = null;
 
 	/**
-	 * Try to get the Operating System set via Java
+	 * Try to get the operating system set via java
 	 * @return OS Operating System
 	 */
 	public static final OS getOS() {

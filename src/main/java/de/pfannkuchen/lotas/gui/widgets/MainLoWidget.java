@@ -12,68 +12,68 @@ import net.fabricmc.api.Environment;
 import net.minecraft.network.chat.TextComponent;
 
 /**
- * This is the Main LoWidget that shows a list of items on the right.
+ * This is the main lowidget that shows a list of items on the right.
  * @author Pancake
  */
 @Environment(EnvType.CLIENT)
 public class MainLoWidget extends LoScreen {
 
-	// Background Width from the right
+	// Background width from the right
 	private static final double BACKGROUND_WIDTH = 0.215;
-	// Border Width
+	// Border width
 	private static final double BORDER_WIDTH = 0.0045;
 
-	// Background Color
+	// Background color
 	private static final int BACKGROUND_COLOR = 0xff161618;
-	// Background Color when focused
+	// Background color when focused
 	private static final int BACKGROUND_FOCUS_COLOR = 0xff1b1c21;
-	// Border Color
+	// Border color
 	private static final int BORDER_COLOR = 0xff108950;
-	// Border Color when focused
+	// Border color when focused
 	private static final int BORDER_FOCUS_COLOR = 0xff19b36a;
 
-	// Title Position. X-Offset by BACKGROUND_WIDTH
+	// Title position. x-offset by BACKGROUND_WIDTH
 	private static final double TITLE_X = 0.045;
 	private static final double TITLE_Y = 0.05;
-	// Title Size
+	// Title size
 	private static final int TITLE_SIZE = 40;
-	// Title Color
+	// Title color
 	private static final int TITLE_COLOR = 0xFFFFFFFF;
-	// Title Text
+	// Title text
 	private static final TextComponent TITLE = new TextComponent("LoTAS Menu");
 
-	// Category Position. X-Offset by BACKGROUND_WIDTH
+	// Category position. x-offset by BACKGROUND_WIDTH
 	private static final double CATEGORY_X = 0.02;
 	private static final double CATEGORY_Y = 0.202;
 	private static final double CATEGORY_GAP_Y = 0.055;
-	// Category Size
+	// Category size
 	private static final int CATEGORY_SIZE = 30;
-	// Category Color
+	// Category color
 	private static final int CATEGORY_COLOR = 0xff149b5b;
-	// Category Color when focused
+	// Category color when focused
 	private static final int CATEGORY_FOCUS_COLOR = 0xff22e187;
-	// Category Texts
+	// Category texts
 	private static TextComponent[] CATEGORIES;
 
-	// Version Position. X-Offset by BACKGROUND_WIDTH
+	// Version position. x-offset by BACKGROUND_WIDTH
 	private static final double VERSION_X = 0.013;
 	private static final double VERSION_Y = 0.923;
-	// Version Size
+	// Version size
 	private static final int VERSION_SIZE = 30;
-	// Version Color
+	// Version color
 	private static final int VERSION_COLOR = 0xff8f8f8f;
-	// Version Text
+	// Version text
 	private static final TextComponent VERSION1 = new TextComponent("LoTAS 3.0.0-SNAPSHOT");
 	private static final TextComponent VERSION2 = new TextComponent("Development Build");
 
-	// Ease-In Animation Progress
+	// Ease-in animation progress
 	private double animationProgress;
-	// On Click on Text Component
+	// On click on text component
 	private BiFunction<TextComponent, Integer, TextComponent> onClick;
 
 	/**
-	 * Initializes the LoWidget with callbacks
-	 * @param onClick Onclick for manipulating the Text
+	 * Initializes the lowidget with callbacks
+	 * @param onClick Onclick for manipulating the text
 	 */
 	public MainLoWidget(BiFunction<TextComponent, Integer, TextComponent> onClick) {
 		this.onClick = onClick;
