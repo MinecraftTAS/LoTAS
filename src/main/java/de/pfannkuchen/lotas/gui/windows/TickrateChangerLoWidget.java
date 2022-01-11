@@ -1,7 +1,10 @@
-package de.pfannkuchen.lotas.gui.widgets;
+package de.pfannkuchen.lotas.gui.windows;
 
 import java.util.function.Consumer;
 
+import de.pfannkuchen.lotas.gui.widgets.ButtonLoWidget;
+import de.pfannkuchen.lotas.gui.widgets.SliderLoWidget;
+import de.pfannkuchen.lotas.gui.widgets.WindowLoWidget;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.network.chat.TextComponent;
