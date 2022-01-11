@@ -76,12 +76,20 @@ public abstract class LoScreen {
 
 	/**
 	 * Called after every key press
-	 * @param key Pressed Key
+	 * @param key Pressed key
 	 */
 	protected void press(int key) {
 		this.widgets.forEach(w -> w.press(key));
 	}
 
+	/**
+	 * Called after every mouse scroll
+	 * @param scroll Mouse scroll
+	 */
+	protected void scroll(double scroll) {
+		this.widgets.forEach(w -> w.scroll(scroll));
+	}
+	
 	/**
 	 * Renders the gui and it's widgets.
 	 * @param stack Pose Stack for rendering

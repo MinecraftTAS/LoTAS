@@ -40,11 +40,11 @@ public class WindowLoWidget extends LoScreen {
 	public double x = 0.2;
 	public double y = 0.2;
 	// Animation progress
-	private double animationProgress = 6;
-	private boolean leftORight = WindowLoWidget.rng.nextBoolean();
-	private boolean topOBottom = WindowLoWidget.rng.nextBoolean();
-	private boolean horizontal = WindowLoWidget.rng.nextBoolean();
-	private boolean vertical = WindowLoWidget.rng.nextBoolean();
+	protected double animationProgress = 6;
+	protected boolean leftORight = WindowLoWidget.rng.nextBoolean();
+	protected boolean topOBottom = WindowLoWidget.rng.nextBoolean();
+	protected boolean horizontal = WindowLoWidget.rng.nextBoolean();
+	protected boolean vertical = WindowLoWidget.rng.nextBoolean();
 	// Movement stuff
 	private boolean isDragging;
 	private double draggingOffsetX;

@@ -167,5 +167,15 @@ public class LoScreenManager {
 			this.screen.press(key);
 		}
 	}
+	
+	/**
+	 * Sends a mouse scroll to all LoScreens
+	 * @param scroll Scroll amount
+	 */
+	public void onMouseScroll(double scroll) {
+		if (this.screen != null) {
+			this.screen.scroll(scroll);
+		}
+	}
 
 }
