@@ -10,11 +10,11 @@ import net.minecraft.network.chat.TextComponent;
  */
 @Environment(EnvType.CLIENT)
 public class DupeModLoWidget extends WindowLoWidget {
-	
+
 	// Update Event
 	private Runnable onSave;
 	private Runnable onLoad;
-	
+
 	/**
 	 * Initializes a Tickrate Changer Widget
 	 */
@@ -26,9 +26,9 @@ public class DupeModLoWidget extends WindowLoWidget {
 
 	@Override
 	protected void init() {
-		addWidget(new ButtonLoWidget(true, 0.005, 0.035, .14, onSave, new TextComponent("Save Playerdata")));
-		addWidget(new ButtonLoWidget(true, 0.005, 0.085, .14, onLoad, new TextComponent("Load Playerdata")));
+		this.addWidget(new ButtonLoWidget(true, 0.005, 0.035, .14, this.onSave, new TextComponent("Save Playerdata")));
+		this.addWidget(new ButtonLoWidget(true, 0.005, 0.085, .14, this.onLoad, new TextComponent("Load Playerdata")));
 		super.init();
 	}
-	
+
 }

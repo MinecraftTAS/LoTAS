@@ -28,5 +28,5 @@ public class MixinClientPlayNetworkHandler {
 		ClientLoTAS.instance.onClientPayload(packet);
 		ci.cancel();
 	}
-	
+
 }

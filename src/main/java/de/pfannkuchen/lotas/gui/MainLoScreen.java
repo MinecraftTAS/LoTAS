@@ -16,27 +16,27 @@ import net.minecraft.network.chat.TextComponent;
  */
 @Environment(EnvType.CLIENT)
 public class MainLoScreen extends LoScreen {
-	
+
 	@Override
 	protected void init() {
 		// Add the Tickrate Changer Widget
 		TickrateChangerLoWidget tickratechangerwidget = new TickrateChangerLoWidget(c -> LoTAS.tickratechanger.requestTickrateUpdate(c));
-		addWidget(tickratechangerwidget);
+		this.addWidget(tickratechangerwidget);
 		TickrateChangerLoWidget.updateTickrate(LoTAS.tickratechanger.getTickrate());
-		
+
 		// Add the Dupe Mod Widget
 		DupeModLoWidget dupemodwidget = new DupeModLoWidget(() -> LoTAS.dupemod.requestDupe(true), () -> LoTAS.dupemod.requestDupe(false));
-		addWidget(dupemodwidget);
-		
+		this.addWidget(dupemodwidget);
+
 		// Add the Savestate Widget
 		SavestatesLoWidget savestateswidget = new SavestatesLoWidget();
-		addWidget(savestateswidget);
-		
-		addWidget(new MainLoWidget((a, b) -> {
+		this.addWidget(savestateswidget);
+
+		this.addWidget(new MainLoWidget((a, b) -> {
 			boolean enable; // Whether the widget should be enabled or disabled
 			String widgetname;
 			if (a.getString().startsWith("\u00A7\u00A7\u00A7l")) {
-				a = new TextComponent(a.getString().replaceAll("\u00A7\u00A7\u00A7l", ""));
+				a = new TextComponent(a.getString().replace("\u00A7\u00A7\u00A7l", ""));
 				enable = false;
 				widgetname = a.getString();
 			} else {
@@ -46,23 +46,23 @@ public class MainLoScreen extends LoScreen {
 			}
 			// Find the widget
 			switch (widgetname) {
-				case "Tickrate Changing":
-					tickratechangerwidget.changeVisibility(enable);
-					TickrateChangerLoWidget.updateTickrate(LoTAS.tickratechanger.getTickrate());
-					break;
-				case "Duping":
-					dupemodwidget.changeVisibility(enable);
-					break;
-				case "Savestating":
-					savestateswidget.changeVisibility(enable);
-					break;
-				default:
-					throw new AssertionError();
+			case "Tickrate Changing":
+				tickratechangerwidget.changeVisibility(enable);
+				TickrateChangerLoWidget.updateTickrate(LoTAS.tickratechanger.getTickrate());
+				break;
+			case "Duping":
+				dupemodwidget.changeVisibility(enable);
+				break;
+			case "Savestating":
+				savestateswidget.changeVisibility(enable);
+				break;
+			default:
+				throw new AssertionError();
 			}
 			// Enable/disable widget
 			return a;
 		}));
 		super.init();
 	}
-	
+
 }

@@ -38,24 +38,24 @@ public class RecorderMod {
 	 * The Windows Videos folder
 	 */
 	private final File VIDEOS_DIR = new File(System.getenv("userprofile"), "Videos");
-	
+
 	/**
 	 * The FFMpeg exe
 	 */
 	private File FFMPEG;
-	
+
 	/**
 	 * Command Line arguments for FFmpeg
 	 */
 	private String COMMAND_LINE = "-y %IN% -f rawvideo -c:v rawvideo -s %SIZE% -pix_fmt rgb24 -r 60 -i - -vf vflip %OUT% -pix_fmt yuv420p", COMMAND_LINE_IN, COMMAND_LINE_OUT;
-	
+
 	/**
 	 * The Not Allowed Guis that may be filtered out
 	 */
 	private final List<String> NOT_ALLOWED_GUI = Arrays.asList("AdvancementsScreen", "ConnectScreen", "DemoIntroScreen", "GenericDirtMessageScreen", "LevelLoadingScreen", "OptionsScreen",
-			"OptionsSubScreen", "ControlsScreen", "LanguageSelectScreen", "MouseSettingsScreen", "SimpleOptionsSubScreen", "AccessibilityOptionsScreen", "ChatOptionsScreen", "SkinCustomizationScreen", 
+			"OptionsSubScreen", "ControlsScreen", "LanguageSelectScreen", "MouseSettingsScreen", "SimpleOptionsSubScreen", "AccessibilityOptionsScreen", "ChatOptionsScreen", "SkinCustomizationScreen",
 			"SoundOptionsScreen", "VideoSettingsScreen", "PackSelectionScreen", "PauseScreen", "PopupScreen", "ProgressScreen", "ReceivingLevelScreen", "ShareToLanScreen", "StatsScreen");
-	
+
 	/**
 	 * Thread-Safe Atomic Boolean to see if the recording is running
 	 */
@@ -65,26 +65,26 @@ public class RecorderMod {
 	 * Width and Height of the Screen
 	 */
 	private int width, height;
-	
+
 	/**
 	 * Thread-Safe List for raw screenshots
 	 */
 	private BufferExchangeList list;
-	
+
 	/**
 	 * Whether a Screenshot should be taken or not.
 	 */
 	private boolean takeScreenshot;
-	
+
 	/**
 	 * Restart the recording if the screen resizes
 	 * @param mc Instance of Minecraft
 	 */
 	public void onResize(Minecraft mc) {
-		stopRecording();
-		startRecording(mc);
+		this.stopRecording();
+		this.startRecording(mc);
 	}
-	
+
 	/**
 	 * Takes Screenshots if nessecary
 	 * @param mc Instance of Minecraft
@@ -92,12 +92,12 @@ public class RecorderMod {
 	public void onRender(Minecraft mc) {
 		if (mc == null) return;
 		// Check screen resolutions
-		if ((this.width != mc.getWindow().getScreenWidth() || this.height != mc.getWindow().getScreenHeight()) && this.isRecording.get()) onResize(mc);
+		if ((this.width != mc.getWindow().getScreenWidth() || this.height != mc.getWindow().getScreenHeight()) && this.isRecording.get()) this.onResize(mc);
 		Screen screen = mc.screen;
 		// Update GuiScreen with NULL if the Gui is an allowed gui.
 		// Done to pass the next check screen == null
 		if (mc.level == null) return;
-		if (screen != null) if (!NOT_ALLOWED_GUI.contains(screen.getClass().getSimpleName())) screen = null;
+		if (screen != null) if (!this.NOT_ALLOWED_GUI.contains(screen.getClass().getSimpleName())) screen = null;
 		if (this.takeScreenshot && screen == null && !ClientLoTAS.loscreenmanager.isScreenOpened()) {
 			this.takeScreenshot = false;
 			// Take a screenshot into the Screenshot List
@@ -109,37 +109,37 @@ public class RecorderMod {
 			}
 		}
 	}
-	
+
 	/**
 	 * Starts the recording
 	 * @param mc Instance of Minecraft
 	 */
 	public void startRecording(Minecraft mc) {
-		FFMPEG = new File(LoTAS.configmanager.getString("recorder", "ffmpeg"));
-		COMMAND_LINE_IN = LoTAS.configmanager.getString("recorder", "ffmpeg_cmd_in");
-		COMMAND_LINE_OUT = LoTAS.configmanager.getString("recorder", "ffmpeg_cmd_out");
-		if (!VIDEOS_DIR.exists()) VIDEOS_DIR.mkdir();
+		this.FFMPEG = new File(LoTAS.configmanager.getString("recorder", "ffmpeg"));
+		this.COMMAND_LINE_IN = LoTAS.configmanager.getString("recorder", "ffmpeg_cmd_in");
+		this.COMMAND_LINE_OUT = LoTAS.configmanager.getString("recorder", "ffmpeg_cmd_out");
+		if (!this.VIDEOS_DIR.exists()) this.VIDEOS_DIR.mkdir();
 		System.gc();
 		this.width = mc.getWindow().getScreenWidth();
 		this.height = mc.getWindow().getScreenHeight();
-		this.list = new BufferExchangeList(32, width*height*3);
+		this.list = new BufferExchangeList(32, this.width*this.height*3);
 		this.isRecording.set(true);
 		/* Starts a Thread for sending the images from the buffer list and ffmpeg */
 		new Thread(() -> {
 			try {
 				// ffmpeg command line
-				String ffmpeg = COMMAND_LINE.replaceAll("%IN%", COMMAND_LINE_IN).replaceAll("%OUT%", COMMAND_LINE_OUT).replaceAll("%SIZE%", this.width + "x" + this.height);
+				String ffmpeg = this.COMMAND_LINE.replaceAll("%IN%", this.COMMAND_LINE_IN).replaceAll("%OUT%", this.COMMAND_LINE_OUT).replaceAll("%SIZE%", this.width + "x" + this.height);
 				// start process
-				final ProcessBuilder pb = new ProcessBuilder(ArrayUtils.add(ArrayUtils.addAll(new String[] {FFMPEG.getAbsolutePath()}, ffmpeg.split(" ")), Date.from(Instant.now()).toString().replace(' ', '-').replace(':', '-') + ".mp4"));
+				final ProcessBuilder pb = new ProcessBuilder(ArrayUtils.add(ArrayUtils.addAll(new String[] {this.FFMPEG.getAbsolutePath()}, ffmpeg.split(" ")), Date.from(Instant.now()).toString().replace(' ', '-').replace(':', '-') + ".mp4"));
 				pb.redirectOutput(Redirect.INHERIT);
-				pb.directory(VIDEOS_DIR);
+				pb.directory(this.VIDEOS_DIR);
 				pb.redirectErrorStream(true);
 				pb.redirectError(Redirect.INHERIT);
 				final Process p = pb.start();
 				OutputStream stream = p.getOutputStream();
-				
+
 				LoTAS.LOGGER.info("Recording started");
-				
+
 				// resuse buffers and arrays for optimal memory usage
 				ByteBuffer b;
 				byte[] array = new byte[this.width*this.height*3];
@@ -155,14 +155,14 @@ public class RecorderMod {
 						stream.write(array);
 						this.list.unlock(i);
 					}
-				}				
+				}
 				// After /r /record has been run again stop the process by closing the streams, causing SIGINT
 				stream.flush();
 				stream.close();
 				p.getInputStream().close();
 				p.getErrorStream().close();
 				LoTAS.LOGGER.info("Recording finished");
-				
+
 			} catch (IOException e) {
 				mc.tell(() -> {
 					mc.setScreen(new ErrorScreen(new TextComponent("Something went wrong while trying to record!"), new TextComponent("Check the console for error messages.")));
@@ -184,7 +184,7 @@ public class RecorderMod {
 			} catch (Exception e) {}
 		}).start();
 	}
-	
+
 	/**
 	 * Stops the recording
 	 */
@@ -200,5 +200,5 @@ public class RecorderMod {
 	public boolean isRecording() {
 		return this.isRecording.get();
 	}
-	
+
 }

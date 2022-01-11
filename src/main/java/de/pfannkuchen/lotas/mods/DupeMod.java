@@ -1,8 +1,8 @@
 /**
  * Here is the logic of the Dupe Mod:
- * 
+ *
  * As noted by the @Environment annotations in front of methods, this code works on both client and server.
- * 
+ *
  * Every time the clients wants to load or save playerdata it sends a Request Playerdata Update Packet to the server. #requestDupe
  * The server proceeds sending a update packet to the clients causing them to process the packet on their own. The server processes the packet too. #onServerPacket
  * The clients listener finally saves or loads the playerdata. #onClientPacket
@@ -34,11 +34,11 @@ public class DupeMod {
 	@Environment(EnvType.CLIENT)
 	public Minecraft mc;
 	public MinecraftServer mcserver;
-	
+
 	@Environment(EnvType.CLIENT)
 	private CompoundTag localPlayer;
 	private HashMap<ServerPlayer, CompoundTag> onlineClients = new HashMap<>();
-	
+
 	/**
 	 * Saves or Loads when receiving a packet
 	 * @param p Incoming Packet
@@ -55,7 +55,7 @@ public class DupeMod {
 			}
 		}
 	}
-	
+
 	/**
 	 * Resend when receiving a packet
 	 * @param p Incoming Packet
@@ -89,7 +89,7 @@ public class DupeMod {
 			});
 		}
 	}
-	
+
 	/**
 	 * Client-Side only dupe request. Sends a packet to the server contains a save or load boolean
 	 * @param saveOLoad Whether player data should be loaded or saved
@@ -100,7 +100,7 @@ public class DupeMod {
 		buf.writeBoolean(saveOLoad);
 		this.mc.getConnection().send(new ServerboundCustomPayloadPacket(DUPE_MOD_RL, buf));
 	}
-	
+
 	/**
 	 * Clears local data on disconnect
 	 */
@@ -108,7 +108,7 @@ public class DupeMod {
 	public void onDisconnect() {
 		this.localPlayer = null;
 	}
-	
+
 	/**
 	 * Updates client data on connect
 	 */
@@ -117,11 +117,7 @@ public class DupeMod {
 		CompoundTag tag = new CompoundTag();
 		c.saveWithoutId(tag);
 		this.onlineClients.put(c, tag);
-//		// Send packet to client
-//		FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
-//		buf.writeBoolean(true); // save signal
-//		c.connection.send(new ClientboundCustomPayloadPacket(DUPE_MOD_RL, buf));
 	}
-	
-	
+
+
 }

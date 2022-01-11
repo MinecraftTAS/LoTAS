@@ -25,13 +25,13 @@ public class StateLoScreen extends LoScreen {
 	// Animation
 	private double animationProgress;
 	private double animationProgress2;
-	
+
 	@Override
 	protected void init() {
 		StateLoScreen.allowUnlocking = false;
 		super.init();
 	}
-	
+
 	@Override
 	protected void render(PoseStack stack, double curX, double curY) {
 		// Animate
@@ -55,22 +55,22 @@ public class StateLoScreen extends LoScreen {
 		}
 		double ease = this.ease(this.animationProgress, 0, 1, 12);
 		double ease2 = this.ease(this.animationProgress2, 0, 1, 12);
-		this.fill(stack, 1 - 0.0045 - 0.215 - (0.785*ease), 0, 1, 1, BORDER_COLOR); // Border
-		this.fill(stack, 1 - 0.215 - (0.785*ease), 0, 1, 1, BACKGROUND_COLOR); // Background
-		this.draw(stack, new TextComponent("Performing State Action..."), 1 + .05 - (0.785*ease), 0.25, 70, TITLE_COLOR, false); // Title
+		this.fill(stack, 1 - 0.0045 - 0.215 - 0.785*ease, 0, 1, 1, StateLoScreen.BORDER_COLOR); // Border
+		this.fill(stack, 1 - 0.215 - 0.785*ease, 0, 1, 1, StateLoScreen.BACKGROUND_COLOR); // Background
+		this.draw(stack, new TextComponent("Performing State Action..."), 1 + .05 - 0.785*ease, 0.25, 70, StateLoScreen.TITLE_COLOR, false); // Title
 		// Render Progress Bar
-		this.fill(stack, 0.19, 0.72*(1*ease), 0.81, 0.76*(1*ease), BORDER_COLOR); 
-		this.fill(stack, 0.19215, 0.723*(1*ease), 0.8079, 0.757*(1*ease), BACKGROUND_COLOR); 
-		this.fill(stack, 0.193, 0.726*(1*ease), 0.193+(0.614*ease2), 0.754*(1*ease), BORDER_COLOR); 
+		this.fill(stack, 0.19, 0.72*(1*ease), 0.81, 0.76*(1*ease), StateLoScreen.BORDER_COLOR);
+		this.fill(stack, 0.19215, 0.723*(1*ease), 0.8079, 0.757*(1*ease), StateLoScreen.BACKGROUND_COLOR);
+		this.fill(stack, 0.193, 0.726*(1*ease), 0.193+0.614*ease2, 0.754*(1*ease), StateLoScreen.BORDER_COLOR);
 
 		super.render(stack, curX, curY);
 	}
-	
+
 	/**
 	 * Allows this screen to be closed after the animation.
 	 */
 	public static void allowUnlocking() {
 		StateLoScreen.allowUnlocking = true;
 	}
-	
+
 }

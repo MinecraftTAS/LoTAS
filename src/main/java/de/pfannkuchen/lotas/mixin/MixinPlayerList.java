@@ -27,5 +27,5 @@ public class MixinPlayerList {
 	public void hookConnectEvent(Connection connection, ServerPlayer serverPlayer, CallbackInfo ci) {
 		LoTAS.instance.onClientConnect(serverPlayer);
 	}
-	
+
 }

@@ -30,7 +30,7 @@ public class MixinKeyboardHandler {
 	public void onKeyPressed(long l, int key, int j, int k, int m, CallbackInfo ci) {
 		ClientLoTAS.instance.onKeyPress(-key); // note: control characters shall be negative
 	}
-	
+
 	/**
 	 * Triggers an Event in {@link ClientLoTAS#onKeyPressed(Integer)} whenever a screen catches a key event
 	 * @param l The Game Window
@@ -41,5 +41,5 @@ public class MixinKeyboardHandler {
 	public void onCharTyped(long l, int key, int j, CallbackInfo ci) {
 		ClientLoTAS.instance.onKeyPress(key);
 	}
-	
+
 }

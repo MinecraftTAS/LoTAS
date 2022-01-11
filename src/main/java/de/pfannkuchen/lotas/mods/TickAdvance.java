@@ -23,33 +23,33 @@ public class TickAdvance {
 	@Environment(EnvType.CLIENT)
 	public Minecraft mc;
 	public MinecraftServer mcserver;
-	
+
 	// Is Tick Advance enabled
 	private boolean tickadvance;
 	// Should tick advance
 	public boolean shouldTick;
-	
+
 	/**
 	 * Updates the Client tickadvance status when receiving a packet
 	 */
 	@Environment(EnvType.CLIENT)
 	public void onClientPacket(ClientboundCustomPayloadPacket p) {
-		if (TICK_ADVANCE_RL.equals(p.getIdentifier())) 
+		if (TICK_ADVANCE_RL.equals(p.getIdentifier()))
 			this.tickadvance = p.getData().readBoolean();
-		if (TICK_RL.equals(p.getIdentifier())) 
+		if (TICK_RL.equals(p.getIdentifier()))
 			this.shouldTick = true; // Tick the Client
 	}
-	
+
 	/**
 	 * Updates the Server tickadvance status and resend when receiving a packet
 	 */
 	public void onServerPacket(ServerboundCustomPayloadPacket p) {
-		if (TICK_ADVANCE_RL.equals(p.getIdentifier())) 
+		if (TICK_ADVANCE_RL.equals(p.getIdentifier()))
 			this.updateTickadvanceStatus(p.getData().readBoolean());
-		if (TICK_RL.equals(p.getIdentifier())) 
+		if (TICK_RL.equals(p.getIdentifier()))
 			this.updateTickadvance();
 	}
-	
+
 
 	/**
 	 * Client-side only tick method
@@ -58,7 +58,7 @@ public class TickAdvance {
 	public void onTick(Minecraft mc) {
 		this.shouldTick = false;
 	}
-	
+
 	/**
 	 * Client-Side only tickadvance update request. Sends a packet to the server toggeling tickadvance.
 	 * @param tickadvance Tickadvance Status
@@ -69,7 +69,7 @@ public class TickAdvance {
 		buf.writeBoolean(!this.tickadvance);
 		this.mc.getConnection().send(new ServerboundCustomPayloadPacket(TICK_ADVANCE_RL, buf));
 	}
-	
+
 	/**
 	 * Client-Side only tick advance request. Sends a packet to the server advancing a tick.
 	 */
@@ -80,7 +80,7 @@ public class TickAdvance {
 		buf.writeBoolean(false);
 		this.mc.getConnection().send(new ServerboundCustomPayloadPacket(TICK_RL, buf));
 	}
-	
+
 	/**
 	 * Server-Side only tickadvance update. Sends a packet to all players
 	 * @param tickadvance Tickadvance status
@@ -94,7 +94,7 @@ public class TickAdvance {
 			c.connection.send(new ClientboundCustomPayloadPacket(TICK_ADVANCE_RL, buf));
 		});
 	}
-	
+
 	/**
 	 * Server-Side only tick advance. Sends a packet to all players
 	 */
@@ -105,7 +105,7 @@ public class TickAdvance {
 			c.connection.send(new ClientboundCustomPayloadPacket(TICK_RL, new FriendlyByteBuf(Unpooled.buffer())));
 		});
 	}
-	
+
 	/**
 	 * Clears local data on disconnect
 	 */
@@ -113,20 +113,20 @@ public class TickAdvance {
 	public void onDisconnect() {
 		this.tickadvance = false;
 	}
-	
+
 	/**
 	 * Updates client data on connect
 	 */
 	public void onConnect(ServerPlayer c) {
 		FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
-		buf.writeBoolean(tickadvance);
+		buf.writeBoolean(this.tickadvance);
 		c.connection.send(new ClientboundCustomPayloadPacket(TICK_ADVANCE_RL, buf));
 	}
-	
+
 	// Place Getters here to not confuse with public variables that shall not be set
-	
+
 	public boolean isTickadvanceEnabled() {
 		return this.tickadvance;
 	}
-	
+
 }

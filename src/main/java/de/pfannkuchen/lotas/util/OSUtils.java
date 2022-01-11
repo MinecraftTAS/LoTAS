@@ -12,7 +12,7 @@ import net.fabricmc.api.Environment;
 public class OSUtils {
 	public enum OS {
 		WINDOWS, LINUX, MACOS
-	};
+	}
 
 	// Cache
 	private static OS os = null;
@@ -22,16 +22,16 @@ public class OSUtils {
 	 * @return OS Operating System
 	 */
 	public static final OS getOS() {
-		if (os == null) {
+		if (OSUtils.os == null) {
 			final String osname = System.getProperty("os.name").toLowerCase();
 			if (osname.contains("win")) {
-				os = OS.WINDOWS;
+				OSUtils.os = OS.WINDOWS;
 			} else if (osname.contains("nix") || osname.contains("nux") || osname.contains("aix")) {
-				os = OS.LINUX;
+				OSUtils.os = OS.LINUX;
 			} else if (osname.contains("mac")) {
-				os = OS.MACOS;
+				OSUtils.os = OS.MACOS;
 			}
 		}
-		return os;
+		return OSUtils.os;
 	}
 }

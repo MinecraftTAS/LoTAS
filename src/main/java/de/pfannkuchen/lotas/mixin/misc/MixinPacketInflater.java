@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import net.minecraft.network.CompressionDecoder;
 
 /**
- * Minecraft is limited to 32k bytes packet sizes, which is not enough to copy our image. 
+ * Minecraft is limited to 32k bytes packet sizes, which is not enough to copy our image.
  * This Mixin increases that packet size
  * @author Pancake
  */

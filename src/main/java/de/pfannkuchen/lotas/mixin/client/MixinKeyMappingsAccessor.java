@@ -28,12 +28,12 @@ public interface MixinKeyMappingsAccessor {
 	public static Map<String, Integer> getCategorySorting() {
 		throw new AssertionError();
 	}
-	
+
 	/**
 	 * This Accessor opens the private field containing the Key for the Key Mapping
 	 * @return
 	 */
 	@Accessor
 	public Key getKey();
-	
+
 }

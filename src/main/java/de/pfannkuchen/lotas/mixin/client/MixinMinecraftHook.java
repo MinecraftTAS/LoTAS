@@ -27,7 +27,7 @@ public class MixinMinecraftHook {
 	public void hookGameInitEvent(CallbackInfo ci) {
 		ClientLoTAS.instance.onRenderInitialize((Minecraft) (Object) this);
 	}
-	
+
 	/**
 	 * Triggers an Event in {@link ClientLoTAS#onShutdown(Minecraft)} before the JVM shuts down.
 	 * @param ci Callback Info
@@ -36,7 +36,7 @@ public class MixinMinecraftHook {
 	public void hookGameCloseEvent(CallbackInfo ci) {
 		ClientLoTAS.instance.onShutdown((Minecraft) (Object) this);
 	}
-	
+
 	/**
 	 * Triggers an Event in {@link ClientLoTAS#onTick(Minecraft)} every tick.
 	 * @param ci Callback Info
@@ -45,7 +45,7 @@ public class MixinMinecraftHook {
 	public void hookTickEvent(CallbackInfo ci) {
 		ClientLoTAS.instance.onTick((Minecraft) (Object) this);
 	}
-	
+
 	/**
 	 * Triggers an Event in {@link ClientLoTAS#onGameLoop(Minecraft)} every game logic loop.
 	 * @param ci Callback Info
@@ -64,7 +64,7 @@ public class MixinMinecraftHook {
 	public void hookScreenUpdateEvent(Screen screen, CallbackInfo ci) {
 		if (ClientLoTAS.instance.onGuiUpdate(screen, (Minecraft) (Object) this)) ci.cancel();
 	}
-	
+
 	/**
 	 * Triggers an Event in {@link ClientLoTAS#onClientDisconnect()} if the player disconnects
 	 * @param ci Callback Info
@@ -73,5 +73,5 @@ public class MixinMinecraftHook {
 	public void hookDisconnectEvent(CallbackInfo ci) {
 		ClientLoTAS.instance.onClientDisconnect();
 	}
-	
+
 }

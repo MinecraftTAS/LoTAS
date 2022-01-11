@@ -26,7 +26,7 @@ public class TextFieldLoWidget extends LoScreen {
 	private static final int FOCUS_LINE_COLOR = 0xff22e187;
 	// Background Color when mouse is over the box
 	private static final int FOCUS_BACKGROUND_COLOR = 0xff1b1c21;
-	
+
 	// Position of the Text Field
 	double x;
 	double y;
@@ -34,7 +34,7 @@ public class TextFieldLoWidget extends LoScreen {
 	double length;
 	// Content of the Text Field
 	String content;
-	
+
 	// Whether the Text Field should be drawn or not
 	boolean active;
 	// Whether the mouse is over the text field or not
@@ -43,7 +43,7 @@ public class TextFieldLoWidget extends LoScreen {
 	Consumer<String> onChange;
 	// Hover animation
 	float animationProgress;
-	
+
 	/**
 	 * Initializes a new Text Field
 	 * @param active Whether the Text Field is active by default
@@ -60,14 +60,13 @@ public class TextFieldLoWidget extends LoScreen {
 		this.content = content;
 		this.onChange = onChange;
 	}
-	
+
 	// Ugly double press fix
 	boolean onControl;
-	
+
 	@Override
 	protected void press(int key) {
-		if (!this.active) return;
-		if (!this.mouseOver) return;
+		if (!this.active || !this.mouseOver) return;
 		// Note: onControl is a fix because control keys are hit for release and press while non control keys are not.
 		if (Screen.isPaste(-key)) {
 			// paste
@@ -93,18 +92,18 @@ public class TextFieldLoWidget extends LoScreen {
 		this.onChange.accept(this.content);
 		super.press(key);
 	}
-	
+
 	@Override
 	protected void render(PoseStack stack, double curX, double curY) {
-		if (!active) return;
-		if (mouseOver) this.animationProgress = Math.min(6, this.animationProgress + ClientLoTAS.internaltimer.tickDelta);
+		if (!this.active) return;
+		if (this.mouseOver) this.animationProgress = Math.min(6, this.animationProgress + ClientLoTAS.internaltimer.tickDelta);
 		else this.animationProgress = Math.max(0, this.animationProgress - ClientLoTAS.internaltimer.tickDelta);
-		byte alpha = (byte) (ease(this.animationProgress, 0, 1, 6)*255);
-		this.mouseOver = curX > (this.x-0.01) && curX < (this.x+this.length+0.01) && curY > (this.y-0.015) && curY < (this.y+0.044);
-		fill(stack, this.x-0.01, this.y-0.015, this.x+this.length+0.01, this.y+0.044, FOCUS_BACKGROUND_COLOR - 0xff000000 + (alpha << 24));
-		draw(stack, new TextComponent(this.content + (this.mouseOver ? "_" : "")), this.x, this.y, 20, TEXT_COLOR, false);
-		fill(stack, this.x, this.y+0.025, this.x+this.length, this.y+0.028, this.mouseOver ? FOCUS_LINE_COLOR : LINE_COLOR);
+		byte alpha = (byte) (this.ease(this.animationProgress, 0, 1, 6)*255);
+		this.mouseOver = curX > this.x-0.01 && curX < this.x+this.length+0.01 && curY > this.y-0.015 && curY < this.y+0.044;
+		this.fill(stack, this.x-0.01, this.y-0.015, this.x+this.length+0.01, this.y+0.044, TextFieldLoWidget.FOCUS_BACKGROUND_COLOR - 0xff000000 + (alpha << 24));
+		this.draw(stack, new TextComponent(this.content + (this.mouseOver ? "_" : "")), this.x, this.y, 20, TextFieldLoWidget.TEXT_COLOR, false);
+		this.fill(stack, this.x, this.y+0.025, this.x+this.length, this.y+0.028, this.mouseOver ? TextFieldLoWidget.FOCUS_LINE_COLOR : TextFieldLoWidget.LINE_COLOR);
 		super.render(stack, curX, curY);
 	}
-	
+
 }
