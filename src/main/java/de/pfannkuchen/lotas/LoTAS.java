@@ -20,7 +20,7 @@ import net.minecraft.server.level.ServerPlayer;
  * @author Pancake
  */
 public class LoTAS implements ModInitializer {
-	
+
 	// LoTAS Logger for printing debug lines into the console.
 	public static final Logger LOGGER = LogManager.getLogger("lotas");
 	// LoTAS Singleton
@@ -35,7 +35,7 @@ public class LoTAS implements ModInitializer {
 	public static DupeMod dupemod;
 	// Savestate Mod Singleton
 	public static SavestateMod savestatemod;
-	
+
 	/**
 	 * Executed after the game launches.
 	 */
@@ -48,7 +48,7 @@ public class LoTAS implements ModInitializer {
 		LoTAS.dupemod = new DupeMod();
 		LoTAS.savestatemod = new SavestateMod();
 	}
-	
+
 	/**
 	 * Executed after the server launches.
 	 * @param server New Server
@@ -61,7 +61,7 @@ public class LoTAS implements ModInitializer {
 		// Update Dupe Mod Handler
 		LoTAS.dupemod.mcserver = server;
 	}
-	
+
 	/**
 	 * Executed after/before every server tick
 	 * @param server Server Instance
@@ -70,7 +70,7 @@ public class LoTAS implements ModInitializer {
 		// Tick Savestate Mod
 		LoTAS.savestatemod.afterServerTick(server);
 	}
-	
+
 	/**
 	 * Executed every time the server receives a custom payload packet.
 	 * @param packet Packet In
@@ -99,5 +99,5 @@ public class LoTAS implements ModInitializer {
 		// Update Savestate Mod
 		LoTAS.savestatemod.onConnect(c);
 	}
-	
+
 }

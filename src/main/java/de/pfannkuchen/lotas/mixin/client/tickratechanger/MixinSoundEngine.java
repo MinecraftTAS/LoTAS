@@ -30,5 +30,5 @@ public class MixinSoundEngine {
 		ci.setReturnValue((float) (Mth.clamp(soundInstance.getPitch(), 0.5F, 2.0F) * LoTAS.tickratechanger.getGamespeed()));
 		ci.cancel();
 	}
-	
+
 }

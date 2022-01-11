@@ -35,23 +35,23 @@ public abstract class MixinTitleScreen extends Screen {
 	 */
 	@Unique
 	private ResourceLocation streaming = new ResourceLocation("textures/gui/stream_indicator.png");
-	
+
 	/**
 	 * Add a recording buton
 	 * @param ci Callback Info
 	 */
 	@Inject(method = "init", at = @At("RETURN"))
 	public void afterInit(CallbackInfo ci) {
-		this.addRenderableWidget(new CustomImageButton(this.width / 2 - 148, (this.height / 4 + 48) + 84, 20, 20, 0, 0, 0, streaming, 16, 64, b -> {
+		this.addRenderableWidget(new CustomImageButton(this.width / 2 - 148, this.height / 4 + 48 + 84, 20, 20, 0, 0, 0, this.streaming, 16, 64, b -> {
 			if (((CustomImageButton) b).isToggled) {
-				minecraft.setScreen(new EmptyScreen());
+				this.minecraft.setScreen(new EmptyScreen());
 				ClientLoTAS.loscreenmanager.setScreen(new RecorderLoScreen());
 			} else {
 				ClientLoTAS.recordermod.stopRecording();
 			}
 		}, (buttonWidget, matrixStack, i, j) -> {
-			if (buttonWidget.isMouseOver(i, j)) this.renderTooltip(matrixStack, this.minecraft.font.split(new TextComponent((OSUtils.getOS() == OS.WINDOWS) ? "If you turn on the recording then LoTAS will record your gameplay and save it to your Videos Folder. It is automatically adapting to the tickrate and removes the pause screens. IT IS RECOMMENDED TO TURN OFF VSYNC" : "This feature is only available for Windows Users"), Math.max(this.width / 2 - 43, 170)), i, j);
-		}, ClientLoTAS.recordermod == null ? false : ClientLoTAS.recordermod.isRecording())).active = (OSUtils.getOS() == OS.WINDOWS);
+			if (buttonWidget.isMouseOver(i, j)) this.renderTooltip(matrixStack, this.minecraft.font.split(new TextComponent(OSUtils.getOS() == OS.WINDOWS ? "If you turn on the recording then LoTAS will record your gameplay and save it to your Videos Folder. It is automatically adapting to the tickrate and removes the pause screens. IT IS RECOMMENDED TO TURN OFF VSYNC" : "This feature is only available for Windows Users"), Math.max(this.width / 2 - 43, 170)), i, j);
+		}, ClientLoTAS.recordermod == null ? false : ClientLoTAS.recordermod.isRecording())).active = OSUtils.getOS() == OS.WINDOWS;
 	}
 
 }

@@ -25,5 +25,5 @@ public class MixinPlayNetworkHandler {
 		LoTAS.instance.onServerPayload(packet);
 		ci.cancel();
 	}
-	
+
 }

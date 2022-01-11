@@ -16,7 +16,7 @@ public class BufferExchangeList {
 	private ByteBuffer[] buffers;
 	private boolean[] locked;
 	private boolean[] filled;
-	
+
 	/**
 	 * Creates and fills a new list of ByteBuffers
 	 * @param length Amount of Byte Buffers
@@ -29,7 +29,7 @@ public class BufferExchangeList {
 		this.filled = new boolean[length];
 		for (int i = 0; i < this.buffers.length; i++) this.buffers[i] = ByteBuffer.allocateDirect(size);
 	}
-	
+
 	/**
 	 * Tries to find a unlocked and unfilled byte buffer
 	 * @return Does a buffer exist
@@ -40,7 +40,7 @@ public class BufferExchangeList {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Tries to find a unlocked and filled byte buffer
 	 * @return Does a buffer exist
@@ -51,7 +51,7 @@ public class BufferExchangeList {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Tries to find a unlocked and unfilled byte buffer
 	 * @return Buffer Index or size of SecureList
@@ -63,7 +63,7 @@ public class BufferExchangeList {
 		}
 		return i;
 	}
-	
+
 	/**
 	 * Tries to find a unlocked and filled byte buffer
 	 * @return Buffer Index or size of SecureList
@@ -75,7 +75,7 @@ public class BufferExchangeList {
 		}
 		return i;
 	}
-	
+
 	/**
 	 * Locks and updates the state of a Buffer
 	 * @param i Index to lock
@@ -89,7 +89,7 @@ public class BufferExchangeList {
 		if (fill) this.buffers[i].clear();
 		return this.buffers[i];
 	}
-	
+
 	/**
 	 * Unlockes a Byte Buffer
 	 * @param index Index to Lock
@@ -104,7 +104,8 @@ public class BufferExchangeList {
 	public void clear() {
 		Arrays.fill(this.locked, false);
 		Arrays.fill(this.filled, false);
-		for (int i = 0; i < this.buffers.length; i++) this.buffers[i].clear();
+		for (ByteBuffer buffer : this.buffers)
+			buffer.clear();
 	}
-	
+
 }

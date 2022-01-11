@@ -32,7 +32,7 @@ public class ClientLoTAS implements ClientModInitializer {
 	public static InternalTimer internaltimer;
 	// Recorder Mod Singleton
 	public static RecorderMod recordermod;
-	
+
 	@Override
 	public void onInitializeClient() {
 		ClientLoTAS.instance = this;
@@ -58,7 +58,7 @@ public class ClientLoTAS implements ClientModInitializer {
 		// Update Savestate Mod Minecraft Instance
 		LoTAS.savestatemod.mc = mc;
 	}
-	
+
 	/**
 	 * Executed every time the Minecraft Screen changes
 	 * @param screen New Screen
@@ -67,9 +67,9 @@ public class ClientLoTAS implements ClientModInitializer {
 	 */
 	public boolean onGuiUpdate(Screen screen, Minecraft mc) {
 		// Trigger LoScreen Event
-		return loscreenmanager.onScreenUpdate(screen, mc);
+		return ClientLoTAS.loscreenmanager.onScreenUpdate(screen, mc);
 	}
-	
+
 	/**
 	 * Executed after every screen caught key press
 	 * @param key Key that was pressed
@@ -78,15 +78,15 @@ public class ClientLoTAS implements ClientModInitializer {
 		// Trigger a Key Press Event for LoScreens
 		ClientLoTAS.loscreenmanager.onKeyPress(key);
 	}
-	
+
 	/**
 	 * Executed before the JVM stops.
 	 * @param mc Instance of Minecraft
 	 */
 	public void onShutdown(Minecraft mc) {
-		
+
 	}
-	
+
 	/**
 	 * Executed every tick of the game.
 	 * @param mc Instance of Minecraft
@@ -95,7 +95,7 @@ public class ClientLoTAS implements ClientModInitializer {
 		// Tick Tick Advance
 		LoTAS.tickadvance.onTick(mc);
 	}
-	
+
 	/**
 	 * Executed every time the game logic loops.
 	 * @param mc Instance of Minecraft
@@ -108,7 +108,7 @@ public class ClientLoTAS implements ClientModInitializer {
 		// Update internal timer
 		ClientLoTAS.internaltimer.advanceTime(Util.getMillis());
 		// Update Recorder
-		ClientLoTAS.recordermod.onRender(mc);	
+		ClientLoTAS.recordermod.onRender(mc);
 	}
 
 	/**
@@ -118,18 +118,18 @@ public class ClientLoTAS implements ClientModInitializer {
 	 */
 	public void onRenderScreen(PoseStack stack, Minecraft mc) {
 		// Render LoScreen
-		loscreenmanager.onGuiRender(stack, mc);
+		ClientLoTAS.loscreenmanager.onGuiRender(stack, mc);
 		// Render Savestate
 		LoTAS.savestatemod.onRender();
 	}
-	
+
 	/**
 	 * Executed after the options are being initialized.
 	 * @param keyMappings Standard Key Mappings
 	 * @return Modified Key Mappings
 	 */
 	public KeyMapping[] onKeybindInitialize(KeyMapping[] keyMappings) {
-		return keybindmanager.onKeybindInitialize(keyMappings);
+		return ClientLoTAS.keybindmanager.onKeybindInitialize(keyMappings);
 	}
 
 	/**
@@ -160,5 +160,5 @@ public class ClientLoTAS implements ClientModInitializer {
 		// Update Savestate Mod
 		LoTAS.savestatemod.onDisconnect();
 	}
-	
+
 }

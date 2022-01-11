@@ -6,7 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Properties;
 
-/** 
+/**
  * The Configuration can read and store keys in a file using Java's Configuration.
  * @author Pancake
  */
@@ -23,7 +23,7 @@ public class ConfigManager {
 	 * @see #save() for saving the configuartion.
 	 */
 	public void setString(String category, String key, String value) {
-		props.setProperty(category + ":" + key, value);
+		this.props.setProperty(category + ":" + key, value);
 	}
 
 	/**
@@ -34,9 +34,9 @@ public class ConfigManager {
 	 * @see #save() for saving the configuartion.
 	 */
 	public void setInt(String category, String key, int value) {
-		props.setProperty(category + ":" + key, value + "");
+		this.props.setProperty(category + ":" + key, value + "");
 	}
-	
+
 	/**
 	 * Stores a double in the configuration object.
 	 * @param category Category where the key is being store (tools, ui, etc.).
@@ -45,7 +45,7 @@ public class ConfigManager {
 	 * @see #save() for saving the configuartion.
 	 */
 	public void setDouble(String category, String key, double value) {
-		props.setProperty(category + ":" + key, value + "");
+		this.props.setProperty(category + ":" + key, value + "");
 	}
 
 	/**
@@ -56,7 +56,7 @@ public class ConfigManager {
 	 * @see #save() for saving the configuartion.
 	 */
 	public void setBoolean(String category, String key, boolean value) {
-		props.setProperty(category + ":" + key, Boolean.toString(value));
+		this.props.setProperty(category + ":" + key, Boolean.toString(value));
 	}
 
 	/**
@@ -66,7 +66,7 @@ public class ConfigManager {
 	 * @see #init() for loading the configuartion.
 	 */
 	public boolean getBoolean(String category, String key) {
-		return Boolean.valueOf(props.getProperty(category + ":" + key, "false"));
+		return Boolean.parseBoolean(this.props.getProperty(category + ":" + key, "false"));
 	}
 
 	/**
@@ -76,7 +76,7 @@ public class ConfigManager {
 	 * @see #init() for loading the configuartion.
 	 */
 	public String getString(String category, String key) {
-		return props.getProperty(category + ":" + key, "null");
+		return this.props.getProperty(category + ":" + key, "null");
 	}
 
 	/**
@@ -86,9 +86,9 @@ public class ConfigManager {
 	 * @see #init() for loading the configuartion.
 	 */
 	public double getDouble(String category, String key) {
-		return Double.valueOf(props.getProperty(category + ":" + key, "-1"));
+		return Double.parseDouble(this.props.getProperty(category + ":" + key, "-1"));
 	}
-	
+
 	/**
 	 * Obtains an integer from the configuration object from category::key.
 	 * @param category Category where the key is stored (tools, ui, etc.).
@@ -96,23 +96,23 @@ public class ConfigManager {
 	 * @see #init() for loading the configuartion.
 	 */
 	public int getInt(String category, String key) {
-		return Integer.valueOf(props.getProperty(category + ":" + key, "-1"));
+		return Integer.parseInt(this.props.getProperty(category + ":" + key, "-1"));
 	}
-	
+
 	/**
-	 * Saves the configuration to a file 
+	 * Saves the configuration to a file
 	 * @see #init() for loading the configuration.
 	 */
 	public void save() {
 		try {
-			FileWriter writer = new FileWriter(configuration);
-			props.store(writer, "LoTAS Configuration File");
+			FileWriter writer = new FileWriter(this.configuration);
+			this.props.store(writer, "LoTAS Configuration File");
 			writer.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Loads the configuration to a file.
 	 * @param configuration Configuration file
@@ -123,9 +123,9 @@ public class ConfigManager {
 			this.configuration = configuration;
 			if (!configuration.exists())
 				configuration.createNewFile();
-			props = new Properties();
+			this.props = new Properties();
 			FileReader reader = new FileReader(configuration);
-			props.load(reader);
+			this.props.load(reader);
 			reader.close();
 		} catch (IOException e) {
 			e.printStackTrace();

@@ -28,14 +28,14 @@ public class MixinOptionsHook {
 	 */
 	@Mutable @Final @Shadow
 	public KeyMapping[] keyMappings;
-	
+
 	/**
 	 * Triggers an Event in {@link ClientLoTAS#onShutdown(Minecraft)} before the keybinds are initializes and replaces them with a custom array.
 	 * @param ci Callback Info
 	 */
 	@Inject(method = "load", at = @At("HEAD"))
 	public void hookLoadEvent(CallbackInfo ci) {
-		keyMappings = ClientLoTAS.instance.onKeybindInitialize(keyMappings);
+		this.keyMappings = ClientLoTAS.instance.onKeybindInitialize(this.keyMappings);
 	}
-	
+
 }
