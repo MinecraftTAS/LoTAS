@@ -26,7 +26,7 @@ public class MixinGuiHook {
 	// Shadow Field seen in GameRenderer.class
 	@Shadow @Final
 	public Minecraft minecraft;
-	
+
 	/**
 	 * Triggers an Event in {@link ClientLoTAS#onRenderScreen(Minecraft)} after the gui screens are being rendered.
 	 * Only triggers while in a minecraft world
@@ -39,7 +39,7 @@ public class MixinGuiHook {
 	@Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/Screen;render(Lcom/mojang/blaze3d/vertex/PoseStack;IIF)V"))
 	public void renderScreenEvent(Screen in, PoseStack stack, int i, int j, float f) {
 		in.render(stack, i, j, f);
-		ClientLoTAS.instance.onRenderScreen(stack, minecraft);
+		ClientLoTAS.instance.onRenderScreen(stack, this.minecraft);
 	}
-	
+
 }

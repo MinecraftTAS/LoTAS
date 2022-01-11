@@ -25,19 +25,19 @@ public class LoTASHelper {
 		BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 		BufferedImage oimg = new BufferedImage(mc.getWindow().getScreenWidth(), mc.getWindow().getScreenHeight(), BufferedImage.TYPE_INT_RGB);
 		NativeImage nimg = Screenshot.takeScreenshot(mc.getMainRenderTarget());
-		
+
 		int[] is = new int[nimg.getWidth() * nimg.getHeight()];
-        for (int i = 0; i < nimg.getHeight(); ++i) {
-            for (int j = 0; j < nimg.getWidth(); ++j) {
-                int k = nimg.getPixelRGBA(j, i);
-                int l = NativeImage.getA(k);
-                int o = NativeImage.getB(k);
-                int n = NativeImage.getG(k);
-                int m = NativeImage.getR(k);
-                is[j + i * nimg.getWidth()] = l << 24 | o << 16 | n << 8 | m;
-            }
-        }
-		
+		for (int i = 0; i < nimg.getHeight(); ++i) {
+			for (int j = 0; j < nimg.getWidth(); ++j) {
+				int k = nimg.getPixelRGBA(j, i);
+				int l = NativeImage.getA(k);
+				int o = NativeImage.getB(k);
+				int n = NativeImage.getG(k);
+				int m = NativeImage.getR(k);
+				is[j + i * nimg.getWidth()] = l << 24 | o << 16 | n << 8 | m;
+			}
+		}
+
 		oimg.setRGB(0, 0, oimg.getWidth(), oimg.getHeight(), is, 0, oimg.getWidth());
 		Graphics2D g = img.createGraphics();
 		g.drawImage(oimg, 0, 0, width, height, 0, 0, oimg.getWidth(), oimg.getHeight(), null);
@@ -45,5 +45,5 @@ public class LoTASHelper {
 		img.getRGB(0, 0, width, height, outArray, 0, width);
 		return outArray;
 	}
-	
+
 }

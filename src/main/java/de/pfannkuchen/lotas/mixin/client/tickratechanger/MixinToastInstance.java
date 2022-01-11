@@ -21,9 +21,9 @@ public class MixinToastInstance {
 	 * @param animationTimer Original value
 	 * @return Manipulated value
 	 */
- 	@ModifyVariable(method = "Lnet/minecraft/client/gui/components/toasts/ToastComponent$ToastInstance;render(IILcom/mojang/blaze3d/vertex/PoseStack;)Z", at = @At(value = "STORE"), ordinal = 0, index = 4)
- 	public long modifyAnimationTime(long animationTimer) {
- 		return LoTAS.tickratechanger.getMilliseconds();
- 	}
-	
+	@ModifyVariable(method = "Lnet/minecraft/client/gui/components/toasts/ToastComponent$ToastInstance;render(IILcom/mojang/blaze3d/vertex/PoseStack;)Z", at = @At(value = "STORE"), ordinal = 0, index = 4)
+	public long modifyAnimationTime(long animationTimer) {
+		return LoTAS.tickratechanger.getMilliseconds();
+	}
+
 }

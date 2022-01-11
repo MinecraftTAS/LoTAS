@@ -20,7 +20,7 @@ import net.minecraft.client.gui.screens.Screen;
  */
 @Environment(EnvType.CLIENT)
 public class LoScreenManager {
-	
+
 	// Currently drawn LoScreen
 	private LoScreen screen;
 	// Shared Minecraft Instance
@@ -37,7 +37,7 @@ public class LoScreenManager {
 	private double lastPosY;
 	// Last tickadvance state
 	private boolean lastTickadvance;
-	
+
 	/**
 	 * Returns whether a screen is opened.
 	 * @return Is screen opened?
@@ -45,7 +45,7 @@ public class LoScreenManager {
 	public boolean isScreenOpened() {
 		return this.screen != null;
 	}
-	
+
 	/**
 	 * Updates the current LoScreen and adds the Minecraft Instance. Can be null.
 	 * @param screen Update LoScreen
@@ -55,13 +55,13 @@ public class LoScreenManager {
 		if (screen != null) {
 			screen.mc = this.mc;
 			screen.reset(this.lastWidth, this.lastHeight);
-			if (mc.screen == null) mc.setScreen(new EmptyScreen());
+			if (this.mc.screen == null) this.mc.setScreen(new EmptyScreen());
 		} else
-			if (mc.screen instanceof EmptyScreen) mc.setScreen(null);
+			if (this.mc.screen instanceof EmptyScreen) this.mc.setScreen(null);
 		// Reinitialize current vanilla screen
 		if (this.mc.screen != null) this.mc.screen.resize(this.mc, this.mc.getWindow().getGuiScaledWidth(), this.mc.getWindow().getGuiScaledHeight());
 	}
-	
+
 	/**
 	 * Updates the Screen.
 	 * @param mc Instance of Minecraft
@@ -78,8 +78,8 @@ public class LoScreenManager {
 		final boolean isMiddlePressed = GLFW.glfwGetMouseButton(mc.getWindow().getWindow(), GLFW.GLFW_MOUSE_BUTTON_MIDDLE) == GLFW.GLFW_PRESS;
 		final boolean isRightPressed = GLFW.glfwGetMouseButton(mc.getWindow().getWindow(), GLFW.GLFW_MOUSE_BUTTON_RIGHT) == GLFW.GLFW_PRESS;
 		// Check whether clicks/moves have passed.
-		if (screen != null) {
-			if (width != lastWidth || height != lastHeight) {
+		if (this.screen != null) {
+			if (width != this.lastWidth || height != this.lastHeight) {
 				this.lastWidth = width;
 				this.lastHeight = height;
 				this.setScreen(this.screen);
@@ -103,14 +103,14 @@ public class LoScreenManager {
 	public void onGameInitialize(Minecraft mc) {
 		this.mc = mc;
 	}
-	
+
 	/**
 	 * Renders the next LoScreen
 	 * @param stack Pose Stack for rendering
 	 * @param mc Instance of Minecraft
 	 */
 	public void onGuiRender(PoseStack stack, Minecraft mc) {
-		if (this.screen != null) this.screen.render(stack, lastPosX, lastPosY);
+		if (this.screen != null) this.screen.render(stack, this.lastPosX, this.lastPosY);
 	}
 
 	/**
@@ -127,9 +127,9 @@ public class LoScreenManager {
 		}
 		if (this.screen != null)
 			return true;
-		return false;	
+		return false;
 	}
-	
+
 	/**
 	 * Getter
 	 * @return the screen
@@ -144,14 +144,14 @@ public class LoScreenManager {
 	 */
 	public void toggleLoTASMenu(Minecraft mc) {
 		if (mc.level == null) return;
-		if (isScreenOpened()) {
-			if (getScreen() instanceof MainLoScreen) {
-				setScreen(null);
+		if (this.isScreenOpened()) {
+			if (this.getScreen() instanceof MainLoScreen) {
+				this.setScreen(null);
 				// Disable tick advance if it was not on before
 				if (!this.lastTickadvance) LoTAS.tickadvance.requestTickadvanceToggle();
 			}
 		} else {
-			setScreen(new MainLoScreen());
+			this.setScreen(new MainLoScreen());
 			// Update tick advance if it is not enabled already
 			this.lastTickadvance = LoTAS.tickadvance.isTickadvanceEnabled();
 			if (!this.lastTickadvance) LoTAS.tickadvance.requestTickadvanceToggle();
@@ -163,9 +163,9 @@ public class LoScreenManager {
 	 * @param key Key that was pressed
 	 */
 	public void onKeyPress(int key) {
-		if (screen != null) {
-			screen.press(key);
+		if (this.screen != null) {
+			this.screen.press(key);
 		}
 	}
-	
+
 }

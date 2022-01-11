@@ -14,7 +14,7 @@ import net.minecraft.server.MinecraftServer;
  */
 @Mixin(MinecraftServer.class)
 public class MixinMinecraftServer {
-	
+
 	/**
 	 * Triggers an Event in {@link LoTAS#onServerTick(MinecraftServer)} after the server ticks
 	 * @param ci Callback Info
@@ -23,7 +23,7 @@ public class MixinMinecraftServer {
 	public void hookTickEvent(CallbackInfo ci) {
 		LoTAS.instance.onServerTick((MinecraftServer) (Object) this);
 	}
-	
+
 	/**
 	 * Triggers an Event in {@link LoTAS#onServerLoad(MinecraftServer)} before the game enters the game loop
 	 * @param ci Callback Info
@@ -32,5 +32,5 @@ public class MixinMinecraftServer {
 	public void hookInitEvent(CallbackInfo ci) {
 		LoTAS.instance.onServerLoad((MinecraftServer) (Object) this);
 	}
-	
+
 }

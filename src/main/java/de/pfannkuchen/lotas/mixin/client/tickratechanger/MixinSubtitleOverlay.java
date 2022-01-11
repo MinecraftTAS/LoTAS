@@ -26,7 +26,7 @@ public class MixinSubtitleOverlay {
 	public long applyTickrate(long threethousand) {
 		return (long) (threethousand * (20.0 / LoTAS.tickratechanger.getTickrate()));
 	}
-	
+
 	/**
 	 * Slows down the render speed by multiplying with the Gamespeed
 	 * @param threethousand 3000, well
@@ -36,5 +36,5 @@ public class MixinSubtitleOverlay {
 	public float applyTickrate2(float threethousand) {
 		return (float) (threethousand * (20.0 / LoTAS.tickratechanger.getTickrate()));
 	}
-	
+
 }
