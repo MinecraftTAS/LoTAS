@@ -1,10 +1,10 @@
 package de.pfannkuchen.lotas.gui;
 
 import de.pfannkuchen.lotas.LoTAS;
-import de.pfannkuchen.lotas.gui.widgets.DupeModLoWidget;
 import de.pfannkuchen.lotas.gui.widgets.MainLoWidget;
-import de.pfannkuchen.lotas.gui.widgets.SavestatesLoWidget;
-import de.pfannkuchen.lotas.gui.widgets.TickrateChangerLoWidget;
+import de.pfannkuchen.lotas.gui.windows.DupeModLoWidget;
+import de.pfannkuchen.lotas.gui.windows.SavestatesLoWidget;
+import de.pfannkuchen.lotas.gui.windows.TickrateChangerLoWidget;
 import de.pfannkuchen.lotas.loscreen.LoScreen;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
