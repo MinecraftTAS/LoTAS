@@ -1,4 +1,4 @@
-package de.pfannkuchen.lotas.mixin.client;
+package de.pfannkuchen.lotas.mixin.client.events;
 
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -21,7 +21,7 @@ import net.minecraft.client.Options;
  */
 @Mixin(Options.class)
 @Environment(EnvType.CLIENT)
-public class MixinOptionsHook {
+public class HookOptions {
 
 	/**
 	 * List of Key Mappings that are being registered once loaded

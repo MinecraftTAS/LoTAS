@@ -4,30 +4,30 @@
 	"package": "de.pfannkuchen.lotas.mixin",
 	"compatibilityLevel": "JAVA_17",
 	"mixins": [
-		"tickratechanger.MixinMinecraftServer",
+		"events.HookMinecraftServer",
+		"events.HookPlayNetworkHandler",
+		"events.HookPlayerList",
 		"misc.MixinCustomPacketInflater",
 		"misc.MixinCustomPacketInflaterClient",
 		"misc.MixinPacketInflater",
-		"MixinMinecraftServer",
-		"MixinPlayNetworkHandler",
-		"MixinPlayerList"
+		"tickratechanger.MixinMinecraftServer",
 	],
 	"client": [
+		"client.accessors.AccessorKeyMapping",
+		"client.events.HookClientPlayNetworkHandler",
+		"client.events.HookGui",
+		"client.events.HookKeyboardHandler",
+		"client.events.HookMinecraft",
+		"client.events.HookMouseHandler",
+		"client.events.HookOptions",
+		"client.events.HookSoundEngine",
 		"client.gui.MixinTitleScreen",
 		"client.tickratechanger.MixinItemRenderer",
 		"client.tickratechanger.MixinLevelRenderer",
 		"client.tickratechanger.MixinSoundEngine",
 		"client.tickratechanger.MixinSubtitleOverlay",
 		"client.tickratechanger.MixinTimer",
-		"client.tickratechanger.MixinToastInstance",
-		"client.MixinClientPlayNetworkHandler",
-		"client.MixinGuiHook",
-		"client.MixinKeyboardHandler",
-		"client.MixinKeyMappingsAccessor",
-		"client.MixinMinecraftHook",
-		"client.MixinMouseHandler",
-		"client.MixinOptionsHook",
-		"client.MixinSoundEngine"
+		"client.tickratechanger.MixinToastInstance"
 	],
 	"injectors": {
 		"defaultRequire": 1

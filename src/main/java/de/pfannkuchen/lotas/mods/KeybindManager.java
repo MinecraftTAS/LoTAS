@@ -8,7 +8,7 @@ import org.lwjgl.glfw.GLFW;
 
 import de.pfannkuchen.lotas.ClientLoTAS;
 import de.pfannkuchen.lotas.LoTAS;
-import de.pfannkuchen.lotas.mixin.client.MixinKeyMappingsAccessor;
+import de.pfannkuchen.lotas.mixin.client.accessors.AccessorKeyMapping;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.KeyMapping;
@@ -46,7 +46,7 @@ public class KeybindManager {
 	 */
 	public KeyMapping[] onKeybindInitialize(KeyMapping[] keyMappings) {
 		// Initialize Categories first
-		final Map<String, Integer> categories = MixinKeyMappingsAccessor.getCategorySorting();
+		final Map<String, Integer> categories = AccessorKeyMapping.getCategorySorting();
 		for (int i = 0; i < this.keybindCategories.length; i++) categories.put(this.keybindCategories[i], i+8);
 		// Finish by adding Keybinds
 		return ArrayUtils.addAll(keyMappings, this.openLoTASMenuKeybind, this.tickadvanceKeybind, this.toggleTickadvance);
@@ -78,7 +78,7 @@ public class KeybindManager {
 	 */
 	private boolean isKeyDown(Minecraft mc, KeyMapping map) {
 		boolean wasPressed = this.keys.containsKey(map) ? this.keys.get(map) : false;
-		boolean isPressed = GLFW.glfwGetKey(mc.getWindow().getWindow(), ((MixinKeyMappingsAccessor) map).getKey().getValue()) == GLFW.GLFW_PRESS;
+		boolean isPressed = GLFW.glfwGetKey(mc.getWindow().getWindow(), ((AccessorKeyMapping) map).getKey().getValue()) == GLFW.GLFW_PRESS;
 		this.keys.put(map, isPressed);
 		return !wasPressed && isPressed;
 	}
