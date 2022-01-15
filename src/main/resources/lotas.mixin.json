@@ -26,7 +26,8 @@
 		"client.MixinKeyMappingsAccessor",
 		"client.MixinMinecraftHook",
 		"client.MixinMouseHandler",
-		"client.MixinOptionsHook"
+		"client.MixinOptionsHook",
+		"client.MixinSoundEngine"
 	],
 	"injectors": {
 		"defaultRequire": 1

@@ -4,8 +4,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 
 import de.pfannkuchen.lotas.loscreen.LoScreenManager;
 import de.pfannkuchen.lotas.mods.KeybindManager;
-import de.pfannkuchen.lotas.mods.RecorderMod;
 import de.pfannkuchen.lotas.util.InternalTimer;
+import de.pfannkuchen.lotas.videorecorder.RecorderMod;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -13,6 +13,7 @@ import net.minecraft.Util;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.network.protocol.game.ClientboundCustomPayloadPacket;
 
 /**
@@ -156,6 +157,15 @@ public class ClientLoTAS implements ClientModInitializer {
 		LoTAS.savestatemod.onClientPacket(packet);
 	}
 
+	/**
+	 * Executed when a Sound Instance is being played
+	 * @param sound Sound that will be played
+	 */
+	public void onSoundPlay(SoundInstance sound) {
+		// Update Recorder Mod
+		ClientLoTAS.recordermod.onSoundPlay(sound);
+	}
+	
 	/**
 	 * Executed if the client disconnects
 	 */
