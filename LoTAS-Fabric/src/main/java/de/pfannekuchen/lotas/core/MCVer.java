@@ -1,9 +1,7 @@
 package de.pfannekuchen.lotas.core;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.platform.GlStateManager.DestFactor;
 import com.mojang.blaze3d.platform.GlStateManager.SourceFactor;
-import com.mojang.math.Matrix4f;
 import com.mojang.math.Quaternion;
 
 import de.pfannekuchen.lotas.mixin.accessors.AccessorButtons;
@@ -40,32 +38,32 @@ public class MCVer {
 //$$ 	public static double getZ(Entity e) {
 //$$ 		return e.getZ();
 //$$ 	}
-//$$ 	public static void setXYZ(Entity e, double x, double y, double z) {
-//$$ 		e.setPos(x, y, z);
-//$$ 	}
 //$$ 	public static void setMessage(AbstractWidget component, String message) {
+		//#if MC>=11601
 //$$ 		component.setMessage(new net.minecraft.network.chat.TextComponent(message));
+		//#else
+//$$ 		component.setMessage(message);
+		//#endif
 //$$ 	}
 //$$ 	public static net.minecraft.server.level.ServerLevel getCurrentLevel() {
 //$$ 		return (ServerLevel) Minecraft.getInstance().getSingleplayerServer().getPlayerList().getPlayers().get(0).level;
 //$$ 	}
 //$$ 	public static String getCurrentWorldFolder() {
+		//#if MC>=11601
 //$$ 		return ((de.pfannekuchen.lotas.mixin.accessors.AccessorLevelStorage)Minecraft.getInstance().getSingleplayerServer()).getStorageSource().getLevelId();
+		//#else
+//$$ 		return Minecraft.getInstance().getSingleplayerServer().getLevelIdName();
+		//#endif
 //$$ 	}
 	//#else
 	public static double getX(Entity e) {
-		return e.x;
+		return e.position().x;
 	}
 	public static double getY(Entity e) {
-		return e.y;
+		return e.position().y;
 	}
 	public static double getZ(Entity e) {
-		return e.z;
-	}
-	public static void setXYZ(Entity e, double x, double y, double z) {
-		e.x = x;
-		e.y = y;
-		e.z = z;
+		return e.position().z;
 	}
 	public static void setMessage(AbstractWidget component, String message) {
 		component.setMessage(message);
@@ -78,7 +76,7 @@ public class MCVer {
 	}
 	//#endif
 	// =============================================== 1.15.2 | 1.16.1 MATRICES  =========================================
-	//#if MC>=11600
+	//#if MC>=11601
 //$$ 	public static com.mojang.blaze3d.vertex.PoseStack stack;
 //$$ 	public static void blit(int a, int b, int c, float d, float e, int f, int g, int h, int i) {
 //$$ 		GuiComponent.blit(stack, a, b, c, d, e, f, g, h, i);
@@ -480,6 +478,16 @@ public class MCVer {
 //$$ 		com.mojang.blaze3d.systems.RenderSystem.setShaderTexture(0, resource);
 		//#else
 		textureManager.bind(resource);
+		//#endif
+	}
+	
+	// =============================================== 1.17.1 | 1.18 WINDOW =========================================
+	
+	public static com.mojang.blaze3d.platform.Window getGLWindow() {
+		//#if MC>=11500
+//$$ 		return Minecraft.getInstance().getWindow();
+		//#else
+		return Minecraft.getInstance().window;
 		//#endif
 	}
 }

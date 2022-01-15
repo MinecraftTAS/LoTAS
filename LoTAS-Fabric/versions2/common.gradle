@@ -22,7 +22,7 @@ dependencies {
     include 'com.google.code.findbugs:annotations:3.0.1u2'
     include 'com.google.errorprone:error_prone_annotations:2.0.19'
     include 'org.modelmapper:modelmapper:0.7.7'
-    modImplementation "net.fabricmc:fabric-loader:0.11.3"
+    modImplementation "net.fabricmc:fabric-loader:0.12.12"
 }
 
 processResources {
@@ -35,10 +35,6 @@ processResources {
 
 build.dependsOn processResources
 defaultTasks 'build'
-
-minecraft {
-	accessWidener '../../src/main/resources/lotas.accesswidener'
-}
 
 jar {
 	from {

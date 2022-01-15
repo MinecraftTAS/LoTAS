@@ -29,7 +29,7 @@ public class EntitySliderWidget extends AbstractWidget {
 	
 
 	public EntitySliderWidget(int xPos, int yPos, List<EntityOptions> ent, int width, int height, OnPress c) {
-		//#if MC>=11600
+		//#if MC>=11601
 //$$ 		super(xPos, yPos, width, height, net.minecraft.network.chat.TextComponent.EMPTY);
 		//#else
 		super(xPos, yPos, width, height, "");
@@ -76,7 +76,7 @@ public class EntitySliderWidget extends AbstractWidget {
 		return this.name + ": " + this.getSliderValue();
 	}
 
-	//#if MC>=11600
+	//#if MC>=11601
 //$$ 	@Override protected void renderBg(com.mojang.blaze3d.vertex.PoseStack stack, Minecraft client, int mouseX, int mouseY) {
 //$$ 		MCVer.stack = stack;
 	//#else
@@ -84,7 +84,11 @@ public class EntitySliderWidget extends AbstractWidget {
 	//#endif
 		MCVer.bind(client.getTextureManager(), WIDGETS_LOCATION);
 		MCVer.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		//#if MC>=11800
+//$$ 		int i = (this.isHovered ? 2 : 1) * 20;
+		//#else
 		int i = (this.isHovered() ? 2 : 1) * 20;
+		//#endif
 		MCVer.blit(this.x + (int) (this.sliderPosition * (double) (this.width - 8)), this.y, 0, 46 + i, 4, 20);
 		MCVer.blit(this.x + (int) (this.sliderPosition * (double) (this.width - 8)) + 4, this.y, 196, 46 + i, 4, 20);
 	}

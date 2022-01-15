@@ -15,7 +15,7 @@ public class ImageButton extends Button {
 	private ResourceLocation pic;
 
 	public ImageButton(int x, int y, Button.OnPress action, ResourceLocation pic) {
-		//#if MC>=11600
+		//#if MC>=11601
 //$$ 		super(x, y, 20, 20, new net.minecraft.network.chat.TextComponent(""), action);
 		//#else
 		super(x, y, 20, 20, "", action);
@@ -31,7 +31,7 @@ public class ImageButton extends Button {
 		this.toggled = toggled;
 	}
 
-	//#if MC>=11600
+	//#if MC>=11601
 //$$ 	public void renderButton(com.mojang.blaze3d.vertex.PoseStack matrices, int mouseX, int mouseY, float delta) {
 //$$ 		super.renderButton(matrices, mouseX, mouseY, delta);
 //$$ 		MCVer.stack = matrices;
