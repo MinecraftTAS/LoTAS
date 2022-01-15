@@ -7,7 +7,7 @@ import net.minecraft.world.level.dimension.DimensionType;
 
 @Mixin(DimensionType.class)
 public interface AccessorDimensionTypes {
-	//#if MC>=11600
+	//#if MC>=11601
 //$$ 	@Accessor("DEFAULT_OVERWORLD")
 //$$ 	public static DimensionType getOverworld() {
 //$$ 		throw new AssertionError();

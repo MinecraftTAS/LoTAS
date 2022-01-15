@@ -173,7 +173,7 @@ public abstract class MixinGuiIngameMenu extends Screen {
 		return (Button) MCVer.getButton(this, index);
 	}
 	
-	//#if MC>=11600
+	//#if MC>=11601
 //$$ 	@Inject(method = "render", at = @At("TAIL"))
 //$$ 	public void drawScreen(com.mojang.blaze3d.vertex.PoseStack stack, int mouseX, int mouseY, float partialTicks, CallbackInfo ci) {
 //$$ 		MCVer.stack = stack;

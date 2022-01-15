@@ -219,35 +219,6 @@ public class MixinMinecraftClient {
 	}
  
 	/**
-	 * Moves the Player when in Freecam mode
-	 * @param strafe Direction
-	 * @param up to
-	 * @param forward move
-	 * @param friction to
-	 */
-	@Unique
-	private void move(float strafe, float up, float forward, float friction) {
-		float f = strafe * strafe + up * up + forward * forward;
-		if (f >= 1.0E-4F) {
-			f = Mth.sqrt(f);
-			if (f < 1.0F)
-				f = 1.0F;
-			f = friction / f;
-			strafe = strafe * f;
-			up = up * f;
-			forward = forward * f;
-			//#if MC>=11700
-//$$ 			float f1 = Mth.sin(player.getYRot() * 0.017453292F);
-//$$ 			float f2 = Mth.cos(player.getYRot() * 0.017453292F);
-			//#else
-			float f1 = Mth.sin(player.yRot * 0.017453292F);
-			float f2 = Mth.cos(player.yRot * 0.017453292F);
-			//#endif
-			MCVer.setXYZ(player, MCVer.getX(player) + (strafe * f2 - forward * f1), MCVer.getY(player) + up, MCVer.getZ(player) + (forward * f2 + strafe * f1));
-		}
-	}
-
-	/**
 	 * Called before every single frame
 	 */
 	@Inject(method = "runTick", at = @At(value = "HEAD"))

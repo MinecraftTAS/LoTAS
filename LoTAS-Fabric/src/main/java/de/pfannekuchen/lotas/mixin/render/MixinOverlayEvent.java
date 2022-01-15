@@ -20,7 +20,7 @@ import net.minecraft.resources.ResourceLocation;
 @Mixin(Gui.class)
 public class MixinOverlayEvent {
 
-	//#if MC>=11600
+	//#if MC>=11601
 //$$ 	@Inject(at = @At(value = "INVOKE", shift = At.Shift.AFTER, target = "Lnet/minecraft/client/gui/Gui;renderEffects(Lcom/mojang/blaze3d/vertex/PoseStack;)V"), method = "render")
 //$$ 	public void injectrender(com.mojang.blaze3d.vertex.PoseStack stack, float tickDelta, CallbackInfo ci) {
 //$$ 		MCVer.stack = stack;
@@ -31,7 +31,7 @@ public class MixinOverlayEvent {
 		LoTASModContainer.hud.drawHud();
 		if (ConfigUtils.getBoolean("tools", "showTickIndicator") && TickrateChangerMod.tickrate <= 5F && TickrateChangerMod.show) {
 			MCVer.bind(Minecraft.getInstance().getTextureManager(),streaming);
-			MCVer.blit(Minecraft.getInstance().window.getGuiScaledWidth() - 17, 1, 0, 0, 16, 16, 16, 64);
+			MCVer.blit(MCVer.getGLWindow().getGuiScaledWidth() - 17, 1, 0, 0, 16, 16, 16, 64);
 		}
 	}
 

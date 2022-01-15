@@ -12,9 +12,11 @@ def versions2 = [
         'fabric',
         '1.14.4',
         '1.15.2',
+        '1.16.0', //Infinity snapshot, but set to 1.16.0 so the preprocessor understands it
         '1.16.1',
         '1.16.5',
-        '1.17.1'
+        '1.17.1',
+        '1.18.1'
 ]
 versions2.collect {":versions2:$it"}.each {
     include it

@@ -38,7 +38,7 @@ public class PotionRenderer {
 //$$ 			stack.setTag(cp);
 //$$ 		}
 //$$
-//$$ 		Window window = Minecraft.getInstance().window;
+//$$ 		Window window = MCVer.getGLWindow();
 //$$
 //$$ 		float scale = (float) (window.getGuiScale() / 3);
 //$$ 		int height = window.getHeight();

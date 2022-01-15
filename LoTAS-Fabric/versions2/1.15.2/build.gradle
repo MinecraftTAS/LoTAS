@@ -4,6 +4,11 @@ plugins {
 
 apply from: '../common.gradle'
 archivesBaseName = "LoTAS1.15.2"
+
+minecraft {
+	accessWidener '../../src/main/resources/lotas.accesswidener'
+}
+
 dependencies {
 	minecraft "com.mojang:minecraft:1.15.2"
 	mappings minecraft.officialMojangMappings()

@@ -199,7 +199,7 @@ public class SeedListScreen extends Screen {
 		}
 	}
 
-	//#if MC>=11600
+	//#if MC>=11601
 //$$ 	@Override public void render(com.mojang.blaze3d.vertex.PoseStack stack, int mouseX, int mouseY, float partialTicks) {
 //$$ 		MCVer.stack = stack;
 	//#else

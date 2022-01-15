@@ -73,7 +73,7 @@ public class DragonManipulationScreen extends Screen {
 	}
 
 	public String getButtonMessage(Button btn) {
-		//#if MC>=11600
+		//#if MC>=11601
 //$$ 		return btn.getMessage().getString();
 		//#else
 		return btn.getMessage();
@@ -155,7 +155,7 @@ public class DragonManipulationScreen extends Screen {
 		super.init();
 	}
 
-	//#if MC>=11600
+	//#if MC>=11601
 //$$ 	@Override public void render(com.mojang.blaze3d.vertex.PoseStack stack, int mouseX, int mouseY, float partialTicks) {
 //$$ 		MCVer.stack = stack;
 	//#else
