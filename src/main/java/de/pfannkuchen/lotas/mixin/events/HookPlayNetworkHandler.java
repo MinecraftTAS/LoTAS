@@ -1,4 +1,4 @@
-package de.pfannkuchen.lotas.mixin;
+package de.pfannkuchen.lotas.mixin.events;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -14,7 +14,7 @@ import net.minecraft.server.network.ServerGamePacketListenerImpl;
  * @author Pancake
  */
 @Mixin(ServerGamePacketListenerImpl.class)
-public class MixinPlayNetworkHandler {
+public class HookPlayNetworkHandler {
 
 	/**
 	 * Triggers an Event in {@link LoTAS#onServerPayload(ServerboundCustomPayloadPacket)} before the game enters the game loop

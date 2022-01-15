@@ -1,4 +1,4 @@
-package de.pfannkuchen.lotas.mixin.client;
+package de.pfannkuchen.lotas.mixin.client.events;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -17,7 +17,7 @@ import net.minecraft.network.protocol.game.ClientboundCustomPayloadPacket;
  */
 @Mixin(ClientPacketListener.class)
 @Environment(EnvType.CLIENT)
-public class MixinClientPlayNetworkHandler {
+public class HookClientPlayNetworkHandler {
 
 	/**
 	 * Triggers an Event in {@link ClientLoTAS#onClientPayload(ClientboundCustomPayloadPacket)} whenever a custom payload packet is received

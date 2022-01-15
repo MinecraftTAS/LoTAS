@@ -1,4 +1,4 @@
-package de.pfannkuchen.lotas.mixin.client;
+package de.pfannkuchen.lotas.mixin.client.events;
 
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -21,7 +21,7 @@ import net.minecraft.client.renderer.GameRenderer;
  */
 @Mixin(GameRenderer.class)
 @Environment(EnvType.CLIENT)
-public class MixinGuiHook {
+public class HookGui {
 
 	// Shadow Field seen in GameRenderer.class
 	@Shadow @Final

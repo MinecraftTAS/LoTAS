@@ -1,4 +1,4 @@
-package de.pfannkuchen.lotas.mixin.client;
+package de.pfannkuchen.lotas.mixin.client.accessors;
 
 import java.util.Map;
 
@@ -18,7 +18,7 @@ import net.minecraft.client.KeyMapping;
  */
 @Mixin(KeyMapping.class)
 @Environment(EnvType.CLIENT)
-public interface MixinKeyMappingsAccessor {
+public interface AccessorKeyMapping {
 
 	/**
 	 * This Accessor opens the static field containing all Categories with orders

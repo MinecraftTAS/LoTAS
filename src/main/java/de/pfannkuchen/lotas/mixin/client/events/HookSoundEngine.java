@@ -1,4 +1,4 @@
-package de.pfannkuchen.lotas.mixin.client;
+package de.pfannkuchen.lotas.mixin.client.events;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -17,7 +17,7 @@ import net.minecraft.client.sounds.SoundEngine;
  */
 @Mixin(SoundEngine.class)
 @Environment(EnvType.CLIENT)
-public class MixinSoundEngine {
+public class HookSoundEngine {
 
 	/**
 	 * Triggers an Event in {@link ClientLoTAS#onSoundPlay(SoundInstance)} before the game enters the game loop
