@@ -1,7 +1,7 @@
 /**
  * Here is the logic of the recorder mod:
  */
-package de.pfannkuchen.lotas.mods;
+package de.pfannkuchen.lotas.videorecorder;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,6 +25,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.ErrorScreen;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.network.chat.TextComponent;
 
 /**
@@ -77,6 +78,12 @@ public class RecorderMod {
 	private boolean takeScreenshot;
 
 	/**
+	 * Whether a screenshot CAN BE taken or not.
+	 * (used for serializing sounds)
+	 */
+	private boolean currentStatus;
+	
+	/**
 	 * Restart the recording if the screen resizes
 	 * @param mc Instance of minecraft
 	 */
@@ -85,6 +92,16 @@ public class RecorderMod {
 		this.startRecording(mc);
 	}
 
+	/**
+	 * Serializes a sound instance of necessary
+	 * @param instance Sound Instance to serialize
+	 */
+	public void onSoundPlay(SoundInstance instance) {
+		if (!isRecording() || !this.currentStatus)
+			return;
+		System.out.println(instance.getLocation().toString());
+	}
+	
 	/**
 	 * Takes screenshots if necessary
 	 * @param mc Instance of minecraft
@@ -96,8 +113,12 @@ public class RecorderMod {
 		Screen screen = mc.screen;
 		// Update gui screen with NULL if the gui is an allowed gui.
 		// Done to pass the next check screen == null
-		if (mc.level == null) return;
+		if (mc.level == null) {
+			this.currentStatus = false;
+			return;
+		}
 		if (screen != null) if (!this.NOT_ALLOWED_GUI.contains(screen.getClass().getSimpleName())) screen = null;
+		this.currentStatus = screen == null && !ClientLoTAS.loscreenmanager.isScreenOpened();
 		if (this.takeScreenshot && screen == null && !ClientLoTAS.loscreenmanager.isScreenOpened()) {
 			this.takeScreenshot = false;
 			// Take a screenshot into the screenshot list
