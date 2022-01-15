@@ -1,4 +1,4 @@
-package de.pfannkuchen.lotas.mixin.client;
+package de.pfannkuchen.lotas.mixin.client.events;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -16,7 +16,7 @@ import net.minecraft.client.MouseHandler;
  */
 @Mixin(MouseHandler.class)
 @Environment(EnvType.CLIENT)
-public class MixinMouseHandler {
+public class HookMouseHandler {
 
 	/**
 	 * Triggers an event in {@link ClientLoTAS#onKeyPressed(Integer)} whenever a screen catches a key event

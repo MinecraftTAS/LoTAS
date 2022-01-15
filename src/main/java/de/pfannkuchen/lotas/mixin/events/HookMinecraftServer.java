@@ -1,4 +1,4 @@
-package de.pfannkuchen.lotas.mixin;
+package de.pfannkuchen.lotas.mixin.events;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -13,7 +13,7 @@ import net.minecraft.server.MinecraftServer;
  * @author Pancake
  */
 @Mixin(MinecraftServer.class)
-public class MixinMinecraftServer {
+public class HookMinecraftServer {
 
 	/**
 	 * Triggers an Event in {@link LoTAS#onServerTick(MinecraftServer)} after the server ticks

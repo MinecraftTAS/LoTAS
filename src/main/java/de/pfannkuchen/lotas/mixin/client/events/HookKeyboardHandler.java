@@ -1,4 +1,4 @@
-package de.pfannkuchen.lotas.mixin.client;
+package de.pfannkuchen.lotas.mixin.client.events;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -11,12 +11,12 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.KeyboardHandler;
 
 /**
- * This Mixin hooks up a key press event
+ * This Mixin hooks up key press events
  * @author Pancake
  */
 @Mixin(KeyboardHandler.class)
 @Environment(EnvType.CLIENT)
-public class MixinKeyboardHandler {
+public class HookKeyboardHandler {
 
 	/**
 	 * Triggers an Event in {@link ClientLoTAS#onKeyPressed(Integer)} whenever a screen catches a key event
