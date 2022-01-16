@@ -15,9 +15,9 @@ Report Bugs under the Issues Section or on our [Discord](https://discord.gg/sdMc
 All Feature Requests go also onto the Discord Server.
 
 ## Features
-* Duping: Save your Inventory/Items/Chests with 1 button and load em again with another click!
+* Duping: Save your Inventory/Items/Chests with 1 button and load' em again with another click!
 * Savestates: Create copies of your World and load them again without copying the world manually!
-* Drop Manipulation: Need Flint? Get Flint! Need Full Diamond Zombie with Looting 3 Diamond Sword? Get it!
+* Drop Manipulation: Need Flint? Get Flint!
 * Spawn Manipulation: Spawn Mobs everywhere possible using the Gui!
 * AI Manipulation: Change what the Dragon should do and where your Entities should move.
 * And More: There are more features like: Tick Indicator, Timer, No Damage and more.. all of those in the wiki.
