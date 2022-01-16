@@ -88,7 +88,7 @@ public class ClientLoTAS implements ClientModInitializer {
 		// Trigger a mouse scroll event for LoScreens
 		ClientLoTAS.loscreenmanager.onMouseScroll(e);
 	}
-	
+
 	/**
 	 * Executed before the JVM stops.
 	 * @param mc Instance of minecraft
@@ -158,14 +158,14 @@ public class ClientLoTAS implements ClientModInitializer {
 	}
 
 	/**
-	 * Executed when a Sound Instance is being played
+	 * Executed when a sound is being played
 	 * @param sound Sound that will be played
 	 */
 	public void onSoundPlay(SoundInstance sound) {
 		// Update Recorder Mod
 		ClientLoTAS.recordermod.onSoundPlay(sound);
 	}
-	
+
 	/**
 	 * Executed if the client disconnects
 	 */
