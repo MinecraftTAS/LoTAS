@@ -16,9 +16,14 @@ import de.pfannekuchen.lotas.core.LoTASModContainer;
 import de.pfannekuchen.lotas.mixin.accessors.AccessorKeyMapping;
 import de.pfannekuchen.lotas.mods.DupeMod;
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;
+import net.minecraft.Util;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.ChatScreen;
 import net.minecraft.client.gui.screens.PauseScreen;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.controls.ControlsScreen;
+import net.minecraft.client.gui.screens.inventory.SignEditScreen;
 import net.minecraft.util.Mth;
 
 /**
@@ -66,6 +71,8 @@ public class KeybindsUtils {
 	 * tick before
 	 */
 	public static boolean wasPressed = false;
+	
+	private static HashMap<Integer, Long> cooldownHashMap = new HashMap<Integer, Long>();
 
 	/**
 	 * Handles a new KeyInputEvent and ticks through all keybinds.
@@ -147,13 +154,57 @@ public class KeybindsUtils {
 	}
 
 	/**
+	 * Checks whether the keycode is pressed, regardless of any gui screens
+	 * 
+	 * @param keybind
+	 * @return
+	 */
+	public static boolean isKeyDown(KeyMapping keybind) {
+		return isKeyDown(getKeyCodeFromKeybind(keybind));
+	}
+
+	public static boolean isKeyDownExceptTextField(KeyMapping keybind) {
+		Screen screen=Minecraft.getInstance().screen;
+		
+		if(screen instanceof ChatScreen || screen instanceof SignEditScreen) {
+			return false;
+		}
+		return isKeyDown(keybind);
+	}
+	
+	public static boolean isKeyDown(int keycode) {
+		boolean down = false;
+
+		Screen screen=Minecraft.getInstance().screen;
+		
+		if (screen instanceof ControlsScreen) {
+			return false;
+		}
+
+		down = keycode > 0 ? Keyboard.isKeyDown(keycode) : Mouse.isKeyDown(keycode); // Check if it's keyboard key or mouse button
+
+		if (down) {
+			if (cooldownHashMap.containsKey(keycode)) {
+				if (50 * 3 <= Util.getMillis() - cooldownHashMap.get(keycode)) {
+					cooldownHashMap.put(keycode, Util.getMillis());
+					return true;
+				}
+				return false;
+			} else {
+				cooldownHashMap.put(keycode, Util.getMillis());
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
 	 * Static method to register all Keybinds to the game. Note: Not using Fabric
 	 * API to avoid a crash using Mojang Mappings
 	 * 
 	 * @return
 	 */
 	public static KeyMapping[] registerKeybinds(KeyMapping[] keyMappings) {
-		Minecraft mc = Minecraft.getInstance();
 		List<KeyMapping> modded = new ArrayList<KeyMapping>(ImmutableList.of(
 				saveStateKeybind,
 				loadStateKeybind,
@@ -176,6 +227,10 @@ public class KeybindsUtils {
 		return newKeyMappings.toArray(new KeyMapping[0]);
 	}
 
+	public static int getKeyCodeFromKeybind(KeyMapping keybind) {
+		return ((AccessorKeyMapping)keybind).getKey().getValue();
+	}
+	
 	private static void addCategories(List<KeyMapping> modded) {
 		modded.forEach(key -> {
 			Map<String, Integer> map = AccessorKeyMapping.getCategorySorting();

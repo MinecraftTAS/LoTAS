@@ -1,7 +1,5 @@
 package de.pfannekuchen.lotas.core.utils;
 
-import org.lwjgl.glfw.GLFW;
-
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
@@ -9,19 +7,24 @@ import net.minecraft.client.Options;
 public class KeystrokeUtils {
 	
 	public static String getKeystrokes() {
-		String out1 = "";
-        Options gamesettings=Minecraft.getInstance().options;
-        /* Obtain every pressed key and add it to a string */
-		for (KeyMapping binds : gamesettings.keyMappings) {
+		String out = "";
+		Options gamesettings = Minecraft.getInstance().options;
+		/* Obtain every pressed key and add it to a string */
+		for (int i = 0; i < gamesettings.keyMappings.length; i++) {
+			KeyMapping binds = gamesettings.keyMappings[i];
 			try {
-				if (binds.isDown()) out1 += binds.getName() + " ";
+				//#if MC>=11601
+//$$ 				if (binds.isDown()) out += binds.getTranslatedKeyMessage().getString().toUpperCase() + " ";
+				//#else
+				if (binds.isDown()) out += binds.getTranslatedKeyMessage().toUpperCase() + " ";
+				//#endif
 			} catch (Exception e3) {
 				
 			}
 		}
-		// Add left and right-click to the string if pressed.
-		if (gamesettings.keyAttack.isDown()) out1 += "LC ";
-		if (gamesettings.keyUse.isDown()) out1 += "RC ";
-		return out1;
+		if(!out.isEmpty()) {
+			out=(String) out.subSequence(0, out.length()-1);
+		}
+		return out;
 	}
 }

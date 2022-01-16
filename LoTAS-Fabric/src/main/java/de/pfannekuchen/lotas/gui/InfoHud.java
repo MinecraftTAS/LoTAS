@@ -17,7 +17,6 @@ import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.core.utils.KeybindsUtils;
 import de.pfannekuchen.lotas.core.utils.KeystrokeUtils;
 import de.pfannekuchen.lotas.core.utils.Timer;
-import de.pfannekuchen.lotas.gui.InfoHud.InfoLabel;
 import de.pfannekuchen.lotas.mods.SavestateMod;
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;
 import net.minecraft.client.Minecraft;
@@ -32,8 +31,6 @@ import net.minecraft.util.Mth;
  */
 public class InfoHud extends Screen {
 	
-
-
 	public static class InfoLabel {
 		public String displayName;
 		public int x;
@@ -67,6 +64,9 @@ public class InfoHud extends Screen {
 	private int xOffset; // drag offsets
 	private int yOffset;
 	
+	private int gridSizeX = 14;
+	private int gridSizeY = 14;
+	
 	public Properties configuration;
 	public static List<InfoLabel> lists = new ArrayList<>();
 	
@@ -82,7 +82,7 @@ public class InfoHud extends Screen {
 			return;
 
 		if ("keystroke".equals(string)) {
-			int newpos = width - 20;
+			int newpos = MCVer.getGLWindow().getScreenHeight() - 20;
 			configuration.setProperty(string + "_x", "0");
 			configuration.setProperty(string + "_y", newpos + "");
 			configuration.setProperty(string + "_visible", "true");
@@ -166,12 +166,30 @@ public class InfoHud extends Screen {
 	public void mouseMoved(double mouseX, double mouseY) {
 		if (currentlyDraggedIndex != -1) {
 			String dragging = lists.get(currentlyDraggedIndex).displayName;
-			lists.get(currentlyDraggedIndex).x = (int) (mouseX) - xOffset;
-			lists.get(currentlyDraggedIndex).y = (int) (mouseY) - yOffset;
+			
+			double mousePosX = mouseX - xOffset;
+			double mousePosY = mouseY - yOffset;
+			
+			if (Screen.hasShiftDown()) {
+				mousePosX = snapToGridX(mousePosX);
+				mousePosY = snapToGridY(mousePosY);
+			}
+			
+			lists.get(currentlyDraggedIndex).x = (int) mousePosX;
+			lists.get(currentlyDraggedIndex).y = (int) mousePosY;
+			
 			configuration.setProperty(dragging + "_x", lists.get(currentlyDraggedIndex).x + "");
 			configuration.setProperty(dragging + "_y", lists.get(currentlyDraggedIndex).y + "");
 		}
 		super.mouseMoved(mouseX, mouseY);
+	}
+	
+	private double snapToGridX(double x) {
+		return Math.round(x / gridSizeX) * gridSizeX;
+	}
+
+	private double snapToGridY(double y) {
+		return Math.round(y / gridSizeY) * gridSizeY;
 	}
 	
 	/**
@@ -368,9 +386,9 @@ public class InfoHud extends Screen {
 				MCVer.drawShadow("Middleclick to enable", width - ypos, xpos - 20, 0x60FF00);
 				MCVer.drawShadow("Rightclick to add black background", width - ypos, xpos - 10, 0x60FF00);
 				MCVer.drawShadow("Hold Shift to snap to grid", width - ypos, xpos, 0x60FF00);
-				MCVer.drawShadow("CTRL+Shift+R to reset the layout", width - ypos, xpos + 10, 0x60FF00);
+				MCVer.drawShadow("CTRL+Shift+R to reset the layout", width - ypos, xpos + 10, 0xEE8100);
 
-				if (de.pfannekuchen.lotas.core.utils.Keyboard.isKeyDown(GLFW.GLFW_KEY_LEFT_CONTROL) && de.pfannekuchen.lotas.core.utils.Keyboard.isKeyDown(GLFW.GLFW_KEY_LEFT_SHIFT) && de.pfannekuchen.lotas.core.utils.Keyboard.isKeyDown(GLFW.GLFW_KEY_R)) {
+				if (Screen.hasShiftDown() && Screen.hasControlDown() && KeybindsUtils.isKeyDown(GLFW.GLFW_KEY_R)) {
 					resetLayout = true;
 					configuration = null;
 				}

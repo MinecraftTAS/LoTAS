@@ -56,7 +56,7 @@ public abstract class MixinGuiIngameMenu extends Screen {
 		((Button)MCVer.getButton(this, 7)).y += 24;
 		
 		MCVer.addButton(this, MCVer.Button(this.width / 2 - 102, this.height / 4 + 48 + -16 + 24 + 24, 98, 20, "Savestate", btn -> {
-			if (Keyboard.isPressed(GLFW.GLFW_KEY_LEFT_SHIFT)) {
+			if (Keyboard.isKeyDown(GLFW.GLFW_KEY_LEFT_SHIFT)) {
 				savestateName = MCVer.EditBox(Minecraft.getInstance().font, this.width / 2 - 100, this.height / 4 + 96 + -16, 98, 20, "");
 				btn.active = false;
 				setFocused(savestateName);
@@ -64,13 +64,13 @@ public abstract class MixinGuiIngameMenu extends Screen {
 				SavestateMod.savestate(null);
 		}));
 		MCVer.addButton(this, MCVer.Button(this.width / 2 + 4, this.height / 4 + 48 + -16 + 24 + 24, 98, 20, "Loadstate", btn -> {
-			if (Keyboard.isPressed(GLFW.GLFW_KEY_LEFT_SHIFT))
+			if (Keyboard.isKeyDown(GLFW.GLFW_KEY_LEFT_SHIFT))
 				Minecraft.getInstance().setScreen(new LoadstateScreen());
 			else
 				SavestateMod.loadstate(-1);
 		}));
 		MCVer.addButton(this, MCVer.Button(5, 15, 48, 20, "+", b -> {
-			if (Keyboard.isPressed(GLFW.GLFW_KEY_LEFT_SHIFT)) {
+			if (Keyboard.isKeyDown(GLFW.GLFW_KEY_LEFT_SHIFT)) {
 				tickrateField = MCVer.EditBox(Minecraft.getInstance().font, 4, 15, 103, 20, "");
 				b.active = false;
 				setFocused(b);
@@ -81,7 +81,7 @@ public abstract class MixinGuiIngameMenu extends Screen {
 			}
 		}));
 		MCVer.addButton(this, MCVer.Button(55, 15, 48, 20, "-", b -> {
-			if (Keyboard.isPressed(GLFW.GLFW_KEY_LEFT_SHIFT)) {
+			if (Keyboard.isKeyDown(GLFW.GLFW_KEY_LEFT_SHIFT)) {
 				tickrateField = MCVer.EditBox(Minecraft.getInstance().font, 4, 15, 103, 20, "");
 				b.active = false;
 				setFocused(b);
@@ -181,7 +181,7 @@ public abstract class MixinGuiIngameMenu extends Screen {
 	@Inject(method = "render", at = @At("TAIL"))
 	public void drawScreen(int mouseX, int mouseY, float partialTicks, CallbackInfo ci) {	
 	//#endif
-		if (Keyboard.isPressed(GLFW.GLFW_KEY_LEFT_SHIFT)) {
+		if (Keyboard.isKeyDown(GLFW.GLFW_KEY_LEFT_SHIFT)) {
 			MCVer.setMessage(getButton(8), "\u00A76Name Savestate");
 			MCVer.setMessage(getButton(9), "\u00A76Choose State");
 			MCVer.setMessage(getButton(10), "\u00A76Custom");

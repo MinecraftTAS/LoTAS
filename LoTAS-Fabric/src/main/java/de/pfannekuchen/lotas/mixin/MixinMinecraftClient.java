@@ -146,7 +146,7 @@ public class MixinMinecraftClient {
 			SavestateMod.savestate(null);
 		}
 
-		//#if MC>=11600
+		//#if MC>=11605
 //$$ 		if (LoTASModContainer.i != -1) {
 //$$ 			if (Minecraft.getInstance().level != null) {
 //$$ 				Minecraft.getInstance().getSingleplayerServer().halt(true);
