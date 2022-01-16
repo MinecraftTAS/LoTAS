@@ -154,11 +154,11 @@ public class KeybindsUtils {
 	 * @param keybind
 	 * @return
 	 */
-	private static boolean isKeyDown(KeyBinding keybind) {
+	public static boolean isKeyDown(KeyBinding keybind) {
 		return isKeyDown(keybind.getKeyCode());
 	}
 
-	private static boolean isKeyDownExceptTextField(KeyBinding keybind) {
+	public static boolean isKeyDownExceptTextField(KeyBinding keybind) {
 		GuiScreen screen=Minecraft.getMinecraft().currentScreen;
 		
 		if(screen instanceof GuiChat || screen instanceof GuiEditSign || (focused && screen != null)) {
@@ -167,7 +167,7 @@ public class KeybindsUtils {
 		return isKeyDown(keybind);
 	}
 	
-	private static boolean isKeyDown(int keycode) {
+	public static boolean isKeyDown(int keycode) {
 		boolean down = false;
 
 		GuiScreen screen=Minecraft.getMinecraft().currentScreen;

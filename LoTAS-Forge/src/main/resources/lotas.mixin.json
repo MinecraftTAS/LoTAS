@@ -29,6 +29,7 @@
     	"accessors.AccessorRenderManager",
     	"accessors.AccessorGuiListWorldSelection",
     	"accessors.AccessorTimer",
+    	"accessors.AccessFocused",
 		"render.gui.MixinGuiScreenWorking",
 		"render.gui.MixinGuiGameOver",
 		"render.gui.MixinGuiMainMenu",

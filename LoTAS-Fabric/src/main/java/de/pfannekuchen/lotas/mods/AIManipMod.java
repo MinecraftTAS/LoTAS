@@ -58,7 +58,9 @@ public class AIManipMod {
 			}else {
 				MoveControl control = job.entity.getMoveControl();
 				Vec3 target=job.target;
-				control.setWantedPosition(target.x, target.y, target.z, 1);
+				if(target!=null) {
+					control.setWantedPosition(target.x, target.y, target.z, 1);
+				}
 			}
 		}
 	}
