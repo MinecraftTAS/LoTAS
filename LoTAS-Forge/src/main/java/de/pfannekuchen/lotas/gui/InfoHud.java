@@ -387,7 +387,7 @@ public class InfoHud extends GuiScreen {
 				MCVer.getFontRenderer(mc).drawStringWithShadow("Middleclick to enable", width - ypos, xpos - 20, 0x60FF00);
 				MCVer.getFontRenderer(mc).drawStringWithShadow("Rightclick to add black background", width - ypos, xpos - 10, 0x60FF00);
 				MCVer.getFontRenderer(mc).drawStringWithShadow("Hold Shift to snap to grid", width - ypos, xpos, 0x60FF00);
-				MCVer.getFontRenderer(mc).drawStringWithShadow("CTRL+Shift+R to reset the layout", width - ypos, xpos + 10, 0x60FF00);
+				MCVer.getFontRenderer(mc).drawStringWithShadow("CTRL+Shift+R to reset the layout", width - ypos, xpos + 10, 0xEE8100);
 
 				if (isCtrlKeyDown() && isShiftKeyDown() && KeybindsUtils.isKeyDown(Keyboard.KEY_R)) {
 					resetLayout = true;

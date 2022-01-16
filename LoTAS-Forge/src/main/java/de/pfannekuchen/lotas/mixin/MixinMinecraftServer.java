@@ -36,7 +36,11 @@ public abstract class MixinMinecraftServer {
 		TickrateChangerMod.resetAdvanceServer();
 	}
 	
+	//#if MC>=11102
 	@Redirect(method = "run", at = @At(value = "FIELD", target = "Lnet/minecraft/server/MinecraftServer;worlds:[Lnet/minecraft/world/WorldServer;"))
+	//#else
+//$$ 	@Redirect(method = "run", at = @At(value = "FIELD", target = "Lnet/minecraft/server/MinecraftServer;worldServers:[Lnet/minecraft/world/WorldServer;"))
+	//#endif
 	public WorldServer[] fixCrashDuringLoadstate(MinecraftServer server) {
 		if(MCVer.getWorlds(server).length==0) {
 			System.out.println("Prevented a forge crash. You are welcome!");
@@ -45,7 +49,11 @@ public abstract class MixinMinecraftServer {
 		return MCVer.getWorlds(server);
 	}
 
-	@Redirect(method = "run", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/WorldServer;areAllPlayersAsleep(V)Z"))
+	//#if MC>=11102
+//	@Redirect(method = "run", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/WorldServer;areAllPlayersAsleep()Z"))
+	//#else
+//$$ 	@Redirect(method = "run", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/WorldServer;areAllPlayersAsleep()Z"))
+	//#endif
 	public boolean fixCrashDuringLoadstate2(WorldServer world) {
 		if (world == null)
 			return false;

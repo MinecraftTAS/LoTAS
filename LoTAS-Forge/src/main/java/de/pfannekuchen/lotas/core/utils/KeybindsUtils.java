@@ -172,7 +172,7 @@ public class KeybindsUtils {
 
 		GuiScreen screen=Minecraft.getMinecraft().currentScreen;
 		
-		if (screen instanceof GuiControls ) {
+		if (screen instanceof GuiControls) {
 			return false;
 		}
 
