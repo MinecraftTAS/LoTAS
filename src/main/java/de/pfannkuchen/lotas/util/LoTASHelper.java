@@ -2,6 +2,8 @@ package de.pfannkuchen.lotas.util;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 
 import com.mojang.blaze3d.platform.NativeImage;
 
@@ -46,4 +48,26 @@ public class LoTASHelper {
 		return outArray;
 	}
 
+	/**
+	 * Writes a String to a Byte Buffer
+	 * @param buf Buffer to read from
+	 * @param string String to write
+	 */
+	public static void writeString(ByteBuffer buf, String string) {
+		byte[] str = string.getBytes(StandardCharsets.UTF_8);
+		buf.putInt(str.length);
+		buf.put(str);
+	}
+	
+	/**
+	 * Reads a String from a Byte Buffer
+	 * @param buf Buffer to read from
+	 * @return String read from bytebuffer
+	 */
+	public static String readString(ByteBuffer buf) {
+		byte[] str = new byte[buf.getInt()];
+		buf.get(str);
+		return new String(str, StandardCharsets.UTF_8);
+	}
+	
 }
