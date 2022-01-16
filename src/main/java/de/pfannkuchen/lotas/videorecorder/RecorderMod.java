@@ -4,6 +4,7 @@
 package de.pfannkuchen.lotas.videorecorder;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.ProcessBuilder.Redirect;
@@ -70,8 +71,13 @@ public class RecorderMod {
 	/**
 	 * Thread-safe list for raw screenshots
 	 */
-	private BufferExchangeList list;
+	private BufferExchangeList video_list;
 
+	/**
+	 * Thread-safe list for serialized sounds
+	 */
+	private BufferExchangeList sound_list;
+	
 	/**
 	 * Whether a screenshot should be taken or not.
 	 */
@@ -82,6 +88,12 @@ public class RecorderMod {
 	 * (used for serializing sounds)
 	 */
 	private boolean currentStatus;
+	
+	/**
+	 * The current tick*3 (aka frame) of the current recording.
+	 * (used for serializing sounds)
+	 */
+	private int currentFrame;
 	
 	/**
 	 * Restart the recording if the screen resizes
@@ -99,7 +111,16 @@ public class RecorderMod {
 	public void onSoundPlay(SoundInstance instance) {
 		if (!isRecording() || !this.currentStatus)
 			return;
-		System.out.println(instance.getLocation().toString());
+		// Take a buffer and fill it
+		if (this.sound_list.containsUnfilledUnlocked()) {
+			int unfilled = this.sound_list.findUnfilled();
+			ByteBuffer b = this.sound_list.getAndLock(unfilled, true);
+			SoundWithTimestamp sound = new SoundWithTimestamp(instance, this.currentFrame);
+			// Write and flip, so that only the required bytes are copied instead of the full 1k
+			sound.write(b);
+			b.flip();
+			this.sound_list.unlock(unfilled);
+		}
 	}
 	
 	/**
@@ -122,11 +143,11 @@ public class RecorderMod {
 		if (this.takeScreenshot && screen == null && !ClientLoTAS.loscreenmanager.isScreenOpened()) {
 			this.takeScreenshot = false;
 			// Take a screenshot into the screenshot list
-			if (this.list.containsUnfilledUnlocked()) {
-				int unfilled = this.list.findUnfilled();
-				ByteBuffer b = this.list.getAndLock(unfilled, true);
+			if (this.video_list.containsUnfilledUnlocked()) {
+				int unfilled = this.video_list.findUnfilled();
+				ByteBuffer b = this.video_list.getAndLock(unfilled, true);
 				GL11.glReadPixels(0, 0, this.width, this.height, GL11.GL_RGB, GL11.GL_UNSIGNED_BYTE, b);
-				this.list.unlock(unfilled);
+				this.video_list.unlock(unfilled);
 			}
 		}
 	}
@@ -143,15 +164,18 @@ public class RecorderMod {
 		System.gc();
 		this.width = mc.getWindow().getScreenWidth();
 		this.height = mc.getWindow().getScreenHeight();
-		this.list = new BufferExchangeList(32, this.width*this.height*3);
+		this.video_list = new BufferExchangeList(32, this.width*this.height*3);
+		this.sound_list = new BufferExchangeList(32, 1000);
 		this.isRecording.set(true);
+		this.currentFrame = 0;
+		final String title = Date.from(Instant.now()).toString().replace(' ', '-').replace(':', '-'); // title of the video
 		/* Starts a thread for sending the images from the buffer list and ffmpeg */
 		new Thread(() -> {
 			try {
 				// ffmpeg command line
 				String ffmpeg = this.COMMAND_LINE.replaceAll("%IN%", this.COMMAND_LINE_IN).replaceAll("%OUT%", this.COMMAND_LINE_OUT).replaceAll("%SIZE%", this.width + "x" + this.height);
 				// start process
-				final ProcessBuilder pb = new ProcessBuilder(ArrayUtils.add(ArrayUtils.addAll(new String[] {this.FFMPEG.getAbsolutePath()}, ffmpeg.split(" ")), Date.from(Instant.now()).toString().replace(' ', '-').replace(':', '-') + ".mp4"));
+				final ProcessBuilder pb = new ProcessBuilder(ArrayUtils.add(ArrayUtils.addAll(new String[] {this.FFMPEG.getAbsolutePath()}, ffmpeg.split(" ")), title + ".mp4"));
 				pb.redirectOutput(Redirect.INHERIT);
 				pb.directory(this.VIDEOS_DIR);
 				pb.redirectErrorStream(true);
@@ -159,30 +183,32 @@ public class RecorderMod {
 				final Process p = pb.start();
 				OutputStream stream = p.getOutputStream();
 
-				LoTAS.LOGGER.info("Recording started");
+				LoTAS.LOGGER.info("Video Recording started");
 
 				// reuse buffers and arrays for optimal memory usage
 				ByteBuffer b;
 				byte[] array = new byte[this.width*this.height*3];
 				while (this.isRecording.get()) {
 					/* Find and lock a Buffer in the list */
-					if (this.list.containsFilledUnlocked()) {
-						int i = this.list.findFilled();
+					if (this.video_list.containsFilledUnlocked()) {
+						int i = this.video_list.findFilled();
 						if (i == 32) continue;
 						// obtain buffer and load into byte array
-						b = this.list.getAndLock(i, false);
+						b = this.video_list.getAndLock(i, false);
 						b.get(array);
 						// send that byte array
 						stream.write(array);
-						this.list.unlock(i);
+						// increase the frame count
+						this.currentFrame++;
+						this.video_list.unlock(i);
 					}
 				}
-				// After /r /record has been run again stop the process by closing the streams, causing SIGINT
+				// After the recording was ended stop the process by closing the streams, causing SIGINT
 				stream.flush();
 				stream.close();
 				p.getInputStream().close();
 				p.getErrorStream().close();
-				LoTAS.LOGGER.info("Recording finished");
+				LoTAS.LOGGER.info("Video Recording finished");
 
 			} catch (IOException e) {
 				mc.tell(() -> {
@@ -191,9 +217,10 @@ public class RecorderMod {
 				e.printStackTrace();
 			}
 		}).start();
-		/* Screenshot every 16 Milliseconds for 60 fps */
+		/* Screenshot every 16 Milliseconds (slowed down) for 60 fps */
 		new Thread(() ->  {
 			try {
+				LoTAS.LOGGER.info("Frame Grabber started");
 				while (this.isRecording.get()) {
 					this.takeScreenshot = true;
 					Thread.sleep((long) (LoTAS.tickratechanger.getMsPerTick()/3.0f));
@@ -202,8 +229,55 @@ public class RecorderMod {
 						Thread.sleep(1L);
 					}
 				}
-			} catch (Exception e) {}
+				LoTAS.LOGGER.info("Frame Grabber finished");
+			} catch (Exception e) {
+				mc.tell(() -> {
+					mc.setScreen(new ErrorScreen(new TextComponent("Something went wrong while trying to record!"), new TextComponent("Check the console for error messages.")));
+				});
+				e.printStackTrace();
+			}
 		}).start();
+		/* Starts a thread for sending the serialized sounds to a file */
+		new Thread(() -> {
+			try {
+				File soundfile = new File(VIDEOS_DIR, Date.from(Instant.now()).toString().replace(' ', '-').replace(':', '-') + ".snd");
+				soundfile.createNewFile();
+				OutputStream stream = new FileOutputStream(soundfile);
+
+				LoTAS.LOGGER.info("Sound Recording started");
+				
+				// reuse buffers and arrays for optimal memory usage
+				ByteBuffer b;
+				byte[] array = new byte[1000];
+				while (this.isRecording.get()) {
+					/* Find and lock a Buffer in the list */
+					if (this.sound_list.containsFilledUnlocked()) {
+						int i = this.sound_list.findFilled();
+						if (i == 32) continue;
+						// obtain buffer and load into byte array
+						b = this.sound_list.getAndLock(i, false);
+						int length = b.remaining();
+						b.get(array, 0, length);
+						// send that byte array
+						stream.write(array, 0, length);
+						this.sound_list.unlock(i);
+					}
+				}
+				// After the recording was stopped, close the input streams
+				stream.flush();
+				stream.close();
+				LoTAS.LOGGER.info("Sound Recording finished");
+				
+			} catch (IOException e) {
+				mc.tell(() -> {
+					mc.setScreen(new ErrorScreen(new TextComponent("Something went wrong while trying to record!"), new TextComponent("Check the console for error messages.")));
+				});
+				e.printStackTrace();
+			}
+		}).start();
+		// Check screen resolution
+		if (mc.getWindow().getScreenWidth() < 1280 || mc.getWindow().getScreenHeight() < 720)
+			mc.gui.getChat().addMessage(new TextComponent("\u00A7cWarning: \u00A7fYour Screen resolution is not supported for TAS Recorder"));
 	}
 
 	/**
@@ -211,7 +285,8 @@ public class RecorderMod {
 	 */
 	public void stopRecording() {
 		this.isRecording.set(false);
-		this.list.clear();
+		this.video_list.clear();
+		this.currentFrame = 0;
 	}
 
 	/**
