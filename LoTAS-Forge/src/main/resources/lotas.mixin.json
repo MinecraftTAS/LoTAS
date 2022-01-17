@@ -20,6 +20,7 @@
 		"patches.MixinServerPatch",
 		"patches.MixinEntityPlayerMPPatch",
 		"patches.MixinWorldProviderPatch",
+		"patches.MixinEntitySheepPatch",
 		"MixinMinecraftServer",
 		"patches.MixinInaccuracyPatch"
     ],
@@ -28,6 +29,7 @@
     	"accessors.AccessorRenderManager",
     	"accessors.AccessorGuiListWorldSelection",
     	"accessors.AccessorTimer",
+    	"accessors.AccessFocused",
 		"render.gui.MixinGuiScreenWorking",
 		"render.gui.MixinGuiGameOver",
 		"render.gui.MixinGuiMainMenu",

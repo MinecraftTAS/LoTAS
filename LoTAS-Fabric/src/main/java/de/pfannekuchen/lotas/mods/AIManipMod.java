@@ -58,7 +58,9 @@ public class AIManipMod {
 			}else {
 				MoveControl control = job.entity.getMoveControl();
 				Vec3 target=job.target;
-				control.setWantedPosition(target.x, target.y, target.z, 1);
+				if(target!=null) {
+					control.setWantedPosition(target.x, target.y, target.z, 1);
+				}
 			}
 		}
 	}
@@ -171,7 +173,7 @@ public class AIManipMod {
 	}
 	
 	public void confirm() {
-		addJob(selectedEntity, target);
+		addJob(selectedEntity, getTargetPos());
 	}
 	
 	public static Vec3 getSelectedEntityPos() {
@@ -195,7 +197,11 @@ public class AIManipMod {
 	}
 	
 	public static Vec3 getTargetPos() {
-		return target;
+		double targetX=Math.floor(target.x);
+		double targetY=Math.floor(target.y);
+		double targetZ=Math.floor(target.z);
+		
+		return new Vec3(targetX, targetY, targetZ);
 	}
 	
 	public boolean contains(Mob entity) {

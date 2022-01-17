@@ -5,6 +5,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
 import de.pfannekuchen.lotas.core.LoTASModContainer;
+import net.minecraft.world.item.Items;
 
 
 
@@ -31,8 +32,10 @@ import de.pfannekuchen.lotas.core.LoTASModContainer;
 	//#endif
 //$$ 		if(itemStack.getTagElement("BlockEntityTag") != null||LoTASModContainer.shield==null) {
 //$$ 			return vertexconsumer;
-//$$ 		}else {
+//$$ 		}else if(itemStack.getItem()== Items.SHIELD){
 //$$ 			return multiBufferSource.getBuffer(net.minecraft.client.renderer.RenderType.entitySolid(LoTASModContainer.shield));
+//$$ 		}else {
+//$$ 			return vertexconsumer;
 //$$ 		}
 //$$ 	}
 //$$ }
@@ -42,6 +45,9 @@ public class MixinRenderShield {
 
 	@org.spongepowered.asm.mixin.injection.ModifyArg(index = 0, method = "renderByItem", at = @org.spongepowered.asm.mixin.injection.At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/texture/TextureManager;bind(Lnet/minecraft/resources/ResourceLocation;)V"))
 	public net.minecraft.resources.ResourceLocation modifyShieldTexture(net.minecraft.resources.ResourceLocation original) {
+		if(original.getPath().contains("trident")){
+			return original;
+		}
 		return de.pfannekuchen.lotas.core.LoTASModContainer.shield == null ? original : de.pfannekuchen.lotas.core.LoTASModContainer.shield;
 	}
 

@@ -35,7 +35,7 @@ public abstract class MixinMinecraftServer {
 	 * @param ignored the value that was originally used, in this case 50L
 	 * @return Milliseconds per tick
 	 */
-	//#if MC>=11600
+	//#if MC>=11601
 //$$ 	@ModifyConstant(method = "runServer", constant = @Constant(longValue = 50L))
 	//#else
 	@ModifyConstant(method = "run", constant = @Constant(longValue = 50L))
@@ -77,7 +77,7 @@ public abstract class MixinMinecraftServer {
 	 * Redirects all Util.getMeasureTimeMs() in the run method of the minecraft server and returns {@link #getCurrentTime()}
 	 * @return
 	 */
-	//#if MC>=11600
+	//#if MC>=11601
 //$$ 	@Redirect(method = "runServer", at = @At(value = "INVOKE", target = "Lnet/minecraft/Util;getMillis()J"))
 	//#else
 	@Redirect(method = "run", at = @At(value = "INVOKE", target = "Lnet/minecraft/Util;getMillis()J"))

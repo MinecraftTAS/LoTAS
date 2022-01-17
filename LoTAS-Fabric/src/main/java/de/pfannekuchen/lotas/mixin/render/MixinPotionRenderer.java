@@ -71,7 +71,7 @@ public abstract class MixinPotionRenderer {
 		//#if MC>=11700
 //$$ 		Minecraft.getInstance().getItemRenderer().renderStatic(stack2, TransformType.FIXED, 15728880, OverlayTexture.NO_OVERLAY, matrices, immediate, 0);
 		//#else
-//$$ 		Minecraft.getInstance().getItemRenderer().renderStatic(stack2, TransformType.FIXED, 15728880, OverlayTexture.NO_OVERLAY, matrices, immediate);
+//$$  		Minecraft.getInstance().getItemRenderer().renderStatic(stack2, TransformType.FIXED, 15728880, OverlayTexture.NO_OVERLAY, matrices, immediate);
 		//#endif
 //$$ 		matrices.popPose();
 //$$ 		immediate.endBatch();

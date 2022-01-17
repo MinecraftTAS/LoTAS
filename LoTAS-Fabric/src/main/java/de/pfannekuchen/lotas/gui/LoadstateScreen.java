@@ -56,7 +56,7 @@ public class LoadstateScreen extends Screen {
 		super.init();
 	}
 	
-	//#if MC>=11600
+	//#if MC>=11601
 //$$ 	@Override public void render(com.mojang.blaze3d.vertex.PoseStack matrices, int mouseX, int mouseY, float partialTicks) {
 //$$ 		MCVer.stack = matrices;
 //$$ 		list.render(matrices, mouseX, mouseY, partialTicks);
@@ -145,7 +145,7 @@ public class LoadstateScreen extends Screen {
 				this.index = index;
 			}
 
-			//#if MC>=11600
+			//#if MC>=11601
 //$$ 			@Override public void render(com.mojang.blaze3d.vertex.PoseStack matrices, int slotIndex, int y, int x, int listWidth, int slotHeight, int mouseX, int mouseY, boolean isSelected, float partialTicks) {
 //$$ 				MCVer.stack = matrices;
 			//#else

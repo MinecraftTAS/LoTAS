@@ -58,61 +58,6 @@ public class EventUtils {
 		//#endif
 		return false;
 	}
-
-	/**
-	 * Event for LoTAS that renders the Keybinds onto the screen
-	 * @param e RenderGameOverlayEvent provided by MinecraftForge.
-	 */
-	@SubscribeEvent public void render(RenderGameOverlayEvent e) {
-		if (checkNonText(e)) return; // Check whether the event is not a text render event.
-		
-		/* Render the Keybind Overlay */
-		net.minecraft.client.gui.FontRenderer renderer = MCVer.getFontRenderer(Minecraft.getMinecraft());
-    	int height = new net.minecraft.client.gui.ScaledResolution(Minecraft.getMinecraft()).getScaledHeight();
-		String out1 = "";
-        GameSettings gs = Minecraft.getMinecraft().gameSettings;
-        /* Obtain every pressed key and add it to a string */
-		for (net.minecraft.client.settings.KeyBinding binds : gs.keyBindings) {
-			try {
-				if (binds.isKeyDown()) out1 += org.lwjgl.input.Keyboard.getKeyName(binds.getKeyCode()) + " ";
-			} catch (Exception e3) {
-				
-			}
-		}
-		// Add left and right-click to the string if pressed.
-		if (gs.keyBindAttack.isKeyDown()) out1 += "LC ";
-		if (gs.keyBindUseItem.isKeyDown()) out1 += "RC ";
-		// Render the Keybinds onto the screen
-        renderer.drawStringWithShadow(out1, 5, height - 11, 0xFFFFFF);
-	}
-	
-	/**
-	 * Handles the timer and all other keybind events
-	 */
-	public static void onInput2() {
-		/* Handle all keybinds */
-		try {
-			KeybindsUtils.keyEvent(); // Trigger the KeybindsUtils method to handle most of the keybinds
-		} catch (Exception e1) {
-			e1.printStackTrace();
-		}
-		
-		// Timer keybinds
-		if (KeybindsUtils.toggleTimerKeybind.isPressed() && de.pfannekuchen.lotas.taschallenges.ChallengeMap.currentMap == null) { // Start/Stop the timer if there are no tas challenges running
-			if (Timer.ticks < 0 || Timer.startTime == null) { // Start the timer
-				Timer.startTime = Duration.ofMillis(System.currentTimeMillis());
-				Timer.ticks = 0;
-			}
-			Timer.running = !Timer.running; // Start/stop the timers state
-		}
-		
-		// Tickrate keybinds
-		if (KeybindsUtils.increaseTickrateKeybind.isPressed()) TickrateChangerMod.index++;
-		else if (KeybindsUtils.decreaseTickrateKeybind.isPressed()) TickrateChangerMod.index--;
-		else return;
-		TickrateChangerMod.index = MCVer.clamp(TickrateChangerMod.index, 0, 11); // Update the index of the recommended Tickrates array
-		TickrateChangerMod.updateTickrate(TickrateChangerMod.ticks[TickrateChangerMod.index]); // Update the Tickrate
-	}
 	
 	/**
 	 * Render Event triggered by MinecraftForge that renders all 3D stuff for LoTAS

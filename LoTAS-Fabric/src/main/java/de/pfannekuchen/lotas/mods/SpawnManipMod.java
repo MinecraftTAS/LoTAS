@@ -6,6 +6,7 @@ import java.util.List;
 import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.mixin.accessors.AccessorDimensionTypes;
 import de.pfannekuchen.lotas.mixin.accessors.AccessorMobEntity;
+import de.pfannekuchen.lotas.mods.SpawnManipMod.EntityOptions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -25,6 +26,7 @@ import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.monster.Ghast;
 import net.minecraft.world.entity.monster.Husk;
 import net.minecraft.world.entity.monster.MagmaCube;
+import net.minecraft.world.entity.monster.Phantom;
 import net.minecraft.world.entity.monster.Skeleton;
 import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.entity.monster.Spider;
@@ -86,11 +88,8 @@ public class SpawnManipMod {
 	public void confirm() {
 		if(canSpawn()) {
 			ServerLevel world=(ServerLevel) MCVer.getCurrentLevel();
-			int targetX=(int) Math.round(target.x-0.5);
-			int targetY=(int) Math.round(target.y);
-			int targetZ=(int) Math.round(target.z-0.5);
-			
-			entity.setPos(targetX, targetY, targetZ);
+			Vec3 target=getTargetPos();
+			entity.setPos(target.x+0.5, target.y, target.z+0.5);
 			world.addFreshEntity(entity);
 		}
 	}
@@ -188,12 +187,16 @@ public class SpawnManipMod {
 	}
 	
 	public static Vec3 getTargetPos() {
-		return target;
+		double targetX=Math.floor(target.x);
+		double targetY=Math.floor(target.y);
+		double targetZ=Math.floor(target.z);
+		
+		return new Vec3(targetX, targetY, targetZ);
 	}
 	
 	public List<EntityOptions> getManipList(){
 		List<EntityOptions> entities=new ArrayList<EntityOptions>();
-		//#if MC>=11600
+		//#if MC>=11601
 //$$ 		DimensionType dimension = MCVer.getCurrentLevel().dimensionType();
 		//#else
 		DimensionType dimension = MCVer.getCurrentLevel().getDimension().getType();
@@ -334,6 +337,37 @@ public class SpawnManipMod {
 			entities.add(new EntityOptions("Blaze", new Blaze(EntityType.BLAZE, world)));
 			entities.add(new EntityOptions("Ghast", new Ghast(EntityType.GHAST, world)));
 			entities.add(new EntityOptions("Magma Cube", new MagmaCube(EntityType.MAGMA_CUBE, world)));
+			//#if MC>=11600
+//$$ 			LivingEntity piglin=new net.minecraft.world.entity.monster.piglin.Piglin(EntityType.PIGLIN, world);
+//$$ 			piglin.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.GOLDEN_SWORD));
+//$$ 			((AccessorMobEntity)piglin).setHandDropChances(hand);
+//$$ 			entities.add(new EntityOptions("Piglin (Gold Sword)", piglin));
+//$$
+//$$ 			piglin=new net.minecraft.world.entity.monster.piglin.Piglin(EntityType.PIGLIN, world);
+//$$ 			piglin.setItemSlot(EquipmentSlot.FEET, new ItemStack(Items.GOLDEN_BOOTS));
+//$$ 			piglin.setItemSlot(EquipmentSlot.CHEST, new ItemStack(Items.GOLDEN_CHESTPLATE));
+//$$ 			piglin.setItemSlot(EquipmentSlot.LEGS, new ItemStack(Items.GOLDEN_LEGGINGS));
+//$$ 			piglin.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.GOLDEN_HELMET));
+//$$ 			piglin.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.GOLDEN_SWORD));
+//$$ 			((AccessorMobEntity)piglin).setArmorDropChances(armor);
+//$$ 			((AccessorMobEntity)piglin).setHandDropChances(hand);
+//$$ 			entities.add(new EntityOptions("Piglin (Gold Sword, Gold Armor)", piglin));
+//$$
+//$$ 			piglin=new net.minecraft.world.entity.monster.piglin.Piglin(EntityType.PIGLIN, world);
+//$$ 			piglin.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.CROSSBOW));
+//$$ 			((AccessorMobEntity)piglin).setHandDropChances(hand);
+//$$ 			entities.add(new EntityOptions("Piglin (Crossbow)", piglin));
+//$$
+//$$ 			piglin=new net.minecraft.world.entity.monster.piglin.Piglin(EntityType.PIGLIN, world);
+//$$ 			piglin.setItemSlot(EquipmentSlot.FEET, new ItemStack(Items.GOLDEN_BOOTS));
+//$$ 			piglin.setItemSlot(EquipmentSlot.CHEST, new ItemStack(Items.GOLDEN_CHESTPLATE));
+//$$ 			piglin.setItemSlot(EquipmentSlot.LEGS, new ItemStack(Items.GOLDEN_LEGGINGS));
+//$$ 			piglin.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.GOLDEN_HELMET));
+//$$ 			((AccessorMobEntity)piglin).setArmorDropChances(armor);
+//$$ 			((AccessorMobEntity)piglin).setHandDropChances(hand);
+//$$ 			piglin.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.CROSSBOW));
+//$$ 			entities.add(new EntityOptions("Piglin (Crossbow, Gold Armor)", piglin));
+			//#endif
 			LivingEntity entity = new Skeleton(EntityType.SKELETON, world);
 			entity.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.BOW));
 			entities.add(new EntityOptions("Skeleton", entity));
@@ -400,6 +434,27 @@ public class SpawnManipMod {
 			}
 		}else if(dimension==AccessorDimensionTypes.getEnd()) {
 			entities.add(new EntityOptions("Enderman", new EnderMan(EntityType.ENDERMAN, world)));
+		} else {
+			entities.add(new EntityOptions("Blaze", new Blaze(EntityType.BLAZE, world)));
+			entities.add(new EntityOptions("Cave Spider", new CaveSpider(EntityType.CAVE_SPIDER, world)));
+			entities.add(new EntityOptions("Creeper", new Creeper(EntityType.CREEPER, world)));
+			entities.add(new EntityOptions("Enderman", new EnderMan(EntityType.ENDERMAN, world)));
+			entities.add(new EntityOptions("Ghast", new Ghast(EntityType.GHAST, world)));
+			entities.add(new EntityOptions("Husk", new Husk(EntityType.HUSK, world)));
+			entities.add(new EntityOptions("Iron Golem", new IronGolem(EntityType.IRON_GOLEM, world)));
+			entities.add(new EntityOptions("Magma Cube", new MagmaCube(EntityType.MAGMA_CUBE, world)));
+			entities.add(new EntityOptions("Phantom", new Phantom(EntityType.PHANTOM, world)));
+			LivingEntity entity = new Skeleton(EntityType.SKELETON, world);
+			entity.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.BOW));
+			entities.add(new EntityOptions("Skeleton", entity));
+			entities.add(new EntityOptions("Slime", new Slime(EntityType.SLIME, world)));
+			entities.add(new EntityOptions("Spider", new Spider(EntityType.SPIDER, world)));
+			entities.add(new EntityOptions("Witch", new Witch(EntityType.WITCH, world)));
+			entity = new WitherSkeleton(EntityType.WITHER_SKELETON, world);
+			entity.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.STONE_SWORD));
+			entities.add(new EntityOptions("Wither Skeleton", entity));
+			entities.add(new EntityOptions("Zombie", new Zombie(world)));
+			entities.add(new EntityOptions("Zombievillager", new ZombieVillager(EntityType.ZOMBIE_VILLAGER, world)));
 		}
 		return entities;
 	}

@@ -5,12 +5,12 @@ import org.lwjgl.glfw.GLFW;
 import de.pfannekuchen.lotas.core.MCVer;
 
 /**
- * A LWJGL style keyboard method
+ * A LWJGL style mouse method
  * @author ScribbleLP
  */
-public class Keyboard {
+public class Mouse {
 
 	public static boolean isKeyDown(int keyCode) {
-		return GLFW.glfwGetKey(MCVer.getGLWindow().getWindow(), keyCode) == GLFW.GLFW_PRESS;
+		return GLFW.glfwGetMouseButton(MCVer.getGLWindow().getWindow(), keyCode) == GLFW.GLFW_PRESS;
 	}
 }

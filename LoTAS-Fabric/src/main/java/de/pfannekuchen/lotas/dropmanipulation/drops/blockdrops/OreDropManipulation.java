@@ -20,6 +20,9 @@ public class OreDropManipulation extends DropManipulationScreen.DropManipulation
 
 	public static SmallCheckboxWidget optimizeLapis = new SmallCheckboxWidget(0, 0, "Full Lapis Drops", false);
 	public static SmallCheckboxWidget optimizeRedstone = new SmallCheckboxWidget(0, 0, "Full Redstone Drops", false);
+	//#if MC>=11700
+//$$ 	public static SmallCheckboxWidget optimizeCopper = new SmallCheckboxWidget(0, 0, "Full Copper Drops", false);
+	//#endif
 
 	public OreDropManipulation(int x, int y, int width, int height) {
 		OreDropManipulation.x = x;
@@ -42,6 +45,18 @@ public class OreDropManipulation extends DropManipulationScreen.DropManipulation
 		} else if (block.defaultBlockState().getBlock() == Blocks.REDSTONE_ORE && optimizeRedstone.isChecked()) {
 			return ImmutableList.of(new ItemStack(Items.REDSTONE, 5));
 		}
+		//#if MC>=11700
+		//#if MC>=11800
+//$$ 		else if(block.defaultBlockState().getBlock() == Blocks.COPPER_ORE && optimizeCopper.isChecked()) {
+//$$ 			return ImmutableList.of(new ItemStack(Items.RAW_COPPER, 5));
+//$$ 		}
+		//#else
+//$$ 		else if(block.defaultBlockState().getBlock() == Blocks.COPPER_ORE && optimizeCopper.isChecked()) {
+//$$ 			return ImmutableList.of(new ItemStack(Items.RAW_COPPER, 3));
+//$$ 		}
+		//#endif
+		//#endif
+		
 		return ImmutableList.of();
 	}
 
@@ -58,6 +73,10 @@ public class OreDropManipulation extends DropManipulationScreen.DropManipulation
 		optimizeLapis.y = 80;
 		optimizeRedstone.x = x;
 		optimizeLapis.x = x;
+		//#if MC>=11700
+//$$ 		optimizeCopper.x = x;
+//$$ 		optimizeCopper.y = 96;
+		//#endif
 	}
 
 	@Override
@@ -66,6 +85,9 @@ public class OreDropManipulation extends DropManipulationScreen.DropManipulation
 		if (enabled.selected()) {
 			optimizeRedstone.mouseClicked(mouseX, mouseY, button);
 			optimizeLapis.mouseClicked(mouseX, mouseY, button);
+			//#if MC>=11700
+//$$ 			optimizeCopper.mouseClicked(mouseX, mouseY, button);
+			//#endif
 		}
 	}
 
@@ -78,6 +100,9 @@ public class OreDropManipulation extends DropManipulationScreen.DropManipulation
 		} else {
 			MCVer.render(optimizeRedstone, mouseX, mouseY, delta);
 			MCVer.render(optimizeLapis, mouseX, mouseY, delta);
+			//#if MC>=11700
+//$$ 			MCVer.render(optimizeCopper, mouseX, mouseY, delta);
+			//#endif
 		}
 
 		MCVer.bind(Minecraft.getInstance().getTextureManager(), new ResourceLocation("lotas", "drops/diamond_ore.png"));

@@ -3,13 +3,13 @@ plugins {
 }
 
 apply from: '../common.gradle'
-archivesBaseName = "LoTAS1.16.5"
+archivesBaseName = "LoTASinfinity"
 
 minecraft {
 	accessWidener '../../src/main/resources/lotas.accesswidener'
 }
 
 dependencies {
-	minecraft "com.mojang:minecraft:1.16.5"
+	minecraft "com.mojang:minecraft:20w14infinite"
 	mappings minecraft.officialMojangMappings()
 }

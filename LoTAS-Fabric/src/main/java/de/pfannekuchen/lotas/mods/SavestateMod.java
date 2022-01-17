@@ -99,7 +99,7 @@ public class SavestateMod {
 			e.printStackTrace();
 		}
 		
-		//#if MC>=11600
+		//#if MC>=11601
 //$$ 		mc.loadLevel(worldName);
 		//#else
 		mc.selectLevel(worldName, worldName, null);
@@ -167,16 +167,16 @@ public class SavestateMod {
 		}
 		mc.gui.getChat().clearMessages(true);
 
-		GLFW.glfwSetCursorPos(Minecraft.getInstance().window.getWindow(), x, y);
+		GLFW.glfwSetCursorPos(MCVer.getGLWindow().getWindow(), x, y);
 		mc.mouseHandler.turnPlayer();
 
-		//#if MC>=11600
+		//#if MC>=11601
 //$$ 		mc.loadLevel(worldName);
 		//#else
 		mc.selectLevel(worldName, worldName, null);
 		//#endif
 		
-		GLFW.glfwSetCursorPos(Minecraft.getInstance().window.getWindow(), x, y);
+		GLFW.glfwSetCursorPos(MCVer.getGLWindow().getWindow(), x, y);
 		mc.mouseHandler.turnPlayer();
 		System.gc();
 		TickrateChangerMod.updateTickrate(tickratesaved);

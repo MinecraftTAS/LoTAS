@@ -1,8 +1,10 @@
 package de.pfannekuchen.lotas.mixin;
 
 import java.io.IOException;
+import java.util.OptionalLong;
+import java.util.Properties;
+import java.util.UUID;
 
-import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -16,7 +18,6 @@ import de.pfannekuchen.lotas.core.LoTASModContainer;
 import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.core.utils.ConfigUtils;
 import de.pfannekuchen.lotas.core.utils.KeybindsUtils;
-import de.pfannekuchen.lotas.core.utils.Keyboard;
 import de.pfannekuchen.lotas.core.utils.Timer;
 import de.pfannekuchen.lotas.mods.AIManipMod;
 import de.pfannekuchen.lotas.mods.SavestateMod;
@@ -24,13 +25,19 @@ import de.pfannekuchen.lotas.mods.TickrateChangerMod;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
+import net.minecraft.client.gui.screens.GenericDirtMessageScreen;
 import net.minecraft.client.gui.screens.PauseScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.texture.DynamicTexture;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.Difficulty;
+import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.GameType;
+import net.minecraft.world.level.LevelSettings;
 
 /**
  * Changes to the Minecraft Classes
@@ -44,9 +51,6 @@ public class MixinMinecraftClient {
 
 	@Shadow
 	private LevelRenderer levelRenderer;
-
-	/** Index of the Tickrate Slider stored while Tick Advancing */
-	private int save;
 
 	@Shadow
 	private int rightClickDelay;
@@ -114,6 +118,7 @@ public class MixinMinecraftClient {
 			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "heck/potion.png"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("potion.png"))));
 			
 			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "drops/piglin.png"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("piglin.png"))));
+			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "drops/copper.png"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("copper.png"))));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -141,6 +146,22 @@ public class MixinMinecraftClient {
 			SavestateMod.savestate(null);
 		}
 
+		//#if MC>=11605
+//$$ 		if (LoTASModContainer.i != -1) {
+//$$ 			if (Minecraft.getInstance().level != null) {
+//$$ 				Minecraft.getInstance().getSingleplayerServer().halt(true);
+//$$ 			}
+//$$
+//$$ 			Minecraft.getInstance().forceSetScreen(new GenericDirtMessageScreen(new TranslatableComponent("createWorld.preparing")));
+//$$ 			LevelSettings levelSettings2;
+//$$ 			levelSettings2 = new LevelSettings(UUID.randomUUID().toString().substring(0, 10), GameType.CREATIVE, false, Difficulty.EASY, true, new GameRules(), net.minecraft.world.level.DataPackConfig.DEFAULT);
+//$$
+//$$ 			Minecraft.getInstance().createLevel(UUID.randomUUID().toString().substring(0, 10), levelSettings2, net.minecraft.core.RegistryAccess.RegistryHolder.builtin(), net.minecraft.world.level.levelgen.WorldGenSettings.create(net.minecraft.core.RegistryAccess.builtin(), new Properties()).withSeed(true, OptionalLong.of(LoTASModContainer.i)));
+//$$ 			LoTASModContainer.i = -1;
+//$$ 			System.gc();
+//$$ 		}
+		//#endif
+		
 		/* Auto Strafing */
 		if (player != null) {
 			//#if MC>=11600
@@ -198,35 +219,6 @@ public class MixinMinecraftClient {
 	}
  
 	/**
-	 * Moves the Player when in Freecam mode
-	 * @param strafe Direction
-	 * @param up to
-	 * @param forward move
-	 * @param friction to
-	 */
-	@Unique
-	private void move(float strafe, float up, float forward, float friction) {
-		float f = strafe * strafe + up * up + forward * forward;
-		if (f >= 1.0E-4F) {
-			f = Mth.sqrt(f);
-			if (f < 1.0F)
-				f = 1.0F;
-			f = friction / f;
-			strafe = strafe * f;
-			up = up * f;
-			forward = forward * f;
-			//#if MC>=11700
-//$$ 			float f1 = Mth.sin(player.getYRot() * 0.017453292F);
-//$$ 			float f2 = Mth.cos(player.getYRot() * 0.017453292F);
-			//#else
-			float f1 = Mth.sin(player.yRot * 0.017453292F);
-			float f2 = Mth.cos(player.yRot * 0.017453292F);
-			//#endif
-			MCVer.setXYZ(player, MCVer.getX(player) + (strafe * f2 - forward * f1), MCVer.getY(player) + up, MCVer.getZ(player) + (forward * f2 + strafe * f1));
-		}
-	}
-
-	/**
 	 * Called before every single frame
 	 */
 	@Inject(method = "runTick", at = @At(value = "HEAD"))
@@ -236,86 +228,8 @@ public class MixinMinecraftClient {
 			TickrateChangerMod.timeOffset += System.currentTimeMillis() - TickrateChangerMod.timeSinceZero;
 			TickrateChangerMod.timeSinceZero = System.currentTimeMillis();
 		}
-
-		/* Tickrate Zero Toggle */
-		if (KeybindsUtils.toggleAdvanceKeybind.consumeClick() && TickrateChangerMod.advanceClient == false && !KeybindsUtils.isFreecaming && screen == null) {
-			if (TickrateChangerMod.tickrate > 0) {
-				save = TickrateChangerMod.index;
-				TickrateChangerMod.updateTickrate(0);
-				TickrateChangerMod.index = 0;
-			} else {
-				TickrateChangerMod.updateTickrate(TickrateChangerMod.ticks[save]);
-				TickrateChangerMod.index = save;
-			}
-		}
-
-		/* Tickrate Zero */
-		if (TickrateChangerMod.tickrate == 0 && KeybindsUtils.advanceTicksKeybind.consumeClick() && !KeybindsUtils.isFreecaming) {
-			TickrateChangerMod.advanceTick();
-		}
-		/* Tickrate Changer */
-		boolean flag = false;
-		if (KeybindsUtils.increaseTickrateKeybind.consumeClick()) {
-			flag = true;
-			TickrateChangerMod.index++;
-		} else if (KeybindsUtils.decreaseTickrateKeybind.consumeClick()) {
-			flag = true;
-			TickrateChangerMod.index--;
-		}
-		if (flag) {
-			TickrateChangerMod.index = Mth.clamp(TickrateChangerMod.index, 0, 11);
-			TickrateChangerMod.updateTickrate(TickrateChangerMod.ticks[TickrateChangerMod.index]);
-		}
-
-		/* Escape using Freecam disables Freecam */
-		if (TickrateChangerMod.tickrate == 0 && screen == null && Keyboard.isKeyDown(GLFW.GLFW_KEY_ESCAPE)) {
-			((Minecraft) (Object) this).setScreen(new PauseScreen(true));
-			TickrateChangerMod.updateTickrate(KeybindsUtils.savedTickrate);
-			KeybindsUtils.isFreecaming = false;
-			Minecraft.getInstance().player.noPhysics = false;
-			levelRenderer.allChanged();
-		}
-
-		/* Freecam Movement */
-		if (KeybindsUtils.isFreecaming) {
-			if (options.keyUp.isDown()) {
-				move(0.0F, 0.0F, 0.91F, 1.0F);
-			}
-			if (options.keyDown.isDown()) {
-				move(0.0F, 0.0F, -0.91F, 1.0F);
-			}
-			if (options.keyLeft.isDown()) {
-				move(0.91F, 0.0F, 0.0F, 1.0F);
-			}
-			if (options.keyRight.isDown()) {
-				move(-0.91F, 0.0F, 0.0F, 1.0F);
-			}
-			if (options.keyJump.isDown()) {
-				move(0.0F, 0.92F, 0.0F, 1.0F);
-			}
-			//#if MC>=11500
-//$$ 			if (options.keyShift.isDown()) {
-			//#else
-			if (options.keySneak.isDown()) {
-			//#endif
-				move(0.0F, -0.92F, 0.0F, 1.0F);
-			}
-		}
-
-		/* Freecam Toggle */
-		if (KeybindsUtils.toggleFreecamKeybind.consumeClick() && Minecraft.getInstance().screen == null) {
-			if (KeybindsUtils.isFreecaming) {
-				KeybindsUtils.isFreecaming = false;
-				Minecraft.getInstance().player.noPhysics = false;
-				levelRenderer.allChanged();
-				TickrateChangerMod.updateTickrate(KeybindsUtils.savedTickrate);
-			} else {
-				KeybindsUtils.isFreecaming = true;
-				Minecraft.getInstance().player.noPhysics = true;
-				KeybindsUtils.savedTickrate = (int) TickrateChangerMod.tickrate;
-				TickrateChangerMod.updateTickrate(0);
-			}
-		}
+		
+		KeybindsUtils.frameKeyEvent();
 	}
 
 	/**
@@ -323,7 +237,7 @@ public class MixinMinecraftClient {
 	 */
 	@Inject(method = "handleKeybinds", at = @At("RETURN"), cancellable = true)
 	public void keyInputEvent(CallbackInfo ci) {
-		KeybindsUtils.keyEvent();
+		KeybindsUtils.tickKeyEvent();
 	}
 
 	/**
