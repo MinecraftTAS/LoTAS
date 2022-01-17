@@ -40,6 +40,3 @@ You will find the versions under the 1.14.4-1.18.1 folders under LoTAS-Fabric/ve
 
 ## Pushing
 Before Pushing, please switch to 1.12.2/1.14.4 again
-
-## Troubleshooting
-Yes we do understand that this setup is pretty jank... If you need help you can contact us under this discord https://discord.gg/sdMc5UrGPN and look for Pancake or Scribble
