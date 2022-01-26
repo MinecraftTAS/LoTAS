@@ -1,5 +1,8 @@
 package de.pfannekuchen.lotas.core.utils;
 
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.GameSettings;
 
@@ -11,14 +14,14 @@ public class KeystrokeUtils {
         /* Obtain every pressed key and add it to a string */
 		for (net.minecraft.client.settings.KeyBinding binds : gamesettings.keyBindings) {
 			try {
-				if (binds.isKeyDown()) out += org.lwjgl.input.Keyboard.getKeyName(binds.getKeyCode()) + " ";
+				if (Keyboard.isKeyDown(binds.getKeyCode())) out += org.lwjgl.input.Keyboard.getKeyName(binds.getKeyCode()) + " ";
 			} catch (Exception e3) {
 				
 			}
 		}
 		// Add left and right-click to the string if pressed.
-		if (gamesettings.keyBindAttack.isKeyDown()) out += "LC ";
-		if (gamesettings.keyBindUseItem.isKeyDown()) out += "RC ";
+		if (Mouse.isButtonDown(gamesettings.keyBindAttack.getKeyCode()+100)) out += "LC ";
+		if (Mouse.isButtonDown(gamesettings.keyBindUseItem.getKeyCode()+100)) out += "RC ";
 		
 		if(!out.isEmpty()) {
 			out=(String) out.subSequence(0, out.length()-1);
