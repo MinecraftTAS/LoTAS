@@ -13,6 +13,7 @@ import de.pfannkuchen.lotas.gui.widgets.ButtonLoWidget;
 import de.pfannkuchen.lotas.gui.widgets.WindowLoWidget;
 import de.pfannkuchen.lotas.mods.SavestateMod.State;
 import de.pfannkuchen.lotas.util.LoTASHelper;
+import de.pfannkuchen.lotas.util.ResourceManager;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.network.chat.TextComponent;
@@ -83,8 +84,13 @@ public class SavestatesLoWidget extends WindowLoWidget {
 			this.draw(stack, new TextComponent("Loadstate"), this.x+0.095+0.0065, this.y+0.1+i*0.1, 20, 0xff149b5b, false);
 			this.draw(stack, new TextComponent("Deletestate"), this.x+0.095+0.0724, this.y+0.1+i*0.1, 20, 0xff149b5b, false);
 			// Render image
-			if (s.texture != null) {
-				RenderSystem.setShaderTexture(0, s.texture);
+			if (this.mc.hasSingleplayerServer()) { // Savestate textures are not supported on multiplayer servers
+				if (s.texture != null && this.mc.hasSingleplayerServer()) {
+					RenderSystem.setShaderTexture(0, s.texture);
+					this.render(stack, this.x+0.011, this.y+0.045+i*0.1, 0.079, 0.079, 0, 0);
+				}
+			} else {
+				RenderSystem.setShaderTexture(0, ResourceManager.UNSUPPORTED);
 				this.render(stack, this.x+0.011, this.y+0.045+i*0.1, 0.079, 0.079, 0, 0);
 			}
 		}
