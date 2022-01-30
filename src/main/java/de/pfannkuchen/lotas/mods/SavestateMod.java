@@ -209,6 +209,7 @@ public class SavestateMod {
 	 */
 	@Environment(EnvType.CLIENT)
 	public void onRender() {
+		if (!this.mc.hasSingleplayerServer()) return; // Savestate textures are not supported on multiplayer servers
 		if (!this.shouldReload) return;
 		this.shouldReload = false;
 		RenderSystem.recordRenderCall(() -> {

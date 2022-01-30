@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import de.pfannkuchen.lotas.loscreen.LoScreenManager;
 import de.pfannkuchen.lotas.mods.KeybindManager;
 import de.pfannkuchen.lotas.util.InternalTimer;
+import de.pfannkuchen.lotas.util.ResourceManager;
 import de.pfannkuchen.lotas.videorecorder.RecorderMod;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
@@ -48,6 +49,8 @@ public class ClientLoTAS implements ClientModInitializer {
 	 * @param mc Instance of minecraft
 	 */
 	public void onRenderInitialize(Minecraft mc) {
+		// Load Textures
+		ResourceManager.load(mc);
 		// Initialize LoScreens
 		ClientLoTAS.loscreenmanager.onGameInitialize(mc);
 		// Update Tickrate Changer Minecraft Instance
