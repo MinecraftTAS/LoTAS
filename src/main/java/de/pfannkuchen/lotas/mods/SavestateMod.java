@@ -223,9 +223,17 @@ public class SavestateMod {
 						n.setPixelRGBA(i, j, img.getRGB(i, j));
 					}
 				}
-				this.mc.getTextureManager().register(s.texture = new ResourceLocation("lotas", (s.name + s.timestamp).replace(' ', '_').replaceAll("[^a-z0-9_.-]", "")), new DynamicTexture(n));
+				recreateTexture(n, s);
 			}
 		});
+	}
+	
+	/**
+	 * Registers the texture
+	 */
+	@Environment(EnvType.CLIENT)
+	public void recreateTexture(NativeImage n, State s) {
+		this.mc.getTextureManager().register(s.texture = new ResourceLocation("lotas", (s.name + s.timestamp).replace(' ', '_').replaceAll("[^a-z0-9_.-]", "")), new DynamicTexture(n));
 	}
 
 
