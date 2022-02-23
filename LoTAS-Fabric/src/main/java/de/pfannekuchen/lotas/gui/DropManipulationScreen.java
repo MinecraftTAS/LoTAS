@@ -32,6 +32,7 @@ import net.minecraft.client.gui.components.Checkbox;
 import net.minecraft.client.gui.screens.PauseScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
@@ -239,7 +240,7 @@ public class DropManipulationScreen extends Screen {
 
 		public abstract List<ItemStack> redirectDrops(BlockState block);
 
-		public abstract List<ItemStack> redirectDrops(Entity entity);
+		public abstract List<ItemStack> redirectDrops(Entity entity, int lootingBonus);
 
 		public abstract void update();
 

@@ -9,6 +9,8 @@ import de.pfannekuchen.lotas.gui.DropManipulationScreen;
 import de.pfannekuchen.lotas.gui.widgets.SmallCheckboxWidget;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.CaveSpider;
@@ -25,6 +27,8 @@ import net.minecraft.world.entity.monster.Vindicator;
 import net.minecraft.world.entity.monster.Witch;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class MonsterDropManipulation extends DropManipulationScreen.DropManipulation {
@@ -60,35 +64,35 @@ public class MonsterDropManipulation extends DropManipulationScreen.DropManipula
 	}
 
 	@Override
-	public List<ItemStack> redirectDrops(Entity entity) {
+	public List<ItemStack> redirectDrops(Entity entity, int lootingBonus) {
+		
+		
 		if (entity instanceof CaveSpider && optimizeCaveSpider.isChecked())
-			return ImmutableList.of(new ItemStack(Items.SPIDER_EYE), new ItemStack(Items.STRING, 2));
+			return ImmutableList.of(new ItemStack(Items.SPIDER_EYE), new ItemStack(Items.STRING, 2 + lootingBonus));
 		if (entity instanceof Creeper && optimizeCreeper.isChecked())
-			return ImmutableList.of(new ItemStack(Items.GUNPOWDER, 2));
+			return ImmutableList.of(new ItemStack(Items.GUNPOWDER, 2 + lootingBonus));
 		if (entity instanceof ElderGuardian && optimizeElderGuardian.isChecked())
-			return ImmutableList.of(new ItemStack(Items.PRISMARINE_CRYSTALS, 1), new ItemStack(Items.PRISMARINE_SHARD, 2), new ItemStack(Items.WET_SPONGE), new ItemStack(Items.PUFFERFISH));
+			return ImmutableList.of(new ItemStack(Items.PRISMARINE_CRYSTALS, 1 + lootingBonus), new ItemStack(Items.PRISMARINE_SHARD, 2 + lootingBonus), new ItemStack(Items.WET_SPONGE), new ItemStack(Items.PUFFERFISH, 1 + lootingBonus));
 		if (entity instanceof EnderMan && optimizeEnderman.isChecked())
-			return ImmutableList.of(new ItemStack(Items.ENDER_PEARL, 1));
+			return ImmutableList.of(new ItemStack(Items.ENDER_PEARL, 1 + lootingBonus));
 		if (entity instanceof Phantom && optimizePhantom.isChecked())
-			return ImmutableList.of(new ItemStack(Items.PHANTOM_MEMBRANE, 1));
+			return ImmutableList.of(new ItemStack(Items.PHANTOM_MEMBRANE, 1 + lootingBonus));
 		if ((entity instanceof Skeleton || entity instanceof Stray) && optimizeSkeleton.isChecked())
-			return ImmutableList.of(new ItemStack(Items.ARROW, 2), new ItemStack(Items.BONE, 2));
-		if (entity instanceof Slime && optimizeSlime.isChecked())
+			return ImmutableList.of(new ItemStack(Items.ARROW, 2 + lootingBonus), new ItemStack(Items.BONE, 2 + lootingBonus));
+		if (entity instanceof Slime && optimizeSlime.isChecked()) {
 			if (((Slime) entity).getSize() == 1) {
-				return ImmutableList.of(new ItemStack(Items.SLIME_BALL, 2));
+				return ImmutableList.of(new ItemStack(Items.SLIME_BALL, 2 + lootingBonus));
 			}
-		if (entity instanceof Slime && optimizeSlime.isChecked())
-			if (((Slime) entity).getSize() == 1)
-				return ImmutableList.of(new ItemStack(Items.SLIME_BALL, 2));
+		}
 		if (entity instanceof Vindicator && optimizeVindicator.isChecked())
-			return ImmutableList.of(new ItemStack(Items.EMERALD, 1));
+			return ImmutableList.of(new ItemStack(Items.EMERALD, 1+lootingBonus));
 		if (entity instanceof Guardian && optimizeGuardian.isChecked())
-			return ImmutableList.of(new ItemStack(Items.PRISMARINE_SHARD, 2));
+			return ImmutableList.of(new ItemStack(Items.PRISMARINE_SHARD, 2+lootingBonus));
 		if (entity instanceof Shulker && optimizeShulker.isChecked())
-			return ImmutableList.of(new ItemStack(Items.SHULKER_SHELL, 1));
+			return ImmutableList.of(new ItemStack(Items.SHULKER_SHELL, 1+lootingBonus));
 		if (entity instanceof Witch && optimizeWitch.isChecked()) {
 			if (!((LivingEntity) entity).isBaby())
-				return ImmutableList.of(new ItemStack(Items.GLOWSTONE_DUST), new ItemStack(Items.STICK), new ItemStack(Items.REDSTONE), new ItemStack(Items.GUNPOWDER), new ItemStack(Items.GLASS_BOTTLE), new ItemStack(Items.SPIDER_EYE));
+				return ImmutableList.of(new ItemStack(Items.GLOWSTONE_DUST, 1+lootingBonus), new ItemStack(Items.STICK, 1+lootingBonus), new ItemStack(Items.REDSTONE, 1+lootingBonus), new ItemStack(Items.GUNPOWDER, 1+lootingBonus), new ItemStack(Items.GLASS_BOTTLE, 1+lootingBonus), new ItemStack(Items.SPIDER_EYE, 1+lootingBonus));
 		}
 		return ImmutableList.of();
 	}

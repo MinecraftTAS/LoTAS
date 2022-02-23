@@ -46,10 +46,10 @@ public class DrownedDropManipulation extends DropManipulationScreen.DropManipula
 	}
 
 	@Override
-	public List<ItemStack> redirectDrops(Entity entity) {
+	public List<ItemStack> redirectDrops(Entity entity, int looting) {
 		List<ItemStack> list = new ArrayList<>();
 		if (entity instanceof Drowned) {
-			list.add(new ItemStack(Items.ROTTEN_FLESH, 2));
+			list.add(new ItemStack(Items.ROTTEN_FLESH, 2+looting));
 
 			if (drops.isToggled())
 				//#if MC>=11700

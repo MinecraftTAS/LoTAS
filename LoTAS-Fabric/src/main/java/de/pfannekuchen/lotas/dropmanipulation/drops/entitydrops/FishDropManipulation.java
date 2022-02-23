@@ -46,17 +46,17 @@ public class FishDropManipulation extends DropManipulationScreen.DropManipulatio
 	}
 
 	@Override
-	public List<ItemStack> redirectDrops(Entity entity) {
+	public List<ItemStack> redirectDrops(Entity entity, int lootingBonus) {
 		if (entity instanceof Cod && optimizeCod.isChecked())
-			return ImmutableList.of(new ItemStack(Items.COD), new ItemStack(Items.BONE_MEAL, 1));
+			return ImmutableList.of(new ItemStack(Items.COD), new ItemStack(Items.BONE_MEAL, 1+lootingBonus));
 		if (entity instanceof Salmon && optimizeSalmon.isChecked())
-			return ImmutableList.of(new ItemStack(Items.SALMON), new ItemStack(Items.BONE_MEAL, 1));
+			return ImmutableList.of(new ItemStack(Items.SALMON), new ItemStack(Items.BONE_MEAL, 1+lootingBonus));
 		if (entity instanceof Dolphin && optimizeDolphin.isChecked())
 			return ImmutableList.of(new ItemStack(Items.COD));
 		if (entity instanceof Pufferfish && optimizePufferfish.isChecked())
-			return ImmutableList.of(new ItemStack(Items.PUFFERFISH, 1), new ItemStack(Items.BONE_MEAL, 1));
+			return ImmutableList.of(new ItemStack(Items.PUFFERFISH, 1), new ItemStack(Items.BONE_MEAL, 1+lootingBonus));
 		if (entity instanceof TropicalFish && optimizeTropical.isChecked())
-			return ImmutableList.of(new ItemStack(Items.TROPICAL_FISH, 1), new ItemStack(Items.BONE_MEAL, 1));
+			return ImmutableList.of(new ItemStack(Items.TROPICAL_FISH, 1), new ItemStack(Items.BONE_MEAL, 1+lootingBonus));
 		return ImmutableList.of();
 	}
 

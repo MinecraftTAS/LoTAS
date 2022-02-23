@@ -46,9 +46,9 @@ public abstract class MixinGuiMainMenu extends Screen {
 		MCVer.addButton(this, MCVer.Button(this.width / 2 - 100, y, 200, 20, I18n.get("menu.singleplayer"), (Button) -> {
 			Minecraft.getInstance().setScreen(new SelectWorldScreen(this));
 		}));
-		MCVer.addButton(this, MCVer.Button(this.width / 2 - 100, y + spacingY * 1, 200, 20, I18n.get("Video Upspeeder"), (Button) -> {
-			Minecraft.getInstance().setScreen(new VideoUpspeederScreen());
-		}));
+		MCVer.addButton(this, MCVer.Button(this.width / 2 - 100, y + spacingY * 1, 200, 20, I18n.get("LoTAS doesn't work in multiplayer :("), (Button) -> {
+			
+		})).active=false;
 		MCVer.addButton(this, MCVer.Button(this.width / 2 - 100, y + spacingY * 2, 200, 20, I18n.get("Configuration"), (Button) -> {
 			Minecraft.getInstance().setScreen(new ConfigurationScreen());
 		}));

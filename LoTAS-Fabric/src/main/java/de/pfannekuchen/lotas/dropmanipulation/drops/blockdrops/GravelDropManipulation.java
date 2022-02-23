@@ -9,6 +9,7 @@ import de.pfannekuchen.lotas.gui.DropManipulationScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -63,7 +64,7 @@ public class GravelDropManipulation extends DropManipulationScreen.DropManipulat
 	}
 
 	@Override
-	public List<ItemStack> redirectDrops(Entity entity) {
+	public List<ItemStack> redirectDrops(Entity entity, int lootingBonus) {
 		return ImmutableList.of();
 	}
 

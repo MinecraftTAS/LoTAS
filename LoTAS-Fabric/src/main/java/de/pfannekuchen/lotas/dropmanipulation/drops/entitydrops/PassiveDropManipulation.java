@@ -73,35 +73,35 @@ public class PassiveDropManipulation extends DropManipulationScreen.DropManipula
 	}
 
 	@Override
-	public List<ItemStack> redirectDrops(Entity entity) {
+	public List<ItemStack> redirectDrops(Entity entity, int lootingBonus) {
 		if (entity instanceof Chicken && optimizeChicken.isChecked()) {
 			if (!((LivingEntity) entity).isBaby())
-				return ImmutableList.of(new ItemStack(Items.FEATHER, 2), entity.isOnFire() ? new ItemStack(Items.COOKED_CHICKEN) : new ItemStack(Items.CHICKEN));
+				return ImmutableList.of(new ItemStack(Items.FEATHER, 2+lootingBonus), entity.isOnFire() ? new ItemStack(Items.COOKED_CHICKEN, 1+lootingBonus) : new ItemStack(Items.CHICKEN, 1+lootingBonus));
 		} else if (entity instanceof Cow && optimizeCow.isChecked()) {
 			if (!((LivingEntity) entity).isBaby())
-				return ImmutableList.of(new ItemStack(Items.LEATHER), entity.isOnFire() ? new ItemStack(Items.COOKED_BEEF, 3) : new ItemStack(Items.BEEF, 3));
+				return ImmutableList.of(new ItemStack(Items.LEATHER, 1+lootingBonus), entity.isOnFire() ? new ItemStack(Items.COOKED_BEEF, 3+lootingBonus) : new ItemStack(Items.BEEF, 3+lootingBonus));
 		} else if (entity instanceof MushroomCow && optimizeMooshroom.isChecked()) {
 			if (!((LivingEntity) entity).isBaby())
-				return ImmutableList.of(new ItemStack(Items.LEATHER, 2), entity.isOnFire() ? new ItemStack(Items.COOKED_BEEF, 3) : new ItemStack(Items.BEEF, 3));
+				return ImmutableList.of(new ItemStack(Items.LEATHER, 2+lootingBonus), entity.isOnFire() ? new ItemStack(Items.COOKED_BEEF, 3+lootingBonus) : new ItemStack(Items.BEEF, 3+lootingBonus));
 		} else if (entity instanceof SkeletonHorse && optimizeSkeletonhorse.isChecked()) {
 			if (!((LivingEntity) entity).isBaby())
-				return ImmutableList.of(new ItemStack(Items.BONE, 2));
+				return ImmutableList.of(new ItemStack(Items.BONE, 2+lootingBonus));
 		} else if (entity instanceof Cat && optimizeCat.isChecked()) {
 			if (!((LivingEntity) entity).isBaby())
-				return ImmutableList.of(new ItemStack(Items.STRING, 2));
+				return ImmutableList.of(new ItemStack(Items.STRING, 2+lootingBonus));
 		} else if (entity instanceof Pig && optimizePig.isChecked()) {
 			if (!((LivingEntity) entity).isBaby())
-				return ImmutableList.of(entity.isOnFire() ? new ItemStack(Items.COOKED_PORKCHOP, 3) : new ItemStack(Items.PORKCHOP, 3));
+				return ImmutableList.of(entity.isOnFire() ? new ItemStack(Items.COOKED_PORKCHOP, 3+lootingBonus) : new ItemStack(Items.PORKCHOP, 3+lootingBonus));
 		} else if (entity instanceof Parrot && optimizeParrot.isChecked()) {
 			if (!((LivingEntity) entity).isBaby())
-				return ImmutableList.of(new ItemStack(Items.FEATHER, 2));
+				return ImmutableList.of(new ItemStack(Items.FEATHER, 2+lootingBonus));
 		} else if (entity instanceof Rabbit && optimizeRabbit.isChecked()) {
 			if (!((LivingEntity) entity).isBaby())
-				return ImmutableList.of(new ItemStack(Items.RABBIT_FOOT, 1), new ItemStack(Items.RABBIT_HIDE, 1), entity.isOnFire() ? new ItemStack(Items.COOKED_RABBIT) : new ItemStack(Items.RABBIT));
+				return ImmutableList.of(new ItemStack(Items.RABBIT_FOOT, 1+lootingBonus), new ItemStack(Items.RABBIT_HIDE, 1+lootingBonus), entity.isOnFire() ? new ItemStack(Items.COOKED_RABBIT, 1+lootingBonus) : new ItemStack(Items.RABBIT, 1+lootingBonus));
 		} else if (entity instanceof Sheep && optimizeSheep.isChecked()) {
 			if (!((LivingEntity) entity).isBaby()) {
 				try {
-					return ImmutableList.of(entity.isOnFire() ? new ItemStack(Items.COOKED_MUTTON, 3) : new ItemStack(Items.MUTTON, 3), new ItemStack((Item) Items.class.getField(((Sheep) entity).getColor().name() + "_WOOL").get(null)));
+					return ImmutableList.of(entity.isOnFire() ? new ItemStack(Items.COOKED_MUTTON, 3+lootingBonus) : new ItemStack(Items.MUTTON, 3+lootingBonus), new ItemStack((Item) Items.class.getField(((Sheep) entity).getColor().name() + "_WOOL").get(null)));
 				} catch (IllegalAccessException e) {
 					e.printStackTrace();
 				} catch (NoSuchFieldException e) {
@@ -113,22 +113,22 @@ public class PassiveDropManipulation extends DropManipulationScreen.DropManipula
 				return ImmutableList.of(new ItemStack(Items.SNOWBALL, 15));
 		} else if (entity instanceof Squid && optimizeSquid.isChecked()) {
 			if (!((LivingEntity) entity).isBaby())
-				return ImmutableList.of(new ItemStack(Items.INK_SAC, 3));
+				return ImmutableList.of(new ItemStack(Items.INK_SAC, 3+lootingBonus));
 		} else if ((entity instanceof Horse || entity instanceof Mule || entity instanceof Donkey || entity instanceof Llama || entity instanceof TraderLlama) && optimizeHorses.isChecked()) {
 			if (!((LivingEntity) entity).isBaby())
-				return ImmutableList.of(new ItemStack(Items.LEATHER, 2));
+				return ImmutableList.of(new ItemStack(Items.LEATHER, 2+lootingBonus));
 		} else if (entity instanceof ZombieHorse && optimizeHorses.isChecked()) {
 			if (!((LivingEntity) entity).isBaby())
-				return ImmutableList.of(new ItemStack(Items.ROTTEN_FLESH, 2));
+				return ImmutableList.of(new ItemStack(Items.ROTTEN_FLESH, 2+lootingBonus));
 		} else if (entity instanceof Turtle && optimizeTurtle.isChecked()) {
 			if (!((LivingEntity) entity).isBaby())
-				return ImmutableList.of(new ItemStack(Items.SEAGRASS, 2));
+				return ImmutableList.of(new ItemStack(Items.SEAGRASS, 2+lootingBonus));
 		} else if (entity instanceof IronGolem && optimizeIronGolem.isChecked()) {
 			if (!((LivingEntity) entity).isBaby())
 				return ImmutableList.of(new ItemStack(Items.IRON_INGOT, 5), new ItemStack(Items.POPPY));
 		} else if (entity instanceof PolarBear && optimizePolarbear.isChecked()) {
 			if (!((LivingEntity) entity).isBaby())
-				return ImmutableList.of(new ItemStack(Items.COD, 2));
+				return ImmutableList.of(new ItemStack(Items.COD, 2+lootingBonus));
 		}
 		return ImmutableList.of();
 	}

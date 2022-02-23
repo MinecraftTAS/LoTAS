@@ -40,8 +40,8 @@ public abstract class MixinGuiMainMenu extends GuiScreen {
 
 	@Inject(at = @At("RETURN"), method = "addSingleplayerMultiplayerButtons")
 	public void redoaddSingleplayerMultiplayerButtons(int p_73969_1_, int p_73969_2_, CallbackInfo ci) {
-		this.buttonList.get(1).id = 24;
-		this.buttonList.get(1).displayString = "Speed up Video";
+		this.buttonList.get(1).enabled=false;
+		this.buttonList.get(1).displayString = "LoTAS doesn't work in multiplayer :(";
 		
 		//#if MC>=10900
 		this.modButton.width = this.buttonList.get(1).width;

@@ -45,21 +45,21 @@ public class NetherMobDropManipulation extends DropManipulationScreen.DropManipu
 	}
 
 	@Override
-	public List<ItemStack> redirectDrops(Entity entity) {
+	public List<ItemStack> redirectDrops(Entity entity, int lootingBonus) {
 		if (entity instanceof Blaze && optimizeBlaze.isChecked())
-			return ImmutableList.of(new ItemStack(Items.BLAZE_ROD));
+			return ImmutableList.of(new ItemStack(Items.BLAZE_ROD, 1+lootingBonus));
 		if (entity instanceof Ghast && optimizeGhast.isChecked())
-			return ImmutableList.of(new ItemStack(Items.GHAST_TEAR), new ItemStack(Items.GUNPOWDER, 2));
+			return ImmutableList.of(new ItemStack(Items.GHAST_TEAR, 1+lootingBonus), new ItemStack(Items.GUNPOWDER, 2+lootingBonus));
 		if (entity instanceof WitherSkeleton && optimizeWitherskeleton.isChecked())
-			return ImmutableList.of(new ItemStack(Items.COAL, 1), new ItemStack(Items.BONE, 2), new ItemStack(Items.WITHER_SKELETON_SKULL));
+			return ImmutableList.of(new ItemStack(Items.COAL, 1+lootingBonus), new ItemStack(Items.BONE, 2+lootingBonus), new ItemStack(Items.WITHER_SKELETON_SKULL));
 		//#if MC>=11600
-//$$ 		if (entity instanceof net.minecraft.world.entity.monster.ZombifiedPiglin && optimizePigman.isChecked()) if (!((net.minecraft.world.entity.monster.ZombifiedPiglin) entity).isBaby()) return ImmutableList.of(new ItemStack(Items.ROTTEN_FLESH, 2), new ItemStack(Items.GOLD_NUGGET), new ItemStack(Items.GOLD_INGOT));
+//$$ 		if (entity instanceof net.minecraft.world.entity.monster.ZombifiedPiglin && optimizePigman.isChecked()) if (!((net.minecraft.world.entity.monster.ZombifiedPiglin) entity).isBaby()) return ImmutableList.of(new ItemStack(Items.ROTTEN_FLESH, 2+lootingBonus), new ItemStack(Items.GOLD_NUGGET, 1+lootingBonus), new ItemStack(Items.GOLD_INGOT, 1+lootingBonus));
 		//#else
-		if (entity instanceof net.minecraft.world.entity.monster.PigZombie && optimizePigman.isChecked()) if (!((net.minecraft.world.entity.monster.PigZombie) entity).isBaby()) return ImmutableList.of(new ItemStack(Items.ROTTEN_FLESH, 2), new ItemStack(Items.GOLD_NUGGET), new ItemStack(Items.GOLD_INGOT));
+		if (entity instanceof net.minecraft.world.entity.monster.PigZombie && optimizePigman.isChecked()) if (!((net.minecraft.world.entity.monster.PigZombie) entity).isBaby()) return ImmutableList.of(new ItemStack(Items.ROTTEN_FLESH, 2+lootingBonus), new ItemStack(Items.GOLD_NUGGET, 1+lootingBonus), new ItemStack(Items.GOLD_INGOT, 1+lootingBonus));
 		//#endif
 		if (entity instanceof MagmaCube && optimizeMagmaCube.isChecked())
 			if (((MagmaCube) entity).getSize() != 1)
-				return ImmutableList.of(new ItemStack(Items.MAGMA_CREAM));
+				return ImmutableList.of(new ItemStack(Items.MAGMA_CREAM, 1+lootingBonus));
 
 		return ImmutableList.of();
 	}
