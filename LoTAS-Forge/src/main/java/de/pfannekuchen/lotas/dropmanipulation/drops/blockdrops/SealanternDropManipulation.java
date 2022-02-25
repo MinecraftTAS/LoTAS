@@ -60,7 +60,7 @@ public class SealanternDropManipulation extends GuiDropChanceManipulation.DropMa
     }
 
     @Override
-    public List<ItemStack> redirectDrops(Entity entity) {
+    public List<ItemStack> redirectDrops(Entity entity, int lootingValue) {
         return ImmutableList.of();
     }
 

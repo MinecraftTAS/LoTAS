@@ -125,7 +125,7 @@ public class PassiveDropManipulation extends DropManipulationScreen.DropManipula
 				return ImmutableList.of(new ItemStack(Items.SEAGRASS, 2+lootingBonus));
 		} else if (entity instanceof IronGolem && optimizeIronGolem.isChecked()) {
 			if (!((LivingEntity) entity).isBaby())
-				return ImmutableList.of(new ItemStack(Items.IRON_INGOT, 5), new ItemStack(Items.POPPY));
+				return ImmutableList.of(new ItemStack(Items.IRON_INGOT, 5), new ItemStack(Items.POPPY, 2));
 		} else if (entity instanceof PolarBear && optimizePolarbear.isChecked()) {
 			if (!((LivingEntity) entity).isBaby())
 				return ImmutableList.of(new ItemStack(Items.COD, 2+lootingBonus));

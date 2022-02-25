@@ -68,7 +68,7 @@ public abstract class MixinGuiWorldSelection extends GuiScreen {
 	public void injectinitGui(CallbackInfo ci) {
 		this.buttonList.add(new GuiButton(16, 5, 5, 98, 20, "Seeds"));
 		this.buttonList.add(new GuiCheckBox(17, width - 17 - MCVer.getFontRenderer(mc).getStringWidth("Open ESC when joining world"), 4, "Open ESC when joining world", ConfigUtils.getBoolean("tools", "hitEscape")));
-		this.buttonList.add(new GuiCheckBox(18, width - 17 - MCVer.getFontRenderer(mc).getStringWidth("Open ESC when joining world"), 16, "Show TAS Challenge Maps", !ConfigUtils.getBoolean("tools", "hideMaps")));
+		this.buttonList.add(new GuiCheckBox(18, width - 17 - MCVer.getFontRenderer(mc).getStringWidth("Open ESC when joining world"), 16, "Show TAS Challenge Maps", ConfigUtils.getBoolean("tools", "hideMaps")));
 	}
 	
 	// Workaround cuz of Mixin

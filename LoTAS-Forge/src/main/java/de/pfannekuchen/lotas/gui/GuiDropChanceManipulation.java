@@ -150,7 +150,7 @@ public class GuiDropChanceManipulation extends GuiScreen {
 		public CheckboxWidget enabled;
 		public abstract String getName();
 		public abstract List<ItemStack> redirectDrops(IBlockState block);
-		public abstract List<ItemStack> redirectDrops(Entity entity);
+		public abstract List<ItemStack> redirectDrops(Entity entity, int lootingValue);
 		public abstract void update();
 		public abstract void mouseAction(int mouseX, int mouseY, int button);
 		public abstract void render(int mouseX, int mouseY, float delta);

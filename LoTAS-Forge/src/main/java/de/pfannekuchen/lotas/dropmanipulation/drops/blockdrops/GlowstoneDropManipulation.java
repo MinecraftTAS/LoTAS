@@ -72,7 +72,7 @@ public class GlowstoneDropManipulation extends GuiDropChanceManipulation.DropMan
     }
 
     @Override
-    public List<ItemStack> redirectDrops(Entity entity) {
+    public List<ItemStack> redirectDrops(Entity entity, int lootingValue) {
         return ImmutableList.of();
     }
 
