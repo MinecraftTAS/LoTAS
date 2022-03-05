@@ -1,7 +1,7 @@
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-version = "2.0.1"
+version = "2.0.2"
 group = "de.pfannekuchen.lotas"
 archivesBaseName = "lotas"
 
@@ -16,12 +16,8 @@ configurations {
 }
 
 dependencies {
-    implementation 'org.projectlombok:lombok:1.16.4'
-    include 'net.bramp.ffmpeg:ffmpeg:2.8.0-21.0'
-    include 'org.slf4j:slf4j-api:1.7.25'
+	implementation 'org.projectlombok:lombok:1.16.4'
     include 'com.google.code.findbugs:annotations:3.0.1u2'
-    include 'com.google.errorprone:error_prone_annotations:2.0.19'
-    include 'org.modelmapper:modelmapper:0.7.7'
     modImplementation "net.fabricmc:fabric-loader:0.12.12"
 }
 

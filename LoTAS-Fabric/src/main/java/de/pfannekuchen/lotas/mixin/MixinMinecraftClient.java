@@ -12,6 +12,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import com.google.gson.JsonObject;
 import com.mojang.blaze3d.platform.NativeImage;
 
 import de.pfannekuchen.lotas.core.LoTASModContainer;
@@ -155,8 +156,13 @@ public class MixinMinecraftClient {
 //$$ 			Minecraft.getInstance().forceSetScreen(new GenericDirtMessageScreen(new TranslatableComponent("createWorld.preparing")));
 //$$ 			LevelSettings levelSettings2;
 //$$ 			levelSettings2 = new LevelSettings(UUID.randomUUID().toString().substring(0, 10), GameType.CREATIVE, false, Difficulty.EASY, true, new GameRules(), net.minecraft.world.level.DataPackConfig.DEFAULT);
-//$$
+			//#if MC>=11802
+//$$ 			net.minecraft.server.dedicated.DedicatedServerProperties.WorldGenProperties properties=new net.minecraft.server.dedicated.DedicatedServerProperties.WorldGenProperties(Long.toString(LoTASModContainer.i), new JsonObject(), true, "default");
+//$$ 			Minecraft.getInstance().createLevel(UUID.randomUUID().toString().substring(0, 10), levelSettings2, net.minecraft.core.RegistryAccess.BUILTIN.get(), net.minecraft.world.level.levelgen.WorldGenSettings.create((net.minecraft.core.RegistryAccess)net.minecraft.core.RegistryAccess.BUILTIN.get(), properties));
+			//#else
 //$$ 			Minecraft.getInstance().createLevel(UUID.randomUUID().toString().substring(0, 10), levelSettings2, net.minecraft.core.RegistryAccess.RegistryHolder.builtin(), net.minecraft.world.level.levelgen.WorldGenSettings.create(net.minecraft.core.RegistryAccess.builtin(), new Properties()).withSeed(true, OptionalLong.of(LoTASModContainer.i)));
+			//#endif
+//$$
 //$$ 			LoTASModContainer.i = -1;
 //$$ 			System.gc();
 //$$ 		}
