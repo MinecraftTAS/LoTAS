@@ -28,8 +28,8 @@ public class TextFieldLoWidget extends LoScreen {
 	private static final int FOCUS_BACKGROUND_COLOR = 0xff1b1c21;
 
 	// Position of the text field
-	double x;
-	double y;
+	public double x;
+	public double y;
 	// Length of the text field
 	double length;
 	// Content of the text field
