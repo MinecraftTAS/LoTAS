@@ -492,8 +492,8 @@ public class SavestateMod {
 	 */
 	@Environment(EnvType.CLIENT)
 	public void onDisconnect() {
-		this.shouldReload = true;
-		this.unload = this.states;
+//		this.shouldReload = true;
+//		this.unload = this.states;
 		this.states = new State[0];
 	}
 
