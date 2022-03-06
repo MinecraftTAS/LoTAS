@@ -71,6 +71,21 @@ public class SavestatesLoWidget extends WindowLoWidget {
 		SavestatesLoWidget.offset = Mth.clamp(SavestatesLoWidget.offset, 0, (LoTAS.savestatemod.getStateCount() - 6 < 0) ? 0 : LoTAS.savestatemod.getStateCount() - 6);
 		super.scroll(scroll);
 	}
+	
+	@Override
+	protected void click(double curX, double curY, int button) {
+		// Handle loadstate and deletestate buttons
+		for (int i = 0; i < Math.min(LoTAS.savestatemod.getStateCount(), 6); i++) {
+			if (curX > this.x+0.095 && curY > this.y+0.095+i*0.1 && curX < this.x+0.16 && curY < this.y+0.09+0.035+i*0.1) {
+				
+			}
+			if (curX > this.x+0.164 && curY > this.y+0.095+i*0.1 && curX < this.x+0.23 && curY < this.y+0.09+0.035+i*0.1) {
+				ClientLoTAS.loscreenmanager.setScreen(null);
+				LoTAS.savestatemod.requestState(2, i, null, null);
+			}
+		}
+		super.click(curX, curY, button);
+	}
 
 	@Override
 	protected void render(PoseStack stack, double curX, double curY) {
@@ -96,10 +111,21 @@ public class SavestatesLoWidget extends WindowLoWidget {
 			this.draw(stack, new TextComponent(s.getName()), this.x+0.1, this.y+i*0.1+0.045, 20, 0xff8f8f8f, false);
 			this.draw(stack, new TextComponent(new SimpleDateFormat().format(Date.from(Instant.ofEpochSecond(s.getTimestamp())))), this.x+0.1, this.y+i*0.1+0.065, 20, 0xff8f8f8f, false);
 			// Render button
-			this.fill(stack, this.x+0.095, this.y+0.095+i*0.1, this.x+0.16, this.y+0.09+0.035+i*0.1, i % 2 != 0 ? 0xff1b1c21 : 0xff0a0a0b);
-			this.fill(stack, this.x+0.164, this.y+0.095+i*0.1, this.x+0.23, this.y+0.09+0.035+i*0.1, i % 2 != 0 ? 0xff1b1c21 : 0xff0a0a0b);
-			this.draw(stack, new TextComponent("Loadstate"), this.x+0.095+0.0065, this.y+0.1+i*0.1, 20, 0xff149b5b, false);
-			this.draw(stack, new TextComponent("Deletestate"), this.x+0.095+0.0724, this.y+0.1+i*0.1, 20, 0xff149b5b, false);
+			if (curX > this.x+0.095 && curY > this.y+0.095+i*0.1 && curX < this.x+0.16 && curY < this.y+0.09+0.035+i*0.1) {
+				this.fill(stack, this.x+0.095, this.y+0.095+i*0.1, this.x+0.16, this.y+0.09+0.035+i*0.1, 0xff149b5b);
+				this.draw(stack, new TextComponent("Loadstate"), this.x+0.095+0.0065, this.y+0.1+i*0.1, 20, i % 2 != 0 ? 0xff1b1c21 : 0xff0a0a0b, false);
+			} else {
+				this.fill(stack, this.x+0.095, this.y+0.095+i*0.1, this.x+0.16, this.y+0.09+0.035+i*0.1, i % 2 != 0 ? 0xff1b1c21 : 0xff0a0a0b);
+				this.draw(stack, new TextComponent("Loadstate"), this.x+0.095+0.0065, this.y+0.1+i*0.1, 20, 0xff149b5b, false);
+			}
+			
+			if (curX > this.x+0.164 && curY > this.y+0.095+i*0.1 && curX < this.x+0.23 && curY < this.y+0.09+0.035+i*0.1) {
+				this.fill(stack, this.x+0.164, this.y+0.095+i*0.1, this.x+0.23, this.y+0.09+0.035+i*0.1, 0xff149b5b);
+				this.draw(stack, new TextComponent("Deletestate"), this.x+0.095+0.0724, this.y+0.1+i*0.1, 20, i % 2 != 0 ? 0xff1b1c21 : 0xff0a0a0b, false);
+			} else {
+				this.fill(stack, this.x+0.164, this.y+0.095+i*0.1, this.x+0.23, this.y+0.09+0.035+i*0.1, i % 2 != 0 ? 0xff1b1c21 : 0xff0a0a0b);
+				this.draw(stack, new TextComponent("Deletestate"), this.x+0.095+0.0724, this.y+0.1+i*0.1, 20, 0xff149b5b, false);
+			}
 			// Render image
 			/*if (this.mc.hasSingleplayerServer()) { // Savestate textures are not supported at all. /////// on multiplayer servers
 				if (s.texture != null) {
