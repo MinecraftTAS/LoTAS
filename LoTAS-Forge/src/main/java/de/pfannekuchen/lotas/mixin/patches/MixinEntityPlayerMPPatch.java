@@ -20,6 +20,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
@@ -58,7 +59,7 @@ public abstract class MixinEntityPlayerMPPatch extends EntityPlayer {
 		boolean flag = this.mcServer.isDedicatedServer() && this.canPlayersAttack() && "fall".equals(source.damageType);
 		
 		if (!ConfigUtils.getBoolean("tools", "takeDamage"))
-			if (respawnInvulnerabilityTicks <= 1 && dimension != 1) {
+			if (respawnInvulnerabilityTicks <= 1 && !isEnderdragonLoaded()) {
 				respawnInvulnerabilityTicks = 60;
 				takenDamage = true;
 			}
@@ -76,12 +77,23 @@ public abstract class MixinEntityPlayerMPPatch extends EntityPlayer {
 					player.motionZ = 0;
 					player.prevPosX = player.posX;
 					player.prevPosY = player.posY;
-					player.prevPosZ = player.posZ; 
+					player.prevPosZ = player.posZ;
 				}
 			} catch (Exception e) {
 				
 			}
 		}
+	}
+	
+	private boolean isEnderdragonLoaded() {
+		if(dimension == 1) {
+			for (Entity entity : getEntityWorld().loadedEntityList){
+				if(entity instanceof EntityDragon) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	//#if MC>=11202

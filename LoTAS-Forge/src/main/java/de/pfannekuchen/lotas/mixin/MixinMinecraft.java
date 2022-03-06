@@ -21,6 +21,7 @@ import de.pfannekuchen.lotas.core.utils.ConfigUtils;
 import de.pfannekuchen.lotas.core.utils.EventUtils;
 import de.pfannekuchen.lotas.core.utils.KeybindsUtils;
 import de.pfannekuchen.lotas.gui.GuiChallengeIngameMenu;
+import de.pfannekuchen.lotas.mixin.accessors.AccessorEntityPlayerMP;
 import de.pfannekuchen.lotas.mods.AIManipMod;
 import de.pfannekuchen.lotas.mods.DupeMod;
 import de.pfannekuchen.lotas.mods.SavestateMod;
@@ -182,6 +183,18 @@ public class MixinMinecraft {
 				MCVer.player((Minecraft) (Object) this).motionY = SavestateMod.motionY;
 				MCVer.player((Minecraft) (Object) this).motionZ = SavestateMod.motionZ;
 			}
+			//#if MC>=11102
+			Minecraft.getMinecraft().getIntegratedServer().getPlayerList().getPlayers().forEach(player ->{
+			//#else
+			//#if MC>=10900
+//$$ 			Minecraft.getMinecraft().getIntegratedServer().getPlayerList().getPlayerList().forEach(player ->{
+			//#else
+//$$ 			Minecraft.getMinecraft().getIntegratedServer().getConfigurationManager().getPlayerList().forEach(player ->{
+			//#endif
+			//#endif
+				((AccessorEntityPlayerMP)player).respawnInvulnerabilityTicks(0);
+			});
+			
 			if(!once) {
 				once=true;
 				AIManipMod.read();

@@ -59,7 +59,7 @@ public abstract class MixinGuiWorldSelection extends GuiScreen {
 				} catch (Exception e) { }
 			}
 			//#else
-//$$ 			field_146638_t = new ChallengeMapEntryWidget((GuiSelectWorld) (Object) this, width);
+//$$ 			field_146638_t = ((GuiSelectWorld) (Object) this).new List(mc);
 			//#endif
 		}
 	}
@@ -105,7 +105,7 @@ public abstract class MixinGuiWorldSelection extends GuiScreen {
 				ConfigUtils.save();
 				break;
 			case 18:
-				ConfigUtils.setBoolean("tools", "hideMaps", !((GuiCheckBox) button).isChecked());
+				ConfigUtils.setBoolean("tools", "hideMaps", ((GuiCheckBox) button).isChecked());
 				ConfigUtils.save();
 				//#if MC>=10900
 				try {

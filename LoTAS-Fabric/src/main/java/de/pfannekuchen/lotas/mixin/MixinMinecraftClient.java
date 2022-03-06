@@ -20,6 +20,7 @@ import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.core.utils.ConfigUtils;
 import de.pfannekuchen.lotas.core.utils.KeybindsUtils;
 import de.pfannekuchen.lotas.core.utils.Timer;
+import de.pfannekuchen.lotas.mixin.accessors.AccessorServerPlayerEntity;
 import de.pfannekuchen.lotas.mods.AIManipMod;
 import de.pfannekuchen.lotas.mods.SavestateMod;
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;
@@ -256,6 +257,15 @@ public class MixinMinecraftClient {
 			SavestateMod.isLoading = false;
 			SavestateMod.showLoadstateDone = true;
 			SavestateMod.timeTitle = System.currentTimeMillis();
+			Minecraft.getInstance().getSingleplayerServer().getPlayerList().getPlayers().forEach(player -> {
+				((AccessorServerPlayerEntity) player).setSpawnInvulnerableTime(0);
+			});
+		}
+		if (((guiScreenIn == null) ? true : guiScreenIn instanceof PauseScreen) && SavestateMod.isSavestate) {
+			SavestateMod.isSavestate=false;
+			Minecraft.getInstance().getSingleplayerServer().getPlayerList().getPlayers().forEach(player -> {
+				((AccessorServerPlayerEntity) player).setSpawnInvulnerableTime(0);
+			});
 		}
 		/* Auto-Pause */
 		if (isLoadingWorld && guiScreenIn == null) {
