@@ -52,7 +52,7 @@ public class SavestatesLoWidget extends WindowLoWidget {
 	@Override
 	protected void scroll(double scroll) {
 		SavestatesLoWidget.offset -= scroll;
-		SavestatesLoWidget.offset = Mth.clamp(SavestatesLoWidget.offset, 0, LoTAS.savestatemod.getStateCount() - 6);
+		SavestatesLoWidget.offset = Mth.clamp(SavestatesLoWidget.offset, 0, (LoTAS.savestatemod.getStateCount() - 6 < 0) ? 0 : LoTAS.savestatemod.getStateCount() - 6);
 		super.scroll(scroll);
 	}
 
