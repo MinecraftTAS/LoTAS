@@ -10,6 +10,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import de.pfannkuchen.lotas.ClientLoTAS;
 import de.pfannkuchen.lotas.LoTAS;
 import de.pfannkuchen.lotas.gui.widgets.ButtonLoWidget;
+import de.pfannkuchen.lotas.gui.widgets.TextFieldLoWidget;
 import de.pfannkuchen.lotas.gui.widgets.WindowLoWidget;
 import de.pfannkuchen.lotas.mods.SavestateMod.State;
 import de.pfannkuchen.lotas.util.LoTASHelper;
@@ -33,19 +34,34 @@ public class SavestatesLoWidget extends WindowLoWidget {
 	 */
 	private ButtonLoWidget savestateBtn;
 
+	/*
+	 * Savestate name text field for later realigning
+	 */
+	private TextFieldLoWidget savestateText;
+	
+	/**
+	 * Name of the savestate
+	 */
+	private String savestateName = "no name given";
+	
 	/**
 	 * Initializes a tickrate changer widget
 	 */
 	public SavestatesLoWidget() {
-		super("savestatewidget", new TextComponent("Savestates"), .237, .037);
+		super("savestatewidget", new TextComponent("Savestates"), .237, .047);
 	}
 
 	@Override
 	protected void init() {
 		this.addWidget(this.savestateBtn = new ButtonLoWidget(true, 0.002, LoTAS.savestatemod.getStateCount()*0.1+0.04, 0.233, () -> {
 			ClientLoTAS.loscreenmanager.setScreen(null);
-			LoTAS.savestatemod.requestState(0, -1, "no name given", LoTASHelper.takeScreenshot(this.mc, 256, 144));
+			LoTAS.savestatemod.requestState(0, -1, this.savestateName, LoTASHelper.takeScreenshot(this.mc, 256, 144));
 		}, new TextComponent("Savestate")));
+		this.addWidget(this.savestateText = new TextFieldLoWidget(true, .02, LoTAS.savestatemod.getStateCount()*0.1+0.104, .197, s -> {
+			if (s.length() > 20)
+				s = s.substring(0, 20);
+			this.savestateName = s;
+		}, "no name given"));
 		super.init();
 	}
 	
@@ -68,8 +84,9 @@ public class SavestatesLoWidget extends WindowLoWidget {
 									0);
 		}
 		// Render the savestate panels
-		this.windowHeight = Math.min(LoTAS.savestatemod.getStateCount(), 6)*0.1+0.083;
+		this.windowHeight = Math.min(LoTAS.savestatemod.getStateCount(), 6)*0.1+0.153;
 		this.savestateBtn.y = Math.min(LoTAS.savestatemod.getStateCount(), 6)*0.1+0.04;
+		this.savestateText.y = Math.min(LoTAS.savestatemod.getStateCount(), 6)*0.1+0.104;
 		for (int i = 0; i < Math.min(LoTAS.savestatemod.getStateCount(), 6); i++) {
 			State s = LoTAS.savestatemod.getSavestateInfo(i+offset);
 			if (s == null) continue;
