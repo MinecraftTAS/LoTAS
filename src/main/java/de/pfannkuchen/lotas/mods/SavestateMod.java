@@ -19,7 +19,6 @@
  */
 package de.pfannkuchen.lotas.mods;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
@@ -130,8 +129,8 @@ public class SavestateMod {
 	private int doLoadstate = -1;
 	private int doDeletestate = -1;
 	// Client-side Todo list
-	private boolean shouldReload;
-	private State[] unload = null;
+//	private boolean shouldReload;
+//	private State[] unload = null;
 	// Server-side folder structure
 	private File savestatesDir;
 	private File worldDir;
@@ -174,7 +173,7 @@ public class SavestateMod {
 						LoTAS.LOGGER.info("The Server finished deletestating.");
 					}
 				}
-				this.unload = this.states;
+//				this.unload = this.states;
 				// Update the State List
 				this.states = new State[buf.readVarInt()];
 			} else {
@@ -183,7 +182,7 @@ public class SavestateMod {
 				this.states[index] = State.deserialize(buf.readByteArray());
 				if (index == this.states.length - 1) {
 					LoTAS.LOGGER.info("The Client has " + this.states.length + " savestates stored in the mirrored list. Reloading all textures...");
-					this.shouldReload = true;
+//					this.shouldReload = true;
 				}
 			}
 		}
@@ -209,13 +208,15 @@ public class SavestateMod {
 	 */
 	@Environment(EnvType.CLIENT)
 	public void onRender() {
-		if (!this.mc.hasSingleplayerServer()) return; // Savestate textures are not supported on multiplayer servers
+		/*if (!this.mc.hasSingleplayerServer()) return; // Savestate textures are not supported at all. /////// on multiplayer servers
 		if (!this.shouldReload) return;
 		this.shouldReload = false;
 		RenderSystem.recordRenderCall(() -> {
 			if (this.unload != null) for (State s : this.unload) if (s.texture != null) this.mc.getTextureManager().release(s.texture);
 			this.unload = null;
 			for (State s : this.states) {
+				if (s == null)
+					continue;
 				NativeImage n = new NativeImage(256, 144, true);
 				BufferedImage img = new BufferedImage(256, 144, BufferedImage.TYPE_INT_ARGB);
 				img.setRGB(0, 0, 256, 144, s.screenshot, 0, 256);
@@ -226,7 +227,7 @@ public class SavestateMod {
 				}
 				recreateTexture(n, s);
 			}
-		});
+		});*/
 	}
 	
 	/**
