@@ -39,12 +39,14 @@ import com.mojang.blaze3d.platform.NativeImage;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import de.pfannkuchen.lotas.LoTAS;
+import de.pfannkuchen.lotas.gui.StateLoScreen;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.protocol.game.ClientboundCustomPayloadPacket;
 import net.minecraft.network.protocol.game.ServerboundCustomPayloadPacket;
 import net.minecraft.resources.ResourceLocation;
@@ -128,6 +130,10 @@ public class SavestateMod {
 	private int[] doSavestatePicture = null;
 	private int doLoadstate = -1;
 	private int doDeletestate = -1;
+	// Server-side state todo list
+	private int loadstateTask = -1;
+	private File loadstateWorldSavestateDir;
+	private boolean loadstateIsLocal;
 	// Client-side Todo list
 //	private boolean shouldReload;
 //	private State[] unload = null;
@@ -162,9 +168,14 @@ public class SavestateMod {
 					}
 				} else if (opcode == 1) {
 					if (lockOUnlock) {
-						LoTAS.LOGGER.info("The Server will loadstate now.");
-					} else {
-						LoTAS.LOGGER.info("The Server finished loadstating.");
+						LoTAS.LOGGER.info("The Server will loadstate now. The client will try to reconnect in 1 second intervals...");
+						if (this.mc.hasSingleplayerServer()) { // In singleplayer worlds the client will just reload the world
+//							String levelid = this.mc.getSingleplayerServer().getWorldData().getLevelName();
+//							System.out.println(levelid);
+//							this.mc.loadLevel(levelid);
+						} else {
+							
+						}
 					}
 				} else if (opcode == 2) {
 					if (lockOUnlock) {
@@ -402,7 +413,40 @@ public class SavestateMod {
 	 * @param i Index to load
 	 */
 	private void loadstate(int i, MinecraftServer mcserver) {
+		// Let the clients know
+		sendPacketToClient(true, 1, mcserver);
+		// Prepare stuff
+		this.prepareFolders(mcserver);
+		this.loadstateWorldSavestateDir = new File(this.savestatesDir, i + "");
+		this.loadstateTask = 1;
+		this.loadstateIsLocal = mcserver.isSingleplayer();
+		// Stop the server
+		for (ServerPlayer p : new ArrayList<>(mcserver.getPlayerList().getPlayers())) {
+			p.connection.disconnect(new TextComponent("Loadstating..."));
+			p.connection.getConnection().disconnect(new TextComponent("Loadstating..."));
+		}
+		mcserver.halt(false); // This will actually wait for the server to fully shut down.
+	}
+	
+	/**
+	 * Loads the state after the server has been shut down
+	 */
+	private void loadstateAfterShutdown() {
+		try {
+			// Delete the world first
+			FileUtils.deleteDirectory(this.worldDir);
+			// Copy the savestate world back
+			FileUtils.copyDirectory(this.loadstateWorldSavestateDir, this.worldDir);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		if (this.loadstateIsLocal) {
+			unlockAfterLoadstate();
+		}
+	}
 
+	private void unlockAfterLoadstate() {
+		StateLoScreen.allowUnlocking();
 	}
 
 	/**
@@ -495,6 +539,16 @@ public class SavestateMod {
 //		this.shouldReload = true;
 //		this.unload = this.states;
 		this.states = new State[0];
+	}
+	
+	/**
+	 * Does stuff after server shutdown
+	 */
+	public void onServerShutdown() {
+		if (this.loadstateTask != -1) {
+			this.loadstateAfterShutdown();
+			this.loadstateTask = -1;
+		}
 	}
 
 	/**

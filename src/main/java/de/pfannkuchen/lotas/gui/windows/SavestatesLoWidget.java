@@ -77,7 +77,8 @@ public class SavestatesLoWidget extends WindowLoWidget {
 		// Handle loadstate and deletestate buttons
 		for (int i = 0; i < Math.min(LoTAS.savestatemod.getStateCount(), 6); i++) {
 			if (curX > this.x+0.095 && curY > this.y+0.095+i*0.1 && curX < this.x+0.16 && curY < this.y+0.09+0.035+i*0.1) {
-				
+				ClientLoTAS.loscreenmanager.setScreen(null);
+				LoTAS.savestatemod.requestState(1, i, null, null);
 			}
 			if (curX > this.x+0.164 && curY > this.y+0.095+i*0.1 && curX < this.x+0.23 && curY < this.y+0.09+0.035+i*0.1) {
 				ClientLoTAS.loscreenmanager.setScreen(null);

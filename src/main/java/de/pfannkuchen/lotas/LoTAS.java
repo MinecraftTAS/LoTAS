@@ -70,7 +70,15 @@ public class LoTAS implements ModInitializer {
 		// Tick Savestate Mod
 		LoTAS.savestatemod.afterServerTick(server);
 	}
-
+	
+	/**
+	 * Executed after the server shuts down
+	 */
+	public void onServerShutdown() {
+		// Shutdown Savestate Mod
+		LoTAS.savestatemod.onServerShutdown();
+	}
+	
 	/**
 	 * Executed every time the server receives a custom payload packet.
 	 * @param packet Packet In

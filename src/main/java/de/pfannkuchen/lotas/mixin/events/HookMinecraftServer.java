@@ -32,5 +32,14 @@ public class HookMinecraftServer {
 	public void hookInitEvent(CallbackInfo ci) {
 		LoTAS.instance.onServerLoad((MinecraftServer) (Object) this);
 	}
+	
+	/**
+	 * Triggers an Event in {@link LoTAS#onServerShutdown()} after the server shuts down
+	 * @param ci Callback Info
+	 */
+	@Inject(method = "runServer", at = @At("RETURN"))
+	public void hookShutdownEvent(CallbackInfo ci) {
+		LoTAS.instance.onServerShutdown();
+	}
 
 }
