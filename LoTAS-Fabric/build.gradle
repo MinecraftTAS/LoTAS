@@ -1,6 +1,6 @@
 import groovy.json.JsonOutput
 
-version = "2.0.1"
+version = "2.0.2"
 group = "de.pfannekuchen.lotas"
 
 apply from: 'versions2/preprocessor.gradle'

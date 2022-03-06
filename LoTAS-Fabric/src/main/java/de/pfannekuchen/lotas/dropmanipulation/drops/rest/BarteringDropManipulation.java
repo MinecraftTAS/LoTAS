@@ -53,7 +53,7 @@ public class BarteringDropManipulation extends DropManipulationScreen.DropManipu
 	}
 
 	@Override
-	public List<ItemStack> redirectDrops(Entity entity) {
+	public List<ItemStack> redirectDrops(Entity entity, int lootingBonus) {
 		//#if MC>=11601
 //$$ 		if (entity == null) {
 //$$ 			System.out.println(f.toLowerCase());

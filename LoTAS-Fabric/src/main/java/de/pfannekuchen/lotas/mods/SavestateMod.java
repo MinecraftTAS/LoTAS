@@ -40,6 +40,7 @@ public class SavestateMod {
 	public static long timeTitle;
 	
 	public static boolean isLoading;
+	public static boolean isSavestate;
 	
 	/**
 	 * Returns the motion of the player, and the current time of the timer as a string
@@ -108,6 +109,7 @@ public class SavestateMod {
 		applyVelocity=true;
 		showSavestateDone = true;
 		timeTitle = System.currentTimeMillis();
+		isSavestate=true;
 		
 		System.gc();
 		TickrateChangerMod.updateTickrate(tickratesaved);

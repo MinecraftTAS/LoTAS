@@ -47,7 +47,7 @@ public class OreDropManipulation extends GuiDropChanceManipulation.DropManipulat
     }
 
     @Override
-    public List<ItemStack> redirectDrops(Entity entity) {
+    public List<ItemStack> redirectDrops(Entity entity, int lootingValue) {
         return ImmutableList.of();
     }
 

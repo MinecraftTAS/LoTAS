@@ -60,46 +60,46 @@ public class PassiveDropManipulation extends GuiDropChanceManipulation.DropManip
     public List<ItemStack> redirectDrops(IBlockState blockstate) { return ImmutableList.of(); }
 
     @Override
-    public List<ItemStack> redirectDrops(Entity entity) {
+    public List<ItemStack> redirectDrops(Entity entity, int lootingValue) {
         if (entity instanceof EntityChicken && optimizeChicken.isChecked()) {
             if (!((EntityLiving) entity).isChild())
-                return ImmutableList.of(new ItemStack(MCVer.getItem("FEATHER"), 2), entity.isBurning() ? new ItemStack(MCVer.getItem("COOKED_CHICKEN")) : new ItemStack(MCVer.getItem("CHICKEN")));
+                return ImmutableList.of(new ItemStack(MCVer.getItem("FEATHER"), 2 + lootingValue), entity.isBurning() ? new ItemStack(MCVer.getItem("COOKED_CHICKEN"), 1 + lootingValue) : new ItemStack(MCVer.getItem("CHICKEN"), 1 + lootingValue));
         } else if (entity instanceof EntityCow && optimizeCow.isChecked()) {
             if (!((EntityLiving) entity).isChild())
-                return ImmutableList.of(new ItemStack(MCVer.getItem("LEATHER")), entity.isBurning() ? new ItemStack(MCVer.getItem("COOKED_BEEF"), 3) : new ItemStack(MCVer.getItem("BEEF"), 3));
+                return ImmutableList.of(new ItemStack(MCVer.getItem("LEATHER"), 1 + lootingValue), entity.isBurning() ? new ItemStack(MCVer.getItem("COOKED_BEEF"), 3 + lootingValue) : new ItemStack(MCVer.getItem("BEEF"), 3 + lootingValue));
         } else if (entity instanceof EntityMooshroom && optimizeMooshroom.isChecked()) {
             if (!((EntityLiving) entity).isChild())
-                return ImmutableList.of(new ItemStack(MCVer.getItem("LEATHER"), 2), entity.isBurning() ? new ItemStack(MCVer.getItem("COOKED_BEEF"), 3) : new ItemStack(MCVer.getItem("BEEF"), 3));
+                return ImmutableList.of(new ItemStack(MCVer.getItem("LEATHER"), 2 + lootingValue), entity.isBurning() ? new ItemStack(MCVer.getItem("COOKED_BEEF"), 3 + lootingValue) : new ItemStack(MCVer.getItem("BEEF"), 3 + lootingValue));
         } else if (entity instanceof EntityPig && optimizePig.isChecked()) {
             if (!((EntityPig) entity).isChild())
-                return ImmutableList.of(entity.isBurning() ? new ItemStack(MCVer.getItem("COOKED_PORKCHOP"), 3) : new ItemStack(MCVer.getItem("PORKCHOP"), 3));
+                return ImmutableList.of(entity.isBurning() ? new ItemStack(MCVer.getItem("COOKED_PORKCHOP"), 3 + lootingValue) : new ItemStack(MCVer.getItem("PORKCHOP"), 3 + lootingValue));
         } 
         //#if MC>=11200
         else if (entity instanceof net.minecraft.entity.passive.EntityParrot && optimizeParrot.isChecked()) {
             if (!((net.minecraft.entity.passive.EntityParrot) entity).isChild())
-                return ImmutableList.of(new ItemStack(Items.FEATHER, 2));
+                return ImmutableList.of(new ItemStack(Items.FEATHER, 2 + lootingValue));
         }
         //#endif
         else if (entity instanceof EntityRabbit && optimizeRabbit.isChecked()) {
             if (!((EntityRabbit) entity).isChild())
-               return ImmutableList.of(new ItemStack(MCVer.getItem("RABBIT_FOOT"), 1), new ItemStack(MCVer.getItem("RABBIT_HIDE"), 1), entity.isBurning() ? new ItemStack(MCVer.getItem("COOKED_RABBIT")) : new ItemStack(MCVer.getItem("RABBIT")));
+               return ImmutableList.of(new ItemStack(MCVer.getItem("RABBIT_FOOT"), 1 + lootingValue), new ItemStack(MCVer.getItem("RABBIT_HIDE"), 1 + lootingValue), entity.isBurning() ? new ItemStack(MCVer.getItem("COOKED_RABBIT")) : new ItemStack(MCVer.getItem("RABBIT")));
         } else if (entity instanceof EntitySheep && optimizeSheep.isChecked()) {
             if (!((EntitySheep) entity).isChild()) 
-               return ImmutableList.of(entity.isBurning() ? new ItemStack(MCVer.getItem("COOKED_MUTTON"), 3) : new ItemStack(MCVer.getItem("MUTTON"), 3), new ItemStack(Item.getItemFromBlock(MCVer.getBlock("WOOL")), 1, ((EntitySheep) entity).getFleeceColor().getMetadata()));
+               return ImmutableList.of(entity.isBurning() ? new ItemStack(MCVer.getItem("COOKED_MUTTON"), 3 + lootingValue) : new ItemStack(MCVer.getItem("MUTTON"), 3 + lootingValue), new ItemStack(Item.getItemFromBlock(MCVer.getBlock("WOOL")), 1, ((EntitySheep) entity).getFleeceColor().getMetadata()));
         } else if (entity instanceof EntitySnowman && optimizeSnowgolem.isChecked()) {
             if (!((EntitySnowman) entity).isChild())
                 return ImmutableList.of(new ItemStack(MCVer.getItem("SNOWBALL"), 15));
         } else if (entity instanceof EntitySquid && optimizeSquid.isChecked()) {
             if (!((EntitySquid) entity).isChild())
-                return ImmutableList.of(new ItemStack(MCVer.getItem("DYE"), 3, 0));
+                return ImmutableList.of(new ItemStack(MCVer.getItem("DYE"), 3 + lootingValue, 0));
         } else if (entity instanceof EntityIronGolem && optimizeIronGolem.isChecked()) {
             if (!((EntityIronGolem) entity).isChild())
-                return ImmutableList.of(new ItemStack(MCVer.getItem("IRON_INGOT"), 5), new ItemStack(MCVer.getBlock("RED_FLOWER")));
+                return ImmutableList.of(new ItemStack(MCVer.getItem("IRON_INGOT"), 5), new ItemStack(MCVer.getBlock("RED_FLOWER"), 2));
         } 
         //#if MC>=11000
         else if (entity instanceof net.minecraft.entity.monster.EntityPolarBear && optimizePolarbear.isChecked()) {
             if (!((net.minecraft.entity.monster.EntityPolarBear) entity).isChild())
-                return ImmutableList.of(new ItemStack(Items.FISH, 2));
+                return ImmutableList.of(new ItemStack(Items.FISH, 2 + lootingValue));
         }
         //#endif
         return ImmutableList.of();

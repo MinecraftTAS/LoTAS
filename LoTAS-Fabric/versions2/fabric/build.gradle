@@ -18,13 +18,17 @@ sourceSets {
 }
 
 dependencies {
-	//#if MC>=11801
+	//#if MC>=11802
+//$$ 	minecraft "com.mojang:minecraft:1.18.2"
+//$$ 	mappings minecraft.officialMojangMappings()
+	//#else
+ 	//#if MC>=11801
 //$$ 	minecraft "com.mojang:minecraft:1.18.1"
 //$$ 	mappings minecraft.officialMojangMappings()
 	//#else
 	//#if MC>=11701
-//$$ 	minecraft "com.mojang:minecraft:1.17.1"
-//$$ 	mappings minecraft.officialMojangMappings()
+//$$	minecraft "com.mojang:minecraft:1.17.1"
+//$$	mappings minecraft.officialMojangMappings()
 	//#else
 	//#if MC>=11605
 //$$  	minecraft "com.mojang:minecraft:1.16.5"
@@ -44,6 +48,7 @@ dependencies {
 	//#else
 	minecraft "com.mojang:minecraft:1.14.4"
 	mappings minecraft.officialMojangMappings()
+	//#endif
 	//#endif
 	//#endif
 	//#endif

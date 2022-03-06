@@ -48,11 +48,11 @@ public class NetherMobDropManipulation extends GuiDropChanceManipulation.DropMan
     public List<ItemStack> redirectDrops(IBlockState blockstate) { return ImmutableList.of(); }
 
     @Override
-    public List<ItemStack> redirectDrops(Entity entity) {
-        if (entity instanceof EntityBlaze && optimizeBlaze.isChecked()) return ImmutableList.of(new ItemStack(MCVer.getItem("BLAZE_ROD")));
-        if (entity instanceof EntityGhast && optimizeGhast.isChecked()) return ImmutableList.of(new ItemStack(MCVer.getItem("GHAST_TEAR")), new ItemStack(MCVer.getItem("GUNPOWDER"), 2));
+    public List<ItemStack> redirectDrops(Entity entity, int lootingValue) {
+        if (entity instanceof EntityBlaze && optimizeBlaze.isChecked()) return ImmutableList.of(new ItemStack(MCVer.getItem("BLAZE_ROD"), 1 + lootingValue));
+        if (entity instanceof EntityGhast && optimizeGhast.isChecked()) return ImmutableList.of(new ItemStack(MCVer.getItem("GHAST_TEAR"), 1 + lootingValue), new ItemStack(MCVer.getItem("GUNPOWDER"), 2 + lootingValue));
         //#if MC>=11100
-        if (entity instanceof net.minecraft.entity.monster.EntityWitherSkeleton && optimizeWitherskeleton.isChecked()) return ImmutableList.of(new ItemStack(Items.COAL, 1), new ItemStack(Items.BONE, 2), new ItemStack(Items.SKULL, 1, 1));
+        if (entity instanceof net.minecraft.entity.monster.EntityWitherSkeleton && optimizeWitherskeleton.isChecked()) return ImmutableList.of(new ItemStack(Items.COAL, 1 + lootingValue), new ItemStack(Items.BONE, 2 + lootingValue), new ItemStack(Items.SKULL, 1, 1));
         //#else
         //$$ if (entity instanceof EntitySkeleton && optimizeWitherskeleton.isChecked()) {
         //$$ 	EntitySkeleton skel=(EntitySkeleton) entity;
@@ -61,12 +61,12 @@ public class NetherMobDropManipulation extends GuiDropChanceManipulation.DropMan
         	//#else
         //$$ 	if(skel.getSkeletonType()==1) {
         	//#endif
-        //$$ 		return ImmutableList.of(new ItemStack(MCVer.getItem("COAL"), 1), new ItemStack(MCVer.getItem("BONE"), 2), new ItemStack(MCVer.getItem("SKULL"), 1, 1));
+        //$$ 		return ImmutableList.of(new ItemStack(MCVer.getItem("COAL"), 1 + lootingValue), new ItemStack(MCVer.getItem("BONE"), 2 + lootingValue), new ItemStack(MCVer.getItem("SKULL"), 1, 1));
         //$$ 	}
         //$$ }
         //#endif
-        if (entity instanceof EntityPigZombie && optimizePigman.isChecked()) if (!((EntityPigZombie) entity).isChild()) return ImmutableList.of(new ItemStack(MCVer.getItem("ROTTEN_FLESH"), 2), new ItemStack(MCVer.getItem("GOLD_NUGGET")), new ItemStack(MCVer.getItem("GOLD_INGOT")));
-        if (entity instanceof EntityMagmaCube && optimizeMagmaCube.isChecked()) if (((EntityMagmaCube) entity).getSlimeSize() != 1) return ImmutableList.of(new ItemStack(MCVer.getItem("MAGMA_CREAM")));
+        if (entity instanceof EntityPigZombie && optimizePigman.isChecked()) if (!((EntityPigZombie) entity).isChild()) return ImmutableList.of(new ItemStack(MCVer.getItem("ROTTEN_FLESH"), 2 + lootingValue), new ItemStack(MCVer.getItem("GOLD_NUGGET"), 1 + lootingValue), new ItemStack(MCVer.getItem("GOLD_INGOT"), 1 + lootingValue));
+        if (entity instanceof EntityMagmaCube && optimizeMagmaCube.isChecked()) if (((EntityMagmaCube) entity).getSlimeSize() != 1) return ImmutableList.of(new ItemStack(MCVer.getItem("MAGMA_CREAM"), 1 + lootingValue));
 
         return ImmutableList.of();
     }

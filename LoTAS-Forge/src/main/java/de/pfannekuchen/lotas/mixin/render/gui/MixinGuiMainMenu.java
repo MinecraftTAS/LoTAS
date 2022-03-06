@@ -15,11 +15,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import de.pfannekuchen.lotas.core.MCVer;
-import de.pfannekuchen.lotas.core.utils.ConfigUtils;
-import de.pfannekuchen.lotas.gui.GuiAcceptTracking;
 import de.pfannekuchen.lotas.gui.GuiConfiguration;
-import de.pfannekuchen.lotas.gui.GuiVideoUpspeeder;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiScreen;
@@ -40,8 +36,8 @@ public abstract class MixinGuiMainMenu extends GuiScreen {
 
 	@Inject(at = @At("RETURN"), method = "addSingleplayerMultiplayerButtons")
 	public void redoaddSingleplayerMultiplayerButtons(int p_73969_1_, int p_73969_2_, CallbackInfo ci) {
-		this.buttonList.get(1).id = 24;
-		this.buttonList.get(1).displayString = "Speed up Video";
+		this.buttonList.get(1).enabled=false;
+		this.buttonList.get(1).displayString = "LoTAS doesn't work in multiplayer :(";
 		
 		//#if MC>=10900
 		this.modButton.width = this.buttonList.get(1).width;
@@ -90,8 +86,6 @@ public abstract class MixinGuiMainMenu extends GuiScreen {
 	public void actionPerformed(GuiButton button, CallbackInfo ci) throws IOException {
 		if (button.id == 69) {
 			mc.displayGuiScreen(new GuiConfiguration());
-		} else if (button.id == 24) {
-			mc.displayGuiScreen(new GuiVideoUpspeeder());
 		}
 	}
 	

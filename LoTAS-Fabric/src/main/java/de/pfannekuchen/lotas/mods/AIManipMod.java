@@ -348,6 +348,11 @@ public class AIManipMod {
 		 * If an entity is stuck, the timeouttimer will increase
 		 */
 		public void timeoutTick() {
+			if(entity==null) {
+				System.err.println("The entity to check is null (timeoutTick)");
+				timeouttimer=300;
+				return;
+			}
 			if(prevPos==null) {
 				Vec3 pos = entity.position();
 				prevPos=pos;

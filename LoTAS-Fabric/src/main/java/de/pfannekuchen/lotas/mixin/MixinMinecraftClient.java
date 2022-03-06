@@ -12,6 +12,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import com.google.gson.JsonObject;
 import com.mojang.blaze3d.platform.NativeImage;
 
 import de.pfannekuchen.lotas.core.LoTASModContainer;
@@ -19,6 +20,7 @@ import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.core.utils.ConfigUtils;
 import de.pfannekuchen.lotas.core.utils.KeybindsUtils;
 import de.pfannekuchen.lotas.core.utils.Timer;
+import de.pfannekuchen.lotas.mixin.accessors.AccessorServerPlayerEntity;
 import de.pfannekuchen.lotas.mods.AIManipMod;
 import de.pfannekuchen.lotas.mods.SavestateMod;
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;
@@ -155,8 +157,13 @@ public class MixinMinecraftClient {
 //$$ 			Minecraft.getInstance().forceSetScreen(new GenericDirtMessageScreen(new TranslatableComponent("createWorld.preparing")));
 //$$ 			LevelSettings levelSettings2;
 //$$ 			levelSettings2 = new LevelSettings(UUID.randomUUID().toString().substring(0, 10), GameType.CREATIVE, false, Difficulty.EASY, true, new GameRules(), net.minecraft.world.level.DataPackConfig.DEFAULT);
-//$$
+			//#if MC>=11802
+//$$ 			net.minecraft.server.dedicated.DedicatedServerProperties.WorldGenProperties properties=new net.minecraft.server.dedicated.DedicatedServerProperties.WorldGenProperties(Long.toString(LoTASModContainer.i), new JsonObject(), true, "default");
+//$$ 			Minecraft.getInstance().createLevel(UUID.randomUUID().toString().substring(0, 10), levelSettings2, net.minecraft.core.RegistryAccess.BUILTIN.get(), net.minecraft.world.level.levelgen.WorldGenSettings.create((net.minecraft.core.RegistryAccess)net.minecraft.core.RegistryAccess.BUILTIN.get(), properties));
+			//#else
 //$$ 			Minecraft.getInstance().createLevel(UUID.randomUUID().toString().substring(0, 10), levelSettings2, net.minecraft.core.RegistryAccess.RegistryHolder.builtin(), net.minecraft.world.level.levelgen.WorldGenSettings.create(net.minecraft.core.RegistryAccess.builtin(), new Properties()).withSeed(true, OptionalLong.of(LoTASModContainer.i)));
+			//#endif
+//$$
 //$$ 			LoTASModContainer.i = -1;
 //$$ 			System.gc();
 //$$ 		}
@@ -250,6 +257,15 @@ public class MixinMinecraftClient {
 			SavestateMod.isLoading = false;
 			SavestateMod.showLoadstateDone = true;
 			SavestateMod.timeTitle = System.currentTimeMillis();
+			Minecraft.getInstance().getSingleplayerServer().getPlayerList().getPlayers().forEach(player -> {
+				((AccessorServerPlayerEntity) player).setSpawnInvulnerableTime(0);
+			});
+		}
+		if (((guiScreenIn == null) ? true : guiScreenIn instanceof PauseScreen) && SavestateMod.isSavestate) {
+			SavestateMod.isSavestate=false;
+			Minecraft.getInstance().getSingleplayerServer().getPlayerList().getPlayers().forEach(player -> {
+				((AccessorServerPlayerEntity) player).setSpawnInvulnerableTime(0);
+			});
 		}
 		/* Auto-Pause */
 		if (isLoadingWorld && guiScreenIn == null) {

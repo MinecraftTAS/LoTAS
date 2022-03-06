@@ -10,8 +10,11 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import de.pfannekuchen.lotas.gui.GuiDropChanceManipulation;
 import de.pfannekuchen.lotas.gui.GuiDropChanceManipulation.DropManipulation;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
-
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.DamageSource;
 //#if MC>=10900
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootTable;
@@ -19,17 +22,16 @@ import net.minecraft.world.storage.loot.LootTable;
 public class MixinEntityLivingPatch {
 
 	@Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/world/storage/loot/LootTable;generateLootForPools(Ljava/util/Random;Lnet/minecraft/world/storage/loot/LootContext;)Ljava/util/List;"), method = "dropLoot")
-    public List<ItemStack> generateLootForPools(LootTable input, Random rng, LootContext context) {
+    public List<ItemStack> generateLootForPools(LootTable input, Random rng, LootContext context, boolean wasRecentlyHit, int lootingModifier, DamageSource source) {
         for (DropManipulation man : GuiDropChanceManipulation.manipulations) {
            if (!man.enabled.isChecked()) continue;
-           List<ItemStack> list = man.redirectDrops((EntityLiving) (Object) this);
+           List<ItemStack> list = man.redirectDrops((EntityLiving) (Object) this, lootingModifier);
             if (!list.isEmpty()) {
                 return list;
             }
         }
         return input.generateLootForPools(rng, context);
 	}
-
 }
 //#else
 //$$ import net.minecraft.world.World;
@@ -43,10 +45,10 @@ public class MixinEntityLivingPatch {
 //$$ 		super(worldIn);
 //$$ 	}
 //$$
-//$$ 	public List<ItemStack> generateLootForPools() {
+//$$ 	public List<ItemStack> generateLootForPools(int i) {
 //$$         for (DropManipulation man : GuiDropChanceManipulation.manipulations) {
 //$$             if (!man.enabled.isChecked()) continue;
-//$$             List<ItemStack> list = man.redirectDrops((EntityLivingBase) (Object) this);
+//$$             List<ItemStack> list = man.redirectDrops((EntityLivingBase) (Object) this, i);
 //$$             if (!list.isEmpty()) {
 //$$                 return list;
 //$$             }
@@ -56,7 +58,7 @@ public class MixinEntityLivingPatch {
 //$$
 //$$ 	@Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/EntityLivingBase;dropFewItems(ZI)V"), method = "onDeath")
 //$$     protected void injectdropFewItems(EntityLivingBase e, boolean b, int i) {
-//$$ 		List<ItemStack> loot = generateLootForPools();
+//$$ 		List<ItemStack> loot = generateLootForPools(i);
 //$$ 		if (loot != null) 
 //$$ 			if (!loot.isEmpty()) {
 //$$ 				for (ItemStack itemStack : loot) 

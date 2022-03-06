@@ -53,10 +53,10 @@ public class ZombieDropManipulation extends GuiDropChanceManipulation.DropManipu
     public List<ItemStack> redirectDrops(IBlockState block) {  return ImmutableList.of(); }
 
     @Override
-    public List<ItemStack> redirectDrops(Entity entity) {
+    public List<ItemStack> redirectDrops(Entity entity, int lootingValue) {
         List<ItemStack> list = new ArrayList<>();
         if (entity instanceof EntityZombie) {
-            list.add(new ItemStack(MCVer.getItem("ROTTEN_FLESH"), 2));
+            list.add(new ItemStack(MCVer.getItem("ROTTEN_FLESH"), 2 + lootingValue));
 
             if (dropIron.isToggled()) list.add(new ItemStack(MCVer.getItem("IRON_INGOT")));
             if (dropPotato.isToggled()) list.add(new ItemStack(MCVer.getItem("POTATO")));

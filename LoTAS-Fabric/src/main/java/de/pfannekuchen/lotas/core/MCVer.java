@@ -111,11 +111,13 @@ public class MCVer {
 //$$ 		component.render(stack, mouseX, mouseY, delta);
 //$$ 	}
 //$$ 	public static void drawShadow(String text, int x, int y, int color) {
+//$$ 		if(text!=null) {
 		//#if MC>=11605
 //$$ 		Minecraft.getInstance().font.drawShadow(stack, text, x, y, color);
 		//#else
 //$$ 		Minecraft.getInstance().font.drawShadow(stack, net.minecraft.network.chat.FormattedText.of(text), x, y, color);
 		//#endif
+//$$ 		}
 //$$ 	}
 //$$ 	public static void renderBackground(Screen screen) {
 //$$ 		screen.renderBackground(stack);

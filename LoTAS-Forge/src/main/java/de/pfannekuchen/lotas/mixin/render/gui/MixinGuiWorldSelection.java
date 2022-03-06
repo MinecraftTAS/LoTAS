@@ -59,7 +59,7 @@ public abstract class MixinGuiWorldSelection extends GuiScreen {
 				} catch (Exception e) { }
 			}
 			//#else
-//$$ 			field_146638_t = new ChallengeMapEntryWidget((GuiSelectWorld) (Object) this, width);
+//$$ 			field_146638_t = ((GuiSelectWorld) (Object) this).new List(mc);
 			//#endif
 		}
 	}
@@ -68,7 +68,7 @@ public abstract class MixinGuiWorldSelection extends GuiScreen {
 	public void injectinitGui(CallbackInfo ci) {
 		this.buttonList.add(new GuiButton(16, 5, 5, 98, 20, "Seeds"));
 		this.buttonList.add(new GuiCheckBox(17, width - 17 - MCVer.getFontRenderer(mc).getStringWidth("Open ESC when joining world"), 4, "Open ESC when joining world", ConfigUtils.getBoolean("tools", "hitEscape")));
-		this.buttonList.add(new GuiCheckBox(18, width - 17 - MCVer.getFontRenderer(mc).getStringWidth("Open ESC when joining world"), 16, "Show TAS Challenge Maps", !ConfigUtils.getBoolean("tools", "hideMaps")));
+		this.buttonList.add(new GuiCheckBox(18, width - 17 - MCVer.getFontRenderer(mc).getStringWidth("Open ESC when joining world"), 16, "Show TAS Challenge Maps", ConfigUtils.getBoolean("tools", "hideMaps")));
 	}
 	
 	// Workaround cuz of Mixin
@@ -105,7 +105,7 @@ public abstract class MixinGuiWorldSelection extends GuiScreen {
 				ConfigUtils.save();
 				break;
 			case 18:
-				ConfigUtils.setBoolean("tools", "hideMaps", !((GuiCheckBox) button).isChecked());
+				ConfigUtils.setBoolean("tools", "hideMaps", ((GuiCheckBox) button).isChecked());
 				ConfigUtils.save();
 				//#if MC>=10900
 				try {

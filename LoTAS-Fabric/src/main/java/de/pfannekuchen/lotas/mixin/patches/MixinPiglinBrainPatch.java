@@ -26,7 +26,7 @@ import org.spongepowered.asm.mixin.Mixin;
 //$$ 		for (DropManipulationScreen.DropManipulation man : DropManipulationScreen.manipulations) {
 //$$ 			if (!((Checkbox) man.enabled).selected())
 //$$ 				continue;
-//$$ 			List<ItemStack> list2 = man.redirectDrops((Piglin) null);
+//$$ 			List<ItemStack> list2 = man.redirectDrops((Piglin) null, 0);
 //$$ 			if (!list2.isEmpty()) {
 //$$ 				list = list2;
 //$$ 			}

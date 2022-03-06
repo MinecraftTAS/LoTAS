@@ -355,7 +355,8 @@ public class AIManipMod {
 		public void timeoutTick() {
 			if(entity==null) {
 				System.err.println("The entity to check is null (timeoutTick)");
-				timeouttimer++;
+				timeouttimer=300;
+				return;
 			}
 			if(prevPos==null) {
 				Vec pos = new Vec(entity.getPositionVector());

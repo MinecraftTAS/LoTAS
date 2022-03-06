@@ -57,25 +57,25 @@ public class MonsterDropManipulation extends GuiDropChanceManipulation.DropManip
     public List<ItemStack> redirectDrops(IBlockState blockstate) { return ImmutableList.of(); }
 
     @Override
-    public List<ItemStack> redirectDrops(Entity entity) {
+    public List<ItemStack> redirectDrops(Entity entity, int lootingValue) {
         if ((entity instanceof EntityCaveSpider || entity instanceof EntitySpider) && optimizeSpider.isChecked())
-            return ImmutableList.of(new ItemStack(MCVer.getItem("SPIDER_EYE")), new ItemStack(MCVer.getItem("STRING"), 2));
+            return ImmutableList.of(new ItemStack(MCVer.getItem("SPIDER_EYE")), new ItemStack(MCVer.getItem("STRING"), 2 + lootingValue));
         if (entity instanceof EntityCreeper && optimizeCreeper.isChecked())
-            return ImmutableList.of(new ItemStack(MCVer.getItem("GUNPOWDER"), 2));
+            return ImmutableList.of(new ItemStack(MCVer.getItem("GUNPOWDER"), 2 + lootingValue));
         if (entity instanceof EntityEnderman && optimizeEnderman.isChecked())
-            return ImmutableList.of(new ItemStack(MCVer.getItem("ENDER_PEARL"), 1));
+            return ImmutableList.of(new ItemStack(MCVer.getItem("ENDER_PEARL"), 1 + lootingValue));
         if (entity instanceof EntitySkeleton && optimizeSkeleton.isChecked())
-            return ImmutableList.of(new ItemStack(MCVer.getItem("ARROW"), 2), new ItemStack(MCVer.getItem("BONE"), 2));
+            return ImmutableList.of(new ItemStack(MCVer.getItem("ARROW"), 2 + lootingValue), new ItemStack(MCVer.getItem("BONE"), 2 + lootingValue));
         if (entity instanceof EntitySlime && optimizeSlime.isChecked())
-            if (((EntitySlime) entity).getSlimeSize() == 1) return ImmutableList.of(new ItemStack(MCVer.getItem("SLIME_BALL"), 2));
+            if (((EntitySlime) entity).getSlimeSize() == 1) return ImmutableList.of(new ItemStack(MCVer.getItem("SLIME_BALL"), 2 + lootingValue));
         if (entity instanceof EntityGuardian && optimizeGuardian.isChecked())
-            return ImmutableList.of(new ItemStack(MCVer.getItem("PRISMARINE_SHARD"), 2));
+            return ImmutableList.of(new ItemStack(MCVer.getItem("PRISMARINE_SHARD"), 2 + lootingValue));
         if (entity instanceof EntityWitch && optimizeWitch.isChecked()) {
             if (!((EntityWitch) entity).isChild())
-            	return ImmutableList.of(new ItemStack(MCVer.getItem("GLOWSTONE_DUST")), new ItemStack(MCVer.getItem("REDSTONE")), new ItemStack(MCVer.getItem("GUNPOWDER")), 
+            	return ImmutableList.of(new ItemStack(MCVer.getItem("GLOWSTONE_DUST"), 1 + lootingValue), new ItemStack(MCVer.getItem("REDSTONE"), 1 + lootingValue), new ItemStack(MCVer.getItem("GUNPOWDER"), 1 + lootingValue), 
             			// Witches don't drop potions in 1.8
             			//#if MC>=10900
-            			((EntityWitch) entity).isDrinkingPotion() ? entity.getHeldEquipment().iterator().next() : new ItemStack(MCVer.getItem("GLASS_BOTTLE"))
+            			((EntityWitch) entity).isDrinkingPotion() ? entity.getHeldEquipment().iterator().next() : new ItemStack(MCVer.getItem("GLASS_BOTTLE"), 1 + lootingValue)
             			//#else
             //$$ 			new ItemStack(MCVer.getItem("GLASS_BOTTLE"))
             			//#endif
@@ -84,11 +84,11 @@ public class MonsterDropManipulation extends GuiDropChanceManipulation.DropManip
         
         //#if MC>=11100
         if (entity instanceof net.minecraft.entity.monster.EntityVindicator && optimizeVindicator.isChecked())
-            return ImmutableList.of(new ItemStack(Items.EMERALD, 1));
+            return ImmutableList.of(new ItemStack(Items.EMERALD, 1 + lootingValue));
         if (entity instanceof net.minecraft.entity.monster.EntityShulker && optimizeShulker.isChecked())
-            return ImmutableList.of(new ItemStack(Items.SHULKER_SHELL, 1));
+            return ImmutableList.of(new ItemStack(Items.SHULKER_SHELL, 1 + lootingValue));
         if (entity instanceof net.minecraft.entity.monster.EntityElderGuardian && optimizeElderGuardian.isChecked())
-            return ImmutableList.of(new ItemStack(Items.PRISMARINE_CRYSTALS, 1), new ItemStack(Items.PRISMARINE_SHARD, 2), new ItemStack(Blocks.SPONGE), new ItemStack(Item.getItemById(349)));
+            return ImmutableList.of(new ItemStack(Items.PRISMARINE_CRYSTALS, 1 + lootingValue), new ItemStack(Items.PRISMARINE_SHARD, 2 + lootingValue), new ItemStack(Blocks.SPONGE), new ItemStack(Item.getItemById(349)));
         //#endif
         return ImmutableList.of();
     }
