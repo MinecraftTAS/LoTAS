@@ -1,115 +1,142 @@
 package de.pfannekuchen.lotas.core.utils;
 
-import org.lwjgl.opengl.GL11;
-
-import com.mojang.blaze3d.platform.Window;
-import com.mojang.blaze3d.platform.GlStateManager.DestFactor;
-import com.mojang.blaze3d.platform.GlStateManager.SourceFactor;
-
 import de.pfannekuchen.lotas.core.MCVer;
-import net.minecraft.client.Minecraft;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.PotionItem;
 
 /**
- * Draws a potion in the gui hud that is moving with the camera
+ * Draws a potion in the gui hud pixel by pixel
  * 
  * @author ScribbleLP
  * @since v1.0
- * @version v1.2
+ * @version v1.3
  */
 public class PotionRenderer {
-
-	public static float lerpX = 0f;
-	public static float lerpY = 0f;
-
-	public static float lerp(float point1, float point2, float alpha) {
-		return point1 + alpha * (point2 - point1);
-	}
-
-	//#if MC>=11500
-//$$ 	public static ItemStack render(com.mojang.blaze3d.vertex.PoseStack matrices) {
-//$$ 		ItemStack stack = new ItemStack(Items.POTION);
-//$$ 		if (stack.getItem() instanceof PotionItem) {
-//$$ 			CompoundTag cp = new CompoundTag();
-//$$ 			cp.putInt("CustomPotionColor", 0x4672A3);
-//$$ 			stack.setTag(cp);
-//$$ 		}
-//$$
-//$$ 		Window window = MCVer.getGLWindow();
-//$$
-//$$ 		float scale = (float) (window.getGuiScale() / 3);
-//$$ 		int height = window.getHeight();
-//$$
-//$$ 		matrices.translate(0, 0, -13);
-//$$
-//$$ 		double skla = 4.1;
-//$$ 		if (scale == 1D) {
-//$$ 			skla = 4.85;
-//$$ 		} else if (scale < 1 && scale > 0.4) {
-//$$ 			skla = 5.6;
-//$$ 		} else if (scale < 0.4 && scale > 0.1) {
-//$$ 			skla = 6.6;
-//$$ 		}
-//$$ 		double height2 = (height / 2 * -0.004) - skla;
-//$$
-//$$ 		matrices.translate(0, height2, 0);
-//$$ 		matrices.scale(scale, scale, scale);
-//$$
-//$$ 		float scale2 = (float) (1 + (1080 - height) * 0.0015);
-//$$ 		matrices.scale(scale2, scale2, scale2);
-//$$
-//$$ 		if (Minecraft.getInstance().player.isUnderWater()) {
-//$$ 			matrices.translate(0, 0, -2.5);
-//$$ 		}
-//$$ 		matrices.mulPose(com.mojang.math.Vector3f.YP.rotationDegrees(180));
-//$$ 		matrices.mulPose(com.mojang.math.Vector3f.ZP.rotationDegrees(10));
-//$$ 		return stack;
-//$$ 	}
-	//#else
-	public static ItemStack render() {
-		ItemStack stack = new ItemStack(Items.POTION);
-		if (stack.getItem() instanceof PotionItem) {
-			CompoundTag cp = new CompoundTag();
-			cp.putInt("CustomPotionColor", 0x4672A3);
-			stack.setTag(cp);
-		}
-
-		Window window= Minecraft.getInstance().window;
-
-		double scale=window.getGuiScale()/3;
-		int height=window.getScreenHeight();
-
-		MCVer.translated(null, 0, 0.0f, -13);
-
-		double skla=4.1;
-		if(scale==1D) {
-			skla=4.85;
-		}
-		else if(scale<1&&scale>0.4) {
-			skla=5.6;
-		}
-		else if(scale<0.4&&scale>0.1) {
-			skla=6.6;
-		}
-		double height2=(height/2*-0.004)-skla;
-
-
-		MCVer.translated(null, 0, height2, 0);
+	
+	public static void render(double xPos, double yPos, double scale) {
+		double rotation=15;
+		xPos+=2.2;
+		yPos+=-0.5;
+		scale+=0.26;
+		MCVer.translated(null, xPos, yPos, 0);
 		MCVer.scaled(null, scale, scale, scale);
-
-		double scale2=1+(1080-height)*0.0015;
-		MCVer.scaled(null, scale2, scale2, scale2);
-
-		if(Minecraft.getInstance().player.isUnderWater()) {
-			MCVer.translated(null, 0, 0, -2.5);
-		}
-		MCVer.rotated(null, 180, 0, 1, 0);
-		MCVer.rotated(null, 10, 0, 0, 1);
-		return stack;
+		MCVer.rotated(null, rotation, 0, 0, 1);
+		
+		int orangeBright=0xE35720;
+		int orange=0xC24218;
+		int orangeDark=0x9A3212;
+		
+		int white=0xFFFFFF;
+		int cyan=0x546980;
+		
+		int y=0;
+		renderPixel(8, y, orangeBright);
+		renderPixel(9, y, orangeBright);
+		
+		y=1;
+		renderPixel(7, y, orange);
+		renderPixel(8, y, orange);
+		renderPixel(9, y, orangeBright);
+		
+		y=2;
+		renderPixel(6, y, orange);
+		renderPixel(7, y, orange);
+		renderPixel(8, y, orange);
+		renderPixel(9, y, orange);
+		
+		y=3;
+		renderPixel(5, y, white);
+		renderPixel(8, y, orangeDark);
+		renderPixel(9, y, orange);
+		
+		y=4;
+		renderPixel(4, y, white);
+		renderPixel(7, y, white);
+		renderPixel(8, y, orangeDark);
+		renderPixel(9, y, orangeDark);
+		
+		y=5;
+		renderPixel(3, y, white);
+		renderPixel(7, y, white);
+		
+		y=6;
+		renderPixel(2, y, white);
+		renderPixel(3, y, cyan);
+		renderPixel(4, y, white);
+		renderPixel(5, y, cyan);
+		renderPixel(6, y, cyan);
+		renderPixel(7, y, cyan);
+		renderPixel(8, y, white);
+		
+		y=7;
+		renderPixel(1, y, white);
+		renderPixel(2, y, cyan);
+		renderPixel(3, y, white);
+		renderPixel(4, y, cyan);
+		renderPixel(5, y, cyan);
+		renderPixel(6, y, cyan);
+		renderPixel(7, y, cyan);
+		renderPixel(8, y, cyan);
+		renderPixel(9, y, white);
+		
+		y=8;
+		renderPixel(1, y, white);
+		renderPixel(2, y, cyan);
+		renderPixel(3, y, white);
+		renderPixel(4, y, cyan);
+		renderPixel(5, y, cyan);
+		renderPixel(6, y, cyan);
+		renderPixel(7, y, cyan);
+		renderPixel(8, y, cyan);
+		renderPixel(9, y, white);
+		
+		y=9;
+		renderPixel(1, y, white);
+		renderPixel(2, y, cyan);
+		renderPixel(3, y, cyan);
+		renderPixel(4, y, cyan);
+		renderPixel(5, y, cyan);
+		renderPixel(6, y, cyan);
+		renderPixel(7, y, white);
+		renderPixel(8, y, cyan);
+		renderPixel(9, y, white);
+		
+		y=10;
+		renderPixel(1, y, white);
+		renderPixel(2, y, cyan);
+		renderPixel(3, y, cyan);
+		renderPixel(4, y, cyan);
+		renderPixel(5, y, cyan);
+		renderPixel(6, y, cyan);
+		renderPixel(7, y, white);
+		renderPixel(8, y, cyan);
+		renderPixel(9, y, white);
+		
+		y=11;
+		renderPixel(1, y, white);
+		renderPixel(2, y, white);
+		renderPixel(3, y, cyan);
+		renderPixel(4, y, cyan);
+		renderPixel(5, y, cyan);
+		renderPixel(6, y, white);
+		renderPixel(7, y, cyan);
+		renderPixel(8, y, white);
+		renderPixel(9, y, white);
+		
+		y=12;
+		renderPixel(3, y, white);
+		renderPixel(4, y, white);
+		renderPixel(5, y, white);
+		renderPixel(6, y, white);
+		renderPixel(7, y, white);
+		
+		MCVer.rotated(null, -rotation, 0, 0, 1);
+		MCVer.scaled(null, (double)1/scale, (double)1/scale, (double)1/scale);
+		MCVer.translated(null, -xPos, -yPos, 0);
+		
+		MCVer.color4f(255, 255, 255, 255);
 	}
-	//#endif
-
+	
+	private static void renderPixel(int x, int y, int color) {
+		int alpha=0x80000000;
+		MCVer.fill(x, y, x+1,y+1, alpha+color);
+	}
 }

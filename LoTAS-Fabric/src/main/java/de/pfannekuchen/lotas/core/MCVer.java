@@ -1,7 +1,11 @@
 package de.pfannekuchen.lotas.core;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.platform.GlStateManager.DestFactor;
 import com.mojang.blaze3d.platform.GlStateManager.SourceFactor;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.math.Quaternion;
 
 import de.pfannekuchen.lotas.mixin.accessors.AccessorButtons;
@@ -150,8 +154,8 @@ public class MCVer {
 	public static void blit(int a, int b, int c, float d, float e, int f, int g, int h, int i) {
 		GuiComponent.blit(a, b, c, d, e, f, g, h, i);
 	}
-	public static void fill(int a, int b, int c, int d, int e) {
-		GuiComponent.fill(a, b, c, d, e);
+	public static void fill(int x, int y, int x2, int y2, int color) {
+	      GuiComponent.fill(x, y, x2, y2, color);
 	}
 	public static void drawCenteredString(Screen s, String text, int x, int y, int color) {
 		s.drawCenteredString(Minecraft.getInstance().font, text, x, y, color);
@@ -424,7 +428,7 @@ public class MCVer {
 		com.mojang.blaze3d.platform.GlStateManager.scaled(scale, scale2, scale3);
 	}
 
-	public static void rotated(Object poseStack, int i, int j, int k, int l) {
+	public static void rotated(Object poseStack, double i, double j, double k, double l) {
 		com.mojang.blaze3d.platform.GlStateManager.rotated(i, j, k, l);
 	}
 
