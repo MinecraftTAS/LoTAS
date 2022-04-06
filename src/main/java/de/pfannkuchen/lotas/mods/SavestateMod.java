@@ -39,6 +39,8 @@ import com.mojang.blaze3d.platform.NativeImage;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import de.pfannkuchen.lotas.LoTAS;
+import de.pfannkuchen.lotas.mixin.accessors.AccessorMinecraftServer;
+import de.pfannkuchen.lotas.mixin.accessors.AccessorServerLevel;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -49,8 +51,12 @@ import net.minecraft.network.protocol.game.ClientboundCustomPayloadPacket;
 import net.minecraft.network.protocol.game.ServerboundCustomPayloadPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.progress.ChunkProgressListener;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.chunk.ChunkStatus;
 import net.minecraft.world.level.storage.LevelResource;
 
 /**
@@ -415,7 +421,42 @@ public class SavestateMod {
 				this.states[ii] = State.deserialize(buf.readByteArray());
 			}
 
-			// ...
+			// Unload the world
+			for (ServerLevel world : mcserver.getAllLevels())
+				world.close();
+			// Delete the world first
+			FileUtils.deleteDirectory(this.worldDir);
+			// Copy the savestate world back
+			FileUtils.copyDirectory(new File(this.savestatesDir, i + ""), this.worldDir);
+			// Reload the world
+			for (ServerLevel world : mcserver.getAllLevels()) {
+				ServerChunkCache previousSource = ((AccessorServerLevel) world).getChunkSource();
+				@SuppressWarnings("resource")
+				ServerChunkCache newSource = new ServerChunkCache(world, ((AccessorMinecraftServer) mcserver).getStorageSource(), mcserver.getFixerUpper(), mcserver.getStructureManager(), ((AccessorMinecraftServer) mcserver).getExecutor(), previousSource.getGenerator(), mcserver.getPlayerList().getViewDistance(), mcserver.getPlayerList().getSimulationDistance(), mcserver.forceSynchronousWrites(), new ChunkProgressListener() {
+					
+					@Override
+					public void updateSpawnPos(ChunkPos var1) {
+						System.out.println("PANCAKE: UPDATING SPAWN POS: " + var1);
+					}
+					
+					@Override
+					public void stop() {
+						System.out.println("PANCAKE: STOPPING");
+					}
+					
+					@Override
+					public void start() {
+						System.out.println("PANCAKE: STARTING");
+					}
+					
+					@Override
+					public void onStatusChange(ChunkPos var1, ChunkStatus var2) {
+						System.out.println("PANCAKE: ON STATUS CHANGE: " + var1 + " | " + var2);
+					}
+				}, ((AccessorServerLevel) world).getEntityManager()::updateChunkStatus, () -> mcserver.overworld().getDataStorage());
+				
+				((AccessorServerLevel) world).setChunkSource(newSource);
+			}
 			
 		} catch (IOException e) {
 			e.printStackTrace();
