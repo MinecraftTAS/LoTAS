@@ -9,6 +9,7 @@ import org.lwjgl.glfw.GLFW;
 import de.pfannkuchen.lotas.ClientLoTAS;
 import de.pfannkuchen.lotas.LoTAS;
 import de.pfannkuchen.lotas.mixin.client.accessors.AccessorKeyMapping;
+import de.pfannkuchen.lotas.util.ChunkControl;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.KeyMapping;
@@ -35,6 +36,10 @@ public class KeybindManager {
 	 * Key binding for advancing a single tick while being in tick advance.
 	 */
 	private KeyMapping toggleTickadvance = new KeyMapping("Toggle tick advance", GLFW.GLFW_KEY_F8, "LoTAS Keybinds");
+	
+	private KeyMapping testingKey = new KeyMapping("Testing", GLFW.GLFW_KEY_F10, "LoTAS Keybinds");
+	private KeyMapping testingKey2 = new KeyMapping("Testing", GLFW.GLFW_KEY_F12, "LoTAS Keybinds");
+	private KeyMapping testingKey3 = new KeyMapping("Testing", GLFW.GLFW_KEY_J, "LoTAS Keybinds");
 
 	/**
 	 * Categories for all key binds used.
@@ -63,6 +68,16 @@ public class KeybindManager {
 			LoTAS.tickadvance.requestTickadvance();
 		else if (this.isKeyDown(mc, this.toggleTickadvance) && mc.level != null)
 			LoTAS.tickadvance.requestTickadvanceToggle();
+		
+		else if (this.isKeyDown(mc, testingKey)) {
+			ChunkControl.unloadPlayer();
+		}
+		else if (this.isKeyDown(mc, testingKey2)) {
+			ChunkControl.loadPlayer();
+		}
+		else if (this.isKeyDown(mc, testingKey3)) {
+			ChunkControl.unloadWorld();
+		}
 	}
 
 	/**

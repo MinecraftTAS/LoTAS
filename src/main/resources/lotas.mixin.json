@@ -6,13 +6,14 @@
 	"mixins": [
 		"accessors.AccessorMinecraftServer",
 		"accessors.AccessorServerLevel",
+		"accessors.AccessorEntity",
 		"events.HookMinecraftServer",
 		"events.HookPlayNetworkHandler",
 		"events.HookPlayerList",
 		"misc.MixinCustomPacketInflater",
 		"misc.MixinCustomPacketInflaterClient",
 		"misc.MixinPacketInflater",
-		"tickratechanger.MixinMinecraftServer",
+		"tickratechanger.MixinMinecraftServer"
 	],
 	"client": [
 		"client.accessors.AccessorKeyMapping",
