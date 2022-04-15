@@ -13,6 +13,7 @@ import de.pfannkuchen.lotas.gui.widgets.TextFieldLoWidget;
 import de.pfannkuchen.lotas.loscreen.LoScreen;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.gui.screens.PauseScreen;
 import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.network.chat.TextComponent;
 
@@ -74,12 +75,18 @@ public class RecorderLoScreen extends LoScreen {
 			if (this.complaint == null) {
 				ClientLoTAS.recordermod.startRecording(this.mc);
 				ClientLoTAS.loscreenmanager.setScreen(null);
-				this.mc.setScreen(new TitleScreen());
+				if (this.mc.level == null)
+					this.mc.setScreen(new TitleScreen());
+				else
+					this.mc.setScreen(new PauseScreen(true));
 			}
 		}, new TextComponent("Start Recording...")));
 		this.addWidget(new ButtonLoWidget(true, .78, .94, .2, () -> {
 			ClientLoTAS.loscreenmanager.setScreen(null);
-			this.mc.setScreen(new TitleScreen());
+			if (this.mc.level == null)
+				this.mc.setScreen(new TitleScreen());
+			else
+				this.mc.setScreen(new PauseScreen(true));
 		}, new TextComponent("Cancel")));
 		super.init();
 	}
