@@ -10,7 +10,8 @@
 		"misc.MixinCustomPacketInflater",
 		"misc.MixinCustomPacketInflaterClient",
 		"misc.MixinPacketInflater",
-		"tickratechanger.MixinMinecraftServer",
+		"tickratechanger.MixinDedicatedServer",
+		"tickratechanger.MixinMinecraftServer"
 	],
 	"client": [
 		"client.accessors.AccessorKeyMapping",
