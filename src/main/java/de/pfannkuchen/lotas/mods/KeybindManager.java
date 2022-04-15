@@ -35,6 +35,16 @@ public class KeybindManager {
 	 * Key binding for advancing a single tick while being in tick advance.
 	 */
 	private KeyMapping toggleTickadvance = new KeyMapping("Toggle tick advance", GLFW.GLFW_KEY_F8, "LoTAS Keybinds");
+	
+	/**
+	 * Key binding for decreasing the tickrate
+	 */
+	private KeyMapping decreaseTickrate = new KeyMapping("Decrease Tickrate", GLFW.GLFW_KEY_COMMA, "LoTAS Keybinds");
+	
+	/**
+	 * Key binding for increasing the tickrate
+	 */
+	private KeyMapping increaseTickrate = new KeyMapping("Increase Tickrate", GLFW.GLFW_KEY_PERIOD, "LoTAS Keybinds");
 
 	/**
 	 * Categories for all key binds used.
@@ -49,7 +59,7 @@ public class KeybindManager {
 		final Map<String, Integer> categories = AccessorKeyMapping.getCategorySorting();
 		for (int i = 0; i < this.keybindCategories.length; i++) categories.put(this.keybindCategories[i], i+8);
 		// Finish by adding Keybinds
-		return ArrayUtils.addAll(keyMappings, this.openLoTASMenuKeybind, this.tickadvanceKeybind, this.toggleTickadvance);
+		return ArrayUtils.addAll(keyMappings, this.openLoTASMenuKeybind, this.tickadvanceKeybind, this.toggleTickadvance, this.decreaseTickrate, this.increaseTickrate);
 	}
 
 	/**
@@ -63,6 +73,11 @@ public class KeybindManager {
 			LoTAS.tickadvance.requestTickadvance();
 		else if (this.isKeyDown(mc, this.toggleTickadvance) && mc.level != null)
 			LoTAS.tickadvance.requestTickadvanceToggle();
+		else if (this.isKeyDown(mc, this.decreaseTickrate) && mc.level != null)
+			LoTAS.tickratechanger.decreaseTickrate();
+		else if (this.isKeyDown(mc, this.increaseTickrate) && mc.level != null)
+			LoTAS.tickratechanger.increaseTickrate();
+		
 	}
 
 	/**
