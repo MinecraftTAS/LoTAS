@@ -45,6 +45,16 @@ public class KeybindManager {
 	 * Key binding for increasing the tickrate
 	 */
 	private KeyMapping increaseTickrate = new KeyMapping("Increase Tickrate", GLFW.GLFW_KEY_PERIOD, "LoTAS Keybinds");
+	
+	/**
+	 * Key binding for increasing the tickrate
+	 */
+	private KeyMapping savePlayerdata = new KeyMapping("Save playerdata", GLFW.GLFW_KEY_N, "LoTAS Keybinds");
+	
+	/**
+	 * Key binding for decreasing the tickrate
+	 */
+	private KeyMapping loadPlayerdata = new KeyMapping("Load playerdata", GLFW.GLFW_KEY_M, "LoTAS Keybinds");
 
 	/**
 	 * Categories for all key binds used.
@@ -59,7 +69,7 @@ public class KeybindManager {
 		final Map<String, Integer> categories = AccessorKeyMapping.getCategorySorting();
 		for (int i = 0; i < this.keybindCategories.length; i++) categories.put(this.keybindCategories[i], i+8);
 		// Finish by adding Keybinds
-		return ArrayUtils.addAll(keyMappings, this.openLoTASMenuKeybind, this.tickadvanceKeybind, this.toggleTickadvance, this.decreaseTickrate, this.increaseTickrate);
+		return ArrayUtils.addAll(keyMappings, this.openLoTASMenuKeybind, this.tickadvanceKeybind, this.toggleTickadvance, this.decreaseTickrate, this.increaseTickrate, this.savePlayerdata, this.loadPlayerdata);
 	}
 
 	/**
@@ -77,6 +87,10 @@ public class KeybindManager {
 			LoTAS.tickratechanger.decreaseTickrate();
 		else if (this.isKeyDown(mc, this.increaseTickrate) && mc.level != null)
 			LoTAS.tickratechanger.increaseTickrate();
+		else if (this.isKeyDown(mc, this.savePlayerdata) && mc.level != null)
+			LoTAS.dupemod.requestDupe(true);
+		else if (this.isKeyDown(mc, this.loadPlayerdata) && mc.level != null)
+			LoTAS.dupemod.requestDupe(false);
 		
 	}
 
