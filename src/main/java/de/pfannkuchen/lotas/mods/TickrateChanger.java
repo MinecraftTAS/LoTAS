@@ -37,6 +37,12 @@ public class TickrateChanger {
 	private double msPerTick = 50.0;
 	private double gamespeed = 1.0;
 
+	// Recommended tickrate
+	@Environment(EnvType.CLIENT)
+	private double[] tickrates = new double[] {
+		0.5f, 1.0f, 2.0f, 4.0f, 5.0f, 10.0f, 20.0f	
+	};
+	
 	// Tickrate Changer Millisecond
 	@Environment(EnvType.CLIENT)
 	private long timeSinceTC = System.currentTimeMillis();
@@ -136,6 +142,32 @@ public class TickrateChanger {
 		c.connection.send(p);
 	}
 
+	/**
+	 * Decreases the tickrate to the nearest recommended value
+	 */
+	@Environment(EnvType.CLIENT)
+	public void decreaseTickrate() {
+		double newTickrate = this.tickrate;
+		for (int i = this.tickrates.length-1; i >= 0; i--)
+			if ((newTickrate = this.tickrates[i]) < this.tickrate)
+				break;
+		
+		this.requestTickrateUpdate(newTickrate);
+	}
+
+	/**
+	 * Increases the tickrate to the nearest recommended value
+	 */
+	@Environment(EnvType.CLIENT)
+	public void increaseTickrate() {
+		double newTickrate = this.tickrate;
+		for (int i = 0; i < this.tickrates.length; i++)
+			if ((newTickrate = this.tickrates[i]) > this.tickrate)
+				break;
+		
+		this.requestTickrateUpdate(newTickrate);
+	}
+	
 	// Place getters here to not confuse with public variables that shall not be set
 
 	public double getTickrate() {
@@ -149,5 +181,5 @@ public class TickrateChanger {
 	public double getGamespeed() {
 		return this.gamespeed;
 	}
-
+	
 }
