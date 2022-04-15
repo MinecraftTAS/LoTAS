@@ -13,6 +13,7 @@
 		"misc.MixinCustomPacketInflater",
 		"misc.MixinCustomPacketInflaterClient",
 		"misc.MixinPacketInflater",
+		"tickratechanger.MixinDedicatedServer",
 		"tickratechanger.MixinMinecraftServer"
 	],
 	"client": [
