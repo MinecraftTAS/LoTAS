@@ -47,9 +47,15 @@ public class RecorderLoScreen extends LoScreen {
 	 * Initializes the Recorder LoScreen
 	 */
 	public RecorderLoScreen() {
-		this.path = LoTAS.configmanager.getString("recorder", "ffmpeg").replace("null", "");
-		this.input = LoTAS.configmanager.getString("recorder", "ffmpeg_cmd_in").replace("null", "");
-		this.output = LoTAS.configmanager.getString("recorder", "ffmpeg_cmd_out").replace("null", "");
+		this.path = LoTAS.configmanager.getString("recorder", "ffmpeg");
+		this.input = LoTAS.configmanager.getString("recorder", "ffmpeg_cmd_in");
+		this.output = LoTAS.configmanager.getString("recorder", "ffmpeg_cmd_out");
+		if (this.path.equals("null"))
+			LoTAS.configmanager.setString("recorder", "ffmpeg", this.path = "C:\\ffmpeg\\bin\\ffmpeg.exe");
+		if (this.input.equals("null"))
+			LoTAS.configmanager.setString("recorder", "ffmpeg_cmd_in", this.input = "-hwaccel auto -hwaccel_output_format auto");
+		if (this.output.equals("null"))
+			LoTAS.configmanager.setString("recorder", "ffmpeg_cmd_out", this.output = "-b:v 32M -c:v h264_nvenc");
 	}
 
 	@Override
