@@ -8,6 +8,7 @@ import org.lwjgl.glfw.GLFW;
 
 import de.pfannkuchen.lotas.ClientLoTAS;
 import de.pfannkuchen.lotas.LoTAS;
+import de.pfannkuchen.lotas.gui.RecorderLoScreen;
 import de.pfannkuchen.lotas.mixin.client.accessors.AccessorKeyMapping;
 import de.pfannkuchen.lotas.util.ChunkControl;
 import de.pfannkuchen.lotas.util.LoTASHelper;
@@ -28,6 +29,11 @@ public class KeybindManager {
 	 */
 	private KeyMapping openLoTASMenuKeybind = new KeyMapping("Open LoTAS Menu", GLFW.GLFW_KEY_R, "LoTAS Keybinds");
 
+	/**
+	 * Key binding for opening the recording menu
+	 */
+	private KeyMapping openRecordingMenuKeybind = new KeyMapping("Open Recording Menu", GLFW.GLFW_KEY_F6, "LoTAS Keybinds");
+	
 	/**
 	 * Key binding for advancing a single tick while being in tick advance.
 	 */
@@ -85,7 +91,7 @@ public class KeybindManager {
 		final Map<String, Integer> categories = AccessorKeyMapping.getCategorySorting();
 		for (int i = 0; i < this.keybindCategories.length; i++) categories.put(this.keybindCategories[i], i+8);
 		// Finish by adding Keybinds
-		return ArrayUtils.addAll(keyMappings, this.openLoTASMenuKeybind, this.tickadvanceKeybind, this.toggleTickadvance, this.decreaseTickrate, this.increaseTickrate, this.savePlayerdata, this.loadPlayerdata, this.quickSavestate, this.quickLoadstate);
+		return ArrayUtils.addAll(keyMappings, this.openLoTASMenuKeybind, this.openRecordingMenuKeybind, this.tickadvanceKeybind, this.toggleTickadvance, this.decreaseTickrate, this.increaseTickrate, this.savePlayerdata, this.loadPlayerdata, this.quickSavestate, this.quickLoadstate);
 	}
 
 	/**
@@ -95,6 +101,8 @@ public class KeybindManager {
 	public void onGameLoop(Minecraft mc) {
 		if (this.isKeyDown(mc, this.openLoTASMenuKeybind) && mc.level != null)
 			ClientLoTAS.loscreenmanager.toggleLoTASMenu(mc);
+		if (this.isKeyDown(mc, this.openRecordingMenuKeybind) && mc.level != null)
+			ClientLoTAS.loscreenmanager.setScreen(new RecorderLoScreen());
 		else if (this.isKeyDown(mc, this.tickadvanceKeybind) && mc.level != null)
 			LoTAS.tickadvance.requestTickadvance();
 		else if (this.isKeyDown(mc, this.toggleTickadvance) && mc.level != null)
