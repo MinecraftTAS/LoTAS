@@ -84,6 +84,14 @@ public class TextFieldLoWidget extends LoScreen {
 				this.onControl = true;
 				if (this.content.length() != 0) this.content = this.content.substring(0, this.content.length()-1);
 			}
+		} else if (Screen.isSelectAll(-key)) {
+			// paste
+			if (this.onControl) {
+				this.onControl = false;
+			} else {
+				this.onControl = true;
+				this.content = "";
+			}
 		} else if (key > 0) {
 			// normal character
 			this.content += (char) key;
