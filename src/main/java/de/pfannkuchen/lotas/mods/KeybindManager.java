@@ -10,8 +10,8 @@ import de.pfannkuchen.lotas.ClientLoTAS;
 import de.pfannkuchen.lotas.LoTAS;
 import de.pfannkuchen.lotas.gui.RecorderLoScreen;
 import de.pfannkuchen.lotas.mixin.client.accessors.AccessorKeyMapping;
-import de.pfannkuchen.lotas.util.ChunkControl;
 import de.pfannkuchen.lotas.util.LoTASHelper;
+import de.pfannkuchen.lotas.worldhacking.WorldHacks;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.KeyMapping;
@@ -76,7 +76,8 @@ public class KeybindManager {
 	
 	private KeyMapping testingKey = new KeyMapping("Testing", GLFW.GLFW_KEY_F10, "LoTAS Keybinds");
 	private KeyMapping testingKey2 = new KeyMapping("Testing", GLFW.GLFW_KEY_F12, "LoTAS Keybinds");
-	private KeyMapping testingKey3 = new KeyMapping("Testing", GLFW.GLFW_KEY_J, "LoTAS Keybinds");
+	private KeyMapping testingKey3 = new KeyMapping("Testing", GLFW.GLFW_KEY_Z, "LoTAS Keybinds");
+	private KeyMapping testingKey4 = new KeyMapping("Testing", GLFW.GLFW_KEY_U, "LoTAS Keybinds");
 
 	/**
 	 * Categories for all key binds used.
@@ -121,13 +122,16 @@ public class KeybindManager {
 			LoTAS.savestatemod.requestState(1, LoTAS.savestatemod.getStateCount()-1, null, null);
 		
 		else if (this.isKeyDown(mc, testingKey)) {
-			ChunkControl.unloadPlayer();
+			WorldHacks.unloadWorld();
 		}
 		else if (this.isKeyDown(mc, testingKey2)) {
-			ChunkControl.loadPlayer();
+			WorldHacks.loadWorld();
 		}
 		else if (this.isKeyDown(mc, testingKey3)) {
-			ChunkControl.unloadWorld();
+			WorldHacks.loadPlayer();
+		}
+		else if (this.isKeyDown(mc, testingKey4)) {
+			WorldHacks.unloadPlayers(Minecraft.getInstance().getSingleplayerServer().overworld());
 		}
 	}
 
