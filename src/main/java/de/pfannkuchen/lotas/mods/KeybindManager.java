@@ -74,10 +74,10 @@ public class KeybindManager {
 	 */
 	private KeyMapping quickLoadstate = new KeyMapping("Load last state", GLFW.GLFW_KEY_K, "LoTAS Keybinds");
 	
-	private KeyMapping testingKey = new KeyMapping("Testing", GLFW.GLFW_KEY_F10, "LoTAS Keybinds");
-	private KeyMapping testingKey2 = new KeyMapping("Testing", GLFW.GLFW_KEY_F12, "LoTAS Keybinds");
-	private KeyMapping testingKey3 = new KeyMapping("Testing", GLFW.GLFW_KEY_Z, "LoTAS Keybinds");
-	private KeyMapping testingKey4 = new KeyMapping("Testing", GLFW.GLFW_KEY_U, "LoTAS Keybinds");
+	private KeyMapping testingKey = new KeyMapping("Testing", GLFW.GLFW_KEY_V, "LoTAS Keybinds");
+	private KeyMapping testingKey2 = new KeyMapping("Testing", GLFW.GLFW_KEY_B, "LoTAS Keybinds");
+	private KeyMapping testingKey3 = new KeyMapping("Testing", GLFW.GLFW_KEY_N, "LoTAS Keybinds");
+	private KeyMapping testingKey4 = new KeyMapping("Testing", GLFW.GLFW_KEY_M, "LoTAS Keybinds");
 
 	/**
 	 * Categories for all key binds used.
@@ -122,16 +122,16 @@ public class KeybindManager {
 			LoTAS.savestatemod.requestState(1, LoTAS.savestatemod.getStateCount()-1, null, null);
 		
 		else if (this.isKeyDown(mc, testingKey)) {
-			WorldHacks.unloadWorld();
+			WorldHacks.unloadPlayers(Minecraft.getInstance().getSingleplayerServer().overworld());
 		}
 		else if (this.isKeyDown(mc, testingKey2)) {
-			WorldHacks.loadWorld();
+			WorldHacks.unloadWorld();
 		}
 		else if (this.isKeyDown(mc, testingKey3)) {
-			WorldHacks.loadPlayer();
+			WorldHacks.loadWorld();
 		}
 		else if (this.isKeyDown(mc, testingKey4)) {
-			WorldHacks.unloadPlayers(Minecraft.getInstance().getSingleplayerServer().overworld());
+			WorldHacks.loadPlayer();
 		}
 	}
 

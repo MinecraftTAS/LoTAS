@@ -33,8 +33,7 @@ public class WorldHacks {
 	public static void unloadPlayers(ServerLevel world) {
 		MinecraftServer server=Minecraft.getInstance().getSingleplayerServer();
 		server.getPlayerList().getPlayers().forEach(player -> {
-			player.getLevel().removePlayerImmediately(player, RemovalReason.CHANGED_DIMENSION);
-			((AccessorServerLevel)world).getChunkSource().removeEntity(player);
+			world.getChunkSource().removeEntity(player);
 		});
 	}
 	
@@ -66,12 +65,12 @@ public class WorldHacks {
 
 	public static void loadPlayer() {
 		Minecraft.getInstance().getSingleplayerServer().getPlayerList().getPlayers().forEach(player -> {
-			((AccessorEntity)player).invokeUnsetRemoved();
+//			((AccessorEntity)player).invokeUnsetRemoved();
 			MinecraftServer server =Minecraft.getInstance().getSingleplayerServer();
 			ServerLevel serverLevel=server.overworld();
-			((AccessorServerLevel)serverLevel).getChunkSource().addEntity(player);
-			player.connection.send(new CustomRespawnPacket(serverLevel.dimensionType(), serverLevel.dimension(), BiomeManager.obfuscateSeed(serverLevel.getSeed()), player.gameMode.getGameModeForPlayer(), player.gameMode.getPreviousGameModeForPlayer(), serverLevel.isDebug(), serverLevel.isFlat(), true, true));
-			player.changeDimension(serverLevel);
+			serverLevel.getChunkSource().addEntity(player);
+//			player.connection.send(new CustomRespawnPacket(serverLevel.dimensionType(), serverLevel.dimension(), BiomeManager.obfuscateSeed(serverLevel.getSeed()), player.gameMode.getGameModeForPlayer(), player.gameMode.getPreviousGameModeForPlayer(), serverLevel.isDebug(), serverLevel.isFlat(), true, true));
+//			player.changeDimension(serverLevel);
 		});
 	}
 
