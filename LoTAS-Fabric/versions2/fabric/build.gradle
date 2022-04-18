@@ -27,8 +27,8 @@ dependencies {
 //$$ 	mappings minecraft.officialMojangMappings()
 	//#else
 	//#if MC>=11701
-//$$	minecraft "com.mojang:minecraft:1.17.1"
-//$$	mappings minecraft.officialMojangMappings()
+//$$ 	minecraft "com.mojang:minecraft:1.17.1"
+//$$ 	mappings minecraft.officialMojangMappings()
 	//#else
 	//#if MC>=11605
 //$$  	minecraft "com.mojang:minecraft:1.16.5"

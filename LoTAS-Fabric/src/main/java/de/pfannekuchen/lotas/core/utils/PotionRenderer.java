@@ -11,14 +11,19 @@ import de.pfannekuchen.lotas.core.MCVer;
  */
 public class PotionRenderer {
 	
-	public static void render(double xPos, double yPos, double scale) {
-		double rotation=15;
+	public static void render(Object poseStack, double xPos, double yPos, double rotation) {
+		double scale=1;
 		xPos+=2.2;
 		yPos+=-0.5;
 		scale+=0.26;
-		MCVer.translated(null, xPos, yPos, 0);
-		MCVer.scaled(null, scale, scale, scale);
-		MCVer.rotated(null, rotation, 0, 0, 1);
+		MCVer.translated(poseStack, xPos, yPos, 0);
+		MCVer.scaled(poseStack, scale, scale, scale);
+		
+		//#if MC>=11700
+//$$ 		MCVer.stack.mulPose(com.mojang.math.Quaternion.fromXYZ(0, 0, (float) rotation));
+		//#else
+		MCVer.rotated(poseStack, rotation, 0, 0, 1);
+		//#endif
 		
 		int orangeBright=0xE35720;
 		int orange=0xC24218;
@@ -128,11 +133,17 @@ public class PotionRenderer {
 		renderPixel(6, y, white);
 		renderPixel(7, y, white);
 		
-		MCVer.rotated(null, -rotation, 0, 0, 1);
-		MCVer.scaled(null, (double)1/scale, (double)1/scale, (double)1/scale);
-		MCVer.translated(null, -xPos, -yPos, 0);
+		//#if MC>=11700
+//$$ 		MCVer.stack.mulPose(com.mojang.math.Quaternion.fromXYZ(0, 0, (float) -rotation));
+		//#else
+		MCVer.rotated(poseStack, -rotation, 0, 0, 1);
+		//#endif
+		MCVer.scaled(poseStack, (double)1/scale, (double)1/scale, (double)1/scale);
+		MCVer.translated(poseStack, -xPos, -yPos, 0);
 		
+		//#if MC<11600
 		MCVer.color4f(255, 255, 255, 255);
+		//#endif
 	}
 	
 	private static void renderPixel(int x, int y, int color) {
