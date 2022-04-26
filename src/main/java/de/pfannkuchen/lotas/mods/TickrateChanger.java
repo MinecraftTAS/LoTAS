@@ -9,6 +9,7 @@
  */
 package de.pfannkuchen.lotas.mods;
 
+import de.pfannkuchen.lotas.LoTAS;
 import de.pfannkuchen.lotas.gui.windows.TickrateChangerLoWidget;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.api.EnvType;
@@ -81,10 +82,13 @@ public class TickrateChanger {
 	 */
 	@Environment(EnvType.CLIENT)
 	public void requestTickrateUpdate(double tickrate) {
+		// Request tickrate update
 		FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
 		buf.writeDouble(tickrate);
 		ServerboundCustomPayloadPacket p = new ServerboundCustomPayloadPacket(TICKRATE_CHANGER_RL, buf);
 		this.mc.getConnection().send(p);
+		// Send notification
+		LoTAS.notificationmanager.requestNotification(this.mc.player.getStringUUID() + "_" + this.mc.player.getName().getString() + " updated the tickrate to " + String.format("%.2f", tickrate));
 	}
 
 	/**
