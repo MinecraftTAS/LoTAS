@@ -39,7 +39,7 @@ public class ToggleButtonLoWidget extends LoScreen {
 	// Hover animation
 	float animationProgress;
 	// Is the button pressed
-	boolean down;
+	public boolean down;
 
 	/**
 	 * Initializes a new button
@@ -47,13 +47,15 @@ public class ToggleButtonLoWidget extends LoScreen {
 	 * @param x Position
 	 * @param y Position
 	 * @param length Length of the button (in screen width percentage)
+	 * @param down Down by default
 	 * @param Callback after button is clicked
 	 */
-	public ToggleButtonLoWidget(boolean active, double x, double y, double length, Consumer<Boolean> onClick, TextComponent value) {
+	public ToggleButtonLoWidget(boolean active, double x, double y, double length, boolean down, Consumer<Boolean> onClick, TextComponent value) {
 		this.active = active;
 		this.x = x;
 		this.y = y;
 		this.length = length;
+		this.down = down;
 		this.onClick = onClick;
 		this.value = value;
 	}
@@ -63,12 +65,19 @@ public class ToggleButtonLoWidget extends LoScreen {
 		if (!this.active) return;
 		// Trigger click event when mouse is over the button
 		if (curX > this.x && curY > this.y && curX < this.x+this.length && curY < this.y+.05) {
-			this.down = !this.down;
-			this.onClick.accept(this.down);
+			this.doClick();
 		}
 		super.click(curX, curY, button);
 	}
 
+	/**
+	 * Does a click internally
+	 */
+	public void doClick() {
+		this.down = !this.down;
+		this.onClick.accept(this.down);
+	}
+	
 	@Override
 	protected void render(PoseStack stack, double curX, double curY) {
 		if (!this.active) return;
