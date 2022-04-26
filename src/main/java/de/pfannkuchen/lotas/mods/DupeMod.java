@@ -12,6 +12,7 @@ package de.pfannkuchen.lotas.mods;
 import java.util.HashMap;
 import java.util.List;
 
+import de.pfannkuchen.lotas.LoTAS;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -115,6 +116,8 @@ public class DupeMod {
 		FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
 		buf.writeBoolean(saveOLoad);
 		this.mc.getConnection().send(new ServerboundCustomPayloadPacket(DUPE_MOD_RL, buf));
+		// Send notification
+		LoTAS.notificationmanager.requestNotification(this.mc.player.getStringUUID() + "_" + this.mc.player.getName().getString() + (saveOLoad ? " saved playerdata" : " loaded playerdata"));
 	}
 
 	/**

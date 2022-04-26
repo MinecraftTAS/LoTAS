@@ -1,9 +1,15 @@
 package de.pfannkuchen.lotas.loscreen;
 
+import java.util.Map.Entry;
+import java.util.Collections;
+import java.util.TreeMap;
+import java.util.UUID;
+
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
 
 import com.mojang.blaze3d.platform.Window;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import de.pfannkuchen.lotas.LoTAS;
@@ -12,7 +18,11 @@ import de.pfannkuchen.lotas.gui.MainLoScreen;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.multiplayer.PlayerInfo;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.util.Mth;
 
 /**
  * Renders and manages the loscreens.
@@ -37,7 +47,9 @@ public class LoScreenManager {
 	private double lastPosY;
 	// Last tickadvance state
 	private boolean lastTickadvance;
-
+	// All notifications onscreen
+	private TreeMap<Long, TextComponent> timestamps = new TreeMap<>(Collections.reverseOrder());
+	
 	/**
 	 * Returns whether a screen is opened.
 	 * @return Is screen opened?
@@ -95,6 +107,13 @@ public class LoScreenManager {
 		this.lastPosX = posX;
 		this.lastPosY = posY;
 	}
+	
+	/**
+	 * Adds a notification to the list of notifications
+	 */
+	public void addNotification(TextComponent message) {
+		this.timestamps.put(System.currentTimeMillis(), message);
+	}
 
 	/**
 	 * Updates the minecraft instance once the game launches
@@ -110,7 +129,41 @@ public class LoScreenManager {
 	 * @param mc Instance of minecraft
 	 */
 	public void onGuiRender(PoseStack stack, Minecraft mc) {
+		// Render LoScreen
 		if (this.screen != null) this.screen.render(stack, this.lastPosX, this.lastPosY);
+		// Render Notifications
+		if (mc.player != null) {		
+			stack.scale(0.66f, 0.66f, 0.66f);
+
+			long currentTime = System.currentTimeMillis();
+			int i = 0;
+			for (Entry<Long, TextComponent> entry : new TreeMap<>(this.timestamps).entrySet()) {
+				String s = entry.getValue().getString();
+				String s1 = s.split("_", 2)[0];
+				String s2 = s.split("_", 2)[1];
+				
+				// Opacity modifier
+				long millis = currentTime - entry.getKey() - 1000;
+				if (millis > 1000)
+					timestamps.remove(entry.getKey());
+				float f = Mth.clamp(1 - (millis > 1000 ? 1 : (millis / 1000.0f)), 0, 1);
+				int fb = (byte) (f*235)+20;
+				// Render notification
+				RenderSystem.enableBlend();
+				RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, f);
+				PlayerInfo playerinfo = Minecraft.getInstance().getConnection().getPlayerInfo(UUID.fromString(s1));
+				if (playerinfo != null) {
+					RenderSystem.setShaderTexture(0, playerinfo.getSkinLocation());
+					Gui.blit(stack, 5, 5+i*20, 16.0f, 16.0f, 16, 16, 128, 128);
+				}
+				Gui.drawString(stack, mc.font, s2, 30, 10+i*20, 0x00149b5b | (fb<<24));
+				RenderSystem.disableBlend();
+				i++;
+			}
+			
+			
+			stack.scale(2.0f, 2.0f, 2.0f);
+		}
 	}
 
 	/**
