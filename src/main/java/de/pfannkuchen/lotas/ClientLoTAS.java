@@ -61,6 +61,8 @@ public class ClientLoTAS implements ClientModInitializer {
 		LoTAS.dupemod.mc = mc;
 		// Update Savestate Mod Minecraft Instance
 		LoTAS.savestatemod.mc = mc;
+		// Update Dragon Manipulation Mod Instance
+		LoTAS.dragonmanipulationmod.mc = mc;
 	}
 
 	/**
@@ -158,6 +160,8 @@ public class ClientLoTAS implements ClientModInitializer {
 		LoTAS.dupemod.onClientPacket(packet);
 		// Update Savestate Mod Callback
 		LoTAS.savestatemod.onClientPacket(packet);
+		// Update Dupe Mod Callback
+		LoTAS.dragonmanipulationmod.onClientPacket(packet);
 	}
 
 	/**

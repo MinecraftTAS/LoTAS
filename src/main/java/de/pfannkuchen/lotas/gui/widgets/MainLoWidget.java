@@ -80,14 +80,14 @@ public class MainLoWidget extends LoScreen {
 		// Update messages to fit with already opened windows
 		MainLoWidget.CATEGORIES = new TextComponent[] {
 				LoTAS.configmanager.getBoolean("tickratechangerwidget", "active") ? new TextComponent("\u00A7\u00A7\u00A7lTickrate Changing") : new TextComponent("Tickrate Changing"),
-						LoTAS.configmanager.getBoolean("dupemodwidget", "active") ? new TextComponent("\u00A7\u00A7\u00A7lDuping") : new TextComponent("Duping"),
-								LoTAS.configmanager.getBoolean("savestatewidget", "active") ? new TextComponent("\u00A7\u00A7\u00A7lSavestating") : new TextComponent("Savestating"),
-										new TextComponent("Dragon Manipulation"),
-										new TextComponent("Drop Manipulation"),
-										new TextComponent("AI Manipulation"),
-										new TextComponent("Spawn Manipulation"),
-										new TextComponent("Misc Manipulation"),
-										new TextComponent("Configuration")
+				LoTAS.configmanager.getBoolean("dupemodwidget", "active") ? new TextComponent("\u00A7\u00A7\u00A7lDuping") : new TextComponent("Duping"),
+				LoTAS.configmanager.getBoolean("savestatewidget", "active") ? new TextComponent("\u00A7\u00A7\u00A7lSavestating") : new TextComponent("Savestating"),
+				LoTAS.configmanager.getBoolean("dragonmanipulationwidget", "active") ? new TextComponent("\u00A7\u00A7\u00A7lDragon Manipulation") : new TextComponent("Dragon Manipulation"),
+					new TextComponent("Drop Manipulation"),
+					new TextComponent("AI Manipulation"),
+					new TextComponent("Spawn Manipulation"),
+					new TextComponent("Misc Manipulation"),
+					new TextComponent("Configuration")
 		};
 	}
 

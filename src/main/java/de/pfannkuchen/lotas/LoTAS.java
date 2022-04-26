@@ -6,6 +6,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import de.pfannkuchen.lotas.mods.ConfigManager;
+import de.pfannkuchen.lotas.mods.DragonManipulationMod;
 import de.pfannkuchen.lotas.mods.DupeMod;
 import de.pfannkuchen.lotas.mods.SavestateMod;
 import de.pfannkuchen.lotas.mods.TickAdvance;
@@ -35,7 +36,9 @@ public class LoTAS implements ModInitializer {
 	public static DupeMod dupemod;
 	// Savestate Mod Singleton
 	public static SavestateMod savestatemod;
-
+	// Dragon Manipulation Mod Singleton
+	public static DragonManipulationMod dragonmanipulationmod;
+	
 	/**
 	 * Executed after the game launches.
 	 */
@@ -47,6 +50,7 @@ public class LoTAS implements ModInitializer {
 		LoTAS.configmanager = new ConfigManager(new File("lotas_develop.properties"));
 		LoTAS.dupemod = new DupeMod();
 		LoTAS.savestatemod = new SavestateMod();
+		LoTAS.dragonmanipulationmod = new DragonManipulationMod();
 	}
 
 	/**
@@ -60,6 +64,8 @@ public class LoTAS implements ModInitializer {
 		LoTAS.tickadvance.mcserver = server;
 		// Update Dupe Mod Handler
 		LoTAS.dupemod.mcserver = server;
+		// Update Dragon Manipulation Mod Handler
+		LoTAS.dragonmanipulationmod.mcserver = server;
 	}
 
 	/**
@@ -84,6 +90,8 @@ public class LoTAS implements ModInitializer {
 		LoTAS.dupemod.onServerPacket(packet);
 		// Update Savestate Mod Handler
 		LoTAS.savestatemod.onServerPacket(packet);
+		// Update Dragon Manipulation Mod Handler
+		LoTAS.dragonmanipulationmod.onServerPacket(packet);
 	}
 
 	/**
@@ -98,6 +106,8 @@ public class LoTAS implements ModInitializer {
 		LoTAS.tickratechanger.onConnect(c);
 		// Update Savestate Mod
 		LoTAS.savestatemod.onConnect(c);
+		// Update Dragon Manipulation Mod
+		LoTAS.dragonmanipulationmod.onConnect(c);
 	}
 
 }
