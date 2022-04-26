@@ -23,7 +23,7 @@ public class ConfigurationScreen extends Screen {
 		super(new TextComponent("Configuration"));
 	}
 
-	public static String[] optionsBoolean = new String[] { "B:tools:saveTickrate:INSERT", "B:ui:hideTickrateMessages:INSERT", "B:tools:showTickIndicator:INSERT", "B:tools:removePearlDelay:INSERT", "B:tools:noDamageUnbreaking:INSERT", "B:tools:removeThrowableInaccuracy:INSERT"};
+	public static String[] optionsBoolean = new String[] { "B:tools:saveTickrate:INSERT", "B:ui:hideTickrateMessages:INSERT", "B:tools:showTickIndicator:INSERT", "B:tools:removePearlDelay:INSERT", "B:tools:noDamageUnbreaking:INSERT", "B:tools:removeThrowableInaccuracy:INSERT", "B:tools:blockHitDelayOptimizer:INSERT"};
 
 	public static String[] optionsInteger = new String[] { "I:hidden:explosionoptimization:INSERT" };
 

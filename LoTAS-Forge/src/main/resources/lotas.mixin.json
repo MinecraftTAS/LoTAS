@@ -9,6 +9,7 @@
     	"accessors.AccessorEntityPlayerMP",
     	"accessors.AccessorEntityLiving",
     	"accessors.AccessorEntityItem",
+    	"patches.MixinBlockHitDelayPatch",
 		"patches.MixinBlockPatch",
 		"patches.MixinDragonSkipPatch",
 		"patches.MixinEntityLivingPatch",

@@ -36,6 +36,7 @@
 		"render.MixinOverlayEvent",
 		"render.MixinRenderEvent",
 		"render.MixinRenderShield",
+		"patches.MixinBlockHitDelayPatch",
 		"patches.MixinBlockPatch",
 		"patches.MixinEntityPatch",
 		"patches.MixinExplosionPatch",
