@@ -18,7 +18,7 @@ public class DupeModLoWidget extends WindowLoWidget {
 	private Runnable onLoad;
 
 	/**
-	 * Initializes a tickrate changer widget
+	 * Initializes a dupe mod widget
 	 */
 	public DupeModLoWidget(Runnable onSave, Runnable onLoad) {
 		super("dupemodwidget", new TextComponent("Dupe Mod"), .15, .135);
