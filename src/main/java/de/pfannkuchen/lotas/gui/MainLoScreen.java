@@ -2,6 +2,7 @@ package de.pfannkuchen.lotas.gui;
 
 import de.pfannkuchen.lotas.LoTAS;
 import de.pfannkuchen.lotas.gui.widgets.MainLoWidget;
+import de.pfannkuchen.lotas.gui.windows.DragonManipulationLoWidget;
 import de.pfannkuchen.lotas.gui.windows.DupeModLoWidget;
 import de.pfannkuchen.lotas.gui.windows.SavestatesLoWidget;
 import de.pfannkuchen.lotas.gui.windows.TickrateChangerLoWidget;
@@ -32,6 +33,10 @@ public class MainLoScreen extends LoScreen {
 		SavestatesLoWidget savestateswidget = new SavestatesLoWidget();
 		this.addWidget(savestateswidget);
 
+		// Add the dragon manipulation Widget
+		DragonManipulationLoWidget dragonmanipulationwidget = new DragonManipulationLoWidget();
+		this.addWidget(dragonmanipulationwidget);
+		
 		this.addWidget(new MainLoWidget((a, b) -> {
 			boolean enable; // Whether the widget should be enabled or disabled
 			String widgetname;
@@ -55,6 +60,9 @@ public class MainLoScreen extends LoScreen {
 				break;
 			case "Savestating":
 				savestateswidget.changeVisibility(enable);
+				break;
+			case "Dragon Manipulation":
+				dragonmanipulationwidget.changeVisibility(enable);
 				break;
 			default:
 				throw new AssertionError();
