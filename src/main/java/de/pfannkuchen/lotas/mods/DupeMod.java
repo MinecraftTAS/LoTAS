@@ -68,25 +68,35 @@ public class DupeMod {
 				// Save all client data in the hash map
 				this.onlineClients.clear();
 				for (ServerPlayer player : players) {
+					// Save playerdata
 					CompoundTag tag = new CompoundTag();
 					player.saveWithoutId(tag);
 					this.onlineClients.put(player, tag);
+					
+					// Send packet to client
+					FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
+					buf.writeBoolean(saveOLoad);
+					player.connection.send(new ClientboundCustomPayloadPacket(DUPE_MOD_RL, buf));
 				}
 			} else {
 				// Load all client data from the hash map
 				for (ServerPlayer player : players) {
 					CompoundTag tag = this.onlineClients.get(player);
 					if (tag != null) {
+						if (!tag.getString("Dimension").equals(player.getLevel().dimension().location().toString())) {
+							System.out.println("Unable to load playerdata for " + player.getName().getString() + " as they are in a different dimension!");
+							continue;
+						}
+						// Load playerdata
 						player.load(tag);
+					
+						// Send packet to client
+						FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
+						buf.writeBoolean(saveOLoad);
+						player.connection.send(new ClientboundCustomPayloadPacket(DUPE_MOD_RL, buf));
 					}
 				}
 			}
-			// Resend packet
-			this.mcserver.getPlayerList().getPlayers().forEach(c -> {
-				FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
-				buf.writeBoolean(saveOLoad);
-				c.connection.send(new ClientboundCustomPayloadPacket(DUPE_MOD_RL, buf));
-			});
 		}
 	}
 
