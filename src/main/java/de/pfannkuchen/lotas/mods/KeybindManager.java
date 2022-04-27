@@ -14,6 +14,8 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.screens.Screen;
 
 /**
  * Manages keybinds and their categories.
@@ -114,6 +116,11 @@ public class KeybindManager {
 	 * @return Key has been pressed recently
 	 */
 	private boolean isKeyDown(Minecraft mc, KeyMapping map) {
+		// Check if in a text field
+		Screen screen = mc.screen;
+		if (!(screen == null || !(screen.getFocused() instanceof EditBox) || !((EditBox) screen.getFocused()).canConsumeInput()))
+			return false;
+		
 		boolean wasPressed = this.keys.containsKey(map) ? this.keys.get(map) : false;
 		boolean isPressed = GLFW.glfwGetKey(mc.getWindow().getWindow(), ((AccessorKeyMapping) map).getKey().getValue()) == GLFW.GLFW_PRESS;
 		this.keys.put(map, isPressed);
