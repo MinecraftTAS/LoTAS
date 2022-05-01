@@ -24,6 +24,7 @@
     	"accessors.AccessorScreen",
     	"accessors.AccessorButtons",
     	"accessors.AccessorKeyMapping",
+    	"accessors.AccessorSoundEngine",
 		"render.binds.MixinTickrateChangerAudioPitch",
 		"render.binds.MixinTickrateChangerEnchantmentGlimm",
 		"render.binds.MixinTickrateChangerSubtitleOverlay",

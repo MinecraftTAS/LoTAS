@@ -31,6 +31,7 @@
     	"accessors.AccessorGuiListWorldSelection",
     	"accessors.AccessorTimer",
     	"accessors.AccessFocused",
+    	"accessors.AccessorSoundManager",
 		"render.gui.MixinGuiScreenWorking",
 		"render.gui.MixinGuiGameOver",
 		"render.gui.MixinGuiMainMenu",
@@ -43,6 +44,7 @@
 		"render.binds.MixinTickrateChangerAchievement",
 		"render.binds.MixinTickrateChangerWorldborder",
 		"render.binds.MixinTickrateChangerSubtitle",
+		"render.binds.MixinSoundManager",
 		"render.MixinShieldRenderer",
 		"render.gui.MixinInGameHud",
 		//#if MC<=11002
