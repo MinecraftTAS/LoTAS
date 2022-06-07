@@ -19,7 +19,7 @@ public class SmallCheckboxWidget extends AbstractButton {
 
 	public SmallCheckboxWidget(int x, int y, String message, boolean checked) {
 		//#if MC>=11601
-//$$ 		super(x, y, 11, 11, new net.minecraft.network.chat.TextComponent(message));
+//$$ 		super(x, y, 11, 11, MCVer.literal(message));
 		//#else
 		super(x, y, 11, 11, message);
 		//#endif

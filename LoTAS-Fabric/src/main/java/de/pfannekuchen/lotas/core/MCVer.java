@@ -22,6 +22,7 @@ import net.minecraft.client.gui.components.Widget;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
@@ -44,7 +45,7 @@ public class MCVer {
 //$$ 	}
 //$$ 	public static void setMessage(AbstractWidget component, String message) {
 		//#if MC>=11601
-//$$ 		component.setMessage(new net.minecraft.network.chat.TextComponent(message));
+//$$ 		component.setMessage(MCVer.literal(message));
 		//#else
 //$$ 		component.setMessage(message);
 		//#endif
@@ -97,13 +98,13 @@ public class MCVer {
 		//#endif
 //$$ 	}
 //$$ 	public static Checkbox Checkbox(int i, int j, int k, int l, String text, boolean bl) {
-//$$ 		return new Checkbox(i, j, k, l, new net.minecraft.network.chat.TextComponent(text), bl);
+//$$ 		return new Checkbox(i, j, k, l, MCVer.literal(text), bl);
 //$$ 	}
 //$$ 	public static Button Button(int i, int j, int k, int l, String text, OnPress onpress) {
-//$$ 		return new Button(i, j, k, l, new net.minecraft.network.chat.TextComponent(text), onpress);
+//$$ 		return new Button(i, j, k, l, MCVer.literal(text), onpress);
 //$$ 	}
 //$$ 	public static EditBox EditBox(Font f, int i, int j, int k, int l, String text) {
-//$$ 		return new EditBox(f, i, j, k, l, new net.minecraft.network.chat.TextComponent(text));
+//$$ 		return new EditBox(f, i, j, k, l, MCVer.literal(text));
 //$$ 	}
 //$$ 	public static void blit(int i, int j, float k, float f, int g, int l) {
 //$$ 		GuiComponent.blit(stack, i, j, k, f, g, l, 256, 256);
@@ -494,6 +495,14 @@ public class MCVer {
 //$$ 		return Minecraft.getInstance().getWindow();
 		//#else
 		return Minecraft.getInstance().window;
+		//#endif
+	}
+	
+	public static Component literal(String s) {
+		//#if MC>=11900
+//$$ 		return Component.literal(s);
+		//#else
+		return new net.minecraft.network.chat.TextComponent(s);
 		//#endif
 	}
 }

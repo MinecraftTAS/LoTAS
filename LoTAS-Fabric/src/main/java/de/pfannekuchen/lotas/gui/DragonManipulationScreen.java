@@ -8,7 +8,6 @@ import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.resources.language.I18n;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.boss.enderdragon.phases.AbstractDragonSittingPhase;
@@ -56,7 +55,7 @@ public class DragonManipulationScreen extends Screen {
 	Button action3;
 
 	public DragonManipulationScreen(Screen screen) {
-		super(new TextComponent("Dragon Manipulator Screen"));
+		super(MCVer.literal("Dragon Manipulator Screen"));
 		EnderDragon dragon = MCVer.getCurrentLevel().getDragons().get(0);
 		dragonPhase = dragon.getPhaseManager().getCurrentPhase();
 		here = screen;

@@ -16,7 +16,7 @@ public class ImageButton extends Button {
 
 	public ImageButton(int x, int y, Button.OnPress action, ResourceLocation pic) {
 		//#if MC>=11601
-//$$ 		super(x, y, 20, 20, new net.minecraft.network.chat.TextComponent(""), action);
+//$$ 		super(x, y, 20, 20, MCVer.literal(""), action);
 		//#else
 		super(x, y, 20, 20, "", action);
 		//#endif

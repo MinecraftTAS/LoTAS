@@ -18,7 +18,6 @@ import net.minecraft.client.gui.components.ObjectSelectionList;
 import net.minecraft.client.gui.screens.PauseScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 
 /**
  * List of States to load/delete
@@ -27,7 +26,7 @@ import net.minecraft.network.chat.TextComponent;
 public class LoadstateScreen extends Screen {
 
 	public LoadstateScreen() {
-		super(new TextComponent("Loadstate Screen"));
+		super(MCVer.literal("Loadstate Screen"));
 	}
 
 	GuiLoadstateList list;

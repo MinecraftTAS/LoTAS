@@ -30,7 +30,11 @@ public class EntitySliderWidget extends AbstractWidget {
 
 	public EntitySliderWidget(int xPos, int yPos, List<EntityOptions> ent, int width, int height, OnPress c) {
 		//#if MC>=11601
+		//#if MC>=11900
+//$$ 		super(xPos, yPos, width, height, net.minecraft.network.chat.Component.empty());
+		//#else
 //$$ 		super(xPos, yPos, width, height, net.minecraft.network.chat.TextComponent.EMPTY);
+		//#endif
 		//#else
 		super(xPos, yPos, width, height, "");
 		//#endif

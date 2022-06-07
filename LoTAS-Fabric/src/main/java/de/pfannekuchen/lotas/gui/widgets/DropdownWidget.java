@@ -36,7 +36,7 @@ public class DropdownWidget<T> extends AbstractWidget {
 
     public DropdownWidget(Font textRenderer, List<T> selections, Function<T, String> nameProvider, int x, int y, int width, int height, String title, T value, Consumer<T> saveHandler) {
     	//#if MC>=11601
-    //$$ 	super(x, y, width, height, new net.minecraft.network.chat.TextComponent(title));
+    //$$ 	super(x, y, width, height, MCVer.literal(title));
     	//#else
     	super(x, y, width, height, title);
     	//#endif
@@ -249,7 +249,7 @@ public class DropdownWidget<T> extends AbstractWidget {
 
         public DropdownListWidget(List<T> selections, Function<T, String> nameProvider, Consumer<T> saveHandler, int x, int y, int width, int height, String message) {
         	//#if MC>=11601
-        //$$ 	super(x, y, width, height, new net.minecraft.network.chat.TextComponent(message));
+        //$$ 	super(x, y, width, height, MCVer.literal(message));
         	//#else
         	super(x, y, width, height, message);
         	//#endif

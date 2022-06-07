@@ -19,12 +19,16 @@ import java.util.Random;
 @Mixin(net.minecraft.world.entity.projectile.ThrowableProjectile.class)
 //#endif
 public class MixinInaccuracyPatch {
+	//#if MC>=11900
+//$$ 	// have fun looking at the new code i ain't got the time for that LOL. edit: it's probably not too bad
+	//#else
     @Redirect(method = "shoot(DDDFF)V", at = @At(value = "INVOKE", target = "Ljava/util/Random;nextGaussian()D", remap = false))
     private double redirect_internalShoot(Random random) {
-        if (ConfigUtils.getBoolean("tools", "removeThrowableInaccuracy")) {
+       if (ConfigUtils.getBoolean("tools", "removeThrowableInaccuracy")) {
             return 0;
         } else {
             return random.nextGaussian();
-        }
-    }
+       }
+   }
+    //#endif
 }

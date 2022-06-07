@@ -23,7 +23,6 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.client.gui.screens.worldselection.SelectWorldScreen;
 import net.minecraft.client.renderer.texture.DynamicTexture;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 
 /**
@@ -66,7 +65,7 @@ public class SeedListScreen extends Screen {
 	}
 
 	public SeedListScreen() {
-		super(new TextComponent("Seeds"));
+		super(MCVer.literal("Seeds"));
 	}
 
 	/**

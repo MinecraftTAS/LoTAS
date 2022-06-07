@@ -12,7 +12,6 @@ import net.minecraft.client.gui.components.Button.OnPress;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.TextComponent;
 
 /**
  * Manages Configuration of LoTAS
@@ -20,7 +19,7 @@ import net.minecraft.network.chat.TextComponent;
 public class ConfigurationScreen extends Screen {
 
 	public ConfigurationScreen() {
-		super(new TextComponent("Configuration"));
+		super(MCVer.literal("Configuration"));
 	}
 
 	public static String[] optionsBoolean = new String[] { "B:tools:saveTickrate:INSERT", "B:ui:hideTickrateMessages:INSERT", "B:tools:showTickIndicator:INSERT", "B:tools:removePearlDelay:INSERT", "B:tools:noDamageUnbreaking:INSERT", "B:tools:removeThrowableInaccuracy:INSERT", "B:tools:blockHitDelayOptimizer:INSERT"};

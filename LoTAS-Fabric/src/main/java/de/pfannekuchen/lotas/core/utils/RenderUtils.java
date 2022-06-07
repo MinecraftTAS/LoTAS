@@ -59,9 +59,9 @@ public enum RenderUtils {
 	}
 
 	public static void applyCameraRotationOnly(Object poseStack) {
-		Camera camera = MCVer.getBlockEntityDispatcher().camera;
 		//#if MC>=11500
 		//#if MC<=11605
+//$$ 		Camera camera = MCVer.getBlockEntityDispatcher().camera;
 //$$ 		MCVer.rotated(poseStack, Mth.wrapDegrees(camera.getXRot()), 1, 0, 0);
 //$$ 		MCVer.rotated(poseStack, Mth.wrapDegrees(camera.getYRot() + 180.0), 0, 1, 0);
 		//#endif
@@ -117,9 +117,12 @@ public enum RenderUtils {
 //$$ 	    bufferBuilder.vertex(matrix, (float)bb.maxX, (float)bb.minY, (float)bb.minZ).color(r, g, b, a).endVertex();
 //$$ 		bufferBuilder.vertex(matrix, (float)bb.minX, (float)bb.minY, (float)bb.minZ).color(r, g, b, a).endVertex();
 //$$
+		//#if MC>=11900
+//$$ 		BufferUploader.drawWithShader(bufferBuilder.end());
+		//#else
 //$$ 		bufferBuilder.end();
-//$$
 //$$ 		BufferUploader.end(bufferBuilder);
+		//#endif
 	    //#else
 	    bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormat.POSITION_COLOR);
 
@@ -205,9 +208,12 @@ public enum RenderUtils {
 //$$ 		bufferBuilder.vertex(matrix, (float)bb.minX, (float)bb.maxY, (float)bb.maxZ).color(1F, 1F, 1F, 1F).endVertex();
 //$$ 		bufferBuilder.vertex(matrix, (float)bb.minX, (float)bb.maxY, (float)bb.minZ).color(1F, 1F, 1F, 1F).endVertex();
 //$$
+		//#if MC>=11900
+//$$ 		BufferUploader.drawWithShader(bufferBuilder.end());
+		//#else
 //$$ 		bufferBuilder.end();
-//$$
 //$$ 		BufferUploader.end(bufferBuilder);
+		//#endif
 	    //#else
 		bufferBuilder.begin(GL11.GL_LINES, DefaultVertexFormat.POSITION_COLOR);
 		bufferBuilder.vertex(bb.minX, bb.minY, bb.minZ).color(1F, 1F, 1F, 1F).endVertex();

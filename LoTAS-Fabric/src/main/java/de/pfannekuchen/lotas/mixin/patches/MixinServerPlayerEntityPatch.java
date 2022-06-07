@@ -27,6 +27,9 @@ import net.minecraft.world.level.Level;
 @Mixin(ServerPlayer.class)
 public abstract class MixinServerPlayerEntityPatch extends Player {
 
+	//#if MC>=11900
+//$$ 	public MixinServerPlayerEntityPatch(Level level, net.minecraft.core.BlockPos blockPos, float f, GameProfile gameProfile, net.minecraft.world.entity.player.ProfilePublicKey profilePublicKey) { super(level, blockPos, f, gameProfile, profilePublicKey); }
+	//#else
 	//#if MC>=11601
 	//#if MC>=11605
 //$$ 	public MixinServerPlayerEntityPatch(Level level, net.minecraft.core.BlockPos blockPos, float f, GameProfile gameProfile) { super(level, blockPos, f, gameProfile); }
@@ -35,6 +38,7 @@ public abstract class MixinServerPlayerEntityPatch extends Player {
 	//#endif
 	//#else
 	public MixinServerPlayerEntityPatch(Level world, GameProfile profile) { super(world, profile); }
+	//#endif
 	//#endif
 
 	@Final

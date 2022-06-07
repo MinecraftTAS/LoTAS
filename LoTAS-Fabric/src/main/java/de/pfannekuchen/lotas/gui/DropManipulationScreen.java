@@ -31,8 +31,6 @@ import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Checkbox;
 import net.minecraft.client.gui.screens.PauseScreen;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
@@ -67,7 +65,7 @@ public class DropManipulationScreen extends Screen {
 	}
 
 	public DropManipulationScreen(PauseScreen gameMenuScreen) {
-		super(new TextComponent("Drop Manipulation Screen"));
+		super(MCVer.literal("Drop Manipulation Screen"));
 	}
 
 	@Override
@@ -139,8 +137,12 @@ public class DropManipulationScreen extends Screen {
 //$$ 		bufferBuilder.vertex(matrix, 24, height - 24, 0).endVertex();
 //$$ 		bufferBuilder.vertex(matrix, width / 3.5f + 1, height - 24, 0).endVertex();
 //$$ 		bufferBuilder.vertex(matrix, width / 3.5f + 1, 24, 0).endVertex();
+		//#if MC>=11900
+//$$ 		BufferUploader.drawWithShader(bufferBuilder.end());
+		//#else
 //$$ 		bufferBuilder.end();
 //$$ 		BufferUploader.end(bufferBuilder);
+		//#endif
 		//#else
 		MCVer.color4f(.5f, .5f, .5f, 0.5F);
 		bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormat.POSITION);
@@ -161,8 +163,12 @@ public class DropManipulationScreen extends Screen {
 //$$ 		bufferBuilder.vertex(matrix, 25, height - 25, 0).endVertex();
 //$$ 		bufferBuilder.vertex(matrix, width / 3.5f, height - 25, 0).endVertex();
 //$$ 		bufferBuilder.vertex(matrix, width / 3.5f, 25, 0).endVertex();
+		//#if MC>=11900
+//$$ 		BufferUploader.drawWithShader(bufferBuilder.end());
+		//#else
 //$$ 		bufferBuilder.end();
 //$$ 		BufferUploader.end(bufferBuilder);
+		//#endif
 		//#else
 		MCVer.color4f(0, 0, 0, 0.5F);
 		bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormat.POSITION);
@@ -182,8 +188,12 @@ public class DropManipulationScreen extends Screen {
 //$$ 		bufferBuilder.vertex(matrix, 27, boxY + 11, 0).endVertex();
 //$$ 		bufferBuilder.vertex(matrix, width / 3.5f - 2, boxY + 11, 0).endVertex();
 //$$ 		bufferBuilder.vertex(matrix, width / 3.5f - 2, boxY - 4, 0).endVertex();
+		//#if MC>=11900
+//$$ 		BufferUploader.drawWithShader(bufferBuilder.end());
+		//#else
 //$$ 		bufferBuilder.end();
 //$$ 		BufferUploader.end(bufferBuilder);
+		//#endif
 		//#else
 		MCVer.color4f(1f, 1f, 1f, 1f);
 		bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormat.POSITION);
@@ -202,8 +212,12 @@ public class DropManipulationScreen extends Screen {
 //$$ 		bufferBuilder.vertex(matrix, 28, boxY + 10, 0).endVertex();
 //$$ 		bufferBuilder.vertex(matrix, width / 3.5f - 3, boxY + 10, 0).endVertex();
 //$$ 		bufferBuilder.vertex(matrix, width / 3.5f - 3, boxY - 3, 0).endVertex();
+		//#if MC>=11900
+//$$ 		BufferUploader.drawWithShader(bufferBuilder.end());
+		//#else
 //$$ 		bufferBuilder.end();
 //$$ 		BufferUploader.end(bufferBuilder);
+		//#endif
 //$$ 		MCVer.disableBlend();
 //$$ 		MCVer.enableTexture();
 //$$ 		MCVer.disableDepthTest();

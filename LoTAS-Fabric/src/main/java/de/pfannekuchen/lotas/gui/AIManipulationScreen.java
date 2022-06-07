@@ -8,7 +8,6 @@ import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.phys.Vec3;
 
 /**
@@ -18,7 +17,7 @@ import net.minecraft.world.phys.Vec3;
 public class AIManipulationScreen extends Screen {
 
 	public AIManipulationScreen() {
-		super(new TextComponent(""));
+		super(MCVer.literal(""));
 	}
 
 	private AIManipMod manip;
