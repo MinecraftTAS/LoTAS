@@ -6,7 +6,7 @@ import de.pfannkuchen.lotas.ClientLoTAS;
 import de.pfannkuchen.lotas.loscreen.LoScreen;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 
 /**
  * Button widget
@@ -31,7 +31,7 @@ public class ButtonLoWidget extends LoScreen {
 	// Move handler
 	public Runnable onClick;
 	// Value of the button
-	public TextComponent value;
+	public Component value;
 	// Hover animation
 	public float animationProgress;
 
@@ -43,7 +43,7 @@ public class ButtonLoWidget extends LoScreen {
 	 * @param length Length of the button (in screen width percentage)
 	 * @param Callback after button is clicked
 	 */
-	public ButtonLoWidget(boolean active, double x, double y, double length, Runnable onClick, TextComponent value) {
+	public ButtonLoWidget(boolean active, double x, double y, double length, Runnable onClick, Component value) {
 		this.active = active;
 		this.x = x;
 		this.y = y;

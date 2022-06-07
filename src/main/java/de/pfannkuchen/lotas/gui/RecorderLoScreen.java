@@ -15,7 +15,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screens.PauseScreen;
 import net.minecraft.client.gui.screens.TitleScreen;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 
 /**
  * LoScreen shown when starting a new recording
@@ -41,7 +41,7 @@ public class RecorderLoScreen extends LoScreen {
 	float animationProgress;
 
 	// Complaining text component
-	TextComponent complaint;
+	Component complaint;
 
 	/**
 	 * Initializes the Recorder LoScreen
@@ -74,8 +74,8 @@ public class RecorderLoScreen extends LoScreen {
 		}, this.output));
 		this.addWidget(new SliderLoWidget(false, .5, .5, 0.75, 0.5, c -> {
 			double bitrate = c*32;
-			return new TextComponent("Bitrate: " + String.format(Locale.ENGLISH, "%.1fM", bitrate));
-		}, new TextComponent("Bitrate: 16.0M")));
+			return Component.literal("Bitrate: " + String.format(Locale.ENGLISH, "%.1fM", bitrate));
+		}, Component.literal("Bitrate: 16.0M")));
 
 		this.addWidget(new ButtonLoWidget(true, .02, .94, .75, () -> {
 			if (this.complaint == null) {
@@ -86,14 +86,14 @@ public class RecorderLoScreen extends LoScreen {
 				else
 					this.mc.setScreen(new PauseScreen(true));
 			}
-		}, new TextComponent("Start Recording...")));
+		}, Component.literal("Start Recording...")));
 		this.addWidget(new ButtonLoWidget(true, .78, .94, .2, () -> {
 			ClientLoTAS.loscreenmanager.setScreen(null);
 			if (this.mc.level == null)
 				this.mc.setScreen(new TitleScreen());
 			else
 				this.mc.setScreen(new PauseScreen(true));
-		}, new TextComponent("Cancel")));
+		}, Component.literal("Cancel")));
 		super.init();
 	}
 
@@ -106,23 +106,23 @@ public class RecorderLoScreen extends LoScreen {
 					-1000+this.ease(this.animationProgress, 0, 1, 12)*1000,
 					0);
 		this.fill(stack, 0, 0, 1, 1, RecorderLoScreen.BACKGROUND_COLOR);
-		this.draw(stack, new TextComponent("LoTAS Recorder"), 0.06, .08, 60, RecorderLoScreen.TITLE_COLOR, false);
-		this.draw(stack, new TextComponent("Path to ffmpeg"), 0.06, .22, 30, RecorderLoScreen.LABEL_COLOR, false);
-		this.draw(stack, new TextComponent("Input options"), 0.06, .34, 30, RecorderLoScreen.LABEL_COLOR, false);
-		this.draw(stack, new TextComponent("Output options"), 0.06, .46, 30, RecorderLoScreen.LABEL_COLOR, false);
+		this.draw(stack, Component.literal("LoTAS Recorder"), 0.06, .08, 60, RecorderLoScreen.TITLE_COLOR, false);
+		this.draw(stack, Component.literal("Path to ffmpeg"), 0.06, .22, 30, RecorderLoScreen.LABEL_COLOR, false);
+		this.draw(stack, Component.literal("Input options"), 0.06, .34, 30, RecorderLoScreen.LABEL_COLOR, false);
+		this.draw(stack, Component.literal("Output options"), 0.06, .46, 30, RecorderLoScreen.LABEL_COLOR, false);
 
 		this.complaint = null;
-		if (this.path == null || this.path.isEmpty() || this.path.isBlank() || !new File(this.path).exists()) this.complaint = new TextComponent("Cannot start recording: Path to ffmpeg invalid");
-		if (!this.output.contains("b:v ")) this.complaint = new TextComponent("Cannot start recording: Bitrate not specified. Specify the bitrate with -b:v.");
-		if (!this.output.contains("c:v ")) this.complaint = new TextComponent("Cannot start recording: Codec not specified. Specify the codec with -c:v.");
-		if (this.input.contains("-y")) this.complaint = new TextComponent("Cannot start recording: Option is present twice: -y");
-		if (this.input.contains("-c:v")) this.complaint = new TextComponent("Cannot start recording: Do not override the decoder");
-		if (this.input.contains("-f")) this.complaint = new TextComponent("Cannot start recording: Do not override the input format");
-		if (this.input.contains("-s")) this.complaint = new TextComponent("Cannot start recording: Do not override the input scale");
-		if (this.input.contains("-pix_fmt")) this.complaint = new TextComponent("Cannot start recording: Do not override the input pixel format");
-		if (this.input.contains("-i")) this.complaint = new TextComponent("Cannot start recording: Do not override the input file");
-		if (this.input.contains("-r")) this.complaint = new TextComponent("Cannot start recording: Do not override the input framerate");
-		if (this.output.contains("-pix_fmt")) this.complaint = new TextComponent("Cannot start recording: Do not override the output pixel format");
+		if (this.path == null || this.path.isEmpty() || this.path.isBlank() || !new File(this.path).exists()) this.complaint = Component.literal("Cannot start recording: Path to ffmpeg invalid");
+		if (!this.output.contains("b:v ")) this.complaint = Component.literal("Cannot start recording: Bitrate not specified. Specify the bitrate with -b:v.");
+		if (!this.output.contains("c:v ")) this.complaint = Component.literal("Cannot start recording: Codec not specified. Specify the codec with -c:v.");
+		if (this.input.contains("-y")) this.complaint = Component.literal("Cannot start recording: Option is present twice: -y");
+		if (this.input.contains("-c:v")) this.complaint = Component.literal("Cannot start recording: Do not override the decoder");
+		if (this.input.contains("-f")) this.complaint = Component.literal("Cannot start recording: Do not override the input format");
+		if (this.input.contains("-s")) this.complaint = Component.literal("Cannot start recording: Do not override the input scale");
+		if (this.input.contains("-pix_fmt")) this.complaint = Component.literal("Cannot start recording: Do not override the input pixel format");
+		if (this.input.contains("-i")) this.complaint = Component.literal("Cannot start recording: Do not override the input file");
+		if (this.input.contains("-r")) this.complaint = Component.literal("Cannot start recording: Do not override the input framerate");
+		if (this.output.contains("-pix_fmt")) this.complaint = Component.literal("Cannot start recording: Do not override the output pixel format");
 		if (this.complaint != null) this.draw(stack, this.complaint, 0.06, .66, 30, RecorderLoScreen.ERROR_COLOR, true);
 
 		super.render(stack, curX, curY);

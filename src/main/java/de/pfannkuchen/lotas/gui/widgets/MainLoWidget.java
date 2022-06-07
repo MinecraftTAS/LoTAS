@@ -9,7 +9,7 @@ import de.pfannkuchen.lotas.LoTAS;
 import de.pfannkuchen.lotas.loscreen.LoScreen;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 
 /**
  * This is the main lowidget that shows a list of items on the right.
@@ -40,7 +40,7 @@ public class MainLoWidget extends LoScreen {
 	// Title color
 	private static final int TITLE_COLOR = 0xFFFFFFFF;
 	// Title text
-	private static final TextComponent TITLE = new TextComponent("LoTAS Menu");
+	private static final Component TITLE = Component.literal("LoTAS Menu");
 
 	// Category position. x-offset by BACKGROUND_WIDTH
 	private static final double CATEGORY_X = 0.02;
@@ -53,7 +53,7 @@ public class MainLoWidget extends LoScreen {
 	// Category color when focused
 	private static final int CATEGORY_FOCUS_COLOR = 0xff22e187;
 	// Category texts
-	private static TextComponent[] CATEGORIES;
+	private static Component[] CATEGORIES;
 
 	// Version position. x-offset by BACKGROUND_WIDTH
 	private static final double VERSION_X = 0.013;
@@ -63,31 +63,31 @@ public class MainLoWidget extends LoScreen {
 	// Version color
 	private static final int VERSION_COLOR = 0xff8f8f8f;
 	// Version text
-	private static final TextComponent VERSION1 = new TextComponent("LoTAS 3.0.0-SNAPSHOT");
-	private static final TextComponent VERSION2 = new TextComponent("Development Build");
+	private static final Component VERSION1 = Component.literal("LoTAS 3.0.0-SNAPSHOT");
+	private static final Component VERSION2 = Component.literal("Development Build");
 
 	// Ease-in animation progress
 	private double animationProgress;
 	// On click on text component
-	private BiFunction<TextComponent, Integer, TextComponent> onClick;
+	private BiFunction<Component, Integer, Component> onClick;
 
 	/**
 	 * Initializes the lowidget with callbacks
 	 * @param onClick Onclick for manipulating the text
 	 */
-	public MainLoWidget(BiFunction<TextComponent, Integer, TextComponent> onClick) {
+	public MainLoWidget(BiFunction<Component, Integer, Component> onClick) {
 		this.onClick = onClick;
 		// Update messages to fit with already opened windows
-		MainLoWidget.CATEGORIES = new TextComponent[] {
-				LoTAS.configmanager.getBoolean("tickratechangerwidget", "active") ? new TextComponent("\u00A7\u00A7\u00A7lTickrate Changing") : new TextComponent("Tickrate Changing"),
-				LoTAS.configmanager.getBoolean("dupemodwidget", "active") ? new TextComponent("\u00A7\u00A7\u00A7lDuping") : new TextComponent("Duping"),
-				LoTAS.configmanager.getBoolean("savestatewidget", "active") ? new TextComponent("\u00A7\u00A7\u00A7lSavestating") : new TextComponent("Savestating"),
-				LoTAS.configmanager.getBoolean("dragonmanipulationwidget", "active") ? new TextComponent("\u00A7\u00A7\u00A7lDragon Manipulation") : new TextComponent("Dragon Manipulation"),
-					new TextComponent("Drop Manipulation"),
-					new TextComponent("AI Manipulation"),
-					new TextComponent("Spawn Manipulation"),
-					new TextComponent("Misc Manipulation"),
-					new TextComponent("Configuration")
+		MainLoWidget.CATEGORIES = new Component[] {
+				LoTAS.configmanager.getBoolean("tickratechangerwidget", "active") ? Component.literal("\u00A7\u00A7\u00A7lTickrate Changing") : Component.literal("Tickrate Changing"),
+				LoTAS.configmanager.getBoolean("dupemodwidget", "active") ? Component.literal("\u00A7\u00A7\u00A7lDuping") : Component.literal("Duping"),
+				LoTAS.configmanager.getBoolean("savestatewidget", "active") ? Component.literal("\u00A7\u00A7\u00A7lSavestating") : Component.literal("Savestating"),
+				LoTAS.configmanager.getBoolean("dragonmanipulationwidget", "active") ? Component.literal("\u00A7\u00A7\u00A7lDragon Manipulation") : Component.literal("Dragon Manipulation"),
+					Component.literal("Drop Manipulation"),
+					Component.literal("AI Manipulation"),
+					Component.literal("Spawn Manipulation"),
+					Component.literal("Misc Manipulation"),
+					Component.literal("Configuration")
 		};
 	}
 
@@ -116,7 +116,7 @@ public class MainLoWidget extends LoScreen {
 		// Render Categories
 		double categoryY = MainLoWidget.CATEGORY_Y;
 		double categoryX = 1 - MainLoWidget.BACKGROUND_WIDTH * this.ease(this.animationProgress, 0, 1, 6) + MainLoWidget.CATEGORY_X;
-		for (TextComponent element : MainLoWidget.CATEGORIES) {
+		for (Component element : MainLoWidget.CATEGORIES) {
 			boolean shadow = false;
 			if (curX > categoryX && curY + MainLoWidget.CATEGORY_GAP_Y/4 > categoryY && curY + MainLoWidget.CATEGORY_GAP_Y/4 < categoryY + MainLoWidget.CATEGORY_GAP_Y) {
 				this.fill(stack, categoryX - MainLoWidget.CATEGORY_GAP_Y/8, categoryY - MainLoWidget.CATEGORY_GAP_Y/4, 1 - MainLoWidget.CATEGORY_GAP_Y/8, categoryY + MainLoWidget.CATEGORY_GAP_Y/4 + 0.025, MainLoWidget.BACKGROUND_FOCUS_COLOR);

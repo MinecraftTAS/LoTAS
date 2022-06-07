@@ -7,7 +7,7 @@ import de.pfannkuchen.lotas.gui.widgets.SliderLoWidget;
 import de.pfannkuchen.lotas.gui.widgets.WindowLoWidget;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 
 /**
  * Tickrate changer Widget
@@ -31,19 +31,19 @@ public class TickrateChangerLoWidget extends WindowLoWidget {
 	 * Initializes a tickrate changer widget
 	 */
 	public TickrateChangerLoWidget(Consumer<Double> update) {
-		super("tickratechangerwidget", new TextComponent("Tickrate Changer"), .15, .135);
+		super("tickratechangerwidget", Component.literal("Tickrate Changer"), .15, .135);
 		TickrateChangerLoWidget.update = update;
 	}
 
 	@Override
 	protected void init() {
-		this.addWidget(TickrateChangerLoWidget.slider = new SliderLoWidget(true, 0.015, 0.095, .12, TickrateChangerLoWidget.index / (double) TickrateChangerLoWidget.TICKRATES.length, c -> new TextComponent("Tickrate: " + TickrateChangerLoWidget.updateTickrate((int) (c*TickrateChangerLoWidget.TICKRATES.length), true, true)), new TextComponent("Tickrate: " + TickrateChangerLoWidget.TICKRATES[TickrateChangerLoWidget.index])));
+		this.addWidget(TickrateChangerLoWidget.slider = new SliderLoWidget(true, 0.015, 0.095, .12, TickrateChangerLoWidget.index / (double) TickrateChangerLoWidget.TICKRATES.length, c -> Component.literal("Tickrate: " + TickrateChangerLoWidget.updateTickrate((int) (c*TickrateChangerLoWidget.TICKRATES.length), true, true)), Component.literal("Tickrate: " + TickrateChangerLoWidget.TICKRATES[TickrateChangerLoWidget.index])));
 		this.addWidget(new ButtonLoWidget(true, 0.005, 0.035, .065, () -> {
 			TickrateChangerLoWidget.updateTickrate(TickrateChangerLoWidget.index+1, false, true);
-		}, new TextComponent("+")));
+		}, Component.literal("+")));
 		this.addWidget(new ButtonLoWidget(true, 0.08, 0.035, .065, () -> {
 			TickrateChangerLoWidget.updateTickrate(TickrateChangerLoWidget.index-1, false, true);
-		}, new TextComponent("-")));
+		}, Component.literal("-")));
 		super.init();
 	}
 
@@ -59,7 +59,7 @@ public class TickrateChangerLoWidget extends WindowLoWidget {
 		TickrateChangerLoWidget.index = index;
 		// Update slider
 		if (!isSlider && TickrateChangerLoWidget.slider != null) {
-			TickrateChangerLoWidget.slider.value = new TextComponent("Tickrate: " + TickrateChangerLoWidget.TICKRATES[index]);
+			TickrateChangerLoWidget.slider.value = Component.literal("Tickrate: " + TickrateChangerLoWidget.TICKRATES[index]);
 			TickrateChangerLoWidget.slider.progress = index / (double) TickrateChangerLoWidget.TICKRATES.length;
 		}
 		// Trigger event

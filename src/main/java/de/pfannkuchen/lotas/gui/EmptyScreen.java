@@ -3,7 +3,7 @@ package de.pfannkuchen.lotas.gui;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 
 /**
  * An empty gui screen.
@@ -14,7 +14,7 @@ import net.minecraft.network.chat.TextComponent;
 public class EmptyScreen extends Screen {
 
 	public EmptyScreen() {
-		super(new TextComponent("Empty Screen"));
+		super(Component.literal("Empty Screen"));
 	}
 
 	/**
