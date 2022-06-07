@@ -225,7 +225,7 @@ public class RecorderMod {
 					this.takeScreenshot = true;
 					Thread.sleep((long) (LoTAS.tickratechanger.getMsPerTick()/3.0f));
 					while (LoTAS.tickadvance.isTickadvanceEnabled()) {
-						if (LoTAS.tickadvance.shouldTick) break;
+						if (LoTAS.tickadvance.shouldTickClient) break;
 						Thread.sleep(1L);
 					}
 				}
