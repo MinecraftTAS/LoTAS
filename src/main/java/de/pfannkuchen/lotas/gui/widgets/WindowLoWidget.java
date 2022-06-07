@@ -10,7 +10,7 @@ import de.pfannkuchen.lotas.loscreen.LoScreen;
 import de.pfannkuchen.lotas.mods.ConfigManager;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 
 /**
@@ -33,7 +33,7 @@ public class WindowLoWidget extends LoScreen {
 	private static final Random rng = new Random();
 
 	// Window sizes
-	private TextComponent title;
+	private Component title;
 	private String id;
 	protected double windowWidth;
 	protected double windowHeight;
@@ -56,7 +56,7 @@ public class WindowLoWidget extends LoScreen {
 	/**
 	 * Initializes the window with a title and size
 	 */
-	public WindowLoWidget(String id, TextComponent title, double windowWidth, double windowHeight) {
+	public WindowLoWidget(String id, Component title, double windowWidth, double windowHeight) {
 		this.id = id;
 		this.title = title;
 		this.windowWidth = windowWidth;

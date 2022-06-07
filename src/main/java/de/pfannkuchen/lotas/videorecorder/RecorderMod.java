@@ -27,7 +27,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.ErrorScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.resources.sounds.SoundInstance;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 
 /**
  * TAS recorder mod
@@ -212,7 +212,7 @@ public class RecorderMod {
 
 			} catch (IOException e) {
 				mc.tell(() -> {
-					mc.setScreen(new ErrorScreen(new TextComponent("Something went wrong while trying to record!"), new TextComponent("Check the console for error messages.")));
+					mc.setScreen(new ErrorScreen(Component.literal("Something went wrong while trying to record!"), Component.literal("Check the console for error messages.")));
 				});
 				e.printStackTrace();
 			}
@@ -232,7 +232,7 @@ public class RecorderMod {
 				LoTAS.LOGGER.info("Frame Grabber finished");
 			} catch (Exception e) {
 				mc.tell(() -> {
-					mc.setScreen(new ErrorScreen(new TextComponent("Something went wrong while trying to record!"), new TextComponent("Check the console for error messages.")));
+					mc.setScreen(new ErrorScreen(Component.literal("Something went wrong while trying to record!"), Component.literal("Check the console for error messages.")));
 				});
 				e.printStackTrace();
 			}
@@ -270,14 +270,14 @@ public class RecorderMod {
 				
 			} catch (IOException e) {
 				mc.tell(() -> {
-					mc.setScreen(new ErrorScreen(new TextComponent("Something went wrong while trying to record!"), new TextComponent("Check the console for error messages.")));
+					mc.setScreen(new ErrorScreen(Component.literal("Something went wrong while trying to record!"), Component.literal("Check the console for error messages.")));
 				});
 				e.printStackTrace();
 			}
 		}).start();
 		// Check screen resolution
 		if (mc.getWindow().getScreenWidth() < 1280 || mc.getWindow().getScreenHeight() < 720)
-			mc.gui.getChat().addMessage(new TextComponent("\u00A7cWarning: \u00A7fYour Screen resolution is not supported for TAS Recorder"));
+			mc.gui.getChat().addMessage(Component.literal("\u00A7cWarning: \u00A7fYour Screen resolution is not supported for TAS Recorder"));
 	}
 
 	/**
