@@ -1,7 +1,11 @@
 package de.pfannekuchen.lotas.core;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.platform.GlStateManager.DestFactor;
 import com.mojang.blaze3d.platform.GlStateManager.SourceFactor;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.math.Quaternion;
 
 import de.pfannekuchen.lotas.mixin.accessors.AccessorButtons;
@@ -18,6 +22,7 @@ import net.minecraft.client.gui.components.Widget;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
@@ -40,7 +45,7 @@ public class MCVer {
 //$$ 	}
 //$$ 	public static void setMessage(AbstractWidget component, String message) {
 		//#if MC>=11601
-//$$ 		component.setMessage(new net.minecraft.network.chat.TextComponent(message));
+//$$ 		component.setMessage(MCVer.literal(message));
 		//#else
 //$$ 		component.setMessage(message);
 		//#endif
@@ -93,13 +98,13 @@ public class MCVer {
 		//#endif
 //$$ 	}
 //$$ 	public static Checkbox Checkbox(int i, int j, int k, int l, String text, boolean bl) {
-//$$ 		return new Checkbox(i, j, k, l, new net.minecraft.network.chat.TextComponent(text), bl);
+//$$ 		return new Checkbox(i, j, k, l, MCVer.literal(text), bl);
 //$$ 	}
 //$$ 	public static Button Button(int i, int j, int k, int l, String text, OnPress onpress) {
-//$$ 		return new Button(i, j, k, l, new net.minecraft.network.chat.TextComponent(text), onpress);
+//$$ 		return new Button(i, j, k, l, MCVer.literal(text), onpress);
 //$$ 	}
 //$$ 	public static EditBox EditBox(Font f, int i, int j, int k, int l, String text) {
-//$$ 		return new EditBox(f, i, j, k, l, new net.minecraft.network.chat.TextComponent(text));
+//$$ 		return new EditBox(f, i, j, k, l, MCVer.literal(text));
 //$$ 	}
 //$$ 	public static void blit(int i, int j, float k, float f, int g, int l) {
 //$$ 		GuiComponent.blit(stack, i, j, k, f, g, l, 256, 256);
@@ -150,8 +155,8 @@ public class MCVer {
 	public static void blit(int a, int b, int c, float d, float e, int f, int g, int h, int i) {
 		GuiComponent.blit(a, b, c, d, e, f, g, h, i);
 	}
-	public static void fill(int a, int b, int c, int d, int e) {
-		GuiComponent.fill(a, b, c, d, e);
+	public static void fill(int x, int y, int x2, int y2, int color) {
+	      GuiComponent.fill(x, y, x2, y2, color);
 	}
 	public static void drawCenteredString(Screen s, String text, int x, int y, int color) {
 		s.drawCenteredString(Minecraft.getInstance().font, text, x, y, color);
@@ -424,7 +429,7 @@ public class MCVer {
 		com.mojang.blaze3d.platform.GlStateManager.scaled(scale, scale2, scale3);
 	}
 
-	public static void rotated(Object poseStack, int i, int j, int k, int l) {
+	public static void rotated(Object poseStack, double i, double j, double k, double l) {
 		com.mojang.blaze3d.platform.GlStateManager.rotated(i, j, k, l);
 	}
 
@@ -490,6 +495,14 @@ public class MCVer {
 //$$ 		return Minecraft.getInstance().getWindow();
 		//#else
 		return Minecraft.getInstance().window;
+		//#endif
+	}
+	
+	public static Component literal(String s) {
+		//#if MC>=11900
+//$$ 		return Component.literal(s);
+		//#else
+		return new net.minecraft.network.chat.TextComponent(s);
 		//#endif
 	}
 }

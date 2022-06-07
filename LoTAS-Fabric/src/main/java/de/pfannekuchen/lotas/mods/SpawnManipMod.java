@@ -1,5 +1,6 @@
 package de.pfannekuchen.lotas.mods;
 
+import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,6 +39,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentInstance;
 import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.phys.Vec3;
 
@@ -205,7 +207,11 @@ public class SpawnManipMod {
 		float[] armor={1f,1f,1f,1f};
 		float[] hand= {1f,1f};
 		
+		//#if MC>=11900
+//$$ 		if(dimension.bedWorks()) {
+		//#else
 		if(dimension == AccessorDimensionTypes.getOverworld()) {
+		//#endif
 			entities.add(new EntityOptions("Cave Spider", new CaveSpider(EntityType.CAVE_SPIDER, world)));
 			entities.add(new EntityOptions("Creeper", new Creeper(EntityType.CREEPER, world)));
 			entities.add(new EntityOptions("Enderman", new EnderMan(EntityType.ENDERMAN, world)));
@@ -333,7 +339,12 @@ public class SpawnManipMod {
 				((AccessorMobEntity)entity).setHandDropChances(hand);
 				entities.add(new EntityOptions("Zombie (Diamond Armor, Enchanted Sword)", entity));
 			}
-		}else if(dimension==AccessorDimensionTypes.getNether()) {
+			
+		//#if MC>=11900
+//$$ 		}else if(dimension.ultraWarm()) {
+		//#else
+		}else if(dimension == AccessorDimensionTypes.getNether()) {
+		//#endif
 			entities.add(new EntityOptions("Blaze", new Blaze(EntityType.BLAZE, world)));
 			entities.add(new EntityOptions("Ghast", new Ghast(EntityType.GHAST, world)));
 			entities.add(new EntityOptions("Magma Cube", new MagmaCube(EntityType.MAGMA_CUBE, world)));
@@ -432,7 +443,12 @@ public class SpawnManipMod {
 				((AccessorMobEntity)entity).setHandDropChances(hand);
 				entities.add(new EntityOptions("Skeleton (Diamond Armor, Enchanted Bow)", entity));
 			}
-		}else if(dimension==AccessorDimensionTypes.getEnd()) {
+			
+		//#if MC>=11900
+//$$ 		}else if(!dimension.bedWorks() && !dimension.ultraWarm()) {
+		//#else
+		} else if(dimension == AccessorDimensionTypes.getEnd()) {
+		//#endif
 			entities.add(new EntityOptions("Enderman", new EnderMan(EntityType.ENDERMAN, world)));
 		} else {
 			entities.add(new EntityOptions("Blaze", new Blaze(EntityType.BLAZE, world)));

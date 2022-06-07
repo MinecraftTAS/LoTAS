@@ -9,7 +9,6 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.PauseScreen;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
@@ -22,7 +21,7 @@ import net.minecraft.world.phys.Vec3;
 public class SpawnManipulationScreen extends Screen {
 	
 	public SpawnManipulationScreen() {
-		super(new TextComponent(""));
+		super(MCVer.literal(""));
 		manip=new SpawnManipMod();
 		world=Minecraft.getInstance().getSingleplayerServer().getPlayerList().getPlayers().get(0).getLevel();
 	}

@@ -69,7 +69,7 @@ public class LeafDropManipulation extends DropManipulationScreen.DropManipulatio
 		if (dropApple.isToggled() && (Blocks.OAK_LEAVES.equals(block.getBlock().defaultBlockState().getBlock()) || Blocks.DARK_OAK_LEAVES.equals(block.getBlock().defaultBlockState().getBlock())))
 			list.add(new ItemStack(Items.APPLE));
 		if (dropStick.isToggled())
-			list.add(new ItemStack(Items.STICK));
+			list.add(new ItemStack(Items.STICK, 2));
 		return list;
 	}
 
@@ -107,7 +107,7 @@ public class LeafDropManipulation extends DropManipulationScreen.DropManipulatio
 		if (!enabled.selected()) {
 			MCVer.color4f(.5f, .5f, .5f, .4f);
 		} else {
-			MCVer.drawShadow("Leaves drop:" + (dropApple.isToggled() ? " 1 Apple" : "") + (dropStick.isToggled() ? " 1 Stick" : "") + (dropSapling.isToggled() ? " 1 Sapling" : ""), x, y + 64, 0xFFFFFF);
+			MCVer.drawShadow("Leaves drop:" + (dropApple.isToggled() ? " 1 Apple" : "") + (dropStick.isToggled() ? " 2 Sticks" : "") + (dropSapling.isToggled() ? " 1 Sapling" : ""), x, y + 64, 0xFFFFFF);
 			MCVer.render(dropApple, mouseX, mouseY, delta);
 			MCVer.render(dropStick, mouseX, mouseY, delta);
 			MCVer.render(dropSapling, mouseX, mouseY, delta);

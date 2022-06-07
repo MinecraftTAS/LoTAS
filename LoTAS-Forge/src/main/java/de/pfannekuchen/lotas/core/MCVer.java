@@ -7,9 +7,11 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.multiplayer.WorldClient;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -247,5 +249,25 @@ public class MCVer {
 	
 	public static void textY(int width) {
 		MCVer.getFontRenderer(Minecraft.getMinecraft()).drawStringWithShadow("Y:", width/2 -76, 135, -6250336);
+	}
+	
+	public static void fill(int x, int y, int x2, int y2, int color) {
+		Gui.drawRect(x, y, x2, y2, color);
+	}
+
+	public static void rotated(float d, float e, float f, float g) {
+		GlStateManager.rotate(d, e, f, g);
+	}
+
+	public static void scaled(double x, double y, double z) {
+		GlStateManager.scale(x, y, z);
+	}
+
+	public static void translated(double x, double y, double z) {
+		GlStateManager.translate(x, y, z);
+	}
+
+	public static void color4f(float r, float g, float b, float a) {
+		GlStateManager.color(r, g, b, a);
 	}
 }

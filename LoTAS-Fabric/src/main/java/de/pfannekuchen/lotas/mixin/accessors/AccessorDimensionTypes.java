@@ -7,6 +7,9 @@ import net.minecraft.world.level.dimension.DimensionType;
 
 @Mixin(DimensionType.class)
 public interface AccessorDimensionTypes {
+	//#if MC>=11900
+//$$
+	//#else
 	//#if MC>=11601
 //$$ 	@Accessor("DEFAULT_OVERWORLD")
 //$$ 	public static DimensionType getOverworld() {
@@ -37,5 +40,6 @@ public interface AccessorDimensionTypes {
 	public static DimensionType getEnd() {
 		throw new AssertionError();
 	}
+	//#endif
 	//#endif
 }

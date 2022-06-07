@@ -100,10 +100,14 @@ public class SavestateMod {
 			e.printStackTrace();
 		}
 		
+		//#if MC>=11900
+//$$         mc.createWorldOpenFlows().loadLevel(mc.screen, worldName);
+		//#else
 		//#if MC>=11601
 //$$ 		mc.loadLevel(worldName);
 		//#else
 		mc.selectLevel(worldName, worldName, null);
+		//#endif
 		//#endif
 		
 		applyVelocity=true;
@@ -172,10 +176,14 @@ public class SavestateMod {
 		GLFW.glfwSetCursorPos(MCVer.getGLWindow().getWindow(), x, y);
 		mc.mouseHandler.turnPlayer();
 
+		//#if MC>=11900
+//$$         mc.createWorldOpenFlows().loadLevel(mc.screen, worldName);
+		//#else
 		//#if MC>=11601
 //$$ 		mc.loadLevel(worldName);
 		//#else
 		mc.selectLevel(worldName, worldName, null);
+		//#endif
 		//#endif
 		
 		GLFW.glfwSetCursorPos(MCVer.getGLWindow().getWindow(), x, y);

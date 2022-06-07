@@ -33,7 +33,6 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.texture.DynamicTexture;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Difficulty;
@@ -149,24 +148,23 @@ public class MixinMinecraftClient {
 		}
 
 		//#if MC>=11605
+		//#if MC>=11800
+//$$ 		// 1.18+ seedfinders will never work 
+		//#else
 //$$ 		if (LoTASModContainer.i != -1) {
 //$$ 			if (Minecraft.getInstance().level != null) {
 //$$ 				Minecraft.getInstance().getSingleplayerServer().halt(true);
 //$$ 			}
-//$$
-//$$ 			Minecraft.getInstance().forceSetScreen(new GenericDirtMessageScreen(new TranslatableComponent("createWorld.preparing")));
+//$$ 
+//$$ 			Minecraft.getInstance().forceSetScreen(new GenericDirtMessageScreen(new net.minecraft.network.chat.TranslatableComponent("createWorld.preparing")));
 //$$ 			LevelSettings levelSettings2;
 //$$ 			levelSettings2 = new LevelSettings(UUID.randomUUID().toString().substring(0, 10), GameType.CREATIVE, false, Difficulty.EASY, true, new GameRules(), net.minecraft.world.level.DataPackConfig.DEFAULT);
-			//#if MC>=11802
-//$$ 			net.minecraft.server.dedicated.DedicatedServerProperties.WorldGenProperties properties=new net.minecraft.server.dedicated.DedicatedServerProperties.WorldGenProperties(Long.toString(LoTASModContainer.i), new JsonObject(), true, "default");
-//$$ 			Minecraft.getInstance().createLevel(UUID.randomUUID().toString().substring(0, 10), levelSettings2, net.minecraft.core.RegistryAccess.BUILTIN.get(), net.minecraft.world.level.levelgen.WorldGenSettings.create((net.minecraft.core.RegistryAccess)net.minecraft.core.RegistryAccess.BUILTIN.get(), properties));
-			//#else
 //$$ 			Minecraft.getInstance().createLevel(UUID.randomUUID().toString().substring(0, 10), levelSettings2, net.minecraft.core.RegistryAccess.RegistryHolder.builtin(), net.minecraft.world.level.levelgen.WorldGenSettings.create(net.minecraft.core.RegistryAccess.builtin(), new Properties()).withSeed(true, OptionalLong.of(LoTASModContainer.i)));
-			//#endif
-//$$
+//$$ 
 //$$ 			LoTASModContainer.i = -1;
 //$$ 			System.gc();
 //$$ 		}
+		//#endif
 		//#endif
 		
 		/* Auto Strafing */

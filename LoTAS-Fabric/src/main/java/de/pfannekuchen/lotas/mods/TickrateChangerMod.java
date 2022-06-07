@@ -1,11 +1,15 @@
 package de.pfannekuchen.lotas.mods;
 
 import java.time.Duration;
-import net.minecraft.client.Minecraft;
-import net.minecraft.network.chat.TextComponent;
+
+import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.core.utils.ConfigUtils;
+import de.pfannekuchen.lotas.core.utils.quack.SoundPitchDuck;
+import de.pfannekuchen.lotas.mixin.MixinMinecraftServer;
 import de.pfannekuchen.lotas.mixin.accessors.AccessorMinecraftClient;
+import de.pfannekuchen.lotas.mixin.accessors.AccessorSoundEngine;
 import de.pfannekuchen.lotas.mixin.accessors.AccessorTimer;
+import net.minecraft.client.Minecraft;
 
 /**
  * Here is the basic Tickrate Changer Management.
@@ -95,7 +99,9 @@ public class TickrateChangerMod {
 		}
 		tickrate = tickrateIn;
 		if (!ConfigUtils.getBoolean("ui", "hideTickrateMessages") && Minecraft.getInstance().gui != null)
-			Minecraft.getInstance().gui.getChat().addMessage(new TextComponent("Updated Tickrate to \u00A7b" + tickrateIn));
+			Minecraft.getInstance().gui.getChat().addMessage(MCVer.literal("Updated Tickrate to \u00A7b" + tickrateIn));
+		
+		((SoundPitchDuck)((AccessorSoundEngine)Minecraft.getInstance().getSoundManager()).getSoundEngine()).updatePitch();
 	}
 
 	/**
