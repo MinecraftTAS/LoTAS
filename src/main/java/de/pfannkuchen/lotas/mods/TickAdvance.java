@@ -27,9 +27,11 @@ public class TickAdvance {
 
 	// Is tick advance enabled
 	private boolean tickadvance;
-	// Should tick advance
-	public boolean shouldTick;
-
+	// Should tick advance clientside
+	public boolean shouldTickClient;
+	// Should tick advance serverside
+	public boolean shouldTickServer;
+	
 	/**
 	 * Updates the client tickadvance status when receiving a packet
 	 */
@@ -38,7 +40,7 @@ public class TickAdvance {
 		if (TICK_ADVANCE_RL.equals(p.getIdentifier()))
 			this.tickadvance = p.getData().readBoolean();
 		if (TICK_RL.equals(p.getIdentifier()))
-			this.shouldTick = true; // Tick the Client
+			this.shouldTickClient = true; // Tick the Client
 	}
 
 	/**
@@ -57,7 +59,7 @@ public class TickAdvance {
 	 */
 	@Environment(EnvType.CLIENT)
 	public void onTick(Minecraft mc) {
-		this.shouldTick = false;
+		this.shouldTickClient = false;
 	}
 
 	/**
@@ -78,7 +80,7 @@ public class TickAdvance {
 	 */
 	@Environment(EnvType.CLIENT)
 	public void requestTickadvance() {
-		if (!this.tickadvance || this.shouldTick) return;
+		if (!this.tickadvance || this.shouldTickClient) return;
 		FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
 		buf.writeBoolean(false);
 		this.mc.getConnection().send(new ServerboundCustomPayloadPacket(TICK_RL, buf));
@@ -102,7 +104,7 @@ public class TickAdvance {
 	 * Server-Side only tick advance. Sends a packet to all players
 	 */
 	public void updateTickadvance() {
-		this.shouldTick = true;
+		this.shouldTickServer = true;
 		// Tick all Clients
 		this.mcserver.getPlayerList().getPlayers().forEach(c -> {
 			c.connection.send(new ClientboundCustomPayloadPacket(TICK_RL, new FriendlyByteBuf(Unpooled.buffer())));

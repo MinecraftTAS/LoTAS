@@ -26,7 +26,7 @@ public class MixinTimer {
 
 	@Inject(method = "advanceTime", at = @At("HEAD"))
 	public void onAdvanceTime(CallbackInfoReturnable<Integer> cir) {
-		this.msPerTick = (float) (LoTAS.tickadvance.isTickadvanceEnabled() && !LoTAS.tickadvance.shouldTick ? Float.MAX_VALUE : LoTAS.tickratechanger.getMsPerTick());
+		this.msPerTick = (float) (LoTAS.tickadvance.isTickadvanceEnabled() && !LoTAS.tickadvance.shouldTickClient ? Float.MAX_VALUE : LoTAS.tickratechanger.getMsPerTick());
 	}
 
 }
