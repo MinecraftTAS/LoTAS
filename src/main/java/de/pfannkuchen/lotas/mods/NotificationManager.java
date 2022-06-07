@@ -6,7 +6,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundCustomPayloadPacket;
 import net.minecraft.network.protocol.game.ServerboundCustomPayloadPacket;
 import net.minecraft.resources.ResourceLocation;
@@ -30,7 +30,7 @@ public class NotificationManager {
 	@Environment(EnvType.CLIENT)
 	public void onClientPacket(ClientboundCustomPayloadPacket p) {
 		if (NOTIFICATION_MANAGER_RL.equals(p.getIdentifier())) {
-			ClientLoTAS.loscreenmanager.addNotification(new TextComponent(p.getData().readUtf()));
+			ClientLoTAS.loscreenmanager.addNotification(Component.literal(p.getData().readUtf()));
 		}
 	}
 	

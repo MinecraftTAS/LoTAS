@@ -7,7 +7,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import de.pfannkuchen.lotas.loscreen.LoScreen;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 
 /**
  * Slider lowidget
@@ -38,9 +38,9 @@ public class SliderLoWidget extends LoScreen {
 	// Whether it's currently being dragged
 	public boolean isDragging = false;
 	// Move handler
-	public Function<Double, TextComponent> onMove;
+	public Function<Double, Component> onMove;
 	// Value of the progress
-	public TextComponent value;
+	public Component value;
 
 	/**
 	 * Initializes a new slider
@@ -50,7 +50,7 @@ public class SliderLoWidget extends LoScreen {
 	 * @param length Length of the slider (in screen width percentage)
 	 * @param Callback after slider is moved
 	 */
-	public SliderLoWidget(boolean active, double x, double y, double length, double progress, Function<Double, TextComponent> onMove, TextComponent value) {
+	public SliderLoWidget(boolean active, double x, double y, double length, double progress, Function<Double, Component> onMove, Component value) {
 		this.active = active;
 		this.x = x;
 		this.y = y;

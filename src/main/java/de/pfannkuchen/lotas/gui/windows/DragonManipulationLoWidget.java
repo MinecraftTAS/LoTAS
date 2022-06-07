@@ -7,7 +7,7 @@ import de.pfannkuchen.lotas.gui.widgets.ToggleButtonLoWidget;
 import de.pfannkuchen.lotas.gui.widgets.WindowLoWidget;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 
 /**
  * Dragon manipulation window lowidget
@@ -27,25 +27,25 @@ public class DragonManipulationLoWidget extends WindowLoWidget {
 	 * Initializes a dragon manipulation widget
 	 */
 	public DragonManipulationLoWidget() {
-		super("dragonmanipulationwidget", new TextComponent("Dragon Manipulation"), .15, .235);
+		super("dragonmanipulationwidget", Component.literal("Dragon Manipulation"), .15, .235);
 	}
 
 	@Override
 	protected void init() {
 		this.addWidget(this.optimalpath = new ToggleButtonLoWidget(true, 0.005, 0.035, .14, LoTAS.configmanager.getBoolean("dragonmanipulationwidget", "forceOptimalPath"), b -> {
 			LoTAS.dragonmanipulationmod.requestState("forceOptimalPath", b);
-		}, new TextComponent("Optimal dragon path")));
+		}, Component.literal("Optimal dragon path")));
 		this.addWidget(this.ccwtoggle = new ToggleButtonLoWidget(true, 0.005, 0.085, .14, LoTAS.configmanager.getBoolean("dragonmanipulationwidget", "forceCCWToggle"), b -> {
 			LoTAS.dragonmanipulationmod.requestState("forceCCWToggle", b);
-		}, new TextComponent("Force cc/ccw toggle")));
+		}, Component.literal("Force cc/ccw toggle")));
 		this.addWidget(this.landingapproach = new ToggleButtonLoWidget(true, 0.005, 0.185, .14, LoTAS.configmanager.getBoolean("dragonmanipulationwidget", "forceLandingApproach"), b -> {
 			LoTAS.dragonmanipulationmod.requestState("forceLandingApproach", b);
 			if (b) LoTAS.dragonmanipulationmod.requestState("forcePlayerStrafing", !b);
-		}, new TextComponent("Force landing approach")));
+		}, Component.literal("Force landing approach")));
 		this.addWidget(this.playerstrafing = new ToggleButtonLoWidget(true, 0.005, 0.135, .14, LoTAS.configmanager.getBoolean("dragonmanipulationwidget", "forcePlayerStrafing"), b -> {
 			LoTAS.dragonmanipulationmod.requestState("forcePlayerStrafing", b);
 			if (b) LoTAS.dragonmanipulationmod.requestState("forceLandingApproach", !b);
-		}, new TextComponent("Force player strafing")));
+		}, Component.literal("Force player strafing")));
 		super.init();
 	}
 

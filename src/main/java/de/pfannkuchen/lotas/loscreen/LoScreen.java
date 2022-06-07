@@ -9,7 +9,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 
 /**
  * LoScreen is an abstract class representing a second screen with a custom api rendered after the normal gui (Short: interactable overlay).
@@ -158,7 +158,7 @@ public abstract class LoScreen {
 	 * @param color Color
 	 * @param shadow Shadow?
 	 */
-	protected final void draw(PoseStack stack, TextComponent text, double x, double y, int size, int color, boolean shadow) {
+	protected final void draw(PoseStack stack, Component text, double x, double y, int size, int color, boolean shadow) {
 		stack.pushPose();
 		// Move by gui scale first
 		stack.scale((float) (1f/this.guiscale), (float) (1f/this.guiscale), 1.0f);

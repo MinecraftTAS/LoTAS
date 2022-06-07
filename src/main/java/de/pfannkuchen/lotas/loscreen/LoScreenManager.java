@@ -21,7 +21,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.multiplayer.PlayerInfo;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 
 /**
@@ -48,7 +48,7 @@ public class LoScreenManager {
 	// Last tickadvance state
 	private boolean lastTickadvance;
 	// All notifications onscreen
-	private TreeMap<Long, TextComponent> timestamps = new TreeMap<>(Collections.reverseOrder());
+	private TreeMap<Long, Component> timestamps = new TreeMap<>(Collections.reverseOrder());
 	
 	/**
 	 * Returns whether a screen is opened.
@@ -111,7 +111,7 @@ public class LoScreenManager {
 	/**
 	 * Adds a notification to the list of notifications
 	 */
-	public void addNotification(TextComponent message) {
+	public void addNotification(Component message) {
 		this.timestamps.put(System.currentTimeMillis(), message);
 	}
 
@@ -137,7 +137,7 @@ public class LoScreenManager {
 
 			long currentTime = System.currentTimeMillis();
 			int i = 0;
-			for (Entry<Long, TextComponent> entry : new TreeMap<>(this.timestamps).entrySet()) {
+			for (Entry<Long, Component> entry : new TreeMap<>(this.timestamps).entrySet()) {
 				String s = entry.getValue().getString();
 				String s1 = s.split("_", 2)[0];
 				String s2 = s.split("_", 2)[1];

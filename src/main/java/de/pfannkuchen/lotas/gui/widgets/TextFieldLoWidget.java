@@ -9,7 +9,7 @@ import de.pfannkuchen.lotas.loscreen.LoScreen;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 
 /**
  * Editable text field
@@ -109,7 +109,7 @@ public class TextFieldLoWidget extends LoScreen {
 		byte alpha = (byte) (this.ease(this.animationProgress, 0, 1, 6)*255);
 		this.mouseOver = curX > this.x-0.01 && curX < this.x+this.length+0.01 && curY > this.y-0.015 && curY < this.y+0.044;
 		this.fill(stack, this.x-0.01, this.y-0.015, this.x+this.length+0.01, this.y+0.044, TextFieldLoWidget.FOCUS_BACKGROUND_COLOR - 0xff000000 + (alpha << 24));
-		this.draw(stack, new TextComponent(this.content + (this.mouseOver ? "_" : "")), this.x, this.y, 20, TextFieldLoWidget.TEXT_COLOR, false);
+		this.draw(stack, Component.literal(this.content + (this.mouseOver ? "_" : "")), this.x, this.y, 20, TextFieldLoWidget.TEXT_COLOR, false);
 		this.fill(stack, this.x, this.y+0.025, this.x+this.length, this.y+0.028, this.mouseOver ? TextFieldLoWidget.FOCUS_LINE_COLOR : TextFieldLoWidget.LINE_COLOR);
 		super.render(stack, curX, curY);
 	}

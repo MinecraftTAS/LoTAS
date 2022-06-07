@@ -6,7 +6,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.ImageButton;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
 /**
@@ -36,10 +36,10 @@ public class CustomImageButton extends ImageButton {
 	 * @param toggled Is toggled or not
 	 */
 	public CustomImageButton(int i, int j, int k, int l, int m, int n, int o, ResourceLocation streaming, int p, int q, OnPress onPress, OnTooltip onTooltip, boolean toggled) {
-		super(i+2, j+2, k-4, l-4, m, n, o, streaming, p, q, b -> {}, onTooltip, TextComponent.EMPTY);
+		super(i+2, j+2, k-4, l-4, m, n, o, streaming, p, q, b -> {}, onTooltip, Component.empty());
 		this.isToggled = toggled;
 		// Trigger the onPress differently
-		this.internalButton = new Button(i, j, k, l, TextComponent.EMPTY, b -> {
+		this.internalButton = new Button(i, j, k, l, Component.empty(), b -> {
 			this.isToggled = !this.isToggled;
 			onPress.onPress(CustomImageButton.this);
 		});

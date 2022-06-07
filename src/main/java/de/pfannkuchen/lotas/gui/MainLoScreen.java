@@ -9,7 +9,7 @@ import de.pfannkuchen.lotas.gui.windows.TickrateChangerLoWidget;
 import de.pfannkuchen.lotas.loscreen.LoScreen;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 
 /**
  * This is the main loscreen that opens on the LoTAS edit button.
@@ -41,12 +41,12 @@ public class MainLoScreen extends LoScreen {
 			boolean enable; // Whether the widget should be enabled or disabled
 			String widgetname;
 			if (a.getString().startsWith("\u00A7\u00A7\u00A7l")) {
-				a = new TextComponent(a.getString().replace("\u00A7\u00A7\u00A7l", ""));
+				a = Component.literal(a.getString().replace("\u00A7\u00A7\u00A7l", ""));
 				enable = false;
 				widgetname = a.getString();
 			} else {
 				widgetname = a.getString();
-				a = new TextComponent("\u00A7\u00A7\u00A7l" + a.getString());
+				a = Component.literal("\u00A7\u00A7\u00A7l" + a.getString());
 				enable = true;
 			}
 			// Find the widget

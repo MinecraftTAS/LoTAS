@@ -8,7 +8,7 @@ import de.pfannkuchen.lotas.ClientLoTAS;
 import de.pfannkuchen.lotas.loscreen.LoScreen;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 
 /**
  * Toggle button lowidget
@@ -35,7 +35,7 @@ public class ToggleButtonLoWidget extends LoScreen {
 	// Move handler
 	Consumer<Boolean> onClick;
 	// Value of the button
-	TextComponent value;
+	Component value;
 	// Hover animation
 	float animationProgress;
 	// Is the button pressed
@@ -50,7 +50,7 @@ public class ToggleButtonLoWidget extends LoScreen {
 	 * @param down Down by default
 	 * @param Callback after button is clicked
 	 */
-	public ToggleButtonLoWidget(boolean active, double x, double y, double length, boolean down, Consumer<Boolean> onClick, TextComponent value) {
+	public ToggleButtonLoWidget(boolean active, double x, double y, double length, boolean down, Consumer<Boolean> onClick, Component value) {
 		this.active = active;
 		this.x = x;
 		this.y = y;

@@ -6,7 +6,7 @@ import de.pfannkuchen.lotas.ClientLoTAS;
 import de.pfannkuchen.lotas.loscreen.LoScreen;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 
 /**
  * Locks the players in the savestate loscreen
@@ -57,7 +57,7 @@ public class StateLoScreen extends LoScreen {
 		double ease2 = this.ease(this.animationProgress2, 0, 1, 12);
 		this.fill(stack, 1 - 0.0045 - 0.215 - 0.785*ease, 0, 1, 1, StateLoScreen.BORDER_COLOR); // Border
 		this.fill(stack, 1 - 0.215 - 0.785*ease, 0, 1, 1, StateLoScreen.BACKGROUND_COLOR); // Background
-		this.draw(stack, new TextComponent("Performing State Action..."), 1 + .05 - 0.785*ease, 0.25, 70, StateLoScreen.TITLE_COLOR, false); // Title
+		this.draw(stack, Component.literal("Performing State Action..."), 1 + .05 - 0.785*ease, 0.25, 70, StateLoScreen.TITLE_COLOR, false); // Title
 		// Render progress bar
 		this.fill(stack, 0.19, 0.72*(1*ease), 0.81, 0.76*(1*ease), StateLoScreen.BORDER_COLOR);
 		this.fill(stack, 0.19215, 0.723*(1*ease), 0.8079, 0.757*(1*ease), StateLoScreen.BACKGROUND_COLOR);
