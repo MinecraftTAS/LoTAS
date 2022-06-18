@@ -14,6 +14,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -45,28 +46,33 @@ public class LeafDropManipulation extends DropManipulationScreen.DropManipulatio
 	@Override
 	public List<ItemStack> redirectDrops(BlockState block) {
 		List<ItemStack> list = new ArrayList<>();
-		if (Blocks.OAK_LEAVES.equals(block.getBlock().defaultBlockState().getBlock())) {
+		Block blockToCheck=block.getBlock().defaultBlockState().getBlock();
+		if (Blocks.OAK_LEAVES.equals(blockToCheck)) {
 			if (dropSapling.isToggled())
 				list.add(new ItemStack(Items.OAK_SAPLING));
-		} else if (Blocks.BIRCH_LEAVES.equals(block.getBlock().defaultBlockState().getBlock())) {
+		} else if (Blocks.BIRCH_LEAVES.equals(blockToCheck)) {
 			if (dropSapling.isToggled())
 				list.add(new ItemStack(Items.BIRCH_SAPLING));
-		} else if (Blocks.SPRUCE_LEAVES.equals(block.getBlock().defaultBlockState().getBlock())) {
+		} else if (Blocks.SPRUCE_LEAVES.equals(blockToCheck)) {
 			if (dropSapling.isToggled())
 				list.add(new ItemStack(Items.SPRUCE_SAPLING));
-		} else if (Blocks.JUNGLE_LEAVES.equals(block.getBlock().defaultBlockState().getBlock())) {
+		} else if (Blocks.JUNGLE_LEAVES.equals(blockToCheck)) {
 			if (dropSapling.isToggled())
 				list.add(new ItemStack(Items.JUNGLE_SAPLING));
-		} else if (Blocks.DARK_OAK_LEAVES.equals(block.getBlock().defaultBlockState().getBlock())) {
+		} else if (Blocks.DARK_OAK_LEAVES.equals(blockToCheck)) {
 			if (dropSapling.isToggled())
 				list.add(new ItemStack(Items.DARK_OAK_SAPLING));
-		} else if (Blocks.ACACIA_LEAVES.equals(block.getBlock().defaultBlockState().getBlock())) {
+		} else if (Blocks.ACACIA_LEAVES.equals(blockToCheck)) {
 			if (dropSapling.isToggled())
 				list.add(new ItemStack(Items.ACACIA_SAPLING));
+		//#if MC>=11900
+//$$ 		} else if (Blocks.MANGROVE_LEAVES.equals(blockToCheck)) {
+//$$ 			// Mangrove leaves don't drop saplings
+		//#endif
 		} else {
 			return ImmutableList.of();
 		}
-		if (dropApple.isToggled() && (Blocks.OAK_LEAVES.equals(block.getBlock().defaultBlockState().getBlock()) || Blocks.DARK_OAK_LEAVES.equals(block.getBlock().defaultBlockState().getBlock())))
+		if (dropApple.isToggled() && (Blocks.OAK_LEAVES.equals(blockToCheck) || Blocks.DARK_OAK_LEAVES.equals(block.getBlock().defaultBlockState().getBlock())))
 			list.add(new ItemStack(Items.APPLE));
 		if (dropStick.isToggled())
 			list.add(new ItemStack(Items.STICK, 2));
