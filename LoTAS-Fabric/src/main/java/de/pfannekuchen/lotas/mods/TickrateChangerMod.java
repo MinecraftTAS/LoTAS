@@ -98,10 +98,11 @@ public class TickrateChangerMod {
 			((AccessorTimer) ((AccessorMinecraftClient) Minecraft.getInstance()).getTimer()).setTickTime(Float.MAX_VALUE);
 		}
 		tickrate = tickrateIn;
-		if (!ConfigUtils.getBoolean("ui", "hideTickrateMessages") && Minecraft.getInstance().gui != null)
-			Minecraft.getInstance().gui.getChat().addMessage(MCVer.literal("Updated Tickrate to \u00A7b" + tickrateIn));
-		
-		((SoundPitchDuck)((AccessorSoundEngine)Minecraft.getInstance().getSoundManager()).getSoundEngine()).updatePitch();
+		if (!ConfigUtils.getBoolean("ui", "hideTickrateMessages") && Minecraft.getInstance().gui != null) {
+			Minecraft mc=Minecraft.getInstance();
+			mc.gui.getChat().addMessage(MCVer.literal("Updated Tickrate to \u00A7b" + tickrateIn));
+		}
+		updatePitch();
 	}
 
 	/**
@@ -159,6 +160,20 @@ public class TickrateChangerMod {
 			advanceServer = false;
 			updateServerTickrate(0);
 		}
+	}
+	
+	public static void updatePitch() {
+		AccessorSoundEngine soundEngine = (AccessorSoundEngine)Minecraft.getInstance().getSoundManager();
+		
+		if(soundEngine == null)
+			return;
+		
+		SoundPitchDuck soundManager=(SoundPitchDuck)soundEngine.getSoundEngine();
+		
+		if(soundManager == null)
+			return;
+		
+		soundManager.updatePitch();
 	}
 
 	//public static ResourceLocation streaming = new ResourceLocation("textures/gui/stream_indicator.png");
