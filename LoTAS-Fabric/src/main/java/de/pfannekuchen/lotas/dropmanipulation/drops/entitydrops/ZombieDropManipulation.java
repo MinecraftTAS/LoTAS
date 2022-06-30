@@ -12,7 +12,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.monster.Husk;
-import net.minecraft.world.entity.monster.PigZombie;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.monster.ZombieVillager;
 import net.minecraft.world.item.ItemStack;
@@ -58,7 +57,12 @@ public class ZombieDropManipulation extends DropManipulationScreen.DropManipulat
 	@Override
 	public List<ItemStack> redirectDrops(Entity entity, int lootingBonus) {
 		List<ItemStack> list = new ArrayList<>();
-		if (entity instanceof Zombie && !(entity instanceof PigZombie)) {
+		if (entity instanceof Zombie &&
+				//#if MC>=11600
+//$$ 				!(entity instanceof net.minecraft.world.entity.monster.ZombifiedPiglin)) {
+				//#else
+				!(entity instanceof net.minecraft.world.entity.monster.PigZombie)) {
+				//#endif
 			list.add(new ItemStack(Items.ROTTEN_FLESH, 2 +lootingBonus));
 
 			if (dropIron.isToggled())
