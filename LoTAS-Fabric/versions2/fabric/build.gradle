@@ -22,7 +22,7 @@ sourceSets {
 }
 
 dependencies {
-	//#if MC>=11802
+	//#if MC>=11900
 //$$ 	minecraft "com.mojang:minecraft:1.19"
 //$$ 	mappings loom.officialMojangMappings()
 	//#else
