@@ -4,7 +4,9 @@ import java.awt.Color;
 import java.time.Duration;
 
 import org.lwjgl.glfw.GLFW;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -42,11 +44,15 @@ public abstract class MixinGuiIngameMenu extends Screen {
 
 	public EditBox savestateName;
 	public EditBox tickrateField;
+	
+	@Shadow @Final
+	private boolean showPauseMenu;
 
 	SmallCheckboxWidget fw = null; // do not pay attention
 
 	@Inject(at = @At("RETURN"), method = "init")
 	public void addCustomButtons(CallbackInfo ci) {
+		if(!showPauseMenu) return;
 		// Move Buttons higher
 		for (int i=0;i<MCVer.getButtonSize(this); i++) {
 			Button guiButton=(Button)MCVer.getButton(this, i);
@@ -181,6 +187,7 @@ public abstract class MixinGuiIngameMenu extends Screen {
 	@Inject(method = "render", at = @At("TAIL"))
 	public void drawScreen(int mouseX, int mouseY, float partialTicks, CallbackInfo ci) {	
 	//#endif
+		if(!showPauseMenu) return;
 		if (Keyboard.isKeyDown(GLFW.GLFW_KEY_LEFT_SHIFT)) {
 			MCVer.setMessage(getButton(8), "\u00A76Name Savestate");
 			MCVer.setMessage(getButton(9), "\u00A76Choose State");

@@ -57,7 +57,12 @@ public class ZombieDropManipulation extends DropManipulationScreen.DropManipulat
 	@Override
 	public List<ItemStack> redirectDrops(Entity entity, int lootingBonus) {
 		List<ItemStack> list = new ArrayList<>();
-		if (entity instanceof Zombie || entity instanceof Husk || entity instanceof ZombieVillager) {
+		if (entity instanceof Zombie &&
+				//#if MC>=11600
+//$$ 				!(entity instanceof net.minecraft.world.entity.monster.ZombifiedPiglin)) {
+				//#else
+				!(entity instanceof net.minecraft.world.entity.monster.PigZombie)) {
+				//#endif
 			list.add(new ItemStack(Items.ROTTEN_FLESH, 2 +lootingBonus));
 
 			if (dropIron.isToggled())

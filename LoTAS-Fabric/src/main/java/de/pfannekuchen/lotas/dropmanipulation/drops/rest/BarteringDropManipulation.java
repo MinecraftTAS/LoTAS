@@ -92,8 +92,8 @@ public class BarteringDropManipulation extends DropManipulationScreen.DropManipu
 //$$ 				case "spectral arrow": return ImmutableList.of(new ItemStack(net.minecraft.world.item.Items.SPECTRAL_ARROW, 16));
 //$$ 				case "arrow": return ImmutableList.of(new ItemStack(net.minecraft.world.item.Items.ARROW, 12));
 //$$ 				case "gravel": return ImmutableList.of(new ItemStack(net.minecraft.world.item.Items.GRAVEL, 16));
-//$$ 				case "magma cream": return ImmutableList.of();
-//$$ 				case "glowstone dust": return ImmutableList.of();
+//$$ 				case "magma cream": return ImmutableList.of(new ItemStack(net.minecraft.world.item.Items.MAGMA_CREAM, 6));
+//$$ 				case "glowstone dust": return ImmutableList.of(new ItemStack(net.minecraft.world.item.Items.GLOWSTONE_DUST, 12));
 //$$ 				case "blackstone": return ImmutableList.of(new ItemStack(net.minecraft.world.item.Items.BLACKSTONE, 16));
 //$$ 				default: return ImmutableList.of();
 //$$ 			}

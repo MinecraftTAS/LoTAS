@@ -10,6 +10,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.core.utils.ConfigUtils;
 import de.pfannekuchen.lotas.gui.ConfigurationScreen;
+import de.pfannekuchen.lotas.mods.TickrateChangerMod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.TitleScreen;
@@ -33,6 +34,9 @@ public abstract class MixinGuiMainMenu extends Screen {
 	
 	@Inject(method="init", at = @At("HEAD"))
 	private void changeSplash(CallbackInfo ci) {
+		if (ConfigUtils.getBoolean("tools", "saveTickrate")) {
+			TickrateChangerMod.updatePitch();
+		}
 		splash="TaS iS cHeAtInG !!1";
 	}
 
