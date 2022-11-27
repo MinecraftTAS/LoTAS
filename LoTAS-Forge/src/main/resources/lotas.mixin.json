@@ -23,7 +23,8 @@
 		"patches.MixinWorldProviderPatch",
 		"patches.MixinEntitySheepPatch",
 		"MixinMinecraftServer",
-		"patches.MixinInaccuracyPatch"
+		"patches.MixinInaccuracyPatch",
+		"patches.MixinSaveHandler"
     ],
     "client": [
     	"accessors.AccessorMinecraftClient",

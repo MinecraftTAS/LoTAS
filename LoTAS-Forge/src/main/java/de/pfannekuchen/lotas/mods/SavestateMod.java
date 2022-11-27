@@ -15,14 +15,15 @@ import org.lwjgl.input.Mouse;
 import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.core.utils.EventUtils.Timer;
 import de.pfannekuchen.lotas.mixin.accessors.AccessorAnvilChunkLoader;
+import de.pfannekuchen.lotas.mixin.render.gui.MixinGuiIngameMenu;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.integrated.IntegratedServer;
 import net.minecraft.world.MinecraftException;
 import net.minecraft.world.WorldServer;
-import net.minecraft.world.gen.ChunkProviderServer;
 import net.minecraft.world.chunk.storage.AnvilChunkLoader;
+import net.minecraft.world.gen.ChunkProviderServer;
 
 /**
  * Saves the player velocity and makes a copy of the world in a seperate folder.
@@ -48,6 +49,8 @@ public class SavestateMod {
 
 	/** Turns off rendering to fake loadless savestates */
 	public static boolean isLoading;
+	
+	public static boolean isSaving;
 
 	/**
 	 * Returns the motion of the player, and the current time of the timer as a string
@@ -65,6 +68,8 @@ public class SavestateMod {
 	public static void savestate(String name) {
 		final String data = generateSavestateFile();
 		final Minecraft mc = Minecraft.getMinecraft();
+		
+		isSaving = true;
 
 		final MinecraftServer server = mc.getIntegratedServer();
 		
@@ -101,13 +106,13 @@ public class SavestateMod {
 		// create a new thread that copies the world
 		new Thread(() -> {
 			// find next savestate directory
-			final String worldName = server.getFolderName();
-			final File worldDir = new File(mc.mcDataDir, "saves/" + worldName);
-			final File savestatesDir = new File(mc.mcDataDir, "saves/savestates/");
+			String worldName = server.getFolderName();
+			File worldDir = new File(mc.mcDataDir, "saves/" + worldName);
+			File savestatesDir = new File(mc.mcDataDir, "saves/savestates/");
 
 			if (!savestatesDir.exists()) savestatesDir.mkdir();
 
-			final int existingSavestates = savestatesDir.listFiles((d, s) -> {
+			int existingSavestates = savestatesDir.listFiles((d, s) -> {
 				return s.startsWith(worldName + "-Savestate");
 			}).length;
 
@@ -138,6 +143,7 @@ public class SavestateMod {
 		// show the label, that the savestates is done.
 		showSavestateDone = true;
 		timeTitle = System.currentTimeMillis();
+		isSaving = false;
 		System.gc();
 		
 		TickrateChangerMod.updateTickrate(tickratesaved);
@@ -156,21 +162,22 @@ public class SavestateMod {
 
 		isLoading = true; // turn off rendering
 		
+		// Store the tickrate before the loadstate
 		float tickratesaved=TickrateChangerMod.tickrateServer;
 		TickrateChangerMod.updateTickrate(20);
 		
 		// stop the server without saving the world
-		final Minecraft mc = Minecraft.getMinecraft();
-		final IntegratedServer server = mc.getIntegratedServer();
+		Minecraft mc = Minecraft.getMinecraft();
+		IntegratedServer server = mc.getIntegratedServer();
 		for (WorldServer worldserver : MCVer.getWorlds(server)) {
 			worldserver.disableLevelSaving = true;
 		}
 		Minecraft.stopIntegratedServer();
 
 		// load the world
-		final String worldName = server.getFolderName();
-		final File worldDir = new File(mc.mcDataDir, "saves/" + worldName);
-		final File savestatesDir = new File(mc.mcDataDir, "saves/savestates/");
+		String worldName = server.getFolderName();
+		File worldDir = new File(mc.mcDataDir, "saves/" + worldName);
+		File savestatesDir = new File(mc.mcDataDir, "saves/savestates/");
 
 		int existingSavestates = savestatesDir.listFiles((d, s) -> {
 			return s.startsWith(worldName + "-Savestate");
@@ -178,22 +185,55 @@ public class SavestateMod {
 
 		if (number != -1) existingSavestates = number;
 
-		final File savestateDir = new File(savestatesDir, worldName + "-Savestate" + (existingSavestates));
+		// Deleting the savestate dir
+		File savestateDir = new File(savestatesDir, worldName + "-Savestate" + (existingSavestates));
 		try {
-			final String data = new String(com.google.common.io.Files.toByteArray(new File(savestateDir, "savestate.dat")));
 			FileUtils.deleteDirectory(worldDir);
+		} catch (IOException e) {
+			System.out.println("Failed to delete the current world. Trying to salvage it...");
+			e.printStackTrace();
+			try {
+				Thread.sleep(20L);
+			} catch (InterruptedException e1) {
+				e1.printStackTrace();
+			}
+			try {
+				FileUtils.copyDirectory(savestateDir, worldDir);
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		}
+		
+		// Copying savestates
+		try {
 			FileUtils.copyDirectory(savestateDir, worldDir);
-
-			// re apply the velocity to make a seamless transition
-			motionX = Double.parseDouble(data.split(":")[0]);
-			motionY = Double.parseDouble(data.split(":")[1]);
-			motionZ = Double.parseDouble(data.split(":")[2]);
-			Timer.ticks = Integer.parseInt(data.split(":")[3]);
-			applyVelocity = true;
-			TrackerFile.increaseLoadstates(savestatesDir, worldName);
-		} catch (NumberFormatException | IOException e) {
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		
+		File savestateFile = new File(savestateDir, "savestate.dat");
+		
+		// Load savestate data
+		
+		String data= "";
+		try {
+			if(savestateFile.exists())
+				data = new String(com.google.common.io.Files.toByteArray(savestateFile));
+			
+			if(!data.isEmpty()) {
+				// re apply the velocity to make a seamless transition
+				motionX = Double.parseDouble(data.split(":")[0]);
+				motionY = Double.parseDouble(data.split(":")[1]);
+				motionZ = Double.parseDouble(data.split(":")[2]);
+				Timer.ticks = Integer.parseInt(data.split(":")[3]);
+				applyVelocity = true;
+				TrackerFile.increaseLoadstates(savestatesDir, worldName);
+			}
+		} catch(Exception e){
+			System.out.println("Failed to read savestate data:");
 			e.printStackTrace();
 		}
+		
 		// clear chat messages because of leftover messages
 		//#if MC>=11100
 		mc.ingameGUI.getChatGUI().clearChatMessages(true);
