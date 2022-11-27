@@ -6,7 +6,6 @@ import com.mojang.blaze3d.platform.GlStateManager.SourceFactor;
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.Tesselator;
-import com.mojang.math.Quaternion;
 
 import de.pfannekuchen.lotas.mixin.accessors.AccessorButtons;
 import de.pfannekuchen.lotas.mixin.accessors.AccessorScreen;
@@ -18,7 +17,6 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Button.OnPress;
 import net.minecraft.client.gui.components.Checkbox;
 import net.minecraft.client.gui.components.EditBox;
-import net.minecraft.client.gui.components.Widget;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.client.renderer.texture.TextureManager;
@@ -101,7 +99,11 @@ public class MCVer {
 //$$ 		return new Checkbox(i, j, k, l, MCVer.literal(text), bl);
 //$$ 	}
 //$$ 	public static Button Button(int i, int j, int k, int l, String text, OnPress onpress) {
+		//#if MC>=11903
+//$$ 		return Button.builder(MCVer.literal(text), onpress).pos(i, j).size(k, l).build();
+		//#else
 //$$ 		return new Button(i, j, k, l, MCVer.literal(text), onpress);
+		//#endif
 //$$ 	}
 //$$ 	public static EditBox EditBox(Font f, int i, int j, int k, int l, String text) {
 //$$ 		return new EditBox(f, i, j, k, l, MCVer.literal(text));
@@ -127,6 +129,15 @@ public class MCVer {
 //$$ 	public static void renderBackground(Screen screen) {
 //$$ 		screen.renderBackground(stack);
 //$$ 	}
+	//#if MC>=11903
+//$$     public static org.joml.Quaternionf fromYXZ(float f, float g, float h) {
+//$$     	org.joml.Quaternionf quaternion = new org.joml.Quaternionf(0.0f, 0.0f, 0.0f, 1.0f);
+//$$         quaternion.mul(new org.joml.Quaternionf(0.0f, (float)Math.sin(f / 2.0f), 0.0f, (float)Math.cos(f / 2.0f)));
+//$$         quaternion.mul(new org.joml.Quaternionf((float)Math.sin(g / 2.0f), 0.0f, 0.0f, (float)Math.cos(g / 2.0f)));
+//$$         quaternion.mul(new org.joml.Quaternionf(0.0f, 0.0f, (float)Math.sin(h / 2.0f), (float)Math.cos(h / 2.0f)));
+//$$         return quaternion;
+//$$     }
+    //#endif
 	//#else
 	public static Checkbox Checkbox(int i, int j, int k, int l, String text, boolean bl) {
 		return new Checkbox(i, j, k, l, text, bl);
@@ -243,7 +254,11 @@ public class MCVer {
 //$$
 //$$ 	public static void rotated(Object stack, double i, double j, double k, double l) {
 //$$ 		com.mojang.blaze3d.vertex.PoseStack poseStack = (com.mojang.blaze3d.vertex.PoseStack)stack;
+		//#if MC>=11903
+//$$ 		poseStack.mulPose(new org.joml.Quaternionf((float)i,(float) j,(float) k,(float) l));
+		//#else
 //$$ 		poseStack.mulPose(new Quaternion((float)i,(float) j,(float) k,(float) l));
+		//#endif
 //$$ 	}
 //$$
 //$$ 	public static void enableDepthTest() {
@@ -446,7 +461,23 @@ public class MCVer {
 	}
 	//#endif
 	
-	// =============================================== 1.16.5 | 1.17 BUTTONS =========================================
+	// =============================================== 1.19.3 BUTTONS ================================================
+	//#if MC>=11903
+//$$ 	public static <T extends net.minecraft.client.gui.components.events.GuiEventListener & net.minecraft.client.gui.components.Renderable & net.minecraft.client.gui.narration.NarratableEntry> T addButton(Screen screen, T button) {
+//$$ 		((de.pfannekuchen.lotas.core.utils.AccessorScreen2)screen).addRenderableWidget(button);
+//$$ 		return button;
+//$$ 	}
+//$$
+//$$ 	public static net.minecraft.client.gui.components.Renderable getButton(Screen obj, int buttonID) {
+//$$ 		return ((AccessorButtons)obj).getButtons().get(buttonID);
+//$$ 	}
+//$$
+//$$
+//$$ 	public static int getButtonSize(Screen obj) {
+//$$ 		return ((AccessorButtons)obj).getButtons().size();
+//$$ 	}
+	//#else
+	// =============================================== 1.16.5 | 1.17 | 1.19.2 BUTTONS =========================================
 	//#if MC>=11700
 //$$ 	public static <T extends net.minecraft.client.gui.components.events.GuiEventListener & net.minecraft.client.gui.components.Widget & net.minecraft.client.gui.narration.NarratableEntry> T addButton(Screen screen, T button) {
 //$$ 		((de.pfannekuchen.lotas.core.utils.AccessorScreen2)screen).addRenderableWidget(button);
@@ -458,9 +489,9 @@ public class MCVer {
 		return button;
 	}
 	//#endif
-	
+
 	//#if MC>=11700
-//$$ 	public static Widget getButton(Screen obj, int buttonID) {
+//$$ 	public static net.minecraft.client.gui.components.Widget getButton(Screen obj, int buttonID) {
 //$$ 		return ((AccessorButtons)obj).getButtons().get(buttonID);
 //$$ 	}
 	//#else
@@ -468,7 +499,7 @@ public class MCVer {
 			return (AbstractWidget) ((AccessorButtons)obj).getButtons().get(buttonID);
 		}
 	//#endif
-		
+
 	//#if MC>=11700
 //$$ 	public static int getButtonSize(Screen obj) {
 //$$ 		return ((AccessorButtons)obj).getButtons().size();
@@ -478,6 +509,7 @@ public class MCVer {
 			return ((AccessorButtons)obj).getButtons().size();
 		}
 		//#endif
+	//#endif
 	// =============================================== 1.16.5 | 1.17 TEXTURES =========================================
 	
 	public static void bind(TextureManager textureManager, ResourceLocation resource) {

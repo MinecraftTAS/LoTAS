@@ -18,7 +18,8 @@ def versions2 = [
         '1.17.1',
         '1.18.2',
         '1.19.0',
-        '1.19.2'
+        '1.19.2',
+        '1.19.3'
 ]
 versions2.collect {":versions2:$it"}.each {
     include it

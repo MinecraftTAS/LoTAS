@@ -1,0 +1,19 @@
+plugins {
+	id 'fabric-loom' version '1.0-SNAPSHOT'
+}
+
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
+
+apply from: '../common.gradle'
+archivesBaseName = "LoTAS1.19.3"
+
+loom {
+	accessWidenerPath = file("../../src/main/resources/lotas.accesswidener")
+}
+
+dependencies {
+	minecraft "com.mojang:minecraft:1.19.3-pre2"
+	mappings loom.officialMojangMappings()
+	modImplementation "net.fabricmc:fabric-loader:0.14.10"
+}

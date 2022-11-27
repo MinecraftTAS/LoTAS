@@ -113,10 +113,16 @@ public class BarteringDropManipulation extends DropManipulationScreen.DropManipu
 	
 	@Override
 	public void update() {
+		//#if MC>=11903
+//$$ 		enabled.setPosition(x, y);
+//$$
+//$$ 		elementwidgets.setPosition(x, y + 80);
+		//#else
 		enabled.x = x;
 		enabled.y = y;
 		elementwidgets.x = x;
 		elementwidgets.y = y + 80;
+		//#endif
 	}
 
 	@Override

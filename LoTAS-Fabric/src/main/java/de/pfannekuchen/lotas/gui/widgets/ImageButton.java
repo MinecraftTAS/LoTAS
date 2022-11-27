@@ -15,10 +15,14 @@ public class ImageButton extends Button {
 	private ResourceLocation pic;
 
 	public ImageButton(int x, int y, Button.OnPress action, ResourceLocation pic) {
+		//#if MC>=11903
+//$$ 		super(x, y, 20, 20, MCVer.literal(""), action, DEFAULT_NARRATION);
+		//#else
 		//#if MC>=11601
 //$$ 		super(x, y, 20, 20, MCVer.literal(""), action);
 		//#else
 		super(x, y, 20, 20, "", action);
+		//#endif
 		//#endif
 		this.pic = pic;
 	}
@@ -41,7 +45,11 @@ public class ImageButton extends Button {
 	//#endif
 		MCVer.bind(Minecraft.getInstance().getTextureManager(), pic);
 		MCVer.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		//#if MC>=11903
+//$$ 		MCVer.blit(getX(), getY(), 0.0F, 0.0F, 20, 20, 20, 20);
+		//#else
 		MCVer.blit(x, y, 0.0F, 0.0F, 20, 20, 20, 20);
+		//#endif
 	}
 
 }

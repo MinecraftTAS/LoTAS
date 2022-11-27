@@ -22,9 +22,13 @@ sourceSets {
 }
 
 dependencies {
+	//#if MC>=11903
+//$$ 	minecraft "com.mojang:minecraft:1.19.3-pre2"
+//$$ 	modImplementation "net.fabricmc:fabric-loader:0.14.10"
+	//#else
 	//#if MC>=11902
-//$$ 	minecraft "com.mojang:minecraft:1.19.2"
-//$$ 	modImplementation "net.fabricmc:fabric-loader:0.14.8"
+//$$	minecraft "com.mojang:minecraft:1.19.2"
+//$$	modImplementation "net.fabricmc:fabric-loader:0.14.8"
 	//#else
 	//#if MC>=11900
 //$$	minecraft "com.mojang:minecraft:1.19"
@@ -48,6 +52,7 @@ dependencies {
 //$$ 	minecraft "com.mojang:minecraft:1.15.2"
 	//#else
 	minecraft "com.mojang:minecraft:1.14.4"
+	//#endif
 	//#endif
 	//#endif
 	//#endif

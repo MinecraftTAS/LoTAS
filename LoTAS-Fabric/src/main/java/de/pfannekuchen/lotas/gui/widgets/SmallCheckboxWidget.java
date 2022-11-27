@@ -42,6 +42,21 @@ public class SmallCheckboxWidget extends AbstractButton {
 		return this.checked;
 	}
 	
+	
+	//#if MC>=11903
+//$$ 	@Override public void renderButton(com.mojang.blaze3d.vertex.PoseStack stack, int mouseX, int mouseY, float delta) {
+//$$ 		MCVer.stack = stack;
+//$$ 		Minecraft minecraftClient = Minecraft.getInstance();
+//$$ 		MCVer.bind(minecraftClient.getTextureManager(), TEXTURE);
+//$$ 		MCVer.blit(this.getX(), this.getY(), 0.0F, 0.0F, 11, this.height, 11, 11);
+//$$ 		this.renderBg(MCVer.stack, minecraftClient, mouseX, mouseY);
+//$$ 		MCVer.drawShadow(this.getMessage().getString(), this.getX() + 16, this.getY() + (this.height - 8) / 2, 14737632 | Mth.ceil(this.alpha * 255.0F) << 24);
+//$$ 		if (isChecked()) {
+//$$ 			MCVer.disableDepthTest();
+//$$ 			MCVer.drawShadow("x", this.getX() + 3, this.getY() + 1, 0xFFFFFF);
+//$$ 		}
+//$$ 	}
+	//#else
 	//#if MC>=11601
 //$$ 	@Override public void renderButton(com.mojang.blaze3d.vertex.PoseStack stack, int mouseX, int mouseY, float delta) {
 //$$ 		MCVer.stack = stack;
@@ -63,14 +78,23 @@ public class SmallCheckboxWidget extends AbstractButton {
 			MCVer.drawShadow("x", this.x + 3, this.y + 1, 0xFFFFFF);
 		}
 	}
+	//#endif
 
 	public void silentPress(boolean f) {
 		this.checked = f;
 	}
+
+	//#if MC>=11903
+//$$ 	@Override
+//$$ 	protected void updateWidgetNarration(net.minecraft.client.gui.narration.NarrationElementOutput var1) {
+//$$
+//$$ 	}
+	//#else
 	//#if MC>=11700
 //$$ 	@Override
 //$$ 	public void updateNarration(net.minecraft.client.gui.narration.NarrationElementOutput narrationElementOutput) {
 //$$
 //$$ 	}
+	//#endif
 	//#endif
 }

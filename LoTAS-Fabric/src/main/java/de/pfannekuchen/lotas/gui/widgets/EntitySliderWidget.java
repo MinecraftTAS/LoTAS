@@ -93,8 +93,13 @@ public class EntitySliderWidget extends AbstractWidget {
 		//#else
 		int i = (this.isHovered() ? 2 : 1) * 20;
 		//#endif
+		//#if MC>=11903
+//$$ 		MCVer.blit(this.getX() + (int) (this.sliderPosition * (double) (this.width - 8)), this.getY(), 0, 46 + i, 4, 20);
+//$$ 		MCVer.blit(this.getX() + (int) (this.sliderPosition * (double) (this.width - 8)) + 4, this.getY(), 196, 46 + i, 4, 20);
+		//#else
 		MCVer.blit(this.x + (int) (this.sliderPosition * (double) (this.width - 8)), this.y, 0, 46 + i, 4, 20);
 		MCVer.blit(this.x + (int) (this.sliderPosition * (double) (this.width - 8)) + 4, this.y, 196, 46 + i, 4, 20);
+		//#endif
 	}
 
 	/**
@@ -105,7 +110,11 @@ public class EntitySliderWidget extends AbstractWidget {
 	public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
 		if (this.visible) {
 			if (this.isMouseDown) {
+				//#if MC>=11903
+//$$ 				this.sliderPosition = (float) (mouseX - (this.getX() + 4)) / (float) (this.width - 8);
+				//#else
 				this.sliderPosition = (float) (mouseX - (this.x + 4)) / (float) (this.width - 8);
+				//#endif
 
 				if (this.sliderPosition < 0.0F) {
 					this.sliderPosition = 0.0F;
@@ -118,8 +127,13 @@ public class EntitySliderWidget extends AbstractWidget {
 			}
 
          	MCVer.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+			//#if MC>=11903
+//$$ 			MCVer.blit(this.getX() + (int) (this.sliderPosition * (float) (this.width - 8)), this.getY(), 0, 66, 4, 20);
+//$$ 			MCVer.blit(this.getX() + (int) (this.sliderPosition * (float) (this.width - 8)) + 4, this.getY(), 196, 66, 4, 20);
+			//#else
 			MCVer.blit(this.x + (int) (this.sliderPosition * (float) (this.width - 8)), this.y, 0, 66, 4, 20);
 			MCVer.blit(this.x + (int) (this.sliderPosition * (float) (this.width - 8)) + 4, this.y, 196, 66, 4, 20);
+			//#endif
 		}
 		return true;
 	}
@@ -145,7 +159,11 @@ public class EntitySliderWidget extends AbstractWidget {
 	@Override
 	public boolean mouseClicked(double mouseX, double mouseY, int delta) {
 		if (super.mouseClicked(mouseX, mouseY, delta)) {
+			//#if MC>=11903
+//$$ 			this.sliderPosition = (float) (mouseX - (this.getX() + 4)) / (float) (this.width - 8);
+			//#else
 			this.sliderPosition = (float) (mouseX - (this.x + 4)) / (float) (this.width - 8);
+			//#endif
 
 			if (this.sliderPosition < 0.0F) {
 				this.sliderPosition = 0.0F;
@@ -170,10 +188,16 @@ public class EntitySliderWidget extends AbstractWidget {
 		entities=manipList;
 	}
 
+	//#if MC>=11903
+//$$ 	@Override
+//$$ 	protected void updateWidgetNarration(net.minecraft.client.gui.narration.NarrationElementOutput var1) {
+//$$ 	}
+	//#else
 	//#if MC>=11700
 //$$ 	@Override
 //$$ 	public void updateNarration(net.minecraft.client.gui.narration.NarrationElementOutput narrationElementOutput) {
-//$$
 //$$ 	}
 	//#endif
+	//#endif
+
 }

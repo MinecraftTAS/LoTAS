@@ -68,6 +68,13 @@ public class OreDropManipulation extends DropManipulationScreen.DropManipulation
 
 	@Override
 	public void update() {
+		//#if MC>=11903
+//$$ 		enabled.setPosition(x, y);
+//$$
+//$$ 		optimizeRedstone.setPosition(x, 64);
+//$$ 		optimizeLapis.setPosition(x, 80);
+//$$ 		optimizeCopper.setPosition(x, 96);
+		//#else
 		enabled.x = x;
 		enabled.y = y;
 		optimizeRedstone.y = 64;
@@ -77,6 +84,7 @@ public class OreDropManipulation extends DropManipulationScreen.DropManipulation
 		//#if MC>=11700
 //$$ 		optimizeCopper.x = x;
 //$$ 		optimizeCopper.y = 96;
+		//#endif
 		//#endif
 	}
 

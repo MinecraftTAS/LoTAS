@@ -56,10 +56,18 @@ public abstract class MixinGuiIngameMenu extends Screen {
 		// Move Buttons higher
 		for (int i=0;i<MCVer.getButtonSize(this); i++) {
 			Button guiButton=(Button)MCVer.getButton(this, i);
+			//#if MC>=11903
+//$$ 			guiButton.setY(guiButton.getY() - 24);
+			//#else
 			guiButton.y -= 24;
+			//#endif
 		}
-		
+		//#if MC>=11903
+//$$ 		Button moveButton = ((Button)MCVer.getButton(this, 7));
+//$$ 		moveButton.setY(moveButton.getY()+24);
+		//#else
 		((Button)MCVer.getButton(this, 7)).y += 24;
+		//#endif
 		
 		MCVer.addButton(this, MCVer.Button(this.width / 2 - 102, this.height / 4 + 48 + -16 + 24 + 24, 98, 20, "Savestate", btn -> {
 			if (Keyboard.isKeyDown(GLFW.GLFW_KEY_LEFT_SHIFT)) {

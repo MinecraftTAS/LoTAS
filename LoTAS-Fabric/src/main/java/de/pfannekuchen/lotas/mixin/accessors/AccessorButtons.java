@@ -12,10 +12,15 @@ import net.minecraft.client.gui.screens.Screen;
 public interface AccessorButtons {
 	//#if MC>=11700
 //$$ 	@Accessor("renderables")
+//$$ 	public List<net.minecraft.client.gui.components.Renderable> getButtons();
+	//#else
+	//#if MC>=11700
+//$$ 	@Accessor("renderables")
 //$$ 	public List<net.minecraft.client.gui.components.Widget> getButtons();
 	//#else
 	@Accessor
 	public List<net.minecraft.client.gui.components.AbstractWidget> getButtons();
 
+	//#endif
 	//#endif
 }

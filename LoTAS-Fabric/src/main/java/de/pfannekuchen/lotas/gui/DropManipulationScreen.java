@@ -130,7 +130,11 @@ public class DropManipulationScreen extends Screen {
 //$$ 		MCVer.enableDepthTest();
 //$$ 		MCVer.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 //$$
+		//#if MC>=11601
+//$$ 		org.joml.Matrix4f matrix = MCVer.stack.last().pose();
+		//#else
 //$$ 		com.mojang.math.Matrix4f matrix = MCVer.stack.last().pose();
+		//#endif
 //$$ 		com.mojang.blaze3d.systems.RenderSystem.setShader(net.minecraft.client.renderer.GameRenderer::getPositionShader);
 //$$ 		bufferBuilder.begin(com.mojang.blaze3d.vertex.VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION);
 //$$ 		bufferBuilder.vertex(matrix, 24, 24, 0).endVertex();

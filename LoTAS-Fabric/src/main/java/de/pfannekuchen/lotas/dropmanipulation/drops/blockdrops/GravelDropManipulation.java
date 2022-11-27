@@ -70,12 +70,20 @@ public class GravelDropManipulation extends DropManipulationScreen.DropManipulat
 
 	@Override
 	public void update() {
+		//#if MC>=11903
+//$$ 		enabled.setPosition(x, y);
+//$$
+//$$ 		dropGravel.setPosition(x, y + 96);
+//$$ 		dropFlint.setPosition(x, y + 120);
+		//#else
 		enabled.x = x;
 		enabled.y = y;
 		dropGravel.x = x;
 		dropGravel.y = y + 96;
 		dropFlint.x = x;
 		dropFlint.y = y + 120;
+		//#endif
+		
 		dropGravel.setWidth(width - x - 128 - 16);
 		dropFlint.setWidth(width - x - 128 - 16);
 	}
