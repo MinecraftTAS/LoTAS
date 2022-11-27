@@ -27,7 +27,8 @@ public class BufferExchangeList {
 		this.buffers = new ByteBuffer[length];
 		this.locked = new boolean[length];
 		this.filled = new boolean[length];
-		for (int i = 0; i < this.buffers.length; i++) this.buffers[i] = ByteBuffer.allocateDirect(size);
+		for (int i = 0; i < this.buffers.length; i++)
+			this.buffers[i] = ByteBuffer.allocateDirect(size);
 	}
 
 	/**
@@ -36,7 +37,8 @@ public class BufferExchangeList {
 	 */
 	public boolean containsUnfilledUnlocked() {
 		for (int i = 0; i < this.locked.length; i++) {
-			if (!this.locked[i] && !this.filled[i]) return true;
+			if (!this.locked[i] && !this.filled[i])
+				return true;
 		}
 		return false;
 	}
@@ -47,7 +49,8 @@ public class BufferExchangeList {
 	 */
 	public boolean containsFilledUnlocked() {
 		for (int i = 0; i < this.locked.length; i++) {
-			if (!this.locked[i] && this.filled[i]) return true;
+			if (!this.locked[i] && this.filled[i])
+				return true;
 		}
 		return false;
 	}
@@ -59,7 +62,8 @@ public class BufferExchangeList {
 	public int findFilled() {
 		int i = 0;
 		for (i = 0; i < this.locked.length; i++) {
-			if (!this.locked[i] && this.filled[i]) break;
+			if (!this.locked[i] && this.filled[i])
+				break;
 		}
 		return i;
 	}
@@ -71,7 +75,8 @@ public class BufferExchangeList {
 	public int findUnfilled() {
 		int i = 0;
 		for (i = 0; i < this.locked.length; i++) {
-			if (!this.locked[i] && !this.filled[i]) break;
+			if (!this.locked[i] && !this.filled[i])
+				break;
 		}
 		return i;
 	}
@@ -83,10 +88,12 @@ public class BufferExchangeList {
 	 * @return Byte Buffer locked
 	 */
 	public ByteBuffer getAndLock(int i, boolean fill) {
-		if (this.locked[i]) return null;
+		if (this.locked[i])
+			return null;
 		this.locked[i] = true;
 		this.filled[i] = fill;
-		if (fill) this.buffers[i].clear();
+		if (fill)
+			this.buffers[i].clear();
 		return this.buffers[i];
 	}
 

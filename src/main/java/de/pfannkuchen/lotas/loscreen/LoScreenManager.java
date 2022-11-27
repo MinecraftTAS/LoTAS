@@ -49,7 +49,7 @@ public class LoScreenManager {
 	private boolean lastTickadvance;
 	// All notifications onscreen
 	private TreeMap<Long, Component> timestamps = new TreeMap<>(Collections.reverseOrder());
-	
+
 	/**
 	 * Returns whether a screen is opened.
 	 * @return Is screen opened?
@@ -67,11 +67,13 @@ public class LoScreenManager {
 		if (screen != null) {
 			screen.mc = this.mc;
 			screen.reset(this.lastWidth, this.lastHeight);
-			if (this.mc.screen == null) this.mc.setScreen(new EmptyScreen());
-		} else
-			if (this.mc.screen instanceof EmptyScreen) this.mc.setScreen(null);
+			if (this.mc.screen == null)
+				this.mc.setScreen(new EmptyScreen());
+		} else if (this.mc.screen instanceof EmptyScreen)
+			this.mc.setScreen(null);
 		// Reinitialize current vanilla screen
-		if (this.mc.screen != null) this.mc.screen.resize(this.mc, this.mc.getWindow().getGuiScaledWidth(), this.mc.getWindow().getGuiScaledHeight());
+		if (this.mc.screen != null)
+			this.mc.screen.resize(this.mc, this.mc.getWindow().getGuiScaledWidth(), this.mc.getWindow().getGuiScaledHeight());
 	}
 
 	/**
@@ -96,10 +98,14 @@ public class LoScreenManager {
 				this.lastHeight = height;
 				this.setScreen(this.screen);
 			}
-			if (!isLeftPressed && this.wasLeftPressed) this.screen.click(posX, posY, 0);
-			if (!isMiddlePressed && this.wasMiddlePressed) this.screen.click(posX, posY, 2);
-			if (!isRightPressed && this.wasRightPressed) this.screen.click(posX, posY, 1);
-			if (isLeftPressed || isRightPressed || isMiddlePressed) this.screen.drag(this.lastPosX, this.lastPosY, posX, posY);
+			if (!isLeftPressed && this.wasLeftPressed)
+				this.screen.click(posX, posY, 0);
+			if (!isMiddlePressed && this.wasMiddlePressed)
+				this.screen.click(posX, posY, 2);
+			if (!isRightPressed && this.wasRightPressed)
+				this.screen.click(posX, posY, 1);
+			if (isLeftPressed || isRightPressed || isMiddlePressed)
+				this.screen.drag(this.lastPosX, this.lastPosY, posX, posY);
 		}
 		this.wasLeftPressed = isLeftPressed;
 		this.wasMiddlePressed = isMiddlePressed;
@@ -107,7 +113,7 @@ public class LoScreenManager {
 		this.lastPosX = posX;
 		this.lastPosY = posY;
 	}
-	
+
 	/**
 	 * Adds a notification to the list of notifications
 	 */
@@ -130,9 +136,10 @@ public class LoScreenManager {
 	 */
 	public void onGuiRender(PoseStack stack, Minecraft mc) {
 		// Render LoScreen
-		if (this.screen != null) this.screen.render(stack, this.lastPosX, this.lastPosY);
+		if (this.screen != null)
+			this.screen.render(stack, this.lastPosX, this.lastPosY);
 		// Render Notifications
-		if (mc.player != null) {		
+		if (mc.player != null) {
 			stack.scale(0.66f, 0.66f, 0.66f);
 
 			long currentTime = System.currentTimeMillis();
@@ -141,27 +148,26 @@ public class LoScreenManager {
 				String s = entry.getValue().getString();
 				String s1 = s.split("_", 2)[0];
 				String s2 = s.split("_", 2)[1];
-				
+
 				// Opacity modifier
 				long millis = currentTime - entry.getKey() - 1000;
 				if (millis > 1000)
 					timestamps.remove(entry.getKey());
 				float f = Mth.clamp(1 - (millis > 1000 ? 1 : (millis / 1000.0f)), 0, 1);
-				int fb = (byte) (f*235)+20;
+				int fb = (byte) (f * 235) + 20;
 				// Render notification
 				RenderSystem.enableBlend();
 				RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, f);
 				PlayerInfo playerinfo = Minecraft.getInstance().getConnection().getPlayerInfo(UUID.fromString(s1));
 				if (playerinfo != null) {
 					RenderSystem.setShaderTexture(0, playerinfo.getSkinLocation());
-					Gui.blit(stack, 5, 5+i*20, 16.0f, 16.0f, 16, 16, 128, 128);
+					Gui.blit(stack, 5, 5 + i * 20, 16.0f, 16.0f, 16, 16, 128, 128);
 				}
-				Gui.drawString(stack, mc.font, s2, 30, 10+i*20, 0x00149b5b | (fb<<24));
+				Gui.drawString(stack, mc.font, s2, 30, 10 + i * 20, 0x00149b5b | (fb << 24));
 				RenderSystem.disableBlend();
 				i++;
 			}
-			
-			
+
 			stack.scale(2.0f, 2.0f, 2.0f);
 		}
 	}
@@ -173,7 +179,8 @@ public class LoScreenManager {
 	 * @return Should cancel
 	 */
 	public boolean onScreenUpdate(Screen vanillaScreen, Minecraft mc) {
-		if (vanillaScreen instanceof EmptyScreen) return false; // don't close on intended screen
+		if (vanillaScreen instanceof EmptyScreen)
+			return false; // don't close on intended screen
 		if (this.screen != null && vanillaScreen == null) { // close the screen
 			this.toggleLoTASMenu(mc);
 			return true;
@@ -196,18 +203,21 @@ public class LoScreenManager {
 	 * @param mc Instance of minecraft
 	 */
 	public void toggleLoTASMenu(Minecraft mc) {
-		if (mc.level == null) return;
+		if (mc.level == null)
+			return;
 		if (this.isScreenOpened()) {
 			if (this.getScreen() instanceof MainLoScreen) {
 				this.setScreen(null);
 				// Disable tick advance if it was not on before
-				if (!this.lastTickadvance) LoTAS.tickadvance.requestTickadvanceToggle();
+				if (!this.lastTickadvance)
+					LoTAS.tickadvance.requestTickadvanceToggle();
 			}
 		} else {
 			this.setScreen(new MainLoScreen());
 			// Update tick advance if it is not enabled already
 			this.lastTickadvance = LoTAS.tickadvance.isTickadvanceEnabled();
-			if (!this.lastTickadvance) LoTAS.tickadvance.requestTickadvanceToggle();
+			if (!this.lastTickadvance)
+				LoTAS.tickadvance.requestTickadvanceToggle();
 		}
 	}
 
@@ -220,7 +230,7 @@ public class LoScreenManager {
 			this.screen.press(key);
 		}
 	}
-	
+
 	/**
 	 * Sends a mouse scroll to all LoScreens
 	 * @param scroll Scroll amount

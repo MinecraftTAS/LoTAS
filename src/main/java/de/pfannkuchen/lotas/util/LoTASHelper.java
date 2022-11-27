@@ -43,7 +43,7 @@ public class LoTASHelper {
 		oimg.setRGB(0, 0, oimg.getWidth(), oimg.getHeight(), is, 0, oimg.getWidth());
 		Graphics2D g = img.createGraphics();
 		g.drawImage(oimg, 0, 0, width, height, 0, 0, oimg.getWidth(), oimg.getHeight(), null);
-		int[] outArray = new int[width*height];
+		int[] outArray = new int[width * height];
 		img.getRGB(0, 0, width, height, outArray, 0, width);
 		return outArray;
 	}
@@ -58,7 +58,7 @@ public class LoTASHelper {
 		buf.putInt(str.length);
 		buf.put(str);
 	}
-	
+
 	/**
 	 * Reads a String from a Byte Buffer
 	 * @param buf Buffer to read from
@@ -69,5 +69,5 @@ public class LoTASHelper {
 		buf.get(str);
 		return new String(str, StandardCharsets.UTF_8);
 	}
-	
+
 }

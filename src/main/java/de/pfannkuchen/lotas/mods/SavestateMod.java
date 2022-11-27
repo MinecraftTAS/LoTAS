@@ -129,8 +129,8 @@ public class SavestateMod {
 	private int doLoadstate = -1;
 	private int doDeletestate = -1;
 	// Client-side Todo list
-//	private boolean shouldReload;
-//	private State[] unload = null;
+	//	private boolean shouldReload;
+	//	private State[] unload = null;
 	// Server-side folder structure
 	private File savestatesDir;
 	private File worldDir;
@@ -173,7 +173,7 @@ public class SavestateMod {
 						LoTAS.LOGGER.info("The Server finished deletestating.");
 					}
 				}
-//				this.unload = this.states;
+				//				this.unload = this.states;
 				// Update the State List
 				this.states = new State[buf.readVarInt()];
 			} else {
@@ -182,7 +182,7 @@ public class SavestateMod {
 				this.states[index] = State.deserialize(buf.readByteArray());
 				if (index == this.states.length - 1) {
 					LoTAS.LOGGER.info("The Client has " + this.states.length + " savestates stored in the mirrored list. Reloading all textures...");
-//					this.shouldReload = true;
+					//					this.shouldReload = true;
 				}
 			}
 		}
@@ -229,7 +229,7 @@ public class SavestateMod {
 			}
 		});*/
 	}
-	
+
 	/**
 	 * Registers the texture
 	 */
@@ -238,7 +238,6 @@ public class SavestateMod {
 		this.mc.getTextureManager().register(s.texture = new ResourceLocation("lotas", (s.name + s.timestamp).replace(' ', '_').replaceAll("[^a-z0-9_.-]", "")), new DynamicTexture(n));
 	}
 
-
 	/**
 	 * Triggers a Load/delete/savestate when a client packet is incoming and then resends the packet to all clients.
 	 * @param p Incoming Packet
@@ -246,19 +245,20 @@ public class SavestateMod {
 	public void onServerPacket(ServerboundCustomPayloadPacket p) {
 		if (SAVESTATE_MOD_RL.equals(p.getIdentifier())) {
 			// The Server has to be in tickrate zero AFTER THE ACTION for this to work
-			if (LoTAS.tickadvance.isTickadvanceEnabled()) LoTAS.tickadvance.updateTickadvanceStatus(false);
+			if (LoTAS.tickadvance.isTickadvanceEnabled())
+				LoTAS.tickadvance.updateTickadvanceStatus(false);
 			FriendlyByteBuf buf = p.getData();
 			switch (buf.readInt()) {
-			case 0:
-				this.doSavestate = buf.readUtf();
-				this.doSavestatePicture = buf.readVarIntArray();
-				break;
-			case 1:
-				this.doLoadstate = buf.readInt();
-				break;
-			case 2:
-				this.doDeletestate = buf.readInt();
-				break;
+				case 0:
+					this.doSavestate = buf.readUtf();
+					this.doSavestatePicture = buf.readVarIntArray();
+					break;
+				case 1:
+					this.doLoadstate = buf.readInt();
+					break;
+				case 2:
+					this.doDeletestate = buf.readInt();
+					break;
 			}
 		}
 	}
@@ -378,8 +378,15 @@ public class SavestateMod {
 					return FileVisitResult.CONTINUE;
 				}
 
-				@Override public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException { return FileVisitResult.CONTINUE; }
-				@Override public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException { return FileVisitResult.CONTINUE; }
+				@Override
+				public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
+					return FileVisitResult.CONTINUE;
+				}
+
+				@Override
+				public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+					return FileVisitResult.CONTINUE;
+				}
 			});
 			// Add the savesate to the list of states
 			this.states = ArrayUtils.add(this.states, new State(this.doSavestate, Instant.now().getEpochSecond(), worldSavestateDir.getAbsolutePath(), this.doSavestatePicture));
@@ -441,9 +448,11 @@ public class SavestateMod {
 		}
 		// Re-enumerate all other savestates ahead
 		for (File file : this.savestatesDir.listFiles()) {
-			if ("states.dat".equals(file.getName())) continue;
+			if ("states.dat".equals(file.getName()))
+				continue;
 			int id = Integer.parseInt(file.getName());
-			if (id > i) file.renameTo(new File(file.getParentFile(), id-1 + ""));
+			if (id > i)
+				file.renameTo(new File(file.getParentFile(), id - 1 + ""));
 		}
 		// Unfreeze Client
 		this.sendPacketToClient(false, 2, mcserver);
@@ -492,8 +501,8 @@ public class SavestateMod {
 	 */
 	@Environment(EnvType.CLIENT)
 	public void onDisconnect() {
-//		this.shouldReload = true;
-//		this.unload = this.states;
+		//		this.shouldReload = true;
+		//		this.unload = this.states;
 		this.states = new State[0];
 	}
 

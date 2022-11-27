@@ -54,9 +54,7 @@ public class RecorderMod {
 	/**
 	 * The not allowed guis that may be filtered out
 	 */
-	private final List<String> NOT_ALLOWED_GUI = Arrays.asList("AdvancementsScreen", "ConnectScreen", "DemoIntroScreen", "GenericDirtMessageScreen", "LevelLoadingScreen", "OptionsScreen",
-			"OptionsSubScreen", "ControlsScreen", "LanguageSelectScreen", "MouseSettingsScreen", "SimpleOptionsSubScreen", "AccessibilityOptionsScreen", "ChatOptionsScreen", "SkinCustomizationScreen",
-			"SoundOptionsScreen", "VideoSettingsScreen", "PackSelectionScreen", "PauseScreen", "PopupScreen", "ProgressScreen", "ReceivingLevelScreen", "ShareToLanScreen", "StatsScreen");
+	private final List<String> NOT_ALLOWED_GUI = Arrays.asList("AdvancementsScreen", "ConnectScreen", "DemoIntroScreen", "GenericDirtMessageScreen", "LevelLoadingScreen", "OptionsScreen", "OptionsSubScreen", "ControlsScreen", "LanguageSelectScreen", "MouseSettingsScreen", "SimpleOptionsSubScreen", "AccessibilityOptionsScreen", "ChatOptionsScreen", "SkinCustomizationScreen", "SoundOptionsScreen", "VideoSettingsScreen", "PackSelectionScreen", "PauseScreen", "PopupScreen", "ProgressScreen", "ReceivingLevelScreen", "ShareToLanScreen", "StatsScreen");
 
 	/**
 	 * Thread-safe atomic boolean to see if the recording is running
@@ -77,7 +75,7 @@ public class RecorderMod {
 	 * Thread-safe list for serialized sounds
 	 */
 	private BufferExchangeList sound_list;
-	
+
 	/**
 	 * Whether a screenshot should be taken or not.
 	 */
@@ -88,13 +86,13 @@ public class RecorderMod {
 	 * (used for serializing sounds)
 	 */
 	private boolean currentStatus;
-	
+
 	/**
 	 * The current tick*3 (aka frame) of the current recording.
 	 * (used for serializing sounds)
 	 */
 	private int currentFrame;
-	
+
 	/**
 	 * Restart the recording if the screen resizes
 	 * @param mc Instance of minecraft
@@ -122,15 +120,17 @@ public class RecorderMod {
 			this.sound_list.unlock(unfilled);
 		}
 	}
-	
+
 	/**
 	 * Takes screenshots if necessary
 	 * @param mc Instance of minecraft
 	 */
 	public void onRender(Minecraft mc) {
-		if (mc == null) return;
+		if (mc == null)
+			return;
 		// Check screen resolutions
-		if ((this.width != mc.getWindow().getScreenWidth() || this.height != mc.getWindow().getScreenHeight()) && this.isRecording.get()) this.onResize(mc);
+		if ((this.width != mc.getWindow().getScreenWidth() || this.height != mc.getWindow().getScreenHeight()) && this.isRecording.get())
+			this.onResize(mc);
 		Screen screen = mc.screen;
 		// Update gui screen with NULL if the gui is an allowed gui.
 		// Done to pass the next check screen == null
@@ -138,7 +138,9 @@ public class RecorderMod {
 			this.currentStatus = false;
 			return;
 		}
-		if (screen != null) if (!this.NOT_ALLOWED_GUI.contains(screen.getClass().getSimpleName())) screen = null;
+		if (screen != null)
+			if (!this.NOT_ALLOWED_GUI.contains(screen.getClass().getSimpleName()))
+				screen = null;
 		this.currentStatus = screen == null && !ClientLoTAS.loscreenmanager.isScreenOpened();
 		if (this.takeScreenshot && screen == null && !ClientLoTAS.loscreenmanager.isScreenOpened()) {
 			this.takeScreenshot = false;
@@ -160,11 +162,12 @@ public class RecorderMod {
 		this.FFMPEG = new File(LoTAS.configmanager.getString("recorder", "ffmpeg"));
 		this.COMMAND_LINE_IN = LoTAS.configmanager.getString("recorder", "ffmpeg_cmd_in");
 		this.COMMAND_LINE_OUT = LoTAS.configmanager.getString("recorder", "ffmpeg_cmd_out");
-		if (!this.VIDEOS_DIR.exists()) this.VIDEOS_DIR.mkdir();
+		if (!this.VIDEOS_DIR.exists())
+			this.VIDEOS_DIR.mkdir();
 		System.gc();
 		this.width = mc.getWindow().getScreenWidth();
 		this.height = mc.getWindow().getScreenHeight();
-		this.video_list = new BufferExchangeList(32, this.width*this.height*3);
+		this.video_list = new BufferExchangeList(32, this.width * this.height * 3);
 		this.sound_list = new BufferExchangeList(32, 1000);
 		this.isRecording.set(true);
 		this.currentFrame = 0;
@@ -175,7 +178,7 @@ public class RecorderMod {
 				// ffmpeg command line
 				String ffmpeg = this.COMMAND_LINE.replaceAll("%IN%", this.COMMAND_LINE_IN).replaceAll("%OUT%", this.COMMAND_LINE_OUT).replaceAll("%SIZE%", this.width + "x" + this.height);
 				// start process
-				final ProcessBuilder pb = new ProcessBuilder(ArrayUtils.add(ArrayUtils.addAll(new String[] {this.FFMPEG.getAbsolutePath()}, ffmpeg.split(" ")), title + ".mp4"));
+				final ProcessBuilder pb = new ProcessBuilder(ArrayUtils.add(ArrayUtils.addAll(new String[] { this.FFMPEG.getAbsolutePath() }, ffmpeg.split(" ")), title + ".mp4"));
 				pb.redirectOutput(Redirect.INHERIT);
 				pb.directory(this.VIDEOS_DIR);
 				pb.redirectErrorStream(true);
@@ -187,12 +190,13 @@ public class RecorderMod {
 
 				// reuse buffers and arrays for optimal memory usage
 				ByteBuffer b;
-				byte[] array = new byte[this.width*this.height*3];
+				byte[] array = new byte[this.width * this.height * 3];
 				while (this.isRecording.get()) {
 					/* Find and lock a Buffer in the list */
 					if (this.video_list.containsFilledUnlocked()) {
 						int i = this.video_list.findFilled();
-						if (i == 32) continue;
+						if (i == 32)
+							continue;
 						// obtain buffer and load into byte array
 						b = this.video_list.getAndLock(i, false);
 						b.get(array);
@@ -218,14 +222,15 @@ public class RecorderMod {
 			}
 		}).start();
 		/* Screenshot every 16 Milliseconds (slowed down) for 60 fps */
-		new Thread(() ->  {
+		new Thread(() -> {
 			try {
 				LoTAS.LOGGER.info("Frame Grabber started");
 				while (this.isRecording.get()) {
 					this.takeScreenshot = true;
-					Thread.sleep((long) (LoTAS.tickratechanger.getMsPerTick()/3.0f));
+					Thread.sleep((long) (LoTAS.tickratechanger.getMsPerTick() / 3.0f));
 					while (LoTAS.tickadvance.isTickadvanceEnabled()) {
-						if (LoTAS.tickadvance.shouldTickClient) break;
+						if (LoTAS.tickadvance.shouldTickClient)
+							break;
 						Thread.sleep(1L);
 					}
 				}
@@ -245,7 +250,7 @@ public class RecorderMod {
 				OutputStream stream = new FileOutputStream(soundfile);
 
 				LoTAS.LOGGER.info("Sound Recording started");
-				
+
 				// reuse buffers and arrays for optimal memory usage
 				ByteBuffer b;
 				byte[] array = new byte[1000];
@@ -253,7 +258,8 @@ public class RecorderMod {
 					/* Find and lock a Buffer in the list */
 					if (this.sound_list.containsFilledUnlocked()) {
 						int i = this.sound_list.findFilled();
-						if (i == 32) continue;
+						if (i == 32)
+							continue;
 						// obtain buffer and load into byte array
 						b = this.sound_list.getAndLock(i, false);
 						int length = b.remaining();
@@ -267,7 +273,7 @@ public class RecorderMod {
 				stream.flush();
 				stream.close();
 				LoTAS.LOGGER.info("Sound Recording finished");
-				
+
 			} catch (IOException e) {
 				mc.tell(() -> {
 					mc.setScreen(new ErrorScreen(Component.literal("Something went wrong while trying to record!"), Component.literal("Check the console for error messages.")));

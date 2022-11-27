@@ -31,7 +31,7 @@ public class DragonManipulationMod {
 	@Environment(EnvType.CLIENT)
 	public Minecraft mc;
 	public MinecraftServer mcserver;
-	
+
 	/**
 	 * Updates the local values on incoming packets
 	 * @param p Incoming packet
@@ -68,7 +68,7 @@ public class DragonManipulationMod {
 			});
 		}
 	}
-	
+
 	/**
 	 * Client-Side only state update request. Sends a packet to the server containg the state to be modified
 	 * @param key Key to change
@@ -82,25 +82,25 @@ public class DragonManipulationMod {
 		this.mc.getConnection().send(new ServerboundCustomPayloadPacket(DRAGON_MANIPULATION_MOD_RL, buf));
 		// Send notification
 		String text = (value ? " enabled " : " disabled ") + switch (key) {
-			case "forceOptimalPath": yield "force optimal ender dragon path";
-			case "forceCCWToggle": yield "force cc/ccw toggle";
-			case "forceLandingApproach": yield "force landing approach";
-			case "forcePlayerStrafing": yield "force player strafing";
-			default: yield " unknown ender dragon option";
+			case "forceOptimalPath":
+				yield "force optimal ender dragon path";
+			case "forceCCWToggle":
+				yield "force cc/ccw toggle";
+			case "forceLandingApproach":
+				yield "force landing approach";
+			case "forcePlayerStrafing":
+				yield "force player strafing";
+			default:
+				yield " unknown ender dragon option";
 		};
 		LoTAS.notificationmanager.requestNotification(this.mc.player.getStringUUID() + "_" + this.mc.player.getName().getString() + text);
 	}
-	
+
 	/**
 	 * Updates client data on connect
 	 */
 	public void onConnect(ServerPlayer c) {
-		final String[] keys = new String[] {
-			"forceOptimalPath",
-			"forceCCWToggle",
-			"forceLandingApproach",
-			"forcePlayerStrafing"
-		};
+		final String[] keys = new String[] { "forceOptimalPath", "forceCCWToggle", "forceLandingApproach", "forcePlayerStrafing" };
 		for (int i = 0; i < keys.length; i++) {
 			FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
 			buf.writeUtf(keys[i]);
@@ -108,5 +108,5 @@ public class DragonManipulationMod {
 			c.connection.send(new ClientboundCustomPayloadPacket(DRAGON_MANIPULATION_MOD_RL, buf));
 		}
 	}
-	
+
 }

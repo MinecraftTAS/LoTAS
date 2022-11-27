@@ -31,7 +31,7 @@ public class TickAdvance {
 	public boolean shouldTickClient;
 	// Should tick advance serverside
 	public boolean shouldTickServer;
-	
+
 	/**
 	 * Updates the client tickadvance status when receiving a packet
 	 */
@@ -52,7 +52,6 @@ public class TickAdvance {
 		if (TICK_RL.equals(p.getIdentifier()))
 			this.updateTickadvance();
 	}
-
 
 	/**
 	 * Client-side only tick method
@@ -80,7 +79,8 @@ public class TickAdvance {
 	 */
 	@Environment(EnvType.CLIENT)
 	public void requestTickadvance() {
-		if (!this.tickadvance || this.shouldTickClient) return;
+		if (!this.tickadvance || this.shouldTickClient)
+			return;
 		FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
 		buf.writeBoolean(false);
 		this.mc.getConnection().send(new ServerboundCustomPayloadPacket(TICK_RL, buf));

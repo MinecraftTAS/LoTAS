@@ -62,9 +62,10 @@ public class ToggleButtonLoWidget extends LoScreen {
 
 	@Override
 	protected void click(double curX, double curY, int button) {
-		if (!this.active) return;
+		if (!this.active)
+			return;
 		// Trigger click event when mouse is over the button
-		if (curX > this.x && curY > this.y && curX < this.x+this.length && curY < this.y+.05) {
+		if (curX > this.x && curY > this.y && curX < this.x + this.length && curY < this.y + .05) {
 			this.doClick();
 		}
 		super.click(curX, curY, button);
@@ -77,25 +78,29 @@ public class ToggleButtonLoWidget extends LoScreen {
 		this.down = !this.down;
 		this.onClick.accept(this.down);
 	}
-	
+
 	@Override
 	protected void render(PoseStack stack, double curX, double curY) {
-		if (!this.active) return;
-		boolean isMouseOver = curX > this.x && curY > this.y && curX < this.x+this.length && curY < this.y+.05;
-		double size	= this.mc.font.width(this.value)/1920.0;
+		if (!this.active)
+			return;
+		boolean isMouseOver = curX > this.x && curY > this.y && curX < this.x + this.length && curY < this.y + .05;
+		double size = this.mc.font.width(this.value) / 1920.0;
 		// Render background
-		this.fill(stack, this.x, this.y, this.x+this.length, this.y+.04, ToggleButtonLoWidget.COLOR);
+		this.fill(stack, this.x, this.y, this.x + this.length, this.y + .04, ToggleButtonLoWidget.COLOR);
 		// Animation
-		if (this.down) this.animationProgress = Math.min(6, this.animationProgress + ClientLoTAS.internaltimer.tickDelta);
-		else this.animationProgress = Math.max(0, this.animationProgress - ClientLoTAS.internaltimer.tickDelta);
+		if (this.down)
+			this.animationProgress = Math.min(6, this.animationProgress + ClientLoTAS.internaltimer.tickDelta);
+		else
+			this.animationProgress = Math.max(0, this.animationProgress - ClientLoTAS.internaltimer.tickDelta);
 		// Render animation
-		byte alpha = (byte) (this.ease(this.animationProgress, 0, 1, 6)*255);
-		this.fill(stack, this.x, this.y, this.x+this.length, this.y+.04, (isMouseOver ? ToggleButtonLoWidget.MOUSEOVER_FOCUS_COLOR : ToggleButtonLoWidget.FOCUS_COLOR) - 0xFF000000 + (alpha << 24));
+		byte alpha = (byte) (this.ease(this.animationProgress, 0, 1, 6) * 255);
+		this.fill(stack, this.x, this.y, this.x + this.length, this.y + .04, (isMouseOver ? ToggleButtonLoWidget.MOUSEOVER_FOCUS_COLOR : ToggleButtonLoWidget.FOCUS_COLOR) - 0xFF000000 + (alpha << 24));
 		// Render centered text
-		if (this.animationProgress > 3) this.draw(stack, this.value, this.x-size+this.length/2, this.y+0.012, 20, ToggleButtonLoWidget.COLOR - 0xFF000000 + (alpha << 24), false);
-		else this.draw(stack, this.value, this.x-size+this.length/2, this.y+0.012, 20, isMouseOver ? ToggleButtonLoWidget.MOUSEOVER_FOCUS_COLOR : ToggleButtonLoWidget.FOCUS_COLOR, false);
+		if (this.animationProgress > 3)
+			this.draw(stack, this.value, this.x - size + this.length / 2, this.y + 0.012, 20, ToggleButtonLoWidget.COLOR - 0xFF000000 + (alpha << 24), false);
+		else
+			this.draw(stack, this.value, this.x - size + this.length / 2, this.y + 0.012, 20, isMouseOver ? ToggleButtonLoWidget.MOUSEOVER_FOCUS_COLOR : ToggleButtonLoWidget.FOCUS_COLOR, false);
 		super.render(stack, curX, curY);
 	}
-
 
 }

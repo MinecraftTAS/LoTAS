@@ -34,7 +34,7 @@ public class SoundWithTimestamp implements SoundInstance {
 	public int source;
 	// Frame of occurence
 	public int frame;
-	
+
 	/**
 	 * Creates a new serializable sound using a given sound instance
 	 * @param sound Based sound instance
@@ -56,7 +56,7 @@ public class SoundWithTimestamp implements SoundInstance {
 		this.source = sound.getSource().ordinal();
 		this.frame = frame;
 	}
-	
+
 	/**
 	 * Creates a new serializable sound using a given byte buffer
 	 * @param buf Based byte buffer
@@ -76,7 +76,7 @@ public class SoundWithTimestamp implements SoundInstance {
 		this.source = buf.getInt();
 		this.frame = buf.getInt();
 	}
-	
+
 	/**
 	 * Serializes the sound to a byte buffer
 	 * @param buf Output buffer
@@ -98,7 +98,7 @@ public class SoundWithTimestamp implements SoundInstance {
 	}
 
 	// Below this point are the rewrites for the interface
-	
+
 	@Override
 	public ResourceLocation getLocation() {
 		return new ResourceLocation(this.namespace, this.path);
@@ -163,5 +163,5 @@ public class SoundWithTimestamp implements SoundInstance {
 	public Attenuation getAttenuation() {
 		return Attenuation.values()[attenuation];
 	}
-	
+
 }

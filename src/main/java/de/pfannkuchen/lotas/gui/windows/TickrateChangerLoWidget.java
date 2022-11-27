@@ -17,9 +17,7 @@ import net.minecraft.network.chat.Component;
 public class TickrateChangerLoWidget extends WindowLoWidget {
 
 	// Tickrates to clamp to
-	private static final double[] TICKRATES = {
-			0.5, 1, 2, 4, 5, 10, 20
-	};
+	private static final double[] TICKRATES = { 0.5, 1, 2, 4, 5, 10, 20 };
 	// Tickrate index selected
 	private static int index = 6;
 	// Tickrate Slider
@@ -37,12 +35,12 @@ public class TickrateChangerLoWidget extends WindowLoWidget {
 
 	@Override
 	protected void init() {
-		this.addWidget(TickrateChangerLoWidget.slider = new SliderLoWidget(true, 0.015, 0.095, .12, TickrateChangerLoWidget.index / (double) TickrateChangerLoWidget.TICKRATES.length, c -> Component.literal("Tickrate: " + TickrateChangerLoWidget.updateTickrate((int) (c*TickrateChangerLoWidget.TICKRATES.length), true, true)), Component.literal("Tickrate: " + TickrateChangerLoWidget.TICKRATES[TickrateChangerLoWidget.index])));
+		this.addWidget(TickrateChangerLoWidget.slider = new SliderLoWidget(true, 0.015, 0.095, .12, TickrateChangerLoWidget.index / (double) TickrateChangerLoWidget.TICKRATES.length, c -> Component.literal("Tickrate: " + TickrateChangerLoWidget.updateTickrate((int) (c * TickrateChangerLoWidget.TICKRATES.length), true, true)), Component.literal("Tickrate: " + TickrateChangerLoWidget.TICKRATES[TickrateChangerLoWidget.index])));
 		this.addWidget(new ButtonLoWidget(true, 0.005, 0.035, .065, () -> {
-			TickrateChangerLoWidget.updateTickrate(TickrateChangerLoWidget.index+1, false, true);
+			TickrateChangerLoWidget.updateTickrate(TickrateChangerLoWidget.index + 1, false, true);
 		}, Component.literal("+")));
 		this.addWidget(new ButtonLoWidget(true, 0.08, 0.035, .065, () -> {
-			TickrateChangerLoWidget.updateTickrate(TickrateChangerLoWidget.index-1, false, true);
+			TickrateChangerLoWidget.updateTickrate(TickrateChangerLoWidget.index - 1, false, true);
 		}, Component.literal("-")));
 		super.init();
 	}
@@ -54,8 +52,9 @@ public class TickrateChangerLoWidget extends WindowLoWidget {
 	 */
 	private static double updateTickrate(int index, boolean isSlider, boolean shouldTrigger) {
 		// Clamp and update tickrate
-		index = Math.min(Math.max(0, index), TickrateChangerLoWidget.TICKRATES.length-1);
-		if (index == TickrateChangerLoWidget.index) return TickrateChangerLoWidget.TICKRATES[index];
+		index = Math.min(Math.max(0, index), TickrateChangerLoWidget.TICKRATES.length - 1);
+		if (index == TickrateChangerLoWidget.index)
+			return TickrateChangerLoWidget.TICKRATES[index];
 		TickrateChangerLoWidget.index = index;
 		// Update slider
 		if (!isSlider && TickrateChangerLoWidget.slider != null) {
@@ -63,7 +62,8 @@ public class TickrateChangerLoWidget extends WindowLoWidget {
 			TickrateChangerLoWidget.slider.progress = index / (double) TickrateChangerLoWidget.TICKRATES.length;
 		}
 		// Trigger event
-		if (TickrateChangerLoWidget.update != null && shouldTrigger) TickrateChangerLoWidget.update.accept(TickrateChangerLoWidget.TICKRATES[index]);
+		if (TickrateChangerLoWidget.update != null && shouldTrigger)
+			TickrateChangerLoWidget.update.accept(TickrateChangerLoWidget.TICKRATES[index]);
 		// Return new tickrate
 		return TickrateChangerLoWidget.TICKRATES[index];
 	}

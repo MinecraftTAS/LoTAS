@@ -27,7 +27,9 @@ import net.minecraft.resources.ResourceLocation;
 @Environment(EnvType.CLIENT)
 public abstract class MixinTitleScreen extends Screen {
 
-	protected MixinTitleScreen(Component component) { super(component); }
+	protected MixinTitleScreen(Component component) {
+		super(component);
+	}
 
 	/**
 	 * Texture for the stream indicator
@@ -49,7 +51,8 @@ public abstract class MixinTitleScreen extends Screen {
 				ClientLoTAS.recordermod.stopRecording();
 			}
 		}, (buttonWidget, matrixStack, i, j) -> {
-			if (buttonWidget.isMouseOver(i, j)) this.renderTooltip(matrixStack, this.minecraft.font.split(Component.literal(OSUtils.getOS() == OS.WINDOWS ? "If you turn on the recording then LoTAS will record your gameplay and save it to your Videos Folder. It is automatically adapting to the tickrate and removes the pause screens. IT IS RECOMMENDED TO TURN OFF VSYNC" : "This feature is only available for Windows Users"), Math.max(this.width / 2 - 43, 170)), i, j);
+			if (buttonWidget.isMouseOver(i, j))
+				this.renderTooltip(matrixStack, this.minecraft.font.split(Component.literal(OSUtils.getOS() == OS.WINDOWS ? "If you turn on the recording then LoTAS will record your gameplay and save it to your Videos Folder. It is automatically adapting to the tickrate and removes the pause screens. IT IS RECOMMENDED TO TURN OFF VSYNC" : "This feature is only available for Windows Users"), Math.max(this.width / 2 - 43, 170)), i, j);
 		}, ClientLoTAS.recordermod == null ? false : ClientLoTAS.recordermod.isRecording())).active = OSUtils.getOS() == OS.WINDOWS;
 	}
 

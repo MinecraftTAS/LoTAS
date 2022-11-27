@@ -26,7 +26,9 @@ public class HookOptions {
 	/**
 	 * List of Key Mappings that are being registered once loaded
 	 */
-	@Mutable @Final @Shadow
+	@Mutable
+	@Final
+	@Shadow
 	public KeyMapping[] keyMappings;
 
 	/**
