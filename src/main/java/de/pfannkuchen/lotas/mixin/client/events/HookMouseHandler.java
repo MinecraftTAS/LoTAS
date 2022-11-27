@@ -28,5 +28,5 @@ public class HookMouseHandler {
 	private void onScroll(long l, double d, double e, CallbackInfo ci) {
 		ClientLoTAS.instance.onMouseScroll(e);
 	}
-	
+
 }

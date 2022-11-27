@@ -15,14 +15,14 @@ import net.minecraft.network.chat.Component;
  */
 @Environment(EnvType.CLIENT)
 public class DragonManipulationLoWidget extends WindowLoWidget {
-	
+
 	// Buttons that toggle each other
 	ToggleButtonLoWidget optimalpath;
 	ToggleButtonLoWidget ccwtoggle;
 	ToggleButtonLoWidget landingapproach;
 	ToggleButtonLoWidget playerstrafing;
 	boolean hasToggled = false; // boolean to prevent deadlock
-	
+
 	/**
 	 * Initializes a dragon manipulation widget
 	 */
@@ -40,17 +40,19 @@ public class DragonManipulationLoWidget extends WindowLoWidget {
 		}, Component.literal("Force cc/ccw toggle")));
 		this.addWidget(this.landingapproach = new ToggleButtonLoWidget(true, 0.005, 0.185, .14, LoTAS.configmanager.getBoolean("dragonmanipulationwidget", "forceLandingApproach"), b -> {
 			LoTAS.dragonmanipulationmod.requestState("forceLandingApproach", b);
-			if (b) LoTAS.dragonmanipulationmod.requestState("forcePlayerStrafing", !b);
+			if (b)
+				LoTAS.dragonmanipulationmod.requestState("forcePlayerStrafing", !b);
 		}, Component.literal("Force landing approach")));
 		this.addWidget(this.playerstrafing = new ToggleButtonLoWidget(true, 0.005, 0.135, .14, LoTAS.configmanager.getBoolean("dragonmanipulationwidget", "forcePlayerStrafing"), b -> {
 			LoTAS.dragonmanipulationmod.requestState("forcePlayerStrafing", b);
-			if (b) LoTAS.dragonmanipulationmod.requestState("forceLandingApproach", !b);
+			if (b)
+				LoTAS.dragonmanipulationmod.requestState("forceLandingApproach", !b);
 		}, Component.literal("Force player strafing")));
 		super.init();
 	}
 
 	private static boolean shouldUpdate;
-	
+
 	@Override
 	protected void render(PoseStack stack, double curX, double curY) {
 		if (DragonManipulationLoWidget.shouldUpdate) {
@@ -62,7 +64,7 @@ public class DragonManipulationLoWidget extends WindowLoWidget {
 		}
 		super.render(stack, curX, curY);
 	}
-	
+
 	/**
 	 * Forces the reinitialization of the widget
 	 */

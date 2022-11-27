@@ -13,8 +13,8 @@ import net.minecraft.server.dedicated.DedicatedServer;
 public class MixinDedicatedServer {
 
 	@Overwrite
-    public long getMaxTickLength() {
-        return Long.MAX_VALUE;
-    }
-	
+	public long getMaxTickLength() {
+		return Long.MAX_VALUE;
+	}
+
 }

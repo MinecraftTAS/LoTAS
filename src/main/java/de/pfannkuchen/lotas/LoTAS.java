@@ -41,7 +41,7 @@ public class LoTAS implements ModInitializer {
 	public static DragonManipulationMod dragonmanipulationmod;
 	// Notification Manager Singleton
 	public static NotificationManager notificationmanager;
-	
+
 	/**
 	 * Executed after the game launches.
 	 */

@@ -33,7 +33,7 @@ public class KeybindManager {
 	 * Key binding for opening the recording menu
 	 */
 	private KeyMapping openRecordingMenuKeybind = new KeyMapping("Open Recording Menu", GLFW.GLFW_KEY_F6, "LoTAS Keybinds");
-	
+
 	/**
 	 * Key binding for advancing a single tick while being in tick advance.
 	 */
@@ -43,22 +43,22 @@ public class KeybindManager {
 	 * Key binding for advancing a single tick while being in tick advance.
 	 */
 	private KeyMapping toggleTickadvance = new KeyMapping("Toggle tick advance", GLFW.GLFW_KEY_F8, "LoTAS Keybinds");
-	
+
 	/**
 	 * Key binding for decreasing the tickrate
 	 */
 	private KeyMapping decreaseTickrate = new KeyMapping("Decrease Tickrate", GLFW.GLFW_KEY_COMMA, "LoTAS Keybinds");
-	
+
 	/**
 	 * Key binding for increasing the tickrate
 	 */
 	private KeyMapping increaseTickrate = new KeyMapping("Increase Tickrate", GLFW.GLFW_KEY_PERIOD, "LoTAS Keybinds");
-	
+
 	/**
 	 * Key binding for increasing the tickrate
 	 */
 	private KeyMapping savePlayerdata = new KeyMapping("Save playerdata", GLFW.GLFW_KEY_N, "LoTAS Keybinds");
-	
+
 	/**
 	 * Key binding for decreasing the tickrate
 	 */
@@ -67,7 +67,7 @@ public class KeybindManager {
 	/**
 	 * Categories for all key binds used.
 	 */
-	private String[] keybindCategories = {"LoTAS Keybinds"};
+	private String[] keybindCategories = { "LoTAS Keybinds" };
 
 	/**
 	 * Initializes the key bind Manager, registers categories and key binds.
@@ -75,7 +75,8 @@ public class KeybindManager {
 	public KeyMapping[] onKeybindInitialize(KeyMapping[] keyMappings) {
 		// Initialize Categories first
 		final Map<String, Integer> categories = AccessorKeyMapping.getCategorySorting();
-		for (int i = 0; i < this.keybindCategories.length; i++) categories.put(this.keybindCategories[i], i+8);
+		for (int i = 0; i < this.keybindCategories.length; i++)
+			categories.put(this.keybindCategories[i], i + 8);
 		// Finish by adding Keybinds
 		return ArrayUtils.addAll(keyMappings, this.openLoTASMenuKeybind, this.tickadvanceKeybind, this.toggleTickadvance, this.decreaseTickrate, this.increaseTickrate, this.savePlayerdata, this.loadPlayerdata);
 	}
@@ -101,7 +102,7 @@ public class KeybindManager {
 			LoTAS.dupemod.requestDupe(true);
 		else if (this.isKeyDown(mc, this.loadPlayerdata) && mc.level != null)
 			LoTAS.dupemod.requestDupe(false);
-		
+
 	}
 
 	/**
@@ -120,7 +121,7 @@ public class KeybindManager {
 		Screen screen = mc.screen;
 		if (!(screen == null || !(screen.getFocused() instanceof EditBox) || !((EditBox) screen.getFocused()).canConsumeInput()))
 			return false;
-		
+
 		boolean wasPressed = this.keys.containsKey(map) ? this.keys.get(map) : false;
 		boolean isPressed = GLFW.glfwGetKey(mc.getWindow().getWindow(), ((AccessorKeyMapping) map).getKey().getValue()) == GLFW.GLFW_PRESS;
 		this.keys.put(map, isPressed);

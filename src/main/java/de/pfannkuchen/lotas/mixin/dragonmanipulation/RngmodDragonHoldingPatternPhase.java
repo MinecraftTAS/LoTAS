@@ -24,7 +24,7 @@ public class RngmodDragonHoldingPatternPhase {
 	public float redirect_nextFloat(Random r) {
 		return LoTAS.configmanager.getBoolean("dragonmanipulationwidget", "forceOptimalPath") ? 0.999f : r.nextFloat();
 	}
-	
+
 	/**
 	 * Manipulates the landing approach phase integer
 	 * @return Zero
@@ -33,7 +33,7 @@ public class RngmodDragonHoldingPatternPhase {
 	public int redirect_nextInt_perching(Random r, int i) {
 		return LoTAS.configmanager.getBoolean("dragonmanipulationwidget", "forceLandingApproach") ? 0 : r.nextInt(i);
 	}
-	
+
 	/**
 	 * Manipulates the strafing phase integer
 	 * @return Zero
@@ -42,7 +42,7 @@ public class RngmodDragonHoldingPatternPhase {
 	public int redirect_nextInt_strafing(Random r, int i) {
 		return LoTAS.configmanager.getBoolean("dragonmanipulationwidget", "forcePlayerStrafing") ? 0 : r.nextInt(i);
 	}
-	
+
 	/**
 	 * Manipulates the strafing phase integer - PART 2
 	 * @return Zero
@@ -51,7 +51,7 @@ public class RngmodDragonHoldingPatternPhase {
 	public int redirect_nextInt_strafing2(Random r, int i) {
 		return LoTAS.configmanager.getBoolean("dragonmanipulationwidget", "forcePlayerStrafing") ? 0 : r.nextInt(i);
 	}
-	
+
 	/**
 	 * Manipulates the rotation changing integer
 	 * @return Zero
@@ -60,5 +60,5 @@ public class RngmodDragonHoldingPatternPhase {
 	public int redirect_nextInt(Random r, int i) {
 		return LoTAS.configmanager.getBoolean("dragonmanipulationwidget", "forceCCWToggle") ? 0 : r.nextInt(i);
 	}
-	
+
 }

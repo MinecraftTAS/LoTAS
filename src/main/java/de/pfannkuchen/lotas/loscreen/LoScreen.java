@@ -89,7 +89,7 @@ public abstract class LoScreen {
 	protected void scroll(double scroll) {
 		this.widgets.forEach(w -> w.scroll(scroll));
 	}
-	
+
 	/**
 	 * Renders the gui and it's widgets.
 	 * @param stack Pose Stack for rendering
@@ -131,7 +131,7 @@ public abstract class LoScreen {
 	 * @param color Color to fill with
 	 */
 	protected final void fill(PoseStack stack, double x1, double y1, double x2, double y2, int color) {
-		GuiComponent.fill(stack, (int) (x1*this.width/this.guiscale), (int) (y1*this.height/this.guiscale), (int) (x2*this.width/this.guiscale), (int) (y2*this.height/this.guiscale), color);
+		GuiComponent.fill(stack, (int) (x1 * this.width / this.guiscale), (int) (y1 * this.height / this.guiscale), (int) (x2 * this.width / this.guiscale), (int) (y2 * this.height / this.guiscale), color);
 	}
 
 	/**
@@ -145,7 +145,7 @@ public abstract class LoScreen {
 	 * @param v UV Coordinates
 	 */
 	protected final void render(PoseStack stack, double x1, double y1, double x2, double y2, double u, double v) {
-		GuiComponent.blit(stack, (int) (x1*this.width/this.guiscale), (int) (y1*this.height/this.guiscale), 0, 0, (int) (x2*this.width/this.guiscale), (int) (y2*this.height/this.guiscale), (int) (this.width/12.6/this.guiscale), (int) (this.height/12.7/this.guiscale));
+		GuiComponent.blit(stack, (int) (x1 * this.width / this.guiscale), (int) (y1 * this.height / this.guiscale), 0, 0, (int) (x2 * this.width / this.guiscale), (int) (y2 * this.height / this.guiscale), (int) (this.width / 12.6 / this.guiscale), (int) (this.height / 12.7 / this.guiscale));
 	}
 
 	/**
@@ -161,18 +161,19 @@ public abstract class LoScreen {
 	protected final void draw(PoseStack stack, Component text, double x, double y, int size, int color, boolean shadow) {
 		stack.pushPose();
 		// Move by gui scale first
-		stack.scale((float) (1f/this.guiscale), (float) (1f/this.guiscale), 1.0f);
-		stack.translate(x*this.width, y*this.height, 0);
+		stack.scale((float) (1f / this.guiscale), (float) (1f / this.guiscale), 1.0f);
+		stack.translate(x * this.width, y * this.height, 0);
 		// Resize for percent size
-		final float scaleX = size/192.0f*this.width/100f;
-		final float scaleY = size/108.0f*(this.width/16*9)/100f;
+		final float scaleX = size / 192.0f * this.width / 100f;
+		final float scaleY = size / 108.0f * (this.width / 16 * 9) / 100f;
 		stack.scale(scaleX, scaleY, 1.0f);
 		// Render text using font renderer
-		if (shadow) this.mc.font.drawShadow(stack, text, 0, 0, color);
-		else this.mc.font.draw(stack, text, 0, 0, color);
+		if (shadow)
+			this.mc.font.drawShadow(stack, text, 0, 0, color);
+		else
+			this.mc.font.draw(stack, text, 0, 0, color);
 		stack.popPose();
 	}
-
 
 	/**
 	 * Ease interpolation
@@ -183,7 +184,7 @@ public abstract class LoScreen {
 	 * @return Ease-out-quad variable
 	 */
 	protected final double ease(double t, double b, double c, double d) {
-		return -c *(t/=d)*(t-2) + b;
+		return -c * (t /= d) * (t - 2) + b;
 	}
 
 	/**

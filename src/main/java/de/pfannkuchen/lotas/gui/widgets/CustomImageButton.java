@@ -36,7 +36,8 @@ public class CustomImageButton extends ImageButton {
 	 * @param toggled Is toggled or not
 	 */
 	public CustomImageButton(int i, int j, int k, int l, int m, int n, int o, ResourceLocation streaming, int p, int q, OnPress onPress, OnTooltip onTooltip, boolean toggled) {
-		super(i+2, j+2, k-4, l-4, m, n, o, streaming, p, q, b -> {}, onTooltip, Component.empty());
+		super(i + 2, j + 2, k - 4, l - 4, m, n, o, streaming, p, q, b -> {
+		}, onTooltip, Component.empty());
 		this.isToggled = toggled;
 		// Trigger the onPress differently
 		this.internalButton = new Button(i, j, k, l, Component.empty(), b -> {
@@ -59,7 +60,7 @@ public class CustomImageButton extends ImageButton {
 	 */
 	@Override
 	public void render(PoseStack poseStack, int i, int j, float f) {
-		this.internalButton.render(poseStack, this.isToggled ? this.internalButton.x+1 : i, this.isToggled ? this.internalButton.y+1 : j, f);
+		this.internalButton.render(poseStack, this.isToggled ? this.internalButton.x + 1 : i, this.isToggled ? this.internalButton.y + 1 : j, f);
 		super.render(poseStack, i, j, f);
 	}
 

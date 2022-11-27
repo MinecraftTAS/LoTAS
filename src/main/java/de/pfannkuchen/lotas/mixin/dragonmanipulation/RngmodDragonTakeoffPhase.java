@@ -24,5 +24,5 @@ public class RngmodDragonTakeoffPhase {
 	public float redirect_nextFloat(Random r) {
 		return LoTAS.configmanager.getBoolean("dupemodwidget", "forceOptimalPath") ? 0.999f : r.nextFloat();
 	}
-	
+
 }
