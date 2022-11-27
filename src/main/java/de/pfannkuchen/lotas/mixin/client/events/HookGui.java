@@ -24,7 +24,8 @@ import net.minecraft.client.renderer.GameRenderer;
 public class HookGui {
 
 	// Shadow Field seen in GameRenderer.class
-	@Shadow @Final
+	@Shadow
+	@Final
 	public Minecraft minecraft;
 
 	/**
@@ -46,5 +47,5 @@ public class HookGui {
 	public void renderScreenEvent(CallbackInfo ci) {
 		ClientLoTAS.instance.onRenderScreen(new PoseStack(), this.minecraft);
 	}
-	
+
 }

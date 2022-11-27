@@ -62,7 +62,8 @@ public class HookMinecraft {
 	 */
 	@Inject(method = "setScreen", at = @At("HEAD"), cancellable = true)
 	public void hookScreenUpdateEvent(Screen screen, CallbackInfo ci) {
-		if (ClientLoTAS.instance.onGuiUpdate(screen, (Minecraft) (Object) this)) ci.cancel();
+		if (ClientLoTAS.instance.onGuiUpdate(screen, (Minecraft) (Object) this))
+			ci.cancel();
 	}
 
 	/**

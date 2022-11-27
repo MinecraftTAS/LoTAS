@@ -23,9 +23,10 @@ import net.minecraft.client.gui.screens.Screen;
 @Environment(EnvType.CLIENT)
 public class HookKeyboardHandler {
 
-	@Shadow @Final
+	@Shadow
+	@Final
 	public Minecraft minecraft;
-	
+
 	/**
 	 * Triggers an Event in {@link ClientLoTAS#onKeyPressed(Integer)} whenever a screen catches a key event
 	 * @param l The Game Window
@@ -37,7 +38,7 @@ public class HookKeyboardHandler {
 	@Inject(method = "keyPress", at = @At("HEAD"))
 	public void onKeyPressed(long l, int key, int j, int k, int m, CallbackInfo ci) {
 		Screen screen = this.minecraft.screen;
-		if (screen == null || !(screen.getFocused() instanceof EditBox) || !((EditBox)screen.getFocused()).canConsumeInput())
+		if (screen == null || !(screen.getFocused() instanceof EditBox) || !((EditBox) screen.getFocused()).canConsumeInput())
 			ClientLoTAS.instance.onKeyPress(-key); // note: control characters shall be negative
 	}
 
@@ -50,7 +51,7 @@ public class HookKeyboardHandler {
 	@Inject(method = "charTyped", at = @At("HEAD"))
 	public void onCharTyped(long l, int key, int j, CallbackInfo ci) {
 		Screen screen = this.minecraft.screen;
-		if (screen == null || !(screen.getFocused() instanceof EditBox) || !((EditBox)screen.getFocused()).canConsumeInput())
+		if (screen == null || !(screen.getFocused() instanceof EditBox) || !((EditBox) screen.getFocused()).canConsumeInput())
 			ClientLoTAS.instance.onKeyPress(key);
 	}
 

@@ -66,7 +66,8 @@ public class TextFieldLoWidget extends LoScreen {
 
 	@Override
 	protected void press(int key) {
-		if (!this.active || !this.mouseOver) return;
+		if (!this.active || !this.mouseOver)
+			return;
 		// Note: onControl is a fix because control keys are hit for release and press while non control keys are not.
 		if (Screen.isPaste(-key)) {
 			// paste
@@ -82,7 +83,8 @@ public class TextFieldLoWidget extends LoScreen {
 				this.onControl = false;
 			} else {
 				this.onControl = true;
-				if (this.content.length() != 0) this.content = this.content.substring(0, this.content.length()-1);
+				if (this.content.length() != 0)
+					this.content = this.content.substring(0, this.content.length() - 1);
 			}
 		} else if (Screen.isSelectAll(-key)) {
 			// paste
@@ -103,14 +105,17 @@ public class TextFieldLoWidget extends LoScreen {
 
 	@Override
 	protected void render(PoseStack stack, double curX, double curY) {
-		if (!this.active) return;
-		if (this.mouseOver) this.animationProgress = Math.min(6, this.animationProgress + ClientLoTAS.internaltimer.tickDelta);
-		else this.animationProgress = Math.max(0, this.animationProgress - ClientLoTAS.internaltimer.tickDelta);
-		byte alpha = (byte) (this.ease(this.animationProgress, 0, 1, 6)*255);
-		this.mouseOver = curX > this.x-0.01 && curX < this.x+this.length+0.01 && curY > this.y-0.015 && curY < this.y+0.044;
-		this.fill(stack, this.x-0.01, this.y-0.015, this.x+this.length+0.01, this.y+0.044, TextFieldLoWidget.FOCUS_BACKGROUND_COLOR - 0xff000000 + (alpha << 24));
+		if (!this.active)
+			return;
+		if (this.mouseOver)
+			this.animationProgress = Math.min(6, this.animationProgress + ClientLoTAS.internaltimer.tickDelta);
+		else
+			this.animationProgress = Math.max(0, this.animationProgress - ClientLoTAS.internaltimer.tickDelta);
+		byte alpha = (byte) (this.ease(this.animationProgress, 0, 1, 6) * 255);
+		this.mouseOver = curX > this.x - 0.01 && curX < this.x + this.length + 0.01 && curY > this.y - 0.015 && curY < this.y + 0.044;
+		this.fill(stack, this.x - 0.01, this.y - 0.015, this.x + this.length + 0.01, this.y + 0.044, TextFieldLoWidget.FOCUS_BACKGROUND_COLOR - 0xff000000 + (alpha << 24));
 		this.draw(stack, Component.literal(this.content + (this.mouseOver ? "_" : "")), this.x, this.y, 20, TextFieldLoWidget.TEXT_COLOR, false);
-		this.fill(stack, this.x, this.y+0.025, this.x+this.length, this.y+0.028, this.mouseOver ? TextFieldLoWidget.FOCUS_LINE_COLOR : TextFieldLoWidget.LINE_COLOR);
+		this.fill(stack, this.x, this.y + 0.025, this.x + this.length, this.y + 0.028, this.mouseOver ? TextFieldLoWidget.FOCUS_LINE_COLOR : TextFieldLoWidget.LINE_COLOR);
 		super.render(stack, curX, curY);
 	}
 

@@ -62,24 +62,28 @@ public class SliderLoWidget extends LoScreen {
 
 	@Override
 	protected void click(double curX, double curY, int button) {
-		if (!this.active) return;
+		if (!this.active)
+			return;
 		this.isDragging = false; // Reset dragging
 		super.click(curX, curY, button);
 	}
 
 	@Override
 	protected void drag(double prevCurX, double prevCurY, double curX, double curY) {
-		if (!this.active) return;
+		if (!this.active)
+			return;
 		// Check whether the drag has started
-		if (curX > this.x-0.005+this.length*this.progress && curX < this.x+0.005+this.length*this.progress && curY > this.y-0.005/9.0f*16.0f && curY < this.y+0.005/9.0f*16.0f && !this.isDragging) {
+		if (curX > this.x - 0.005 + this.length * this.progress && curX < this.x + 0.005 + this.length * this.progress && curY > this.y - 0.005 / 9.0f * 16.0f && curY < this.y + 0.005 / 9.0f * 16.0f && !this.isDragging) {
 			this.isDragging = true;
 		}
 		// Move the slider while dragged
 		if (this.isDragging) {
-			double p = curX-this.x;
-			if (p < 0) p = 0;
-			if (p > this.length) p = this.length;
-			this.progress = p/this.length;
+			double p = curX - this.x;
+			if (p < 0)
+				p = 0;
+			if (p > this.length)
+				p = this.length;
+			this.progress = p / this.length;
 			// Update the Label
 			this.value = this.onMove.apply(this.progress);
 		}
@@ -88,17 +92,17 @@ public class SliderLoWidget extends LoScreen {
 
 	@Override
 	protected void render(PoseStack stack, double curX, double curY) {
-		if (!this.active) return;
-		this.fill(stack, this.x, this.y-.0015, this.x+this.length, this.y+.0015, SliderLoWidget.BACKGROUND_COLOR); // Render Background
+		if (!this.active)
+			return;
+		this.fill(stack, this.x, this.y - .0015, this.x + this.length, this.y + .0015, SliderLoWidget.BACKGROUND_COLOR); // Render Background
 		// Render dot with different color when hovered
-		if (curX > this.x-0.005+this.length*this.progress && curX < this.x+0.005+this.length*this.progress && curY > this.y-0.005/9.0f*16.0f && curY < this.y+0.005/9.0f*16.0f && !this.isDragging)
-			this.fill(stack, this.x-0.005+this.length*this.progress, this.y-0.005/9.0f*16.0f, this.x+0.005+this.length*this.progress, this.y+0.005/9.0f*16.0f, SliderLoWidget.BORDER_FOCUS_COLOR);
+		if (curX > this.x - 0.005 + this.length * this.progress && curX < this.x + 0.005 + this.length * this.progress && curY > this.y - 0.005 / 9.0f * 16.0f && curY < this.y + 0.005 / 9.0f * 16.0f && !this.isDragging)
+			this.fill(stack, this.x - 0.005 + this.length * this.progress, this.y - 0.005 / 9.0f * 16.0f, this.x + 0.005 + this.length * this.progress, this.y + 0.005 / 9.0f * 16.0f, SliderLoWidget.BORDER_FOCUS_COLOR);
 		else
-			this.fill(stack, this.x-0.005+this.length*this.progress, this.y-0.005/9.0f*16.0f, this.x+0.005+this.length*this.progress, this.y+0.005/9.0f*16.0f, SliderLoWidget.BORDER_COLOR);
+			this.fill(stack, this.x - 0.005 + this.length * this.progress, this.y - 0.005 / 9.0f * 16.0f, this.x + 0.005 + this.length * this.progress, this.y + 0.005 / 9.0f * 16.0f, SliderLoWidget.BORDER_COLOR);
 		// Render value
-		this.draw(stack, this.value, this.x, this.y+0.0165, 20, SliderLoWidget.TEXT_COLOR, false);
+		this.draw(stack, this.value, this.x, this.y + 0.0165, 20, SliderLoWidget.TEXT_COLOR, false);
 		super.render(stack, curX, curY);
 	}
-
 
 }

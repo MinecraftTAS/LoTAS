@@ -40,10 +40,8 @@ public class TickrateChanger {
 
 	// Recommended tickrate
 	@Environment(EnvType.CLIENT)
-	private double[] tickrates = new double[] {
-		0.5f, 1.0f, 2.0f, 4.0f, 5.0f, 10.0f, 20.0f	
-	};
-	
+	private double[] tickrates = new double[] { 0.5f, 1.0f, 2.0f, 4.0f, 5.0f, 10.0f, 20.0f };
+
 	// Tickrate Changer Millisecond
 	@Environment(EnvType.CLIENT)
 	private long timeSinceTC = System.currentTimeMillis();
@@ -72,9 +70,9 @@ public class TickrateChanger {
 	 * @param p Incoming Packet
 	 */
 	public void onServerPacket(ServerboundCustomPayloadPacket p) {
-		if (TICKRATE_CHANGER_RL.equals(p.getIdentifier())) this.updateTickrate(p.getData().readDouble());
+		if (TICKRATE_CHANGER_RL.equals(p.getIdentifier()))
+			this.updateTickrate(p.getData().readDouble());
 	}
-
 
 	/**
 	 * Client-Side only tickrate update request. Sends a packet to the server updating the tickrate.
@@ -96,7 +94,8 @@ public class TickrateChanger {
 	 * @param tickrate Tickrate to update to
 	 */
 	public void updateTickrate(double tickrate) {
-		if (tickrate < 0.1) return;
+		if (tickrate < 0.1)
+			return;
 		this.internallyUpdateTickrate(tickrate);
 		// Update Tickrate for all Clients
 		this.mcserver.getPlayerList().getPlayers().forEach(c -> {
@@ -152,10 +151,10 @@ public class TickrateChanger {
 	@Environment(EnvType.CLIENT)
 	public void decreaseTickrate() {
 		double newTickrate = this.tickrate;
-		for (int i = this.tickrates.length-1; i >= 0; i--)
+		for (int i = this.tickrates.length - 1; i >= 0; i--)
 			if ((newTickrate = this.tickrates[i]) < this.tickrate)
 				break;
-		
+
 		this.requestTickrateUpdate(newTickrate);
 	}
 
@@ -168,10 +167,10 @@ public class TickrateChanger {
 		for (int i = 0; i < this.tickrates.length; i++)
 			if ((newTickrate = this.tickrates[i]) > this.tickrate)
 				break;
-		
+
 		this.requestTickrateUpdate(newTickrate);
 	}
-	
+
 	// Place getters here to not confuse with public variables that shall not be set
 
 	public double getTickrate() {
@@ -185,5 +184,5 @@ public class TickrateChanger {
 	public double getGamespeed() {
 		return this.gamespeed;
 	}
-	
+
 }

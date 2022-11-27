@@ -21,7 +21,9 @@ import net.minecraft.client.Timer;
 @Environment(EnvType.CLIENT)
 public class MixinTimer {
 
-	@Shadow @Final @Mutable
+	@Shadow
+	@Final
+	@Mutable
 	public float msPerTick;
 
 	@Inject(method = "advanceTime", at = @At("HEAD"))

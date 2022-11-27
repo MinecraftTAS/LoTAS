@@ -52,7 +52,8 @@ public class DupeMod {
 				this.localPlayer = new CompoundTag();
 				this.mc.player.saveWithoutId(this.localPlayer);
 			} else {
-				if (this.localPlayer != null) this.mc.player.load(this.localPlayer);
+				if (this.localPlayer != null)
+					this.mc.player.load(this.localPlayer);
 			}
 		}
 	}
@@ -73,7 +74,7 @@ public class DupeMod {
 					CompoundTag tag = new CompoundTag();
 					player.saveWithoutId(tag);
 					this.onlineClients.put(player, tag);
-					
+
 					// Send packet to client
 					FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
 					buf.writeBoolean(saveOLoad);
@@ -88,15 +89,15 @@ public class DupeMod {
 							System.out.println("Unable to load playerdata for " + player.getName().getString() + " as they are in a different dimension!");
 							continue;
 						}
-						
+
 						if (!player.isAlive()) { // Instead of reviving the player just don't load playerdata - this will be multiplayer safe
 							System.out.println("Unable to load playerdata for " + player.getName().getString() + " as they are not alive.");
 							continue;
 						}
-						
+
 						// Load playerdata
 						player.load(tag);
-					
+
 						// Send packet to client
 						FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
 						buf.writeBoolean(saveOLoad);
@@ -137,6 +138,5 @@ public class DupeMod {
 		c.saveWithoutId(tag);
 		this.onlineClients.put(c, tag);
 	}
-
 
 }

@@ -24,7 +24,7 @@ public class RngmodDragonStrafePlayerPhase {
 	public float redirect_nextFloat(Random r) {
 		return LoTAS.configmanager.getBoolean("dupemodwidget", "forceOptimalPath") ? 0.999f : r.nextFloat();
 	}
-	
+
 	/**
 	 * Manipulates the rotation changing integer
 	 * @return Zero
@@ -33,5 +33,5 @@ public class RngmodDragonStrafePlayerPhase {
 	public int redirect_nextInt(Random r, int i) {
 		return LoTAS.configmanager.getBoolean("dupemodwidget", "forceCCWToggle") ? 0 : r.nextInt(i);
 	}
-	
+
 }

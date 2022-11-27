@@ -22,7 +22,7 @@ public class NotificationManager {
 	@Environment(EnvType.CLIENT)
 	public Minecraft mc;
 	public MinecraftServer mcserver;
-	
+
 	/**
 	 * Adds notifications when receiving a packet
 	 * @param p Incoming packet
@@ -33,7 +33,7 @@ public class NotificationManager {
 			ClientLoTAS.loscreenmanager.addNotification(Component.literal(p.getData().readUtf()));
 		}
 	}
-	
+
 	/**
 	 * Resend when receiving a packet
 	 * @param p Incoming packet
@@ -48,7 +48,7 @@ public class NotificationManager {
 			});
 		}
 	}
-	
+
 	/**
 	 * Requests a notification to be added
 	 * @param notification Notification String
@@ -59,5 +59,5 @@ public class NotificationManager {
 		buf.writeUtf(notification);
 		this.mc.getConnection().send(new ServerboundCustomPayloadPacket(NOTIFICATION_MANAGER_RL, buf));
 	}
-	
+
 }

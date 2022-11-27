@@ -19,7 +19,7 @@ import net.minecraft.resources.ResourceLocation;
 public class ResourceManager {
 
 	public static final ResourceLocation UNSUPPORTED = new ResourceLocation("lotas", "unsupported");
-	
+
 	/**
 	 * Initially load all assets packed within the LoTAS Jar
 	 */
@@ -30,5 +30,5 @@ public class ResourceManager {
 			LoTAS.LOGGER.error("Unable to load textures.", e);
 		}
 	}
-	
+
 }

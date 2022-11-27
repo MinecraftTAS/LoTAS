@@ -28,5 +28,5 @@ public class HookSoundEngine {
 	public void hookPlayEvent(SoundInstance sound, CallbackInfo ci) {
 		ClientLoTAS.instance.onSoundPlay(sound);
 	}
-	
+
 }
