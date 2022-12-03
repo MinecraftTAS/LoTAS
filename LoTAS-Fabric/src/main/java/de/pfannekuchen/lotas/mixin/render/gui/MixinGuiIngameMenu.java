@@ -55,16 +55,16 @@ public abstract class MixinGuiIngameMenu extends Screen {
 		if(!showPauseMenu) return;
 		// Move Buttons higher
 		for (int i=0;i<MCVer.getButtonSize(this); i++) {
-			Button guiButton=(Button)MCVer.getButton(this, i);
 			//#if MC>=11903
-//$$ 			guiButton.setY(guiButton.getY() - 24);
+//$$ //			guiButton.setY(guiButton.getY() - 24);
 			//#else
+			Button guiButton=(Button)MCVer.getButton(this, i);
 			guiButton.y -= 24;
 			//#endif
 		}
 		//#if MC>=11903
-//$$ 		Button moveButton = ((Button)MCVer.getButton(this, 7));
-//$$ 		moveButton.setY(moveButton.getY()+24);
+//$$ //		Button moveButton = ((Button)MCVer.getButton(this, 7));
+//$$ //		moveButton.setY(moveButton.getY()+24);
 		//#else
 		((Button)MCVer.getButton(this, 7)).y += 24;
 		//#endif
@@ -188,7 +188,7 @@ public abstract class MixinGuiIngameMenu extends Screen {
 	}
 	
 	//#if MC>=11601
-//$$ 	@Inject(method = "render", at = @At("TAIL"))
+//$$ //	@Inject(method = "render", at = @At("TAIL"))
 //$$ 	public void drawScreen(com.mojang.blaze3d.vertex.PoseStack stack, int mouseX, int mouseY, float partialTicks, CallbackInfo ci) {
 //$$ 		MCVer.stack = stack;
 	//#else

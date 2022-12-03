@@ -107,7 +107,6 @@ public class LoTASModContainer implements ModInitializer {
 			e.printStackTrace();
 		}
 		LoTASModContainer.shield=new ResourceLocation("textures/shield/bottleshield.png");
-		//		AccessorModelLoader.setShieldBase(new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEX, new Identifier("lotas","pan_cake")));
 	}
 	
 	public static void loadShieldsMCTAS() {

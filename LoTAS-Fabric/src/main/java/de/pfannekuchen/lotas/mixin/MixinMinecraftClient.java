@@ -120,6 +120,7 @@ public class MixinMinecraftClient {
 			
 			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "drops/piglin.png"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("piglin.png"))));
 			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "drops/copper.png"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("copper.png"))));
+		
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
