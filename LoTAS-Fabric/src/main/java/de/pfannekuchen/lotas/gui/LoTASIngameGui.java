@@ -271,7 +271,7 @@ public class LoTASIngameGui {
 		// Show Tickjump number
 		String color = isShiftDown ? "\u00A76" : "";
 		
-		//#if MC>=11903
+		//#if MC>=11900
 //$$ 		tickDisplayButton.setMessage(net.minecraft.network.chat.Component.literal(color + TickrateChangerMod.ticks[TickrateChangerMod.ji] + "t"));
 		//#else
 		//#if MC>=11601
