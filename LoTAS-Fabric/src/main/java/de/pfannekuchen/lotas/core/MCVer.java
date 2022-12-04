@@ -1,14 +1,9 @@
 package de.pfannekuchen.lotas.core;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.platform.GlStateManager.DestFactor;
 import com.mojang.blaze3d.platform.GlStateManager.SourceFactor;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.Tesselator;
 
 import de.pfannekuchen.lotas.mixin.accessors.AccessorButtons;
-import de.pfannekuchen.lotas.mixin.accessors.AccessorScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiComponent;
@@ -23,6 +18,7 @@ import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 
 /**
@@ -49,7 +45,8 @@ public class MCVer {
 		//#endif
 //$$ 	}
 //$$ 	public static net.minecraft.server.level.ServerLevel getCurrentLevel() {
-//$$ 		return (ServerLevel) Minecraft.getInstance().getSingleplayerServer().getPlayerList().getPlayers().get(0).level;
+//$$ 		ServerPlayer player = Minecraft.getInstance().getSingleplayerServer().getPlayerList().getPlayers().get(0);
+//$$ 		return (ServerLevel) player.level;
 //$$ 	}
 //$$ 	public static String getCurrentWorldFolder() {
 		//#if MC>=11601
@@ -88,11 +85,12 @@ public class MCVer {
 //$$ 		GuiComponent.fill(stack, a, b, c, d, e);
 //$$ 	}
 //$$ 	public static void drawCenteredString(Screen s, String text, int x, int y, int color) {
+//$$ 		Minecraft mc = Minecraft.getInstance();
 //$$ 		if (text == null) text = " ";
 		//#if MC>=11605
-//$$ 		Screen.drawCenteredString(stack, Minecraft.getInstance().font, text, x, y, color);
+//$$ 		Screen.drawCenteredString(stack, mc.font, text, x, y, color);
 		//#else
-//$$ 		s.drawCenteredString(stack, Minecraft.getInstance().font, net.minecraft.network.chat.FormattedText.of(text), x, y, color);
+//$$ 		s.drawCenteredString(stack, mc.font, net.minecraft.network.chat.FormattedText.of(text), x, y, color);
 		//#endif
 //$$ 	}
 //$$ 	public static Checkbox Checkbox(int i, int j, int k, int l, String text, boolean bl) {
@@ -118,11 +116,12 @@ public class MCVer {
 //$$ 		component.render(stack, mouseX, mouseY, delta);
 //$$ 	}
 //$$ 	public static void drawShadow(String text, int x, int y, int color) {
+//$$ 		Minecraft mc = Minecraft.getInstance();
 //$$ 		if(text!=null) {
 		//#if MC>=11605
-//$$ 		Minecraft.getInstance().font.drawShadow(stack, text, x, y, color);
+//$$ 		mc.font.drawShadow(stack, text, x, y, color);
 		//#else
-//$$ 		Minecraft.getInstance().font.drawShadow(stack, net.minecraft.network.chat.FormattedText.of(text), x, y, color);
+//$$ 		mc.font.drawShadow(stack, net.minecraft.network.chat.FormattedText.of(text), x, y, color);
 		//#endif
 //$$ 		}
 //$$ 	}
@@ -257,7 +256,7 @@ public class MCVer {
 		//#if MC>=11903
 //$$ 		poseStack.mulPose(new org.joml.Quaternionf((float)i,(float) j,(float) k,(float) l));
 		//#else
-//$$ 		poseStack.mulPose(new Quaternion((float)i,(float) j,(float) k,(float) l));
+//$$ 		poseStack.mulPose(new com.mojang.math.Quaternion((float)i,(float) j,(float) k,(float) l));
 		//#endif
 //$$ 	}
 //$$
@@ -485,7 +484,7 @@ public class MCVer {
 //$$ 	}
 	//#else
 	public static <T extends AbstractWidget> T addButton(Screen screen, T button) {
-		((AccessorScreen)screen).invokeAddButton(button);
+		((de.pfannekuchen.lotas.mixin.accessors.AccessorScreen)screen).invokeAddButton(button);
 		return button;
 	}
 	//#endif

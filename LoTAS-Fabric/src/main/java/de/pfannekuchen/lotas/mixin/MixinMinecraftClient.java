@@ -93,39 +93,46 @@ public class MixinMinecraftClient {
 	public void loadRenderingLate(CallbackInfo ci) {
 		/* Load Textures because FabricAPI has been removed */
 		try {
-			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "drops/apple.png"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("apple.png"))));
-			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "drops/carrot.png"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("carrot.png"))));
-			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "drops/deadbush.png"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("deadbush.png"))));
-			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "drops/diamond_ore.png"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("diamond_ore.png"))));
-			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "drops/drowned.png"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("drowned.png"))));
-			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "drops/fish.gif"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("fish.gif"))));
-			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "drops/glowstone.png"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("glowstone.png"))));
-			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "drops/gold.png"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("gold.png"))));
-			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "drops/gravel.png"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("gravel.png"))));
-			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "drops/iron.png"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("iron.png"))));
-			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "drops/leaf.png"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("leaf.png"))));
-			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "drops/plants.png"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("plants.png"))));
-			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "drops/potato.png"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("potato.png"))));
-			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "drops/sapling.png"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("sapling.png"))));
-			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "drops/sealantern.gif"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("sealantern.gif"))));
-			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "drops/sheep.png"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("sheep.png"))));
-			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "drops/spider.png"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("spider.png"))));
-			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "drops/stick.png"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("stick.png"))));
-			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "drops/wither_skeleton.png"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("wither_skeleton.png"))));
-			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "drops/zombie.png"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("zombie.png"))));
-			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "dragon/breath.png"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("breath.png"))));
-			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "dragon/flying.png"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("flying.png"))));
-			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "dragon/shooting.png"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("shooting.png"))));
-			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "heck/potion.png"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("potion.png"))));
+			registerTexture("drops/apple.png", "apple.png");
+			registerTexture("drops/carrot.png", "carrot.png");
+			registerTexture("drops/deadbush.png", "deadbush.png");
+			registerTexture("drops/diamond_ore.png", "diamond_ore.png");
+			registerTexture("drops/drowned.png", "drowned.png");
+			registerTexture("drops/fish.gif", "fish.gif");
+			registerTexture("drops/glowstone.png", "glowstone.png");
+			registerTexture("drops/gold.png", "gold.png");
+			registerTexture("drops/gravel.png", "gravel.png");
+			registerTexture("drops/iron.png", "iron.png");
+			registerTexture("drops/leaf.png", "leaf.png");
+			registerTexture("drops/plants.png", "plants.png");
+			registerTexture("drops/potato.png", "potato.png");
+			registerTexture("drops/sapling.png", "sapling.png");
+			registerTexture("drops/sealantern.gif", "sealantern.gif");
+			registerTexture("drops/sheep.png", "sheep.png");
+			registerTexture("drops/spider.png", "spider.png");
+			registerTexture("drops/stick.png", "stick.png");
+			registerTexture("drops/wither_skeleton.png", "wither_skeleton.png");
+			registerTexture("drops/zombie.png", "zombie.png");
+			registerTexture("dragon/breath.png", "breath.png");
+			registerTexture("dragon/flying.png", "flying.png");
+			registerTexture("dragon/shooting.png", "shooting.png");
+			registerTexture("heck/potion.png", "potion.png");
 			
-			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "drops/piglin.png"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("piglin.png"))));
-			Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", "drops/copper.png"), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream("copper.png"))));
-		
+			registerTexture("drops/piglin.png", "piglin.png");
+			registerTexture("drops/copper.png", "copper.png");
+			
+			registerTexture("gui/small_checkbox.png", "small_checkbox.png");
+			registerTexture("shield/bottleshield.png", "bottleshield.png");
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		/* Load Shields */
 		LoTASModContainer.loadShieldsMCTAS();
+	}
+	
+	private void registerTexture(String path, String file) throws IOException{
+		Minecraft.getInstance().getTextureManager().register(new ResourceLocation("lotas", path), new DynamicTexture(NativeImage.read(LoTASModContainer.class.getResourceAsStream(file))));
 	}
 
 	/**
@@ -156,12 +163,12 @@ public class MixinMinecraftClient {
 //$$ 			if (Minecraft.getInstance().level != null) {
 //$$ 				Minecraft.getInstance().getSingleplayerServer().halt(true);
 //$$ 			}
-//$$ 
+//$$
 //$$ 			Minecraft.getInstance().forceSetScreen(new GenericDirtMessageScreen(new net.minecraft.network.chat.TranslatableComponent("createWorld.preparing")));
 //$$ 			LevelSettings levelSettings2;
 //$$ 			levelSettings2 = new LevelSettings(UUID.randomUUID().toString().substring(0, 10), GameType.CREATIVE, false, Difficulty.EASY, true, new GameRules(), net.minecraft.world.level.DataPackConfig.DEFAULT);
 //$$ 			Minecraft.getInstance().createLevel(UUID.randomUUID().toString().substring(0, 10), levelSettings2, net.minecraft.core.RegistryAccess.RegistryHolder.builtin(), net.minecraft.world.level.levelgen.WorldGenSettings.create(net.minecraft.core.RegistryAccess.builtin(), new Properties()).withSeed(true, OptionalLong.of(LoTASModContainer.i)));
-//$$ 
+//$$
 //$$ 			LoTASModContainer.i = -1;
 //$$ 			System.gc();
 //$$ 		}

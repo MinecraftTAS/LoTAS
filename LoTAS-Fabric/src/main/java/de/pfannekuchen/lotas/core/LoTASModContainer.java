@@ -55,7 +55,8 @@ public class LoTASModContainer implements ModInitializer {
 		}
 		/* Load the Configuration and set the tickrate if required */
 		try {
-			ConfigUtils.init(new File(Minecraft.getInstance().gameDirectory, "lotas.properties"));
+			Minecraft mc = Minecraft.getInstance();
+			ConfigUtils.init(new File(mc.gameDirectory, "lotas.properties"));
 			if (ConfigUtils.getBoolean("tools", "saveTickrate"))
 				TickrateChangerMod.updateTickrate(ConfigUtils.getInt("hidden", "tickrate"));
 		} catch (IOException e) {
@@ -106,7 +107,11 @@ public class LoTASModContainer implements ModInitializer {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		//#if MC>=11903
+//$$ 		LoTASModContainer.shield=new ResourceLocation("lotas", "shield/bottleshield.png");
+		//#else
 		LoTASModContainer.shield=new ResourceLocation("textures/shield/bottleshield.png");
+		//#endif
 	}
 	
 	public static void loadShieldsMCTAS() {
@@ -129,7 +134,11 @@ public class LoTASModContainer implements ModInitializer {
 			e.printStackTrace();
 		}
 		
+		//#if MC>=11903
+//$$ 		LoTASModContainer.shield=new ResourceLocation("lotas", "shield/bottleshield.png");
+		//#else
 		LoTASModContainer.shield=new ResourceLocation("textures/shield/bottleshield.png");
+		//#endif
 	}
 	
 

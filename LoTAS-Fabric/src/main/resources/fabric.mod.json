@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "lotas",
-  "version": "2.0.4",
+  "version": "2.0.5",
 
   "name": "LoTAS",
   "description": "Low Optimization Tool Assisted Speedrun Mod",
@@ -10,7 +10,7 @@
     "Scribble"
   ],
   "contact": {
-    "homepage": "https://mgnet.work/",
+    "homepage": "https://minecrafttas.com/",
     "sources": "https://github.com/MCPfannkuchenYT/LoTAS"
   },
 

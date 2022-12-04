@@ -4,13 +4,12 @@ import java.util.List;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
-import org.spongepowered.asm.mixin.gen.Invoker;
 
 import net.minecraft.client.gui.screens.Screen;
 
 @Mixin(Screen.class)
 public interface AccessorButtons {
-	//#if MC>=11700
+	//#if MC>=11903
 //$$ 	@Accessor("renderables")
 //$$ 	public List<net.minecraft.client.gui.components.Renderable> getButtons();
 	//#else
