@@ -33,6 +33,7 @@
     	"accessors.AccessorTimer",
     	"accessors.AccessFocused",
     	"accessors.AccessorSoundManager",
+    	"accessors.AccessorGuiScreen",
 		"render.gui.MixinGuiScreenWorking",
 		"render.gui.MixinGuiGameOver",
 		"render.gui.MixinGuiMainMenu",

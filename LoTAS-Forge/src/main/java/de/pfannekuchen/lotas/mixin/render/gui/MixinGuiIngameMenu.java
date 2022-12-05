@@ -82,7 +82,8 @@ public abstract class MixinGuiIngameMenu extends GuiScreen {
     	//#else
     //$$     buttonList.get(0).yPosition += 24;
         //#endif
-        this.buttonList.add(new GuiButton(13, this.width / 2 - 100, this.height / 4 + 96 + -16, 98, 20, I18n.format("Savestate")));
+        
+        
     	
     	GuiButton loadstate = new GuiButton(14, this.width / 2 + 2, this.height / 4 + 96 + -16, 98, 20, I18n.format("Loadstate"));
     	loadstate.enabled = SavestateMod.hasSavestate();
@@ -230,11 +231,7 @@ public abstract class MixinGuiIngameMenu extends GuiScreen {
 	@Inject(method = "actionPerformed", at = @At("HEAD"))
 	public void redoactionPerformed(GuiButton button, CallbackInfo ci) {
 		if (button.id == 13) {
-			if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-				savestateName = new GuiTextField(93, MCVer.getFontRenderer(mc), this.width / 2 - 100, this.height / 4 + 96 + -16, 98, 20);
-				button.enabled = false;
-				savestateName.setFocused(true);
-			} else SavestateMod.savestate(null);
+
 		} else if (button.id == 14) {
 			if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) mc.displayGuiScreen(new GuiLoadstateMenu());
 			else SavestateMod.loadstate(-1);
