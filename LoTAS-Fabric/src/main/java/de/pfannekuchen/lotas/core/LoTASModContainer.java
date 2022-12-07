@@ -8,18 +8,12 @@ import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URL;
-import java.net.URLConnection;
-import java.nio.file.Files;
-import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
-
-import org.apache.commons.io.FileUtils;
 
 import de.pfannekuchen.lotas.core.utils.ConfigUtils;
 import de.pfannekuchen.lotas.core.utils.TextureYoinker;
 import de.pfannekuchen.lotas.gui.InfoHud;
-import de.pfannekuchen.lotas.gui.SeedListScreen;
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.client.Minecraft;
@@ -47,12 +41,6 @@ public class LoTASModContainer implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		hud = new InfoHud();
-		/* Load the Seeds for the (disabled) Seeds Menu */
-		try {
-			loadSeeds();
-		} catch (Exception e1) {
-			e1.printStackTrace();
-		}
 		/* Load the Configuration and set the tickrate if required */
 		try {
 			Minecraft mc = Minecraft.getInstance();
@@ -140,31 +128,4 @@ public class LoTASModContainer implements ModInitializer {
 		LoTASModContainer.shield=new ResourceLocation("textures/shield/bottleshield.png");
 		//#endif
 	}
-	
-
-	/**
-	 * Loads a list of seeds together with preview images from <a href="http://mgnet.work/seeds/">mgnet.work/seeds/seedsX.XX.X.txt</a> and creates a List
-	 * @throws IOException
-	 */
-	public void loadSeeds() throws Exception {
-		File file = new File("seeddata.txt");
-		try {
-			URL url = new URL("https://data.mgnet.work/lotas/seeds/1.14.4.txt"); // TODO: wait why does this say 1.14.4...
-			URLConnection conn = url.openConnection();
-			conn.setReadTimeout(5000);
-			file.createNewFile();
-			FileUtils.copyInputStreamToFile(conn.getInputStream(), file);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		List<String> strings = Files.readAllLines(file.toPath());
-		for (String line : strings) {
-			String seed = line.split(":")[0];
-			String name = line.split(":")[1];
-			String description = line.split(":")[2];
-
-			SeedListScreen.seeds.add(new SeedListScreen.Seed(seed, name, description));
-		}
-	}
-
 }

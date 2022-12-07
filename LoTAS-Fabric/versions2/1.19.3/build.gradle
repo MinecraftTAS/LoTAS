@@ -13,6 +13,6 @@ loom {
 }
 
 dependencies {
-	minecraft "com.mojang:minecraft:1.19.3-rc1"
+	minecraft "com.mojang:minecraft:1.19.3"
 	mappings loom.officialMojangMappings()
 }

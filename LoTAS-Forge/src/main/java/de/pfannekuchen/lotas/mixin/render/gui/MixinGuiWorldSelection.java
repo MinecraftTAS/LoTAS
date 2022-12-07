@@ -13,10 +13,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import de.pfannekuchen.lotas.core.LoTASModContainer;
 import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.core.utils.ConfigUtils;
-import de.pfannekuchen.lotas.gui.GuiSeedList;
 import de.pfannekuchen.lotas.gui.widgets.ChallengeMapEntryWidget;
 import de.pfannekuchen.lotas.taschallenges.ChallengeMap;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 
 import net.minecraft.client.gui.GuiScreen;
@@ -66,7 +64,6 @@ public abstract class MixinGuiWorldSelection extends GuiScreen {
 	
 	@Inject(at = @At("HEAD"), method = "initGui")
 	public void injectinitGui(CallbackInfo ci) {
-		this.buttonList.add(new GuiButton(16, 5, 5, 98, 20, "Seeds"));
 		this.buttonList.add(new GuiCheckBox(17, width - 17 - MCVer.getFontRenderer(mc).getStringWidth("Open ESC when joining world"), 4, "Open ESC when joining world", ConfigUtils.getBoolean("tools", "hitEscape")));
 		this.buttonList.add(new GuiCheckBox(18, width - 17 - MCVer.getFontRenderer(mc).getStringWidth("Open ESC when joining world"), 16, "Show TAS Challenge Maps", ConfigUtils.getBoolean("tools", "hideMaps")));
 	}
@@ -97,9 +94,6 @@ public abstract class MixinGuiWorldSelection extends GuiScreen {
 	@Inject(at = @At("HEAD"), method = "actionPerformed")
 	public void injectactionPerformed(GuiButton button, CallbackInfo ci) {
 		switch (button.id) {
-			case 16:
-				Minecraft.getMinecraft().displayGuiScreen(new GuiSeedList());
-				break;
 			case 17:
 				ConfigUtils.setBoolean("tools", "hitEscape", ((GuiCheckBox) button).isChecked());
 				ConfigUtils.save();

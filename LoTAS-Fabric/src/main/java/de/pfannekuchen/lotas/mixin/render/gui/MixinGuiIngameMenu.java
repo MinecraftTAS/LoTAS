@@ -1,24 +1,16 @@
 package de.pfannekuchen.lotas.mixin.render.gui;
 
-import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import de.pfannekuchen.lotas.core.MCVer;
-import de.pfannekuchen.lotas.core.utils.Keyboard;
 import de.pfannekuchen.lotas.gui.LoTASIngameGui;
-import de.pfannekuchen.lotas.mods.SavestateMod;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.PauseScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -32,9 +24,6 @@ public abstract class MixinGuiIngameMenu extends Screen {
 		super(title);
 	}
 
-	public EditBox savestateName;
-	public EditBox tickrateField;
-	
 	@Shadow @Final
 	private boolean showPauseMenu;
 	

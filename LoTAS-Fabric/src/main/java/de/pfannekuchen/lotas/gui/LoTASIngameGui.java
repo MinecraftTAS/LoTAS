@@ -100,7 +100,7 @@ public class LoTASIngameGui {
 		// =============== TICKRATE
 
 		tickrateIncreaseButton = MCVer.Button(5, 15, 48, 20, "+", btn -> {
-			if (Keyboard.isKeyDown(GLFW.GLFW_KEY_LEFT_SHIFT)) {
+			if (Screen.hasShiftDown()) {
 				activateTickrateField(true);
 			} else {
 				TickrateChangerMod.index++;
@@ -110,7 +110,7 @@ public class LoTASIngameGui {
 		});
 
 		tickrateDecreaseButton = MCVer.Button(55, 15, 48, 20, "-", btn -> {
-			if (Keyboard.isKeyDown(GLFW.GLFW_KEY_LEFT_SHIFT)) {
+			if (Screen.hasShiftDown()) {
 				activateTickrateField(true);
 			} else {
 				TickrateChangerMod.index--;
@@ -160,7 +160,7 @@ public class LoTASIngameGui {
 		});
 
 		tickDisplayButton = MCVer.Button(5, 115, 30, 20, TickrateChangerMod.ticks[TickrateChangerMod.ji] + "t", btn -> {
-			if (Keyboard.isKeyDown(GLFW.GLFW_KEY_LEFT_SHIFT)) {
+			if (Screen.hasShiftDown()) {
 				TickrateChangerMod.ji--;
 			} else {
 				TickrateChangerMod.ji++;
@@ -176,7 +176,7 @@ public class LoTASIngameGui {
 				TickrateChangerMod.ji = upper;
 		});
 
-		// =============== Checkboxes
+		// =============== CHECKBOXES
 
 		avoidDamageCheckbox = new SmallCheckboxWidget(2, height - 20 - 15, "Avoid taking damage", !ConfigUtils.getBoolean("tools", "takeDamage"), box -> {
 			ConfigUtils.setBoolean("tools", "takeDamage", !box.isChecked());
@@ -266,7 +266,7 @@ public class LoTASIngameGui {
 			MCVer.drawShadow("press ESC to continue", 8, 147, 0xFFFFFF);
 		}
 
-		boolean isShiftDown = Keyboard.isKeyDown(GLFW.GLFW_KEY_LEFT_SHIFT);
+		boolean isShiftDown = Screen.hasShiftDown();
 
 		// Show Tickjump number
 		String color = isShiftDown ? "\u00A76" : "";
@@ -281,6 +281,7 @@ public class LoTASIngameGui {
 		//#endif
 		//#endif
 
+		// Hint
 		if (isShiftDown && tickjumpText) {
 			MCVer.drawCenteredString(parentScreen, "\u00A7a^^^^^^^^", 70, 139, 0xFFFFFF);
 			MCVer.drawCenteredString(parentScreen, String.format("\u00A7aReopens the Game Menu"), 70, 145, 0xFFFFFF);
@@ -455,14 +456,14 @@ public class LoTASIngameGui {
 	public Button constructSavestateButton() {
 		//#if MC>=11903
 //$$ 		return net.minecraft.client.gui.components.Button.builder(net.minecraft.network.chat.Component.literal("Savestate"), btn -> {
-//$$ 			if (Keyboard.isKeyDown(GLFW.GLFW_KEY_LEFT_SHIFT)) {
+//$$ 			if (Screen.hasShiftDown()) {
 //$$ 				activateSavestateField(true);
 //$$ 			} else
 //$$ 				SavestateMod.savestate(null);
 //$$ 		}).width(98).build();
 		//#else
 		return MCVer.Button(parentScreen.width / 2 - 102, parentScreen.height / 4 + 48 + -16 + 24 + 24, 98, 20, "Savestate", btn -> {
-			if (Keyboard.isKeyDown(GLFW.GLFW_KEY_LEFT_SHIFT)) {
+			if (Screen.hasShiftDown()) {
 				activateSavestateField(true);
 			} else
 				SavestateMod.savestate(null);
@@ -473,14 +474,14 @@ public class LoTASIngameGui {
 	public Button constructLoadstateButton() {
 		//#if MC>=11903
 //$$ 		return net.minecraft.client.gui.components.Button.builder(net.minecraft.network.chat.Component.literal("Loadstate"), btn -> {
-//$$ 			if (Keyboard.isKeyDown(GLFW.GLFW_KEY_LEFT_SHIFT))
+//$$ 			if (Screen.hasShiftDown())
 //$$ 				Minecraft.getInstance().setScreen(new LoadstateScreen());
 //$$ 			else
 //$$ 				SavestateMod.loadstate(-1);
 //$$ 		}).width(98).build();
 		//#else
 		return MCVer.Button(parentScreen.width / 2 + 4, parentScreen.height / 4 + 48 + -16 + 24 + 24, 98, 20, "Loadstate", btn -> {
-		if (Keyboard.isKeyDown(GLFW.GLFW_KEY_LEFT_SHIFT))
+		if (Screen.hasShiftDown())
 			Minecraft.getInstance().setScreen(new LoadstateScreen());
 		else
 			SavestateMod.loadstate(-1);
