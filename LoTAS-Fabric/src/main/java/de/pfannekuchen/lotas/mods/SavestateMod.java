@@ -147,12 +147,13 @@ public class SavestateMod {
 		for (ServerLevel worldserver : server.getAllLevels()) {
 			worldserver.noSave = true;
 		}
-		mc.getSingleplayerServer().halt(true);
 
-		// load the world
-		String worldName = MCVer.getCurrentWorldFolder();
-		File worldDir = new File(mc.gameDirectory, "saves/" + worldName);
-		File savestatesDir = new File(mc.gameDirectory, "saves/savestates/");
+		final String worldName = MCVer.getCurrentWorldFolder();
+		final File worldDir = new File(mc.gameDirectory, "saves/" + worldName);
+		final File savestatesDir = new File(mc.gameDirectory, "saves/savestates/");
+
+		mc.level.disconnect();
+		mc.clearLevel();
 
 		int existingSavestates = savestatesDir.listFiles((d, s) -> {
 			return s.startsWith(worldName + "-Savestate");
