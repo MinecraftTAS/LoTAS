@@ -78,6 +78,13 @@ public class ZombieDropManipulation extends DropManipulationScreen.DropManipulat
 
 	@Override
 	public void update() {
+		//#if MC>=11903
+//$$ 		enabled.setPosition(x, y);
+//$$
+//$$ 		dropIron.setPosition(x, y + 96);
+//$$ 		dropPotato.setPosition(x+22, y + 96);
+//$$ 		dropCarrot.setPosition(x+44, y + 96);
+		//#else
 		enabled.x = x;
 		enabled.y = y;
 		dropIron.x = x;
@@ -86,6 +93,7 @@ public class ZombieDropManipulation extends DropManipulationScreen.DropManipulat
 		dropPotato.y = y + 96;
 		dropCarrot.x = x + 44;
 		dropCarrot.y = y + 96;
+		//#endif
 	}
 
 	@Override

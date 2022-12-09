@@ -19,10 +19,14 @@ public class PotionRenderer {
 		MCVer.translated(poseStack, xPos, yPos, 0);
 		MCVer.scaled(poseStack, scale, scale, scale);
 		
+		//#if MC>=11903
+//$$ 		MCVer.stack.mulPose(MCVer.fromYXZ(0F, 0F, (float) rotation) );
+		//#else
 		//#if MC>=11700
 //$$ 		MCVer.stack.mulPose(com.mojang.math.Quaternion.fromXYZ(0, 0, (float) rotation));
 		//#else
 		MCVer.rotated(poseStack, rotation, 0, 0, 1);
+		//#endif
 		//#endif
 		
 		int orangeBright=0xE35720;
@@ -133,10 +137,14 @@ public class PotionRenderer {
 		renderPixel(6, y, white);
 		renderPixel(7, y, white);
 		
+		//#if MC>=11903
+//$$ 		MCVer.stack.mulPose(MCVer.fromYXZ(0F, 0F, (float) -rotation));
+		//#else
 		//#if MC>=11700
 //$$ 		MCVer.stack.mulPose(com.mojang.math.Quaternion.fromXYZ(0, 0, (float) -rotation));
 		//#else
 		MCVer.rotated(poseStack, -rotation, 0, 0, 1);
+		//#endif
 		//#endif
 		MCVer.scaled(poseStack, (double)1/scale, (double)1/scale, (double)1/scale);
 		MCVer.translated(poseStack, -xPos, -yPos, 0);

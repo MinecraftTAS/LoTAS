@@ -67,6 +67,12 @@ public class SealanternDropManipulation extends DropManipulationScreen.DropManip
 
 	@Override
 	public void update() {
+		//#if MC>=11903
+//$$ 		enabled.setPosition(x, y);
+//$$
+//$$ 		drop2Pris.setPosition(x, y + 96);
+//$$ 		drop3Pris.setPosition(x, y + 120);
+		//#else
 		enabled.x = x;
 		enabled.y = y;
 
@@ -74,7 +80,8 @@ public class SealanternDropManipulation extends DropManipulationScreen.DropManip
 		drop2Pris.y = y + 96;
 		drop3Pris.x = x;
 		drop3Pris.y = y + 120;
-
+		//#endif
+		
 		drop2Pris.setWidth(width - x - 128 - 16);
 		drop3Pris.setWidth(width - x - 128 - 16);
 

@@ -64,7 +64,7 @@ public class GuiDropChanceManipulation extends GuiScreen {
 			man.update();
 		}
 		this.buttonList.add(new ButtonWidget((int) (width / 3.5f + 24), this.height - 40, 200, 20, "Done", b -> {
-			Minecraft.getMinecraft().displayGuiScreen(ChallengeMap.currentMap == null ? new GuiIngameMenu() : new GuiChallengeIngameMenu());
+			Minecraft.getMinecraft().displayGuiScreen(new GuiIngameMenu());
 		}));
 		super.initGui();
 	}

@@ -86,6 +86,13 @@ public class LeafDropManipulation extends DropManipulationScreen.DropManipulatio
 
 	@Override
 	public void update() {
+		//#if MC>=11903
+//$$ 		enabled.setPosition(x, y);
+//$$
+//$$ 		dropApple.setPosition(x, y + 96);
+//$$ 		dropStick.setPosition(x+22, y + 96);
+//$$ 		dropSapling.setPosition(x+44, y + 96);
+		//#else
 		enabled.x = x;
 		enabled.y = y;
 		dropApple.x = x;
@@ -94,6 +101,7 @@ public class LeafDropManipulation extends DropManipulationScreen.DropManipulatio
 		dropStick.y = y + 96;
 		dropSapling.x = x + 44;
 		dropSapling.y = y + 96;
+		//#endif
 	}
 
 	@Override

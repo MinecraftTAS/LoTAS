@@ -1,15 +1,9 @@
 package de.pfannekuchen.lotas.core;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.platform.GlStateManager.DestFactor;
 import com.mojang.blaze3d.platform.GlStateManager.SourceFactor;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.Tesselator;
-import com.mojang.math.Quaternion;
 
 import de.pfannekuchen.lotas.mixin.accessors.AccessorButtons;
-import de.pfannekuchen.lotas.mixin.accessors.AccessorScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiComponent;
@@ -18,13 +12,13 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Button.OnPress;
 import net.minecraft.client.gui.components.Checkbox;
 import net.minecraft.client.gui.components.EditBox;
-import net.minecraft.client.gui.components.Widget;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 
 /**
@@ -51,7 +45,8 @@ public class MCVer {
 		//#endif
 //$$ 	}
 //$$ 	public static net.minecraft.server.level.ServerLevel getCurrentLevel() {
-//$$ 		return (ServerLevel) Minecraft.getInstance().getSingleplayerServer().getPlayerList().getPlayers().get(0).level;
+//$$ 		ServerPlayer player = Minecraft.getInstance().getSingleplayerServer().getPlayerList().getPlayers().get(0);
+//$$ 		return (ServerLevel) player.level;
 //$$ 	}
 //$$ 	public static String getCurrentWorldFolder() {
 		//#if MC>=11601
@@ -90,18 +85,23 @@ public class MCVer {
 //$$ 		GuiComponent.fill(stack, a, b, c, d, e);
 //$$ 	}
 //$$ 	public static void drawCenteredString(Screen s, String text, int x, int y, int color) {
+//$$ 		Minecraft mc = Minecraft.getInstance();
 //$$ 		if (text == null) text = " ";
 		//#if MC>=11605
-//$$ 		Screen.drawCenteredString(stack, Minecraft.getInstance().font, text, x, y, color);
+//$$ 		Screen.drawCenteredString(stack, mc.font, text, x, y, color);
 		//#else
-//$$ 		s.drawCenteredString(stack, Minecraft.getInstance().font, net.minecraft.network.chat.FormattedText.of(text), x, y, color);
+//$$ 		s.drawCenteredString(stack, mc.font, net.minecraft.network.chat.FormattedText.of(text), x, y, color);
 		//#endif
 //$$ 	}
 //$$ 	public static Checkbox Checkbox(int i, int j, int k, int l, String text, boolean bl) {
 //$$ 		return new Checkbox(i, j, k, l, MCVer.literal(text), bl);
 //$$ 	}
 //$$ 	public static Button Button(int i, int j, int k, int l, String text, OnPress onpress) {
+		//#if MC>=11903
+//$$ 		return Button.builder(MCVer.literal(text), onpress).pos(i, j).size(k, l).build();
+		//#else
 //$$ 		return new Button(i, j, k, l, MCVer.literal(text), onpress);
+		//#endif
 //$$ 	}
 //$$ 	public static EditBox EditBox(Font f, int i, int j, int k, int l, String text) {
 //$$ 		return new EditBox(f, i, j, k, l, MCVer.literal(text));
@@ -116,17 +116,27 @@ public class MCVer {
 //$$ 		component.render(stack, mouseX, mouseY, delta);
 //$$ 	}
 //$$ 	public static void drawShadow(String text, int x, int y, int color) {
+//$$ 		Minecraft mc = Minecraft.getInstance();
 //$$ 		if(text!=null) {
 		//#if MC>=11605
-//$$ 		Minecraft.getInstance().font.drawShadow(stack, text, x, y, color);
+//$$ 		mc.font.drawShadow(stack, text, x, y, color);
 		//#else
-//$$ 		Minecraft.getInstance().font.drawShadow(stack, net.minecraft.network.chat.FormattedText.of(text), x, y, color);
+//$$ 		mc.font.drawShadow(stack, net.minecraft.network.chat.FormattedText.of(text), x, y, color);
 		//#endif
 //$$ 		}
 //$$ 	}
 //$$ 	public static void renderBackground(Screen screen) {
 //$$ 		screen.renderBackground(stack);
 //$$ 	}
+	//#if MC>=11903
+//$$     public static org.joml.Quaternionf fromYXZ(float f, float g, float h) {
+//$$     	org.joml.Quaternionf quaternion = new org.joml.Quaternionf(0.0f, 0.0f, 0.0f, 1.0f);
+//$$         quaternion.mul(new org.joml.Quaternionf(0.0f, (float)Math.sin(f / 2.0f), 0.0f, (float)Math.cos(f / 2.0f)));
+//$$         quaternion.mul(new org.joml.Quaternionf((float)Math.sin(g / 2.0f), 0.0f, 0.0f, (float)Math.cos(g / 2.0f)));
+//$$         quaternion.mul(new org.joml.Quaternionf(0.0f, 0.0f, (float)Math.sin(h / 2.0f), (float)Math.cos(h / 2.0f)));
+//$$         return quaternion;
+//$$     }
+    //#endif
 	//#else
 	public static Checkbox Checkbox(int i, int j, int k, int l, String text, boolean bl) {
 		return new Checkbox(i, j, k, l, text, bl);
@@ -243,7 +253,11 @@ public class MCVer {
 //$$
 //$$ 	public static void rotated(Object stack, double i, double j, double k, double l) {
 //$$ 		com.mojang.blaze3d.vertex.PoseStack poseStack = (com.mojang.blaze3d.vertex.PoseStack)stack;
-//$$ 		poseStack.mulPose(new Quaternion((float)i,(float) j,(float) k,(float) l));
+		//#if MC>=11903
+//$$ 		poseStack.mulPose(new org.joml.Quaternionf((float)i,(float) j,(float) k,(float) l));
+		//#else
+//$$ 		poseStack.mulPose(new com.mojang.math.Quaternion((float)i,(float) j,(float) k,(float) l));
+		//#endif
 //$$ 	}
 //$$
 //$$ 	public static void enableDepthTest() {
@@ -446,7 +460,23 @@ public class MCVer {
 	}
 	//#endif
 	
-	// =============================================== 1.16.5 | 1.17 BUTTONS =========================================
+	// =============================================== 1.19.3 BUTTONS ================================================
+	//#if MC>=11903
+//$$ 	public static <T extends net.minecraft.client.gui.components.events.GuiEventListener & net.minecraft.client.gui.components.Renderable & net.minecraft.client.gui.narration.NarratableEntry> T addButton(Screen screen, T button) {
+//$$ 		((de.pfannekuchen.lotas.core.utils.AccessorScreen2)screen).addRenderableWidget(button);
+//$$ 		return button;
+//$$ 	}
+//$$
+//$$ 	public static net.minecraft.client.gui.components.Renderable getButton(Screen obj, int buttonID) {
+//$$ 		return ((AccessorButtons)obj).getButtons().get(buttonID);
+//$$ 	}
+//$$
+//$$
+//$$ 	public static int getButtonSize(Screen obj) {
+//$$ 		return ((AccessorButtons)obj).getButtons().size();
+//$$ 	}
+	//#else
+	// =============================================== 1.16.5 | 1.17 | 1.19.2 BUTTONS =========================================
 	//#if MC>=11700
 //$$ 	public static <T extends net.minecraft.client.gui.components.events.GuiEventListener & net.minecraft.client.gui.components.Widget & net.minecraft.client.gui.narration.NarratableEntry> T addButton(Screen screen, T button) {
 //$$ 		((de.pfannekuchen.lotas.core.utils.AccessorScreen2)screen).addRenderableWidget(button);
@@ -454,13 +484,13 @@ public class MCVer {
 //$$ 	}
 	//#else
 	public static <T extends AbstractWidget> T addButton(Screen screen, T button) {
-		((AccessorScreen)screen).invokeAddButton(button);
+		((de.pfannekuchen.lotas.mixin.accessors.AccessorScreen)screen).invokeAddButton(button);
 		return button;
 	}
 	//#endif
-	
+
 	//#if MC>=11700
-//$$ 	public static Widget getButton(Screen obj, int buttonID) {
+//$$ 	public static net.minecraft.client.gui.components.Widget getButton(Screen obj, int buttonID) {
 //$$ 		return ((AccessorButtons)obj).getButtons().get(buttonID);
 //$$ 	}
 	//#else
@@ -468,7 +498,7 @@ public class MCVer {
 			return (AbstractWidget) ((AccessorButtons)obj).getButtons().get(buttonID);
 		}
 	//#endif
-		
+
 	//#if MC>=11700
 //$$ 	public static int getButtonSize(Screen obj) {
 //$$ 		return ((AccessorButtons)obj).getButtons().size();
@@ -478,6 +508,7 @@ public class MCVer {
 			return ((AccessorButtons)obj).getButtons().size();
 		}
 		//#endif
+	//#endif
 	// =============================================== 1.16.5 | 1.17 TEXTURES =========================================
 	
 	public static void bind(TextureManager textureManager, ResourceLocation resource) {

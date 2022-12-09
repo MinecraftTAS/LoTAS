@@ -75,6 +75,37 @@ public class DropdownWidget<T> extends AbstractWidget {
     //#else
     @Override public void renderButton(int mouseX, int mouseY, float delta) {
     //#endif
+    	//#if MC>=11903
+    //$$     int buttonWidth = (this.height);
+    //$$     int searchBoxWidth = this.width - buttonWidth - PADDING_H;
+    //$$     int buttonX, searchBoxX;
+    //$$     if(textRenderer.isBidirectional()) {
+    //$$         buttonX = this.getX();
+    //$$         searchBoxX = this.getX() + buttonWidth + PADDING_H;
+    //$$     } else {
+    //$$         searchBoxX = this.getX();
+    //$$         buttonX = this.getX() + searchBoxWidth + PADDING_H;
+    //$$     }
+    //$$     searchBox.setX(searchBoxX);
+    //$$     searchBox.setY(this.getY());
+    //$$     searchBox.setWidth(searchBoxWidth);
+    //$$     dropdownButton.setX(buttonX);
+    //$$     dropdownButton.setY(this.getY());
+    //$$     dropdownButton.setWidth(buttonWidth);
+    //$$     MCVer.render(searchBox, mouseX, mouseY, delta);
+    //$$     MCVer.render(dropdownButton, mouseX, mouseY, delta);
+    //$$     dropdown.setX(searchBoxX);
+    //$$     dropdown.setY(searchBox.getY() + 20 + 1);
+    //$$     dropdownOpenUp = false;
+    //$$     int dropdownHeight = getLineHeight(textRenderer) * DropdownListWidget.DISPLAYED_LINE_COUNT;
+    //$$     if(Minecraft.getInstance().screen != null) {
+    //$$         int areaBottom = Minecraft.getInstance().screen.height - 20; // fuck
+    //$$         if(dropdown.getY() + dropdownHeight > areaBottom) {
+    //$$             dropdown.setY(searchBox.getY() - dropdownHeight);
+    //$$             dropdownOpenUp = true;
+    //$$         }
+    //$$     }
+    	//#else
         int buttonWidth = (this.height);
         int searchBoxWidth = this.width - buttonWidth - PADDING_H;
         int buttonX, searchBoxX;
@@ -106,6 +137,7 @@ public class DropdownWidget<T> extends AbstractWidget {
         }
         dropdown.setWidth(searchBoxWidth + DropdownListWidget.SCROLL_BAR_PADDING + DropdownListWidget.SCROLL_BAR_WIDTH);
         dropdown.setHeight(dropdownHeight);
+        //#endif
     }
 
     //#if MC>=11601
@@ -319,8 +351,13 @@ public class DropdownWidget<T> extends AbstractWidget {
         //#endif
             Font textRenderer = DropdownWidget.this.textRenderer;
             int lineHeight = getLineHeight(textRenderer);
+            //#if MC>=11903
+            //$$ int bgx0 = this.getX();
+            //$$ int bgy0 = this.getY();
+            //#else
             int bgx0 = this.x;
             int bgy0 = this.y;
+            //#endif
             int bgx1 = bgx0 + this.width - SCROLL_BAR_WIDTH - SCROLL_BAR_PADDING;
             int bgy1 = bgy0 + this.height;
             // render background
@@ -329,7 +366,11 @@ public class DropdownWidget<T> extends AbstractWidget {
             // render selections
             int endIdx = Math.min(suggestedSelections.size(), scrollIdx + DISPLAYED_LINE_COUNT);
             for(int i = scrollIdx; i < endIdx; i++) {
+            	//#if MC>=11903
+            //$$ 	int y = this.getY() + lineHeight * (i - scrollIdx);
+            	//#else
                 int y = this.y + lineHeight * (i - scrollIdx);
+                //#endif
                 if(i == selectedIndex) {
                     int sx0 = bgx0 - 1;
                     int sy0 = y;
@@ -420,7 +461,11 @@ public class DropdownWidget<T> extends AbstractWidget {
 
         @Override
         public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        	//#if MC>=11903
+        //$$     int offsetIdx = (int)(mouseY - this.getY()) / getLineHeight(DropdownWidget.this.textRenderer);
+        	//#else
             int offsetIdx = (int)(mouseY - this.y) / getLineHeight(DropdownWidget.this.textRenderer);
+            //#endif
             int absoluteIdx = offsetIdx + scrollIdx;
             if(absoluteIdx < suggestedSelections.size()) {
                 setSelectedIndex(absoluteIdx);
@@ -442,15 +487,29 @@ public class DropdownWidget<T> extends AbstractWidget {
             }
             return true;
         }
+//#if MC>=11903
+//$$         @Override
+//$$         protected void updateWidgetNarration(net.minecraft.client.gui.narration.NarrationElementOutput var1) {
+//$$         }
+//#else
 //#if MC>=11700
 //$$ 		@Override
 //$$ 		public void updateNarration(net.minecraft.client.gui.narration.NarrationElementOutput narrationElementOutput) {
 //$$ 		}
 //#endif
+//#endif
+
     }
+//#if MC>=11903
+//$$     @Override
+//$$     protected void updateWidgetNarration(net.minecraft.client.gui.narration.NarrationElementOutput var1) {
+//$$     }
+//#else
 //#if MC>=11700
 //$$ 	@Override
 //$$ 	public void updateNarration(net.minecraft.client.gui.narration.NarrationElementOutput narrationElementOutput) {
 //$$ 	}
 //#endif
+//#endif
+
 }

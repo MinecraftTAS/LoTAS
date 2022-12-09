@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.Callable;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
@@ -120,6 +121,11 @@ public class InfoHud extends GuiScreen {
 			try {
 				x = Integer.parseInt(configuration.getProperty(label.displayName + "_x"));
 				y = Integer.parseInt(configuration.getProperty(label.displayName + "_y"));
+				
+				Pair<Integer, Integer> newPos = getScreenOffset(x, y, label);
+				
+				x = newPos.getLeft();
+				y = newPos.getRight();
 			} catch (NumberFormatException e) {
 				configuration.setProperty(label.displayName + "_x", "0");
 				configuration.setProperty(label.displayName + "_y", "0");
@@ -355,20 +361,10 @@ public class InfoHud extends GuiScreen {
 			int lx = label.x;
 			int ly = label.y;
 
-			int marginX = 5;
-			int marginY = 5;
-
-			ScaledResolution scaled = new ScaledResolution(Minecraft.getMinecraft());
-
-			if (getBBRight(lx, label.renderText) > scaled.getScaledWidth()) {
-				int offset = getBBRight(lx, label.renderText);
-				lx = lx - (offset - scaled.getScaledWidth()) - marginX;
-			}
-
-			if (getBBDown(ly) > scaled.getScaledHeight()) {
-				int offset = getBBDown(ly);
-				ly = ly - (offset - scaled.getScaledHeight()) - marginY;
-			}
+			Pair<Integer, Integer> newPos = getScreenOffset(lx, ly, label);
+			
+			lx = newPos.getLeft();
+			ly = newPos.getRight();
 
 			if (label.visible) {
 				drawRectWithText(label.renderText, lx, ly, label.renderRect);
@@ -405,6 +401,25 @@ public class InfoHud extends GuiScreen {
 			drawRect(x, y, getBBRight(x, text), getBBDown(y), 0x80000000);
 		MCVer.getFontRenderer(Minecraft.getMinecraft()).drawStringWithShadow(text, x + 2, y + 3, 0xFFFFFF);
 		GL11.glEnable(3042 /* GL_BLEND */);
+	}
+	
+	private Pair<Integer, Integer> getScreenOffset(int x, int y, InfoLabel label){
+		ScaledResolution scaled = new ScaledResolution(Minecraft.getMinecraft());
+		
+		int marginX = 5;
+		int marginY = 5;
+		
+		if (getBBRight(x, label.renderText) > scaled.getScaledWidth()) {
+			int offset = getBBRight(x, label.renderText);
+			x = x - (offset - scaled.getScaledWidth()) - marginX;
+		}
+
+		if (getBBDown(y) > scaled.getScaledHeight()) {
+			int offset = getBBDown(y);
+			y = y - (offset - scaled.getScaledHeight()) - marginY;
+		}
+		
+		return Pair.of(x, y);
 	}
 
 	private int getBBRight(int x, String text) {

@@ -79,6 +79,13 @@ public class DeadbushDropManipulation extends DropManipulationScreen.DropManipul
 
 	@Override
 	public void update() {
+		//#if MC>=11903
+//$$ 		enabled.setPosition(x, y);
+//$$
+//$$ 		drop0Stick.setPosition(x, y + 96);
+//$$ 		drop1Stick.setPosition(x, y + 120);
+//$$ 		drop2Stick.setPosition(x, y + 144);
+		//#else
 		enabled.x = x;
 		enabled.y = y;
 
@@ -88,6 +95,7 @@ public class DeadbushDropManipulation extends DropManipulationScreen.DropManipul
 		drop1Stick.y = y + 120;
 		drop2Stick.x = x;
 		drop2Stick.y = y + 144;
+		//#endif
 
 		drop0Stick.setWidth(width - x - 128 - 16);
 		drop1Stick.setWidth(width - x - 128 - 16);

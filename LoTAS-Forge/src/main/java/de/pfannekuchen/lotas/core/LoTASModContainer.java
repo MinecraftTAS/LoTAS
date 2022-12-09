@@ -5,20 +5,14 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.net.URLConnection;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import org.apache.commons.io.FileUtils;
-
 import de.pfannekuchen.lotas.core.utils.ConfigUtils;
 import de.pfannekuchen.lotas.core.utils.EventUtils;
 import de.pfannekuchen.lotas.core.utils.KeybindsUtils;
-import de.pfannekuchen.lotas.gui.GuiSeedList.SeedListExtended;
-import de.pfannekuchen.lotas.gui.GuiSeedList.SeedListExtended.SeedEntry;
 import de.pfannekuchen.lotas.gui.InfoHud;
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;
 import de.pfannekuchen.lotas.taschallenges.ChallengeMap;
@@ -81,13 +75,6 @@ public class LoTASModContainer {
 		new Thread(() -> {
 			// Load configuration with suggested config file
 			ConfigUtils.init(new Configuration(e.getSuggestedConfigurationFile()));
-
-			// Load all seeds for the seeds gui
-			try {
-				loadSeeds();
-			} catch (Exception e1) {
-				e1.printStackTrace();
-			}
 
 			// Load the tickrate if it's supposed to be saved
 			if (ConfigUtils.getBoolean("tools", "saveTickrate")) {
@@ -224,41 +211,5 @@ public class LoTASModContainer {
 		// when there is no custom shield, set the texture to the normal one
 		LoTASModContainer.shield = new ResourceLocation("lotas", "misc/bottleshield.png");
 		// #endif
-	}
-
-	/**
-	 * Method that loads the seeds file from the server
-	 * 
-	 * @throws Exception Throws whenever something fails horribly
-	 */
-	public void loadSeeds() throws Exception {
-		// Load the file
-		File file = new File("seeddata.txt");
-		try {
-			URL url = new URL("https://data.mgnet.work/lotas/seeds/" + version + ".txt");
-			URLConnection conn = url.openConnection();
-			conn.setReadTimeout(5000);
-			file.createNewFile();
-			FileUtils.copyInputStreamToFile(conn.getInputStream(), file);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		// Parse the file
-		List<String> strings = Files.readAllLines(file.toPath());
-		int c = 0;
-		for (String line : strings) {
-			String seed = line.split(":")[0]; // seed is before first :
-			String name = line.split(":")[1]; // etc...
-			String description = line.split(":")[2];
-			SeedEntry entry = new SeedEntry(name, description, seed, c);
-			// load icon and add seed to list
-			new Thread(() -> {
-				entry.loc = new ResourceLocation("seeds", seed);
-				ThreadDownloadImageData dw = new ThreadDownloadImageData((File) null, "https://data.mgnet.work/lotas/seeds/images/" + seed + ".png", null, new ImageBufferDownload());
-				Minecraft.getMinecraft().getTextureManager().loadTexture(entry.loc, dw);
-			}).start();
-			SeedListExtended.seeds.add(entry);
-			c++;
-		}
 	}
 }

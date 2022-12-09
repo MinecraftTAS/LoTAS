@@ -8,6 +8,9 @@
     	"accessors.AccessorDimensionTypes",
     	"accessors.AccessorLevelStorage",
     	"patches.MixinSheepPatch",
+		//#if MC<11601
+		"patches.MixinLevelStorage",
+		//#endif
 		"patches.MixinInaccuracyPatch"
     ],
     "client": [

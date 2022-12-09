@@ -135,6 +135,25 @@ public class PassiveDropManipulation extends DropManipulationScreen.DropManipula
 
 	@Override
 	public void update() {
+		//#if MC>=11903
+//$$ 		enabled.setPosition(x, y);
+//$$
+//$$ 		optimizeChicken.setPosition(x, 64);
+//$$ 		optimizeSkeletonhorse.setPosition(x, 80);
+//$$ 		optimizeCat.setPosition(x, 96);
+//$$ 		optimizeMooshroom.setPosition(x, 112);
+//$$ 		optimizeCow.setPosition(x, 128);
+//$$ 		optimizePig.setPosition(x, 144);
+//$$ 		optimizeParrot.setPosition(x, 160);
+//$$ 		optimizeRabbit.setPosition(x, 176);
+//$$ 		optimizeSnowgolem.setPosition(x, 192);
+//$$ 		optimizeSheep.setPosition(x, 208);
+//$$ 		optimizeSquid.setPosition(x, 224);
+//$$ 		optimizeHorses.setPosition(x, 240);
+//$$ 		optimizeTurtle.setPosition(x, 256);
+//$$ 		optimizeIronGolem.setPosition(x, 272);
+//$$ 		optimizePolarbear.setPosition(x, 288);
+		//#else
 		enabled.x = x;
 		enabled.y = y;
 		optimizeChicken.y = 64;
@@ -167,6 +186,7 @@ public class PassiveDropManipulation extends DropManipulationScreen.DropManipula
 		optimizeTurtle.x = x;
 		optimizeIronGolem.x = x;
 		optimizePolarbear.x = x;
+		//#endif
 	}
 
 	@Override

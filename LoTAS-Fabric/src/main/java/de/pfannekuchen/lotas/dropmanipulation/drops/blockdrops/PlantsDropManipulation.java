@@ -89,6 +89,20 @@ public class PlantsDropManipulation extends DropManipulationScreen.DropManipulat
 
 	@Override
 	public void update() {
+		//#if MC>=11903
+//$$ 		enabled.setPosition(x, y);
+//$$
+//$$ 		optimizeCarrots.setPosition(x, 64);
+//$$ 		optimizeBeetroot.setPosition(x, 80);
+//$$ 		optimizeMelons.setPosition(x, 96);
+//$$ 		optimizeWheat.setPosition(x, 112);
+//$$ 		optimizePotato.setPosition(x, 128);
+//$$ 		optimizeCocoa.setPosition(x, 144);
+//$$ 		optimizeChorus.setPosition(x, 160);
+//$$ 		optimizeNetherwart.setPosition(x, 176);
+//$$ 		optimizeSweetBerry.setPosition(x, 192);
+//$$ 		optimizeMushroom.setPosition(x, 208);
+		//#else
 		enabled.x = x;
 		enabled.y = y;
 		optimizeCarrots.y = 64;
@@ -111,6 +125,7 @@ public class PlantsDropManipulation extends DropManipulationScreen.DropManipulat
 		optimizeNetherwart.x = x;
 		optimizeSweetBerry.x = x;
 		optimizeMushroom.x = x;
+		//#endif
 	}
 
 	@Override

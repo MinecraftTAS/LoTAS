@@ -6,13 +6,13 @@ sourceCompatibility = JavaVersion.VERSION_17
 targetCompatibility = JavaVersion.VERSION_17
 
 apply from: '../common.gradle'
-archivesBaseName = "LoTAS1.19.0"
+archivesBaseName = "LoTAS1.19.3"
 
 loom {
 	accessWidenerPath = file("../../src/main/resources/lotas.accesswidener")
 }
 
 dependencies {
-	minecraft "com.mojang:minecraft:1.19"
+	minecraft "com.mojang:minecraft:1.19.3"
 	mappings loom.officialMojangMappings()
 }

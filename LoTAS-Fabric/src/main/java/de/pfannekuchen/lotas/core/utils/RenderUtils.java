@@ -84,7 +84,11 @@ public enum RenderUtils {
 		Tesselator tesselator = Tesselator.getInstance();
 	    BufferBuilder bufferBuilder = tesselator.getBuilder();
 	    //#if MC>=11700
+	    //#if MC>=11903
+//$$ 	    org.joml.Matrix4f matrix = ((com.mojang.blaze3d.vertex.PoseStack) poseStack).last().pose();
+	    //#else
 //$$ 	    com.mojang.math.Matrix4f matrix = ((com.mojang.blaze3d.vertex.PoseStack) poseStack).last().pose();
+	    //#endif
 //$$ 	    com.mojang.blaze3d.systems.RenderSystem.setShader(net.minecraft.client.renderer.GameRenderer::getPositionColorShader);
 //$$ 	    bufferBuilder.begin(com.mojang.blaze3d.vertex.VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
 //$$ 	    bufferBuilder.vertex(matrix, (float)bb.minX, (float)bb.minY, (float)bb.minZ).color(r, g, b, a).endVertex();
@@ -169,7 +173,11 @@ public enum RenderUtils {
 	    BufferBuilder bufferBuilder = tesselator.getBuilder();
 	    
 	    //#if MC>=11700
+	    //#if MC>=11903
+//$$ 	    org.joml.Matrix4f matrix = ((com.mojang.blaze3d.vertex.PoseStack) poseStack).last().pose();
+	    //#else
 //$$ 	    com.mojang.math.Matrix4f matrix = ((com.mojang.blaze3d.vertex.PoseStack) poseStack).last().pose();
+	    //#endif
 //$$ 	    com.mojang.blaze3d.systems.RenderSystem.setShader(net.minecraft.client.renderer.GameRenderer::getPositionColorShader);
 //$$ 	    bufferBuilder.begin(com.mojang.blaze3d.vertex.VertexFormat.Mode.DEBUG_LINES, DefaultVertexFormat.POSITION_COLOR);
 //$$ 	    bufferBuilder.vertex(matrix, (float)bb.minX, (float)bb.minY, (float)bb.minZ).color(1F, 1F, 1F, 1F).endVertex();

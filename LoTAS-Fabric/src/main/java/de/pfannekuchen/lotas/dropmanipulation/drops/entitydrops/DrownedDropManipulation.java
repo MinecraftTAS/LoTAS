@@ -63,10 +63,16 @@ public class DrownedDropManipulation extends DropManipulationScreen.DropManipula
 
 	@Override
 	public void update() {
+		//#if MC>=11903
+//$$ 		enabled.setPosition(x, y);
+//$$
+//$$ 		drops.setPosition(x, y + 96);
+		//#else
 		enabled.x = x;
 		enabled.y = y;
 		drops.x = x;
 		drops.y = y + 96;
+		//#endif
 	}
 
 	@Override

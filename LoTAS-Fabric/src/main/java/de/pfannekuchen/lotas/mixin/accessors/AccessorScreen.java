@@ -15,15 +15,24 @@ import net.minecraft.client.gui.screens.Screen;
 //$$ public class AccessorScreen implements AccessorScreen2{
 //$$
 //$$ 	@Shadow
+	//#if MC>=11903
+//$$ 	private List<net.minecraft.client.gui.components.Renderable> renderables;
+	//#else
 //$$ 	private List<net.minecraft.client.gui.components.Widget> renderables;
+	//#endif
 //$$ 	@Shadow
 //$$ 	private List<net.minecraft.client.gui.components.events.GuiEventListener> children;
 //$$ 	@Shadow
 //$$ 	private List<net.minecraft.client.gui.narration.NarratableEntry> narratables;
 //$$
 //$$ 	@Override
+	//#if MC>=11903
+//$$ 	public <T extends net.minecraft.client.gui.components.events.GuiEventListener & net.minecraft.client.gui.components.Renderable & net.minecraft.client.gui.narration.NarratableEntry> T addRenderableWidget(T widget) {
+//$$ 		this.renderables.add((net.minecraft.client.gui.components.Renderable) widget);
+	//#else
 //$$ 	public <T extends net.minecraft.client.gui.components.events.GuiEventListener & net.minecraft.client.gui.components.Widget & net.minecraft.client.gui.narration.NarratableEntry> T addRenderableWidget(T widget) {
 //$$ 		this.renderables.add((net.minecraft.client.gui.components.Widget) widget);
+	//#endif
 //$$ 		this.children.add(widget);
 //$$ 		this.narratables.add((net.minecraft.client.gui.narration.NarratableEntry) widget);
 //$$ 		return widget;

@@ -79,6 +79,13 @@ public class GlowstoneDropManipulation extends DropManipulationScreen.DropManipu
 
 	@Override
 	public void update() {
+		//#if MC>=11903
+//$$ 		enabled.setPosition(x, y);
+//$$
+//$$ 		drop2Glowstonedust.setPosition(x, y + 96);
+//$$ 		drop3Glowstonedust.setPosition(x, y + 120);
+//$$ 		drop4Glowstonedust.setPosition(x, y + 144);
+		//#else
 		enabled.x = x;
 		enabled.y = y;
 
@@ -88,6 +95,7 @@ public class GlowstoneDropManipulation extends DropManipulationScreen.DropManipu
 		drop3Glowstonedust.y = y + 120;
 		drop4Glowstonedust.x = x;
 		drop4Glowstonedust.y = y + 144;
+		//#endif
 
 		drop2Glowstonedust.setWidth(width - x - 128 - 16);
 		drop3Glowstonedust.setWidth(width - x - 128 - 16);

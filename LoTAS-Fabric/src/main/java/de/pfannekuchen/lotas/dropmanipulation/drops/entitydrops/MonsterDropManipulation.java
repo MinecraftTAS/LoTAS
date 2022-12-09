@@ -98,6 +98,21 @@ public class MonsterDropManipulation extends DropManipulationScreen.DropManipula
 
 	@Override
 	public void update() {
+		//#if MC>=11903
+//$$ 		enabled.setPosition(x, y);
+//$$
+//$$ 		optimizeCaveSpider.setPosition(x, 64);
+//$$ 		optimizeEnderman.setPosition(x, 80);
+//$$ 		optimizeElderGuardian.setPosition(x, 96);
+//$$ 		optimizeCreeper.setPosition(x, 112);
+//$$ 		optimizePhantom.setPosition(x, 128);
+//$$ 		optimizeSlime.setPosition(x, 144);
+//$$ 		optimizeVindicator.setPosition(x, 160);
+//$$ 		optimizeSkeleton.setPosition(x, 176);
+//$$ 		optimizeShulker.setPosition(x, 192);
+//$$ 		optimizeGuardian.setPosition(x, 208);
+//$$ 		optimizeWitch.setPosition(x, 224);
+		//#else
 		enabled.x = x;
 		enabled.y = y;
 		optimizeCaveSpider.y = 64;
@@ -122,6 +137,7 @@ public class MonsterDropManipulation extends DropManipulationScreen.DropManipula
 		optimizeShulker.x = x;
 		optimizeGuardian.x = x;
 		optimizeWitch.x = x;
+		//#endif
 	}
 
 	@Override

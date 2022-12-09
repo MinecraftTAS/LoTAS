@@ -38,8 +38,8 @@ public abstract class MixinGuiCreateWorld extends GuiScreen {
 				offsetX.textboxKeyTyped(key, code);
 				offsetZ.textboxKeyTyped(key, code);
 				try {
-					LoTASModContainer.offsetX = MCVer.clamp(Integer.parseInt(offsetX.getText()), -9, 9);
-					LoTASModContainer.offsetZ = MCVer.clamp(Integer.parseInt(offsetZ.getText()), -9, 9);
+					LoTASModContainer.offsetX = MCVer.clamp(Integer.parseInt(offsetX.getText()), -9, 9)*-1;
+					LoTASModContainer.offsetZ = MCVer.clamp(Integer.parseInt(offsetZ.getText()), -9, 9)*-1;
 				} catch (Exception e) {
 					// Lazyness wins. (This is actually fine)
 				}

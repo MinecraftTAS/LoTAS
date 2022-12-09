@@ -66,6 +66,15 @@ public class NetherMobDropManipulation extends DropManipulationScreen.DropManipu
 
 	@Override
 	public void update() {
+		//#if MC>=11903
+//$$ 		enabled.setPosition(x, y);
+//$$
+//$$ 		optimizeBlaze.setPosition(x, 64);
+//$$ 		optimizePigman.setPosition(x, 80);
+//$$ 		optimizeMagmaCube.setPosition(x, 96);
+//$$ 		optimizeWitherskeleton.setPosition(x, 112);
+//$$ 		optimizeGhast.setPosition(x, 128);
+		//#else
 		enabled.x = x;
 		enabled.y = y;
 		optimizeBlaze.y = 64;
@@ -78,6 +87,7 @@ public class NetherMobDropManipulation extends DropManipulationScreen.DropManipu
 		optimizeMagmaCube.x = x;
 		optimizeWitherskeleton.x = x;
 		optimizeGhast.x = x;
+		//#endif
 	}
 
 	@Override

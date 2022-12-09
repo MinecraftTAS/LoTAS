@@ -62,6 +62,15 @@ public class FishDropManipulation extends DropManipulationScreen.DropManipulatio
 
 	@Override
 	public void update() {
+		//#if MC>=11903
+//$$ 		enabled.setPosition(x, y);
+//$$
+//$$ 		optimizeCod.setPosition(x, y + 64);
+//$$ 		optimizePufferfish.setPosition(x, y + 80);
+//$$ 		optimizeDolphin.setPosition(x, y + 96);
+//$$ 		optimizeSalmon.setPosition(x, y + 112);
+//$$ 		optimizeTropical.setPosition(x, y + 128);
+		//#else
 		enabled.x = x;
 		enabled.y = y;
 		optimizeCod.y = 64;
@@ -74,6 +83,7 @@ public class FishDropManipulation extends DropManipulationScreen.DropManipulatio
 		optimizeDolphin.x = x;
 		optimizeSalmon.x = x;
 		optimizeTropical.x = x;
+		//#endif
 	}
 
 	@Override

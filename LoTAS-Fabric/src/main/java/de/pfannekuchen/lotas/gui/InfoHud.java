@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.Callable;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 
@@ -101,18 +102,25 @@ public class InfoHud extends Screen {
 	 */
 	public void identify(int mouseX, int mouseY) {
 		int index = 0;
+		Minecraft mc = Minecraft.getInstance();
 		for (InfoLabel label : lists) {
 			int x=0;
 			int y=0;
 			try {
 				x = Integer.parseInt(configuration.getProperty(label.displayName + "_x"));
 				y = Integer.parseInt(configuration.getProperty(label.displayName + "_y"));
+				
+				Pair<Integer, Integer> newPos = getScreenOffset(x, y, label);
+				
+				x = newPos.getLeft();
+				y = newPos.getRight();
+				
 			} catch (NumberFormatException e) {
 				configuration.setProperty(label.displayName + "_x", "0");
 				configuration.setProperty(label.displayName + "_y", "0");
 				saveConfig();
 			}
-			int w = x + Minecraft.getInstance().font.width(label.renderText);
+			int w = x + mc.font.width(label.renderText);
 			int h = y + 15;
 			
 			if (mouseX >= x && mouseX <= w && mouseY >= y && mouseY <= h) {
@@ -195,8 +203,9 @@ public class InfoHud extends Screen {
 	 * Saves the Configuration
 	 */
 	private void saveConfig() {
+		Minecraft mc = Minecraft.getInstance();
 		try {
-			File tasmodDir = new File(Minecraft.getInstance().gameDirectory, "lotas");
+			File tasmodDir = new File(mc.gameDirectory, "lotas");
 			tasmodDir.mkdir();
 			File configFile = new File(tasmodDir, "infogui.cfg");
 			if (!configFile.exists()) configFile.createNewFile();
@@ -218,9 +227,10 @@ public class InfoHud extends Screen {
 		if (configuration != null) return false;
 		/* Check whether already rendered before */
 		try {
+			Minecraft mc = Minecraft.getInstance();
 			configuration = new Properties();
 			if (!resetLayout) {
-				File tasmodDir = new File(Minecraft.getInstance().gameDirectory, "lotas");
+				File tasmodDir = new File(mc.gameDirectory, "lotas");
 				tasmodDir.mkdir();
 				File configFile = new File(tasmodDir, "infogui.cfg");
 				if (!configFile.exists()) configFile.createNewFile();
@@ -234,74 +244,74 @@ public class InfoHud extends Screen {
 			
 			setDefaults("tickrate", y);
 			lists.add(new InfoLabel("tickrate", configuration, () -> {
-				if (Minecraft.getInstance().screen == this)
+				if (mc.screen == this)
 					return "Tickrate";
 				return "Tickrate: " + TickrateChangerMod.tickrate;
 			}));
 			y += 14;
 			setDefaults("position", y);
 			lists.add(new InfoLabel("position", configuration, () -> {
-				if (Minecraft.getInstance().screen == this)
+				if (mc.screen == this)
 					return "XYZ";
-				return String.format("%.2f %.2f %.2f", MCVer.getX(Minecraft.getInstance().player), MCVer.getY(Minecraft.getInstance().player), MCVer.getZ(Minecraft.getInstance().player));
+				return String.format("%.2f %.2f %.2f", MCVer.getX(mc.player), MCVer.getY(mc.player), MCVer.getZ(mc.player));
 			}));
 			y += 14;
 			setDefaults("preciseposition", y);
 			lists.add(new InfoLabel("preciseposition", configuration, () -> {
-				if (Minecraft.getInstance().screen == this)
+				if (mc.screen == this)
 					return "Precise XYZ";
-				return String.format("%f %f %f", MCVer.getX(Minecraft.getInstance().player), MCVer.getY(Minecraft.getInstance().player), MCVer.getZ(Minecraft.getInstance().player));
+				return String.format("%f %f %f", MCVer.getX(mc.player), MCVer.getY(mc.player), MCVer.getZ(mc.player));
 			}));
 			y += 14;
 			setDefaults("chunkposition", y);
 			lists.add(new InfoLabel("chunkposition", configuration, () -> {
-				if (Minecraft.getInstance().screen == this)
+				if (mc.screen == this)
 					return "Chunk Position";
 				//#if MC>=11700
-//$$ 				return String.format("%d %d", Minecraft.getInstance().player.chunkPosition().getRegionLocalX(), Minecraft.getInstance().player.chunkPosition().getRegionLocalZ());
+//$$ 				return String.format("%d %d", mc.player.chunkPosition().getRegionLocalX(), mc.player.chunkPosition().getRegionLocalZ());
 				//#else
-				return String.format("%d %d %d", Minecraft.getInstance().player.xChunk, Minecraft.getInstance().player.yChunk, Minecraft.getInstance().player.zChunk);
+				return String.format("%d %d %d", mc.player.xChunk, mc.player.yChunk, mc.player.zChunk);
 				//#endif
 			}));
 			y += 14;
 			setDefaults("worldseed", y);
 			lists.add(new InfoLabel("worldseed", configuration, () -> {
-				if (Minecraft.getInstance().screen == this)
+				if (mc.screen == this)
 					return "Worldseed";
-				return Minecraft.getInstance().getSingleplayerServer().getPlayerList().getPlayers().get(0).getLevel().getSeed() + "";
+				return mc.getSingleplayerServer().getPlayerList().getPlayers().get(0).getLevel().getSeed() + "";
 			}));
 			y += 14;
 			setDefaults("ticks", y);
 			lists.add(new InfoLabel("ticks", configuration, () -> {
-				if (Minecraft.getInstance().screen == this)
+				if (mc.screen == this)
 					return "Ticks";
 				return TickrateChangerMod.ticksPassedServer + "";
 			}));
 			y += 14;
 			setDefaults("savestates", y);
 			lists.add(new InfoLabel("savestates", configuration, () -> {
-				if (Minecraft.getInstance().screen == this)
+				if (mc.screen == this)
 					return "Savestate Count";
 				return ("Savestates: " + SavestateMod.TrackerFile.savestateCount);
 			}));
 			y += 14;
 			setDefaults("loadstates", y);
 			lists.add(new InfoLabel("loadstates", configuration, () -> {
-				if (Minecraft.getInstance().screen == this)
+				if (mc.screen == this)
 					return "Loadstate Count";
 				return ("Loadstates: " + SavestateMod.TrackerFile.loadstateCount);
 			}));
 			y += 14;
 			setDefaults("timer", y);
 			lists.add(new InfoLabel("timer", configuration, () -> {
-				if (Minecraft.getInstance().screen == this)
+				if (mc.screen == this)
 					return "Timer";
 				return Timer.ticks == -1 ? "Timer is paused" : Timer.getDuration(Duration.ofMillis(Timer.ticks * 50));
 			}));
 			y += 14;
 			setDefaults("rtatimer", y);
 			lists.add(new InfoLabel("rtatimer", configuration, () -> {
-				if (Minecraft.getInstance().screen == this)
+				if (mc.screen == this)
 					return "RTATimer";
 				if (Timer.running) TickrateChangerMod.rta = Duration.ofMillis(System.currentTimeMillis() - Timer.startTime.toMillis());
 				return Timer.ticks == -1 ? "" : ("RTA: " + Timer.getDuration(TickrateChangerMod.rta));
@@ -309,10 +319,10 @@ public class InfoHud extends Screen {
 			y += 14;
 			setDefaults("bps", y);
 			lists.add(new InfoLabel("bps", configuration, () -> {
-				if (Minecraft.getInstance().screen == this)
+				if (mc.screen == this)
 					return "Speed/BPS";
-				double distTraveledLastTickX = MCVer.getX(Minecraft.getInstance().player) - Minecraft.getInstance().player.xOld;
-				double distTraveledLastTickZ = MCVer.getZ(Minecraft.getInstance().player) - Minecraft.getInstance().player.zOld;
+				double distTraveledLastTickX = MCVer.getX(mc.player) - mc.player.xOld;
+				double distTraveledLastTickZ = MCVer.getZ(mc.player) - mc.player.zOld;
 				//#if MC>=11700
 //$$ 				return String.format("%.2f", Mth.sqrt((float) (distTraveledLastTickX * distTraveledLastTickX + distTraveledLastTickZ * distTraveledLastTickZ)) / 0.05F) + " blocks/sec";
 				//#else
@@ -322,7 +332,7 @@ public class InfoHud extends Screen {
 			y += 14;
 			setDefaults("keystroke", y);
 			lists.add(new InfoLabel("keystroke", configuration, () -> {
-				if (Minecraft.getInstance().screen == this)
+				if (mc.screen == this)
 					return "Keystrokes";
 				return KeystrokeUtils.getKeystrokes();
 			}));
@@ -340,30 +350,20 @@ public class InfoHud extends Screen {
 		int ypos = 190;
 		for (InfoLabel label : lists) {
 			
+			Minecraft mc = Minecraft.getInstance();
+			
 			int lx = label.x;
 			int ly = label.y;
 
-			int marginX = 5;
-			int marginY = 5;
-
-
-			int widthScaled=MCVer.getGLWindow().getGuiScaledWidth();
-			int heightScaled=MCVer.getGLWindow().getGuiScaledHeight();
+			Pair<Integer, Integer> newPos = getScreenOffset(lx, ly, label);
 			
-			if (getBBRight(lx, label.renderText) > widthScaled) {
-				int offset = getBBRight(lx, label.renderText);
-				lx = lx - (offset - widthScaled) - marginX;
-			}
-
-			if (getBBDown(ly) > heightScaled) {
-				int offset = getBBDown(ly);
-				ly = ly - (offset - heightScaled) - marginY;
-			}
+			lx = newPos.getLeft();
+			ly = newPos.getRight();
 			
 			if (label.visible) {
 				drawRectWithText(label.renderText, lx, ly, label.renderRect);
-			} else if (Minecraft.getInstance().screen != null) {
-				if (Minecraft.getInstance().screen.getClass().getSimpleName().contains("InfoHud")) {
+			} else if (mc.screen != null) {
+				if (mc.screen.getClass().getSimpleName().contains("InfoHud")) {
 					//#if MC>=11700
 //$$ 					MCVer.pushMatrix(MCVer.stack);
 					//#else
@@ -380,7 +380,7 @@ public class InfoHud extends Screen {
 					//#endif
 				}
 			}
-			if (Minecraft.getInstance().screen instanceof InfoHud) {
+			if (mc.screen instanceof InfoHud) {
 				MCVer.drawShadow("Leftclick to move", width - ypos, xpos - 30, 0x60FF00);
 				MCVer.drawShadow("Middleclick to enable", width - ypos, xpos - 20, 0x60FF00);
 				MCVer.drawShadow("Rightclick to add black background", width - ypos, xpos - 10, 0x60FF00);
@@ -403,9 +403,30 @@ public class InfoHud extends Screen {
 		MCVer.drawShadow(text, x + 2, y + 3, 0xFFFFFF);
 		GL11.glEnable(3042 /*GL_BLEND*/);
 	}
+
+	private Pair<Integer, Integer> getScreenOffset(int x, int y, InfoLabel label){
+		int widthScaled=MCVer.getGLWindow().getGuiScaledWidth();
+		int heightScaled=MCVer.getGLWindow().getGuiScaledHeight();
+		
+		int marginX = 5;
+		int marginY = 5;
+		
+		if (getBBRight(x, label.renderText) > widthScaled) {
+			int offset = getBBRight(x, label.renderText);
+			x = x - (offset - widthScaled) - marginX;
+		}
+
+		if (getBBDown(y) > heightScaled) {
+			int offset = getBBDown(y);
+			y = y - (offset - heightScaled) - marginY;
+		}
+		
+		return Pair.of(x, y);
+	}
 	
 	private int getBBRight(int x, String text) {
-		return x + Minecraft.getInstance().font.width(text) + 4;
+		Minecraft mc = Minecraft.getInstance();
+		return x + mc.font.width(text) + 4;
 	}
 	
 	private int getBBDown(int y) {
