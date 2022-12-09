@@ -244,6 +244,8 @@ public class LoTASGuiIngameMenu {
 		
 		aiButton.enabled = AIManipMod.isEntityInRange();
 		
+		loadstateButton.enabled = SavestateMod.hasSavestate();
+		
 		List<GuiButton> buttonList = ((AccessorGuiScreen)parentScreen).getButtonList();
 		
 		buttonList.add(savestateButton);
@@ -342,7 +344,7 @@ public class LoTASGuiIngameMenu {
 			long timeSince = System.currentTimeMillis() - SavestateMod.timeTitle;
 			if (timeSince >= 1800) {
 				SavestateMod.showSavestateDone = false;
-				savestateButton.enabled=SavestateMod.hasSavestate();
+				loadstateButton.enabled=SavestateMod.hasSavestate();
 				return;
 			}
 			parentScreen.drawCenteredString(fontRenderer, "\u00A76Savestate successful...", width / 2, 40, new Color(1F, 1F, 1F, 1F - (timeSince / 2000F)).getRGB());

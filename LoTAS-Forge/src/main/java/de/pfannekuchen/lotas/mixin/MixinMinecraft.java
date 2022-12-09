@@ -20,7 +20,6 @@ import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.core.utils.ConfigUtils;
 import de.pfannekuchen.lotas.core.utils.EventUtils;
 import de.pfannekuchen.lotas.core.utils.KeybindsUtils;
-import de.pfannekuchen.lotas.gui.GuiChallengeIngameMenu;
 import de.pfannekuchen.lotas.mixin.accessors.AccessorEntityPlayerMP;
 import de.pfannekuchen.lotas.mods.AIManipMod;
 import de.pfannekuchen.lotas.mods.DupeMod;
@@ -51,8 +50,6 @@ public class MixinMinecraft {
 	
 	@Shadow
     public GuiScreen currentScreen;
-	
-	private int save = 6;
 	
 	private boolean isLoadingWorld;
 	
@@ -147,12 +144,9 @@ public class MixinMinecraft {
     
     @ModifyVariable(method = "displayGuiScreen", at = @At("STORE"), index = 1, ordinal = 0)
     public GuiScreen changeGuiScreen(GuiScreen screenIn) {
-    	if (ChallengeMap.currentMap != null && screenIn != null) {
-    		if (screenIn instanceof GuiIngameMenu) return new GuiChallengeIngameMenu();
-    	}
 		if (isLoadingWorld && screenIn == null) {
 			isLoadingWorld = false;
-			return ChallengeMap.currentMap == null ? new GuiIngameMenu() : new GuiChallengeIngameMenu();
+			return new GuiIngameMenu();
 		}
 		return screenIn;
     }

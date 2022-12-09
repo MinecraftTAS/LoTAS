@@ -6,6 +6,8 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import de.pfannekuchen.lotas.core.MCVer;
@@ -94,7 +96,7 @@ public abstract class MixinGuiIngameMenu extends Screen {
 	
 	//#if MC>=11903
 //$$ 	@Redirect(method = "createPauseMenu", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/GridWidget$RowHelper;addChild(Lnet/minecraft/client/gui/components/AbstractWidget;I)Lnet/minecraft/client/gui/components/AbstractWidget;"))
-//$$ 	public net.minecraft.client.gui.components.AbstractWidget redirect_createPauseMenu(net.minecraft.client.gui.components.GridWidget.RowHelper parent, AbstractWidget button, int i) {
+//$$ 	public net.minecraft.client.gui.components.AbstractWidget redirect_createPauseMenu(net.minecraft.client.gui.components.GridWidget.RowHelper parent, net.minecraft.client.gui.components.AbstractWidget button, int i) {
 //$$ 		parent.addChild(lotasGui.getSavestateButton());
 //$$ 		parent.addChild(lotasGui.getLoadstateButton());
 //$$ 		return parent.addChild(button, i);

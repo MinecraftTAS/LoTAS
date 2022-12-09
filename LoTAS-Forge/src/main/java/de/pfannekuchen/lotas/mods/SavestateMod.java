@@ -154,7 +154,8 @@ public class SavestateMod {
 	 * @throws IOException Throws when the World was locked
 	 */
 	public static void loadstate(int number) {
-		if (!hasSavestate()) return; // check for a savestates
+		if (!hasSavestate()) 
+			return; // check for a savestates
 
 		// save mouse coordinates to avoid mouse madness when not in fullscreen
 		int x = Mouse.getX();

@@ -44,7 +44,7 @@ public abstract class MixinMinecraftServer {
 	public WorldServer[] fixCrashDuringLoadstate(MinecraftServer server) {
 		if(MCVer.getWorlds(server).length==0) {
 			System.out.println("Prevented a forge crash. You are welcome!");
-			return null;
+			return new WorldServer[] {};
 		}
 		return MCVer.getWorlds(server);
 	}

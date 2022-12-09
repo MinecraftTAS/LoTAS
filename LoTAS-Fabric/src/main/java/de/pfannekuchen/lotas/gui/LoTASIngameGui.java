@@ -224,6 +224,8 @@ public class LoTASIngameGui {
 		dragonButton.active = MCVer.getCurrentLevel().getDragons().size() > 0; // Disable the button if no dragon is in the current level
 
 		aiButton.active = AIManipMod.isEntityInRange(); // Disable if no entity is in range
+		
+		loadstateButton.active = SavestateMod.hasSavestate();
 
 		MCVer.addButton(parentScreen, savestateButton);
 		MCVer.addButton(parentScreen, loadstateButton);

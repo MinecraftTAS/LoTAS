@@ -15,6 +15,7 @@ import org.lwjgl.glfw.GLFW;
 import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.core.utils.Timer;
 import de.pfannekuchen.lotas.mixin.render.gui.MixinGuiIngameMenu;
+import de.pfannekuchen.lotas.mods.SavestateMod.TrackerFile;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.server.IntegratedServer;
@@ -35,8 +36,11 @@ public class SavestateMod {
 	public static double motionY;
 	public static double motionZ;
 
+	/** Temporary variable to indicate that the "Savestate Done" Label should show up */
 	public static boolean showSavestateDone;
+	/** Temporary variable to indicate that the "Loadstate Done" Label should show up */
 	public static boolean showLoadstateDone;
+	/** Temporary variable to indicate that the Labels above should fade out */
 	public static long timeTitle;
 	
 	public static boolean isLoading;
@@ -134,43 +138,77 @@ public class SavestateMod {
 
 		isLoading = true;
 		
+		// Store the tickrate before the loadstate
 		float tickratesaved=TickrateChangerMod.tickrateServer;
 		TickrateChangerMod.updateTickrate(20);
 
-		final IntegratedServer server = mc.getSingleplayerServer();
-
+		// stop the server without saving the world
+		IntegratedServer server = mc.getSingleplayerServer();
 		for (ServerLevel worldserver : server.getAllLevels()) {
 			worldserver.noSave = true;
 		}
-
 		mc.getSingleplayerServer().halt(true);
 
-		final String worldName = MCVer.getCurrentWorldFolder();
-		final File worldDir = new File(mc.gameDirectory, "saves/" + worldName);
-		final File savestatesDir = new File(mc.gameDirectory, "saves/savestates/");
+		// load the world
+		String worldName = MCVer.getCurrentWorldFolder();
+		File worldDir = new File(mc.gameDirectory, "saves/" + worldName);
+		File savestatesDir = new File(mc.gameDirectory, "saves/savestates/");
 
 		int existingSavestates = savestatesDir.listFiles((d, s) -> {
 			return s.startsWith(worldName + "-Savestate");
 		}).length;
 
-		if (number != -1)
-			existingSavestates = number;
+		if (number != -1) existingSavestates = number;
 
-		final File savestateDir = new File(savestatesDir, worldName + "-Savestate" + (existingSavestates));
+		// Deleting the savestate dir
+		File savestateDir = new File(savestatesDir, worldName + "-Savestate" + (existingSavestates));
 		try {
-			final String data = new String(com.google.common.io.Files.toByteArray(new File(savestateDir, "savestate.dat")));
 			FileUtils.deleteDirectory(worldDir);
-			FileUtils.copyDirectory(savestateDir, worldDir);
-
-			motionX = Double.parseDouble(data.split(":")[0]);
-			motionY = Double.parseDouble(data.split(":")[1]);
-			motionZ = Double.parseDouble(data.split(":")[2]);
-			Timer.ticks = Integer.parseInt(data.split(":")[3]);
-			applyVelocity = true;
-			TrackerFile.increaseLoadstates(savestatesDir, worldName);
 		} catch (NumberFormatException | IOException e) {
+			System.out.println("Failed to delete the current world. Trying to salvage it...");
+			e.printStackTrace();
+			try {
+				Thread.sleep(20L);
+			} catch (InterruptedException e1) {
+				e1.printStackTrace();
+			}
+			try {
+				FileUtils.copyDirectory(savestateDir, worldDir);
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		}
+		
+		// Copying savestates
+		try {
+			FileUtils.copyDirectory(savestateDir, worldDir);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		
+		File savestateFile = new File(savestateDir, "savestate.dat");
+
+		// Load savestate data
+		
+		String data= "";
+		try {
+			if(savestateFile.exists())
+				data = new String(com.google.common.io.Files.toByteArray(savestateFile));
+			
+			if(!data.isEmpty()) {
+				// re apply the velocity to make a seamless transition
+				motionX = Double.parseDouble(data.split(":")[0]);
+				motionY = Double.parseDouble(data.split(":")[1]);
+				motionZ = Double.parseDouble(data.split(":")[2]);
+				Timer.ticks = Integer.parseInt(data.split(":")[3]);
+				applyVelocity = true;
+				TrackerFile.increaseLoadstates(savestatesDir, worldName);
+			}
+		} catch(Exception e){
+			System.out.println("Failed to read savestate data:");
 			e.printStackTrace();
 		}
+		
 		mc.gui.getChat().clearMessages(true);
 
 		GLFW.glfwSetCursorPos(MCVer.getGLWindow().getWindow(), x, y);
@@ -188,8 +226,8 @@ public class SavestateMod {
 		
 		GLFW.glfwSetCursorPos(MCVer.getGLWindow().getWindow(), x, y);
 		mc.mouseHandler.turnPlayer();
-		System.gc();
 		TickrateChangerMod.updateTickrate(tickratesaved);
+		System.gc();
 	}
 
 	/**
