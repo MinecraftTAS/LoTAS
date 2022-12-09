@@ -8,8 +8,10 @@
     	"accessors.AccessorDimensionTypes",
     	"accessors.AccessorLevelStorage",
     	"patches.MixinSheepPatch",
-		"patches.MixinInaccuracyPatch",
-		"patches.MixinLevelStorage"
+		//#if MC<11601
+		"patches.MixinLevelStorage",
+		//#endif
+		"patches.MixinInaccuracyPatch"
     ],
     "client": [
     	"MixinMinecraftClient",
