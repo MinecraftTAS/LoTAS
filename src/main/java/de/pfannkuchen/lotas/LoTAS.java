@@ -5,10 +5,10 @@ import java.io.File;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import de.pfannkuchen.lotas.mods.ConfigManager;
 import de.pfannkuchen.lotas.mods.DupeMod;
 import de.pfannkuchen.lotas.mods.TickAdvance;
 import de.pfannkuchen.lotas.mods.TickrateChanger;
+import de.pfannkuchen.lotas.system.ConfigurationSystem;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.network.protocol.game.ServerboundCustomPayloadPacket;
 import net.minecraft.server.MinecraftServer;
@@ -29,7 +29,7 @@ public class LoTAS implements ModInitializer {
 	// Tick Advance Singleton
 	public static TickAdvance tickadvance;
 	// Config Manager Singleton
-	public static ConfigManager configmanager;
+	public static ConfigurationSystem configmanager;
 	// Dupe Mod Singleton
 	public static DupeMod dupemod;
 
@@ -41,7 +41,7 @@ public class LoTAS implements ModInitializer {
 		LoTAS.instance = this; // Prepare the singleton
 		LoTAS.tickratechanger = new TickrateChanger();
 		LoTAS.tickadvance = new TickAdvance();
-		LoTAS.configmanager = new ConfigManager(new File("lotas_develop.properties"));
+		LoTAS.configmanager = new ConfigurationSystem(new File("lotas_develop.properties"));
 		LoTAS.dupemod = new DupeMod();
 	}
 
