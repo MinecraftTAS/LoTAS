@@ -6,7 +6,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import de.pfannkuchen.lotas.mods.ConfigManager;
-import de.pfannkuchen.lotas.mods.DragonManipulationMod;
 import de.pfannkuchen.lotas.mods.DupeMod;
 import de.pfannkuchen.lotas.mods.TickAdvance;
 import de.pfannkuchen.lotas.mods.TickrateChanger;
@@ -33,8 +32,6 @@ public class LoTAS implements ModInitializer {
 	public static ConfigManager configmanager;
 	// Dupe Mod Singleton
 	public static DupeMod dupemod;
-	// Dragon Manipulation Mod Singleton
-	public static DragonManipulationMod dragonmanipulationmod;
 
 	/**
 	 * Executed after the game launches.
@@ -46,7 +43,6 @@ public class LoTAS implements ModInitializer {
 		LoTAS.tickadvance = new TickAdvance();
 		LoTAS.configmanager = new ConfigManager(new File("lotas_develop.properties"));
 		LoTAS.dupemod = new DupeMod();
-		LoTAS.dragonmanipulationmod = new DragonManipulationMod();
 	}
 
 	/**
@@ -60,8 +56,6 @@ public class LoTAS implements ModInitializer {
 		LoTAS.tickadvance.mcserver = server;
 		// Update Dupe Mod Handler
 		LoTAS.dupemod.mcserver = server;
-		// Update Dragon Manipulation Mod Handler
-		LoTAS.dragonmanipulationmod.mcserver = server;
 	}
 
 	/**
@@ -69,7 +63,7 @@ public class LoTAS implements ModInitializer {
 	 * @param server Server Instance
 	 */
 	public void onServerTick(MinecraftServer server) {
-		
+
 	}
 
 	/**
@@ -83,8 +77,6 @@ public class LoTAS implements ModInitializer {
 		LoTAS.tickadvance.onServerPacket(packet);
 		// Update Dupe Mod Handler
 		LoTAS.dupemod.onServerPacket(packet);
-		// Update Dragon Manipulation Mod Handler
-		LoTAS.dragonmanipulationmod.onServerPacket(packet);
 	}
 
 	/**
@@ -97,8 +89,6 @@ public class LoTAS implements ModInitializer {
 		LoTAS.tickadvance.onConnect(c);
 		// Update Tickrate Changer
 		LoTAS.tickratechanger.onConnect(c);
-		// Update Dragon Manipulation Mod
-		LoTAS.dragonmanipulationmod.onConnect(c);
 	}
 
 }

@@ -4,10 +4,6 @@
 	"package": "de.pfannkuchen.lotas.mixin",
 	"compatibilityLevel": "JAVA_17",
 	"mixins": [
-		"dragonmanipulation.RngmodDragonHoldingPatternPhase",
-		"dragonmanipulation.RngmodDragonLandingApproachPhase",
-		"dragonmanipulation.RngmodDragonStrafePlayerPhase",
-		"dragonmanipulation.RngmodDragonTakeoffPhase",
 		"events.HookMinecraftServer",
 		"events.HookPlayNetworkHandler",
 		"events.HookPlayerList",
