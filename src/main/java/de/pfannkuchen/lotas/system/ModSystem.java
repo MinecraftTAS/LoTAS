@@ -1,5 +1,6 @@
 package de.pfannkuchen.lotas.system;
 
+import de.pfannkuchen.lotas.mods.DupeMod;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
@@ -19,7 +20,7 @@ public class ModSystem {
 
 	// @formatter:off
 	private static Mod[] mods = {
-
+		new DupeMod()
 	};
 	// @formatter:on
 
@@ -122,7 +123,7 @@ public class ModSystem {
 		/**
 		 * Id of the mod
 		 */
-		private ResourceLocation id;
+		protected ResourceLocation id;
 
 		/**
 		 * Initializes a mod
@@ -135,14 +136,14 @@ public class ModSystem {
 		/**
 		 * Executed after the fabric launcher. Mc and mcserver will still be null
 		 */
-		public void onInitialize() {
+		protected void onInitialize() {
 
 		}
 
 		/**
 		 * Executed after the server launches. This will set mcserver
 		 */
-		public void onServerLoad() {
+		protected void onServerLoad() {
 
 		}
 
@@ -150,7 +151,7 @@ public class ModSystem {
 		 * Executed inbetween every tick on the server
 		 * @param server Server Instance
 		 */
-		public void onServerTick() {
+		protected void onServerTick() {
 
 		}
 
@@ -158,7 +159,7 @@ public class ModSystem {
 		 * Executed every time the server receives a custom payload packet.
 		 * @param buf Packet
 		 */
-		public void onServerPayload(FriendlyByteBuf buf) {
+		protected void onServerPayload(FriendlyByteBuf buf) {
 
 		}
 
@@ -166,7 +167,7 @@ public class ModSystem {
 		 * Executed if a client connects to the server
 		 * @param player Client connected
 		 */
-		public void onClientConnect(ServerPlayer player) {
+		protected void onClientConnect(ServerPlayer player) {
 
 		}
 
@@ -174,7 +175,7 @@ public class ModSystem {
 		 * Executed after the client initializes. mc is not set yet
 		 */
 		@Environment(EnvType.CLIENT)
-		public void onClientsideInitialize() {
+		protected void onClientsideInitialize() {
 
 		}
 
@@ -182,7 +183,7 @@ public class ModSystem {
 		 * Executed after the rendering engine launches. mc will be set here
 		 */
 		@Environment(EnvType.CLIENT)
-		public void onClientsideRenderInitialize() {
+		protected void onClientsideRenderInitialize() {
 
 		}
 
@@ -190,7 +191,7 @@ public class ModSystem {
 		 * Executed before the JVM stops on the clientside.
 		 */
 		@Environment(EnvType.CLIENT)
-		public void onClientsideShutdown() {
+		protected void onClientsideShutdown() {
 
 		}
 
@@ -198,7 +199,7 @@ public class ModSystem {
 		 * Executed every tick of the client.
 		 */
 		@Environment(EnvType.CLIENT)
-		public void onClientsideTick() {
+		protected void onClientsideTick() {
 
 		}
 
@@ -206,7 +207,7 @@ public class ModSystem {
 		 * Executed every time the clients game logic loops.
 		 */
 		@Environment(EnvType.CLIENT)
-		public void onClientsideGameLoop() {
+		protected void onClientsideGameLoop() {
 
 		}
 
@@ -215,7 +216,7 @@ public class ModSystem {
 		 * @param buf Packet
 		 */
 		@Environment(EnvType.CLIENT)
-		public void onClientsidePayload(FriendlyByteBuf buf) {
+		protected void onClientsidePayload(FriendlyByteBuf buf) {
 
 		}
 
@@ -223,8 +224,25 @@ public class ModSystem {
 		 * Executed if the client disconnects from a world or server
 		 */
 		@Environment(EnvType.CLIENT)
-		public void onClientsideDisconnect() {
+		protected void onClientsideDisconnect() {
 
+		}
+
+		/**
+		 * Sends a packet from the server to a client
+		 * @param player Player
+		 * @param buf Data
+		 */
+		protected void sendPacketToClient(ServerPlayer player, FriendlyByteBuf buf) {
+			player.connection.send(new ClientboundCustomPayloadPacket(this.id, buf));
+		}
+
+		/**
+		 * Sends a packet from the client to the server
+		 * @param buf Data
+		 */
+		protected void sendPacketToServer(FriendlyByteBuf buf) {
+			this.mc.getConnection().send(new ServerboundCustomPayloadPacket(this.id, buf));
 		}
 
 	}
