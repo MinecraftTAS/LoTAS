@@ -31,7 +31,7 @@ public class ConfigurationSystem {
 			this.props.load(reader);
 			reader.close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			LoTAS.LOGGER.error("Could not load configuration file! {}", e);
 		}
 	}
 
@@ -71,7 +71,7 @@ public class ConfigurationSystem {
 			this.props.store(writer, "LoTAS Configuration File");
 			writer.close();
 		} catch (Exception e) {
-			e.printStackTrace();
+			LoTAS.LOGGER.error("Could not save configuration file! {}", e);
 		}
 	}
 
