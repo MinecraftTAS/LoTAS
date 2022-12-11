@@ -11,16 +11,12 @@
 		"events.HookMinecraftServer",
 		"events.HookPlayNetworkHandler",
 		"events.HookPlayerList",
-		"misc.MixinCustomPacketInflater",
-		"misc.MixinCustomPacketInflaterClient",
-		"misc.MixinPacketInflater",
 		"tickratechanger.MixinDedicatedServer",
 		"tickratechanger.MixinMinecraftServer"
 	],
 	"client": [
 		"client.accessors.AccessorKeyMapping",
 		"client.events.HookClientPlayNetworkHandler",
-		"client.events.HookGui",
 		"client.events.HookMinecraft",
 		"client.events.HookOptions",
 		"client.tickratechanger.MixinItemRenderer",

@@ -1,7 +1,5 @@
 package de.pfannkuchen.lotas;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-
 import de.pfannkuchen.lotas.mods.KeybindManager;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
@@ -39,8 +37,6 @@ public class ClientLoTAS implements ClientModInitializer {
 		LoTAS.tickadvance.mc = mc;
 		// Update Dupe Mod Minecraft Instance
 		LoTAS.dupemod.mc = mc;
-		// Update Savestate Mod Minecraft Instance
-		LoTAS.savestatemod.mc = mc;
 		// Update Dragon Manipulation Mod Minecraft Instance
 		LoTAS.dragonmanipulationmod.mc = mc;
 	}
@@ -72,16 +68,6 @@ public class ClientLoTAS implements ClientModInitializer {
 	}
 
 	/**
-	 * Executed after the gui screens are rendered.
-	 * @param stack Pose Stack for rendering
-	 * @param mc Instance of minecraft
-	 */
-	public void onRenderScreen(PoseStack stack, Minecraft mc) {
-		// Render Savestate
-		LoTAS.savestatemod.onRender();
-	}
-
-	/**
 	 * Executed after the options are being initialized.
 	 * @param keyMappings Standard Key Mappings
 	 * @return Modified Key Mappings
@@ -101,8 +87,6 @@ public class ClientLoTAS implements ClientModInitializer {
 		LoTAS.tickadvance.onClientPacket(packet);
 		// Update Dupe Mod Callback
 		LoTAS.dupemod.onClientPacket(packet);
-		// Update Savestate Mod Callback
-		LoTAS.savestatemod.onClientPacket(packet);
 		// Update Dupe Mod Callback
 		LoTAS.dragonmanipulationmod.onClientPacket(packet);
 	}
@@ -117,8 +101,6 @@ public class ClientLoTAS implements ClientModInitializer {
 		LoTAS.tickadvance.onDisconnect();
 		// Update Tickrate Changer
 		LoTAS.tickratechanger.onDisconnect();
-		// Update Savestate Mod
-		LoTAS.savestatemod.onDisconnect();
 	}
 
 }
