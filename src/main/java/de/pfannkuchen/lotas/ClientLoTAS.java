@@ -37,8 +37,6 @@ public class ClientLoTAS implements ClientModInitializer {
 		LoTAS.tickadvance.mc = mc;
 		// Update Dupe Mod Minecraft Instance
 		LoTAS.dupemod.mc = mc;
-		// Update Dragon Manipulation Mod Minecraft Instance
-		LoTAS.dragonmanipulationmod.mc = mc;
 	}
 
 	/**
@@ -87,8 +85,6 @@ public class ClientLoTAS implements ClientModInitializer {
 		LoTAS.tickadvance.onClientPacket(packet);
 		// Update Dupe Mod Callback
 		LoTAS.dupemod.onClientPacket(packet);
-		// Update Dupe Mod Callback
-		LoTAS.dragonmanipulationmod.onClientPacket(packet);
 	}
 
 	/**
