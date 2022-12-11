@@ -39,9 +39,9 @@ public class LoTAS implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		LoTAS.instance = this; // Prepare the singleton
+		ConfigurationSystem.load(new File("lotas_develop.properties"));
 		LoTAS.tickratechanger = new TickrateChanger();
 		LoTAS.tickadvance = new TickAdvance();
-		LoTAS.configmanager = new ConfigurationSystem(new File("lotas_develop.properties"));
 		LoTAS.dupemod = new DupeMod();
 	}
 

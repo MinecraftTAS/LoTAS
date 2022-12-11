@@ -6,6 +6,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import de.pfannkuchen.lotas.ClientLoTAS;
+import de.pfannkuchen.lotas.system.KeybindSystem;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
@@ -46,11 +47,12 @@ public class HookMinecraft {
 	}
 
 	/**
-	 * Triggers an Event in {@link ClientLoTAS#onGameLoop(Minecraft)} every game logic loop.
+	 * Triggers an Event in {@link ClientLoTAS#onGameLoop(Minecraft)} every game logic loop and updates the keybind system in {@link KeybindSystem#onGameLoop(Minecraft)}
 	 * @param ci Callback Info
 	 */
 	@Inject(method = "runTick", at = @At("HEAD"))
 	public void hookGameLoopEvent(CallbackInfo ci) {
+		KeybindSystem.onGameLoop((Minecraft) (Object) this);
 		ClientLoTAS.instance.onGameLoop((Minecraft) (Object) this);
 	}
 

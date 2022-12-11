@@ -14,21 +14,21 @@ import de.pfannkuchen.lotas.LoTAS;
  */
 public class ConfigurationSystem {
 
-	private Properties props = new Properties();
-	private File configuration;
+	private static Properties props = new Properties();
+	private static File configurationFile;
 
 	/**
 	 * Loads the configuration to a file.
 	 * @param configuration Configuration file
 	 */
-	public ConfigurationSystem(File configuration) {
+	public static void load(File configuration) {
 		try {
-			this.configuration = configuration;
+			configurationFile = configuration;
 			if (!configuration.exists())
 				configuration.createNewFile();
-			this.props = new Properties();
+			props = new Properties();
 			var reader = new FileReader(configuration);
-			this.props.load(reader);
+			props.load(reader);
 			reader.close();
 		} catch (IOException e) {
 			LoTAS.LOGGER.error("Could not load configuration file! {}", e);
@@ -40,8 +40,8 @@ public class ConfigurationSystem {
 	 * @param key Name of the variable
 	 * @param value Value of the variable
 	 */
-	private void setProperty(String key, String value) {
-		this.props.setProperty(key, value);
+	private static void setProperty(String key, String value) {
+		props.setProperty(key, value);
 	}
 
 	/**
@@ -49,26 +49,26 @@ public class ConfigurationSystem {
 	 * @param key Name of the variable
 	 * @param def Default value
 	 */
-	private String getProperty(String key, String def) {
-		return this.props.getProperty(key, def);
+	private static String getProperty(String key, String def) {
+		return props.getProperty(key, def);
 	}
 
 	/**
 	 * Verifies whether a property is present in the configuration or not.
-	 * @param key Name of tghe variable
+	 * @param key Name of the variable
 	 * @return Value present
 	 */
-	public boolean hasProperty(String key) {
-		return this.props.containsKey(key);
+	public static boolean hasProperty(String key) {
+		return props.containsKey(key);
 	}
 
 	/**
 	 * Saves the configuration to a file
 	 */
-	public void save() {
+	public static void save() {
 		try {
-			var writer = new FileWriter(this.configuration);
-			this.props.store(writer, "LoTAS Configuration File");
+			var writer = new FileWriter(configurationFile);
+			props.store(writer, "LoTAS Configuration File");
 			writer.close();
 		} catch (Exception e) {
 			LoTAS.LOGGER.error("Could not save configuration file! {}", e);
@@ -82,8 +82,8 @@ public class ConfigurationSystem {
 	 * @param key Name of the variable
 	 * @param value Value of the variable
 	 */
-	public void setString(String key, String value) {
-		this.setProperty(key, value);
+	public static void setString(String key, String value) {
+		setProperty(key, value);
 	}
 
 	/**
@@ -91,8 +91,8 @@ public class ConfigurationSystem {
 	 * @param key Name of the variable
 	 * @param value Value of the variable
 	 */
-	public void setChar(String key, char value) {
-		this.setProperty(key, (short) value + "");
+	public static void setChar(String key, char value) {
+		setProperty(key, (short) value + "");
 	}
 
 	/**
@@ -100,8 +100,8 @@ public class ConfigurationSystem {
 	 * @param key Name of the variable
 	 * @param value Value of the variable
 	 */
-	public void setByte(String key, byte value) {
-		this.setProperty(key, value + "");
+	public static void setByte(String key, byte value) {
+		setProperty(key, value + "");
 	}
 
 	/**
@@ -109,8 +109,8 @@ public class ConfigurationSystem {
 	 * @param key Name of the variable
 	 * @param value Value of the variable
 	 */
-	public void setShort(String key, short value) {
-		this.setProperty(key, value + "");
+	public static void setShort(String key, short value) {
+		setProperty(key, value + "");
 	}
 
 	/**
@@ -118,8 +118,8 @@ public class ConfigurationSystem {
 	 * @param key Name of the variable
 	 * @param value Value of the variable
 	 */
-	public void setInt(String key, int value) {
-		this.setProperty(key, value + "");
+	public static void setInt(String key, int value) {
+		setProperty(key, value + "");
 	}
 
 	/**
@@ -127,8 +127,8 @@ public class ConfigurationSystem {
 	 * @param key Name of the variable
 	 * @param value Value of the variable
 	 */
-	public void setLong(String key, long value) {
-		this.setProperty(key, value + "");
+	public static void setLong(String key, long value) {
+		setProperty(key, value + "");
 	}
 
 	/**
@@ -136,8 +136,8 @@ public class ConfigurationSystem {
 	 * @param key Name of the variable
 	 * @param value Value of the variable
 	 */
-	public void setDouble(String key, double value) {
-		this.setProperty(key, Double.doubleToLongBits(value) + "");
+	public static void setDouble(String key, double value) {
+		setProperty(key, Double.doubleToLongBits(value) + "");
 	}
 
 	/**
@@ -145,8 +145,8 @@ public class ConfigurationSystem {
 	 * @param key Name of the variable
 	 * @param value Value of the variable
 	 */
-	public void setFloat(String key, float value) {
-		this.setProperty(key, Float.floatToIntBits(value) + "");
+	public static void setFloat(String key, float value) {
+		setProperty(key, Float.floatToIntBits(value) + "");
 	}
 
 	/**
@@ -154,8 +154,8 @@ public class ConfigurationSystem {
 	 * @param key Name of the variable
 	 * @param value Value of the variable
 	 */
-	public void setBoolean(String key, boolean value) {
-		this.setProperty(key, value + "");
+	public static void setBoolean(String key, boolean value) {
+		setProperty(key, value + "");
 	}
 
 	// generic get methods
@@ -166,8 +166,8 @@ public class ConfigurationSystem {
 	 * @param def Default value
 	 * @return Value or default
 	 */
-	public String getString(String key, String def) {
-		return this.getProperty(key, def);
+	public static String getString(String key, String def) {
+		return getProperty(key, def);
 	}
 
 	/**
@@ -176,8 +176,8 @@ public class ConfigurationSystem {
 	 * @param def Default value
 	 * @return Value or default
 	 */
-	public char getChar(String key, char def) {
-		var stringVal = this.getProperty(key, (short) def + "");
+	public static char getChar(String key, char def) {
+		var stringVal = getProperty(key, (short) def + "");
 		try {
 			return (char) Short.parseShort(stringVal);
 		} catch (NumberFormatException e) {
@@ -192,8 +192,8 @@ public class ConfigurationSystem {
 	 * @param def Default value
 	 * @return Value or default
 	 */
-	public byte getByte(String key, byte def) {
-		var stringVal = this.getProperty(key, def + "");
+	public static byte getByte(String key, byte def) {
+		var stringVal = getProperty(key, def + "");
 		try {
 			return Byte.parseByte(stringVal);
 		} catch (NumberFormatException e) {
@@ -208,8 +208,8 @@ public class ConfigurationSystem {
 	 * @param def Default value
 	 * @return Value or default
 	 */
-	public short getShort(String key, short def) {
-		var stringVal = this.getProperty(key, def + "");
+	public static short getShort(String key, short def) {
+		var stringVal = getProperty(key, def + "");
 		try {
 			return Short.parseShort(stringVal);
 		} catch (NumberFormatException e) {
@@ -224,8 +224,8 @@ public class ConfigurationSystem {
 	 * @param def Default value
 	 * @return Value or default
 	 */
-	public int getInt(String key, int def) {
-		var stringVal = this.getProperty(key, def + "");
+	public static int getInt(String key, int def) {
+		var stringVal = getProperty(key, def + "");
 		try {
 			return Integer.parseInt(stringVal);
 		} catch (NumberFormatException e) {
@@ -240,8 +240,8 @@ public class ConfigurationSystem {
 	 * @param def Default value
 	 * @return Value or default
 	 */
-	public long getLong(String key, long def) {
-		var stringVal = this.getProperty(key, def + "");
+	public static long getLong(String key, long def) {
+		var stringVal = getProperty(key, def + "");
 		try {
 			return Long.parseLong(stringVal);
 		} catch (NumberFormatException e) {
@@ -256,8 +256,8 @@ public class ConfigurationSystem {
 	 * @param def Default value
 	 * @return Value or default
 	 */
-	public double getDouble(String key, double def) {
-		var stringVal = this.getProperty(key, Double.doubleToLongBits(def) + "");
+	public static double getDouble(String key, double def) {
+		var stringVal = getProperty(key, Double.doubleToLongBits(def) + "");
 		try {
 			return Double.longBitsToDouble(Long.parseLong(stringVal));
 		} catch (NumberFormatException e) {
@@ -272,8 +272,8 @@ public class ConfigurationSystem {
 	 * @param def Default value
 	 * @return Value or default
 	 */
-	public float getFloat(String key, float def) {
-		var stringVal = this.getProperty(key, Float.floatToIntBits(def) + "");
+	public static float getFloat(String key, float def) {
+		var stringVal = getProperty(key, Float.floatToIntBits(def) + "");
 		try {
 			return Float.intBitsToFloat(Integer.parseInt(stringVal));
 		} catch (NumberFormatException e) {
@@ -288,8 +288,8 @@ public class ConfigurationSystem {
 	 * @param def Default value
 	 * @return Value or default
 	 */
-	public boolean getBoolean(String key, boolean def) {
-		var stringVal = this.getProperty(key, def + "");
+	public static boolean getBoolean(String key, boolean def) {
+		var stringVal = getProperty(key, def + "");
 		try {
 			return Boolean.parseBoolean(stringVal);
 		} catch (NumberFormatException e) {
