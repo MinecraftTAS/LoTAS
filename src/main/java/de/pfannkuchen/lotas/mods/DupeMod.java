@@ -10,6 +10,7 @@
 package de.pfannkuchen.lotas.mods;
 
 import java.util.HashMap;
+import java.util.List;
 
 import de.pfannkuchen.lotas.LoTAS;
 import de.pfannkuchen.lotas.system.ModSystem.Mod;
@@ -55,7 +56,7 @@ public class DupeMod extends Mod {
 	@Override
 	@Environment(EnvType.CLIENT)
 	protected void onClientsidePayload(FriendlyByteBuf buf) {
-		var saveOLoad = buf.readBoolean();
+		boolean saveOLoad = buf.readBoolean();
 		if (saveOLoad) {
 			this.localPlayer = new CompoundTag();
 			this.mc.player.saveWithoutId(this.localPlayer);
@@ -69,26 +70,26 @@ public class DupeMod extends Mod {
 	 */
 	@Override
 	protected void onServerPayload(FriendlyByteBuf buf) {
-		var saveOLoad = buf.readBoolean();
-		var players = this.mcserver.getPlayerList().getPlayers();
+		boolean saveOLoad = buf.readBoolean();
+		List<ServerPlayer> players = this.mcserver.getPlayerList().getPlayers();
 		if (saveOLoad) {
 			// Save all client data in the hash map
 			this.onlineClients.clear();
 			for (ServerPlayer player : players) {
 				// Save playerdata
-				var tag = new CompoundTag();
+				CompoundTag tag = new CompoundTag();
 				player.saveWithoutId(tag);
 				this.onlineClients.put(player, tag);
 
 				// Send packet to client
-				var data = new FriendlyByteBuf(Unpooled.buffer());
+				FriendlyByteBuf data = new FriendlyByteBuf(Unpooled.buffer());
 				data.writeBoolean(saveOLoad);
 				this.sendPacketToClient(player, data);
 			}
 		} else
 			// Load all client data from the hash map
 			for (ServerPlayer player : players) {
-				var tag = this.onlineClients.get(player);
+				CompoundTag tag = this.onlineClients.get(player);
 				if (tag != null) {
 					if (!tag.getString("Dimension").equals(player.getLevel().dimension().location().toString())) {
 						LoTAS.LOGGER.warn("Unable to load playerdata for " + player.getName().getString() + " as they are in a different dimension!");
@@ -104,7 +105,7 @@ public class DupeMod extends Mod {
 					player.load(tag);
 
 					// Send packet to client
-					var data = new FriendlyByteBuf(Unpooled.buffer());
+					FriendlyByteBuf data = new FriendlyByteBuf(Unpooled.buffer());
 					data.writeBoolean(saveOLoad);
 					this.sendPacketToClient(player, data);
 				}
@@ -117,7 +118,7 @@ public class DupeMod extends Mod {
 	 */
 	@Environment(EnvType.CLIENT)
 	public void requestDupe(boolean saveOLoad) {
-		var buf = new FriendlyByteBuf(Unpooled.buffer());
+		FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
 		buf.writeBoolean(saveOLoad);
 		this.sendPacketToServer(buf);
 		LoTAS.LOGGER.info(this.mc.player.getName().getString() + (saveOLoad ? " saved playerdata" : " loaded playerdata"));
@@ -138,7 +139,7 @@ public class DupeMod extends Mod {
 	@Override
 	protected void onClientConnect(ServerPlayer player) {
 		// Save player
-		var tag = new CompoundTag();
+		CompoundTag tag = new CompoundTag();
 		player.saveWithoutId(tag);
 		this.onlineClients.put(player, tag);
 	}

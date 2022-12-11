@@ -16,6 +16,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.screens.Screen;
 
 /**
  * Manages keybinds and their categories.
@@ -106,8 +107,8 @@ public class KeybindSystem {
 	 */
 	public static KeyMapping[] onKeybindInitialize(KeyMapping[] keyMappings) {
 		// Initialize categories
-		var categories = AccessorKeyMapping.getCategorySorting();
-		for (var i = 0; i < keybinds.length; i++)
+		Map<String, Integer> categories = AccessorKeyMapping.getCategorySorting();
+		for (int i = 0; i < keybinds.length; i++)
 			if (!categories.containsKey(keybinds[i].category))
 				categories.put(keybinds[i].category, i + 8);
 		// Add keybinds
@@ -139,12 +140,12 @@ public class KeybindSystem {
 	 */
 	private static boolean isKeyDown(Minecraft mc, KeyMapping map) {
 		// Check if in a text field
-		var screen = mc.screen;
+		Screen screen = mc.screen;
 		if (screen != null && screen.getFocused() instanceof EditBox && ((EditBox) screen.getFocused()).canConsumeInput())
 			return false;
 
-		var wasPressed = keys.containsKey(map) ? keys.get(map) : false;
-		var isPressed = GLFW.glfwGetKey(mc.getWindow().getWindow(), ((AccessorKeyMapping) map).getKey().getValue()) == GLFW.GLFW_PRESS;
+		boolean wasPressed = keys.containsKey(map) ? keys.get(map) : false;
+		boolean isPressed = GLFW.glfwGetKey(mc.getWindow().getWindow(), ((AccessorKeyMapping) map).getKey().getValue()) == GLFW.GLFW_PRESS;
 		keys.put(map, isPressed);
 		return !wasPressed && isPressed;
 	}
