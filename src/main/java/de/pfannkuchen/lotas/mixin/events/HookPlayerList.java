@@ -6,6 +6,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import de.pfannkuchen.lotas.LoTAS;
+import de.pfannkuchen.lotas.system.ModSystem;
 import net.minecraft.network.Connection;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.PlayerList;
@@ -25,6 +26,7 @@ public class HookPlayerList {
 	 */
 	@Inject(method = "placeNewPlayer", at = @At("RETURN"))
 	public void hookConnectEvent(Connection connection, ServerPlayer serverPlayer, CallbackInfo ci) {
+		ModSystem.onClientConnect(serverPlayer);
 		LoTAS.instance.onClientConnect(serverPlayer);
 	}
 

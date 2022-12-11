@@ -6,6 +6,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import de.pfannkuchen.lotas.ClientLoTAS;
+import de.pfannkuchen.lotas.system.ModSystem;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.multiplayer.ClientPacketListener;
@@ -25,6 +26,7 @@ public class HookClientPlayNetworkHandler {
 	 */
 	@Inject(method = "handleCustomPayload", at = @At("HEAD"), cancellable = true)
 	public void hookCustomPayloadEvent(ClientboundCustomPayloadPacket packet, CallbackInfo ci) {
+		ModSystem.onClientsidePayload(packet);
 		ClientLoTAS.instance.onClientPayload(packet);
 		ci.cancel();
 	}
