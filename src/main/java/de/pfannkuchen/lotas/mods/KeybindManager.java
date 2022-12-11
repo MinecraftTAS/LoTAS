@@ -6,7 +6,6 @@ import java.util.Map;
 import org.apache.commons.lang3.ArrayUtils;
 import org.lwjgl.glfw.GLFW;
 
-import de.pfannkuchen.lotas.ClientLoTAS;
 import de.pfannkuchen.lotas.LoTAS;
 import de.pfannkuchen.lotas.mixin.client.accessors.AccessorKeyMapping;
 import net.fabricmc.api.EnvType;
@@ -22,11 +21,6 @@ import net.minecraft.client.gui.screens.Screen;
  */
 @Environment(EnvType.CLIENT)
 public class KeybindManager {
-
-	/**
-	 * Key binding for opening and closing the LoTAS menu LoScreen.
-	 */
-	private KeyMapping openLoTASMenuKeybind = new KeyMapping("Open LoTAS Menu", GLFW.GLFW_KEY_R, "LoTAS Keybinds");
 
 	/**
 	 * Key binding for advancing a single tick while being in tick advance.
@@ -72,7 +66,7 @@ public class KeybindManager {
 		for (int i = 0; i < this.keybindCategories.length; i++)
 			categories.put(this.keybindCategories[i], i + 8);
 		// Finish by adding Keybinds
-		return ArrayUtils.addAll(keyMappings, this.openLoTASMenuKeybind, this.tickadvanceKeybind, this.toggleTickadvance, this.decreaseTickrate, this.increaseTickrate, this.savePlayerdata, this.loadPlayerdata);
+		return ArrayUtils.addAll(keyMappings, this.tickadvanceKeybind, this.toggleTickadvance, this.decreaseTickrate, this.increaseTickrate, this.savePlayerdata, this.loadPlayerdata);
 	}
 
 	/**
@@ -80,9 +74,7 @@ public class KeybindManager {
 	 * @param mc Instance of minecraft
 	 */
 	public void onGameLoop(Minecraft mc) {
-		if (this.isKeyDown(mc, this.openLoTASMenuKeybind) && mc.level != null)
-			ClientLoTAS.loscreenmanager.toggleLoTASMenu(mc);
-		else if (this.isKeyDown(mc, this.tickadvanceKeybind) && mc.level != null)
+		if (this.isKeyDown(mc, this.tickadvanceKeybind) && mc.level != null)
 			LoTAS.tickadvance.requestTickadvance();
 		else if (this.isKeyDown(mc, this.toggleTickadvance) && mc.level != null)
 			LoTAS.tickadvance.requestTickadvanceToggle();

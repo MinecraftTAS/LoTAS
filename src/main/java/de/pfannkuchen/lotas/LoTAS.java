@@ -8,7 +8,6 @@ import org.apache.logging.log4j.Logger;
 import de.pfannkuchen.lotas.mods.ConfigManager;
 import de.pfannkuchen.lotas.mods.DragonManipulationMod;
 import de.pfannkuchen.lotas.mods.DupeMod;
-import de.pfannkuchen.lotas.mods.NotificationManager;
 import de.pfannkuchen.lotas.mods.SavestateMod;
 import de.pfannkuchen.lotas.mods.TickAdvance;
 import de.pfannkuchen.lotas.mods.TickrateChanger;
@@ -39,8 +38,6 @@ public class LoTAS implements ModInitializer {
 	public static SavestateMod savestatemod;
 	// Dragon Manipulation Mod Singleton
 	public static DragonManipulationMod dragonmanipulationmod;
-	// Notification Manager Singleton
-	public static NotificationManager notificationmanager;
 
 	/**
 	 * Executed after the game launches.
@@ -54,7 +51,6 @@ public class LoTAS implements ModInitializer {
 		LoTAS.dupemod = new DupeMod();
 		LoTAS.savestatemod = new SavestateMod();
 		LoTAS.dragonmanipulationmod = new DragonManipulationMod();
-		LoTAS.notificationmanager = new NotificationManager();
 	}
 
 	/**
@@ -70,8 +66,6 @@ public class LoTAS implements ModInitializer {
 		LoTAS.dupemod.mcserver = server;
 		// Update Dragon Manipulation Mod Handler
 		LoTAS.dragonmanipulationmod.mcserver = server;
-		// Update Notification Manager Handler
-		LoTAS.notificationmanager.mcserver = server;
 	}
 
 	/**
@@ -98,8 +92,6 @@ public class LoTAS implements ModInitializer {
 		LoTAS.savestatemod.onServerPacket(packet);
 		// Update Dragon Manipulation Mod Handler
 		LoTAS.dragonmanipulationmod.onServerPacket(packet);
-		// Update Notification Manager Handler
-		LoTAS.notificationmanager.onServerPacket(packet);
 	}
 
 	/**
