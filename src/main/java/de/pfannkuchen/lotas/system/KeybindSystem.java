@@ -10,6 +10,7 @@ import org.lwjgl.glfw.GLFW;
 import de.pfannkuchen.lotas.LoTAS;
 import de.pfannkuchen.lotas.mixin.client.accessors.AccessorKeyMapping;
 import de.pfannkuchen.lotas.mods.DupeMod;
+import de.pfannkuchen.lotas.mods.TickAdvance;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.KeyMapping;
@@ -29,10 +30,10 @@ public class KeybindSystem {
 	// @formatter:off
 	private static Keybind[] keybinds = {
 		new Keybind("Advance a tick", "Tickrate Changer", GLFW.GLFW_KEY_F9, true, () -> {
-			LoTAS.tickadvance.requestTickadvance();
+			TickAdvance.instance.requestTickadvance();
 		}),
 		new Keybind("Toggle tick advance", "Tickrate Changer", GLFW.GLFW_KEY_F8, true, () -> {
-			LoTAS.tickadvance.requestTickadvanceToggle();
+			TickAdvance.instance.requestTickadvanceToggle();
 		}),
 		new Keybind("Decrease Tickrate", "Tickrate Changer", GLFW.GLFW_KEY_COMMA, true, () -> {
 			LoTAS.tickratechanger.decreaseTickrate();

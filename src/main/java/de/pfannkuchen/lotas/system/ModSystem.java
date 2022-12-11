@@ -1,6 +1,7 @@
 package de.pfannkuchen.lotas.system;
 
 import de.pfannkuchen.lotas.mods.DupeMod;
+import de.pfannkuchen.lotas.mods.TickAdvance;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
@@ -20,7 +21,8 @@ public class ModSystem {
 
 	// @formatter:off
 	private static Mod[] mods = {
-		new DupeMod()
+		new DupeMod(),
+		new TickAdvance()
 	};
 	// @formatter:on
 

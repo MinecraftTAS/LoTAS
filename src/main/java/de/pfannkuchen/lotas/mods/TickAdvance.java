@@ -1,15 +1,12 @@
 package de.pfannkuchen.lotas.mods;
 
 import de.pfannkuchen.lotas.LoTAS;
+import de.pfannkuchen.lotas.system.ModSystem.Mod;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.protocol.game.ClientboundCustomPayloadPacket;
-import net.minecraft.network.protocol.game.ServerboundCustomPayloadPacket;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 
 /**
@@ -17,13 +14,14 @@ import net.minecraft.server.level.ServerPlayer;
  * ~ same logic as tickrate changer
  * @author Pancake
  */
-public class TickAdvance {
+public class TickAdvance extends Mod {
 
-	static final ResourceLocation TICK_ADVANCE_RL = new ResourceLocation("lotas", "tickadvance");
-	static final ResourceLocation TICK_RL = new ResourceLocation("lotas", "tick");
-	@Environment(EnvType.CLIENT)
-	public Minecraft mc;
-	public MinecraftServer mcserver;
+	public static TickAdvance instance;
+
+	public TickAdvance() {
+		super(new ResourceLocation("lotas", "tickadvance"));
+		instance = this;
+	}
 
 	// Is tick advance enabled
 	private boolean tickadvance;
@@ -35,29 +33,29 @@ public class TickAdvance {
 	/**
 	 * Updates the client tickadvance status when receiving a packet
 	 */
+	@Override
 	@Environment(EnvType.CLIENT)
-	public void onClientPacket(ClientboundCustomPayloadPacket p) {
-		if (TICK_ADVANCE_RL.equals(p.getIdentifier()))
-			this.tickadvance = p.getData().readBoolean();
-		if (TICK_RL.equals(p.getIdentifier()))
-			this.shouldTickClient = true; // Tick the Client
+	protected void onClientsidePayload(FriendlyByteBuf buf) {
+		if (buf.readInt() == 0)
+			this.tickadvance = buf.readBoolean();
+		else
+			this.shouldTickClient = true; // Tick the client
 	}
 
 	/**
 	 * Updates the server tickadvance status and resend when receiving a packet
 	 */
-	public void onServerPacket(ServerboundCustomPayloadPacket p) {
-		if (TICK_ADVANCE_RL.equals(p.getIdentifier()))
-			this.updateTickadvanceStatus(p.getData().readBoolean());
-		if (TICK_RL.equals(p.getIdentifier()))
+	@Override
+	protected void onServerPayload(FriendlyByteBuf buf) {
+		if (buf.readInt() == 0)
+			this.updateTickadvanceStatus(buf.readBoolean());
+		else
 			this.updateTickadvance();
 	}
 
-	/**
-	 * Client-side only tick method
-	 */
 	@Environment(EnvType.CLIENT)
-	public void onTick(Minecraft mc) {
+	@Override
+	protected void onClientsideTick() {
 		this.shouldTickClient = false;
 	}
 
@@ -68,8 +66,9 @@ public class TickAdvance {
 	@Environment(EnvType.CLIENT)
 	public void requestTickadvanceToggle() {
 		var buf = new FriendlyByteBuf(Unpooled.buffer());
-		buf.writeBoolean(!this.tickadvance);
-		this.mc.getConnection().send(new ServerboundCustomPayloadPacket(TICK_ADVANCE_RL, buf));
+		buf.writeInt(0); // status update
+		buf.writeBoolean(!this.tickadvance); // new status
+		this.sendPacketToServer(buf);
 		LoTAS.LOGGER.info(this.mc.player.getName().getString() + " toggled tick advance " + (this.tickadvance ? "off" : "on"));
 	}
 
@@ -81,8 +80,8 @@ public class TickAdvance {
 		if (!this.tickadvance || this.shouldTickClient)
 			return;
 		var buf = new FriendlyByteBuf(Unpooled.buffer());
-		buf.writeBoolean(false);
-		this.mc.getConnection().send(new ServerboundCustomPayloadPacket(TICK_RL, buf));
+		buf.writeInt(1); // tick update
+		this.sendPacketToServer(buf);
 	}
 
 	/**
@@ -91,11 +90,12 @@ public class TickAdvance {
 	 */
 	public void updateTickadvanceStatus(boolean tickadvance) {
 		this.tickadvance = tickadvance;
-		// Update Tickadvance for all Clients
-		this.mcserver.getPlayerList().getPlayers().forEach(c -> {
+		// Update Tickadvance for all clients
+		this.mcserver.getPlayerList().getPlayers().forEach(player -> {
 			var buf = new FriendlyByteBuf(Unpooled.buffer());
-			buf.writeBoolean(tickadvance);
-			c.connection.send(new ClientboundCustomPayloadPacket(TICK_ADVANCE_RL, buf));
+			buf.writeInt(0); // status update
+			buf.writeBoolean(tickadvance); // new status
+			this.sendPacketToClient(player, buf);
 		});
 	}
 
@@ -104,27 +104,32 @@ public class TickAdvance {
 	 */
 	public void updateTickadvance() {
 		this.shouldTickServer = true;
-		// Tick all Clients
-		this.mcserver.getPlayerList().getPlayers().forEach(c -> {
-			c.connection.send(new ClientboundCustomPayloadPacket(TICK_RL, new FriendlyByteBuf(Unpooled.buffer())));
+		// Tick all clients
+		this.mcserver.getPlayerList().getPlayers().forEach(player -> {
+			var buf = new FriendlyByteBuf(Unpooled.buffer());
+			buf.writeInt(1); // tick update
+			this.sendPacketToClient(player, buf);
 		});
 	}
 
 	/**
 	 * Clears local data on disconnect
 	 */
+	@Override
 	@Environment(EnvType.CLIENT)
-	public void onDisconnect() {
+	protected void onClientsideDisconnect() {
 		this.tickadvance = false;
 	}
 
 	/**
 	 * Updates client data on connect
 	 */
-	public void onConnect(ServerPlayer c) {
+	@Override
+	protected void onClientConnect(ServerPlayer player) {
 		var buf = new FriendlyByteBuf(Unpooled.buffer());
-		buf.writeBoolean(this.tickadvance);
-		c.connection.send(new ClientboundCustomPayloadPacket(TICK_ADVANCE_RL, buf));
+		buf.writeInt(0); // status update
+		buf.writeBoolean(this.tickadvance); // new status
+		this.sendPacketToClient(player, buf);
 	}
 
 	public boolean isTickadvanceEnabled() {
