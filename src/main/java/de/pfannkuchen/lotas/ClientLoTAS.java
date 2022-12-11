@@ -1,6 +1,6 @@
 package de.pfannkuchen.lotas;
 
-import de.pfannkuchen.lotas.mods.KeybindManager;
+import de.pfannkuchen.lotas.system.KeybindSystem;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -18,12 +18,12 @@ public class ClientLoTAS implements ClientModInitializer {
 	// Client-side LoTAS Singleton
 	public static ClientLoTAS instance;
 	// Keybind Manager Singleton
-	public static KeybindManager keybindmanager;
+	public static KeybindSystem keybindmanager;
 
 	@Override
 	public void onInitializeClient() {
 		ClientLoTAS.instance = this;
-		ClientLoTAS.keybindmanager = new KeybindManager(); // Also initializes this
+		ClientLoTAS.keybindmanager = new KeybindSystem(); // Also initializes this
 	}
 
 	/**

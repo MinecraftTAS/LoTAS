@@ -1,4 +1,4 @@
-package de.pfannkuchen.lotas.mods;
+package de.pfannkuchen.lotas.system;
 
 import java.io.File;
 import java.io.FileReader;
@@ -12,7 +12,7 @@ import de.pfannkuchen.lotas.LoTAS;
  * The Configuration can read and store keys in a file using java's configuration.
  * @author Pancake
  */
-public class ConfigManager {
+public class ConfigurationSystem {
 
 	private Properties props = new Properties();
 	private File configuration;
@@ -21,7 +21,7 @@ public class ConfigManager {
 	 * Loads the configuration to a file.
 	 * @param configuration Configuration file
 	 */
-	public ConfigManager(File configuration) {
+	public ConfigurationSystem(File configuration) {
 		try {
 			this.configuration = configuration;
 			if (!configuration.exists())

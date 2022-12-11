@@ -1,4 +1,4 @@
-package de.pfannkuchen.lotas.mods;
+package de.pfannkuchen.lotas.system;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -20,7 +20,7 @@ import net.minecraft.client.gui.components.EditBox;
  * @author Pancake
  */
 @Environment(EnvType.CLIENT)
-public class KeybindManager {
+public class KeybindSystem {
 
 	/**
 	 * List of keybinds

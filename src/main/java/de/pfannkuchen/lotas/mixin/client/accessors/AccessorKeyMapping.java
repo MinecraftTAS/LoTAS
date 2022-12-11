@@ -7,13 +7,13 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 
 import com.mojang.blaze3d.platform.InputConstants.Key;
 
-import de.pfannkuchen.lotas.mods.KeybindManager;
+import de.pfannkuchen.lotas.system.KeybindSystem;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.KeyMapping;
 
 /**
- * This mixin accessor makes the categories array for {@link KeybindManager} accessible.
+ * This mixin accessor makes the categories array for {@link KeybindSystem} accessible.
  * @author Scribble
  */
 @Mixin(KeyMapping.class)
