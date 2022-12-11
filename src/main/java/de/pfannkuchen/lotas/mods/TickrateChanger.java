@@ -54,7 +54,7 @@ public class TickrateChanger extends Mod {
 	protected void onClientsidePayload(FriendlyByteBuf buf) {
 		this.internallyUpdateTickrate(buf.readDouble());
 		// Update the local time
-		var time = System.currentTimeMillis() - this.timeSinceTC;
+		long time = System.currentTimeMillis() - this.timeSinceTC;
 		this.fakeTimeSinceTC += time * this.gamespeed;
 		this.timeSinceTC = System.currentTimeMillis();
 	}
@@ -75,7 +75,7 @@ public class TickrateChanger extends Mod {
 	@Environment(EnvType.CLIENT)
 	public void requestTickrateUpdate(double tickrate) {
 		// Request tickrate update
-		var buf = new FriendlyByteBuf(Unpooled.buffer());
+		FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
 		buf.writeDouble(tickrate);
 		this.sendPacketToServer(buf);
 		LoTAS.LOGGER.info(this.mc.player.getName().getString() + " updated the tickrate to " + String.format("%.2f", tickrate));
@@ -91,7 +91,7 @@ public class TickrateChanger extends Mod {
 		this.internallyUpdateTickrate(tickrate);
 		// Update Tickrate for all clients
 		this.mcserver.getPlayerList().getPlayers().forEach(player -> {
-			var buf = new FriendlyByteBuf(Unpooled.buffer());
+			FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
 			buf.writeDouble(tickrate);
 			this.sendPacketToClient(player, buf);
 		});
@@ -113,7 +113,7 @@ public class TickrateChanger extends Mod {
 	 */
 	@Environment(EnvType.CLIENT)
 	public long getMilliseconds() {
-		var time = System.currentTimeMillis() - this.timeSinceTC;
+		long time = System.currentTimeMillis() - this.timeSinceTC;
 		time *= this.gamespeed;
 		return this.fakeTimeSinceTC + time;
 	}
@@ -129,7 +129,7 @@ public class TickrateChanger extends Mod {
 
 	@Override
 	protected void onClientConnect(ServerPlayer player) {
-		var buf = new FriendlyByteBuf(Unpooled.buffer());
+		FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
 		buf.writeDouble(this.tickrate);
 		this.sendPacketToClient(player, buf);
 	}
@@ -139,8 +139,8 @@ public class TickrateChanger extends Mod {
 	 */
 	@Environment(EnvType.CLIENT)
 	public void decreaseTickrate() {
-		var newTickrate = this.tickrate;
-		for (var i = this.tickrates.length - 1; i >= 0; i--) {
+		double newTickrate = this.tickrate;
+		for (int i = this.tickrates.length - 1; i >= 0; i--) {
 			newTickrate = this.tickrates[i];
 			if (newTickrate < this.tickrate)
 				break;
@@ -154,7 +154,7 @@ public class TickrateChanger extends Mod {
 	 */
 	@Environment(EnvType.CLIENT)
 	public void increaseTickrate() {
-		var newTickrate = this.tickrate;
+		double newTickrate = this.tickrate;
 		for (double tickrate2 : this.tickrates) {
 			newTickrate = tickrate2;
 			if (newTickrate > this.tickrate)
