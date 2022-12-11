@@ -6,6 +6,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import de.pfannkuchen.lotas.LoTAS;
+import de.pfannkuchen.lotas.system.ModSystem;
 import net.minecraft.server.MinecraftServer;
 
 /**
@@ -21,6 +22,7 @@ public class HookMinecraftServer {
 	 */
 	@Inject(method = "runServer", at = @At(value = "INVOKE", shift = At.Shift.AFTER, target = "Lnet/minecraft/server/MinecraftServer;endMetricsRecordingTick()V"))
 	public void hookTickEvent(CallbackInfo ci) {
+		ModSystem.onServerTick();
 		LoTAS.instance.onServerTick((MinecraftServer) (Object) this);
 	}
 
@@ -30,6 +32,7 @@ public class HookMinecraftServer {
 	 */
 	@Inject(method = "<init>", at = @At("RETURN"))
 	public void hookInitEvent(CallbackInfo ci) {
+		ModSystem.onServerLoad((MinecraftServer) (Object) this);
 		LoTAS.instance.onServerLoad((MinecraftServer) (Object) this);
 	}
 
