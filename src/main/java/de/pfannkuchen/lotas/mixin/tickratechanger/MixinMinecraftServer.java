@@ -18,7 +18,7 @@
  * Here the server checks if the server is running behind on ticks and tries to correct that by adding more than one tick to the nextTickTime
  *
  *		this.nextTickTime += 50L;
- * 
+ *
  * The nextTickTime is increased by one tick. Let's say if the current time was 1000, then nextTickTime is 1050.
  *
  *		this.tickServer(this::haveTime);
@@ -49,7 +49,6 @@ import net.minecraft.server.MinecraftServer;
 
 /**
  * Slows down the Minecraft Server
- * 
  * @author Scribble
  */
 @Mixin(MinecraftServer.class)
@@ -64,7 +63,6 @@ public abstract class MixinMinecraftServer {
 	/**
 	 * Replaces all 50L values in MinecraftServer.runServer() to the desired milliseconds
 	 * per tick which is obtained by the tickratechanger
-	 * 
 	 * @param ignored the value that was originally used, in this case 50L
 	 * @return Milliseconds per tick
 	 */
@@ -76,7 +74,6 @@ public abstract class MixinMinecraftServer {
 	/**
 	 * Redirects all Util.getMillis() in the run method of the minecraft server and
 	 * returns {@link #getCurrentTime()}
-	 * 
 	 * @return Modified measuring time
 	 */
 	@Redirect(method = "runServer", at = @At(value = "INVOKE", target = "Lnet/minecraft/Util;getMillis()J"))
@@ -87,7 +84,6 @@ public abstract class MixinMinecraftServer {
 	/**
 	 * Redirects all Util.getMillis() in the shouldKeepTicking method of the
 	 * minecraft server and returns {@link #getCurrentTime()}
-	 * 
 	 * @return Modified measuring time
 	 */
 	@Redirect(method = "haveTime", at = @At(value = "INVOKE", target = "Lnet/minecraft/Util;getMillis()J"))
@@ -97,36 +93,30 @@ public abstract class MixinMinecraftServer {
 
 	/**
 	 * Returns the time dependant on if the current tickrate is tickrate 0
-	 * 
-	 * @return In tickrates > 0 the vanilla time - offset else the current time in
-	 *         tickrate 0
+	 * @return In tickrates > 0 the vanilla time - offset else the current time in tickrate 0
 	 */
 	private long getCurrentTime() {
 		if (!LoTAS.tickadvance.isTickadvanceEnabled() || LoTAS.tickadvance.shouldTickServer) {
 			this.currentTime = Util.getMillis(); // Set the current time that will be returned if the player decides to activate
 													// tickrate 0
 			return Util.getMillis() - this.offset; // Returns the Current time - offset which was set while tickrate 0 was active
-		} else {
-			this.offset = Util.getMillis() - this.currentTime; // Creating the offset from the measured time and the stopped time
-			this.nextTickTime = this.currentTime + 50L;
-			/*
-			 * Without this, the time reference would still increase by every tick in
-			 * vanilla, meaning that if you stop tickrate 0, the time reference would be
-			 * like nothing ever happened. The server realises this and just catches up with
-			 * the ticks. Now the time reference is always one tick ahead of the current
-			 * time, tricking shouldKeepTicking in forever catching up to one tick, creating
-			 * a loop. And if we unpause this, the offset is applied.
-			 */
-
-			return this.currentTime;
 		}
+		this.offset = Util.getMillis() - this.currentTime; // Creating the offset from the measured time and the stopped time
+		this.nextTickTime = this.currentTime + 50L;
+		// Without this, the time reference would still increase by every tick in
+		// vanilla, meaning that if you stop tickrate 0, the time reference would be
+		// like nothing ever happened. The server realises this and just catches up with
+		// the ticks. Now the time reference is always one tick ahead of the current
+		// time, tricking shouldKeepTicking in forever catching up to one tick, creating
+		// a loop. And if we unpause this, the offset is applied.
+
+		return this.currentTime;
 	}
 
 	/**
 	 * Resets the Tick Advance status
-	 * 
 	 * @param supplier Parameters
-	 * @param ci       Callback Info
+	 * @param ci Callback Info
 	 */
 	@Inject(method = "tickServer", at = @At("HEAD"))
 	public void injectrunTick(BooleanSupplier supplier, CallbackInfo ci) {
