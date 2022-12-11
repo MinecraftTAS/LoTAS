@@ -10,7 +10,6 @@
 package de.pfannkuchen.lotas.mods;
 
 import java.util.HashMap;
-import java.util.List;
 
 import de.pfannkuchen.lotas.LoTAS;
 import io.netty.buffer.Unpooled;
@@ -47,14 +46,12 @@ public class DupeMod {
 	@Environment(EnvType.CLIENT)
 	public void onClientPacket(ClientboundCustomPayloadPacket p) {
 		if (DUPE_MOD_RL.equals(p.getIdentifier())) {
-			boolean saveOLoad = p.getData().readBoolean();
+			var saveOLoad = p.getData().readBoolean();
 			if (saveOLoad) {
 				this.localPlayer = new CompoundTag();
 				this.mc.player.saveWithoutId(this.localPlayer);
-			} else {
-				if (this.localPlayer != null)
-					this.mc.player.load(this.localPlayer);
-			}
+			} else if (this.localPlayer != null)
+				this.mc.player.load(this.localPlayer);
 		}
 	}
 
@@ -64,26 +61,26 @@ public class DupeMod {
 	 */
 	public void onServerPacket(ServerboundCustomPayloadPacket p) {
 		if (DUPE_MOD_RL.equals(p.getIdentifier())) {
-			boolean saveOLoad = p.getData().readBoolean();
-			List<ServerPlayer> players = this.mcserver.getPlayerList().getPlayers();
+			var saveOLoad = p.getData().readBoolean();
+			var players = this.mcserver.getPlayerList().getPlayers();
 			if (saveOLoad) {
 				// Save all client data in the hash map
 				this.onlineClients.clear();
 				for (ServerPlayer player : players) {
 					// Save playerdata
-					CompoundTag tag = new CompoundTag();
+					var tag = new CompoundTag();
 					player.saveWithoutId(tag);
 					this.onlineClients.put(player, tag);
 
 					// Send packet to client
-					FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
+					var buf = new FriendlyByteBuf(Unpooled.buffer());
 					buf.writeBoolean(saveOLoad);
 					player.connection.send(new ClientboundCustomPayloadPacket(DUPE_MOD_RL, buf));
 				}
-			} else {
+			} else
 				// Load all client data from the hash map
 				for (ServerPlayer player : players) {
-					CompoundTag tag = this.onlineClients.get(player);
+					var tag = this.onlineClients.get(player);
 					if (tag != null) {
 						if (!tag.getString("Dimension").equals(player.getLevel().dimension().location().toString())) {
 							System.out.println("Unable to load playerdata for " + player.getName().getString() + " as they are in a different dimension!");
@@ -99,12 +96,11 @@ public class DupeMod {
 						player.load(tag);
 
 						// Send packet to client
-						FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
+						var buf = new FriendlyByteBuf(Unpooled.buffer());
 						buf.writeBoolean(saveOLoad);
 						player.connection.send(new ClientboundCustomPayloadPacket(DUPE_MOD_RL, buf));
 					}
 				}
-			}
 		}
 	}
 
@@ -114,7 +110,7 @@ public class DupeMod {
 	 */
 	@Environment(EnvType.CLIENT)
 	public void requestDupe(boolean saveOLoad) {
-		FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
+		var buf = new FriendlyByteBuf(Unpooled.buffer());
 		buf.writeBoolean(saveOLoad);
 		this.mc.getConnection().send(new ServerboundCustomPayloadPacket(DUPE_MOD_RL, buf));
 		LoTAS.LOGGER.info(this.mc.player.getName().getString() + (saveOLoad ? " saved playerdata" : " loaded playerdata"));
@@ -133,7 +129,7 @@ public class DupeMod {
 	 */
 	public void onConnect(ServerPlayer c) {
 		// Save player
-		CompoundTag tag = new CompoundTag();
+		var tag = new CompoundTag();
 		c.saveWithoutId(tag);
 		this.onlineClients.put(c, tag);
 	}

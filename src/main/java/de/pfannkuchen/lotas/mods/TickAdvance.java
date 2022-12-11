@@ -67,7 +67,7 @@ public class TickAdvance {
 	 */
 	@Environment(EnvType.CLIENT)
 	public void requestTickadvanceToggle() {
-		FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
+		var buf = new FriendlyByteBuf(Unpooled.buffer());
 		buf.writeBoolean(!this.tickadvance);
 		this.mc.getConnection().send(new ServerboundCustomPayloadPacket(TICK_ADVANCE_RL, buf));
 		LoTAS.LOGGER.info(this.mc.player.getName().getString() + " toggled tick advance " + (this.tickadvance ? "off" : "on"));
@@ -80,7 +80,7 @@ public class TickAdvance {
 	public void requestTickadvance() {
 		if (!this.tickadvance || this.shouldTickClient)
 			return;
-		FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
+		var buf = new FriendlyByteBuf(Unpooled.buffer());
 		buf.writeBoolean(false);
 		this.mc.getConnection().send(new ServerboundCustomPayloadPacket(TICK_RL, buf));
 	}
@@ -93,7 +93,7 @@ public class TickAdvance {
 		this.tickadvance = tickadvance;
 		// Update Tickadvance for all Clients
 		this.mcserver.getPlayerList().getPlayers().forEach(c -> {
-			FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
+			var buf = new FriendlyByteBuf(Unpooled.buffer());
 			buf.writeBoolean(tickadvance);
 			c.connection.send(new ClientboundCustomPayloadPacket(TICK_ADVANCE_RL, buf));
 		});
@@ -122,12 +122,10 @@ public class TickAdvance {
 	 * Updates client data on connect
 	 */
 	public void onConnect(ServerPlayer c) {
-		FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
+		var buf = new FriendlyByteBuf(Unpooled.buffer());
 		buf.writeBoolean(this.tickadvance);
 		c.connection.send(new ClientboundCustomPayloadPacket(TICK_ADVANCE_RL, buf));
 	}
-
-	// Place getters here to not confuse with public variables that shall not be set
 
 	public boolean isTickadvanceEnabled() {
 		return this.tickadvance;
