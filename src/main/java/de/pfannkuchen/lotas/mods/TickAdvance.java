@@ -67,7 +67,7 @@ public class TickAdvance extends Mod {
 	 */
 	@Environment(EnvType.CLIENT)
 	public void requestTickadvanceToggle() {
-		var buf = new FriendlyByteBuf(Unpooled.buffer());
+		FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
 		buf.writeInt(0); // status update
 		buf.writeBoolean(!this.tickadvance); // new status
 		this.sendPacketToServer(buf);
@@ -81,7 +81,7 @@ public class TickAdvance extends Mod {
 	public void requestTickadvance() {
 		if (!this.tickadvance || this.shouldTickClient)
 			return;
-		var buf = new FriendlyByteBuf(Unpooled.buffer());
+		FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
 		buf.writeInt(1); // tick update
 		this.sendPacketToServer(buf);
 	}
@@ -94,7 +94,7 @@ public class TickAdvance extends Mod {
 		this.tickadvance = tickadvance;
 		// Update Tickadvance for all clients
 		this.mcserver.getPlayerList().getPlayers().forEach(player -> {
-			var buf = new FriendlyByteBuf(Unpooled.buffer());
+			FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
 			buf.writeInt(0); // status update
 			buf.writeBoolean(tickadvance); // new status
 			this.sendPacketToClient(player, buf);
@@ -108,7 +108,7 @@ public class TickAdvance extends Mod {
 		this.shouldTickServer = true;
 		// Tick all clients
 		this.mcserver.getPlayerList().getPlayers().forEach(player -> {
-			var buf = new FriendlyByteBuf(Unpooled.buffer());
+			FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
 			buf.writeInt(1); // tick update
 			this.sendPacketToClient(player, buf);
 		});
@@ -128,7 +128,7 @@ public class TickAdvance extends Mod {
 	 */
 	@Override
 	protected void onClientConnect(ServerPlayer player) {
-		var buf = new FriendlyByteBuf(Unpooled.buffer());
+		FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
 		buf.writeInt(0); // status update
 		buf.writeBoolean(this.tickadvance); // new status
 		this.sendPacketToClient(player, buf);

@@ -27,7 +27,7 @@ public class ConfigurationSystem {
 			if (!configuration.exists())
 				configuration.createNewFile();
 			props = new Properties();
-			var reader = new FileReader(configuration);
+			FileReader reader = new FileReader(configuration);
 			props.load(reader);
 			reader.close();
 		} catch (IOException e) {
@@ -67,7 +67,7 @@ public class ConfigurationSystem {
 	 */
 	public static void save() {
 		try {
-			var writer = new FileWriter(configurationFile);
+			FileWriter writer = new FileWriter(configurationFile);
 			props.store(writer, "LoTAS Configuration File");
 			writer.close();
 		} catch (Exception e) {
@@ -177,7 +177,7 @@ public class ConfigurationSystem {
 	 * @return Value or default
 	 */
 	public static char getChar(String key, char def) {
-		var stringVal = getProperty(key, (short) def + "");
+		String stringVal = getProperty(key, (short) def + "");
 		try {
 			return (char) Short.parseShort(stringVal);
 		} catch (NumberFormatException e) {
@@ -193,7 +193,7 @@ public class ConfigurationSystem {
 	 * @return Value or default
 	 */
 	public static byte getByte(String key, byte def) {
-		var stringVal = getProperty(key, def + "");
+		String stringVal = getProperty(key, def + "");
 		try {
 			return Byte.parseByte(stringVal);
 		} catch (NumberFormatException e) {
@@ -209,7 +209,7 @@ public class ConfigurationSystem {
 	 * @return Value or default
 	 */
 	public static short getShort(String key, short def) {
-		var stringVal = getProperty(key, def + "");
+		String stringVal = getProperty(key, def + "");
 		try {
 			return Short.parseShort(stringVal);
 		} catch (NumberFormatException e) {
@@ -225,7 +225,7 @@ public class ConfigurationSystem {
 	 * @return Value or default
 	 */
 	public static int getInt(String key, int def) {
-		var stringVal = getProperty(key, def + "");
+		String stringVal = getProperty(key, def + "");
 		try {
 			return Integer.parseInt(stringVal);
 		} catch (NumberFormatException e) {
@@ -241,7 +241,7 @@ public class ConfigurationSystem {
 	 * @return Value or default
 	 */
 	public static long getLong(String key, long def) {
-		var stringVal = getProperty(key, def + "");
+		String stringVal = getProperty(key, def + "");
 		try {
 			return Long.parseLong(stringVal);
 		} catch (NumberFormatException e) {
@@ -257,7 +257,7 @@ public class ConfigurationSystem {
 	 * @return Value or default
 	 */
 	public static double getDouble(String key, double def) {
-		var stringVal = getProperty(key, Double.doubleToLongBits(def) + "");
+		String stringVal = getProperty(key, Double.doubleToLongBits(def) + "");
 		try {
 			return Double.longBitsToDouble(Long.parseLong(stringVal));
 		} catch (NumberFormatException e) {
@@ -273,7 +273,7 @@ public class ConfigurationSystem {
 	 * @return Value or default
 	 */
 	public static float getFloat(String key, float def) {
-		var stringVal = getProperty(key, Float.floatToIntBits(def) + "");
+		String stringVal = getProperty(key, Float.floatToIntBits(def) + "");
 		try {
 			return Float.intBitsToFloat(Integer.parseInt(stringVal));
 		} catch (NumberFormatException e) {
@@ -289,7 +289,7 @@ public class ConfigurationSystem {
 	 * @return Value or default
 	 */
 	public static boolean getBoolean(String key, boolean def) {
-		var stringVal = getProperty(key, def + "");
+		String stringVal = getProperty(key, def + "");
 		try {
 			return Boolean.parseBoolean(stringVal);
 		} catch (NumberFormatException e) {
