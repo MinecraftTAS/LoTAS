@@ -6,7 +6,6 @@ import de.pfannkuchen.lotas.loscreen.LoScreenManager;
 import de.pfannkuchen.lotas.mods.KeybindManager;
 import de.pfannkuchen.lotas.util.InternalTimer;
 import de.pfannkuchen.lotas.util.ResourceManager;
-import de.pfannkuchen.lotas.videorecorder.RecorderMod;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -14,7 +13,6 @@ import net.minecraft.Util;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.network.protocol.game.ClientboundCustomPayloadPacket;
 
 /**
@@ -32,8 +30,6 @@ public class ClientLoTAS implements ClientModInitializer {
 	public static KeybindManager keybindmanager;
 	// Internal Timer Singleton
 	public static InternalTimer internaltimer;
-	// Recorder Mod Singleton
-	public static RecorderMod recordermod;
 
 	@Override
 	public void onInitializeClient() {
@@ -41,7 +37,6 @@ public class ClientLoTAS implements ClientModInitializer {
 		ClientLoTAS.loscreenmanager = new LoScreenManager();
 		ClientLoTAS.keybindmanager = new KeybindManager(); // Also initializes this
 		ClientLoTAS.internaltimer = new InternalTimer();
-		ClientLoTAS.recordermod = new RecorderMod();
 	}
 
 	/**
@@ -124,8 +119,6 @@ public class ClientLoTAS implements ClientModInitializer {
 		ClientLoTAS.keybindmanager.onGameLoop(mc);
 		// Update internal timer
 		ClientLoTAS.internaltimer.advanceTime(Util.getMillis());
-		// Update Recorder
-		ClientLoTAS.recordermod.onRender(mc);
 	}
 
 	/**
@@ -166,15 +159,6 @@ public class ClientLoTAS implements ClientModInitializer {
 		LoTAS.dragonmanipulationmod.onClientPacket(packet);
 		// Update Notification Manager Callback
 		LoTAS.notificationmanager.onClientPacket(packet);
-	}
-
-	/**
-	 * Executed when a sound is being played
-	 * @param sound Sound that will be played
-	 */
-	public void onSoundPlay(SoundInstance sound) {
-		// Update Recorder Mod
-		ClientLoTAS.recordermod.onSoundPlay(sound);
 	}
 
 	/**
