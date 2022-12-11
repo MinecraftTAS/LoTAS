@@ -4,7 +4,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
 
-import de.pfannkuchen.lotas.LoTAS;
+import de.pfannkuchen.lotas.mods.TickrateChanger;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.components.SubtitleOverlay;
@@ -24,7 +24,7 @@ public class MixinSubtitleOverlay {
 	 */
 	@ModifyConstant(method = "render", constant = @Constant(longValue = 3000L))
 	public long applyTickrate(long threethousand) {
-		return (long) (threethousand * (20.0 / LoTAS.tickratechanger.getTickrate()));
+		return (long) (threethousand * (20.0 / TickrateChanger.instance.getTickrate()));
 	}
 
 	/**
@@ -34,7 +34,7 @@ public class MixinSubtitleOverlay {
 	 */
 	@ModifyConstant(method = "render", constant = @Constant(floatValue = 3000F))
 	public float applyTickrate2(float threethousand) {
-		return (float) (threethousand * (20.0 / LoTAS.tickratechanger.getTickrate()));
+		return (float) (threethousand * (20.0 / TickrateChanger.instance.getTickrate()));
 	}
 
 }

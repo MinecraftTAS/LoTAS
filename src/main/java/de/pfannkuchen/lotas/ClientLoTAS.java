@@ -4,8 +4,6 @@ import de.pfannkuchen.lotas.system.ModSystem;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.Minecraft;
-import net.minecraft.network.protocol.game.ClientboundCustomPayloadPacket;
 
 /**
  * LoTAS fabric mod core for the client only.
@@ -14,71 +12,9 @@ import net.minecraft.network.protocol.game.ClientboundCustomPayloadPacket;
 @Environment(EnvType.CLIENT)
 public class ClientLoTAS implements ClientModInitializer {
 
-	// Client-side LoTAS Singleton
-	public static ClientLoTAS instance;
-
 	@Override
 	public void onInitializeClient() {
-		ClientLoTAS.instance = this;
 		ModSystem.onClientsideInitialize();
-	}
-
-	/**
-	 * Executed after the rendering engine launches.
-	 * @param mc Instance of minecraft
-	 */
-	public void onRenderInitialize(Minecraft mc) {
-		// Update Tickrate Changer Minecraft Instance
-		LoTAS.tickratechanger.mc = mc;
-	}
-
-	/**
-	 * Executed before the JVM stops.
-	 * @param mc Instance of minecraft
-	 */
-	public void onShutdown(Minecraft mc) {
-
-	}
-
-	/**
-	 * Executed every tick of the game.
-	 * @param mc Instance of minecraft
-	 */
-	public void onTick(Minecraft mc) {
-	}
-
-	/**
-	 * Executed every time the game logic loops.
-	 * @param mc Instance of minecraft
-	 */
-	public void onGameLoop(Minecraft mc) {
-
-	}
-
-	//	/**
-	//	 * Executed after the options are being initialized.
-	//	 * @param keyMappings Standard Key Mappings
-	//	 * @return Modified Key Mappings
-	//	 */
-	//	public KeyMapping[] onKeybindInitialize(KeyMapping[] keyMappings) {
-	//		return ClientLoTAS.keybindmanager.onKeybindInitialize(keyMappings);
-	//	}
-
-	/**
-	 * Executed every time the client receives a custom payload packet.
-	 * @param packet Packet In
-	 */
-	public void onClientPayload(ClientboundCustomPayloadPacket packet) {
-		// Update Tickrate Changer Callback
-		LoTAS.tickratechanger.onClientPacket(packet);
-	}
-
-	/**
-	 * Executed if the client disconnects
-	 */
-	public void onClientDisconnect() {
-		// Update Tickrate Changer
-		LoTAS.tickratechanger.onDisconnect();
 	}
 
 }

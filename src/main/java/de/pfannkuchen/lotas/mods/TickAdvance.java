@@ -32,6 +32,7 @@ public class TickAdvance extends Mod {
 
 	/**
 	 * Updates the client tickadvance status when receiving a packet
+	 * @param buf Packet Data
 	 */
 	@Override
 	@Environment(EnvType.CLIENT)
@@ -44,6 +45,7 @@ public class TickAdvance extends Mod {
 
 	/**
 	 * Updates the server tickadvance status and resend when receiving a packet
+	 * @param buf Packet Data
 	 */
 	@Override
 	protected void onServerPayload(FriendlyByteBuf buf) {

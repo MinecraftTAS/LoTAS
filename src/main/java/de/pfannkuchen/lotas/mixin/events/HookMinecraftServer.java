@@ -5,35 +5,32 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import de.pfannkuchen.lotas.LoTAS;
 import de.pfannkuchen.lotas.system.ModSystem;
 import net.minecraft.server.MinecraftServer;
 
 /**
- * This mixin is purely responsible for the hooking up the events in {@link LoTAS}.
+ * This mixin is purely responsible for the hooking up the events in {@link ModSystem}.
  * @author Pancake
  */
 @Mixin(MinecraftServer.class)
 public class HookMinecraftServer {
 
 	/**
-	 * Triggers an Event in {@link LoTAS#onServerTick(MinecraftServer)} after the server ticks
+	 * Triggers an Event in {@link ModSystem#onServerTick(MinecraftServer)} after the server ticks
 	 * @param ci Callback Info
 	 */
 	@Inject(method = "runServer", at = @At(value = "INVOKE", shift = At.Shift.AFTER, target = "Lnet/minecraft/server/MinecraftServer;endMetricsRecordingTick()V"))
 	public void hookTickEvent(CallbackInfo ci) {
 		ModSystem.onServerTick();
-		LoTAS.instance.onServerTick((MinecraftServer) (Object) this);
 	}
 
 	/**
-	 * Triggers an Event in {@link LoTAS#onServerLoad(MinecraftServer)} before the game enters the game loop
+	 * Triggers an Event in {@link ModSystem#onServerLoad(MinecraftServer)} before the game enters the game loop
 	 * @param ci Callback Info
 	 */
 	@Inject(method = "<init>", at = @At("RETURN"))
 	public void hookInitEvent(CallbackInfo ci) {
 		ModSystem.onServerLoad((MinecraftServer) (Object) this);
-		LoTAS.instance.onServerLoad((MinecraftServer) (Object) this);
 	}
 
 }
