@@ -7,6 +7,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import de.pfannkuchen.lotas.ClientLoTAS;
 import de.pfannkuchen.lotas.system.KeybindSystem;
+import de.pfannkuchen.lotas.system.ModSystem;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
@@ -25,6 +26,7 @@ public class HookMinecraft {
 	 */
 	@Inject(method = "run", at = @At("HEAD"))
 	public void hookGameInitEvent(CallbackInfo ci) {
+		ModSystem.onClientsideRenderInitialize((Minecraft) (Object) this);
 		ClientLoTAS.instance.onRenderInitialize((Minecraft) (Object) this);
 	}
 
@@ -34,6 +36,7 @@ public class HookMinecraft {
 	 */
 	@Inject(method = "close", at = @At("RETURN"))
 	public void hookGameCloseEvent(CallbackInfo ci) {
+		ModSystem.onClientsideShutdown();
 		ClientLoTAS.instance.onShutdown((Minecraft) (Object) this);
 	}
 
@@ -43,6 +46,7 @@ public class HookMinecraft {
 	 */
 	@Inject(method = "tick", at = @At("HEAD"))
 	public void hookTickEvent(CallbackInfo ci) {
+		ModSystem.onClientsideTick();
 		ClientLoTAS.instance.onTick((Minecraft) (Object) this);
 	}
 
@@ -52,6 +56,7 @@ public class HookMinecraft {
 	 */
 	@Inject(method = "runTick", at = @At("HEAD"))
 	public void hookGameLoopEvent(CallbackInfo ci) {
+		ModSystem.onClientsideGameLoop();
 		KeybindSystem.onGameLoop((Minecraft) (Object) this);
 		ClientLoTAS.instance.onGameLoop((Minecraft) (Object) this);
 	}
@@ -62,6 +67,7 @@ public class HookMinecraft {
 	 */
 	@Inject(method = "clearLevel(Lnet/minecraft/client/gui/screens/Screen;)V", at = @At("HEAD"))
 	public void hookDisconnectEvent(CallbackInfo ci) {
+		ModSystem.onClientsideDisconnect();
 		ClientLoTAS.instance.onClientDisconnect();
 	}
 

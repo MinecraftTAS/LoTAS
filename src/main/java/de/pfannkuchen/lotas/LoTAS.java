@@ -9,6 +9,7 @@ import de.pfannkuchen.lotas.mods.DupeMod;
 import de.pfannkuchen.lotas.mods.TickAdvance;
 import de.pfannkuchen.lotas.mods.TickrateChanger;
 import de.pfannkuchen.lotas.system.ConfigurationSystem;
+import de.pfannkuchen.lotas.system.ModSystem;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.network.protocol.game.ServerboundCustomPayloadPacket;
 import net.minecraft.server.MinecraftServer;
@@ -40,6 +41,7 @@ public class LoTAS implements ModInitializer {
 	public void onInitialize() {
 		LoTAS.instance = this; // Prepare the singleton
 		ConfigurationSystem.load(new File("lotas_develop.properties"));
+		ModSystem.onInitialize();
 		LoTAS.tickratechanger = new TickrateChanger();
 		LoTAS.tickadvance = new TickAdvance();
 		LoTAS.dupemod = new DupeMod();

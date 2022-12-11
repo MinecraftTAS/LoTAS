@@ -6,6 +6,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import de.pfannkuchen.lotas.LoTAS;
+import de.pfannkuchen.lotas.system.ModSystem;
 import net.minecraft.network.protocol.game.ServerboundCustomPayloadPacket;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 
@@ -22,6 +23,7 @@ public class HookPlayNetworkHandler {
 	 */
 	@Inject(method = "handleCustomPayload", at = @At("HEAD"), cancellable = true)
 	public void hookCustomPayloadEvent(ServerboundCustomPayloadPacket packet, CallbackInfo ci) {
+		ModSystem.onServerPayload(packet);
 		LoTAS.instance.onServerPayload(packet);
 		ci.cancel();
 	}
