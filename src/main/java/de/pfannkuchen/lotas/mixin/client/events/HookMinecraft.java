@@ -9,7 +9,6 @@ import de.pfannkuchen.lotas.ClientLoTAS;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.Screen;
 
 /**
  * This mixin is purely responsible for the hooking up the events in {@link ClientLoTAS}.
@@ -53,17 +52,6 @@ public class HookMinecraft {
 	@Inject(method = "runTick", at = @At("HEAD"))
 	public void hookGameLoopEvent(CallbackInfo ci) {
 		ClientLoTAS.instance.onGameLoop((Minecraft) (Object) this);
-	}
-
-	/**
-	 * Triggers an Event in {@link ClientLoTAS#onGuiUpdate(Screen, Minecraft)} every screen change. Can also cancel the event.
-	 * @param screen New Screen
-	 * @param ci Callback Info
-	 */
-	@Inject(method = "setScreen", at = @At("HEAD"), cancellable = true)
-	public void hookScreenUpdateEvent(Screen screen, CallbackInfo ci) {
-		if (ClientLoTAS.instance.onGuiUpdate(screen, (Minecraft) (Object) this))
-			ci.cancel();
 	}
 
 	/**

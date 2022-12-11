@@ -70,8 +70,7 @@ public class TickAdvance {
 		FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
 		buf.writeBoolean(!this.tickadvance);
 		this.mc.getConnection().send(new ServerboundCustomPayloadPacket(TICK_ADVANCE_RL, buf));
-		// Send notification
-		LoTAS.notificationmanager.requestNotification(this.mc.player.getStringUUID() + "_" + this.mc.player.getName().getString() + " toggled tick advance " + (this.tickadvance ? "off" : "on"));
+		LoTAS.LOGGER.info(this.mc.player.getName().getString() + " toggled tick advance " + (this.tickadvance ? "off" : "on"));
 	}
 
 	/**

@@ -117,8 +117,7 @@ public class DupeMod {
 		FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
 		buf.writeBoolean(saveOLoad);
 		this.mc.getConnection().send(new ServerboundCustomPayloadPacket(DUPE_MOD_RL, buf));
-		// Send notification
-		LoTAS.notificationmanager.requestNotification(this.mc.player.getStringUUID() + "_" + this.mc.player.getName().getString() + (saveOLoad ? " saved playerdata" : " loaded playerdata"));
+		LoTAS.LOGGER.info(this.mc.player.getName().getString() + (saveOLoad ? " saved playerdata" : " loaded playerdata"));
 	}
 
 	/**

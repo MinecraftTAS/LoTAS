@@ -9,7 +9,6 @@
 package de.pfannkuchen.lotas.mods;
 
 import de.pfannkuchen.lotas.LoTAS;
-import de.pfannkuchen.lotas.gui.windows.DragonManipulationLoWidget;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -43,7 +42,6 @@ public class DragonManipulationMod {
 			FriendlyByteBuf data = p.getData();
 			LoTAS.configmanager.setBoolean("dragonmanipulationwidget", data.readUtf(), data.readBoolean());
 			LoTAS.configmanager.save();
-			DragonManipulationLoWidget.forceUpdate();
 		}
 	}
 
@@ -80,7 +78,7 @@ public class DragonManipulationMod {
 		buf.writeUtf(key);
 		buf.writeBoolean(value);
 		this.mc.getConnection().send(new ServerboundCustomPayloadPacket(DRAGON_MANIPULATION_MOD_RL, buf));
-		// Send notification
+		// Log to console
 		String text = (value ? " enabled " : " disabled ") + switch (key) {
 			case "forceOptimalPath":
 				yield "force optimal ender dragon path";
@@ -93,7 +91,7 @@ public class DragonManipulationMod {
 			default:
 				yield " unknown ender dragon option";
 		};
-		LoTAS.notificationmanager.requestNotification(this.mc.player.getStringUUID() + "_" + this.mc.player.getName().getString() + text);
+		LoTAS.LOGGER.info(this.mc.player.getName().getString() + text);
 	}
 
 	/**
