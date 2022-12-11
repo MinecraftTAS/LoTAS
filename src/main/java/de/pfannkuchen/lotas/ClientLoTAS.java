@@ -30,8 +30,6 @@ public class ClientLoTAS implements ClientModInitializer {
 	public void onRenderInitialize(Minecraft mc) {
 		// Update Tickrate Changer Minecraft Instance
 		LoTAS.tickratechanger.mc = mc;
-		// Update Tick Advance Minecraft Instance
-		LoTAS.tickadvance.mc = mc;
 	}
 
 	/**
@@ -47,8 +45,6 @@ public class ClientLoTAS implements ClientModInitializer {
 	 * @param mc Instance of minecraft
 	 */
 	public void onTick(Minecraft mc) {
-		// Tick Tick Advance
-		LoTAS.tickadvance.onTick(mc);
 	}
 
 	/**
@@ -75,16 +71,12 @@ public class ClientLoTAS implements ClientModInitializer {
 	public void onClientPayload(ClientboundCustomPayloadPacket packet) {
 		// Update Tickrate Changer Callback
 		LoTAS.tickratechanger.onClientPacket(packet);
-		// Update Tick Advance Callback
-		LoTAS.tickadvance.onClientPacket(packet);
 	}
 
 	/**
 	 * Executed if the client disconnects
 	 */
 	public void onClientDisconnect() {
-		// Update Tick Advance
-		LoTAS.tickadvance.onDisconnect();
 		// Update Tickrate Changer
 		LoTAS.tickratechanger.onDisconnect();
 	}

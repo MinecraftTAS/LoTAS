@@ -44,6 +44,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import de.pfannkuchen.lotas.LoTAS;
+import de.pfannkuchen.lotas.mods.TickAdvance;
 import net.minecraft.Util;
 import net.minecraft.server.MinecraftServer;
 
@@ -96,7 +97,7 @@ public abstract class MixinMinecraftServer {
 	 * @return In tickrates > 0 the vanilla time - offset else the current time in tickrate 0
 	 */
 	private long getCurrentTime() {
-		if (!LoTAS.tickadvance.isTickadvanceEnabled() || LoTAS.tickadvance.shouldTickServer) {
+		if (!TickAdvance.instance.isTickadvanceEnabled() || TickAdvance.instance.shouldTickServer) {
 			this.currentTime = Util.getMillis(); // Set the current time that will be returned if the player decides to activate
 													// tickrate 0
 			return Util.getMillis() - this.offset; // Returns the Current time - offset which was set while tickrate 0 was active
@@ -120,7 +121,7 @@ public abstract class MixinMinecraftServer {
 	 */
 	@Inject(method = "tickServer", at = @At("HEAD"))
 	public void injectrunTick(BooleanSupplier supplier, CallbackInfo ci) {
-		LoTAS.tickadvance.shouldTickServer = false;
+		TickAdvance.instance.shouldTickServer = false;
 	}
 
 }
