@@ -50,7 +50,7 @@ public class DupeMod extends Mod {
 
 	/**
 	 * Saves or loads when receiving a packet
-	 * @param p Incoming packet
+	 * @param buf Packet Data
 	 */
 	@Override
 	@Environment(EnvType.CLIENT)
@@ -65,7 +65,7 @@ public class DupeMod extends Mod {
 
 	/**
 	 * Resend when receiving a packet
-	 * @param p Incoming packet
+	 * @param buf Packet Data
 	 */
 	@Override
 	protected void onServerPayload(FriendlyByteBuf buf) {
