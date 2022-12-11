@@ -5,7 +5,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import de.pfannkuchen.lotas.ClientLoTAS;
 import de.pfannkuchen.lotas.system.ModSystem;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -13,7 +12,7 @@ import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.network.protocol.game.ClientboundCustomPayloadPacket;
 
 /**
- * This mixin is purely responsible for the hooking up the events in {@link ClientLoTAS}. It also cancelles the logger
+ * This mixin is purely responsible for the hooking up the events in {@link ModSystem}. It also cancelles the logger
  * @author Pancake
  */
 @Mixin(ClientPacketListener.class)
@@ -21,13 +20,12 @@ import net.minecraft.network.protocol.game.ClientboundCustomPayloadPacket;
 public class HookClientPlayNetworkHandler {
 
 	/**
-	 * Triggers an Event in {@link ClientLoTAS#onClientPayload(ClientboundCustomPayloadPacket)} whenever a custom payload packet is received
+	 * Triggers an Event in {@link ModSystem#onClientsidePayload(ClientboundCustomPayloadPacket)} whenever a custom payload packet is received
 	 * @param ci Callback Info
 	 */
 	@Inject(method = "handleCustomPayload", at = @At("HEAD"), cancellable = true)
 	public void hookCustomPayloadEvent(ClientboundCustomPayloadPacket packet, CallbackInfo ci) {
 		ModSystem.onClientsidePayload(packet);
-		ClientLoTAS.instance.onClientPayload(packet);
 		ci.cancel();
 	}
 

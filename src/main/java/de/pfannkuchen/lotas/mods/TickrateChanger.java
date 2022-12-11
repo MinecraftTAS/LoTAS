@@ -10,27 +10,26 @@
 package de.pfannkuchen.lotas.mods;
 
 import de.pfannkuchen.lotas.LoTAS;
+import de.pfannkuchen.lotas.system.ModSystem.Mod;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.protocol.game.ClientboundCustomPayloadPacket;
-import net.minecraft.network.protocol.game.ServerboundCustomPayloadPacket;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 
 /**
  * Main tickrate changer
  * @author Pancake
  */
-public class TickrateChanger {
+public class TickrateChanger extends Mod {
 
-	static final ResourceLocation TICKRATE_CHANGER_RL = new ResourceLocation("lotas", "tickratechanger");
-	@Environment(EnvType.CLIENT)
-	public Minecraft mc;
-	public MinecraftServer mcserver;
+	public static TickrateChanger instance;
+
+	public TickrateChanger() {
+		super(new ResourceLocation("lotas", "tickratechanger"));
+		instance = this;
+	}
 
 	// Tickrate Variables in various formats
 	private double tickrate = 20.0;
@@ -49,26 +48,24 @@ public class TickrateChanger {
 
 	/**
 	 * Updates the Client tickrate when receiving a packet
-	 * @param p Incoming Packet
+	 * @param buf Packet Data
 	 */
-	@Environment(EnvType.CLIENT)
-	public void onClientPacket(ClientboundCustomPayloadPacket p) {
-		if (TICKRATE_CHANGER_RL.equals(p.getIdentifier())) {
-			this.internallyUpdateTickrate(p.getData().readDouble());
-			// Update the local time
-			var time = System.currentTimeMillis() - this.timeSinceTC;
-			this.fakeTimeSinceTC += time * this.gamespeed;
-			this.timeSinceTC = System.currentTimeMillis();
-		}
+	@Override
+	protected void onClientsidePayload(FriendlyByteBuf buf) {
+		this.internallyUpdateTickrate(buf.readDouble());
+		// Update the local time
+		var time = System.currentTimeMillis() - this.timeSinceTC;
+		this.fakeTimeSinceTC += time * this.gamespeed;
+		this.timeSinceTC = System.currentTimeMillis();
 	}
 
 	/**
 	 * Updates the Server tickrate and resend when receiving a packet
-	 * @param p Incoming Packet
+	 * @param buf Packet Data
 	 */
-	public void onServerPacket(ServerboundCustomPayloadPacket p) {
-		if (TICKRATE_CHANGER_RL.equals(p.getIdentifier()))
-			this.updateTickrate(p.getData().readDouble());
+	@Override
+	protected void onServerPayload(FriendlyByteBuf buf) {
+		this.updateTickrate(buf.readDouble());
 	}
 
 	/**
@@ -80,8 +77,7 @@ public class TickrateChanger {
 		// Request tickrate update
 		var buf = new FriendlyByteBuf(Unpooled.buffer());
 		buf.writeDouble(tickrate);
-		var p = new ServerboundCustomPayloadPacket(TICKRATE_CHANGER_RL, buf);
-		this.mc.getConnection().send(p);
+		this.sendPacketToServer(buf);
 		LoTAS.LOGGER.info(this.mc.player.getName().getString() + " updated the tickrate to " + String.format("%.2f", tickrate));
 	}
 
@@ -93,12 +89,11 @@ public class TickrateChanger {
 		if (tickrate < 0.1)
 			return;
 		this.internallyUpdateTickrate(tickrate);
-		// Update Tickrate for all Clients
-		this.mcserver.getPlayerList().getPlayers().forEach(c -> {
+		// Update Tickrate for all clients
+		this.mcserver.getPlayerList().getPlayers().forEach(player -> {
 			var buf = new FriendlyByteBuf(Unpooled.buffer());
 			buf.writeDouble(tickrate);
-			var p = new ClientboundCustomPayloadPacket(TICKRATE_CHANGER_RL, buf);
-			c.connection.send(p);
+			this.sendPacketToClient(player, buf);
 		});
 	}
 
@@ -126,19 +121,17 @@ public class TickrateChanger {
 	/**
 	 * Clears local data on disconnect
 	 */
+	@Override
 	@Environment(EnvType.CLIENT)
-	public void onDisconnect() {
+	public void onClientsideDisconnect() {
 		this.internallyUpdateTickrate(20.0);
 	}
 
-	/**
-	 * Updates client data on connect
-	 */
-	public void onConnect(ServerPlayer c) {
+	@Override
+	protected void onClientConnect(ServerPlayer player) {
 		var buf = new FriendlyByteBuf(Unpooled.buffer());
 		buf.writeDouble(this.tickrate);
-		var p = new ClientboundCustomPayloadPacket(TICKRATE_CHANGER_RL, buf);
-		c.connection.send(p);
+		this.sendPacketToClient(player, buf);
 	}
 
 	/**

@@ -43,8 +43,8 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import de.pfannkuchen.lotas.LoTAS;
 import de.pfannkuchen.lotas.mods.TickAdvance;
+import de.pfannkuchen.lotas.mods.TickrateChanger;
 import net.minecraft.Util;
 import net.minecraft.server.MinecraftServer;
 
@@ -69,7 +69,7 @@ public abstract class MixinMinecraftServer {
 	 */
 	@ModifyConstant(method = "runServer", constant = @Constant(longValue = 50L))
 	private long serverTickWaitTime(long ignored) {
-		return (long) LoTAS.tickratechanger.getMsPerTick();
+		return (long) TickrateChanger.instance.getMsPerTick();
 	}
 
 	/**

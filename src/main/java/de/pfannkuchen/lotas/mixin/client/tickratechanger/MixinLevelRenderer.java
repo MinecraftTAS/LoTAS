@@ -4,7 +4,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
-import de.pfannkuchen.lotas.LoTAS;
+import de.pfannkuchen.lotas.mods.TickrateChanger;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.LevelRenderer;
@@ -24,7 +24,7 @@ public class MixinLevelRenderer {
 	 */
 	@ModifyVariable(method = "renderWorldBorder", at = @At(value = "STORE"), index = 19, ordinal = 3)
 	public float injectf3(float f) {
-		return LoTAS.tickratechanger.getMilliseconds() % 3000L / 3000.0F;
+		return TickrateChanger.instance.getMilliseconds() % 3000L / 3000.0F;
 	}
 
 }

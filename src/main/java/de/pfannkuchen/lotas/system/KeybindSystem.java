@@ -7,10 +7,10 @@ import java.util.Map;
 import org.apache.commons.lang3.ArrayUtils;
 import org.lwjgl.glfw.GLFW;
 
-import de.pfannkuchen.lotas.LoTAS;
 import de.pfannkuchen.lotas.mixin.client.accessors.AccessorKeyMapping;
 import de.pfannkuchen.lotas.mods.DupeMod;
 import de.pfannkuchen.lotas.mods.TickAdvance;
+import de.pfannkuchen.lotas.mods.TickrateChanger;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.KeyMapping;
@@ -36,10 +36,10 @@ public class KeybindSystem {
 			TickAdvance.instance.requestTickadvanceToggle();
 		}),
 		new Keybind("Decrease Tickrate", "Tickrate Changer", GLFW.GLFW_KEY_COMMA, true, () -> {
-			LoTAS.tickratechanger.decreaseTickrate();
+			TickrateChanger.instance.decreaseTickrate();
 		}),
 		new Keybind("Increase Tickrate", "Tickrate Changer", GLFW.GLFW_KEY_PERIOD, true, () -> {
-			LoTAS.tickratechanger.increaseTickrate();
+			TickrateChanger.instance.increaseTickrate();
 		}),
 		new Keybind("Save playerdata", "Duplication", GLFW.GLFW_KEY_N, true, () -> {
 			DupeMod.instance.requestDupe(true);
