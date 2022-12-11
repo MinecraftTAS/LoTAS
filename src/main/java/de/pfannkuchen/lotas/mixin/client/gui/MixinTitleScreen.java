@@ -14,6 +14,7 @@ import de.pfannkuchen.lotas.util.OSUtils;
 import de.pfannkuchen.lotas.util.OSUtils.OS;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.network.chat.Component;
@@ -50,10 +51,7 @@ public abstract class MixinTitleScreen extends Screen {
 			} else {
 				ClientLoTAS.recordermod.stopRecording();
 			}
-		}, (buttonWidget, matrixStack, i, j) -> {
-			if (buttonWidget.isMouseOver(i, j))
-				this.renderTooltip(matrixStack, this.minecraft.font.split(Component.literal(OSUtils.getOS() == OS.WINDOWS ? "If you turn on the recording then LoTAS will record your gameplay and save it to your Videos Folder. It is automatically adapting to the tickrate and removes the pause screens. IT IS RECOMMENDED TO TURN OFF VSYNC" : "This feature is only available for Windows Users"), Math.max(this.width / 2 - 43, 170)), i, j);
-		}, ClientLoTAS.recordermod == null ? false : ClientLoTAS.recordermod.isRecording())).active = OSUtils.getOS() == OS.WINDOWS;
+		}, Tooltip.create(Component.literal(OSUtils.getOS() == OS.WINDOWS ? "If you turn on the recording then LoTAS will record your gameplay and save it to your Videos Folder. It is automatically adapting to the tickrate and removes the pause screens. IT IS RECOMMENDED TO TURN OFF VSYNC" : "This feature is only available for Windows Users")), ClientLoTAS.recordermod == null ? false : ClientLoTAS.recordermod.isRecording())).active = OSUtils.getOS() == OS.WINDOWS;
 	}
 
 }
