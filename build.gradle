@@ -1,7 +1,7 @@
 /* Add Plugins required for LoTAS */
 plugins {
-	// Add Fabric-Loom plugin for the fabric modloader
-	id 'fabric-loom' version '0.12-SNAPSHOT'
+	// Add Fabric-Loom plugin for the fabric modloader (note for now this is 1.1 made by pancake)
+	id 'fabric-loom' version '1.1-SNAPSHOT'
 }
 
 // Set Java version compatibility to 17
