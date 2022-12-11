@@ -8,7 +8,6 @@ import org.apache.logging.log4j.Logger;
 import de.pfannkuchen.lotas.mods.ConfigManager;
 import de.pfannkuchen.lotas.mods.DragonManipulationMod;
 import de.pfannkuchen.lotas.mods.DupeMod;
-import de.pfannkuchen.lotas.mods.SavestateMod;
 import de.pfannkuchen.lotas.mods.TickAdvance;
 import de.pfannkuchen.lotas.mods.TickrateChanger;
 import net.fabricmc.api.ModInitializer;
@@ -34,8 +33,6 @@ public class LoTAS implements ModInitializer {
 	public static ConfigManager configmanager;
 	// Dupe Mod Singleton
 	public static DupeMod dupemod;
-	// Savestate Mod Singleton
-	public static SavestateMod savestatemod;
 	// Dragon Manipulation Mod Singleton
 	public static DragonManipulationMod dragonmanipulationmod;
 
@@ -49,7 +46,6 @@ public class LoTAS implements ModInitializer {
 		LoTAS.tickadvance = new TickAdvance();
 		LoTAS.configmanager = new ConfigManager(new File("lotas_develop.properties"));
 		LoTAS.dupemod = new DupeMod();
-		LoTAS.savestatemod = new SavestateMod();
 		LoTAS.dragonmanipulationmod = new DragonManipulationMod();
 	}
 
@@ -69,12 +65,11 @@ public class LoTAS implements ModInitializer {
 	}
 
 	/**
-	 * Executed after/before every server tick
+	 * Executed inbetween every server tick
 	 * @param server Server Instance
 	 */
 	public void onServerTick(MinecraftServer server) {
-		// Tick Savestate Mod
-		LoTAS.savestatemod.afterServerTick(server);
+		
 	}
 
 	/**
@@ -88,8 +83,6 @@ public class LoTAS implements ModInitializer {
 		LoTAS.tickadvance.onServerPacket(packet);
 		// Update Dupe Mod Handler
 		LoTAS.dupemod.onServerPacket(packet);
-		// Update Savestate Mod Handler
-		LoTAS.savestatemod.onServerPacket(packet);
 		// Update Dragon Manipulation Mod Handler
 		LoTAS.dragonmanipulationmod.onServerPacket(packet);
 	}
@@ -104,8 +97,6 @@ public class LoTAS implements ModInitializer {
 		LoTAS.tickadvance.onConnect(c);
 		// Update Tickrate Changer
 		LoTAS.tickratechanger.onConnect(c);
-		// Update Savestate Mod
-		LoTAS.savestatemod.onConnect(c);
 		// Update Dragon Manipulation Mod
 		LoTAS.dragonmanipulationmod.onConnect(c);
 	}
