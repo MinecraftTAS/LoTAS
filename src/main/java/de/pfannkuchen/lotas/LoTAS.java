@@ -5,7 +5,6 @@ import java.io.File;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import de.pfannkuchen.lotas.mods.DupeMod;
 import de.pfannkuchen.lotas.mods.TickAdvance;
 import de.pfannkuchen.lotas.mods.TickrateChanger;
 import de.pfannkuchen.lotas.system.ConfigurationSystem;
@@ -31,8 +30,6 @@ public class LoTAS implements ModInitializer {
 	public static TickAdvance tickadvance;
 	// Config Manager Singleton
 	public static ConfigurationSystem configmanager;
-	// Dupe Mod Singleton
-	public static DupeMod dupemod;
 
 	/**
 	 * Executed after the game launches.
@@ -44,7 +41,6 @@ public class LoTAS implements ModInitializer {
 		ModSystem.onInitialize();
 		LoTAS.tickratechanger = new TickrateChanger();
 		LoTAS.tickadvance = new TickAdvance();
-		LoTAS.dupemod = new DupeMod();
 	}
 
 	/**
@@ -56,8 +52,6 @@ public class LoTAS implements ModInitializer {
 		LoTAS.tickratechanger.mcserver = server;
 		// Update Tick Advance Instance
 		LoTAS.tickadvance.mcserver = server;
-		// Update Dupe Mod Handler
-		LoTAS.dupemod.mcserver = server;
 	}
 
 	/**
@@ -77,16 +71,12 @@ public class LoTAS implements ModInitializer {
 		LoTAS.tickratechanger.onServerPacket(packet);
 		// Update Tick Advance Handler
 		LoTAS.tickadvance.onServerPacket(packet);
-		// Update Dupe Mod Handler
-		LoTAS.dupemod.onServerPacket(packet);
 	}
 
 	/**
 	 * Executed if a client connects
 	 */
 	public void onClientConnect(ServerPlayer c) {
-		// Update Dupe Mod
-		LoTAS.dupemod.onConnect(c);
 		// Update Tick Advance
 		LoTAS.tickadvance.onConnect(c);
 		// Update Tickrate Changer

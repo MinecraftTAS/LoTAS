@@ -32,8 +32,6 @@ public class ClientLoTAS implements ClientModInitializer {
 		LoTAS.tickratechanger.mc = mc;
 		// Update Tick Advance Minecraft Instance
 		LoTAS.tickadvance.mc = mc;
-		// Update Dupe Mod Minecraft Instance
-		LoTAS.dupemod.mc = mc;
 	}
 
 	/**
@@ -79,16 +77,12 @@ public class ClientLoTAS implements ClientModInitializer {
 		LoTAS.tickratechanger.onClientPacket(packet);
 		// Update Tick Advance Callback
 		LoTAS.tickadvance.onClientPacket(packet);
-		// Update Dupe Mod Callback
-		LoTAS.dupemod.onClientPacket(packet);
 	}
 
 	/**
 	 * Executed if the client disconnects
 	 */
 	public void onClientDisconnect() {
-		// Update Dupe Mod
-		LoTAS.dupemod.onDisconnect();
 		// Update Tick Advance
 		LoTAS.tickadvance.onDisconnect();
 		// Update Tickrate Changer
