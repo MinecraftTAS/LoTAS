@@ -10,7 +10,6 @@
 package de.pfannkuchen.lotas.mods;
 
 import de.pfannkuchen.lotas.LoTAS;
-import de.pfannkuchen.lotas.gui.windows.TickrateChangerLoWidget;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -60,8 +59,6 @@ public class TickrateChanger {
 			long time = System.currentTimeMillis() - this.timeSinceTC;
 			this.fakeTimeSinceTC += time * this.gamespeed;
 			this.timeSinceTC = System.currentTimeMillis();
-			// Update the Tickrate Changer LoWidget
-			TickrateChangerLoWidget.updateTickrate(this.tickrate);
 		}
 	}
 
@@ -85,8 +82,7 @@ public class TickrateChanger {
 		buf.writeDouble(tickrate);
 		ServerboundCustomPayloadPacket p = new ServerboundCustomPayloadPacket(TICKRATE_CHANGER_RL, buf);
 		this.mc.getConnection().send(p);
-		// Send notification
-		LoTAS.notificationmanager.requestNotification(this.mc.player.getStringUUID() + "_" + this.mc.player.getName().getString() + " updated the tickrate to " + String.format("%.2f", tickrate));
+		LoTAS.LOGGER.info(this.mc.player.getName().getString() + " updated the tickrate to " + String.format("%.2f", tickrate));
 	}
 
 	/**

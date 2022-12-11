@@ -194,10 +194,11 @@ public class SavestateMod {
 	@Environment(EnvType.CLIENT)
 	private void lock(boolean lockOUnlock) {
 		try {
-			if (lockOUnlock)
-				de.pfannkuchen.lotas.ClientLoTAS.loscreenmanager.setScreen(new de.pfannkuchen.lotas.gui.StateLoScreen());
-			else
-				de.pfannkuchen.lotas.gui.StateLoScreen.allowUnlocking();
+//			gonna delete this next commit
+//			if (lockOUnlock)
+//				de.pfannkuchen.lotas.ClientLoTAS.loscreenmanager.setScreen(new de.pfannkuchen.lotas.gui.StateLoScreen());
+//			else
+//				de.pfannkuchen.lotas.gui.StateLoScreen.allowUnlocking();
 		} catch (Exception e) {
 			e.printStackTrace(); // just to be sure, this didn't happen after I implemented the recordRenderCall()
 		}
