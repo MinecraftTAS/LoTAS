@@ -1,10 +1,8 @@
 package de.pfannkuchen.lotas;
 
-import de.pfannkuchen.lotas.system.KeybindSystem;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.protocol.game.ClientboundCustomPayloadPacket;
 
@@ -17,13 +15,10 @@ public class ClientLoTAS implements ClientModInitializer {
 
 	// Client-side LoTAS Singleton
 	public static ClientLoTAS instance;
-	// Keybind Manager Singleton
-	public static KeybindSystem keybindmanager;
 
 	@Override
 	public void onInitializeClient() {
 		ClientLoTAS.instance = this;
-		ClientLoTAS.keybindmanager = new KeybindSystem(); // Also initializes this
 	}
 
 	/**
@@ -61,18 +56,17 @@ public class ClientLoTAS implements ClientModInitializer {
 	 * @param mc Instance of minecraft
 	 */
 	public void onGameLoop(Minecraft mc) {
-		// Update Key bindings
-		ClientLoTAS.keybindmanager.onGameLoop(mc);
+
 	}
 
-	/**
-	 * Executed after the options are being initialized.
-	 * @param keyMappings Standard Key Mappings
-	 * @return Modified Key Mappings
-	 */
-	public KeyMapping[] onKeybindInitialize(KeyMapping[] keyMappings) {
-		return ClientLoTAS.keybindmanager.onKeybindInitialize(keyMappings);
-	}
+	//	/**
+	//	 * Executed after the options are being initialized.
+	//	 * @param keyMappings Standard Key Mappings
+	//	 * @return Modified Key Mappings
+	//	 */
+	//	public KeyMapping[] onKeybindInitialize(KeyMapping[] keyMappings) {
+	//		return ClientLoTAS.keybindmanager.onKeybindInitialize(keyMappings);
+	//	}
 
 	/**
 	 * Executed every time the client receives a custom payload packet.
