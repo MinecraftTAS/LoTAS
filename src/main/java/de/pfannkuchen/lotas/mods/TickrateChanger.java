@@ -39,7 +39,7 @@ public class TickrateChanger {
 
 	// Recommended tickrate
 	@Environment(EnvType.CLIENT)
-	private double[] tickrates = new double[] { 0.5f, 1.0f, 2.0f, 4.0f, 5.0f, 10.0f, 20.0f };
+	private double[] tickrates = { 0.5f, 1.0f, 2.0f, 4.0f, 5.0f, 10.0f, 20.0f };
 
 	// Tickrate Changer Millisecond
 	@Environment(EnvType.CLIENT)
@@ -56,7 +56,7 @@ public class TickrateChanger {
 		if (TICKRATE_CHANGER_RL.equals(p.getIdentifier())) {
 			this.internallyUpdateTickrate(p.getData().readDouble());
 			// Update the local time
-			long time = System.currentTimeMillis() - this.timeSinceTC;
+			var time = System.currentTimeMillis() - this.timeSinceTC;
 			this.fakeTimeSinceTC += time * this.gamespeed;
 			this.timeSinceTC = System.currentTimeMillis();
 		}
@@ -78,9 +78,9 @@ public class TickrateChanger {
 	@Environment(EnvType.CLIENT)
 	public void requestTickrateUpdate(double tickrate) {
 		// Request tickrate update
-		FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
+		var buf = new FriendlyByteBuf(Unpooled.buffer());
 		buf.writeDouble(tickrate);
-		ServerboundCustomPayloadPacket p = new ServerboundCustomPayloadPacket(TICKRATE_CHANGER_RL, buf);
+		var p = new ServerboundCustomPayloadPacket(TICKRATE_CHANGER_RL, buf);
 		this.mc.getConnection().send(p);
 		LoTAS.LOGGER.info(this.mc.player.getName().getString() + " updated the tickrate to " + String.format("%.2f", tickrate));
 	}
@@ -95,9 +95,9 @@ public class TickrateChanger {
 		this.internallyUpdateTickrate(tickrate);
 		// Update Tickrate for all Clients
 		this.mcserver.getPlayerList().getPlayers().forEach(c -> {
-			FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
+			var buf = new FriendlyByteBuf(Unpooled.buffer());
 			buf.writeDouble(tickrate);
-			ClientboundCustomPayloadPacket p = new ClientboundCustomPayloadPacket(TICKRATE_CHANGER_RL, buf);
+			var p = new ClientboundCustomPayloadPacket(TICKRATE_CHANGER_RL, buf);
 			c.connection.send(p);
 		});
 	}
@@ -118,7 +118,7 @@ public class TickrateChanger {
 	 */
 	@Environment(EnvType.CLIENT)
 	public long getMilliseconds() {
-		long time = System.currentTimeMillis() - this.timeSinceTC;
+		var time = System.currentTimeMillis() - this.timeSinceTC;
 		time *= this.gamespeed;
 		return this.fakeTimeSinceTC + time;
 	}
@@ -135,9 +135,9 @@ public class TickrateChanger {
 	 * Updates client data on connect
 	 */
 	public void onConnect(ServerPlayer c) {
-		FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
+		var buf = new FriendlyByteBuf(Unpooled.buffer());
 		buf.writeDouble(this.tickrate);
-		ClientboundCustomPayloadPacket p = new ClientboundCustomPayloadPacket(TICKRATE_CHANGER_RL, buf);
+		var p = new ClientboundCustomPayloadPacket(TICKRATE_CHANGER_RL, buf);
 		c.connection.send(p);
 	}
 
@@ -146,10 +146,12 @@ public class TickrateChanger {
 	 */
 	@Environment(EnvType.CLIENT)
 	public void decreaseTickrate() {
-		double newTickrate = this.tickrate;
-		for (int i = this.tickrates.length - 1; i >= 0; i--)
-			if ((newTickrate = this.tickrates[i]) < this.tickrate)
+		var newTickrate = this.tickrate;
+		for (var i = this.tickrates.length - 1; i >= 0; i--) {
+			newTickrate = this.tickrates[i];
+			if (newTickrate < this.tickrate)
 				break;
+		}
 
 		this.requestTickrateUpdate(newTickrate);
 	}
@@ -159,15 +161,15 @@ public class TickrateChanger {
 	 */
 	@Environment(EnvType.CLIENT)
 	public void increaseTickrate() {
-		double newTickrate = this.tickrate;
-		for (int i = 0; i < this.tickrates.length; i++)
-			if ((newTickrate = this.tickrates[i]) > this.tickrate)
+		var newTickrate = this.tickrate;
+		for (double tickrate2 : this.tickrates) {
+			newTickrate = tickrate2;
+			if (newTickrate > this.tickrate)
 				break;
+		}
 
 		this.requestTickrateUpdate(newTickrate);
 	}
-
-	// Place getters here to not confuse with public variables that shall not be set
 
 	public double getTickrate() {
 		return this.tickrate;
