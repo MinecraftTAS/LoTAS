@@ -5,7 +5,6 @@ import java.io.File;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import de.pfannkuchen.lotas.mods.TickAdvance;
 import de.pfannkuchen.lotas.mods.TickrateChanger;
 import de.pfannkuchen.lotas.system.ConfigurationSystem;
 import de.pfannkuchen.lotas.system.ModSystem;
@@ -26,10 +25,6 @@ public class LoTAS implements ModInitializer {
 	public static LoTAS instance;
 	// Tickrate Changer Singleton
 	public static TickrateChanger tickratechanger;
-	// Tick Advance Singleton
-	public static TickAdvance tickadvance;
-	// Config Manager Singleton
-	public static ConfigurationSystem configmanager;
 
 	/**
 	 * Executed after the game launches.
@@ -40,7 +35,6 @@ public class LoTAS implements ModInitializer {
 		ConfigurationSystem.load(new File("lotas_develop.properties"));
 		ModSystem.onInitialize();
 		LoTAS.tickratechanger = new TickrateChanger();
-		LoTAS.tickadvance = new TickAdvance();
 	}
 
 	/**
@@ -50,8 +44,6 @@ public class LoTAS implements ModInitializer {
 	public void onServerLoad(MinecraftServer server) {
 		// Update Tickrate Changer Instance
 		LoTAS.tickratechanger.mcserver = server;
-		// Update Tick Advance Instance
-		LoTAS.tickadvance.mcserver = server;
 	}
 
 	/**
@@ -69,16 +61,12 @@ public class LoTAS implements ModInitializer {
 	public void onServerPayload(ServerboundCustomPayloadPacket packet) {
 		// Update Tickrate Changer Handler
 		LoTAS.tickratechanger.onServerPacket(packet);
-		// Update Tick Advance Handler
-		LoTAS.tickadvance.onServerPacket(packet);
 	}
 
 	/**
 	 * Executed if a client connects
 	 */
 	public void onClientConnect(ServerPlayer c) {
-		// Update Tick Advance
-		LoTAS.tickadvance.onConnect(c);
 		// Update Tickrate Changer
 		LoTAS.tickratechanger.onConnect(c);
 	}
