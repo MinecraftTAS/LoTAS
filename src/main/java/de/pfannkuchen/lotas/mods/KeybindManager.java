@@ -1,5 +1,6 @@
 package de.pfannkuchen.lotas.mods;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,7 +14,6 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.EditBox;
-import net.minecraft.client.gui.screens.Screen;
 
 /**
  * Manages keybinds and their categories.
@@ -23,50 +23,147 @@ import net.minecraft.client.gui.screens.Screen;
 public class KeybindManager {
 
 	/**
-	 * Key binding for advancing a single tick while being in tick advance.
+	 * List of keybinds
 	 */
-	private KeyMapping tickadvanceKeybind = new KeyMapping("Advance a tick", GLFW.GLFW_KEY_F9, "LoTAS Keybinds");
+	// @formatter:off
+	private Keybind[] keybinds = {
+		new Keybind("Advance a tick", "Tickrate Changer", GLFW.GLFW_KEY_F9, true, () -> {
+			LoTAS.tickadvance.requestTickadvance();
+		}),
+		new Keybind("Toggle tick advance", "Tickrate Changer", GLFW.GLFW_KEY_F8, true, () -> {
+			LoTAS.tickadvance.requestTickadvanceToggle();
+		}),
+		new Keybind("Decrease Tickrate", "Tickrate Changer", GLFW.GLFW_KEY_COMMA, true, () -> {
+			LoTAS.tickratechanger.decreaseTickrate();
+		}),
+		new Keybind("Increase Tickrate", "Tickrate Changer", GLFW.GLFW_KEY_PERIOD, true, () -> {
+			LoTAS.tickratechanger.increaseTickrate();
+		}),
+		new Keybind("Save playerdata", "Duplication", GLFW.GLFW_KEY_N, true, () -> {
+			LoTAS.dupemod.requestDupe(true);
+		}),
+		new Keybind("Load playerdata", "Duplication", GLFW.GLFW_KEY_M, true, () -> {
+			LoTAS.dupemod.requestDupe(false);
+		}),
+	};
+	// @formatter:on
 
 	/**
-	 * Key binding for advancing a single tick while being in tick advance.
+	 * Represents a keybind
+	 * @author Pancake
 	 */
-	private KeyMapping toggleTickadvance = new KeyMapping("Toggle tick advance", GLFW.GLFW_KEY_F8, "LoTAS Keybinds");
+	public class Keybind {
+
+		/**
+		 * Name of the keybind in the controls menu
+		 */
+		private String name;
+
+		/**
+		 * Category of the keybind in the controls menu
+		 */
+		private String category;
+
+		/**
+		 * Default key of the keybind
+		 */
+		private int defaultKey;
+
+		/**
+		 * Should the keybind only be available if mc.level is not null
+		 */
+		private boolean isInGame;
+
+		/**
+		 * Will be run when the keybind is pressed
+		 */
+		private Runnable onKeyDown;
+
+		/**
+		 * Minecraft key mapping
+		 */
+		private KeyMapping keyMapping;
+
+		/**
+		 * Initializes a keybind
+		 * @param name Name of the keybind
+		 * @param category Category of the keybind
+		 * @param defaultKey Default key of the keybind
+		 * @param isInGame Should the keybind only be available if mc.level is not null
+		 * @param onKeyDown Will be run when the keybind is pressed
+		 */
+		public Keybind(String name, String category, int defaultKey, boolean isInGame, Runnable onKeyDown) {
+			this.name = name;
+			this.category = category;
+			this.defaultKey = defaultKey;
+			this.isInGame = isInGame;
+			this.onKeyDown = onKeyDown;
+			this.keyMapping = new KeyMapping(name, defaultKey, category);
+		}
+
+		/**
+		 * Returns the name of the keybind
+		 * @return Name of keybind
+		 */
+		public String getName() {
+			return this.name;
+		}
+
+		/**
+		 * Returns the category of the keybind
+		 * @return Category of keybind
+		 */
+		public String getCategory() {
+			return this.category;
+		}
+
+		/**
+		 * Returns the default key of the keybind
+		 * @return Default key of keybind
+		 */
+		public int getDefaultKey() {
+			return this.defaultKey;
+		}
+
+		/**
+		 * Returns the minecraft key mapping
+		 * @return Minecraft key mapping
+		 */
+		public KeyMapping getKeyMapping() {
+			return this.keyMapping;
+		}
+
+		/**
+		 * Returns the runnable that will be executed when they key is pressed
+		 * @return On Key Down Runnable
+		 */
+		public Runnable getOnKeyDown() {
+			return this.onKeyDown;
+		}
+
+		/**
+		 * Returns whether the keybind is an ingame keybind or not
+		 * @return Is Ingame keybind
+		 */
+		public boolean isInGame() {
+			return this.isInGame;
+		}
+
+	}
 
 	/**
-	 * Key binding for decreasing the tickrate
-	 */
-	private KeyMapping decreaseTickrate = new KeyMapping("Decrease Tickrate", GLFW.GLFW_KEY_COMMA, "LoTAS Keybinds");
-
-	/**
-	 * Key binding for increasing the tickrate
-	 */
-	private KeyMapping increaseTickrate = new KeyMapping("Increase Tickrate", GLFW.GLFW_KEY_PERIOD, "LoTAS Keybinds");
-
-	/**
-	 * Key binding for increasing the tickrate
-	 */
-	private KeyMapping savePlayerdata = new KeyMapping("Save playerdata", GLFW.GLFW_KEY_N, "LoTAS Keybinds");
-
-	/**
-	 * Key binding for decreasing the tickrate
-	 */
-	private KeyMapping loadPlayerdata = new KeyMapping("Load playerdata", GLFW.GLFW_KEY_M, "LoTAS Keybinds");
-
-	/**
-	 * Categories for all key binds used.
-	 */
-	private String[] keybindCategories = { "LoTAS Keybinds" };
-
-	/**
-	 * Initializes the key bind Manager, registers categories and key binds.
+	 * Initializes the keybind Manager, registers categories and key binds.
 	 */
 	public KeyMapping[] onKeybindInitialize(KeyMapping[] keyMappings) {
-		// Initialize Categories first
-		final Map<String, Integer> categories = AccessorKeyMapping.getCategorySorting();
-		for (int i = 0; i < this.keybindCategories.length; i++)
-			categories.put(this.keybindCategories[i], i + 8);
-		// Finish by adding Keybinds
-		return ArrayUtils.addAll(keyMappings, this.tickadvanceKeybind, this.toggleTickadvance, this.decreaseTickrate, this.increaseTickrate, this.savePlayerdata, this.loadPlayerdata);
+		// Initialize categories
+		var categories = AccessorKeyMapping.getCategorySorting();
+		System.out.println(categories.size());
+		for (var i = 0; i < this.keybinds.length; i++)
+			if (!categories.containsKey(this.keybinds[i].getCategory()))
+				categories.put(this.keybinds[i].getCategory(), i + 8);
+		System.out.println(categories.size());
+		// Add keybinds
+		return ArrayUtils.addAll(keyMappings, Arrays.asList(this.keybinds).stream().map(Keybind::getKeyMapping).toArray(KeyMapping[]::new)); // convert Keybind array to KeyMapping on the fly
 	}
 
 	/**
@@ -74,23 +171,15 @@ public class KeybindManager {
 	 * @param mc Instance of minecraft
 	 */
 	public void onGameLoop(Minecraft mc) {
-		if (this.isKeyDown(mc, this.tickadvanceKeybind) && mc.level != null)
-			LoTAS.tickadvance.requestTickadvance();
-		else if (this.isKeyDown(mc, this.toggleTickadvance) && mc.level != null)
-			LoTAS.tickadvance.requestTickadvanceToggle();
-		else if (this.isKeyDown(mc, this.decreaseTickrate) && mc.level != null)
-			LoTAS.tickratechanger.decreaseTickrate();
-		else if (this.isKeyDown(mc, this.increaseTickrate) && mc.level != null)
-			LoTAS.tickratechanger.increaseTickrate();
-		else if (this.isKeyDown(mc, this.savePlayerdata) && mc.level != null)
-			LoTAS.dupemod.requestDupe(true);
-		else if (this.isKeyDown(mc, this.loadPlayerdata) && mc.level != null)
-			LoTAS.dupemod.requestDupe(false);
-
+		for (Keybind keybind : this.keybinds) {
+			if (keybind.isInGame() && mc.level != null || !this.isKeyDown(mc, keybind.getKeyMapping()))
+				continue;
+			keybind.getOnKeyDown().run();
+		}
 	}
 
 	/**
-	 * Map of pressed/non-pressed Keys.
+	 * Map of pressed/non-pressed keys.
 	 */
 	private Map<KeyMapping, Boolean> keys = new HashMap<>();
 
@@ -102,14 +191,22 @@ public class KeybindManager {
 	 */
 	private boolean isKeyDown(Minecraft mc, KeyMapping map) {
 		// Check if in a text field
-		Screen screen = mc.screen;
-		if (!(screen == null || !(screen.getFocused() instanceof EditBox) || !((EditBox) screen.getFocused()).canConsumeInput()))
+		var screen = mc.screen;
+		if (screen != null && screen.getFocused() instanceof EditBox && ((EditBox) screen.getFocused()).canConsumeInput())
 			return false;
 
-		boolean wasPressed = this.keys.containsKey(map) ? this.keys.get(map) : false;
-		boolean isPressed = GLFW.glfwGetKey(mc.getWindow().getWindow(), ((AccessorKeyMapping) map).getKey().getValue()) == GLFW.GLFW_PRESS;
+		var wasPressed = this.keys.containsKey(map) ? this.keys.get(map) : false;
+		var isPressed = GLFW.glfwGetKey(mc.getWindow().getWindow(), ((AccessorKeyMapping) map).getKey().getValue()) == GLFW.GLFW_PRESS;
 		this.keys.put(map, isPressed);
 		return !wasPressed && isPressed;
+	}
+
+	/**
+	 * Returns all keybinds
+	 * @return List of keybinds
+	 */
+	public Keybind[] getKeybinds() {
+		return this.keybinds;
 	}
 
 }
