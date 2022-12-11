@@ -9,6 +9,7 @@ import org.lwjgl.glfw.GLFW;
 
 import de.pfannkuchen.lotas.LoTAS;
 import de.pfannkuchen.lotas.mixin.client.accessors.AccessorKeyMapping;
+import de.pfannkuchen.lotas.mods.DupeMod;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.KeyMapping;
@@ -40,10 +41,10 @@ public class KeybindSystem {
 			LoTAS.tickratechanger.increaseTickrate();
 		}),
 		new Keybind("Save playerdata", "Duplication", GLFW.GLFW_KEY_N, true, () -> {
-			LoTAS.dupemod.requestDupe(true);
+			DupeMod.instance.requestDupe(true);
 		}),
 		new Keybind("Load playerdata", "Duplication", GLFW.GLFW_KEY_M, true, () -> {
-			LoTAS.dupemod.requestDupe(false);
+			DupeMod.instance.requestDupe(false);
 		}),
 	};
 	// @formatter:on
