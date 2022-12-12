@@ -1,6 +1,5 @@
 package de.pfannkuchen.lotas.mods;
 
-import de.pfannkuchen.lotas.LoTAS;
 import de.pfannkuchen.lotas.system.ModSystem.Mod;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.api.EnvType;
@@ -18,16 +17,27 @@ public class TickAdvance extends Mod {
 
 	public static TickAdvance instance;
 
+	/**
+	 * Initializes the tick advance mod
+	 */
 	public TickAdvance() {
 		super(new ResourceLocation("lotas", "tickadvance"));
 		instance = this;
 	}
 
-	// Is tick advance enabled
+	/**
+	 *  Is tick advance enabled
+	 */
 	private boolean tickadvance;
-	// Should tick advance clientside
+
+	/**
+	 *  Should tick advance clientside
+	 */
 	public boolean shouldTickClient;
-	// Should tick advance serverside
+
+	/**
+	 *  Should tick advance serverside
+	 */
 	public boolean shouldTickServer;
 
 	/**
@@ -71,7 +81,6 @@ public class TickAdvance extends Mod {
 		buf.writeInt(0); // status update
 		buf.writeBoolean(!this.tickadvance); // new status
 		this.sendPacketToServer(buf);
-		LoTAS.LOGGER.info("{} toggled tick advance {}", this.mc.player.getName().getString(), this.tickadvance ? "off" : "on");
 	}
 
 	/**

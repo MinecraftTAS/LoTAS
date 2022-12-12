@@ -21,6 +21,9 @@ import net.minecraft.server.level.ServerPlayer;
 public class ModSystem {
 
 	// @formatter:off
+	/**
+	 * Registered of mods
+	 */
 	private static Mod[] mods = {
 		new DupeMod(),
 		new TickAdvance(),
