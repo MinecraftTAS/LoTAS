@@ -90,25 +90,28 @@ public class DupeMod extends Mod {
 			// Load all client data from the hash map
 			for (ServerPlayer player : players) {
 				CompoundTag tag = this.onlineClients.get(player);
-				if (tag != null) {
-					if (!tag.getString("Dimension").equals(player.getLevel().dimension().location().toString())) {
-						LoTAS.LOGGER.warn("Unable to load playerdata for " + player.getName().getString() + " as they are in a different dimension!");
-						continue;
-					}
-
-					if (!player.isAlive()) { // Instead of reviving the player just don't load playerdata - this will be multiplayer safe
-						LoTAS.LOGGER.warn("Unable to load playerdata for " + player.getName().getString() + " as they are not alive.");
-						continue;
-					}
-
-					// Load playerdata
-					player.load(tag);
-
-					// Send packet to client
-					FriendlyByteBuf data = new FriendlyByteBuf(Unpooled.buffer());
-					data.writeBoolean(saveOLoad);
-					this.sendPacketToClient(player, data);
+				if (tag == null) {
+					LoTAS.LOGGER.warn("No playerdata stored for {}.", player.getName().getString());
+					continue;
 				}
+
+				if (!tag.getString("Dimension").equals(player.getLevel().dimension().location().toString())) {
+					LoTAS.LOGGER.warn("Unable to load playerdata for {} as they are in a different dimension!", player.getName().getString());
+					continue;
+				}
+
+				if (!player.isAlive()) { // Instead of reviving the player just don't load playerdata - this will be multiplayer safe
+					LoTAS.LOGGER.warn("Unable to load playerdata for {} as they are not alive.", player.getName().getString());
+					continue;
+				}
+
+				// Load playerdata
+				player.load(tag);
+
+				// Send packet to client
+				FriendlyByteBuf data = new FriendlyByteBuf(Unpooled.buffer());
+				data.writeBoolean(saveOLoad);
+				this.sendPacketToClient(player, data);
 			}
 	}
 
@@ -121,7 +124,6 @@ public class DupeMod extends Mod {
 		FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
 		buf.writeBoolean(saveOLoad);
 		this.sendPacketToServer(buf);
-		LoTAS.LOGGER.info(this.mc.player.getName().getString() + (saveOLoad ? " saved playerdata" : " loaded playerdata"));
 	}
 
 	/**

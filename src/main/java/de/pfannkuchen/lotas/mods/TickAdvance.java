@@ -71,7 +71,7 @@ public class TickAdvance extends Mod {
 		buf.writeInt(0); // status update
 		buf.writeBoolean(!this.tickadvance); // new status
 		this.sendPacketToServer(buf);
-		LoTAS.LOGGER.info(this.mc.player.getName().getString() + " toggled tick advance " + (this.tickadvance ? "off" : "on"));
+		LoTAS.LOGGER.info("{} toggled tick advance {}", this.mc.player.getName().getString(), this.tickadvance ? "off" : "on");
 	}
 
 	/**
