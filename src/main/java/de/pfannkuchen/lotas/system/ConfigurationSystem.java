@@ -181,7 +181,7 @@ public class ConfigurationSystem {
 		try {
 			return (char) Short.parseShort(stringVal);
 		} catch (NumberFormatException e) {
-			LoTAS.LOGGER.warn("Configuration file for key \"" + key + "\" contains invalid char value \"" + stringVal + "\".");
+			LoTAS.LOGGER.warn("Configuration file for key \"{}\" contains invalid char value \"{}\".", key, stringVal);
 		}
 		return def;
 	}
@@ -197,7 +197,7 @@ public class ConfigurationSystem {
 		try {
 			return Byte.parseByte(stringVal);
 		} catch (NumberFormatException e) {
-			LoTAS.LOGGER.warn("Configuration file for key \"" + key + "\" contains invalid byte value \"" + stringVal + "\".");
+			LoTAS.LOGGER.warn("Configuration file for key \"{}\" contains invalid byte value \"{}\".", key, stringVal);
 		}
 		return def;
 	}
@@ -213,7 +213,7 @@ public class ConfigurationSystem {
 		try {
 			return Short.parseShort(stringVal);
 		} catch (NumberFormatException e) {
-			LoTAS.LOGGER.warn("Configuration file for key \"" + key + "\" contains invalid short value \"" + stringVal + "\".");
+			LoTAS.LOGGER.warn("Configuration file for key \"{}\" contains invalid short value \"{}\".", key, stringVal);
 		}
 		return def;
 	}
@@ -229,7 +229,7 @@ public class ConfigurationSystem {
 		try {
 			return Integer.parseInt(stringVal);
 		} catch (NumberFormatException e) {
-			LoTAS.LOGGER.warn("Configuration file for key \"" + key + "\" contains invalid int value \"" + stringVal + "\".");
+			LoTAS.LOGGER.warn("Configuration file for key \"{}\" contains invalid int value \"{}\".", key, stringVal);
 		}
 		return def;
 	}
@@ -245,7 +245,7 @@ public class ConfigurationSystem {
 		try {
 			return Long.parseLong(stringVal);
 		} catch (NumberFormatException e) {
-			LoTAS.LOGGER.warn("Configuration file for key \"" + key + "\" contains invalid long value \"" + stringVal + "\".");
+			LoTAS.LOGGER.warn("Configuration file for key \"{}\" contains invalid long value \"{}\".", key, stringVal);
 		}
 		return def;
 	}
@@ -261,7 +261,7 @@ public class ConfigurationSystem {
 		try {
 			return Double.longBitsToDouble(Long.parseLong(stringVal));
 		} catch (NumberFormatException e) {
-			LoTAS.LOGGER.warn("Configuration file for key \"" + key + "\" contains invalid double value \"" + stringVal + "\".");
+			LoTAS.LOGGER.warn("Configuration file for key \"{}\" contains invalid double value \"{}\".", key, stringVal);
 		}
 		return def;
 	}
@@ -277,7 +277,7 @@ public class ConfigurationSystem {
 		try {
 			return Float.intBitsToFloat(Integer.parseInt(stringVal));
 		} catch (NumberFormatException e) {
-			LoTAS.LOGGER.warn("Configuration file for key \"" + key + "\" contains invalid float value \"" + stringVal + "\".");
+			LoTAS.LOGGER.warn("Configuration file for key \"{}\" contains invalid float value \"{}\".", key, stringVal);
 		}
 		return def;
 	}
@@ -293,7 +293,7 @@ public class ConfigurationSystem {
 		try {
 			return Boolean.parseBoolean(stringVal);
 		} catch (NumberFormatException e) {
-			LoTAS.LOGGER.warn("Configuration file for key \"" + key + "\" contains invalid boolean value \"" + stringVal + "\".");
+			LoTAS.LOGGER.warn("Configuration file for key \"{}\" contains invalid boolean value \"{}\".", key, stringVal);
 		}
 		return def;
 	}
