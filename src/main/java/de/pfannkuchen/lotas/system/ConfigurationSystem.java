@@ -14,7 +14,14 @@ import de.pfannkuchen.lotas.LoTAS;
  */
 public class ConfigurationSystem {
 
+	/**
+	 * Configuration object
+	 */
 	private static Properties props = new Properties();
+
+	/**
+	 * Configuration file
+	 */
 	private static File configurationFile;
 
 	/**

@@ -9,7 +9,6 @@
  */
 package de.pfannkuchen.lotas.mods;
 
-import de.pfannkuchen.lotas.LoTAS;
 import de.pfannkuchen.lotas.system.ModSystem.Mod;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.api.EnvType;
@@ -26,23 +25,44 @@ public class TickrateChanger extends Mod {
 
 	public static TickrateChanger instance;
 
+	/**
+	 * Initializes the tickrate changer
+	 */
 	public TickrateChanger() {
 		super(new ResourceLocation("lotas", "tickratechanger"));
 		instance = this;
 	}
 
-	// Tickrate Variables in various formats
+	/**
+	 * Tickrate of the game
+	 */
 	private double tickrate = 20.0;
+
+	/**
+	 * Tickrate of the game stored in milliseconds per tick
+	 */
 	private double msPerTick = 50.0;
+
+	/**
+	 * Tickrate of the game stored in game speed percentage
+	 */
 	private double gamespeed = 1.0;
 
-	// Recommended tickrate
+	/**
+	 * Array of the most common tickrates available via decrease and increase tickrate keybinds
+	 */
 	@Environment(EnvType.CLIENT)
 	private double[] tickrates = { 0.5f, 1.0f, 2.0f, 4.0f, 5.0f, 10.0f, 20.0f };
 
-	// Tickrate Changer Millisecond
+	/**
+	 * System time in milliseconds since last tickrate change
+	 */
 	@Environment(EnvType.CLIENT)
 	private long timeSinceTC = System.currentTimeMillis();
+
+	/**
+	 * Game time in milliseconds since last tickrate change
+	 */
 	@Environment(EnvType.CLIENT)
 	private long fakeTimeSinceTC = System.currentTimeMillis();
 
@@ -78,7 +98,6 @@ public class TickrateChanger extends Mod {
 		FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
 		buf.writeDouble(tickrate);
 		this.sendPacketToServer(buf);
-		LoTAS.LOGGER.info("{} updated the tickrate to {}", this.mc.player.getName().getString(), String.format("%.2f", tickrate));
 	}
 
 	/**
