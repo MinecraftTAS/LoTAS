@@ -78,7 +78,7 @@ public class TickrateChanger extends Mod {
 		FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
 		buf.writeDouble(tickrate);
 		this.sendPacketToServer(buf);
-		LoTAS.LOGGER.info(this.mc.player.getName().getString() + " updated the tickrate to " + String.format("%.2f", tickrate));
+		LoTAS.LOGGER.info("{} updated the tickrate to {}", this.mc.player.getName().getString(), String.format("%.2f", tickrate));
 	}
 
 	/**
