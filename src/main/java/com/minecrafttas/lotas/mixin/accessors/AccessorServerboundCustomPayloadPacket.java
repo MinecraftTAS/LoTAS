@@ -3,8 +3,6 @@ package com.minecrafttas.lotas.mixin.accessors;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.game.ServerboundCustomPayloadPacket;
 import net.minecraft.resources.ResourceLocation;
@@ -14,21 +12,20 @@ import net.minecraft.resources.ResourceLocation;
  * @author Pancake
  */
 @Mixin(ServerboundCustomPayloadPacket.class)
-@Environment(EnvType.CLIENT)
 public interface AccessorServerboundCustomPayloadPacket {
 
 	/**
 	 * This Accessor opens the private field containing the identifier for the packet
 	 * @return Identifier
 	 */
-	@Accessor
-	public ResourceLocation getIdentifier();
+	@Accessor("identifier")
+	public ResourceLocation identifier();
 
 	/**
 	 * This Accessor opens the private field containing the data for the packet
 	 * @return Data
 	 */
-	@Accessor
-	public FriendlyByteBuf getData();
+	@Accessor("data")
+	public FriendlyByteBuf data();
 	
 }
