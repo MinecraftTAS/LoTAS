@@ -6,7 +6,23 @@ plugins {
 /* Configure Discombobulator */
 discombobulator {
 	versions = [
-		"1.14.4",
-		"1.12.2"
+		"1.19.3",
+		"1.18.2",
+		"1.17.1",
+		"1.16.5",
+		"1.16.1",
+		"1.15.2",
+		"1.14.4"
+	]
+	patterns = [
+		GetWindow: [
+			"1.19.3": "mc.getWindow()",
+			"1.18.2": "mc.getWindow()",
+			"1.17.1": "mc.getWindow()",
+			"1.16.5": "mc.getWindow()",
+			"1.16.1": "mc.getWindow()",
+			"1.15.2": "mc.getWindow()",
+			"1.14.4": "mc.window"
+		]
 	]
 }

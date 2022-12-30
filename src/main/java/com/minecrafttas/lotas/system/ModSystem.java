@@ -1,5 +1,6 @@
 package com.minecrafttas.lotas.system;
 
+import com.minecrafttas.lotas.mixin.accessors.AccessorServerboundCustomPayloadPacket;
 import com.minecrafttas.lotas.mods.DupeMod;
 import com.minecrafttas.lotas.mods.TickAdvance;
 import com.minecrafttas.lotas.mods.TickrateChanger;
@@ -51,8 +52,8 @@ public class ModSystem {
 
 	public static void onServerPayload(ServerboundCustomPayloadPacket buf) {
 		for (Mod mod : mods)
-			if (mod.id.equals(buf.getIdentifier()))
-				mod.onServerPayload(buf.getData());
+			if (mod.id.equals(((AccessorServerboundCustomPayloadPacket) buf).getIdentifier()))
+				mod.onServerPayload(((AccessorServerboundCustomPayloadPacket) buf).getData());
 	}
 
 	@Environment(EnvType.CLIENT)
