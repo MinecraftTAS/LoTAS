@@ -52,8 +52,8 @@ public class ModSystem {
 
 	public static void onServerPayload(ServerboundCustomPayloadPacket buf) {
 		for (Mod mod : mods)
-			if (mod.id.equals(((AccessorServerboundCustomPayloadPacket) buf).getIdentifier()))
-				mod.onServerPayload(((AccessorServerboundCustomPayloadPacket) buf).getData());
+			if (mod.id.equals(((AccessorServerboundCustomPayloadPacket) buf).identifier()))
+				mod.onServerPayload(((AccessorServerboundCustomPayloadPacket) buf).data());
 	}
 
 	@Environment(EnvType.CLIENT)
