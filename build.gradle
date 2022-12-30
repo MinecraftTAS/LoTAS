@@ -16,13 +16,8 @@ discombobulator {
 	]
 	patterns = [
 		GetWindow: [
-			"1.19.3": "mc.getWindow()",
-			"1.18.2": "mc.getWindow()",
-			"1.17.1": "mc.getWindow()",
-			"1.16.5": "mc.getWindow()",
-			"1.16.1": "mc.getWindow()",
-			"1.15.2": "mc.getWindow()",
-			"1.14.4": "mc.window"
+			"def": "mc.window",
+			"1.15.2": "mc.getWindow()"
 		]
 	]
 }
