@@ -144,7 +144,7 @@ public class KeybindSystem {
 			return false;
 
 		boolean wasPressed = keys.containsKey(map) ? keys.get(map) : false;
-		boolean isPressed = GLFW.glfwGetKey(mc.getWindow().getWindow(), ((AccessorKeyMapping) map).getKey().getValue()) == GLFW.GLFW_PRESS;
+		boolean isPressed = GLFW.glfwGetKey(mc.getWindow().getWindow(), ((AccessorKeyMapping) map).getKey().getValue()) == GLFW.GLFW_PRESS; // @GetWindow
 		keys.put(map, isPressed);
 		return !wasPressed && isPressed;
 	}
