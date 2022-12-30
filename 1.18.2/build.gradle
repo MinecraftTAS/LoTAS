@@ -1,0 +1,24 @@
+/* Add Plugins required for LoTAS */
+plugins {
+	// Add Fabric-Loom plugin for the fabric modloader (note for now this is 1.1 made by pancake)
+	id 'fabric-loom' version '1.1-SNAPSHOT'
+}
+
+// Set Java version compatibility to 1.8
+sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
+
+/* Add Repositories required for LoTAS */
+repositories {
+	// Add the MGNetwork maven server.
+	maven { url 'https://maven.mgnet.work' }
+	// Add the cursed mappings maven repository
+	maven { url 'https://raw.githubusercontent.com/BleachDev/cursed-mappings/main/' }
+}
+
+/* Add Dependencies for LoTAS */
+dependencies {
+	// Add minecraft, mappings and fabric loader with versions from gradle.properties
+	minecraft "com.mojang:minecraft:1.18.2"
+	mappings loom.officialMojangMappings()
+	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+}
