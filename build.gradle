@@ -1,51 +1,12 @@
 /* Add Plugins required for LoTAS */
 plugins {
-	// Add Fabric-Loom plugin for the fabric modloader (note for now this is 1.1 made by pancake)
-	id 'fabric-loom' version '1.1-SNAPSHOT'
+	id 'discombobulator' version '1.0.0-SNAPSHOT'
 }
 
-// Set Java version compatibility to 17
-sourceCompatibility = targetCompatibility = JavaVersion.VERSION_17
-
-// Update basic properties from gradle.properties
-archivesBaseName = project.archives_base_name
-version = project.mod_version
-group = project.maven_group
-
-/* Add Repositories required for LoTAS */
-repositories {
-	// Add the MGNetwork maven server.
-	maven { url 'https://maven.mgnet.work' }
-}
-
-/* Add Dependencies for LoTAS */
-dependencies {
-	// Add minecraft, mappings and fabric loader with versions from gradle.properties
-	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings loom.officialMojangMappings()
-	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-}
-
-/* Add some preprocessing to the resources */
-processResources {
-	// Update the version string in the fabric.mod.json file
-	inputs.property "version", project.version
-
-	filesMatching("fabric.mod.json") {
-		expand "version": project.version
-	}
-}
-
-/* Select Java 17 for compiling */
-tasks.withType(JavaCompile).configureEach {
-	// Minecraft 1.18 (1.18-pre2) upwards uses Java 17.
-	it.options.release = 17
-}
-
-/* Add some post processing to the final jar file */
-jar {
-	// Add the LICENSE to the final jar
-	from("LICENSE.md") {
-		rename { "LICENSE_${project.archivesBaseName}"}
-	}
+/* Configure Discombobulator */
+discombobulator {
+	versions = [
+		"1.14.4",
+		"1.12.2"
+	]
 }
