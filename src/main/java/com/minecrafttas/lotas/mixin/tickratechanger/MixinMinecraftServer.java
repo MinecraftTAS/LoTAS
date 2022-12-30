@@ -68,7 +68,7 @@ public abstract class MixinMinecraftServer {
 	 * @param ignored the value that was originally used, in this case 50L
 	 * @return Milliseconds per tick
 	 */
-	@ModifyConstant(method = "runServer", constant = @Constant(longValue = 50L))
+	@ModifyConstant(method = "runServer", constant = @Constant(longValue = 50L)) // @RunServer
 	private long serverTickWaitTime(long ignored) {
 		return (long) TickrateChanger.instance.getMsPerTick();
 	}
@@ -78,7 +78,7 @@ public abstract class MixinMinecraftServer {
 	 * returns {@link #getCurrentTime()}
 	 * @return Modified measuring time
 	 */
-	@Redirect(method = "runServer", at = @At(value = "INVOKE", target = "Lnet/minecraft/Util;getMillis()J"))
+	@Redirect(method = "runServer", at = @At(value = "INVOKE", target = "Lnet/minecraft/Util;getMillis()J")) // @RunServer
 	public long redirectGetMillis() {
 		return this.getCurrentTime();
 	}

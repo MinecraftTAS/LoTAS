@@ -20,7 +20,8 @@ public class HookMinecraftServer {
 	 * Triggers an Event in {@link ModSystem#onServerTick(MinecraftServer)} after the server ticks
 	 * @param ci Callback Info
 	 */
-	@Inject(method = "runServer", at = @At(value = "INVOKE", shift = At.Shift.AFTER, target = "Lnet/minecraft/server/MinecraftServer;endMetricsRecordingTick()V"))
+	@Inject(method = "runServer", at = @At(value = "INVOKE", shift = At.Shift.AFTER, // @RunServer
+		target = "Lnet/minecraft/util/profiling/ProfilerFiller;pop()V")) // @Profiler
 	public void hookTickEvent(CallbackInfo ci) {
 		ModSystem.onServerTick();
 	}

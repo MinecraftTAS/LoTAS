@@ -18,6 +18,18 @@ discombobulator {
 		GetWindow: [
 			"def": "mc.window",
 			"1.15.2": "mc.getWindow()"
+		],
+		WorldBorder: [
+			"def": "renderWorldBounds",
+			"1.17.1": "renderWorldBorder"
+		],
+		RunServer: [
+			"def": '"run"',
+			"1.16.1": '"runServer"'
+		],
+		Profiler: [
+			"def": "Lnet/minecraft/util/profiling/GameProfiler;",
+			"1.16.1": "Lnet/minecraft/util/profiling/ProfilerFiller;"
 		]
 	]
 }

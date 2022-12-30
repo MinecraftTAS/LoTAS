@@ -23,7 +23,7 @@ public class MixinLevelRenderer {
 	 * @param f Ignored original value
 	 * @return Manipulated value
 	 */
-	@ModifyVariable(method = "renderWorldBorder", at = @At(value = "STORE"), index = 19, ordinal = 3)
+	@ModifyVariable(method = "renderWorldBounds", at = @At(value = "STORE"), index = 19, ordinal = 3) // @WorldBorder
 	public float injectf3(float f) {
 		return TickrateChanger.instance.getMilliseconds() % 3000L / 3000.0F;
 	}
