@@ -30,6 +30,18 @@ discombobulator {
 		Profiler: [
 			"def": "Lnet/minecraft/util/profiling/GameProfiler;",
 			"1.16.1": "Lnet/minecraft/util/profiling/ProfilerFiller;"
+		],
+		RandomSourceDescriptor: [
+			"def": "Ljava/util/Random;",
+			"1.19.3": "Lnet/minecraft/util/RandomSource;"
+		],
+		RandomSourceClass: [
+			"def": "Random",
+			"1.19.3": "RandomSource"
+		],
+		RandomSourceImport: [
+			"def": "import java.util.Random;",
+			"1.19.3": "import net.minecraft.util.RandomSource;"
 		]
 	]
 }

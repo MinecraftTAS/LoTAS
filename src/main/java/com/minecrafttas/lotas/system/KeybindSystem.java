@@ -8,6 +8,8 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.lwjgl.glfw.GLFW;
 
 import com.minecrafttas.lotas.mixin.client.accessors.AccessorKeyMapping;
+import com.minecrafttas.lotas.mods.DragonManipulation;
+import com.minecrafttas.lotas.mods.DragonManipulation.Settings;
 import com.minecrafttas.lotas.mods.DupeMod;
 import com.minecrafttas.lotas.mods.TickAdvance;
 import com.minecrafttas.lotas.mods.TickrateChanger;
@@ -47,6 +49,9 @@ public class KeybindSystem {
 		}),
 		new Keybind("Load playerdata", "Duplication", GLFW.GLFW_KEY_M, true, () -> {
 			DupeMod.instance.requestDupe(false);
+		}),
+		new Keybind("Toggle dragon manipulation", "Dragon Manipulation", GLFW.GLFW_KEY_X, true, () -> { // hotkey just for testing, will be removed with gui
+			DragonManipulation.instance.requestEdit(DragonManipulation.instance.getCurrentSettings() == null ? new Settings(true, true, false) : null);
 		}),
 	};
 
