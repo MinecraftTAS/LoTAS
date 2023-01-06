@@ -9,7 +9,7 @@ import org.lwjgl.glfw.GLFW;
 
 import com.minecrafttas.lotas.mixin.client.accessors.AccessorKeyMapping;
 import com.minecrafttas.lotas.mods.DragonManipulation;
-import com.minecrafttas.lotas.mods.DragonManipulation.Settings;
+import com.minecrafttas.lotas.mods.DragonManipulation.Phase;
 import com.minecrafttas.lotas.mods.DupeMod;
 import com.minecrafttas.lotas.mods.TickAdvance;
 import com.minecrafttas.lotas.mods.TickrateChanger;
@@ -50,8 +50,17 @@ public class KeybindSystem {
 		new Keybind("Load playerdata", "Duplication", GLFW.GLFW_KEY_M, true, () -> {
 			DupeMod.instance.requestDupe(false);
 		}),
-		new Keybind("Toggle dragon manipulation", "Dragon Manipulation", GLFW.GLFW_KEY_X, true, () -> { // hotkey just for testing, will be removed with gui
-			DragonManipulation.instance.requestEdit(DragonManipulation.instance.getCurrentSettings() == null ? new Settings(true, true, false) : null);
+		new Keybind("Manipulate to holding pattern phase", "Dragon Manipulation", GLFW.GLFW_KEY_Y, true, () -> { // hotkey just for testing, will be removed with gui
+			DragonManipulation.instance.requestPhaseChange(Phase.HOLDINGPATTERN);
+		}),
+		new Keybind("Manipulate to landing approach phase", "Dragon Manipulation", GLFW.GLFW_KEY_X, true, () -> { // hotkey just for testing, will be removed with gui
+			DragonManipulation.instance.requestPhaseChange(Phase.LANDINGAPPROACH);
+		}),
+		new Keybind("Manipulate to strafing phase", "Dragon Manipulation", GLFW.GLFW_KEY_C, true, () -> { // hotkey just for testing, will be removed with gui
+			DragonManipulation.instance.requestPhaseChange(Phase.STRAFING);
+		}),
+		new Keybind("Disable manipulation", "Dragon Manipulation", GLFW.GLFW_KEY_V, true, () -> { // hotkey just for testing, will be removed with gui
+			DragonManipulation.instance.requestPhaseChange(Phase.OFF);
 		}),
 	};
 
