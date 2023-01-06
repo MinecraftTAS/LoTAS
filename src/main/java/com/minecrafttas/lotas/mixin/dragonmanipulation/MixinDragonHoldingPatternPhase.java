@@ -3,11 +3,14 @@ package com.minecrafttas.lotas.mixin.dragonmanipulation;
 import net.minecraft.util.RandomSource; // @RandomSourceImport
 
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 import com.minecrafttas.lotas.mixin.accessors.AccessorPath;
 import com.minecrafttas.lotas.mods.DragonManipulation;
+import com.minecrafttas.lotas.mods.DragonManipulation.Phase;
 
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.boss.enderdragon.phases.AbstractDragonPhaseInstance;
@@ -31,7 +34,7 @@ public abstract class MixinDragonHoldingPatternPhase extends AbstractDragonPhase
 	 */
 	@Redirect(method = "navigateToNextPathNode", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/RandomSource;nextFloat()F")) // @RandomSourceDescriptor
 	public float redirect_nextFloat(RandomSource r) { // @RandomSourceSourceClass
-		return DragonManipulation.instance.isForceOptimalDragonPath() ? 0f : r.nextFloat();
+		return DragonManipulation.instance.getPhase() == Phase.OFF ? r.nextFloat() : 0.0f;
 	}
 	
 	/**
@@ -43,39 +46,56 @@ public abstract class MixinDragonHoldingPatternPhase extends AbstractDragonPhase
 	 */
 	@Redirect(method = "navigateToNextPathNode", at = @At(value = "NEW", target = "Lnet/minecraft/world/phys/Vec3;<init>(DDD)Lnet/minecraft/world/phys/Vec3;"))
 	public Vec3 navigate_nodeInit(double x, double y, double z) {
-		if (!DragonManipulation.instance.isForceOptimalDragonPath())
+		if (DragonManipulation.instance.getPhase() == Phase.OFF)
 			return new Vec3(x, y, z);
 		
 		double distance = Math.max(0, Math.min(20, dragon.position().y - y));
 		return new Vec3(x, y + distance, z);
 	}
-
+	
+	@Unique
+	public int shouldCCWCWC = 1; // should counter clock wise clock wise change, lol. 0 == switch, anything else == no switch
+	
+	@Shadow
+	public boolean clockwise;
+	
 	/**
-	 * Forces an optimal dragon path by (step 3) calculating a path that skips the two high nodes
+	 * Forces an optimal dragon path by (step 3) calculating whether a direction change would result in the more optimal path.
+	 * Coincidentally the length of the path does not need to be checked, because for some odd mathematical reason the path length will always be 1 in the outer circle
 	 * @param dragon Ender Dragon
-	 * @param i Path creation parameter
-	 * @param j Path creation parameter
-	 * @param n path creation parameter
-	 * @return Optimal path
+	 * @return Closest node
 	 */
-	@Redirect(method = "findNewTarget", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/boss/enderdragon/EnderDragon;findPath(IILnet/minecraft/world/level/pathfinder/Node;)Lnet/minecraft/world/level/pathfinder/Path;"))
-	public Path redirect_findPath(EnderDragon dragon, int i, int j, Node n) {
-		if (!DragonManipulation.instance.isForceOptimalDragonPath())
-			return dragon.findPath(i, j, n);
-		// 20 attempts at generating an optimal path
-		Path path = null;
-		for (int k = 0; k < 20; k++) {
-			path = dragon.findPath(i, j, n);
-			boolean in = true;
-			for (Node node : ((AccessorPath) path).nodes())
-				if (node.y > 85) {
-					in = false;
-					break;
-				}
-			if (in)
-				return path;
-		}
-		return path;
+	@Redirect(method = "findNewTarget", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/boss/enderdragon/EnderDragon;findClosestNode()I"))
+	public int redirect_findClosestNode(EnderDragon dragon) {
+		this.shouldCCWCWC = 1; // reset
+
+		int closestNode = dragon.findClosestNode();
+
+		// do math
+		int i = closestNode;
+		i = this.clockwise ? ++i : --i;
+		if ((i %= 12) < 0) i += 12;
+		
+		// get path and node
+		Path path = dragon.findPath(i, closestNode, null);
+		for (Node node : ((AccessorPath) path).nodes())
+			if (node.y > 85) {
+				this.shouldCCWCWC = 0;
+				break;
+			}
+		
+		return closestNode;
+	}
+	
+	/**
+	 * Forces an optimal dragon path by (step 4) applying the calculated math from redirect_findClosestNode
+	 * @param r Random source
+	 * @param i Bound
+	 * @return Random int
+	 */
+	@Redirect(method = "findNewTarget", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/RandomSource;nextInt(I)I", ordinal = 3)) // @RandomSourceDescriptor
+	public int redirect_nextInt(RandomSource r, int i) { // @RandomSourceSourceClass
+		return DragonManipulation.instance.getPhase() == Phase.OFF ? r.nextInt(i) : this.shouldCCWCWC;
 	}
 	
 	/**
@@ -86,7 +106,15 @@ public abstract class MixinDragonHoldingPatternPhase extends AbstractDragonPhase
 	 */
 	@Redirect(method = "findNewTarget", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/RandomSource;nextInt(I)I", ordinal = 0)) // @RandomSourceDescriptor
 	public int redirect_nextInt_perching(RandomSource r, int i) { // @RandomSourceSourceClass
-		return DragonManipulation.instance.isForceDragonLandingApproach() ? 0 : r.nextInt(i);
+		switch (DragonManipulation.instance.getPhase()) {
+			case LANDINGAPPROACH:
+				return 0;
+			case HOLDINGPATTERN:
+			case STRAFING:
+				return 1;
+			default:
+				return r.nextInt(i);
+		}
 	}
 
 	/**
@@ -97,7 +125,15 @@ public abstract class MixinDragonHoldingPatternPhase extends AbstractDragonPhase
 	 */
 	@Redirect(method = "findNewTarget", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/RandomSource;nextInt(I)I", ordinal = 1)) // @RandomSourceDescriptor
 	public int redirect_nextInt_strafing(RandomSource r, int i) { // @RandomSourceSourceClass
-		return DragonManipulation.instance.isForceDragonStrafingPhase() ? 0 : r.nextInt(i);
+		switch (DragonManipulation.instance.getPhase()) {
+			case STRAFING:
+				return 0;
+			case LANDINGAPPROACH:
+			case HOLDINGPATTERN:
+				return 1;
+			default:
+				return r.nextInt(i);
+		}
 	}
 
 	/**
@@ -108,7 +144,15 @@ public abstract class MixinDragonHoldingPatternPhase extends AbstractDragonPhase
 	 */
 	@Redirect(method = "findNewTarget", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/RandomSource;nextInt(I)I", ordinal = 2)) // @RandomSourceDescriptor
 	public int redirect_nextInt_strafing2(RandomSource r, int i) { // @RandomSourceSourceClass
-		return DragonManipulation.instance.isForceDragonStrafingPhase() ? 0 : r.nextInt(i);
+		switch (DragonManipulation.instance.getPhase()) {
+			case STRAFING:
+				return 0;
+			case LANDINGAPPROACH:
+			case HOLDINGPATTERN:
+				return 1;
+			default:
+				return r.nextInt(i);
+		}
 	}
 	
 }
