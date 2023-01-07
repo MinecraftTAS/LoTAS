@@ -28,7 +28,7 @@ public abstract class MixinDragonTakeoffPhase extends AbstractDragonPhaseInstanc
 	 * @return Multiplier
 	 */
 	@Redirect(method = "navigateToNextPathNode", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/RandomSource;nextFloat()F")) // @RandomSourceDescriptor
-	public float redirect_nextFloat(RandomSource r) { // @RandomSourceSourceClass
+	public float redirect_nextFloat(RandomSource r) { // @RngSourceClass
 		return DragonManipulation.instance.getPhase() == Phase.OFF ? r.nextFloat() : 0.0f;
 	}
 	

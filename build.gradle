@@ -35,9 +35,9 @@ discombobulator {
 			"def": "Ljava/util/Random;",
 			"1.19.3": "Lnet/minecraft/util/RandomSource;"
 		],
-		RandomSourceClass: [
-			"def": "Random",
-			"1.19.3": "RandomSource"
+		RngSourceClass: [
+			"def": "Random ",
+			"1.19.3": "RandomSource "
 		],
 		RandomSourceImport: [
 			"def": "import java.util.Random;",
