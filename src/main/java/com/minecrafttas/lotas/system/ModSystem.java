@@ -3,6 +3,7 @@ package com.minecrafttas.lotas.system;
 import com.minecrafttas.lotas.mixin.accessors.AccessorServerboundCustomPayloadPacket;
 import com.minecrafttas.lotas.mods.DragonManipulation;
 import com.minecrafttas.lotas.mods.DupeMod;
+import com.minecrafttas.lotas.mods.LootManipulation;
 import com.minecrafttas.lotas.mods.TickAdvance;
 import com.minecrafttas.lotas.mods.TickrateChanger;
 
@@ -30,7 +31,8 @@ public class ModSystem {
 		new DupeMod(),
 		new TickAdvance(),
 		new TickrateChanger(),
-		new DragonManipulation()
+		new DragonManipulation(),
+		new LootManipulation()
 	};
 
 	// 1: event handlers that update the mod
