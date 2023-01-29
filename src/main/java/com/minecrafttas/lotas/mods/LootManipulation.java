@@ -1,5 +1,6 @@
 package com.minecrafttas.lotas.mods;
 
+import com.minecrafttas.lotas.mixin.accessors.AccessorCompositeEntryBase;
 import com.minecrafttas.lotas.mixin.accessors.AccessorLootItem;
 import com.minecrafttas.lotas.mixin.accessors.AccessorLootPool;
 import com.minecrafttas.lotas.mixin.accessors.AccessorLootTable;
@@ -32,33 +33,63 @@ public class LootManipulation extends Mod {
 		if (fetch)
 			return;
 		fetch = true;
-		System.out.println("TEST?");
+		
+		// Iterate through all loot tables
 		LootTables lootTables = this.mcserver.getLootTables();
 		for (ResourceLocation loc : lootTables.getIds()) {
 			LootTable table = lootTables.get(loc);
-			System.out.println("Table " + loc.getPath());
-			for (LootPool pool : ((AccessorLootTable) table).pools()) {
-				System.out.println("\tPool:");
-				for (LootPoolEntryContainer entry : ((AccessorLootPool) pool).entries()) {
-					if (entry instanceof LootItem) {
-						System.out.println("\t\t" + ((AccessorLootItem) entry).item().toString());
-					} else if (entry instanceof AlternativesEntry) {
-						System.out.println("\t\tdrops too complicated");
-					} else if (entry instanceof TagEntry) {
-						System.out.println("\t\tTag:");
-						for (Item item : ((AccessorTagEntry) entry).tag().getValues()) {
-							System.out.println("\t\t\t" + item.toString());
-						}
-					} else if (entry instanceof LootTableReference) {
-						System.out.println("\t\t\u2937 " + ((AccessorLootTableReference) entry).name().getPath());
-					} else if (entry instanceof EmptyLootItem) {
-						System.out.println("\t\t");
-					} else {
-						throw new RuntimeException("Loot Entry not implemented: " + entry.getClass().getSimpleName());
-					}
-				}
-			}
+			// Analyze loot table
+			System.out.println("Loot Table: " + loc.getPath());
+			analyzeTable(table);
 		}
 	}
 
+	/**
+	 * Analyzes a loot table
+	 * @param table Loot table
+	 */
+	private void analyzeTable(LootTable table) {
+		// Iterate through all loot pools
+		for (LootPool pool : ((AccessorLootTable) table).pools()) {
+			// Analyze loot pool
+			System.out.println("Pool:");
+			analyzePool(pool);
+		}
+	}
+	
+	/**
+	 * Analyzes a loot pool
+	 * @param pool Loot pool
+	 */
+	private void analyzePool(LootPool pool) {
+		// Iterate through all loot entries
+		for (LootPoolEntryContainer entry : ((AccessorLootPool) pool).entries()) {
+			// Analyze loot entry
+			analyzeEntry(entry);
+		}
+	}
+	
+	/**
+	 * Analyzes a loot entry
+	 * @param entry Loot Entry
+	 */
+	private void analyzeEntry(LootPoolEntryContainer entry) {
+		if (entry instanceof LootItem) {
+			System.out.println(((AccessorLootItem) entry).item().toString());
+		} else if (entry instanceof AlternativesEntry) {
+			System.out.println("First Entry:");
+			for (LootPoolEntryContainer item : ((AccessorCompositeEntryBase) entry).children())
+				analyzeEntry(item);
+		} else if (entry instanceof TagEntry) {
+			System.out.println("One Item:");
+			for (Item item : ((AccessorTagEntry) entry).tag().getValues())
+				System.out.println(item.toString());
+		} else if (entry instanceof LootTableReference) {
+			System.out.println("\u2937 " + ((AccessorLootTableReference) entry).name().getPath());
+		} else if (entry instanceof EmptyLootItem) {
+			System.out.println("nothing");
+		} else {
+			throw new RuntimeException("Loot Entry not implemented: " + entry.getClass().getSimpleName());
+		}
+	}
 }
