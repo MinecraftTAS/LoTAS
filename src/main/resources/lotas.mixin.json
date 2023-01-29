@@ -4,9 +4,13 @@
 	"package": "com.minecrafttas.lotas.mixin",
 	"compatibilityLevel": "JAVA_8",
 	"mixins": [
+		"accessors.AccessorLootItem",
+		"accessors.AccessorLootPool",
 		"accessors.AccessorLootTable",
+		"accessors.AccessorLootTableReference",
 		"accessors.AccessorPath",
 		"accessors.AccessorServerboundCustomPayloadPacket",
+		"accessors.AccessorTagEntry",
 		"dragonmanipulation.MixinDragonHoldingPatternPhase",
 		"dragonmanipulation.MixinDragonLandingApproachPhase",
 		"dragonmanipulation.MixinDragonStrafePlayerPhase",
