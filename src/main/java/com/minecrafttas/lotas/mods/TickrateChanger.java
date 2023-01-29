@@ -139,7 +139,7 @@ public class TickrateChanger extends Mod {
 	}
 
 	/**
-	 * Clears local data on disconnect
+	 * Resets tickrate on disconnect
 	 */
 	@Override
 	@Environment(EnvType.CLIENT)
