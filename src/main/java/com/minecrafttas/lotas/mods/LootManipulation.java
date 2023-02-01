@@ -23,6 +23,7 @@ import net.minecraft.world.level.storage.loot.entries.TagEntry;
 public class LootManipulation extends Mod {		
 
 	private boolean fetch;
+	private String s = "";
 	
 	public LootManipulation() {
 		super(new ResourceLocation("lotas", "lootmanipulation"));
@@ -35,13 +36,17 @@ public class LootManipulation extends Mod {
 		fetch = true;
 		
 		// Iterate through all loot tables
+		s += "{";
 		LootTables lootTables = this.mcserver.getLootTables();
 		for (ResourceLocation loc : lootTables.getIds()) {
 			LootTable table = lootTables.get(loc);
 			// Analyze loot table
-			System.out.println("Loot Table: " + loc.getPath());
+			s += "\"" + loc.getPath() + "\":{";
 			analyzeTable(table);
+			s += "},";
 		}
+		s += "}";
+		System.out.println(s);
 	}
 
 	/**
@@ -50,11 +55,14 @@ public class LootManipulation extends Mod {
 	 */
 	private void analyzeTable(LootTable table) {
 		// Iterate through all loot pools
+		s += "\"pools\":[";
 		for (LootPool pool : ((AccessorLootTable) table).pools()) {
 			// Analyze loot pool
-			System.out.println("Pool:");
+			s += "{";
 			analyzePool(pool);
+			s += "},";
 		}
+		s += "]";
 	}
 	
 	/**
@@ -63,10 +71,12 @@ public class LootManipulation extends Mod {
 	 */
 	private void analyzePool(LootPool pool) {
 		// Iterate through all loot entries
+		s += "\"entries\":[";
 		for (LootPoolEntryContainer entry : ((AccessorLootPool) pool).entries()) {
 			// Analyze loot entry
 			analyzeEntry(entry);
 		}
+		s += "]";
 	}
 	
 	/**
@@ -75,21 +85,24 @@ public class LootManipulation extends Mod {
 	 */
 	private void analyzeEntry(LootPoolEntryContainer entry) {
 		if (entry instanceof LootItem) {
-			System.out.println(((AccessorLootItem) entry).item().toString());
+			s += "{\"item\":\"" + ((AccessorLootItem) entry).item().toString() + "\"},";
 		} else if (entry instanceof AlternativesEntry) {
-			System.out.println("First Entry:");
+			s += "{\"first\":[";
 			for (LootPoolEntryContainer item : ((AccessorCompositeEntryBase) entry).children())
 				analyzeEntry(item);
+			s += "]},";
 		} else if (entry instanceof TagEntry) {
-			System.out.println("One Item:");
+			s += "{\"any\":[";
 			for (Item item : ((AccessorTagEntry) entry).tag().getValues())
-				System.out.println(item.toString());
+				s += "\"" + item.toString() + "\",";
+			s += "]},";
 		} else if (entry instanceof LootTableReference) {
-			System.out.println("\u2937 " + ((AccessorLootTableReference) entry).name().getPath());
+			s += "{\"reference\":\"" + ((AccessorLootTableReference) entry).name().getPath() + "\"},";
 		} else if (entry instanceof EmptyLootItem) {
-			System.out.println("nothing");
+//			System.out.println("nothing");
 		} else {
 			throw new RuntimeException("Loot Entry not implemented: " + entry.getClass().getSimpleName());
 		}
 	}
+	
 }
