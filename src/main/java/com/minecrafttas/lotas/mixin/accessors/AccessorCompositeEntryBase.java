@@ -3,9 +3,8 @@ package com.minecrafttas.lotas.mixin.accessors;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
-import net.minecraft.world.item.Item;
 import net.minecraft.world.level.storage.loot.entries.CompositeEntryBase;
-import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 
 /**
  * This mixin accessor makes the children of a composite entry base loot entry accessible.
