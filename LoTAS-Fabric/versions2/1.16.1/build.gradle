@@ -11,5 +11,6 @@ minecraft {
 
 dependencies {
 	minecraft "com.mojang:minecraft:1.16.1"
+	modImplementation "net.fabricmc:fabric-loader:0.14.11"
 	mappings minecraft.officialMojangMappings()
 }

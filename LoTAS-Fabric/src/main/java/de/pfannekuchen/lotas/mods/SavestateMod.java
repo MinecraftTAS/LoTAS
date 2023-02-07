@@ -43,16 +43,22 @@ public class SavestateMod {
 	/** Temporary variable to indicate that the Labels above should fade out */
 	public static long timeTitle;
 	
-	public static boolean isLoading;
-	public static boolean isSavestate;
+	public static State state=State.NONE;
+	
+	public enum State {
+		SAVESTATING,
+		LOADSTATING,
+		NONE;
+	}
 	
 	/**
 	 * Returns the motion of the player, and the current time of the timer as a string
 	 * @return Data as String
 	 */
 	public static final String generateSavestateFile() {
-		final LocalPlayer p = Minecraft.getInstance().player;
-		final Vec3 velocity = p.getDeltaMovement();
+		LocalPlayer p = Minecraft.getInstance().player;
+		Vec3 velocity = p.getDeltaMovement();
+		
 		motionX = velocity.x;
 		motionY = velocity.y;
 		motionZ = velocity.z;
@@ -63,20 +69,23 @@ public class SavestateMod {
 	 * Closes the server and creates a savestate in .minecraft/savestates/
 	 * @throws IOException
 	 */
-	public static void savestate(String name) {		
-		final String data = generateSavestateFile();
-		final Minecraft mc = Minecraft.getInstance();
+	public static void savestate(String name) {
+		if (state == State.SAVESTATING) {
+			return;
+		}
+		String data = generateSavestateFile();
+		Minecraft mc = Minecraft.getInstance();
 
-		final MinecraftServer server = mc.getSingleplayerServer();
+		MinecraftServer server = mc.getSingleplayerServer();
 		
 		server.getPlayerList().saveAll();
 		
 		float tickratesaved=TickrateChangerMod.tickrateServer;
 		TickrateChangerMod.updateTickrate(20);
 		
-		final String worldName = MCVer.getCurrentWorldFolder();
-		final File worldDir = new File(mc.gameDirectory, "saves/" + worldName);
-		final File savestatesDir = new File(mc.gameDirectory, "saves/savestates/");
+		String worldName = MCVer.getCurrentWorldFolder();
+		File worldDir = new File(mc.gameDirectory, "saves/" + worldName);
+		File savestatesDir = new File(mc.gameDirectory, "saves/savestates/");
 		
 		AIManipMod.save();
 		mc.getSingleplayerServer().halt(true);
@@ -84,7 +93,7 @@ public class SavestateMod {
 		if (!savestatesDir.exists())
 			savestatesDir.mkdir();
 
-		final int existingSavestates = savestatesDir.listFiles((d, s) -> {
+		int existingSavestates = savestatesDir.listFiles((d, s) -> {
 			return s.startsWith(worldName + "-Savestate");
 		}).length;
 
@@ -117,7 +126,7 @@ public class SavestateMod {
 		applyVelocity=true;
 		showSavestateDone = true;
 		timeTitle = System.currentTimeMillis();
-		isSavestate=true;
+		state = State.SAVESTATING;
 		
 		System.gc();
 		TickrateChangerMod.updateTickrate(tickratesaved);
@@ -128,6 +137,9 @@ public class SavestateMod {
 	 * @throws IOException
 	 */
 	public static void loadstate(int number) {
+		if (state == State.LOADSTATING) {
+			return;
+		}
 		if (!hasSavestate())
 			return;
 
@@ -136,7 +148,7 @@ public class SavestateMod {
 		double x = mc.mouseHandler.xpos();
 		double y = mc.mouseHandler.ypos();
 
-		isLoading = true;
+		state = State.LOADSTATING;
 		
 		// Store the tickrate before the loadstate
 		float tickratesaved=TickrateChangerMod.tickrateServer;
