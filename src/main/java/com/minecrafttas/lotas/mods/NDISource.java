@@ -12,6 +12,8 @@ import me.walkerknapp.devolay.Devolay;
 import me.walkerknapp.devolay.DevolayFrameFourCCType;
 import me.walkerknapp.devolay.DevolaySender;
 import me.walkerknapp.devolay.DevolayVideoFrame;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.resources.ResourceLocation;
 
 /**
@@ -61,6 +63,7 @@ public class NDISource extends Mod {
 	 * Initializes NDI
 	 */
 	@Override
+	@Environment(EnvType.CLIENT)
 	protected void onClientsideInitialize() {
 		this.enabled = ConfigurationSystem.getBoolean("ndi_enabled", false);
 		if (!this.enabled) return;
@@ -111,6 +114,7 @@ public class NDISource extends Mod {
 	 * Fetches the games pixels into the video buffer
 	 */
 	@Override
+	@Environment(EnvType.CLIENT)
 	protected void onClientsidePostRender() {
 		if (!this.enabled) return;
 		
@@ -121,6 +125,7 @@ public class NDISource extends Mod {
 	 * Closes the ndi stream on shutdown
 	 */
 	@Override
+	@Environment(EnvType.CLIENT)
 	protected void onClientsideShutdown() {
 		if (!this.enabled) return;
 		
