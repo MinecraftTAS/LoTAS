@@ -46,6 +46,19 @@ discombobulator {
 		PostRender: [
 			"def": "Lnet/minecraft/client/gui/components/toasts/ToastComponent;render()V",
 			"1.16.1": "Lnet/minecraft/client/gui/components/toasts/ToastComponent;render(Lcom/mojang/blaze3d/vertex/PoseStack;)V"
+		],
+		Toast: [
+			"def": "render(II)Z",
+			"1.16.1": "render(IILcom/mojang/blaze3d/vertex/PoseStack;)Z",
+			"1.19.3": "render(ILcom/mojang/blaze3d/vertex/PoseStack;)Z"
+		],
+		LootTag: [
+			"def": "Tag<",
+			"1.18.2": "TagKey<"
+		],
+		LootImportTag: [
+			"def": "Tag;",
+			"1.18.2": "TagKey;"
 		]
 	]
 }
