@@ -21,4 +21,5 @@ dependencies {
 	minecraft "com.mojang:minecraft:1.15.2"
 	mappings loom.officialMojangMappings()
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	implementation 'me.walkerknapp:devolay:2.1.0:integrated'
 }

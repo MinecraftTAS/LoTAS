@@ -42,6 +42,10 @@ discombobulator {
 		RandomSourceImport: [
 			"def": "import java.util.Random;",
 			"1.19.3": "import net.minecraft.util.RandomSource;"
+		],
+		PostRender: [
+			"def": "Lnet/minecraft/client/gui/components/toasts/ToastComponent;render()V",
+			"1.16.1": "Lnet/minecraft/client/gui/components/toasts/ToastComponent;render(Lcom/mojang/blaze3d/vertex/PoseStack;)V"
 		]
 	]
 }
