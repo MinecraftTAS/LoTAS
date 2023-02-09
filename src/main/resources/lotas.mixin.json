@@ -24,6 +24,7 @@
 	],
 	"client": [
 		"client.accessors.AccessorKeyMapping",
+		"client.accessors.AccessorMinecraft",
 		"client.events.HookClientPlayNetworkHandler",
 		"client.events.HookMinecraft",
 		"client.events.HookOptions",
