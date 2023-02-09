@@ -5,6 +5,7 @@ import com.minecrafttas.lotas.mods.DragonManipulation;
 import com.minecrafttas.lotas.mods.DupeMod;
 import com.minecrafttas.lotas.mods.LootManipulation;
 import com.minecrafttas.lotas.mods.NDISource;
+import com.minecrafttas.lotas.mods.Overlay;
 import com.minecrafttas.lotas.mods.TickAdvance;
 import com.minecrafttas.lotas.mods.TickrateChanger;
 
@@ -34,7 +35,8 @@ public class ModSystem {
 		new TickrateChanger(),
 		new DragonManipulation(),
 		new LootManipulation(),
-		new NDISource()
+		new NDISource(),
+//		new Overlay() PROOF OF CONCEPT
 	};
 
 	// 1: event handlers that update the mod
