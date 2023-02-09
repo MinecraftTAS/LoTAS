@@ -20,23 +20,46 @@ import net.minecraft.resources.ResourceLocation;
  */
 public class NDISource extends Mod {
 
+	/**
+	 * NDI Stream sender
+	 */
 	private DevolaySender stream;
-	private ByteBuffer data;
-	private DevolayVideoFrame frame;
-	private Thread thread;
 	
-	private int width;
-	private int height;
-	private int framerate;
+	/**
+	 * NDI Video buffer
+	 */
+	private ByteBuffer data;
+	
+	/**
+	 * NDI Video Frame holder
+	 */
+	private DevolayVideoFrame frame;
+
+	/**
+	 * Streaming thread
+	 */
+	private Thread thread;
+
+	/**
+	 * Properties for the NDI Stream
+	 */
+	private int width, height, framerate;
+	
+	/**
+	 * Whether the ndi stream should be enabled or not
+	 */
 	private boolean enabled;
 	
 	/**
-	 * Initializes the tick advance mod
+	 * Initializes the ndi source
 	 */
 	public NDISource() {
 		super(new ResourceLocation("lotas", "ndisource"));
 	}
 
+	/**
+	 * Initializes NDI
+	 */
 	@Override
 	protected void onClientsideInitialize() {
 		this.enabled = ConfigurationSystem.getBoolean("ndi_enabled", false);
@@ -75,6 +98,9 @@ public class NDISource extends Mod {
 		
 	}
 	
+	/**
+	 * Fetches the games pixels into the video buffer
+	 */
 	@Override
 	protected void onClientsidePostRender() {
 		if (!this.enabled) return;
@@ -82,6 +108,9 @@ public class NDISource extends Mod {
 		GL11.glReadPixels(0, 0, this.width, this.height, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, this.data);
 	}
 	
+	/**
+	 * Closes the ndi stream on shutdown
+	 */
 	@Override
 	protected void onClientsideShutdown() {
 		if (!this.enabled) return;
