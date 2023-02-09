@@ -19,6 +19,7 @@ import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.entries.LootTableReference;
 import net.minecraft.world.level.storage.loot.entries.TagEntry;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 
 public class LootManipulation extends Mod {		
 
@@ -46,7 +47,7 @@ public class LootManipulation extends Mod {
 			s += "},";
 		}
 		s += "}";
-		System.out.println(s);
+//		System.out.println(s);
 	}
 
 	/**
@@ -70,13 +71,16 @@ public class LootManipulation extends Mod {
 	 * @param pool Loot pool
 	 */
 	private void analyzePool(LootPool pool) {
-		// Iterate through all loot entries
-		s += "\"entries\":[";
-		for (LootPoolEntryContainer entry : ((AccessorLootPool) pool).entries()) {
-			// Analyze loot entry
-			analyzeEntry(entry);
+		for (LootItemFunction entry : ((AccessorLootPool) pool).functions()) {
+			System.out.println(entry.getClass().getName());
 		}
-		s += "]";
+//		// Iterate through all loot entries
+//		s += "\"entries\":[";
+//		for (LootPoolEntryContainer entry : ((AccessorLootPool) pool).entries()) {
+//			// Analyze loot entry
+//			analyzeEntry(entry);
+//		}
+//		s += "]";
 	}
 	
 	/**

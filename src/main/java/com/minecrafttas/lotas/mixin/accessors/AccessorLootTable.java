@@ -14,10 +14,10 @@ import net.minecraft.world.level.storage.loot.LootTable;
 public interface AccessorLootTable {
 
 	/**
-	 * This Accessor opens the private field containing the list of loot tables
-	 * @return Identifier
+	 * This Accessor opens the private field containing the list of loot pools
+	 * @return Loot Pools
 	 */
 	@Accessor("pools")
 	public LootPool[] pools();
-
+	
 }
