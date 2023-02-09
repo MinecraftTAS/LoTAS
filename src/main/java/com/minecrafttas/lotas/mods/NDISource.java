@@ -69,6 +69,15 @@ public class NDISource extends Mod {
 		this.height = ConfigurationSystem.getInt("ndi_height", 1080);
 		this.framerate = ConfigurationSystem.getInt("ndi_framerate", 60);
 
+		if (this.width > 1920 || this.height > 1080) {
+			LoTAS.LOGGER.warn("Resolutions higher than 1080p might cause lag");
+		}
+		
+		if (this.framerate > 120) {
+			LoTAS.LOGGER.warn("Framerates above 120 fps are not supported and have therefore been reduced to 120.");
+			this.framerate = 120;
+		}
+		
 		if (!Devolay.isSupportedCpu()) {
 			LoTAS.LOGGER.warn("NDI not supported on this cpu.");
 			return;
