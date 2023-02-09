@@ -1,8 +1,12 @@
 package com.minecrafttas.lotas.mods;
 
+import com.minecrafttas.lotas.mixin.client.accessors.AccessorCamera;
+import com.minecrafttas.lotas.mixin.client.accessors.AccessorGameRenderer;
+import com.minecrafttas.lotas.system.ConfigurationSystem;
 import com.minecrafttas.lotas.system.ModSystem.Mod;
 
 import io.netty.buffer.Unpooled;
+import it.unimi.dsi.fastutil.bytes.Byte2BooleanSortedMaps.SynchronizedSortedMap;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.network.FriendlyByteBuf;
@@ -27,6 +31,11 @@ public class TickAdvance extends Mod {
 	}
 
 	/**
+	 * Should tick advance when a player joins the server
+	 */
+	private boolean freezeOnJoin;
+
+	/**
 	 *  Is tick advance enabled
 	 */
 	private boolean tickadvance;
@@ -34,13 +43,19 @@ public class TickAdvance extends Mod {
 	/**
 	 *  Should tick advance clientside
 	 */
+	@Environment(EnvType.CLIENT)
 	public boolean shouldTickClient;
 
 	/**
 	 *  Should tick advance serverside
 	 */
 	public boolean shouldTickServer;
-
+	
+	@Override
+	protected void onInitialize() {
+		this.freezeOnJoin = ConfigurationSystem.getBoolean("tickadvance_freezeonjoin", true);
+	}
+	
 	/**
 	 * Updates the client tickadvance status when receiving a packet
 	 * @param buf Packet Data
@@ -138,6 +153,10 @@ public class TickAdvance extends Mod {
 	 */
 	@Override
 	protected void onClientConnect(ServerPlayer player) {
+		if (this.freezeOnJoin && !this.tickadvance) {
+			this.updateTickadvanceStatus(true);
+		}
+		
 		FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
 		buf.writeInt(0); // status update
 		buf.writeBoolean(this.tickadvance); // new status
