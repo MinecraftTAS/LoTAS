@@ -3,6 +3,7 @@ package com.minecrafttas.lotas.mixin.client.events;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.At.Shift;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.minecrafttas.lotas.system.KeybindSystem;
@@ -64,6 +65,15 @@ public class HookMinecraft {
 	@Inject(method = "clearLevel(Lnet/minecraft/client/gui/screens/Screen;)V", at = @At("HEAD"))
 	public void hookDisconnectEvent(CallbackInfo ci) {
 		ModSystem.onClientsideDisconnect();
+	}
+	
+	/**
+	 * Triggers an Event in {@link ModSystem#onClientsidePostRender(Minecraft)} after the game has rendered the frame
+	 * @param ci Callback Info
+	 */
+	@Inject(method = "runTick", at = @At(value = "INVOKE", shift = Shift.AFTER, target = "Lnet/minecraft/client/gui/components/toasts/ToastComponent;render(Lcom/mojang/blaze3d/vertex/PoseStack;)V")) // @PostRender
+	public void hookPostRenderEvent(CallbackInfo ci) {
+		ModSystem.onClientsidePostRender();
 	}
 
 }
