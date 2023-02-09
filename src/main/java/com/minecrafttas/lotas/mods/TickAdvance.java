@@ -1,12 +1,9 @@
 package com.minecrafttas.lotas.mods;
 
-import com.minecrafttas.lotas.mixin.client.accessors.AccessorCamera;
-import com.minecrafttas.lotas.mixin.client.accessors.AccessorGameRenderer;
 import com.minecrafttas.lotas.system.ConfigurationSystem;
 import com.minecrafttas.lotas.system.ModSystem.Mod;
 
 import io.netty.buffer.Unpooled;
-import it.unimi.dsi.fastutil.bytes.Byte2BooleanSortedMaps.SynchronizedSortedMap;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.network.FriendlyByteBuf;
