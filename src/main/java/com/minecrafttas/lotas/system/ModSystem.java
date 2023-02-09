@@ -4,6 +4,7 @@ import com.minecrafttas.lotas.mixin.accessors.AccessorServerboundCustomPayloadPa
 import com.minecrafttas.lotas.mods.DragonManipulation;
 import com.minecrafttas.lotas.mods.DupeMod;
 import com.minecrafttas.lotas.mods.LootManipulation;
+import com.minecrafttas.lotas.mods.NDISource;
 import com.minecrafttas.lotas.mods.TickAdvance;
 import com.minecrafttas.lotas.mods.TickrateChanger;
 
@@ -32,7 +33,8 @@ public class ModSystem {
 		new TickAdvance(),
 		new TickrateChanger(),
 		new DragonManipulation(),
-		new LootManipulation()
+		new LootManipulation(),
+		new NDISource()
 	};
 
 	// 1: event handlers that update the mod
@@ -113,7 +115,13 @@ public class ModSystem {
 		for (Mod mod : mods)
 			mod.onClientsideDisconnect();
 	}
-
+	
+	@Environment(EnvType.CLIENT)
+	public static void onClientsidePostRender() {
+		for (Mod mod : mods)
+			mod.onClientsidePostRender();
+	}
+	
 	/**
 	 * Hull of a mod containing events for the mod
 	 * @author Pancake
@@ -240,6 +248,14 @@ public class ModSystem {
 		}
 
 		/**
+		 * Executed every time the client renders a frame
+		 */
+		@Environment(EnvType.CLIENT)
+		protected void onClientsidePostRender() {
+			
+		}
+		
+		/**
 		 * Sends a packet from the server to a client
 		 * @param player Player
 		 * @param buf Data
@@ -252,10 +268,11 @@ public class ModSystem {
 		 * Sends a packet from the client to the server
 		 * @param buf Data
 		 */
+		@Environment(EnvType.CLIENT)
 		protected void sendPacketToServer(FriendlyByteBuf buf) {
 			this.mc.getConnection().send(new ServerboundCustomPayloadPacket(this.id, buf));
 		}
-
+		
 	}
 
 }
