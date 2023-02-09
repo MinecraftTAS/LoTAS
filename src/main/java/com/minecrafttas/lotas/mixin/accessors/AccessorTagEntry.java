@@ -3,7 +3,7 @@ package com.minecrafttas.lotas.mixin.accessors;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagKey; // @LootImportTag
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.storage.loot.entries.TagEntry;
 
@@ -19,6 +19,6 @@ public interface AccessorTagEntry {
 	 * @return Tag
 	 */
 	@Accessor("tag")
-	public Tag<Item> tag();
+	public TagKey<Item> tag(); // @LootTag
 
 }

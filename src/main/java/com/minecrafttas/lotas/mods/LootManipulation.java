@@ -93,8 +93,16 @@ public class LootManipulation extends Mod {
 			s += "]},";
 		} else if (entry instanceof TagEntry) {
 			s += "{\"any\":[";
-			for (Item item : ((AccessorTagEntry) entry).tag().getValues())
-				s += "\"" + item.toString() + "\",";
+			// # 1.19.3
+//$$ 			for (net.minecraft.core.Holder<Item> item : net.minecraft.core.registries.BuiltInRegistries.ITEM.getTagOrEmpty(((AccessorTagEntry) entry).tag()))
+//$$ 				s += "\"" + item.value().toString() + "\",";
+			// # 1.18.2
+//$$			for (net.minecraft.core.Holder<Item> item : net.minecraft.core.Registry.ITEM.getTagOrEmpty(((AccessorTagEntry) entry).tag()))
+//$$				s += "\"" + item.value().toString() + "\",";
+			// # def
+//$$ 			for (Item item : ((AccessorTagEntry) entry).tag().getValues())
+//$$ 				s += "\"" + item.toString() + "\",";
+			// # end
 			s += "]},";
 		} else if (entry instanceof LootTableReference) {
 			s += "{\"reference\":\"" + ((AccessorLootTableReference) entry).name().getPath() + "\"},";
