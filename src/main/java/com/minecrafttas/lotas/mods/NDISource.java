@@ -45,6 +45,11 @@ public class NDISource extends Mod {
 		this.width = ConfigurationSystem.getInt("ndi_width", 1920);
 		this.height = ConfigurationSystem.getInt("ndi_height", 1080);
 		this.framerate = ConfigurationSystem.getInt("ndi_framerate", 60);
+
+		if (!Devolay.isSupportedCpu()) {
+			LoTAS.LOGGER.warn("NDI not supported on this cpu.");
+			return;
+		}
 		
 		if (Devolay.loadLibraries() != 0) {
 			LoTAS.LOGGER.error("NDI runtime not found.");
