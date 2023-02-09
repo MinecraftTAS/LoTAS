@@ -12,6 +12,12 @@ import net.minecraft.server.dedicated.DedicatedServer;
 @Mixin(DedicatedServer.class)
 public class MixinDedicatedServer {
 
+	/**
+	 * Disable max tick length
+	 * @reason Prevent crash
+	 * @author Pancake
+	 * @return Max tick length
+	 */
 	@Overwrite
 	public long getMaxTickLength() {
 		return Long.MAX_VALUE;
