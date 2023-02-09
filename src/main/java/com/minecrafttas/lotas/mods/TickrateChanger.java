@@ -9,6 +9,7 @@
  */
 package com.minecrafttas.lotas.mods;
 
+import com.minecrafttas.lotas.system.ConfigurationSystem;
 import com.minecrafttas.lotas.system.ModSystem.Mod;
 
 import io.netty.buffer.Unpooled;
@@ -34,6 +35,16 @@ public class TickrateChanger extends Mod {
 		instance = this;
 	}
 
+	/**
+	 * Should the game remember the tickrate
+	 */
+	private boolean rememberTickrate;
+	
+	/**
+	 * Tickrate stored between worlds (static for integrated server)
+	 */
+	private static double storedTickrate = 20.0;
+	
 	/**
 	 * Tickrate of the game
 	 */
@@ -79,6 +90,11 @@ public class TickrateChanger extends Mod {
 		this.fakeTimeSinceTC += time * this.gamespeed;
 		this.timeSinceTC = System.currentTimeMillis();
 	}
+	
+	@Override
+	protected void onServerLoad() {
+		this.rememberTickrate = ConfigurationSystem.getBoolean("tickratechanger_remembertickrate", true);
+	}
 
 	/**
 	 * Updates the Server tickrate and resend when receiving a packet
@@ -108,6 +124,7 @@ public class TickrateChanger extends Mod {
 	public void updateTickrate(double tickrate) {
 		if (tickrate < 0.1)
 			return;
+		storedTickrate = tickrate;
 		this.internallyUpdateTickrate(tickrate);
 		// Update Tickrate for all clients
 		this.mcserver.getPlayerList().getPlayers().forEach(player -> {
@@ -149,6 +166,8 @@ public class TickrateChanger extends Mod {
 
 	@Override
 	protected void onClientConnect(ServerPlayer player) {
+		if (this.mcserver.isSingleplayer() && this.rememberTickrate)
+			this.internallyUpdateTickrate(storedTickrate);
 		FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
 		buf.writeDouble(this.tickrate);
 		this.sendPacketToClient(player, buf);
