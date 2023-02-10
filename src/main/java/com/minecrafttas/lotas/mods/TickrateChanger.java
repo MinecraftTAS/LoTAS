@@ -92,7 +92,7 @@ public class TickrateChanger extends Mod {
 	}
 	
 	@Override
-	protected void onServerLoad() {
+	protected void onInitialize() {
 		this.rememberTickrate = ConfigurationSystem.getBoolean("tickratechanger_remembertickrate", true);
 	}
 

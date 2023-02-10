@@ -3,6 +3,7 @@ package com.minecrafttas.lotas.system;
 import com.minecrafttas.lotas.mixin.accessors.AccessorServerboundCustomPayloadPacket;
 import com.minecrafttas.lotas.mods.DragonManipulation;
 import com.minecrafttas.lotas.mods.DupeMod;
+import com.minecrafttas.lotas.mods.SavestateMod;
 import com.minecrafttas.lotas.mods.TickAdvance;
 import com.minecrafttas.lotas.mods.TickrateChanger;
 
@@ -33,7 +34,8 @@ public class ModSystem {
 		new DragonManipulation(),
 //		new LootManipulation(),
 //		new NDISource(),
-//		new Overlay()
+//		new Overlay(),
+		new SavestateMod()
 	};
 
 	// 1: event handlers that update the mod
