@@ -47,7 +47,7 @@ public class LootManipulation extends Mod {
 			s += "},";
 		}
 		s += "}";
-//		System.out.println(s);
+		System.out.println(s);
 	}
 
 	/**
@@ -74,13 +74,13 @@ public class LootManipulation extends Mod {
 		for (LootItemFunction entry : ((AccessorLootPool) pool).functions()) {
 			System.out.println(entry.getClass().getName());
 		}
-//		// Iterate through all loot entries
-//		s += "\"entries\":[";
-//		for (LootPoolEntryContainer entry : ((AccessorLootPool) pool).entries()) {
-//			// Analyze loot entry
-//			analyzeEntry(entry);
-//		}
-//		s += "]";
+		// Iterate through all loot entries
+		s += "\"entries\":[";
+		for (LootPoolEntryContainer entry : ((AccessorLootPool) pool).entries()) {
+			// Analyze loot entry
+			analyzeEntry(entry);
+		}
+		s += "]";
 	}
 	
 	/**
