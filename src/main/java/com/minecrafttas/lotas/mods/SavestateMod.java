@@ -129,7 +129,11 @@ public class SavestateMod extends Mod {
 	 * Server-Side: Prepares all folders if not already set
 	 */
 	private void prepareFolders() {
-		this.worldDir = this.mcserver.getStorageSource().getFile(this.mcserver.getLevelIdName(), "");
+		// # 1.16.1
+//$$		this.worldDir = this.mcserver.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT).toFile().getParentFile();
+		// # def
+//$$ 		this.worldDir = this.mcserver.getStorageSource().getFile(this.mcserver.getLevelIdName(), "");
+		// # end
 		this.savestatesDir = new File(this.worldDir.getParentFile(), this.worldDir.getName() + " Savestates");
 		if (!this.savestatesDir.exists()) {
 			this.states = new State[0];
