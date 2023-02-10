@@ -91,7 +91,7 @@ public class SavestateMod extends Mod {
 		TickAdvance.instance.updateTickadvanceStatus(false);
 		switch (buf.readInt()) {
 			case 0:
-				this.doSavestate = buf.readUtf();
+				this.doSavestate = buf.readUtf(Short.MAX_VALUE);
 				break;
 			case 1:
 				this.doLoadstate = buf.readInt();
@@ -129,7 +129,7 @@ public class SavestateMod extends Mod {
 	 * Server-Side: Prepares all folders if not already set
 	 */
 	private void prepareFolders() {
-		this.worldDir = this.mcserver.getStorageSource().getBaseDir().resolve(this.mcserver.getLevelIdName()).toFile();
+		this.worldDir = this.mcserver.getStorageSource().getFile(this.mcserver.getLevelIdName(), "");
 		this.savestatesDir = new File(this.worldDir.getParentFile(), this.worldDir.getName() + " Savestates");
 		if (!this.savestatesDir.exists()) {
 			this.states = new State[0];
@@ -291,6 +291,7 @@ public class SavestateMod extends Mod {
 	 * @param buf Packet Data
 	 */
 	@Override
+	@Environment(EnvType.CLIENT)
 	protected void onClientsidePayload(FriendlyByteBuf buf) {
 		this.states = new State[buf.readInt()];
 		for (int i = 0; i < this.states.length; i++) {
@@ -373,9 +374,9 @@ public class SavestateMod extends Mod {
 
 		public static State deserialize(byte[] data) {
 			FriendlyByteBuf buffer = new FriendlyByteBuf(Unpooled.wrappedBuffer(data));
-			String s1 = buffer.readUtf();
+			String s1 = buffer.readUtf(Short.MAX_VALUE);
 			long l2 = buffer.readLong();
-			String s3 = buffer.readUtf();
+			String s3 = buffer.readUtf(Short.MAX_VALUE);
 			return new State(s1, l2, s3);
 		}
 
