@@ -11,6 +11,7 @@ import com.minecrafttas.lotas.mixin.client.accessors.AccessorKeyMapping;
 import com.minecrafttas.lotas.mods.DragonManipulation;
 import com.minecrafttas.lotas.mods.DragonManipulation.Phase;
 import com.minecrafttas.lotas.mods.DupeMod;
+import com.minecrafttas.lotas.mods.SavestateMod;
 import com.minecrafttas.lotas.mods.TickAdvance;
 import com.minecrafttas.lotas.mods.TickrateChanger;
 
@@ -61,6 +62,15 @@ public class KeybindSystem {
 		}),
 		new Keybind("Disable manipulation", "Dragon Manipulation", GLFW.GLFW_KEY_V, true, () -> { // hotkey just for testing, will be removed with gui
 			DragonManipulation.instance.requestPhaseChange(Phase.OFF);
+		}),
+		new Keybind("Savestate", "Savestates", GLFW.GLFW_KEY_J, true, () -> {
+			SavestateMod.instance.requestState(0, -1, "Test");
+		}),
+		new Keybind("Loadstate", "Savestates", GLFW.GLFW_KEY_K, true, () -> {
+			SavestateMod.instance.requestState(1, 0, null);
+		}),
+		new Keybind("Deletestate", "Savestates", GLFW.GLFW_KEY_I, true, () -> {
+			SavestateMod.instance.requestState(2, 0, null);
 		}),
 	};
 
