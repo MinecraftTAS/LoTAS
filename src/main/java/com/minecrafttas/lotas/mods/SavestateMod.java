@@ -20,11 +20,18 @@ import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.ArrayUtils;
 
 import com.minecrafttas.lotas.LoTAS;
+import com.minecrafttas.lotas.mixin.accessors.AccessorChunkMap;
+import com.minecrafttas.lotas.mixin.accessors.AccessorDistanceManager;
+import com.minecrafttas.lotas.mixin.accessors.AccessorRegionFileStorage;
+import com.minecrafttas.lotas.mixin.accessors.AccessorServerChunkCache;
+import com.minecrafttas.lotas.mixin.accessors.AccessorServerLevel;
 import com.minecrafttas.lotas.system.ModSystem.Mod;
 
 import io.netty.buffer.Unpooled;
@@ -32,7 +39,11 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerChunkCache;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.chunk.storage.RegionFile;
 
 /**
  * Main savestate mod
@@ -107,22 +118,40 @@ public class SavestateMod extends Mod {
 	 */
 	@Override
 	protected void onServerTick() {
+		// Prepare folders and states file if necessary
+		if (this.doDeletestate != -1 || this.doSavestate != null || this.doLoadstate != -1) {
+			// Prepare folders
+			this.prepareFolders();
+			try {
+				// Reread state file
+				FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.wrappedBuffer(Files.readAllBytes(new File(this.savestatesDir, "states.dat").toPath())));
+				this.states = new State[buf.readVarInt()];
+				for (int ii = 0; ii < this.states.length; ii++) {
+					this.states[ii] = State.deserialize(buf.readByteArray());
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
 		// Savestate
 		if (this.doSavestate != null) {
 			this.savestate();
 			this.doSavestate = null;
+			TickAdvance.instance.lock = false;
 		}
 		// Loadstate
 		if (this.doLoadstate != -1) {
 			this.loadstate(this.doLoadstate);
 			this.doLoadstate = -1;
+			TickAdvance.instance.lock = false;
 		}
 		// Deletestate
 		if (this.doDeletestate != -1) {
 			this.deletestate(this.doDeletestate);
 			this.doDeletestate = -1;
+			TickAdvance.instance.lock = false;
 		}
-		TickAdvance.instance.lock = false;
 	}
 	
 	/**
@@ -170,16 +199,8 @@ public class SavestateMod extends Mod {
 		this.mcserver.getPlayerList().saveAll();
 		// Save Worlds
 		this.mcserver.saveAllChunks(false, true, false);
-		// Prepare Folders
-		this.prepareFolders();
 		File worldSavestateDir = new File(this.savestatesDir, this.savestatesDir.listFiles().length - 1 + "");
 		try {
-			// Reread state file
-			FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.wrappedBuffer(Files.readAllBytes(new File(this.savestatesDir, "states.dat").toPath())));
-			this.states = new State[buf.readVarInt()];
-			for (int ii = 0; ii < this.states.length; ii++) {
-				this.states[ii] = State.deserialize(buf.readByteArray());
-			}
 			// Copy full folder
 			Files.walkFileTree(this.worldDir.toPath(), new FileVisitor<Path>() {
 
@@ -236,7 +257,123 @@ public class SavestateMod extends Mod {
 			LoTAS.LOGGER.warn("Trying to loadstate a nonexistant state: " + i);
 			return;
 		}
+		// Enable tickrate zero
+		TickAdvance.instance.updateTickadvanceStatus(true);
 		
+		// serverside:
+		// remove players
+		for (ServerPlayer player : new ArrayList<>(this.mcserver.getPlayerList().getPlayers())) {
+			this.mcserver.getPlayerList().remove(player);
+		}
+		
+		// serverside: 
+		// fetch and remove entities from ServerLevel (globalEntities, entitiesById, toAddAfterTick)
+		// remove entities from ChunkAccess/LevelChunk
+		// remove entities from ChunkMap
+		
+		for (ServerLevel level : this.mcserver.getAllLevels()) {
+			((AccessorServerLevel) level).toAddAfterTick().clear(); // entities in this queue will be added next tick
+			((AccessorServerLevel) level).globalEntities().clear(); // global entities are entities such as lighting bolts, they are ticked but not registered the the chunk map or the chunk access
+		
+			for (Entity entity : ((AccessorServerLevel) level).entitiesById().values()) {
+				level.despawn(entity);
+			}
+		}
+		
+		// serverside:
+		// remove chunk tickets from distance manager (tickets, chunksToUpdateFutures, ticketsToRelease)
+		// unload chunks (updatingChunkMap, visibleChunkMap, pendingUnloads)
+		// clear chunk cache
+		// unlock files
+		
+		for (ServerLevel level : this.mcserver.getAllLevels()) {
+			try {
+				ServerChunkCache chunkCache = level.getChunkSource();
+
+				// remove tickets
+				AccessorDistanceManager distanceManager = (AccessorDistanceManager) ((AccessorServerChunkCache) chunkCache).distanceManager();
+				distanceManager.tickets().clear();
+				distanceManager.chunksToUpdateFutures().clear();
+				distanceManager.ticketsToRelease().clear();
+
+				// unload chunks
+				AccessorChunkMap map = (AccessorChunkMap) chunkCache.chunkMap;
+				map.pendingUnloads().clear();
+				map.updatingChunkMap().clear();
+				map.visibleChunkMap().clear();
+				map.runProcessUnloads(() -> true);
+
+				// clear cache
+				((AccessorServerChunkCache) level.getChunkSource()).runClearCache();
+
+				// unlock files
+				chunkCache.close();
+				((AccessorRegionFileStorage) chunkCache.getPoiManager()).regionCache().clear();
+				((AccessorRegionFileStorage) chunkCache.chunkMap).regionCache().clear();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+		}
+
+		// serverside:
+		// load state
+		
+//		File worldSavestateDir = new File(this.savestatesDir, i + "");
+		try {
+			// Delete world folder
+			FileUtils.deleteDirectory(this.worldDir);
+			// FIXME: By this point the world should be deleted
+			
+			//			
+//			// Copy state
+//			Files.walkFileTree(worldSavestateDir.toPath(), new FileVisitor<Path>() {
+//
+//				@Override
+//				public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+//					try {
+//						worldDir.toPath().resolve(worldSavestateDir.toPath().relativize(dir)).toFile().mkdirs();
+//					} catch (Exception e) {
+//						System.err.println("Unable to mkdir: " + dir);
+//					}
+//					return FileVisitResult.CONTINUE;
+//				}
+//
+//				@Override
+//				public FileVisitResult visitFile(Path dir, BasicFileAttributes attrs) throws IOException {
+//					try {
+//						Files.copy(dir, worldDir.toPath().resolve(worldSavestateDir.toPath().relativize(dir)), StandardCopyOption.REPLACE_EXISTING);
+//					} catch (Exception e) {
+//						System.err.println("Unable to copy: " + dir);
+//					}
+//					return FileVisitResult.CONTINUE;
+//				}
+//
+//				@Override
+//				public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
+//					return FileVisitResult.CONTINUE;
+//				}
+//
+//				@Override
+//				public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+//					return FileVisitResult.CONTINUE;
+//				}
+//			});
+//			Thread.sleep(200);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		// serverside:
+		// reload level
+//		for (ServerLevel level : this.mcserver.getAllLevels()) {
+//			ServerChunkCache oldChunkCache = level.getChunkSource();
+//			ServerChunkCache newChunkCache = new ServerChunkCache(level, level.getLevelStorage().getFolder(), level.getLevelStorage().getFixerUpper(), level.getLevelStorage().getStructureManager(), this.mcserver.getBackgroundTaskExecutor(), oldChunkCache.getGenerator(), this.mcserver.getPlayerList().getViewDistance(), ((AccessorChunkMap) oldChunkCache.chunkMap).progressListener(), () -> mcserver.getLevel(DimensionType.OVERWORLD).getDataStorage());
+//			((AccessorLevel) level).chunkSource(newChunkCache);
+//		}
+		
+		// Enable tickrate zero
+//		TickAdvance.instance.updateTickadvanceStatus(false);
 	}
 
 	/**
@@ -250,16 +387,8 @@ public class SavestateMod extends Mod {
 		}
 		// Enable tickrate zero
 		TickAdvance.instance.updateTickadvanceStatus(true);
-		// Prepare folders
-		this.prepareFolders();
 		File worldSavestateDir = new File(this.savestatesDir, i + "");
 		try {
-			// Reread state file
-			FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.wrappedBuffer(Files.readAllBytes(new File(this.savestatesDir, "states.dat").toPath())));
-			this.states = new State[buf.readVarInt()];
-			for (int ii = 0; ii < this.states.length; ii++) {
-				this.states[ii] = State.deserialize(buf.readByteArray());
-			}
 			// Delete Folder if it exists
 			if (worldSavestateDir.exists())
 				FileUtils.deleteDirectory(worldSavestateDir);
