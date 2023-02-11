@@ -37,6 +37,7 @@ import com.minecrafttas.lotas.system.ModSystem.Mod;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerChunkCache;
@@ -44,6 +45,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.chunk.storage.RegionFile;
+import net.minecraft.world.level.dimension.DimensionType;
 
 /**
  * Main savestate mod
@@ -276,7 +278,8 @@ public class SavestateMod extends Mod {
 			((AccessorServerLevel) level).globalEntities().clear(); // global entities are entities such as lighting bolts, they are ticked but not registered the the chunk map or the chunk access
 		
 			for (Entity entity : ((AccessorServerLevel) level).entitiesById().values()) {
-				level.despawn(entity);
+				if (entity != null)
+					level.despawn(entity);
 			}
 		}
 		
@@ -307,72 +310,72 @@ public class SavestateMod extends Mod {
 				((AccessorServerChunkCache) level.getChunkSource()).runClearCache();
 
 				// unlock files
-				chunkCache.close();
+				for (RegionFile file : ((AccessorRegionFileStorage) chunkCache.getPoiManager()).regionCache().values())
+					file.close();
 				((AccessorRegionFileStorage) chunkCache.getPoiManager()).regionCache().clear();
+				
+				for (RegionFile file : ((AccessorRegionFileStorage) chunkCache.chunkMap).regionCache().values())
+					file.close();
 				((AccessorRegionFileStorage) chunkCache.chunkMap).regionCache().clear();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 			
 		}
-
+		
 		// serverside:
 		// load state
 		
-//		File worldSavestateDir = new File(this.savestatesDir, i + "");
+		File worldSavestateDir = new File(this.savestatesDir, i + "");
 		try {
 			// Delete world folder
 			FileUtils.deleteDirectory(this.worldDir);
-			// FIXME: By this point the world should be deleted
 			
-			//			
-//			// Copy state
-//			Files.walkFileTree(worldSavestateDir.toPath(), new FileVisitor<Path>() {
-//
-//				@Override
-//				public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
-//					try {
-//						worldDir.toPath().resolve(worldSavestateDir.toPath().relativize(dir)).toFile().mkdirs();
-//					} catch (Exception e) {
-//						System.err.println("Unable to mkdir: " + dir);
-//					}
-//					return FileVisitResult.CONTINUE;
-//				}
-//
-//				@Override
-//				public FileVisitResult visitFile(Path dir, BasicFileAttributes attrs) throws IOException {
-//					try {
-//						Files.copy(dir, worldDir.toPath().resolve(worldSavestateDir.toPath().relativize(dir)), StandardCopyOption.REPLACE_EXISTING);
-//					} catch (Exception e) {
-//						System.err.println("Unable to copy: " + dir);
-//					}
-//					return FileVisitResult.CONTINUE;
-//				}
-//
-//				@Override
-//				public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
-//					return FileVisitResult.CONTINUE;
-//				}
-//
-//				@Override
-//				public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
-//					return FileVisitResult.CONTINUE;
-//				}
-//			});
-//			Thread.sleep(200);
+			// Copy state
+			Files.walkFileTree(worldSavestateDir.toPath(), new FileVisitor<Path>() {
+
+				@Override
+				public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+					try {
+						worldDir.toPath().resolve(worldSavestateDir.toPath().relativize(dir)).toFile().mkdirs();
+					} catch (Exception e) {
+						System.err.println("Unable to mkdir: " + dir);
+					}
+					return FileVisitResult.CONTINUE;
+				}
+
+				@Override
+				public FileVisitResult visitFile(Path dir, BasicFileAttributes attrs) throws IOException {
+					try {
+						Files.copy(dir, worldDir.toPath().resolve(worldSavestateDir.toPath().relativize(dir)), StandardCopyOption.REPLACE_EXISTING);
+					} catch (Exception e) {
+						System.err.println("Unable to copy: " + dir);
+					}
+					return FileVisitResult.CONTINUE;
+				}
+
+				@Override
+				public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
+					return FileVisitResult.CONTINUE;
+				}
+
+				@Override
+				public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+					return FileVisitResult.CONTINUE;
+				}
+			});
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
-		// serverside:
-		// reload level
-//		for (ServerLevel level : this.mcserver.getAllLevels()) {
-//			ServerChunkCache oldChunkCache = level.getChunkSource();
-//			ServerChunkCache newChunkCache = new ServerChunkCache(level, level.getLevelStorage().getFolder(), level.getLevelStorage().getFixerUpper(), level.getLevelStorage().getStructureManager(), this.mcserver.getBackgroundTaskExecutor(), oldChunkCache.getGenerator(), this.mcserver.getPlayerList().getViewDistance(), ((AccessorChunkMap) oldChunkCache.chunkMap).progressListener(), () -> mcserver.getLevel(DimensionType.OVERWORLD).getDataStorage());
-//			((AccessorLevel) level).chunkSource(newChunkCache);
-//		}
+		// TODO:
+		// load level.dat (levelstorage)
+		// load players (levelstorage?)
+		// figure out data storage
+		// maybe update the client?
+		// see if it works lmfao
 		
-		// Enable tickrate zero
+		// Disable tickrate zero
 //		TickAdvance.instance.updateTickadvanceStatus(false);
 	}
 
