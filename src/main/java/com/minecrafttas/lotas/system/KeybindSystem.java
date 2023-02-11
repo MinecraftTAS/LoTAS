@@ -21,6 +21,7 @@ import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.recipebook.RecipeBookComponent;
 
 /**
  * Manages keybinds and their categories.
@@ -164,7 +165,7 @@ public class KeybindSystem {
 	private static boolean isKeyDown(Minecraft mc, KeyMapping map) {
 		// Check if in a text field
 		Screen screen = mc.screen;
-		if (screen != null && screen.getFocused() instanceof EditBox && ((EditBox) screen.getFocused()).canConsumeInput())
+		if (screen != null && ((screen.getFocused() instanceof EditBox && ((EditBox) screen.getFocused()).canConsumeInput()) || screen.getFocused() instanceof RecipeBookComponent))
 			return false;
 
 		boolean wasPressed = keys.containsKey(map) ? keys.get(map) : false;
