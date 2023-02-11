@@ -22,6 +22,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.GameType;
 
 /**
  * Main dupe mod
@@ -61,8 +62,11 @@ public class DupeMod extends Mod {
 		if (saveOLoad) {
 			this.localPlayer = new CompoundTag();
 			this.mc.player.saveWithoutId(this.localPlayer);
-		} else if (this.localPlayer != null)
+			this.localPlayer.putInt("lotas_playerGameType", buf.readInt());
+		} else if (this.localPlayer != null) {
 			this.mc.player.load(this.localPlayer);
+			this.mc.gameMode.setLocalMode(GameType.byId(this.localPlayer.getInt("lotas_playerGameType")));
+		}
 	}
 
 	/**
@@ -85,6 +89,7 @@ public class DupeMod extends Mod {
 				// Send packet to client
 				FriendlyByteBuf data = new FriendlyByteBuf(Unpooled.buffer());
 				data.writeBoolean(saveOLoad);
+				data.writeInt(tag.getInt("playerGameType"));
 				this.sendPacketToClient(player, data);
 			}
 		} else
