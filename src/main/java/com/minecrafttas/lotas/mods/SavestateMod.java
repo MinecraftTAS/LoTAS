@@ -12,6 +12,8 @@ package com.minecrafttas.lotas.mods;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.nio.file.FileVisitResult;
 import java.nio.file.FileVisitor;
 import java.nio.file.Files;
@@ -21,10 +23,11 @@ import java.nio.file.StandardOpenOption;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.concurrent.Executor;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.ArrayUtils;
+import org.jetbrains.annotations.Nullable;
 
 import com.minecrafttas.lotas.LoTAS;
 import com.minecrafttas.lotas.mixin.accessors.AccessorChunkMap;
@@ -37,15 +40,18 @@ import com.minecrafttas.lotas.system.ModSystem.Mod;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ChunkHolder;
+import net.minecraft.server.level.ChunkMap;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.TicketType;
+import net.minecraft.util.Unit;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.chunk.storage.RegionFile;
-import net.minecraft.world.level.dimension.DimensionType;
 
 /**
  * Main savestate mod
@@ -368,6 +374,20 @@ public class SavestateMod extends Mod {
 			e.printStackTrace();
 		}
 		
+		// make a new distance manager cuz why not
+		try {			
+			for (ServerLevel level : this.mcserver.getAllLevels()) {
+				ServerChunkCache chunkCache = level.getChunkSource();
+				DistanceManager manager = new DistanceManager(chunkCache.chunkMap, mcserver.getBackgroundTaskExecutor(), ((AccessorDistanceManager) ((AccessorServerChunkCache) chunkCache).distanceManager()).mainThreadExecutor());
+				
+				((AccessorServerChunkCache) chunkCache).distanceManager(manager);
+				
+				manager.addRegionTicket(TicketType.START, new ChunkPos(0, 0), 11, Unit.INSTANCE);
+			}
+		} catch (SecurityException | IllegalArgumentException e) {
+			e.printStackTrace();
+		}
+		
 		// TODO:
 		// load level.dat (levelstorage)
 		// load players (levelstorage?)
@@ -528,5 +548,31 @@ public class SavestateMod extends Mod {
 			return this.savelocation;
 		}
 	}
+	
+    public class DistanceManager extends net.minecraft.server.level.DistanceManager {
+    	
+    	private ChunkMap map;
+    	protected DistanceManager(ChunkMap map, Executor executor, Executor executor2) {
+    		super(executor, executor2);
+            this.map = map;
+        }
+
+        @Override
+        protected boolean isChunkToRemove(long l) {
+            return ((AccessorChunkMap) map).toDrop().contains(l);
+        }
+
+        @Override
+        @Nullable
+        protected ChunkHolder getChunk(long l) {
+            return ((AccessorChunkMap) map).runGetUpdatingChunkIfPresent(l);
+        }
+
+        @Override
+        @Nullable
+        protected ChunkHolder updateChunkScheduling(long l, int i, @Nullable ChunkHolder chunkHolder, int j) {
+            return ((AccessorChunkMap) map).runUpdateChunkScheduling(l, i, chunkHolder, j);
+        }
+    }
 
 }
