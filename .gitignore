@@ -4,6 +4,7 @@ build/
 
 # Exclude more stuff
 run/
+run-server/
 *.launch
 
 # Exclude project files

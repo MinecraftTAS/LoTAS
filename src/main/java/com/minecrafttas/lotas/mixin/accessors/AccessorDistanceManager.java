@@ -1,7 +1,6 @@
 package com.minecrafttas.lotas.mixin.accessors;
 
 import java.util.Set;
-import java.util.concurrent.Executor;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
@@ -25,7 +24,5 @@ public interface AccessorDistanceManager {
 	@Accessor("ticketsToRelease")
 	public LongSet ticketsToRelease();
 
-	@Accessor("mainThreadExecutor")
-	public Executor mainThreadExecutor();
 
 }
