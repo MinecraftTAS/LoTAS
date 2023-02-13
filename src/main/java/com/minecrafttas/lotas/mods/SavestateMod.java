@@ -12,8 +12,6 @@ package com.minecrafttas.lotas.mods;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.nio.file.FileVisitResult;
 import java.nio.file.FileVisitor;
 import java.nio.file.Files;
@@ -23,15 +21,14 @@ import java.nio.file.StandardOpenOption;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.concurrent.Executor;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.ArrayUtils;
-import org.jetbrains.annotations.Nullable;
 
 import com.minecrafttas.lotas.LoTAS;
 import com.minecrafttas.lotas.mixin.accessors.AccessorChunkMap;
 import com.minecrafttas.lotas.mixin.accessors.AccessorDistanceManager;
+import com.minecrafttas.lotas.mixin.accessors.AccessorLevel;
 import com.minecrafttas.lotas.mixin.accessors.AccessorRegionFileStorage;
 import com.minecrafttas.lotas.mixin.accessors.AccessorServerChunkCache;
 import com.minecrafttas.lotas.mixin.accessors.AccessorServerLevel;
@@ -41,17 +38,19 @@ import io.netty.buffer.Unpooled;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.game.ClientboundRespawnPacket;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ChunkHolder;
-import net.minecraft.server.level.ChunkMap;
+import net.minecraft.server.level.DerivedServerLevel;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.level.TicketType;
-import net.minecraft.util.Unit;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.chunk.storage.RegionFile;
+import net.minecraft.world.level.dimension.DimensionType;
+import net.minecraft.world.level.storage.DerivedLevelData;
+import net.minecraft.world.level.storage.LevelData;
+import net.minecraft.world.level.storage.LevelStorageSource;
 
 /**
  * Main savestate mod
@@ -199,7 +198,6 @@ public class SavestateMod extends Mod {
 	/**
 	 * Saves a new state of the world
 	 */
-	@SuppressWarnings("resource")
 	private void savestate() {
 		// Enable tickrate zero
 		TickAdvance.instance.updateTickadvanceStatus(true);
@@ -225,6 +223,8 @@ public class SavestateMod extends Mod {
 				@Override
 				public FileVisitResult visitFile(Path dir, BasicFileAttributes attrs) throws IOException {
 					try {
+						if (dir.getFileName().toString().equals("session.lock"))
+							return FileVisitResult.CONTINUE;
 						Files.copy(dir, worldSavestateDir.toPath().resolve(SavestateMod.this.worldDir.toPath().relativize(dir)), StandardCopyOption.REPLACE_EXISTING);
 					} catch (Exception e) {
 						System.err.println("Unable to copy: " + dir);
@@ -268,12 +268,6 @@ public class SavestateMod extends Mod {
 		// Enable tickrate zero
 		TickAdvance.instance.updateTickadvanceStatus(true);
 		
-		// serverside:
-		// remove players
-		for (ServerPlayer player : new ArrayList<>(this.mcserver.getPlayerList().getPlayers())) {
-			this.mcserver.getPlayerList().remove(player);
-		}
-		
 		// serverside: 
 		// fetch and remove entities from ServerLevel (globalEntities, entitiesById, toAddAfterTick)
 		// remove entities from ChunkAccess/LevelChunk
@@ -283,7 +277,7 @@ public class SavestateMod extends Mod {
 			((AccessorServerLevel) level).toAddAfterTick().clear(); // entities in this queue will be added next tick
 			((AccessorServerLevel) level).globalEntities().clear(); // global entities are entities such as lighting bolts, they are ticked but not registered the the chunk map or the chunk access
 		
-			for (Entity entity : ((AccessorServerLevel) level).entitiesById().values()) {
+			for (Entity entity : new ArrayList<>(((AccessorServerLevel) level).entitiesById().values())) {
 				if (entity != null)
 					level.despawn(entity);
 			}
@@ -310,6 +304,7 @@ public class SavestateMod extends Mod {
 				map.pendingUnloads().clear();
 				map.updatingChunkMap().clear();
 				map.visibleChunkMap().clear();
+				map.entitiesInLevel().clear();
 				map.runProcessUnloads(() -> true);
 
 				// clear cache
@@ -334,8 +329,11 @@ public class SavestateMod extends Mod {
 		
 		File worldSavestateDir = new File(this.savestatesDir, i + "");
 		try {
-			// Delete world folder
-			FileUtils.deleteDirectory(this.worldDir);
+			// Delete world folder without deleting session.lock
+			for (File f : this.worldDir.listFiles()) {
+				if (f.isDirectory())
+					FileUtils.deleteDirectory(f);
+			}
 			
 			// Copy state
 			Files.walkFileTree(worldSavestateDir.toPath(), new FileVisitor<Path>() {
@@ -374,29 +372,28 @@ public class SavestateMod extends Mod {
 			e.printStackTrace();
 		}
 		
-		// make a new distance manager cuz why not
-		try {			
-			for (ServerLevel level : this.mcserver.getAllLevels()) {
-				ServerChunkCache chunkCache = level.getChunkSource();
-				DistanceManager manager = new DistanceManager(chunkCache.chunkMap, mcserver.getBackgroundTaskExecutor(), ((AccessorDistanceManager) ((AccessorServerChunkCache) chunkCache).distanceManager()).mainThreadExecutor());
-				
-				((AccessorServerChunkCache) chunkCache).distanceManager(manager);
-				
-				manager.addRegionTicket(TicketType.START, new ChunkPos(0, 0), 11, Unit.INSTANCE);
-			}
-		} catch (SecurityException | IllegalArgumentException e) {
-			e.printStackTrace();
+		// TODO:
+		// load level.dat (levelstorage): done
+		// load players (levelstorage?): done
+		// figure out data storage: done
+		// maybe update the client?: done
+		// see if it works lmfao: i guess?
+		
+		LevelData data = LevelStorageSource.getLevelData(new File(this.worldDir, "level.dat"), this.mcserver.getFixerUpper());
+		for (ServerLevel level : this.mcserver.getAllLevels())
+			if (level instanceof DerivedServerLevel)
+				((AccessorLevel) level).levelData(new DerivedLevelData(data));
+			else
+				((AccessorLevel) level).levelData(data);
+		
+		for (ServerPlayer player : this.mcserver.getPlayerList().getPlayers()) {
+			player.getLevel().addNewPlayer(player);
+			player.teleportTo(player.getLevel(), player.x, player.y, player.z, player.yRot, player.xRot);
+			
 		}
 		
-		// TODO:
-		// load level.dat (levelstorage)
-		// load players (levelstorage?)
-		// figure out data storage
-		// maybe update the client?
-		// see if it works lmfao
-		
 		// Disable tickrate zero
-//		TickAdvance.instance.updateTickadvanceStatus(false);
+		TickAdvance.instance.updateTickadvanceStatus(false);
 	}
 
 	/**
@@ -548,31 +545,5 @@ public class SavestateMod extends Mod {
 			return this.savelocation;
 		}
 	}
-	
-    public class DistanceManager extends net.minecraft.server.level.DistanceManager {
-    	
-    	private ChunkMap map;
-    	protected DistanceManager(ChunkMap map, Executor executor, Executor executor2) {
-    		super(executor, executor2);
-            this.map = map;
-        }
-
-        @Override
-        protected boolean isChunkToRemove(long l) {
-            return ((AccessorChunkMap) map).toDrop().contains(l);
-        }
-
-        @Override
-        @Nullable
-        protected ChunkHolder getChunk(long l) {
-            return ((AccessorChunkMap) map).runGetUpdatingChunkIfPresent(l);
-        }
-
-        @Override
-        @Nullable
-        protected ChunkHolder updateChunkScheduling(long l, int i, @Nullable ChunkHolder chunkHolder, int j) {
-            return ((AccessorChunkMap) map).runUpdateChunkScheduling(l, i, chunkHolder, j);
-        }
-    }
 
 }
