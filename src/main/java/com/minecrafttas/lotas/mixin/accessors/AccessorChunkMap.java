@@ -30,13 +30,7 @@ public interface AccessorChunkMap {
 	@Accessor("progressListener")
 	public ChunkProgressListener progressListener();
 
-	@Accessor("toDrop")
-	public LongSet toDrop();
-
-	@Invoker("getUpdatingChunkIfPresent")
-	public ChunkHolder runGetUpdatingChunkIfPresent(long l);
-
-	@Invoker("updateChunkScheduling")
-	public ChunkHolder runUpdateChunkScheduling(long l, int i, ChunkHolder chunkHolder, int j);
-	
+	@Accessor("entitiesInLevel")
+	public LongSet entitiesInLevel();
+	  
 }

@@ -1,7 +1,6 @@
 package com.minecrafttas.lotas.mixin.accessors;
 
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.gen.Invoker;
 
@@ -16,8 +15,5 @@ public interface AccessorServerChunkCache {
 	
 	@Accessor("distanceManager")
 	public DistanceManager distanceManager();
-	
-	@Accessor("distanceManager") @Mutable
-	public void distanceManager(DistanceManager distanceManager);
 	
 }
