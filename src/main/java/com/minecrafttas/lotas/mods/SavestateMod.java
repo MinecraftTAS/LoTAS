@@ -26,6 +26,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.ArrayUtils;
 
 import com.minecrafttas.lotas.LoTAS;
+import com.minecrafttas.lotas.duck.ServerPlayerDuck;
 import com.minecrafttas.lotas.mixin.accessors.AccessorChunkMap;
 import com.minecrafttas.lotas.mixin.accessors.AccessorDistanceManager;
 import com.minecrafttas.lotas.mixin.accessors.AccessorLevel;
@@ -37,17 +38,30 @@ import com.minecrafttas.lotas.system.ModSystem.Mod;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.game.ClientboundChangeDifficultyPacket;
+import net.minecraft.network.protocol.game.ClientboundGameEventPacket;
+import net.minecraft.network.protocol.game.ClientboundLevelEventPacket;
+import net.minecraft.network.protocol.game.ClientboundPlayerAbilitiesPacket;
+import net.minecraft.network.protocol.game.ClientboundRespawnPacket;
+import net.minecraft.network.protocol.game.ClientboundUpdateMobEffectPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.DerivedServerLevel;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.players.PlayerList;
+import net.minecraft.util.Mth;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.chunk.storage.RegionFile;
+import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.storage.DerivedLevelData;
 import net.minecraft.world.level.storage.LevelData;
 import net.minecraft.world.level.storage.LevelStorageSource;
+import net.minecraft.world.phys.Vec3;
 
 /**
  * Main savestate mod
@@ -386,14 +400,17 @@ public class SavestateMod extends Mod {
 				((AccessorLevel) level).levelData(data);
 		
 		for (ServerPlayer player : new ArrayList<>(this.mcserver.getPlayerList().getPlayers())) {
+			DimensionType oldDimension = player.dimension;
 			this.mcserver.getPlayerList().load(player);
-			ServerLevel level = this.mcserver.getLevel(player.dimension);
-			
-			if (player.dimension == player.getLevel().getDimension().getType())
+			DimensionType newDimension = player.dimension;
+			if(oldDimension != newDimension) {
+				((ServerPlayerDuck)player).changeDimensionNoPortal(newDimension);
+			}
+			else {
+				ServerLevel level = this.mcserver.getLevel(player.dimension);
 				level.addNewPlayer(player);
-			
-			player.teleportTo(level, player.x, player.y, player.z, player.yRot, player.xRot);
-			System.out.println(level.getPlayerByUUID(player.getUUID()));
+				player.teleportTo(level, player.x, player.y, player.z, player.yRot, player.xRot);
+			}
 		}
 		
 		// Disable tickrate zero
@@ -436,7 +453,7 @@ public class SavestateMod extends Mod {
 			if (id > i)
 				file.renameTo(new File(file.getParentFile(), id - 1 + ""));
 		}
-		// Disable tickrate zero (FIXME: do we really wants this?)
+		// Disable tickrate zero
 		TickAdvance.instance.updateTickadvanceStatus(false);
 		// Send all states to the client
 		this.sendStates();
@@ -549,5 +566,4 @@ public class SavestateMod extends Mod {
 			return this.savelocation;
 		}
 	}
-
 }
