@@ -38,16 +38,13 @@ import io.netty.buffer.Unpooled;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.protocol.game.ClientboundRespawnPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.DerivedServerLevel;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.chunk.storage.RegionFile;
-import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.storage.DerivedLevelData;
 import net.minecraft.world.level.storage.LevelData;
 import net.minecraft.world.level.storage.LevelStorageSource;
@@ -141,6 +138,7 @@ public class SavestateMod extends Mod {
 			}
 		}
 
+		
 		// Savestate
 		if (this.doSavestate != null) {
 			this.savestate();
@@ -159,6 +157,7 @@ public class SavestateMod extends Mod {
 			this.doDeletestate = -1;
 			TickAdvance.instance.lock = false;
 		}
+		
 	}
 	
 	/**
@@ -386,10 +385,15 @@ public class SavestateMod extends Mod {
 			else
 				((AccessorLevel) level).levelData(data);
 		
-		for (ServerPlayer player : this.mcserver.getPlayerList().getPlayers()) {
-			player.getLevel().addNewPlayer(player);
-			player.teleportTo(player.getLevel(), player.x, player.y, player.z, player.yRot, player.xRot);
+		for (ServerPlayer player : new ArrayList<>(this.mcserver.getPlayerList().getPlayers())) {
+			this.mcserver.getPlayerList().load(player);
+			ServerLevel level = this.mcserver.getLevel(player.dimension);
 			
+			if (player.dimension == player.getLevel().getDimension().getType())
+				level.addNewPlayer(player);
+			
+			player.teleportTo(level, player.x, player.y, player.z, player.yRot, player.xRot);
+			System.out.println(level.getPlayerByUUID(player.getUUID()));
 		}
 		
 		// Disable tickrate zero
