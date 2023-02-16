@@ -26,7 +26,6 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.ArrayUtils;
 
 import com.minecrafttas.lotas.LoTAS;
-import com.minecrafttas.lotas.duck.ServerPlayerDuck;
 import com.minecrafttas.lotas.mixin.accessors.AccessorChunkMap;
 import com.minecrafttas.lotas.mixin.accessors.AccessorDistanceManager;
 import com.minecrafttas.lotas.mixin.accessors.AccessorLevel;
@@ -38,30 +37,24 @@ import com.minecrafttas.lotas.system.ModSystem.Mod;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.game.ClientboundChangeDifficultyPacket;
-import net.minecraft.network.protocol.game.ClientboundGameEventPacket;
-import net.minecraft.network.protocol.game.ClientboundLevelEventPacket;
 import net.minecraft.network.protocol.game.ClientboundPlayerAbilitiesPacket;
 import net.minecraft.network.protocol.game.ClientboundRespawnPacket;
+import net.minecraft.network.protocol.game.ClientboundSetExperiencePacket;
+import net.minecraft.network.protocol.game.ClientboundSetHealthPacket;
 import net.minecraft.network.protocol.game.ClientboundUpdateMobEffectPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.DerivedServerLevel;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.players.PlayerList;
-import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.chunk.storage.RegionFile;
-import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.storage.DerivedLevelData;
 import net.minecraft.world.level.storage.LevelData;
 import net.minecraft.world.level.storage.LevelStorageSource;
-import net.minecraft.world.phys.Vec3;
 
 /**
  * Main savestate mod
@@ -385,13 +378,6 @@ public class SavestateMod extends Mod {
 			e.printStackTrace();
 		}
 		
-		// TODO:
-		// load level.dat (levelstorage): done
-		// load players (levelstorage?): done
-		// figure out data storage: done
-		// maybe update the client?: done
-		// see if it works lmfao: i guess?
-		
 		LevelData data = LevelStorageSource.getLevelData(new File(this.worldDir, "level.dat"), this.mcserver.getFixerUpper());
 		for (ServerLevel level : this.mcserver.getAllLevels())
 			if (level instanceof DerivedServerLevel)
@@ -400,23 +386,37 @@ public class SavestateMod extends Mod {
 				((AccessorLevel) level).levelData(data);
 		
 		for (ServerPlayer player : new ArrayList<>(this.mcserver.getPlayerList().getPlayers())) {
-			DimensionType oldDimension = player.dimension;
 			this.mcserver.getPlayerList().load(player);
-			DimensionType newDimension = player.dimension;
-			if(oldDimension != newDimension) {
-				((ServerPlayerDuck)player).changeDimensionNoPortal(newDimension);
-			}
-			else {
-				ServerLevel level = this.mcserver.getLevel(player.dimension);
-				level.addNewPlayer(player);
-				player.teleportTo(level, player.x, player.y, player.z, player.yRot, player.xRot);
-			}
+			ServerLevel newLevel = this.mcserver.getLevel(player.dimension);
+			
+	        // Pre update Player
+	        LevelData levelData = player.level.getLevelData();
+	        player.connection.send(new ClientboundRespawnPacket(player.dimension, levelData.getGeneratorType(), player.gameMode.getGameModeForPlayer()));
+	        player.connection.send(new ClientboundChangeDifficultyPacket(levelData.getDifficulty(), levelData.isDifficultyLocked()));
+	        player.server.getPlayerList().sendPlayerPermissionLevel(player);
+	        
+	        // Update level
+	        player.moveTo(player.x, player.y, player.z, player.yRot, player.xRot);
+	        player.setLevel(newLevel);
+	        newLevel.addDuringPortalTeleport(player);
+	        
+	        
+	        // Update player
+	        player.connection.teleport(player.x, player.y, player.z, player.yRot, player.xRot);
+	        player.gameMode.setLevel(newLevel);
+	        player.connection.send(new ClientboundPlayerAbilitiesPacket(player.abilities));
+	        player.server.getPlayerList().sendLevelInfo(player, newLevel);
+	        player.server.getPlayerList().sendAllPlayerInfo(player);
+	        player.connection.send(new ClientboundSetHealthPacket(player.getHealth(), player.getFoodData().getFoodLevel(), player.getFoodData().getSaturationLevel()));
+	        player.connection.send(new ClientboundSetExperiencePacket(player.experienceProgress, player.totalExperience, player.experienceLevel));
+	        for (MobEffectInstance mobEffectInstance : player.getActiveEffects())
+	        	player.connection.send(new ClientboundUpdateMobEffectPacket(player.getId(), mobEffectInstance));
 		}
 		
 		// Disable tickrate zero
 		TickAdvance.instance.updateTickadvanceStatus(false);
 	}
-
+	
 	/**
 	 * Deletes a state of the world
 	 * @param i Index to delete
