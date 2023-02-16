@@ -29,9 +29,11 @@ import com.minecrafttas.lotas.LoTAS;
 import com.minecrafttas.lotas.mixin.accessors.AccessorChunkMap;
 import com.minecrafttas.lotas.mixin.accessors.AccessorDistanceManager;
 import com.minecrafttas.lotas.mixin.accessors.AccessorLevel;
+import com.minecrafttas.lotas.mixin.accessors.AccessorPlayerList;
 import com.minecrafttas.lotas.mixin.accessors.AccessorRegionFileStorage;
 import com.minecrafttas.lotas.mixin.accessors.AccessorServerChunkCache;
 import com.minecrafttas.lotas.mixin.accessors.AccessorServerLevel;
+import com.minecrafttas.lotas.mixin.accessors.AccessorServerPlayer;
 import com.minecrafttas.lotas.system.ModSystem.Mod;
 
 import io.netty.buffer.Unpooled;
@@ -45,10 +47,13 @@ import net.minecraft.network.protocol.game.ClientboundSetExperiencePacket;
 import net.minecraft.network.protocol.game.ClientboundSetHealthPacket;
 import net.minecraft.network.protocol.game.ClientboundUpdateMobEffectPacket;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.PlayerAdvancements;
 import net.minecraft.server.level.DerivedServerLevel;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.players.PlayerList;
+import net.minecraft.stats.ServerStatsCounter;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.chunk.storage.RegionFile;
@@ -411,6 +416,18 @@ public class SavestateMod extends Mod {
 	        player.connection.send(new ClientboundSetExperiencePacket(player.experienceProgress, player.totalExperience, player.experienceLevel));
 	        for (MobEffectInstance mobEffectInstance : player.getActiveEffects())
 	        	player.connection.send(new ClientboundUpdateMobEffectPacket(player.getId(), mobEffectInstance));
+		}
+		
+		PlayerList playerList = this.mcserver.getPlayerList();
+		for (ServerPlayer player : playerList.getPlayers()) {
+			PlayerAdvancements adv = player.getAdvancements();
+            adv.reload();
+            adv.flushDirty(player);
+            
+            ((AccessorPlayerList) playerList).stats().remove(player.getUUID());
+            ServerStatsCounter stats = playerList.getPlayerStats(player);
+            ((AccessorServerPlayer) player).stats(stats);
+            stats.sendStats(player);
 		}
 		
 		// Disable tickrate zero
