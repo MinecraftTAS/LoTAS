@@ -43,21 +43,25 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.PlayerList;
 import net.minecraft.stats.ServerStatsCounter;
-import net.minecraft.util.DirectoryLock;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.storage.RegionFile;
+
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.level.storage.DerivedLevelData;
 import net.minecraft.world.level.storage.LevelData;
 
 // # 1.16.1
+//$$import net.minecraft.world.level.Level;
+//$$import net.minecraft.world.level.dimension.DimensionType;
+//$$import net.minecraft.util.DirectoryLock;
 //$$import java.util.concurrent.CompletableFuture;
 //$$import net.minecraft.Util;
 //$$import net.minecraft.commands.Commands;
+//$$import net.minecraft.nbt.CompoundTag;
 //$$import net.minecraft.nbt.NbtOps;
+//$$import net.minecraft.nbt.Tag;
 //$$import net.minecraft.server.MinecraftServer;
 //$$import net.minecraft.server.packs.repository.FolderRepositorySource;
 //$$import net.minecraft.server.packs.repository.PackRepository;
@@ -73,6 +77,7 @@ import net.minecraft.world.level.storage.LevelData;
 //$$import net.minecraft.world.level.storage.LevelStorageSource.LevelStorageAccess;
 //$$import net.minecraft.world.level.storage.ServerLevelData;
 //$$import net.minecraft.world.level.storage.WorldData;
+//$$import com.mojang.serialization.Dynamic;
 // # def
 //$$import net.minecraft.world.level.storage.LevelStorageSource;
 //$$import net.minecraft.server.level.DerivedServerLevel;
@@ -250,7 +255,7 @@ public class SavestateMod extends Mod {
 			map.processUnloads(() -> true);
 			
 			// # 1.15.2
-//$$			
+//$$			// FIXME: 1.15.2+ doesn't work
 			// # def
 //$$			// Unload nether portals
 //$$			level.getPortalForcer().cachedPortals.clear();
@@ -315,8 +320,9 @@ public class SavestateMod extends Mod {
 		 */
 		
 		// # 1.16.1
-//$$		WorldData worldData = loadWorldData(this.mcserver.storageSource);
+//$$		WorldData worldData = this.loadWorldData(this.mcserver.storageSource);
 //$$		ServerLevelData data = worldData.overworldData();
+//$$		this.mcserver.worldData = worldData;
 //$$		for (ServerLevel level : this.mcserver.getAllLevels()) {
 //$$			if (level.dimension() != Level.OVERWORLD)
 //$$				level.levelData = new DerivedLevelData(worldData, data);
@@ -338,12 +344,16 @@ public class SavestateMod extends Mod {
 		for (ServerPlayer player : new ArrayList<>(playerList.getPlayers())) {
 			
 			// Load player data
-			Level oldLevel = player.level;
-			playerList.load(player);
-			ServerLevel newLevel = (ServerLevel) player.level;
-			
+			// # 1.16.1
+//$$			CompoundTag compoundTag = playerList.load(player);
+//$$			ServerLevel newLevel = this.mcserver.getLevel(compoundTag != null ? DimensionType.parseLegacy(new Dynamic<Tag>(NbtOps.INSTANCE, compoundTag.get("Dimension"))).result().orElse(Level.OVERWORLD) : Level.OVERWORLD);
+			// # def
+//$$			playerList.load(player);
+//$$			ServerLevel newLevel = this.mcserver.getLevel(player.dimension);
+			// # end
+
 	        // Update client pre-level
-	        LevelData levelData = oldLevel.getLevelData();
+	        LevelData levelData = newLevel.getLevelData();
 	        // # 1.16.1
 //$$	        player.connection.send(new ClientboundRespawnPacket(newLevel.dimensionTypeKey(), newLevel.dimension(), BiomeManager.obfuscateSeed(newLevel.getSeed()), player.gameMode.getGameModeForPlayer(), player.gameMode.getPreviousGameModeForPlayer(), newLevel.isDebug(), newLevel.isFlat(), true));        
 	        // # 1.15.2
@@ -374,7 +384,7 @@ public class SavestateMod extends Mod {
 	        // Update player advancements
 			PlayerAdvancements adv = player.getAdvancements();
 			// # 1.16.1
-//$$			adv.reload(this.mcserver.getAdvancements());
+//$$			adv.reload(this.mcserver.getAdvancements()); // FIXME: Advancements don't load 1.16+ (probably)
 			// # def
 //$$			adv.reload();
 			// # end
@@ -382,7 +392,7 @@ public class SavestateMod extends Mod {
             
             // Update player stats
             playerList.stats.remove(player.getUUID());
-            ServerStatsCounter stats = playerList.getPlayerStats(player);
+            ServerStatsCounter stats = playerList.getPlayerStats(player); // FIXME: Stats don't load 1.16+
             player.stats = stats;
             stats.sendStats(player);
             
