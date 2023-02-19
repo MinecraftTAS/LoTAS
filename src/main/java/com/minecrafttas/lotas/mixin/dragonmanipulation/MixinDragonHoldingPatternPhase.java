@@ -8,7 +8,6 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-import com.minecrafttas.lotas.mixin.accessors.AccessorPath;
 import com.minecrafttas.lotas.mods.DragonManipulation;
 import com.minecrafttas.lotas.mods.DragonManipulation.Phase;
 
@@ -78,7 +77,7 @@ public abstract class MixinDragonHoldingPatternPhase extends AbstractDragonPhase
 		
 		// get path and node
 		Path path = dragon.findPath(i, closestNode, null);
-		for (Node node : ((AccessorPath) path).nodes())
+		for (Node node : path.nodes)
 			if (node.y > 85) {
 				this.shouldCCWCWC = 0;
 				break;
