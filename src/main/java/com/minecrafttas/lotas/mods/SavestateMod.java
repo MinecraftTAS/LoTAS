@@ -12,9 +12,8 @@ package com.minecrafttas.lotas.mods;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
+
 import java.time.Instant;
 import java.util.ArrayList;
 
@@ -38,21 +37,48 @@ import net.minecraft.network.protocol.game.ClientboundUpdateMobEffectPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.PlayerAdvancements;
 import net.minecraft.server.level.ChunkMap;
-import net.minecraft.server.level.DerivedServerLevel;
 import net.minecraft.server.level.DistanceManager;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.PlayerList;
 import net.minecraft.stats.ServerStatsCounter;
+import net.minecraft.util.DirectoryLock;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.storage.RegionFile;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.level.storage.DerivedLevelData;
 import net.minecraft.world.level.storage.LevelData;
-import net.minecraft.world.level.storage.LevelStorageSource;
-import net.minecraft.world.phys.Vec3;
+
+// # 1.16.1
+//$$import java.util.concurrent.CompletableFuture;
+//$$import net.minecraft.Util;
+//$$import net.minecraft.commands.Commands;
+//$$import net.minecraft.nbt.NbtOps;
+//$$import net.minecraft.server.MinecraftServer;
+//$$import net.minecraft.server.packs.repository.FolderRepositorySource;
+//$$import net.minecraft.server.packs.repository.PackRepository;
+//$$import net.minecraft.server.packs.repository.ServerPacksSource;
+//$$import net.minecraft.core.RegistryAccess;
+//$$import net.minecraft.resources.RegistryReadOps;
+//$$import net.minecraft.server.ServerResources;
+//$$import net.minecraft.server.packs.repository.Pack;
+//$$import net.minecraft.server.packs.repository.PackSource;
+//$$import net.minecraft.world.level.biome.BiomeManager;
+//$$import net.minecraft.world.level.storage.LevelResource;
+//$$import net.minecraft.world.level.DataPackConfig;
+//$$import net.minecraft.world.level.storage.LevelStorageSource.LevelStorageAccess;
+//$$import net.minecraft.world.level.storage.ServerLevelData;
+//$$import net.minecraft.world.level.storage.WorldData;
+// # def
+//$$import net.minecraft.world.level.storage.LevelStorageSource;
+//$$import net.minecraft.server.level.DerivedServerLevel;
+//$$import java.nio.file.StandardOpenOption;
+//$$import java.nio.file.Files;
+// # end
 
 /**
  * Main savestate mod
@@ -187,6 +213,8 @@ public class SavestateMod extends Mod {
 			return;
 		}
 		
+		TickAdvance.instance.updateTickadvanceStatus(true);
+		
 		/*
 		 * Fully unload server level
 		 */
@@ -198,8 +226,12 @@ public class SavestateMod extends Mod {
 			
 			// Clear global and future entities
 			level.toAddAfterTick.clear();
-			level.globalEntities.clear();
-		
+			// # 1.16.1
+//$$			
+			// # def
+//$$			level.globalEntities.clear();
+			// # end
+			
 			// Despawn existing entities
 			for (Entity entity : new ArrayList<>(level.entitiesById.values()))
 				if (entity != null)
@@ -252,12 +284,18 @@ public class SavestateMod extends Mod {
 		/*
 		 * Load state
 		 */
-
+		
+		
 		// Save session.lock
 		File worldDir = this.data.getWorldDir();
-		Path sessionLockFile = new File(worldDir, "session.lock").toPath();
-		byte[] sessionLock = Files.readAllBytes(sessionLockFile);
-
+		// # 1.16.1
+//$$		Path levelPath = this.mcserver.storageSource.levelPath;
+//$$		this.mcserver.storageSource.lock.close();
+		// # def
+//$$		Path sessionLockFile = new File(worldDir, "session.lock").toPath();
+//$$		byte[] sessionLock = Files.readAllBytes(sessionLockFile);
+		// # end
+		
 		// Delete world
 		FileUtils.deleteDirectory(worldDir);
 
@@ -266,29 +304,48 @@ public class SavestateMod extends Mod {
 		FileUtils.copyDirectory(worldSavestateDir, this.data.getWorldDir());
 
 		// Load session.lock
-		Files.write(sessionLockFile, sessionLock, StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.CREATE);
-
+		// # 1.16.1
+//$$		this.mcserver.storageSource.lock = DirectoryLock.create(levelPath);
+		// # def
+//$$ 		Files.write(sessionLockFile, sessionLock, StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.CREATE);
+		// # end
+		
 		/*
 		 * Fully reload world
 		 */
 		
-		LevelData data = LevelStorageSource.getLevelData(new File(worldDir, "level.dat"), this.mcserver.getFixerUpper());
-		for (ServerLevel level : this.mcserver.getAllLevels()) {
-			// Load level data
-			if (level instanceof DerivedServerLevel)
-				level.levelData = new DerivedLevelData(data);
-			else
-				level.levelData = data;
-		}
+		// # 1.16.1
+//$$		WorldData worldData = loadWorldData(this.mcserver.storageSource);
+//$$		ServerLevelData data = worldData.overworldData();
+//$$		for (ServerLevel level : this.mcserver.getAllLevels()) {
+//$$			if (level.dimension() != Level.OVERWORLD)
+//$$				level.levelData = new DerivedLevelData(worldData, data);
+//$$			else
+//$$				level.levelData = data;
+//$$		}
+		// # def
+//$$		LevelData data = LevelStorageSource.getLevelData(new File(worldDir, "level.dat"), this.mcserver.getFixerUpper());
+//$$		for (ServerLevel level : this.mcserver.getAllLevels()) {
+//$$			// Load level data
+//$$			if (level instanceof DerivedServerLevel)
+//$$				level.levelData = new DerivedLevelData(data);
+//$$			else
+//$$				level.levelData = data;
+//$$		}
+		// # end
 		
 		PlayerList playerList = this.mcserver.getPlayerList();
 		for (ServerPlayer player : new ArrayList<>(playerList.getPlayers())) {
+			
 			// Load player data
+			Level oldLevel = player.level;
 			playerList.load(player);
+			ServerLevel newLevel = (ServerLevel) player.level;
 			
 	        // Update client pre-level
-			ServerLevel newLevel = this.mcserver.getLevel(player.dimension);
-	        LevelData levelData = player.level.getLevelData();
+	        LevelData levelData = oldLevel.getLevelData();
+	        // # 1.16.1
+//$$	        player.connection.send(new ClientboundRespawnPacket(newLevel.dimensionTypeKey(), newLevel.dimension(), BiomeManager.obfuscateSeed(newLevel.getSeed()), player.gameMode.getGameModeForPlayer(), player.gameMode.getPreviousGameModeForPlayer(), newLevel.isDebug(), newLevel.isFlat(), true));        
 	        // # 1.15.2
 //$$	        player.connection.send(new ClientboundRespawnPacket(player.dimension, LevelData.obfuscateSeed(levelData.getSeed()), levelData.getGeneratorType(), player.gameMode.getGameModeForPlayer()));
 	        // # def
@@ -303,7 +360,6 @@ public class SavestateMod extends Mod {
 	        player.setLevel(newLevel);
 	        newLevel.addDuringPortalTeleport(player);
 	        
-	        
 	        // Update client level
 	        player.connection.teleport(pos.x(), pos.y(), pos.z(), player.yRot, player.xRot);
 	        player.gameMode.setLevel(newLevel);
@@ -317,7 +373,11 @@ public class SavestateMod extends Mod {
 		
 	        // Update player advancements
 			PlayerAdvancements adv = player.getAdvancements();
-            adv.reload();
+			// # 1.16.1
+//$$			adv.reload(this.mcserver.getAdvancements());
+			// # def
+//$$			adv.reload();
+			// # end
             adv.flushDirty(player);
             
             // Update player stats
@@ -339,7 +399,31 @@ public class SavestateMod extends Mod {
     		buf2.writeInt(-1);
             this.sendPacketToClient(player, buf2);
 		}
+		
+		TickAdvance.instance.updateTickadvanceStatus(false);
 	}
+	
+	// # 1.16.1
+//$$	private WorldData loadWorldData(LevelStorageAccess levelStorageAccess) {
+//$$        ServerResources serverResources;
+//$$		DataPackConfig dataPackConfig = levelStorageAccess.getDataPacks();
+//$$        PackRepository<Pack> packRepository = new PackRepository<Pack>(Pack::new, new ServerPacksSource(), new FolderRepositorySource(levelStorageAccess.getLevelPath(LevelResource.DATAPACK_DIR).toFile(), PackSource.WORLD));
+//$$        DataPackConfig dataPackConfig2 = MinecraftServer.configurePackRepository(packRepository, dataPackConfig == null ? DataPackConfig.DEFAULT : dataPackConfig, false);
+//$$        CompletableFuture<ServerResources> completableFuture = ServerResources.loadResources(packRepository.openAllSelected(), Commands.CommandSelection.DEDICATED, 2, Util.backgroundExecutor(), Runnable::run);
+//$$        try {
+//$$            serverResources = completableFuture.get();
+//$$        }
+//$$        catch (Exception exception) {
+//$$            packRepository.close();
+//$$            return null;
+//$$        }
+//$$        serverResources.updateGlobals();
+//$$        RegistryAccess.RegistryHolder exception = RegistryAccess.builtin();
+//$$        RegistryReadOps<net.minecraft.nbt.Tag> registryReadOps = RegistryReadOps.create(NbtOps.INSTANCE, serverResources.getResourceManager(), exception);
+//$$        WorldData worldData = levelStorageAccess.getDataTag(registryReadOps, dataPackConfig2);
+//$$        return worldData;
+//$$	}
+	// # end
 	
 	/**
 	 * Deletes a state of the world
