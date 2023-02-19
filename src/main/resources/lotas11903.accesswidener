@@ -40,6 +40,7 @@ accessible field net/minecraft/world/level/storage/LevelStorageSource$LevelStora
 mutable field net/minecraft/world/level/storage/LevelStorageSource$LevelStorageAccess lock Lnet/minecraft/util/DirectoryLock;
 accessible field net/minecraft/server/MinecraftServer worldData Lnet/minecraft/world/level/storage/WorldData;
 mutable field net/minecraft/server/MinecraftServer worldData Lnet/minecraft/world/level/storage/WorldData;
+accessible field net/minecraft/world/level/chunk/storage/SectionStorage storage Lit/unimi/dsi/fastutil/longs/Long2ObjectMap;
 
 # Dragon Manipulation
 accessible field net/minecraft/world/level/pathfinder/Path nodes Ljava/util/List;
