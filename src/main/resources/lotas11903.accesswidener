@@ -37,6 +37,7 @@ accessible field net/minecraft/world/level/storage/loot/LootPool entries [Lnet/m
 accessible field net/minecraft/world/level/storage/loot/entries/LootItem item Lnet/minecraft/world/item/Item;
 accessible field net/minecraft/world/level/storage/loot/entries/CompositeEntryBase children [Lnet/minecraft/world/level/storage/loot/entries/LootPoolEntryContainer;
 #accessible field net/minecraft/world/level/storage/loot/entries/TagEntry tag Lnet/minecraft/tags/Tag;
+accessible field net/minecraft/world/level/storage/loot/entries/TagEntry tag Lnet/minecraft/tags/TagKey;
 accessible field net/minecraft/world/level/storage/loot/entries/LootTableReference name Lnet/minecraft/resources/ResourceLocation;
 
 # Keybind System
