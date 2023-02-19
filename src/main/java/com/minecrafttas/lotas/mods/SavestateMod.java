@@ -30,6 +30,7 @@ import com.minecrafttas.lotas.mixin.accessors.AccessorChunkMap;
 import com.minecrafttas.lotas.mixin.accessors.AccessorDistanceManager;
 import com.minecrafttas.lotas.mixin.accessors.AccessorLevel;
 import com.minecrafttas.lotas.mixin.accessors.AccessorPlayerList;
+import com.minecrafttas.lotas.mixin.accessors.AccessorPortalForcer;
 import com.minecrafttas.lotas.mixin.accessors.AccessorRegionFileStorage;
 import com.minecrafttas.lotas.mixin.accessors.AccessorServerChunkCache;
 import com.minecrafttas.lotas.mixin.accessors.AccessorServerLevel;
@@ -317,7 +318,10 @@ public class SavestateMod extends Mod {
 				map.visibleChunkMap().clear();
 				map.entitiesInLevel().clear();
 				map.runProcessUnloads(() -> true);
-
+				
+				// unload portals
+				((AccessorPortalForcer) level.getPortalForcer()).cachedPortals().clear();
+				
 				// clear cache
 				((AccessorServerChunkCache) level.getChunkSource()).runClearCache();
 
