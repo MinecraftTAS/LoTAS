@@ -31,6 +31,7 @@ accessible field net/minecraft/world/level/chunk/storage/IOWorker storage Lnet/m
 accessible field net/minecraft/world/entity/ai/village/poi/PoiManager loadedChunks Lit/unimi/dsi/fastutil/longs/LongSet;
 accessible field net/minecraft/world/level/chunk/storage/IOWorker pendingWrites Ljava/util/Map;
 accessible field net/minecraft/world/level/chunk/storage/ChunkStorage worker Lnet/minecraft/world/level/chunk/storage/IOWorker;
+accessible field net/minecraft/world/level/chunk/storage/SectionStorage storage Lit/unimi/dsi/fastutil/longs/Long2ObjectMap;
 
 # Dragon Manipulation
 accessible field net/minecraft/world/level/pathfinder/Path nodes Ljava/util/List;
