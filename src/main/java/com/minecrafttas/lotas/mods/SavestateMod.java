@@ -121,23 +121,29 @@ public class SavestateMod extends Mod {
 	@Override
 	protected void onServerTick() {
 		
-		// Savestate
-		if (this.doSavestate != null) {
-			this.savestate();
-			this.doSavestate = null;
-			TickAdvance.instance.lock = false;
-		}
-		// Loadstate
-		if (this.doLoadstate != -1) {
-			this.loadstate(this.doLoadstate);
-			this.doLoadstate = -1;
-			TickAdvance.instance.lock = false;
-		}
-		// Deletestate
-		if (this.doDeletestate != -1) {
-			this.deletestate(this.doDeletestate);
-			this.doDeletestate = -1;
-			TickAdvance.instance.lock = false;
+		// FIXME
+		
+		try {
+			// Savestate
+			if (this.doSavestate != null) {
+				this.savestate();
+				this.doSavestate = null;
+				TickAdvance.instance.lock = false;
+			}
+			// Loadstate
+			if (this.doLoadstate != -1) {
+				this.loadstate(this.doLoadstate);
+				this.doLoadstate = -1;
+				TickAdvance.instance.lock = false;
+			}
+			// Deletestate
+			if (this.doDeletestate != -1) {
+				this.deletestate(this.doDeletestate);
+				this.doDeletestate = -1;
+				TickAdvance.instance.lock = false;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		
 	}
@@ -156,8 +162,12 @@ public class SavestateMod extends Mod {
 
 	/**
 	 * Saves a new state of the world
+	 * @throws IOException Filesystem Exception 
 	 */
-	private void savestate() {
+	private void savestate() throws IOException {
+		// Load data FIXME
+		this.data.loadData();
+		
 		// Enable tickrate zero
 		TickAdvance.instance.updateTickadvanceStatus(true);
 		
@@ -165,23 +175,16 @@ public class SavestateMod extends Mod {
 		this.mcserver.getPlayerList().saveAll();
 		this.mcserver.saveAllChunks(false, true, false);
 		
-		try {
-			// Load data
-			this.data.loadData();
-			
-			// Make state
-			int latestStateIndex = this.data.getStateCount() - 1;
-			int index = latestStateIndex == -1 ? 0 : this.data.getState(latestStateIndex).getIndex() + 1;
-			File stateDir = new File(data.getWorldSavestateDir(), index + "");
-			FileUtils.copyDirectory(this.data.getWorldDir(), stateDir);
-			this.data.addState(new State(this.doSavestate, Instant.now().getEpochSecond(), index));
-			
-			// Save data and send to client
-			this.data.saveData();
-			this.sendStates();
-		} catch (IOException e) {
-			e.printStackTrace(); // TODO: proper error
-		}
+		// Make state
+		int latestStateIndex = this.data.getStateCount() - 1;
+		int index = latestStateIndex == -1 ? 0 : this.data.getState(latestStateIndex).getIndex() + 1;
+		File stateDir = new File(data.getWorldSavestateDir(), index + "");
+		FileUtils.copyDirectory(this.data.getWorldDir(), stateDir);
+		this.data.addState(new State(this.doSavestate, Instant.now().getEpochSecond(), index));
+		
+		// Save data and send to client
+		this.data.saveData();
+		this.sendStates();
 		
 		// Disable tickrate zero FIXME
 		TickAdvance.instance.updateTickadvanceStatus(false);
@@ -190,127 +193,117 @@ public class SavestateMod extends Mod {
 	/**
 	 * Loads a state of the world
 	 * @param i Index to load
+	 * @throws IOException Filesystem Excepion
 	 */
-	private void loadstate(int i) {
+	private void loadstate(int i) throws IOException {
+		// Load data FIXME
+		this.data.loadData();
+		
 		if (!this.data.isValid(i)) {
 			LoTAS.LOGGER.warn("Trying to load a nonexistant state: " + i);
 			return;
 		}
 		
-		// Enable tickrate zero
+		// Enable tickrate zero FIXME
 		TickAdvance.instance.updateTickadvanceStatus(true);
 		
-		// serverside: 
-		// fetch and remove entities from ServerLevel (globalEntities, entitiesById, toAddAfterTick)
-		// remove entities from ChunkAccess/LevelChunk
-		// remove entities from ChunkMap
+		/*
+		 * Fully unload server level
+		 */
 		
 		for (ServerLevel level : this.mcserver.getAllLevels()) {
-			level.toAddAfterTick.clear(); // entities in this queue will be added next tick
-			level.globalEntities.clear(); // global entities are entities such as lighting bolts, they are ticked but not registered the the chunk map or the chunk access
+			ServerChunkCache chunkCache = level.getChunkSource();
+			DistanceManager distanceManager = chunkCache.distanceManager;
+			ChunkMap map = chunkCache.chunkMap;
+			
+			// Clear global and future entities
+			level.toAddAfterTick.clear();
+			level.globalEntities.clear();
 		
-			for (Entity entity : new ArrayList<>(level.entitiesById.values())) {
+			// Despawn existing entities
+			for (Entity entity : new ArrayList<>(level.entitiesById.values()))
 				if (entity != null)
 					level.despawn(entity);
-			}
+
+			// Remove chunk loading requests
+			distanceManager.tickets.clear();
+			distanceManager.chunksToUpdateFutures.clear();
+			distanceManager.ticketsToRelease.clear();
+			
+			// Unload chunks
+			map.pendingUnloads.clear();
+			map.updatingChunkMap.clear();
+			map.visibleChunkMap.clear();
+			map.entitiesInLevel.clear();
+			map.processUnloads(() -> true);
+			
+			// Unload nether portals
+			level.getPortalForcer().cachedPortals.clear();
+		
+			// Clear chunk cache
+			chunkCache.clearCache();
+
+			// Close file
+			for (RegionFile file : map.poiManager.regionCache.values())
+				file.close();
+			map.poiManager.regionCache.clear();
+			
+			for (RegionFile file : map.regionCache.values())
+				file.close();
+			map.regionCache.clear();
 		}
 		
-		// serverside:
-		// remove chunk tickets from distance manager (tickets, chunksToUpdateFutures, ticketsToRelease)
-		// unload chunks (updatingChunkMap, visibleChunkMap, pendingUnloads)
-		// clear chunk cache
-		// unlock files
-		
-		for (ServerLevel level : this.mcserver.getAllLevels()) {
-			try {
-				ServerChunkCache chunkCache = level.getChunkSource();
+		/**
+		 * Load state
+		 */
 
-				// remove tickets
-				DistanceManager distanceManager = chunkCache.distanceManager;
-				distanceManager.tickets.clear();
-				distanceManager.chunksToUpdateFutures.clear();
-				distanceManager.ticketsToRelease.clear();
+		// Save session.lock
+		File worldDir = this.data.getWorldDir();
+		Path sessionLockFile = new File(worldDir, "session.lock").toPath();
+		byte[] sessionLock = Files.readAllBytes(sessionLockFile);
 
-				// unload chunks
-				ChunkMap map = chunkCache.chunkMap;
-				map.pendingUnloads.clear();
-				map.updatingChunkMap.clear();
-				map.visibleChunkMap.clear();
-				map.entitiesInLevel.clear();
-				map.processUnloads(() -> true);
-				
-				// unload portals
-				level.getPortalForcer().cachedPortals.clear();
-				
-				// clear cache
-				chunkCache.clearCache();
+		// Delete world
+		FileUtils.deleteDirectory(worldDir);
 
-				// unlock files
-				for (RegionFile file : map.poiManager.regionCache.values())
-					file.close();
-				map.poiManager.regionCache.clear();
-				
-				for (RegionFile file : map.regionCache.values())
-					file.close();
-				map.regionCache.clear();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			
-		}
-		
-		// serverside:
-		// load state
+		// Copy state
+		File worldSavestateDir = new File(this.data.getWorldSavestateDir(), this.data.getState(i).getIndex() + "");
+		FileUtils.copyDirectory(worldSavestateDir, this.data.getWorldDir());
 
-		File worldDir = null;
-		try {
-			// Load data
-			this.data.loadData();
-			
-			worldDir = this.data.getWorldDir();
+		// Load session.lock
+		Files.write(sessionLockFile, sessionLock, StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.CREATE);
 
-			// Save session.lock
-			Path sessionLockFile = new File(worldDir, "session.lock").toPath();
-			byte[] sessionLock = Files.readAllBytes(sessionLockFile);
-			
-			// Delete world
-			FileUtils.deleteDirectory(worldDir);
-			
-			// Copy state
-			File worldSavestateDir = new File(this.data.getWorldSavestateDir(), this.data.getState(i).getIndex() + "");
-			FileUtils.copyDirectory(worldSavestateDir, this.data.getWorldDir());
-			
-			// Load session.lock
-			Files.write(sessionLockFile, sessionLock, StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.CREATE);
-			
-		} catch (IOException e) {
-			e.printStackTrace(); // FIXME proper error
-		}
+		/**
+		 * Fully reload world
+		 */
 		
 		LevelData data = LevelStorageSource.getLevelData(new File(worldDir, "level.dat"), this.mcserver.getFixerUpper());
-		for (ServerLevel level : this.mcserver.getAllLevels())
+		for (ServerLevel level : this.mcserver.getAllLevels()) {
+			// Load level data
 			if (level instanceof DerivedServerLevel)
 				level.levelData = new DerivedLevelData(data);
 			else
 				level.levelData = data;
+		}
 		
-		for (ServerPlayer player : new ArrayList<>(this.mcserver.getPlayerList().getPlayers())) {
-			this.mcserver.getPlayerList().load(player);
-			ServerLevel newLevel = this.mcserver.getLevel(player.dimension);
+		PlayerList playerList = this.mcserver.getPlayerList();
+		for (ServerPlayer player : new ArrayList<>(playerList.getPlayers())) {
+			// Load player data
+			playerList.load(player);
 			
-	        // Pre update Player
+	        // Update client pre-level
+			ServerLevel newLevel = this.mcserver.getLevel(player.dimension);
 	        LevelData levelData = player.level.getLevelData();
 	        player.connection.send(new ClientboundRespawnPacket(player.dimension, levelData.getGeneratorType(), player.gameMode.getGameModeForPlayer()));
 	        player.connection.send(new ClientboundChangeDifficultyPacket(levelData.getDifficulty(), levelData.isDifficultyLocked()));
 	        player.server.getPlayerList().sendPlayerPermissionLevel(player);
 	        
-	        // Update level
+	        // Add player to level
 	        player.moveTo(player.x, player.y, player.z, player.yRot, player.xRot);
 	        player.setLevel(newLevel);
 	        newLevel.addDuringPortalTeleport(player);
 	        
 	        
-	        // Update player
+	        // Update client level
 	        player.connection.teleport(player.x, player.y, player.z, player.yRot, player.xRot);
 	        player.gameMode.setLevel(newLevel);
 	        player.connection.send(new ClientboundPlayerAbilitiesPacket(player.abilities));
@@ -320,14 +313,13 @@ public class SavestateMod extends Mod {
 	        player.connection.send(new ClientboundSetExperiencePacket(player.experienceProgress, player.totalExperience, player.experienceLevel));
 	        for (MobEffectInstance mobEffectInstance : player.getActiveEffects())
 	        	player.connection.send(new ClientboundUpdateMobEffectPacket(player.getId(), mobEffectInstance));
-		}
 		
-		PlayerList playerList = this.mcserver.getPlayerList();
-		for (ServerPlayer player : playerList.getPlayers()) {
+	        // Update player advancements
 			PlayerAdvancements adv = player.getAdvancements();
             adv.reload();
             adv.flushDirty(player);
             
+            // Update player stats
             playerList.stats.remove(player.getUUID());
             ServerStatsCounter stats = playerList.getPlayerStats(player);
             player.stats = stats;
@@ -341,30 +333,27 @@ public class SavestateMod extends Mod {
 	/**
 	 * Deletes a state of the world
 	 * @param i Index to delete
+	 * @throws IOException Filesystem Exception
 	 */
-	private void deletestate(int i) {
+	private void deletestate(int i) throws IOException {
+		// Load data FIXME
+		this.data.loadData();
+		
 		if (!this.data.isValid(i)) {
 			LoTAS.LOGGER.warn("Trying to delete a nonexistant state: " + i);
 			return;
 		}
 		
-		// Enable tickrate zero
+		// Enable tickrate zero FIXME
 		TickAdvance.instance.updateTickadvanceStatus(true);
+		
+		// Delete State
+		FileUtils.deleteDirectory(new File(this.data.getWorldSavestateDir(), this.data.getState(i).getIndex() + ""));
+		this.data.removeState(i);
 
-		try {
-			// Load data
-			this.data.loadData();
-			
-			// Delete State
-			FileUtils.deleteDirectory(new File(this.data.getWorldSavestateDir(), this.data.getState(i).getIndex() + ""));
-			this.data.removeState(i);
-
-			// Save data and send to client
-			this.data.saveData();
-			this.sendStates();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		// Save data and send to client
+		this.data.saveData();
+		this.sendStates();
 		
 		// Disable tickrate zero FIXME
 		TickAdvance.instance.updateTickadvanceStatus(false);
