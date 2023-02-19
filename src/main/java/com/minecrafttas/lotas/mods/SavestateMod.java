@@ -26,15 +26,6 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.ArrayUtils;
 
 import com.minecrafttas.lotas.LoTAS;
-import com.minecrafttas.lotas.mixin.accessors.AccessorChunkMap;
-import com.minecrafttas.lotas.mixin.accessors.AccessorDistanceManager;
-import com.minecrafttas.lotas.mixin.accessors.AccessorLevel;
-import com.minecrafttas.lotas.mixin.accessors.AccessorPlayerList;
-import com.minecrafttas.lotas.mixin.accessors.AccessorPortalForcer;
-import com.minecrafttas.lotas.mixin.accessors.AccessorRegionFileStorage;
-import com.minecrafttas.lotas.mixin.accessors.AccessorServerChunkCache;
-import com.minecrafttas.lotas.mixin.accessors.AccessorServerLevel;
-import com.minecrafttas.lotas.mixin.accessors.AccessorServerPlayer;
 import com.minecrafttas.lotas.system.ModSystem.Mod;
 
 import io.netty.buffer.Unpooled;
@@ -49,7 +40,9 @@ import net.minecraft.network.protocol.game.ClientboundSetHealthPacket;
 import net.minecraft.network.protocol.game.ClientboundUpdateMobEffectPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.PlayerAdvancements;
+import net.minecraft.server.level.ChunkMap;
 import net.minecraft.server.level.DerivedServerLevel;
+import net.minecraft.server.level.DistanceManager;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -286,10 +279,10 @@ public class SavestateMod extends Mod {
 		// remove entities from ChunkMap
 		
 		for (ServerLevel level : this.mcserver.getAllLevels()) {
-			((AccessorServerLevel) level).toAddAfterTick().clear(); // entities in this queue will be added next tick
-			((AccessorServerLevel) level).globalEntities().clear(); // global entities are entities such as lighting bolts, they are ticked but not registered the the chunk map or the chunk access
+			level.toAddAfterTick.clear(); // entities in this queue will be added next tick
+			level.globalEntities.clear(); // global entities are entities such as lighting bolts, they are ticked but not registered the the chunk map or the chunk access
 		
-			for (Entity entity : new ArrayList<>(((AccessorServerLevel) level).entitiesById().values())) {
+			for (Entity entity : new ArrayList<>(level.entitiesById.values())) {
 				if (entity != null)
 					level.despawn(entity);
 			}
@@ -306,33 +299,33 @@ public class SavestateMod extends Mod {
 				ServerChunkCache chunkCache = level.getChunkSource();
 
 				// remove tickets
-				AccessorDistanceManager distanceManager = (AccessorDistanceManager) ((AccessorServerChunkCache) chunkCache).distanceManager();
-				distanceManager.tickets().clear();
-				distanceManager.chunksToUpdateFutures().clear();
-				distanceManager.ticketsToRelease().clear();
+				DistanceManager distanceManager = chunkCache.distanceManager;
+				distanceManager.tickets.clear();
+				distanceManager.chunksToUpdateFutures.clear();
+				distanceManager.ticketsToRelease.clear();
 
 				// unload chunks
-				AccessorChunkMap map = (AccessorChunkMap) chunkCache.chunkMap;
-				map.pendingUnloads().clear();
-				map.updatingChunkMap().clear();
-				map.visibleChunkMap().clear();
-				map.entitiesInLevel().clear();
-				map.runProcessUnloads(() -> true);
+				ChunkMap map = chunkCache.chunkMap;
+				map.pendingUnloads.clear();
+				map.updatingChunkMap.clear();
+				map.visibleChunkMap.clear();
+				map.entitiesInLevel.clear();
+				map.processUnloads(() -> true);
 				
 				// unload portals
-				((AccessorPortalForcer) level.getPortalForcer()).cachedPortals().clear();
+				level.getPortalForcer().cachedPortals.clear();
 				
 				// clear cache
-				((AccessorServerChunkCache) level.getChunkSource()).runClearCache();
+				chunkCache.clearCache();
 
 				// unlock files
-				for (RegionFile file : ((AccessorRegionFileStorage) chunkCache.getPoiManager()).regionCache().values())
+				for (RegionFile file : map.poiManager.regionCache.values())
 					file.close();
-				((AccessorRegionFileStorage) chunkCache.getPoiManager()).regionCache().clear();
+				map.poiManager.regionCache.clear();
 				
-				for (RegionFile file : ((AccessorRegionFileStorage) chunkCache.chunkMap).regionCache().values())
+				for (RegionFile file : map.regionCache.values())
 					file.close();
-				((AccessorRegionFileStorage) chunkCache.chunkMap).regionCache().clear();
+				map.regionCache.clear();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -390,9 +383,9 @@ public class SavestateMod extends Mod {
 		LevelData data = LevelStorageSource.getLevelData(new File(this.worldDir, "level.dat"), this.mcserver.getFixerUpper());
 		for (ServerLevel level : this.mcserver.getAllLevels())
 			if (level instanceof DerivedServerLevel)
-				((AccessorLevel) level).levelData(new DerivedLevelData(data));
+				level.levelData = new DerivedLevelData(data);
 			else
-				((AccessorLevel) level).levelData(data);
+				level.levelData = data;
 		
 		for (ServerPlayer player : new ArrayList<>(this.mcserver.getPlayerList().getPlayers())) {
 			this.mcserver.getPlayerList().load(player);
@@ -428,9 +421,9 @@ public class SavestateMod extends Mod {
             adv.reload();
             adv.flushDirty(player);
             
-            ((AccessorPlayerList) playerList).stats().remove(player.getUUID());
+            playerList.stats.remove(player.getUUID());
             ServerStatsCounter stats = playerList.getPlayerStats(player);
-            ((AccessorServerPlayer) player).stats(stats);
+            player.stats = stats;
             stats.sendStats(player);
 		}
 		
