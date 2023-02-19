@@ -217,20 +217,36 @@ public class SavestateMod extends Mod {
 			map.entitiesInLevel.clear();
 			map.processUnloads(() -> true);
 			
-			// Unload nether portals
-			level.getPortalForcer().cachedPortals.clear();
-		
+			// # 1.15.2
+//$$			
+			// # def
+//$$			// Unload nether portals
+//$$			level.getPortalForcer().cachedPortals.clear();
+			// # end
+			
 			// Clear chunk cache
 			chunkCache.clearCache();
 
 			// Close file
-			for (RegionFile file : map.poiManager.regionCache.values())
-				file.close();
-			map.poiManager.regionCache.clear();
-			
-			for (RegionFile file : map.regionCache.values())
-				file.close();
-			map.regionCache.clear();
+			// # 1.15.2
+//$$			for (RegionFile file : map.poiManager.worker.storage.regionCache.values())
+//$$				file.close();
+//$$			map.poiManager.worker.storage.regionCache.clear();
+//$$			map.poiManager.worker.pendingWrites.clear();
+//$$			
+//$$			for (RegionFile file : map.worker.storage.regionCache.values())
+//$$				file.close();
+//$$			map.worker.storage.regionCache.clear();
+//$$			map.worker.pendingWrites.clear();
+			// # def
+//$$			for (RegionFile file : map.poiManager.regionCache.values())
+//$$				file.close();
+//$$			map.poiManager.regionCache.clear();
+//$$			
+//$$			for (RegionFile file : map.regionCache.values())
+//$$				file.close();
+//$$			map.regionCache.clear();
+			// # end
 		}
 		
 		/*
@@ -273,7 +289,11 @@ public class SavestateMod extends Mod {
 	        // Update client pre-level
 			ServerLevel newLevel = this.mcserver.getLevel(player.dimension);
 	        LevelData levelData = player.level.getLevelData();
-	        player.connection.send(new ClientboundRespawnPacket(player.dimension, levelData.getGeneratorType(), player.gameMode.getGameModeForPlayer()));
+	        // # 1.15.2
+//$$	        player.connection.send(new ClientboundRespawnPacket(player.dimension, LevelData.obfuscateSeed(levelData.getSeed()), levelData.getGeneratorType(), player.gameMode.getGameModeForPlayer()));
+	        // # def
+//$$	        player.connection.send(new ClientboundRespawnPacket(player.dimension, levelData.getGeneratorType(), player.gameMode.getGameModeForPlayer()));
+	        // # end
 	        player.connection.send(new ClientboundChangeDifficultyPacket(levelData.getDifficulty(), levelData.isDifficultyLocked()));
 	        player.server.getPlayerList().sendPlayerPermissionLevel(player);
 	        
