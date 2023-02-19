@@ -1,11 +1,5 @@
 package com.minecrafttas.lotas.mods;
 
-import com.minecrafttas.lotas.mixin.accessors.AccessorCompositeEntryBase;
-import com.minecrafttas.lotas.mixin.accessors.AccessorLootItem;
-import com.minecrafttas.lotas.mixin.accessors.AccessorLootPool;
-import com.minecrafttas.lotas.mixin.accessors.AccessorLootTable;
-import com.minecrafttas.lotas.mixin.accessors.AccessorLootTableReference;
-import com.minecrafttas.lotas.mixin.accessors.AccessorTagEntry;
 import com.minecrafttas.lotas.system.ModSystem.Mod;
 
 import net.minecraft.resources.ResourceLocation;
@@ -57,7 +51,7 @@ public class LootManipulation extends Mod {
 	private void analyzeTable(LootTable table) {
 		// Iterate through all loot pools
 		s += "\"pools\":[";
-		for (LootPool pool : ((AccessorLootTable) table).pools()) {
+		for (LootPool pool : table.pools) {
 			// Analyze loot pool
 			s += "{";
 			analyzePool(pool);
@@ -71,12 +65,12 @@ public class LootManipulation extends Mod {
 	 * @param pool Loot pool
 	 */
 	private void analyzePool(LootPool pool) {
-		for (LootItemFunction entry : ((AccessorLootPool) pool).functions()) {
+		for (LootItemFunction entry : pool.functions) {
 			System.out.println(entry.getClass().getName());
 		}
 		// Iterate through all loot entries
 		s += "\"entries\":[";
-		for (LootPoolEntryContainer entry : ((AccessorLootPool) pool).entries()) {
+		for (LootPoolEntryContainer entry : pool.entries) {
 			// Analyze loot entry
 			analyzeEntry(entry);
 		}
@@ -89,10 +83,10 @@ public class LootManipulation extends Mod {
 	 */
 	private void analyzeEntry(LootPoolEntryContainer entry) {
 		if (entry instanceof LootItem) {
-			s += "{\"item\":\"" + ((AccessorLootItem) entry).item().toString() + "\"},";
+			s += "{\"item\":\"" + ((LootItem) entry).item.toString() + "\"},";
 		} else if (entry instanceof AlternativesEntry) {
 			s += "{\"first\":[";
-			for (LootPoolEntryContainer item : ((AccessorCompositeEntryBase) entry).children())
+			for (LootPoolEntryContainer item : ((AlternativesEntry) entry).children)
 				analyzeEntry(item);
 			s += "]},";
 		} else if (entry instanceof TagEntry) {
@@ -104,12 +98,12 @@ public class LootManipulation extends Mod {
 //$$			for (net.minecraft.core.Holder<Item> item : net.minecraft.core.Registry.ITEM.getTagOrEmpty(((AccessorTagEntry) entry).tag()))
 //$$				s += "\"" + item.value().toString() + "\",";
 			// # def
-//$$ 			for (Item item : ((AccessorTagEntry) entry).tag().getValues())
+//$$ 			for (Item item : ((TagEntry) entry).tag.getValues())
 //$$ 				s += "\"" + item.toString() + "\",";
 			// # end
 			s += "]},";
 		} else if (entry instanceof LootTableReference) {
-			s += "{\"reference\":\"" + ((AccessorLootTableReference) entry).name().getPath() + "\"},";
+			s += "{\"reference\":\"" + ((LootTableReference) entry).name.getPath() + "\"},";
 		} else if (entry instanceof EmptyLootItem) {
 //			System.out.println("nothing");
 		} else {

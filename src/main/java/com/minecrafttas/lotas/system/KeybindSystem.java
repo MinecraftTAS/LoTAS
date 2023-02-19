@@ -7,7 +7,6 @@ import java.util.Map;
 import org.apache.commons.lang3.ArrayUtils;
 import org.lwjgl.glfw.GLFW;
 
-import com.minecrafttas.lotas.mixin.client.accessors.AccessorKeyMapping;
 import com.minecrafttas.lotas.mods.DragonManipulation;
 import com.minecrafttas.lotas.mods.DragonManipulation.Phase;
 import com.minecrafttas.lotas.mods.DupeMod;
@@ -131,7 +130,7 @@ public class KeybindSystem {
 	 */
 	public static KeyMapping[] onKeybindInitialize(KeyMapping[] keyMappings) {
 		// Initialize categories
-		Map<String, Integer> categories = AccessorKeyMapping.getCategorySorting();
+		Map<String, Integer> categories = KeyMapping.CATEGORY_SORT_ORDER;
 		for (int i = 0; i < keybinds.length; i++)
 			if (!categories.containsKey(keybinds[i].category))
 				categories.put(keybinds[i].category, i + 8);
@@ -169,7 +168,7 @@ public class KeybindSystem {
 			return false;
 
 		boolean wasPressed = keys.containsKey(map) ? keys.get(map) : false;
-		boolean isPressed = GLFW.glfwGetKey(mc.getWindow().getWindow(), ((AccessorKeyMapping) map).getKey().getValue()) == GLFW.GLFW_PRESS; // @GetWindow
+		boolean isPressed = GLFW.glfwGetKey(mc.getWindow().getWindow(), map.key.getValue()) == GLFW.GLFW_PRESS; // @GetWindow
 		keys.put(map, isPressed);
 		return !wasPressed && isPressed;
 	}
