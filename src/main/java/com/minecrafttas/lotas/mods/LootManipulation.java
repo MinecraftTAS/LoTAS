@@ -92,10 +92,10 @@ public class LootManipulation extends Mod {
 		} else if (entry instanceof TagEntry) {
 			s += "{\"any\":[";
 			// # 1.19.3
-//$$ 			for (net.minecraft.core.Holder<Item> item : net.minecraft.core.registries.BuiltInRegistries.ITEM.getTagOrEmpty(((AccessorTagEntry) entry).tag()))
+//$$ 			for (net.minecraft.core.Holder<Item> item : net.minecraft.core.registries.BuiltInRegistries.ITEM.getTagOrEmpty(((TagEntry) entry).tag))
 //$$ 				s += "\"" + item.value().toString() + "\",";
 			// # 1.18.2
-//$$			for (net.minecraft.core.Holder<Item> item : net.minecraft.core.Registry.ITEM.getTagOrEmpty(((AccessorTagEntry) entry).tag()))
+//$$			for (net.minecraft.core.Holder<Item> item : net.minecraft.core.Registry.ITEM.getTagOrEmpty(((TagEntry) entry).tag))
 //$$				s += "\"" + item.value().toString() + "\",";
 			// # def
 //$$ 			for (Item item : ((TagEntry) entry).tag.getValues())

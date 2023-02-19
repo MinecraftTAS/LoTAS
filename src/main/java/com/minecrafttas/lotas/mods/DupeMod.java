@@ -23,6 +23,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.GameType;
+import net.minecraft.world.phys.Vec3;
 
 /**
  * Main dupe mod
@@ -65,7 +66,8 @@ public class DupeMod extends Mod {
 			this.localPlayer.putInt("lotas_playerGameType", buf.readInt());
 		} else if (this.localPlayer != null) {
 			this.mc.player.load(this.localPlayer);
-			this.mc.player.teleportTo(this.mc.player.x, this.mc.player.y, this.mc.player.z);
+			Vec3 pos = this.mc.player.position();
+			this.mc.player.teleportTo(pos.x(), pos.y(), pos.z());
 			this.mc.gameMode.setLocalMode(GameType.byId(this.localPlayer.getInt("lotas_playerGameType")));
 		}
 	}
@@ -118,7 +120,8 @@ public class DupeMod extends Mod {
 
 				// Load playerdata
 				player.load(tag);
-				player.teleportTo(player.x, player.y, player.z);
+				Vec3 pos = player.position();
+				player.teleportTo(pos.x(), pos.y(), pos.z());
 
 				// Send packet to client
 				FriendlyByteBuf data = new FriendlyByteBuf(Unpooled.buffer());
