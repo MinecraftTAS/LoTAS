@@ -38,6 +38,8 @@ accessible field net/minecraft/world/level/storage/LevelStorageSource baseDir Lj
 accessible field net/minecraft/world/level/storage/LevelStorageSource backupDir Ljava/nio/file/Path;
 accessible field net/minecraft/world/level/storage/LevelStorageSource$LevelStorageAccess lock Lnet/minecraft/util/DirectoryLock;
 mutable field net/minecraft/world/level/storage/LevelStorageSource$LevelStorageAccess lock Lnet/minecraft/util/DirectoryLock;
+accessible field net/minecraft/server/MinecraftServer worldData Lnet/minecraft/world/level/storage/WorldData;
+mutable field net/minecraft/server/MinecraftServer worldData Lnet/minecraft/world/level/storage/WorldData;
 
 # Dragon Manipulation
 accessible field net/minecraft/world/level/pathfinder/Path nodes Ljava/util/List;
