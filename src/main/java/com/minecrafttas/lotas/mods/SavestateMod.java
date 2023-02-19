@@ -46,11 +46,19 @@ import net.minecraft.stats.ServerStatsCounter;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
+
 import net.minecraft.world.level.chunk.storage.RegionFile;
 
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.level.storage.DerivedLevelData;
 import net.minecraft.world.level.storage.LevelData;
+
+// # 1.17.1
+//$$import net.minecraft.world.level.entity.EntityTickList;
+//$$import net.minecraft.world.level.entity.PersistentEntitySectionManager;
+//$$import net.minecraft.world.entity.Entity.RemovalReason;
+//$$import net.minecraft.world.level.chunk.storage.EntityStorage;
+// # end
 
 // # 1.16.1
 //$$import net.minecraft.world.level.Level;
@@ -69,7 +77,6 @@ import net.minecraft.world.level.storage.LevelData;
 //$$import net.minecraft.core.RegistryAccess;
 //$$import net.minecraft.resources.RegistryReadOps;
 //$$import net.minecraft.server.ServerResources;
-//$$import net.minecraft.server.packs.repository.Pack;
 //$$import net.minecraft.server.packs.repository.PackSource;
 //$$import net.minecraft.world.level.biome.BiomeManager;
 //$$import net.minecraft.world.level.storage.LevelResource;
@@ -230,18 +237,54 @@ public class SavestateMod extends Mod {
 			ChunkMap map = chunkCache.chunkMap;
 			
 			// Clear global and future entities
-			level.toAddAfterTick.clear();
+			// # 1.17.1
+//$$
 			// # 1.16.1
-//$$			
+//$$			level.toAddAfterTick.clear();
 			// # def
+//$$			level.toAddAfterTick.clear();
 //$$			level.globalEntities.clear();
 			// # end
 			
-			// Despawn existing entities
-			for (Entity entity : new ArrayList<>(level.entitiesById.values()))
-				if (entity != null)
-					level.despawn(entity);
-
+			// # 1.17.1
+//$$			level.entityTickList = new EntityTickList();
+//$$			
+//$$			ArrayList<Entity> temp = new ArrayList<>();
+//$$			level.getAllEntities().forEach(c -> {
+//$$				temp.add(c);
+//$$			});
+//$$			for (Entity entity : temp) {
+//$$				if (entity == null)
+//$$					continue;
+//$$				entity.remove(RemovalReason.UNLOADED_WITH_PLAYER);
+//$$			}
+//$$			temp.clear();
+//$$			
+//$$			PersistentEntitySectionManager<Entity> entityManager = level.entityManager;
+//$$			EntityStorage entityStorage = (EntityStorage) entityManager.permanentStorage;
+//$$			entityStorage.worker.pendingWrites.clear();
+//$$			entityManager.knownUuids.clear();
+//$$			entityManager.sectionStorage.sectionIds.clear();
+//$$			entityManager.sectionStorage.sections.clear();
+//$$			entityManager.chunkVisibility.clear();
+//$$			entityManager.chunkLoadStatuses.clear();
+//$$			entityManager.loadingInbox.clear();
+//$$			entityManager.chunksToUnload.clear();
+//$$			
+//$$			for (Entity entity : entityManager.visibleEntityStorage.getAllEntities())
+//$$				entityManager.visibleEntityStorage.remove(entity);
+//$$			
+//$$			for (RegionFile file : entityStorage.worker.storage.regionCache.values())
+//$$				file.close();
+//$$			entityStorage.worker.storage.regionCache.clear();
+			// # def
+//$$			// Despawn existing entities
+//$$			for (Entity entity : new ArrayList<>(level.entitiesById.values()))
+//$$				if (entity != null)
+//$$					level.despawn(entity);
+			// # end
+			
+			
 			// Remove chunk loading requests
 			distanceManager.tickets.clear();
 			distanceManager.chunksToUpdateFutures.clear();
@@ -356,6 +399,8 @@ public class SavestateMod extends Mod {
 
 	        // Update client pre-level
 	        LevelData levelData = newLevel.getLevelData();
+	        // # 1.16.5
+//$$	        player.connection.send(new ClientboundRespawnPacket(newLevel.dimensionType(), newLevel.dimension(), BiomeManager.obfuscateSeed(newLevel.getSeed()), player.gameMode.getGameModeForPlayer(), player.gameMode.getPreviousGameModeForPlayer(), newLevel.isDebug(), newLevel.isFlat(), true));        
 	        // # 1.16.1
 //$$	        player.connection.send(new ClientboundRespawnPacket(newLevel.dimensionTypeKey(), newLevel.dimension(), BiomeManager.obfuscateSeed(newLevel.getSeed()), player.gameMode.getGameModeForPlayer(), player.gameMode.getPreviousGameModeForPlayer(), newLevel.isDebug(), newLevel.isFlat(), true));        
 	        // # 1.15.2
@@ -370,7 +415,7 @@ public class SavestateMod extends Mod {
 	        Vec3 pos = player.position();
 	        player.moveTo(pos.x(), pos.y(), pos.z(), player.yRot, player.xRot);
 	        player.setLevel(newLevel);
-	        newLevel.addDuringPortalTeleport(player);
+	        newLevel.addDuringPortalTeleport(player); // FIXME: player not added 1.17+
 	        
 	        // Update client level
 	        player.connection.teleport(pos.x(), pos.y(), pos.z(), player.yRot, player.xRot);
@@ -419,9 +464,21 @@ public class SavestateMod extends Mod {
 //$$	private WorldData loadWorldData(LevelStorageAccess levelStorageAccess) {
 //$$        ServerResources serverResources;
 //$$		DataPackConfig dataPackConfig = levelStorageAccess.getDataPacks();
-//$$        PackRepository<Pack> packRepository = new PackRepository<Pack>(Pack::new, new ServerPacksSource(), new FolderRepositorySource(levelStorageAccess.getLevelPath(LevelResource.DATAPACK_DIR).toFile(), PackSource.WORLD));
+	// # end
+		// # 1.17.1
+//$$		PackRepository packRepository = new PackRepository(net.minecraft.server.packs.PackType.SERVER_DATA, new ServerPacksSource(), new FolderRepositorySource(levelStorageAccess.getLevelPath(LevelResource.DATAPACK_DIR).toFile(), PackSource.WORLD));
+//$$        DataPackConfig dataPackConfig2 = MinecraftServer.configurePackRepository(packRepository, dataPackConfig == null ? DataPackConfig.DEFAULT : dataPackConfig, false);
+//$$        CompletableFuture<ServerResources> completableFuture = ServerResources.loadResources(packRepository.openAllSelected(), RegistryAccess.builtin(), Commands.CommandSelection.DEDICATED, 2, Util.backgroundExecutor(), Runnable::run);
+		// # 1.16.5
+//$$		PackRepository packRepository = new PackRepository(new ServerPacksSource(), new FolderRepositorySource(levelStorageAccess.getLevelPath(LevelResource.DATAPACK_DIR).toFile(), PackSource.WORLD));
 //$$        DataPackConfig dataPackConfig2 = MinecraftServer.configurePackRepository(packRepository, dataPackConfig == null ? DataPackConfig.DEFAULT : dataPackConfig, false);
 //$$        CompletableFuture<ServerResources> completableFuture = ServerResources.loadResources(packRepository.openAllSelected(), Commands.CommandSelection.DEDICATED, 2, Util.backgroundExecutor(), Runnable::run);
+		// # 1.16.1
+//$$        PackRepository<net.minecraft.server.packs.repository.Pack> packRepository = new PackRepository<net.minecraft.server.packs.repository.Pack>(net.minecraft.server.packs.repository.Pack::new, new ServerPacksSource(), new FolderRepositorySource(levelStorageAccess.getLevelPath(LevelResource.DATAPACK_DIR).toFile(), PackSource.WORLD));
+//$$        DataPackConfig dataPackConfig2 = MinecraftServer.configurePackRepository(packRepository, dataPackConfig == null ? DataPackConfig.DEFAULT : dataPackConfig, false);
+//$$        CompletableFuture<ServerResources> completableFuture = ServerResources.loadResources(packRepository.openAllSelected(), Commands.CommandSelection.DEDICATED, 2, Util.backgroundExecutor(), Runnable::run);
+        // # end
+	// # 1.16.1
 //$$        try {
 //$$            serverResources = completableFuture.get();
 //$$        }
