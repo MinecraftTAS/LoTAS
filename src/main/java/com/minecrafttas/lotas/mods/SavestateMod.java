@@ -62,19 +62,21 @@ public class SavestateMod extends Mod {
 	
 	/**
 	 * Initializes the savestate mod
-	 * @param id
 	 */
 	public SavestateMod() {
 		super(new ResourceLocation("lotas", "savestatemod"));
 		instance = this;
 	}
 
-	// Server-side Todo list
-	private String doSavestate = null;
-	private int doLoadstate = -1;
-	private int doDeletestate = -1;
-
+	/**
+	 * Mirrored state data
+	 */
 	private StateData data = new StateData();
+	
+	/**
+	 * Task for next tick
+	 */
+	private Task task;
 	
 	/**
 	 * Client-Side only state request. Sends a packet to the server contains a save or load int and an index to load
@@ -99,20 +101,25 @@ public class SavestateMod extends Mod {
 	 */
 	@Override
 	protected void onServerPayload(FriendlyByteBuf buf) {
-		// The Server has to be in tickrate zero AFTER THE ACTION for this to work
-		TickAdvance.instance.lock = true;
-		TickAdvance.instance.updateTickadvanceStatus(false);
+		// Prepare task for next tick
 		switch (buf.readInt()) {
 			case 0:
-				this.doSavestate = buf.readUtf(Short.MAX_VALUE);
+				String s = buf.readUtf(Short.MAX_VALUE);
+				this.task = () -> this.savestate(s);
 				break;
 			case 1:
-				this.doLoadstate = buf.readInt();
+				int i = buf.readInt();
+				this.task = () -> this.loadstate(i);
 				break;
 			case 2:
-				this.doDeletestate = buf.readInt();
+				int j = buf.readInt();
+				this.task = () -> this.deletestate(j);
 				break;
 		}
+		
+		// Tick the server
+		if (TickAdvance.instance.isTickadvanceEnabled())
+			TickAdvance.instance.updateTickadvance();
 	}
 
 	/**
@@ -120,32 +127,16 @@ public class SavestateMod extends Mod {
 	 */
 	@Override
 	protected void onServerTick() {
-		
-		// FIXME
-		
-		try {
-			// Savestate
-			if (this.doSavestate != null) {
-				this.savestate();
-				this.doSavestate = null;
-				TickAdvance.instance.lock = false;
+		// Run task
+		if (this.task != null) {
+			try {
+				this.data.loadData();
+				this.task.run();
+			} catch (IOException e) {
+				LoTAS.LOGGER.error("State task failed!", e);
 			}
-			// Loadstate
-			if (this.doLoadstate != -1) {
-				this.loadstate(this.doLoadstate);
-				this.doLoadstate = -1;
-				TickAdvance.instance.lock = false;
-			}
-			// Deletestate
-			if (this.doDeletestate != -1) {
-				this.deletestate(this.doDeletestate);
-				this.doDeletestate = -1;
-				TickAdvance.instance.lock = false;
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
+			this.task = null;
 		}
-		
 	}
 
 	/**
@@ -162,15 +153,10 @@ public class SavestateMod extends Mod {
 
 	/**
 	 * Saves a new state of the world
+	 * @param name Savestate Name
 	 * @throws IOException Filesystem Exception 
 	 */
-	private void savestate() throws IOException {
-		// Load data FIXME
-		this.data.loadData();
-		
-		// Enable tickrate zero
-		TickAdvance.instance.updateTickadvanceStatus(true);
-		
+	private void savestate(String name) throws IOException {
 		// Save world
 		this.mcserver.getPlayerList().saveAll();
 		this.mcserver.saveAllChunks(false, true, false);
@@ -180,14 +166,11 @@ public class SavestateMod extends Mod {
 		int index = latestStateIndex == -1 ? 0 : this.data.getState(latestStateIndex).getIndex() + 1;
 		File stateDir = new File(data.getWorldSavestateDir(), index + "");
 		FileUtils.copyDirectory(this.data.getWorldDir(), stateDir);
-		this.data.addState(new State(this.doSavestate, Instant.now().getEpochSecond(), index));
+		this.data.addState(new State(name == null ? "Untitled State" : name, Instant.now().getEpochSecond(), index));
 		
 		// Save data and send to client
 		this.data.saveData();
 		this.sendStates();
-		
-		// Disable tickrate zero FIXME
-		TickAdvance.instance.updateTickadvanceStatus(false);
 	}
 
 	/**
@@ -196,16 +179,10 @@ public class SavestateMod extends Mod {
 	 * @throws IOException Filesystem Excepion
 	 */
 	private void loadstate(int i) throws IOException {
-		// Load data FIXME
-		this.data.loadData();
-		
 		if (!this.data.isValid(i)) {
-			LoTAS.LOGGER.warn("Trying to load a nonexistant state: " + i);
+			LoTAS.LOGGER.warn("Trying to load a state that does not exist: " + i);
 			return;
 		}
-		
-		// Enable tickrate zero FIXME
-		TickAdvance.instance.updateTickadvanceStatus(true);
 		
 		/*
 		 * Fully unload server level
@@ -325,9 +302,6 @@ public class SavestateMod extends Mod {
             player.stats = stats;
             stats.sendStats(player);
 		}
-		
-		// Disable tickrate zero FIXME
-		TickAdvance.instance.updateTickadvanceStatus(false);
 	}
 	
 	/**
@@ -336,16 +310,10 @@ public class SavestateMod extends Mod {
 	 * @throws IOException Filesystem Exception
 	 */
 	private void deletestate(int i) throws IOException {
-		// Load data FIXME
-		this.data.loadData();
-		
 		if (!this.data.isValid(i)) {
-			LoTAS.LOGGER.warn("Trying to delete a nonexistant state: " + i);
+			LoTAS.LOGGER.warn("Trying to delete a state that does not exist: " + i);
 			return;
 		}
-		
-		// Enable tickrate zero FIXME
-		TickAdvance.instance.updateTickadvanceStatus(true);
 		
 		// Delete State
 		FileUtils.deleteDirectory(new File(this.data.getWorldSavestateDir(), this.data.getState(i).getIndex() + ""));
@@ -354,9 +322,6 @@ public class SavestateMod extends Mod {
 		// Save data and send to client
 		this.data.saveData();
 		this.sendStates();
-		
-		// Disable tickrate zero FIXME
-		TickAdvance.instance.updateTickadvanceStatus(false);
 	}
 	
 	
@@ -378,7 +343,7 @@ public class SavestateMod extends Mod {
 			this.data.loadData();
 			this.sendStates();
 		} catch (IOException e) {
-			e.printStackTrace(); // TODO: proper error
+			LoTAS.LOGGER.warn("Unable to send states to client.", e);
 		}
 	}
 	
@@ -388,5 +353,9 @@ public class SavestateMod extends Mod {
 	@Override
 	protected void onServerLoad() {
 		this.data.onServerInitialize(this.mcserver);
+	}
+	
+	public interface Task {
+		public void run() throws IOException;
 	}
 }
