@@ -47,6 +47,7 @@ import net.minecraft.server.players.PlayerList;
 import net.minecraft.stats.ServerStatsCounter;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.level.chunk.storage.RegionFile;
 import net.minecraft.world.level.storage.DerivedLevelData;
 import net.minecraft.world.level.storage.LevelData;
@@ -146,6 +147,7 @@ public class SavestateMod extends Mod {
 		byte[] serialized = this.data.serializeData();
 		this.mcserver.getPlayerList().getPlayers().forEach(player -> {
 			FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
+			buf.writeInt(0);
 			buf.writeByteArray(serialized);
 			this.sendPacketToClient(player, buf);
 		});
@@ -230,7 +232,7 @@ public class SavestateMod extends Mod {
 			map.regionCache.clear();
 		}
 		
-		/**
+		/*
 		 * Load state
 		 */
 
@@ -249,7 +251,7 @@ public class SavestateMod extends Mod {
 		// Load session.lock
 		Files.write(sessionLockFile, sessionLock, StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.CREATE);
 
-		/**
+		/*
 		 * Fully reload world
 		 */
 		
@@ -301,6 +303,19 @@ public class SavestateMod extends Mod {
             ServerStatsCounter stats = playerList.getPlayerStats(player);
             player.stats = stats;
             stats.sendStats(player);
+            
+            // Update dupe mod data
+    		FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
+    		buf.writeBoolean(true);
+            DupeMod.instance.onServerPayload(buf);
+            
+            // Run quality of life stuff
+            player.getCooldowns().cooldowns.clear();
+            
+            // Run quality of life stuff on the client
+    		FriendlyByteBuf buf2 = new FriendlyByteBuf(Unpooled.buffer());
+    		buf2.writeInt(-1);
+            this.sendPacketToClient(player, buf2);
 		}
 	}
 	
@@ -332,7 +347,19 @@ public class SavestateMod extends Mod {
 	@Override
 	@Environment(EnvType.CLIENT)
 	protected void onClientsidePayload(FriendlyByteBuf buf) {
-		this.data.deserializeData(buf.readByteArray());
+		switch (buf.readInt()) {
+			case -1: // Update after loadstate
+				this.mc.gui.getChat().clearMessages(false);
+				this.mc.getToasts().clear();
+				this.mc.particleEngine.particles.clear();
+				this.mc.player.getCooldowns().cooldowns.clear();
+				this.mc.player.attackStrengthTicker = 100;
+				this.mc.player.lastItemInMainHand = this.mc.player.getItemBySlot(EquipmentSlot.MAINHAND);
+				break;
+			case 1: // Load states
+				this.data.deserializeData(buf.readByteArray());
+				break;
+		}
 	}
 	
 	/**
