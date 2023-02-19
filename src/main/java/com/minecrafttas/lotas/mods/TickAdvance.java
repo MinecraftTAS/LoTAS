@@ -48,11 +48,6 @@ public class TickAdvance extends Mod {
 	 */
 	public boolean shouldTickServer;
 	
-	/**
-	 * Server-side variable to block all incoming packets
-	 */
-	public boolean lock = false;
-	
 	@Override
 	protected void onInitialize() {
 		this.freezeOnJoin = ConfigurationSystem.getBoolean("tickadvance_freezeonjoin", true);
@@ -77,9 +72,6 @@ public class TickAdvance extends Mod {
 	 */
 	@Override
 	protected void onServerPayload(FriendlyByteBuf buf) {
-		if (this.lock)
-			return;
-		
 		if (buf.readInt() == 0)
 			this.updateTickadvanceStatus(buf.readBoolean());
 		else
