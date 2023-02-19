@@ -6,7 +6,7 @@ plugins {
 
 // Add access widener
 loom {
-	accessWidenerPath = file('src/main/resources/lotas.accesswidener')
+	accessWidenerPath = file('src/main/resources/lotas11802.accesswidener')
 }
 
 // Set Java version compatibility to 1.8
