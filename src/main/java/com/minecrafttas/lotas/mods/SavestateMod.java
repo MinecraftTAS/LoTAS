@@ -255,7 +255,7 @@ public class SavestateMod extends Mod {
 			map.processUnloads(() -> true);
 			
 			// # 1.15.2
-//$$			// FIXME: 1.15.2+ doesn't work
+//$$
 			// # def
 //$$			// Unload nether portals
 //$$			level.getPortalForcer().cachedPortals.clear();
@@ -268,6 +268,8 @@ public class SavestateMod extends Mod {
 			// # 1.15.2
 //$$			for (RegionFile file : map.poiManager.worker.storage.regionCache.values())
 //$$				file.close();
+//$$			map.poiManager.loadedChunks.clear();
+//$$			map.poiManager.storage.clear();
 //$$			map.poiManager.worker.storage.regionCache.clear();
 //$$			map.poiManager.worker.pendingWrites.clear();
 //$$			
@@ -384,7 +386,7 @@ public class SavestateMod extends Mod {
 	        // Update player advancements
 			PlayerAdvancements adv = player.getAdvancements();
 			// # 1.16.1
-//$$			adv.reload(this.mcserver.getAdvancements()); // FIXME: Advancements don't load 1.16+ (probably)
+//$$			adv.reload(this.mcserver.getAdvancements());
 			// # def
 //$$			adv.reload();
 			// # end
@@ -392,7 +394,7 @@ public class SavestateMod extends Mod {
             
             // Update player stats
             playerList.stats.remove(player.getUUID());
-            ServerStatsCounter stats = playerList.getPlayerStats(player); // FIXME: Stats don't load 1.16+
+            ServerStatsCounter stats = playerList.getPlayerStats(player);
             player.stats = stats;
             stats.sendStats(player);
             
