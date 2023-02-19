@@ -22,6 +22,10 @@ accessible field net/minecraft/server/players/PlayerList stats Ljava/util/Map;
 accessible field net/minecraft/server/level/ServerPlayer stats Lnet/minecraft/stats/ServerStatsCounter;
 mutable field net/minecraft/server/level/ServerPlayer stats Lnet/minecraft/stats/ServerStatsCounter;
 accessible field net/minecraft/server/level/ChunkMap poiManager Lnet/minecraft/world/entity/ai/village/poi/PoiManager;
+accessible field net/minecraft/client/particle/ParticleEngine particles Ljava/util/Map;
+accessible field net/minecraft/world/item/ItemCooldowns cooldowns Ljava/util/Map;
+accessible field net/minecraft/world/entity/LivingEntity attackStrengthTicker I
+accessible field net/minecraft/world/entity/player/Player lastItemInMainHand Lnet/minecraft/world/item/ItemStack;
 
 # Dragon Manipulation
 accessible field net/minecraft/world/level/pathfinder/Path nodes Ljava/util/List;

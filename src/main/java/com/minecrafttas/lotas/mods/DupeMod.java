@@ -65,6 +65,7 @@ public class DupeMod extends Mod {
 			this.localPlayer.putInt("lotas_playerGameType", buf.readInt());
 		} else if (this.localPlayer != null) {
 			this.mc.player.load(this.localPlayer);
+			this.mc.player.teleportTo(this.mc.player.x, this.mc.player.y, this.mc.player.z);
 			this.mc.gameMode.setLocalMode(GameType.byId(this.localPlayer.getInt("lotas_playerGameType")));
 		}
 	}
@@ -117,6 +118,7 @@ public class DupeMod extends Mod {
 
 				// Load playerdata
 				player.load(tag);
+				player.teleportTo(player.x, player.y, player.z);
 
 				// Send packet to client
 				FriendlyByteBuf data = new FriendlyByteBuf(Unpooled.buffer());
