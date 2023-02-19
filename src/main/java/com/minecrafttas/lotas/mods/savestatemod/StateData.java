@@ -41,7 +41,11 @@ public class StateData {
 	 * @param mcserver Minecraft Server
 	 */
 	public void onServerInitialize(MinecraftServer mcserver) {
- 		this.worldDir = mcserver.getStorageSource().getFile(mcserver.getLevelIdName(), "");
+		// # 1.16.1
+//$$		this.worldDir = mcserver.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT).toFile().getParentFile();
+		// # def
+//$$ 		this.worldDir = mcserver.getStorageSource().getFile(mcserver.getLevelIdName(), "");
+		// # end
  		this.worldSavestateDir = new File(this.worldDir.getParentFile(), this.worldDir.getName() + " Savestates");
  		this.worldStatesFile = new File(this.worldSavestateDir, "states.dat");
 	}

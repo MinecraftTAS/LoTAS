@@ -18,6 +18,8 @@ accessible method net/minecraft/server/level/ServerChunkCache clearCache ()V
 accessible field net/minecraft/world/level/chunk/storage/RegionFileStorage regionCache Lit/unimi/dsi/fastutil/longs/Long2ObjectLinkedOpenHashMap;
 #accessible field net/minecraft/world/level/Level levelData Lnet/minecraft/world/level/storage/LevelData;
 #mutable field net/minecraft/world/level/Level levelData Lnet/minecraft/world/level/storage/LevelData;
+accessible field net/minecraft/world/level/Level levelData Lnet/minecraft/world/level/storage/WritableLevelData;
+mutable field net/minecraft/world/level/Level levelData Lnet/minecraft/world/level/storage/WritableLevelData;
 accessible field net/minecraft/server/players/PlayerList stats Ljava/util/Map;
 accessible field net/minecraft/server/level/ServerPlayer stats Lnet/minecraft/stats/ServerStatsCounter;
 mutable field net/minecraft/server/level/ServerPlayer stats Lnet/minecraft/stats/ServerStatsCounter;
@@ -26,11 +28,16 @@ accessible field net/minecraft/client/particle/ParticleEngine particles Ljava/ut
 accessible field net/minecraft/world/item/ItemCooldowns cooldowns Ljava/util/Map;
 accessible field net/minecraft/world/entity/LivingEntity attackStrengthTicker I
 accessible field net/minecraft/world/entity/player/Player lastItemInMainHand Lnet/minecraft/world/item/ItemStack;
+accessible field net/minecraft/world/level/chunk/storage/SectionStorage worker Lnet/minecraft/world/level/chunk/storage/IOWorker;
 accessible field net/minecraft/world/level/chunk/storage/IOWorker storage Lnet/minecraft/world/level/chunk/storage/RegionFileStorage;
 accessible field net/minecraft/world/entity/ai/village/poi/PoiManager loadedChunks Lit/unimi/dsi/fastutil/longs/LongSet;
 accessible field net/minecraft/world/level/chunk/storage/IOWorker pendingWrites Ljava/util/Map;
 accessible field net/minecraft/world/level/chunk/storage/ChunkStorage worker Lnet/minecraft/world/level/chunk/storage/IOWorker;
-
+accessible field net/minecraft/server/MinecraftServer storageSource Lnet/minecraft/world/level/storage/LevelStorageSource$LevelStorageAccess;
+accessible field net/minecraft/world/level/storage/LevelStorageSource baseDir Ljava/nio/file/Path;
+accessible field net/minecraft/world/level/storage/LevelStorageSource backupDir Ljava/nio/file/Path;
+accessible field net/minecraft/world/level/storage/LevelStorageSource$LevelStorageAccess lock Lnet/minecraft/util/DirectoryLock;
+mutable field net/minecraft/world/level/storage/LevelStorageSource$LevelStorageAccess lock Lnet/minecraft/util/DirectoryLock;
 
 # Dragon Manipulation
 accessible field net/minecraft/world/level/pathfinder/Path nodes Ljava/util/List;
