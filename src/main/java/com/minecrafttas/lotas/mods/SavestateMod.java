@@ -52,6 +52,7 @@ import net.minecraft.world.level.chunk.storage.RegionFile;
 import net.minecraft.world.level.storage.DerivedLevelData;
 import net.minecraft.world.level.storage.LevelData;
 import net.minecraft.world.level.storage.LevelStorageSource;
+import net.minecraft.world.phys.Vec3;
 
 /**
  * Main savestate mod
@@ -277,13 +278,14 @@ public class SavestateMod extends Mod {
 	        player.server.getPlayerList().sendPlayerPermissionLevel(player);
 	        
 	        // Add player to level
-	        player.moveTo(player.x, player.y, player.z, player.yRot, player.xRot);
+	        Vec3 pos = player.position();
+	        player.moveTo(pos.x(), pos.y(), pos.z(), player.yRot, player.xRot);
 	        player.setLevel(newLevel);
 	        newLevel.addDuringPortalTeleport(player);
 	        
 	        
 	        // Update client level
-	        player.connection.teleport(player.x, player.y, player.z, player.yRot, player.xRot);
+	        player.connection.teleport(pos.x(), pos.y(), pos.z(), player.yRot, player.xRot);
 	        player.gameMode.setLevel(newLevel);
 	        player.connection.send(new ClientboundPlayerAbilitiesPacket(player.abilities));
 	        player.server.getPlayerList().sendLevelInfo(player, newLevel);
