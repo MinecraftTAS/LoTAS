@@ -12,20 +12,17 @@ package com.minecrafttas.lotas.mods;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.FileVisitResult;
-import java.nio.file.FileVisitor;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
-import java.nio.file.attribute.BasicFileAttributes;
 import java.time.Instant;
 import java.util.ArrayList;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.ArrayUtils;
 
 import com.minecrafttas.lotas.LoTAS;
+import com.minecrafttas.lotas.mods.savestatemod.StateData;
+import com.minecrafttas.lotas.mods.savestatemod.StateData.State;
 import com.minecrafttas.lotas.system.ModSystem.Mod;
 
 import io.netty.buffer.Unpooled;
@@ -76,14 +73,9 @@ public class SavestateMod extends Mod {
 	private String doSavestate = null;
 	private int doLoadstate = -1;
 	private int doDeletestate = -1;
-	
-	// Server-side folder structure
-	private File savestatesDir;
-	private File worldDir;
-	
-	// Mirrored State List
-	private State[] states = {};
 
+	private StateData data = new StateData();
+	
 	/**
 	 * Client-Side only state request. Sends a packet to the server contains a save or load int and an index to load
 	 * @param state state 0 is save, state 1 is load, state 2 is delete
@@ -128,22 +120,6 @@ public class SavestateMod extends Mod {
 	 */
 	@Override
 	protected void onServerTick() {
-		// Prepare folders and states file if necessary
-		if (this.doDeletestate != -1 || this.doSavestate != null || this.doLoadstate != -1) {
-			// Prepare folders
-			this.prepareFolders();
-			try {
-				// Reread state file
-				FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.wrappedBuffer(Files.readAllBytes(new File(this.savestatesDir, "states.dat").toPath())));
-				this.states = new State[buf.readVarInt()];
-				for (int ii = 0; ii < this.states.length; ii++) {
-					this.states[ii] = State.deserialize(buf.readByteArray());
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-
 		
 		// Savestate
 		if (this.doSavestate != null) {
@@ -165,37 +141,15 @@ public class SavestateMod extends Mod {
 		}
 		
 	}
-	
-	/**
-	 * Server-Side: Prepares all folders if not already set
-	 */
-	private void prepareFolders() {
-		// # 1.16.1
-//$$		this.worldDir = this.mcserver.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT).toFile().getParentFile();
-		// # def
-//$$ 		this.worldDir = this.mcserver.getStorageSource().getFile(this.mcserver.getLevelIdName(), "");
-		// # end
-		this.savestatesDir = new File(this.worldDir.getParentFile(), this.worldDir.getName() + " Savestates");
-		if (!this.savestatesDir.exists()) {
-			this.states = new State[0];
-			this.savestatesDir.mkdirs();
-			try {
-				Files.write(new File(this.savestatesDir, "states.dat").toPath(), new FriendlyByteBuf(Unpooled.buffer()).writeVarInt(0).array(), StandardOpenOption.CREATE_NEW);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}
 
 	/**
 	 * Sends all states to the client
 	 */
 	public void sendStates() {
+		byte[] serialized = this.data.serializeData();
 		this.mcserver.getPlayerList().getPlayers().forEach(player -> {
 			FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
-			buf.writeInt(this.states.length);
-			for (State s : this.states)
-				buf.writeByteArray(s.serialize());
+			buf.writeByteArray(serialized);
 			this.sendPacketToClient(player, buf);
 		});
 	}
@@ -206,59 +160,31 @@ public class SavestateMod extends Mod {
 	private void savestate() {
 		// Enable tickrate zero
 		TickAdvance.instance.updateTickadvanceStatus(true);
-		// Save Playerdata
+		
+		// Save world
 		this.mcserver.getPlayerList().saveAll();
-		// Save Worlds
 		this.mcserver.saveAllChunks(false, true, false);
-		File worldSavestateDir = new File(this.savestatesDir, this.savestatesDir.listFiles().length - 1 + "");
+		
 		try {
-			// Copy full folder
-			Files.walkFileTree(this.worldDir.toPath(), new FileVisitor<Path>() {
-
-				@Override
-				public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
-					try {
-						worldSavestateDir.toPath().resolve(SavestateMod.this.worldDir.toPath().relativize(dir)).toFile().mkdirs();
-					} catch (Exception e) {
-						System.err.println("Unable to mkdir: " + dir);
-					}
-					return FileVisitResult.CONTINUE;
-				}
-
-				@Override
-				public FileVisitResult visitFile(Path dir, BasicFileAttributes attrs) throws IOException {
-					try {
-						if (dir.getFileName().toString().equals("session.lock"))
-							return FileVisitResult.CONTINUE;
-						Files.copy(dir, worldSavestateDir.toPath().resolve(SavestateMod.this.worldDir.toPath().relativize(dir)), StandardCopyOption.REPLACE_EXISTING);
-					} catch (Exception e) {
-						System.err.println("Unable to copy: " + dir);
-					}
-					return FileVisitResult.CONTINUE;
-				}
-
-				@Override
-				public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
-					return FileVisitResult.CONTINUE;
-				}
-
-				@Override
-				public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
-					return FileVisitResult.CONTINUE;
-				}
-			});
-			// Add the savesate to the list of states
-			this.states = ArrayUtils.add(this.states, new State(this.doSavestate, Instant.now().getEpochSecond(), worldSavestateDir.getAbsolutePath()));
-			// Write savestate file
-			FriendlyByteBuf buf2 = new FriendlyByteBuf(Unpooled.buffer());
-			buf2.writeVarInt(this.states.length);
-			for (State s : this.states) {
-				buf2.writeByteArray(s.serialize());
-			}
-			Files.write(new File(this.savestatesDir, "states.dat").toPath(), buf2.array(), StandardOpenOption.CREATE);
+			// Load data
+			this.data.loadData();
+			
+			// Make state
+			int latestStateIndex = this.data.getStateCount() - 1;
+			int index = latestStateIndex == -1 ? 0 : this.data.getState(latestStateIndex).getIndex() + 1;
+			File stateDir = new File(data.getWorldSavestateDir(), index + "");
+			FileUtils.copyDirectory(this.data.getWorldDir(), stateDir);
+			this.data.addState(new State(this.doSavestate, Instant.now().getEpochSecond(), index));
+			
+			// Save data and send to client
+			this.data.saveData();
+			this.sendStates();
 		} catch (IOException e) {
-			e.printStackTrace();
+			e.printStackTrace(); // TODO: proper error
 		}
+		
+		// Disable tickrate zero FIXME
+		TickAdvance.instance.updateTickadvanceStatus(false);
 	}
 
 	/**
@@ -266,10 +192,11 @@ public class SavestateMod extends Mod {
 	 * @param i Index to load
 	 */
 	private void loadstate(int i) {
-		if (i >= this.states.length) {
-			LoTAS.LOGGER.warn("Trying to loadstate a nonexistant state: " + i);
+		if (!this.data.isValid(i)) {
+			LoTAS.LOGGER.warn("Trying to load a nonexistant state: " + i);
 			return;
 		}
+		
 		// Enable tickrate zero
 		TickAdvance.instance.updateTickadvanceStatus(true);
 		
@@ -334,53 +261,33 @@ public class SavestateMod extends Mod {
 		
 		// serverside:
 		// load state
-		
-		File worldSavestateDir = new File(this.savestatesDir, i + "");
+
+		File worldDir = null;
 		try {
-			// Delete world folder without deleting session.lock
-			for (File f : this.worldDir.listFiles()) {
-				if (f.isDirectory())
-					FileUtils.deleteDirectory(f);
-			}
+			// Load data
+			this.data.loadData();
+			
+			worldDir = this.data.getWorldDir();
+
+			// Save session.lock
+			Path sessionLockFile = new File(worldDir, "session.lock").toPath();
+			byte[] sessionLock = Files.readAllBytes(sessionLockFile);
+			
+			// Delete world
+			FileUtils.deleteDirectory(worldDir);
 			
 			// Copy state
-			Files.walkFileTree(worldSavestateDir.toPath(), new FileVisitor<Path>() {
-
-				@Override
-				public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
-					try {
-						worldDir.toPath().resolve(worldSavestateDir.toPath().relativize(dir)).toFile().mkdirs();
-					} catch (Exception e) {
-						System.err.println("Unable to mkdir: " + dir);
-					}
-					return FileVisitResult.CONTINUE;
-				}
-
-				@Override
-				public FileVisitResult visitFile(Path dir, BasicFileAttributes attrs) throws IOException {
-					try {
-						Files.copy(dir, worldDir.toPath().resolve(worldSavestateDir.toPath().relativize(dir)), StandardCopyOption.REPLACE_EXISTING);
-					} catch (Exception e) {
-						System.err.println("Unable to copy: " + dir);
-					}
-					return FileVisitResult.CONTINUE;
-				}
-
-				@Override
-				public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
-					return FileVisitResult.CONTINUE;
-				}
-
-				@Override
-				public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
-					return FileVisitResult.CONTINUE;
-				}
-			});
+			File worldSavestateDir = new File(this.data.getWorldSavestateDir(), this.data.getState(i).getIndex() + "");
+			FileUtils.copyDirectory(worldSavestateDir, this.data.getWorldDir());
+			
+			// Load session.lock
+			Files.write(sessionLockFile, sessionLock, StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.CREATE);
+			
 		} catch (IOException e) {
-			e.printStackTrace();
+			e.printStackTrace(); // FIXME proper error
 		}
 		
-		LevelData data = LevelStorageSource.getLevelData(new File(this.worldDir, "level.dat"), this.mcserver.getFixerUpper());
+		LevelData data = LevelStorageSource.getLevelData(new File(worldDir, "level.dat"), this.mcserver.getFixerUpper());
 		for (ServerLevel level : this.mcserver.getAllLevels())
 			if (level instanceof DerivedServerLevel)
 				level.levelData = new DerivedLevelData(data);
@@ -427,7 +334,7 @@ public class SavestateMod extends Mod {
             stats.sendStats(player);
 		}
 		
-		// Disable tickrate zero
+		// Disable tickrate zero FIXME
 		TickAdvance.instance.updateTickadvanceStatus(false);
 	}
 	
@@ -436,41 +343,31 @@ public class SavestateMod extends Mod {
 	 * @param i Index to delete
 	 */
 	private void deletestate(int i) {
-		if (i >= this.states.length) {
-			LoTAS.LOGGER.warn("Trying to deletestate a nonexistant state: " + i);
+		if (!this.data.isValid(i)) {
+			LoTAS.LOGGER.warn("Trying to delete a nonexistant state: " + i);
 			return;
 		}
+		
 		// Enable tickrate zero
 		TickAdvance.instance.updateTickadvanceStatus(true);
-		File worldSavestateDir = new File(this.savestatesDir, i + "");
+
 		try {
-			// Delete Folder if it exists
-			if (worldSavestateDir.exists())
-				FileUtils.deleteDirectory(worldSavestateDir);
-			// Remove the savestate from the array
-			this.states = ArrayUtils.remove(this.states, i);
-			// Write savestate file
-			FriendlyByteBuf buf2 = new FriendlyByteBuf(Unpooled.buffer());
-			buf2.writeVarInt(this.states.length);
-			for (State s : this.states) {
-				buf2.writeByteArray(s.serialize());
-			}
-			Files.write(new File(this.savestatesDir, "states.dat").toPath(), buf2.array(), StandardOpenOption.CREATE);
+			// Load data
+			this.data.loadData();
+			
+			// Delete State
+			FileUtils.deleteDirectory(new File(this.data.getWorldSavestateDir(), this.data.getState(i).getIndex() + ""));
+			this.data.removeState(i);
+
+			// Save data and send to client
+			this.data.saveData();
+			this.sendStates();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		// Re-enumerate all other savestates ahead
-		for (File file : this.savestatesDir.listFiles()) {
-			if ("states.dat".equals(file.getName()))
-				continue;
-			int id = Integer.parseInt(file.getName());
-			if (id > i)
-				file.renameTo(new File(file.getParentFile(), id - 1 + ""));
-		}
-		// Disable tickrate zero
+		
+		// Disable tickrate zero FIXME
 		TickAdvance.instance.updateTickadvanceStatus(false);
-		// Send all states to the client
-		this.sendStates();
 	}
 	
 	
@@ -481,103 +378,26 @@ public class SavestateMod extends Mod {
 	@Override
 	@Environment(EnvType.CLIENT)
 	protected void onClientsidePayload(FriendlyByteBuf buf) {
-		this.states = new State[buf.readInt()];
-		for (int i = 0; i < this.states.length; i++) {
-			this.states[i] = State.deserialize(buf.readByteArray());
-		}
+		this.data.deserializeData(buf.readByteArray());
 	}
 	
 	/**
 	 * Updates client data on connect
 	 */
 	public void onConnect(ServerPlayer c) {
-		// Load everything
-		FriendlyByteBuf buf;
 		try {
-			this.prepareFolders();
-			buf = new FriendlyByteBuf(Unpooled.wrappedBuffer(Files.readAllBytes(new File(this.savestatesDir, "states.dat").toPath())));
-			this.states = new State[buf.readVarInt()];
-			for (int i = 0; i < this.states.length; i++) {
-				this.states[i] = State.deserialize(buf.readByteArray());
-			}
+			this.data.loadData();
+			this.sendStates();
 		} catch (IOException e) {
-			e.printStackTrace();
+			e.printStackTrace(); // TODO: proper error
 		}
-		this.sendStates(); // send the states to all clients, can't hurt
 	}
-
+	
 	/**
-	 * Returns the Description of a state or the date of it, if non given
-	 * @param index Index to check
-	 * @return Description of state
+	 * Load save data on initialize
 	 */
-	@Environment(EnvType.CLIENT)
-	public State getSavestateInfo(int index) {
-		return this.states[index];
-	}
-
-	/**
-	 * Client-Side only way to check if or how many savestates exists.
-	 * @return Whether a state is present to load from
-	 */
-	@Environment(EnvType.CLIENT)
-	public int getStateCount() {
-		return this.states.length;
-	}
-
-	/**
-	 * Clears local data on disconnect
-	 */
-	@Environment(EnvType.CLIENT)
-	public void onDisconnect() {
-		this.states = new State[0];
-	}
-
-	/**
-	 * State information holder
-	 * @author Pancake
-	 */
-	public static class State {
-
-		// Information of any state
-		private String name;
-		private long timestamp;
-
-		// Data of the state
-		private File savelocation;
-
-		public State(String name, long timestamp, String savelocation) {
-			this.name = name;
-			this.timestamp = timestamp;
-			this.savelocation = new File(savelocation);
-		}
-
-		public byte[] serialize() {
-			FriendlyByteBuf buffer = new FriendlyByteBuf(Unpooled.buffer());
-			buffer.writeUtf(this.name);
-			buffer.writeLong(this.timestamp);
-			buffer.writeUtf(this.savelocation.getAbsolutePath());
-			return buffer.array();
-		}
-
-		public static State deserialize(byte[] data) {
-			FriendlyByteBuf buffer = new FriendlyByteBuf(Unpooled.wrappedBuffer(data));
-			String s1 = buffer.readUtf(Short.MAX_VALUE);
-			long l2 = buffer.readLong();
-			String s3 = buffer.readUtf(Short.MAX_VALUE);
-			return new State(s1, l2, s3);
-		}
-
-		public String getName() {
-			return this.name;
-		}
-
-		public long getTimestamp() {
-			return this.timestamp;
-		}
-
-		public File getSavelocation() {
-			return this.savelocation;
-		}
+	@Override
+	protected void onServerLoad() {
+		this.data.onServerInitialize(this.mcserver);
 	}
 }
