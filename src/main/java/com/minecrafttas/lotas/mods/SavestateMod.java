@@ -52,7 +52,7 @@ import net.minecraft.world.level.chunk.storage.RegionFile;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.level.storage.DerivedLevelData;
 import net.minecraft.world.level.storage.LevelData;
-
+	
 // # 1.17.1
 //$$import net.minecraft.world.level.entity.EntityTickList;
 //$$import net.minecraft.world.level.entity.PersistentEntitySectionManager;
@@ -60,27 +60,33 @@ import net.minecraft.world.level.storage.LevelData;
 //$$import net.minecraft.world.level.chunk.storage.EntityStorage;
 // # end
 
+// # 1.18.2
+//$$import net.minecraft.resources.RegistryOps;
 // # 1.16.1
-//$$import net.minecraft.world.level.Level;
-//$$import net.minecraft.world.level.dimension.DimensionType;
-//$$import net.minecraft.util.DirectoryLock;
+//$$import net.minecraft.resources.RegistryReadOps;
+//$$import net.minecraft.server.ServerResources;
 //$$import java.util.concurrent.CompletableFuture;
 //$$import net.minecraft.Util;
 //$$import net.minecraft.commands.Commands;
-//$$import net.minecraft.nbt.CompoundTag;
-//$$import net.minecraft.nbt.NbtOps;
-//$$import net.minecraft.nbt.Tag;
 //$$import net.minecraft.server.MinecraftServer;
 //$$import net.minecraft.server.packs.repository.FolderRepositorySource;
 //$$import net.minecraft.server.packs.repository.PackRepository;
 //$$import net.minecraft.server.packs.repository.ServerPacksSource;
-//$$import net.minecraft.core.RegistryAccess;
-//$$import net.minecraft.resources.RegistryReadOps;
-//$$import net.minecraft.server.ServerResources;
 //$$import net.minecraft.server.packs.repository.PackSource;
-//$$import net.minecraft.world.level.biome.BiomeManager;
 //$$import net.minecraft.world.level.storage.LevelResource;
 //$$import net.minecraft.world.level.DataPackConfig;
+// # end
+
+// # 1.16.1
+//$$import net.minecraft.world.level.Level;
+//$$import net.minecraft.world.level.dimension.DimensionType;
+//$$import net.minecraft.util.DirectoryLock;
+//$$import net.minecraft.nbt.CompoundTag;
+//$$import net.minecraft.nbt.NbtOps;
+//$$import net.minecraft.nbt.Tag;
+//$$import net.minecraft.core.RegistryAccess;
+//$$
+//$$import net.minecraft.world.level.biome.BiomeManager;
 //$$import net.minecraft.world.level.storage.LevelStorageSource.LevelStorageAccess;
 //$$import net.minecraft.world.level.storage.ServerLevelData;
 //$$import net.minecraft.world.level.storage.WorldData;
@@ -202,12 +208,23 @@ public class SavestateMod extends Mod {
 		this.mcserver.getPlayerList().saveAll();
 		this.mcserver.saveAllChunks(false, true, false);
 		
+		// Disable Session Lock
+		// # 1.16.1
+//$$		Path levelPath = this.mcserver.storageSource.levelPath;
+//$$		this.mcserver.storageSource.lock.close();
+		// # end
+		
 		// Make state
 		int latestStateIndex = this.data.getStateCount() - 1;
 		int index = latestStateIndex == -1 ? 0 : this.data.getState(latestStateIndex).getIndex() + 1;
 		File stateDir = new File(data.getWorldSavestateDir(), index + "");
 		FileUtils.copyDirectory(this.data.getWorldDir(), stateDir);
 		this.data.addState(new State(name == null ? "Untitled State" : name, Instant.now().getEpochSecond(), index));
+		
+		// Reenable Session Lock
+		// # 1.16.1
+//$$		this.mcserver.storageSource.lock = DirectoryLock.create(levelPath);
+		// # end
 		
 		// Save data and send to client
 		this.data.saveData();
@@ -219,6 +236,9 @@ public class SavestateMod extends Mod {
 	 * @param i Index to load
 	 * @throws IOException Filesystem Excepion
 	 */
+	// # 1.18.2
+//$$	@SuppressWarnings("deprecation")
+	// # end
 	private void loadstate(int i) throws IOException {
 		if (!this.data.isValid(i)) {
 			LoTAS.LOGGER.warn("Trying to load a state that does not exist: " + i);
@@ -399,6 +419,8 @@ public class SavestateMod extends Mod {
 
 	        // Update client pre-level
 	        LevelData levelData = newLevel.getLevelData();
+	        // # 1.18.2
+//$$	        player.connection.send(new ClientboundRespawnPacket(newLevel.dimensionTypeRegistration(), newLevel.dimension(), BiomeManager.obfuscateSeed(newLevel.getSeed()), player.gameMode.getGameModeForPlayer(), player.gameMode.getPreviousGameModeForPlayer(), newLevel.isDebug(), newLevel.isFlat(), true));        
 	        // # 1.16.5
 //$$	        player.connection.send(new ClientboundRespawnPacket(newLevel.dimensionType(), newLevel.dimension(), BiomeManager.obfuscateSeed(newLevel.getSeed()), player.gameMode.getGameModeForPlayer(), player.gameMode.getPreviousGameModeForPlayer(), newLevel.isDebug(), newLevel.isFlat(), true));        
 	        // # 1.16.1
@@ -460,11 +482,20 @@ public class SavestateMod extends Mod {
 		TickAdvance.instance.updateTickadvanceStatus(false);
 	}
 	
+	// TODO: fix with nesting
+	// # 1.18.2
+//$$	private WorldData loadWorldData(LevelStorageAccess levelStorageAccess) {
+//$$        RegistryAccess.Writable writable = RegistryAccess.builtinCopy();
+//$$        RegistryOps<Tag> dynamicOps = RegistryOps.createAndLoad(NbtOps.INSTANCE, writable, this.mcserver.getResourceManager());
+//$$        return levelStorageAccess.getDataTag(dynamicOps, levelStorageAccess.getDataPacks(), writable.allElementsLifecycle());
+//$$	}
 	// # 1.16.1
 //$$	private WorldData loadWorldData(LevelStorageAccess levelStorageAccess) {
 //$$        ServerResources serverResources;
 //$$		DataPackConfig dataPackConfig = levelStorageAccess.getDataPacks();
 	// # end
+		// # 1.18.2
+//$$		
 		// # 1.17.1
 //$$		PackRepository packRepository = new PackRepository(net.minecraft.server.packs.PackType.SERVER_DATA, new ServerPacksSource(), new FolderRepositorySource(levelStorageAccess.getLevelPath(LevelResource.DATAPACK_DIR).toFile(), PackSource.WORLD));
 //$$        DataPackConfig dataPackConfig2 = MinecraftServer.configurePackRepository(packRepository, dataPackConfig == null ? DataPackConfig.DEFAULT : dataPackConfig, false);
@@ -478,6 +509,8 @@ public class SavestateMod extends Mod {
 //$$        DataPackConfig dataPackConfig2 = MinecraftServer.configurePackRepository(packRepository, dataPackConfig == null ? DataPackConfig.DEFAULT : dataPackConfig, false);
 //$$        CompletableFuture<ServerResources> completableFuture = ServerResources.loadResources(packRepository.openAllSelected(), Commands.CommandSelection.DEDICATED, 2, Util.backgroundExecutor(), Runnable::run);
         // # end
+    // # 1.18.2
+//$$        
 	// # 1.16.1
 //$$        try {
 //$$            serverResources = completableFuture.get();
