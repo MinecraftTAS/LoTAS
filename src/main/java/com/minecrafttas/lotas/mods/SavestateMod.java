@@ -52,7 +52,25 @@ import net.minecraft.world.level.chunk.storage.RegionFile;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.level.storage.DerivedLevelData;
 import net.minecraft.world.level.storage.LevelData;
-	
+
+// # 1.19.3
+//$$import net.minecraft.server.RegistryLayer;
+//$$import net.minecraft.server.WorldLoader;
+//$$import net.minecraft.server.WorldLoader.DataLoadContext;
+//$$import net.minecraft.resources.RegistryDataLoader;
+//$$import net.minecraft.world.level.WorldDataConfiguration;
+//$$import net.minecraft.core.LayeredRegistryAccess;
+//$$import net.minecraft.core.registries.Registries;
+//$$import net.minecraft.world.level.storage.LevelResource;
+//$$import net.minecraft.server.packs.resources.CloseableResourceManager;
+//$$import net.minecraft.resources.ResourceKey;
+//$$import net.minecraft.world.level.dimension.LevelStem;
+//$$import net.minecraft.commands.Commands;
+//$$import net.minecraft.core.Registry;
+//$$import com.mojang.datafixers.DataFixerUpper;
+//$$import com.mojang.datafixers.util.Pair;
+// # end
+
 // # 1.17.1
 //$$import net.minecraft.world.level.entity.EntityTickList;
 //$$import net.minecraft.world.level.entity.PersistentEntitySectionManager;
@@ -85,7 +103,6 @@ import net.minecraft.world.level.storage.LevelData;
 //$$import net.minecraft.nbt.NbtOps;
 //$$import net.minecraft.nbt.Tag;
 //$$import net.minecraft.core.RegistryAccess;
-//$$
 //$$import net.minecraft.world.level.biome.BiomeManager;
 //$$import net.minecraft.world.level.storage.LevelStorageSource.LevelStorageAccess;
 //$$import net.minecraft.world.level.storage.ServerLevelData;
@@ -209,6 +226,9 @@ public class SavestateMod extends Mod {
 		this.mcserver.saveAllChunks(false, true, false);
 		
 		// Disable Session Lock
+		// # 1.19.3
+//$$		Path levelPath = this.mcserver.storageSource.getLevelPath(LevelResource.ROOT);
+//$$		this.mcserver.storageSource.lock.close();
 		// # 1.16.1
 //$$		Path levelPath = this.mcserver.storageSource.levelPath;
 //$$		this.mcserver.storageSource.lock.close();
@@ -358,6 +378,9 @@ public class SavestateMod extends Mod {
 		
 		// Save session.lock
 		File worldDir = this.data.getWorldDir();
+		// # 1.19.3
+//$$		Path levelPath = this.mcserver.storageSource.getLevelPath(LevelResource.ROOT);
+//$$		this.mcserver.storageSource.lock.close();
 		// # 1.16.1
 //$$		Path levelPath = this.mcserver.storageSource.levelPath;
 //$$		this.mcserver.storageSource.lock.close();
@@ -419,6 +442,8 @@ public class SavestateMod extends Mod {
 
 	        // Update client pre-level
 	        LevelData levelData = newLevel.getLevelData();
+	        // # 1.19.3
+//$$	        player.connection.send(new ClientboundRespawnPacket(newLevel.dimensionTypeId(), newLevel.dimension(), BiomeManager.obfuscateSeed(newLevel.getSeed()), player.gameMode.getGameModeForPlayer(), player.gameMode.getPreviousGameModeForPlayer(), newLevel.isDebug(), newLevel.isFlat(), (byte) 1, player.getLastDeathLocation()));        
 	        // # 1.18.2
 //$$	        player.connection.send(new ClientboundRespawnPacket(newLevel.dimensionTypeRegistration(), newLevel.dimension(), BiomeManager.obfuscateSeed(newLevel.getSeed()), player.gameMode.getGameModeForPlayer(), player.gameMode.getPreviousGameModeForPlayer(), newLevel.isDebug(), newLevel.isFlat(), true));        
 	        // # 1.16.5
@@ -483,10 +508,28 @@ public class SavestateMod extends Mod {
 	}
 	
 	// TODO: fix with nesting
+	// # 1.19.3
+//$$	private WorldData loadWorldData(LevelStorageAccess levelStorageAccess) {
+//$$		// FIXME: stuck here... don't know how to continue
+//$$        Pair<WorldDataConfiguration, CloseableResourceManager> pair = initConfig.packConfig.createResourceManager();
+//$$        CloseableResourceManager closeableResourceManager = pair.getSecond();
+//$$        LayeredRegistryAccess<RegistryLayer> layeredRegistryAccess = RegistryLayer.createRegistryAccess();
+//$$        LayeredRegistryAccess<RegistryLayer> layeredRegistryAccess2 = WorldLoader.loadAndReplaceLayer(closeableResourceManager, layeredRegistryAccess, RegistryLayer.WORLDGEN, RegistryDataLoader.WORLDGEN_REGISTRIES);
+//$$        RegistryAccess.Frozen frozen = layeredRegistryAccess2.getAccessForLoading(RegistryLayer.DIMENSIONS);
+//$$        RegistryAccess.Frozen frozen2 = RegistryDataLoader.load(closeableResourceManager, frozen, RegistryDataLoader.DIMENSION_REGISTRIES);
+//$$        WorldDataConfiguration worldDataConfiguration = pair.getFirst();
+//$$		
+//$$		DataLoadContext context = new DataLoadContext(closeableResourceManager, worldDataConfiguration, frozen, frozen2);
+//$$		Registry<LevelStem> registry = context.datapackDimensions().registryOrThrow(Registries.LEVEL_STEM);
+//$$		
+//$$		DataFixerUpper fixer = (DataFixerUpper) this.mcserver.getFixerUpper();
+//$$        RegistryOps<Tag> dynamicOps = RegistryOps.create(NbtOps.INSTANCE, context.datapackWorldgen());
+//$$        return levelStorageAccess.getDataTag(dynamicOps, levelStorageAccess.getDataConfiguration(), registry, context.datapackWorldgen().allRegistriesLifecycle()).getFirst();
+//$$	}
 	// # 1.18.2
 //$$	private WorldData loadWorldData(LevelStorageAccess levelStorageAccess) {
 //$$        RegistryAccess.Writable writable = RegistryAccess.builtinCopy();
-//$$        RegistryOps<Tag> dynamicOps = RegistryOps.createAndLoad(NbtOps.INSTANCE, writable, this.mcserver.getResourceManager());
+//$$       RegistryOps<Tag> dynamicOps = RegistryOps.createAndLoad(NbtOps.INSTANCE, writable, this.mcserver.getResourceManager());
 //$$        return levelStorageAccess.getDataTag(dynamicOps, levelStorageAccess.getDataPacks(), writable.allElementsLifecycle());
 //$$	}
 	// # 1.16.1
