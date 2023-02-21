@@ -71,7 +71,7 @@ public class HookMinecraft {
 	 * Triggers an Event in {@link ModSystem#onClientsidePostRender(Minecraft)} after the game has rendered the frame
 	 * @param ci Callback Info
 	 */
-	@Inject(method = "runTick", at = @At(value = "INVOKE", shift = Shift.AFTER, target = "Lnet/minecraft/client/gui/components/toasts/ToastComponent;render(Lcom/mojang/blaze3d/vertex/PoseStack;)V")) // @PostRender
+	@Inject(method = "runTick", at = @At(value = "INVOKE", shift = Shift.AFTER, target = "Lnet/minecraft/client/gui/components/toasts/ToastComponent;render(Lcom/mojang/blaze3d/vertex/PoseStack;)V")) // @PostRender;
 	public void hookPostRenderEvent(CallbackInfo ci) {
 		ModSystem.onClientsidePostRender();
 	}
