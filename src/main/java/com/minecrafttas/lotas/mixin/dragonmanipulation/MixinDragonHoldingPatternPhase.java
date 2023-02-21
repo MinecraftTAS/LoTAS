@@ -1,6 +1,6 @@
 package com.minecrafttas.lotas.mixin.dragonmanipulation;
 
-import net.minecraft.util.RandomSource; // @RandomSourceImport
+import net.minecraft.util.RandomSource; // @RandomSourceImport;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -31,8 +31,8 @@ public abstract class MixinDragonHoldingPatternPhase extends AbstractDragonPhase
 	 * @param r Random source
 	 * @return Multiplier
 	 */
-	@Redirect(method = "navigateToNextPathNode", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/RandomSource;nextFloat()F")) // @RandomSourceDescriptor
-	public float redirect_nextFloat(RandomSource r) { // @RngSourceClass
+	@Redirect(method = "navigateToNextPathNode", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/RandomSource;nextFloat()F")) // @RandomSourceDescriptor;
+	public float redirect_nextFloat(RandomSource r) { // @RngSourceClass;
 		return DragonManipulation.instance.getPhase() == Phase.OFF ? r.nextFloat() : 0.0f;
 	}
 	
@@ -92,8 +92,8 @@ public abstract class MixinDragonHoldingPatternPhase extends AbstractDragonPhase
 	 * @param i Bound
 	 * @return Random int
 	 */
-	@Redirect(method = "findNewTarget", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/RandomSource;nextInt(I)I", ordinal = 3)) // @RandomSourceDescriptor
-	public int redirect_nextInt(RandomSource r, int i) { // @RngSourceClass
+	@Redirect(method = "findNewTarget", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/RandomSource;nextInt(I)I", ordinal = 3)) // @RandomSourceDescriptor;
+	public int redirect_nextInt(RandomSource r, int i) { // @RngSourceClass;
 		return DragonManipulation.instance.getPhase() == Phase.OFF ? r.nextInt(i) : this.shouldCCWCWC;
 	}
 	
@@ -103,8 +103,8 @@ public abstract class MixinDragonHoldingPatternPhase extends AbstractDragonPhase
 	 * @param i Bound
 	 * @return Random int
 	 */
-	@Redirect(method = "findNewTarget", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/RandomSource;nextInt(I)I", ordinal = 0)) // @RandomSourceDescriptor
-	public int redirect_nextInt_perching(RandomSource r, int i) { // @RngSourceClass
+	@Redirect(method = "findNewTarget", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/RandomSource;nextInt(I)I", ordinal = 0)) // @RandomSourceDescriptor;
+	public int redirect_nextInt_perching(RandomSource r, int i) { // @RngSourceClass;
 		switch (DragonManipulation.instance.getPhase()) {
 			case LANDINGAPPROACH:
 				return 0;
@@ -122,8 +122,8 @@ public abstract class MixinDragonHoldingPatternPhase extends AbstractDragonPhase
 	 * @param i Bound
 	 * @return Random int
 	 */
-	@Redirect(method = "findNewTarget", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/RandomSource;nextInt(I)I", ordinal = 1)) // @RandomSourceDescriptor
-	public int redirect_nextInt_strafing(RandomSource r, int i) { // @RngSourceClass
+	@Redirect(method = "findNewTarget", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/RandomSource;nextInt(I)I", ordinal = 1)) // @RandomSourceDescriptor;
+	public int redirect_nextInt_strafing(RandomSource r, int i) { // @RngSourceClass;
 		switch (DragonManipulation.instance.getPhase()) {
 			case STRAFING:
 				return 0;
@@ -141,8 +141,8 @@ public abstract class MixinDragonHoldingPatternPhase extends AbstractDragonPhase
 	 * @param i Bound
 	 * @return Random int
 	 */
-	@Redirect(method = "findNewTarget", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/RandomSource;nextInt(I)I", ordinal = 2)) // @RandomSourceDescriptor
-	public int redirect_nextInt_strafing2(RandomSource r, int i) { // @RngSourceClass
+	@Redirect(method = "findNewTarget", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/RandomSource;nextInt(I)I", ordinal = 2)) // @RandomSourceDescriptor;
+	public int redirect_nextInt_strafing2(RandomSource r, int i) { // @RngSourceClass;
 		switch (DragonManipulation.instance.getPhase()) {
 			case STRAFING:
 				return 0;
