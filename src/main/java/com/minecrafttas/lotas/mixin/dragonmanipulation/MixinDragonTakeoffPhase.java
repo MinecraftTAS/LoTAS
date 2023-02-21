@@ -1,6 +1,6 @@
 package com.minecrafttas.lotas.mixin.dragonmanipulation;
 
-import net.minecraft.util.RandomSource; // @RandomSourceImport
+import net.minecraft.util.RandomSource; // @RandomSourceImport;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -27,8 +27,8 @@ public abstract class MixinDragonTakeoffPhase extends AbstractDragonPhaseInstanc
 	 * @param r Random source
 	 * @return Multiplier
 	 */
-	@Redirect(method = "navigateToNextPathNode", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/RandomSource;nextFloat()F")) // @RandomSourceDescriptor
-	public float redirect_nextFloat(RandomSource r) { // @RngSourceClass
+	@Redirect(method = "navigateToNextPathNode", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/RandomSource;nextFloat()F")) // @RandomSourceDescriptor;
+	public float redirect_nextFloat(RandomSource r) { // @RngSourceClass;
 		return DragonManipulation.instance.getPhase() == Phase.OFF ? r.nextFloat() : 0.0f;
 	}
 	
