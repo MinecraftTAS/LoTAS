@@ -54,7 +54,6 @@ accessible field net/minecraft/world/entity/player/Player lastItemInMainHand Lne
 #$$accessible field net/minecraft/world/level/storage/LevelStorageSource$LevelStorageAccess levelPath Ljava/nio/file/Path;
 #$$accessible field net/minecraft/server/MinecraftServer worldData Lnet/minecraft/world/level/storage/WorldData;
 #$$mutable field net/minecraft/server/MinecraftServer worldData Lnet/minecraft/world/level/storage/WorldData;
-## def
 ## end
 
 ## 1.15.2
@@ -64,13 +63,11 @@ accessible field net/minecraft/world/entity/player/Player lastItemInMainHand Lne
 #$$accessible field net/minecraft/world/level/chunk/storage/IOWorker pendingWrites Ljava/util/Map;
 #$$accessible field net/minecraft/world/level/chunk/storage/ChunkStorage worker Lnet/minecraft/world/level/chunk/storage/IOWorker;
 #$$accessible field net/minecraft/world/level/chunk/storage/SectionStorage storage Lit/unimi/dsi/fastutil/longs/Long2ObjectMap;
-## def
 ## end
 
 ## 1.16.5
 #$$accessible field net/minecraft/world/level/storage/LevelStorageSource baseDir Ljava/nio/file/Path;
 #$$accessible field net/minecraft/world/level/storage/LevelStorageSource backupDir Ljava/nio/file/Path;
-## def
 ## end
 
 ## 1.17.1
@@ -91,12 +88,10 @@ accessible field net/minecraft/world/entity/player/Player lastItemInMainHand Lne
 #$$accessible field net/minecraft/world/level/chunk/storage/EntityStorage worker Lnet/minecraft/world/level/chunk/storage/IOWorker;
 #$$accessible field net/minecraft/world/level/entity/PersistentEntitySectionManager sectionStorage Lnet/minecraft/world/level/entity/EntitySectionStorage;
 #$$accessible field net/minecraft/world/level/entity/PersistentEntitySectionManager visibleEntityStorage Lnet/minecraft/world/level/entity/EntityLookup;
-## def
 ## end
 
 ## 1.19.3
 #$$accessible field net/minecraft/world/level/storage/LevelStorageSource$LevelStorageAccess levelPath Ljava/nio/file/Path;
-## def
 ## end
 
 # Dragon Manipulation
