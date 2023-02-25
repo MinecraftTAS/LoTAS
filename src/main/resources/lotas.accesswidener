@@ -2,15 +2,18 @@ accessWidener v1 named
 
 # Savestate Mod
 
-## 1.17.1
-## 1.16.1
-#$$accessible field net/minecraft/server/level/ServerLevel toAddAfterTick Ljava/util/Queue;
-#$$accessible field net/minecraft/server/level/ServerLevel entitiesById Lit/unimi/dsi/fastutil/ints/Int2ObjectMap;
-## def
+	## 1.17.1
+	## def
+#$$
+		### 1.16.1
+		### def
 #$$accessible field net/minecraft/server/level/ServerLevel globalEntities Ljava/util/List;
+		### end
+#$$
 #$$accessible field net/minecraft/server/level/ServerLevel toAddAfterTick Ljava/util/Queue;
 #$$accessible field net/minecraft/server/level/ServerLevel entitiesById Lit/unimi/dsi/fastutil/ints/Int2ObjectMap;
-## end
+#$$
+	## end
 
 accessible field net/minecraft/server/level/ServerChunkCache distanceManager Lnet/minecraft/server/level/DistanceManager;
 accessible field net/minecraft/server/level/DistanceManager tickets Lit/unimi/dsi/fastutil/longs/Long2ObjectOpenHashMap;
@@ -22,20 +25,21 @@ accessible field net/minecraft/server/level/ChunkMap visibleChunkMap Lit/unimi/d
 accessible field net/minecraft/server/level/ChunkMap entitiesInLevel Lit/unimi/dsi/fastutil/longs/LongSet;
 accessible method net/minecraft/server/level/ChunkMap processUnloads (Ljava/util/function/BooleanSupplier;)V
 
-## 1.15.2
-## def
+	## 1.15.2
+	## def
 #$$accessible field net/minecraft/world/level/PortalForcer cachedPortals Ljava/util/Map;
-## end
+	## end
+
 accessible method net/minecraft/server/level/ServerChunkCache clearCache ()V
 accessible field net/minecraft/world/level/chunk/storage/RegionFileStorage regionCache Lit/unimi/dsi/fastutil/longs/Long2ObjectLinkedOpenHashMap;
 
-## 1.16.1
+	## 1.16.1
 #$$accessible field net/minecraft/world/level/Level levelData Lnet/minecraft/world/level/storage/WritableLevelData;
 #$$mutable field net/minecraft/world/level/Level levelData Lnet/minecraft/world/level/storage/WritableLevelData;
-## def
+	## def
 #$$accessible field net/minecraft/world/level/Level levelData Lnet/minecraft/world/level/storage/LevelData;
 #$$mutable field net/minecraft/world/level/Level levelData Lnet/minecraft/world/level/storage/LevelData;
-## end
+	## end
 
 accessible field net/minecraft/server/players/PlayerList stats Ljava/util/Map;
 accessible field net/minecraft/server/level/ServerPlayer stats Lnet/minecraft/stats/ServerStatsCounter;
@@ -47,30 +51,30 @@ accessible field net/minecraft/world/entity/LivingEntity attackStrengthTicker I
 accessible field net/minecraft/world/entity/player/Player lastItemInMainHand Lnet/minecraft/world/item/ItemStack;
 
 
-## 1.16.1
+	## 1.16.1
 #$$accessible field net/minecraft/server/MinecraftServer storageSource Lnet/minecraft/world/level/storage/LevelStorageSource$LevelStorageAccess;
 #$$accessible field net/minecraft/world/level/storage/LevelStorageSource$LevelStorageAccess lock Lnet/minecraft/util/DirectoryLock;
 #$$mutable field net/minecraft/world/level/storage/LevelStorageSource$LevelStorageAccess lock Lnet/minecraft/util/DirectoryLock;
 #$$accessible field net/minecraft/world/level/storage/LevelStorageSource$LevelStorageAccess levelPath Ljava/nio/file/Path;
 #$$accessible field net/minecraft/server/MinecraftServer worldData Lnet/minecraft/world/level/storage/WorldData;
 #$$mutable field net/minecraft/server/MinecraftServer worldData Lnet/minecraft/world/level/storage/WorldData;
-## end
+	## end
 
-## 1.15.2
+	## 1.15.2
 #$$accessible field net/minecraft/world/level/chunk/storage/SectionStorage worker Lnet/minecraft/world/level/chunk/storage/IOWorker;
 #$$accessible field net/minecraft/world/level/chunk/storage/IOWorker storage Lnet/minecraft/world/level/chunk/storage/RegionFileStorage;
 #$$accessible field net/minecraft/world/entity/ai/village/poi/PoiManager loadedChunks Lit/unimi/dsi/fastutil/longs/LongSet;
 #$$accessible field net/minecraft/world/level/chunk/storage/IOWorker pendingWrites Ljava/util/Map;
 #$$accessible field net/minecraft/world/level/chunk/storage/ChunkStorage worker Lnet/minecraft/world/level/chunk/storage/IOWorker;
 #$$accessible field net/minecraft/world/level/chunk/storage/SectionStorage storage Lit/unimi/dsi/fastutil/longs/Long2ObjectMap;
-## end
+	## end
 
-## 1.16.5
+	## 1.16.5
 #$$accessible field net/minecraft/world/level/storage/LevelStorageSource baseDir Ljava/nio/file/Path;
 #$$accessible field net/minecraft/world/level/storage/LevelStorageSource backupDir Ljava/nio/file/Path;
-## end
+	## end
 
-## 1.17.1
+	## 1.17.1
 #$$accessible field net/minecraft/world/entity/Entity yRot F
 #$$accessible field net/minecraft/world/entity/Entity xRot F
 #$$accessible field net/minecraft/world/entity/player/Player abilities Lnet/minecraft/world/entity/player/Abilities;
@@ -88,11 +92,11 @@ accessible field net/minecraft/world/entity/player/Player lastItemInMainHand Lne
 #$$accessible field net/minecraft/world/level/chunk/storage/EntityStorage worker Lnet/minecraft/world/level/chunk/storage/IOWorker;
 #$$accessible field net/minecraft/world/level/entity/PersistentEntitySectionManager sectionStorage Lnet/minecraft/world/level/entity/EntitySectionStorage;
 #$$accessible field net/minecraft/world/level/entity/PersistentEntitySectionManager visibleEntityStorage Lnet/minecraft/world/level/entity/EntityLookup;
-## end
+	## end
 
-## 1.19.3
+	## 1.19.3
 #$$accessible field net/minecraft/world/level/storage/LevelStorageSource$LevelStorageAccess levelPath Ljava/nio/file/Path;
-## end
+	## end
 
 # Dragon Manipulation
 accessible field net/minecraft/world/level/pathfinder/Path nodes Ljava/util/List;
@@ -104,11 +108,12 @@ accessible field net/minecraft/world/level/storage/loot/LootPool functions [Lnet
 accessible field net/minecraft/world/level/storage/loot/LootPool entries [Lnet/minecraft/world/level/storage/loot/entries/LootPoolEntryContainer;
 accessible field net/minecraft/world/level/storage/loot/entries/LootItem item Lnet/minecraft/world/item/Item;
 accessible field net/minecraft/world/level/storage/loot/entries/CompositeEntryBase children [Lnet/minecraft/world/level/storage/loot/entries/LootPoolEntryContainer;
-## 1.18.2
+	
+	## 1.18.2
 #$$accessible field net/minecraft/world/level/storage/loot/entries/TagEntry tag Lnet/minecraft/tags/TagKey;
-## def
+	## def
 #$$accessible field net/minecraft/world/level/storage/loot/entries/TagEntry tag Lnet/minecraft/tags/Tag;
-## end
+	## end
 accessible field net/minecraft/world/level/storage/loot/entries/LootTableReference name Lnet/minecraft/resources/ResourceLocation;
 
 
