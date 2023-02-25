@@ -228,7 +228,6 @@ public class SavestateMod extends Mod {
 		// Disable Session Lock
 		// # 1.19.3
 //$$		Path levelPath = this.mcserver.storageSource.getLevelPath(LevelResource.ROOT);
-//$$		this.mcserver.storageSource.lock.close();
 		// # 1.16.1
 //$$		Path levelPath = this.mcserver.storageSource.levelPath;
 //$$		this.mcserver.storageSource.lock.close();
@@ -278,11 +277,10 @@ public class SavestateMod extends Mod {
 			
 			// Clear global and future entities
 			// # 1.17.1
-//$$
+//$$			
 			// # 1.16.1
 //$$			level.toAddAfterTick.clear();
 			// # def
-//$$			level.toAddAfterTick.clear();
 //$$			level.globalEntities.clear();
 			// # end
 			
@@ -378,11 +376,13 @@ public class SavestateMod extends Mod {
 		
 		// Save session.lock
 		File worldDir = this.data.getWorldDir();
-		// # 1.19.3
-//$$		Path levelPath = this.mcserver.storageSource.getLevelPath(LevelResource.ROOT);
-//$$		this.mcserver.storageSource.lock.close();
+
 		// # 1.16.1
+			// ## 1.19.3
+//$$			Path levelPath = this.mcserver.storageSource.getLevelPath(LevelResource.ROOT);
+			// ## def
 //$$		Path levelPath = this.mcserver.storageSource.levelPath;
+			// ## end
 //$$		this.mcserver.storageSource.lock.close();
 		// # def
 //$$		Path sessionLockFile = new File(worldDir, "session.lock").toPath();
