@@ -50,7 +50,7 @@ public class TickAdvance extends Mod {
 	
 	@Override
 	protected void onInitialize() {
-		this.freezeOnJoin = ConfigurationSystem.getBoolean("tickadvance_freezeonjoin", true);
+		this.freezeOnJoin = ConfigurationSystem.getBoolean("tickadvance_freezeonjoin", false);
 	}
 	
 	/**

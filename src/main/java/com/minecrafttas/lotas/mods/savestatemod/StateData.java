@@ -102,6 +102,8 @@ public class StateData {
 	 */
 	public static class State implements Serializable {
 
+		private static final long serialVersionUID = 2074471357776822598L;
+
 		/**
 		 * Name of the state
 		 */

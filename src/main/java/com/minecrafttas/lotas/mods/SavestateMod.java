@@ -13,7 +13,9 @@ package com.minecrafttas.lotas.mods;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
-
+// # 1.19.3
+//$$import java.nio.file.Paths;
+// # end
 import java.time.Instant;
 import java.util.ArrayList;
 
@@ -57,21 +59,28 @@ import net.minecraft.world.level.storage.LevelData;
 //$$import net.minecraft.server.RegistryLayer;
 //$$import net.minecraft.server.WorldLoader;
 //$$import net.minecraft.server.WorldLoader.DataLoadContext;
+//$$import net.minecraft.server.WorldLoader.InitConfig;
+//$$import net.minecraft.server.dedicated.DedicatedServerProperties;
+//$$import net.minecraft.server.dedicated.DedicatedServerSettings;
 //$$import net.minecraft.resources.RegistryDataLoader;
 //$$import net.minecraft.world.level.WorldDataConfiguration;
 //$$import net.minecraft.core.LayeredRegistryAccess;
 //$$import net.minecraft.core.registries.Registries;
 //$$import net.minecraft.world.level.storage.LevelResource;
+//$$import net.minecraft.world.level.storage.LevelStorageSource;
+//$$import net.minecraft.server.packs.repository.PackRepository;
+//$$import net.minecraft.server.packs.repository.ServerPacksSource;
 //$$import net.minecraft.server.packs.resources.CloseableResourceManager;
-//$$import net.minecraft.resources.ResourceKey;
 //$$import net.minecraft.world.level.dimension.LevelStem;
 //$$import net.minecraft.commands.Commands;
 //$$import net.minecraft.core.Registry;
-//$$import com.mojang.datafixers.DataFixerUpper;
 //$$import com.mojang.datafixers.util.Pair;
 // # end
 
 // # 1.17.1
+// ## 1.19.3
+//$$import net.minecraft.world.flag.FeatureFlags;
+// ## end
 //$$import net.minecraft.world.level.entity.EntityTickList;
 //$$import net.minecraft.world.level.entity.PersistentEntitySectionManager;
 //$$import net.minecraft.world.entity.Entity.RemovalReason;
@@ -226,10 +235,12 @@ public class SavestateMod extends Mod {
 		this.mcserver.saveAllChunks(false, true, false);
 		
 		// Disable Session Lock
-		// # 1.19.3
-//$$		Path levelPath = this.mcserver.storageSource.getLevelPath(LevelResource.ROOT);
 		// # 1.16.1
+		// ## 1.19.3
+//$$		Path levelPath = this.mcserver.storageSource.getLevelPath(LevelResource.ROOT);
+		// ## def
 //$$		Path levelPath = this.mcserver.storageSource.levelPath;
+		// ## end
 //$$		this.mcserver.storageSource.lock.close();
 		// # end
 		
@@ -507,10 +518,9 @@ public class SavestateMod extends Mod {
 		TickAdvance.instance.updateTickadvanceStatus(false);
 	}
 	
-	// TODO: fix with nesting
 	// # 1.19.3
-//$$	private WorldData loadWorldData(LevelStorageAccess levelStorageAccess) {
-//$$		// FIXME: stuck here... don't know how to continue
+//$$	private WorldData loadWorldData(LevelStorageAccess levelStorageAccess) throws IOException {
+//$$		InitConfig initConfig = loadOrCreateConfig();
 //$$        Pair<WorldDataConfiguration, CloseableResourceManager> pair = initConfig.packConfig.createResourceManager();
 //$$        CloseableResourceManager closeableResourceManager = pair.getSecond();
 //$$        LayeredRegistryAccess<RegistryLayer> layeredRegistryAccess = RegistryLayer.createRegistryAccess();
@@ -522,14 +532,13 @@ public class SavestateMod extends Mod {
 //$$		DataLoadContext context = new DataLoadContext(closeableResourceManager, worldDataConfiguration, frozen, frozen2);
 //$$		Registry<LevelStem> registry = context.datapackDimensions().registryOrThrow(Registries.LEVEL_STEM);
 //$$		
-//$$		DataFixerUpper fixer = (DataFixerUpper) this.mcserver.getFixerUpper();
 //$$        RegistryOps<Tag> dynamicOps = RegistryOps.create(NbtOps.INSTANCE, context.datapackWorldgen());
 //$$        return levelStorageAccess.getDataTag(dynamicOps, levelStorageAccess.getDataConfiguration(), registry, context.datapackWorldgen().allRegistriesLifecycle()).getFirst();
 //$$	}
 	// # 1.18.2
 //$$	private WorldData loadWorldData(LevelStorageAccess levelStorageAccess) {
 //$$        RegistryAccess.Writable writable = RegistryAccess.builtinCopy();
-//$$       RegistryOps<Tag> dynamicOps = RegistryOps.createAndLoad(NbtOps.INSTANCE, writable, this.mcserver.getResourceManager());
+//$$        RegistryOps<Tag> dynamicOps = RegistryOps.createAndLoad(NbtOps.INSTANCE, writable, this.mcserver.getResourceManager());
 //$$        return levelStorageAccess.getDataTag(dynamicOps, levelStorageAccess.getDataPacks(), writable.allElementsLifecycle());
 //$$	}
 	// # 1.16.1
@@ -569,6 +578,38 @@ public class SavestateMod extends Mod {
 //$$        return worldData;
 //$$	}
 	// # end
+	
+	
+	//#1.19.3
+//$$    private static WorldLoader.InitConfig loadOrCreateConfig() throws IOException {
+//$$    	Path path = Paths.get("server.properties", new String[0]);
+//$$        DedicatedServerSettings dedicatedServerSettings = new DedicatedServerSettings(path);
+//$$        dedicatedServerSettings.forceSave();
+//$$        
+//$$        File file = new File(".");
+//$$        String string = dedicatedServerSettings.getProperties().levelName;
+//$$        
+//$$        
+//$$        LevelStorageSource levelStorageSource = LevelStorageSource.createDefault(file.toPath());
+//$$        LevelStorageSource.LevelStorageAccess levelStorageAccess = levelStorageSource.createAccess(string);
+//$$        PackRepository packRepository = ServerPacksSource.createPackRepository(levelStorageAccess.getLevelPath(LevelResource.DATAPACK_DIR));
+//$$        
+//$$        DedicatedServerProperties dedicatedServerProperties = dedicatedServerSettings.getProperties();
+//$$        
+//$$        WorldDataConfiguration worldDataConfiguration2;
+//$$        boolean bl2;
+//$$        WorldDataConfiguration worldDataConfiguration = levelStorageAccess.getDataConfiguration();
+//$$        if (worldDataConfiguration != null) {
+//$$            bl2 = false;
+//$$            worldDataConfiguration2 = worldDataConfiguration;
+//$$        } else {
+//$$            bl2 = true;
+//$$            worldDataConfiguration2 = new WorldDataConfiguration(dedicatedServerProperties.initialDataPackConfiguration, FeatureFlags.DEFAULT_FLAGS);
+//$$        }
+//$$        WorldLoader.PackConfig packConfig = new WorldLoader.PackConfig(packRepository, worldDataConfiguration2, false, bl2);
+//$$        return new WorldLoader.InitConfig(packConfig, Commands.CommandSelection.DEDICATED, dedicatedServerProperties.functionPermissionLevel);
+//$$    }
+    //#end
 	
 	/**
 	 * Deletes a state of the world
