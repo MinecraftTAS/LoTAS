@@ -420,13 +420,16 @@ public class SavestateMod extends Mod {
 		
 		// # 1.16.1
 //$$		WorldData worldData = this.loadWorldData(this.mcserver.storageSource);
-//$$		ServerLevelData data = worldData.overworldData();
 //$$		this.mcserver.worldData = worldData;
+//$$		
 //$$		for (ServerLevel level : this.mcserver.getAllLevels()) {
-//$$			if (level.dimension() != Level.OVERWORLD)
-//$$				level.levelData = new DerivedLevelData(worldData, data);
-//$$			else
-//$$				level.levelData = data;
+//$$			
+//$$			ServerLevelData data = worldData.overworldData();
+//$$			if (level.dimension() != Level.OVERWORLD) {
+//$$				data = new DerivedLevelData(worldData, data);
+//$$			}
+//$$			level.levelData = data;
+//$$			level.serverLevelData = data;
 //$$		}
 		// # def
 //$$		LevelData data = LevelStorageSource.getLevelData(new File(worldDir, "level.dat"), this.mcserver.getFixerUpper());

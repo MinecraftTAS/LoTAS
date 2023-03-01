@@ -14,7 +14,6 @@ accessWidener v1 named
 #$$accessible field net/minecraft/server/level/ServerLevel entitiesById Lit/unimi/dsi/fastutil/ints/Int2ObjectMap;
 #$$
 ## end
-
 accessible field net/minecraft/server/level/ServerChunkCache distanceManager Lnet/minecraft/server/level/DistanceManager;
 accessible field net/minecraft/server/level/DistanceManager tickets Lit/unimi/dsi/fastutil/longs/Long2ObjectOpenHashMap;
 accessible field net/minecraft/server/level/DistanceManager chunksToUpdateFutures Ljava/util/Set;
@@ -34,6 +33,8 @@ accessible method net/minecraft/server/level/ServerChunkCache clearCache ()V
 accessible field net/minecraft/world/level/chunk/storage/RegionFileStorage regionCache Lit/unimi/dsi/fastutil/longs/Long2ObjectLinkedOpenHashMap;
 
 ## 1.16.1
+#$$accessible field net/minecraft/server/level/ServerLevel serverLevelData Lnet/minecraft/world/level/storage/ServerLevelData;
+#$$mutable field net/minecraft/server/level/ServerLevel serverLevelData Lnet/minecraft/world/level/storage/ServerLevelData;
 #$$accessible field net/minecraft/world/level/Level levelData Lnet/minecraft/world/level/storage/WritableLevelData;
 #$$mutable field net/minecraft/world/level/Level levelData Lnet/minecraft/world/level/storage/WritableLevelData;
 ## def
