@@ -52,10 +52,14 @@ accessible field net/minecraft/world/entity/player/Player lastItemInMainHand Lne
 
 
 ## 1.16.1
+### 1.19.3
+#$$accessible field net/minecraft/world/level/storage/LevelStorageSource$LevelStorageAccess levelDirectory Lnet/minecraft/world/level/storage/LevelStorageSource$LevelDirectory;
+### def
+#$$accessible field net/minecraft/world/level/storage/LevelStorageSource$LevelStorageAccess levelPath Ljava/nio/file/Path;
+### end
 #$$accessible field net/minecraft/server/MinecraftServer storageSource Lnet/minecraft/world/level/storage/LevelStorageSource$LevelStorageAccess;
 #$$accessible field net/minecraft/world/level/storage/LevelStorageSource$LevelStorageAccess lock Lnet/minecraft/util/DirectoryLock;
 #$$mutable field net/minecraft/world/level/storage/LevelStorageSource$LevelStorageAccess lock Lnet/minecraft/util/DirectoryLock;
-#$$accessible field net/minecraft/world/level/storage/LevelStorageSource$LevelStorageAccess levelPath Ljava/nio/file/Path;
 #$$accessible field net/minecraft/server/MinecraftServer worldData Lnet/minecraft/world/level/storage/WorldData;
 #$$mutable field net/minecraft/server/MinecraftServer worldData Lnet/minecraft/world/level/storage/WorldData;
 ## end
@@ -95,7 +99,8 @@ accessible field net/minecraft/world/entity/player/Player lastItemInMainHand Lne
 ## end
 
 ## 1.19.3
-#$$accessible field net/minecraft/world/level/storage/LevelStorageSource$LevelStorageAccess levelPath Ljava/nio/file/Path;
+#$$accessible method net/minecraft/server/WorldLoader loadAndReplaceLayer (Lnet/minecraft/server/packs/resources/ResourceManager;Lnet/minecraft/core/LayeredRegistryAccess;Lnet/minecraft/server/RegistryLayer;Ljava/util/List;)Lnet/minecraft/core/LayeredRegistryAccess;
+#$$accessible field net/minecraft/server/WorldLoader$InitConfig packConfig Lnet/minecraft/server/WorldLoader$PackConfig;
 ## end
 
 # Dragon Manipulation
