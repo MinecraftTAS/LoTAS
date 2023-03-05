@@ -16,7 +16,7 @@
 	"license": "GPLv3",
 	"icon": "",
 	"environment": "*",
-	"accessWidener", "lotas.accesswidener",
+	"accessWidener": "lotas.accesswidener",
 	"entrypoints": {
 		"main": [
 			"com.minecrafttas.lotas.LoTAS"
