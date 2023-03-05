@@ -14,7 +14,6 @@ import com.minecrafttas.lotas.mods.DragonManipulation.Phase;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.boss.enderdragon.phases.AbstractDragonPhaseInstance;
 import net.minecraft.world.entity.boss.enderdragon.phases.DragonHoldingPatternPhase;
-import net.minecraft.world.level.pathfinder.Node;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.Vec3;
 
@@ -66,24 +65,26 @@ public abstract class MixinDragonHoldingPatternPhase extends AbstractDragonPhase
 	 */
 	@Redirect(method = "findNewTarget", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/boss/enderdragon/EnderDragon;findClosestNode()I"))
 	public int redirect_findClosestNode(EnderDragon dragon) {
-		this.shouldCCWCWC = 1; // reset
+		int j, closestNodeA, closestNodeB;
+		closestNodeA = closestNodeB = j = dragon.findClosestNode();
 
-		int closestNode = dragon.findClosestNode();
+		closestNodeB += 6;
 
-		// do math
-		int i = closestNode;
-		i = this.clockwise ? ++i : --i;
-		if ((i %= 12) < 0) i += 12;
-		
+		closestNodeA = this.clockwise ? ++closestNodeA : --closestNodeA;
+		closestNodeB = this.clockwise ? --closestNodeB : ++closestNodeB;
+
+		if ((closestNodeA %= 12) < 0)
+			closestNodeA += 12;
+
+		if ((closestNodeB %= 12) < 0)
+			closestNodeB += 12;
+
 		// get path and node
-		Path path = dragon.findPath(i, closestNode, null);
-		for (Node node : path.nodes)
-			if (node.y > 85) {
-				this.shouldCCWCWC = 0;
-				break;
-			}
-		
-		return closestNode;
+		Path noSwitchPath = dragon.findPath(j, closestNodeA, null);
+		Path switchPath = dragon.findPath(j, closestNodeB, null);
+
+		this.shouldCCWCWC = (noSwitchPath.nodes.size() <= switchPath.nodes.size()) ? 1 : 0;
+		return j;
 	}
 	
 	/**
