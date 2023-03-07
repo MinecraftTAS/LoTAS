@@ -12,4 +12,8 @@ pluginManagement {
 	}
 }
 
-rootDir.listFiles().each { if (it.directory && new File(it, 'build.gradle').exists()) include ":${it.name}" }
+rootDir.listFiles().each { 
+	if (it.directory && new File(it, 'build.gradle').exists() && new File(it, 'src/main/resources/lotas.accesswidener').exists()) {
+		include ":${it.name}"
+	}
+}
