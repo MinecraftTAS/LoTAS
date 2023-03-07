@@ -43,6 +43,8 @@ import net.minecraft.server.level.DistanceManager;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.Ticket;
+import net.minecraft.server.level.TicketType;
 import net.minecraft.server.players.PlayerList;
 import net.minecraft.stats.ServerStatsCounter;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -86,6 +88,9 @@ import net.minecraft.world.level.storage.LevelData;
 //$$import net.minecraft.world.level.entity.EntityTickList;
 //$$import net.minecraft.world.level.entity.PersistentEntitySectionManager;
 //$$import net.minecraft.world.entity.Entity.RemovalReason;
+//$$import net.minecraft.world.level.chunk.ChunkSource;
+//$$import net.minecraft.world.level.chunk.ChunkStatus;
+//$$import net.minecraft.world.level.chunk.LevelChunk;
 //$$import net.minecraft.world.level.chunk.storage.EntityStorage;
 // # end
 
@@ -95,7 +100,10 @@ import net.minecraft.world.level.storage.LevelData;
 //$$import net.minecraft.resources.RegistryReadOps;
 //$$import net.minecraft.server.ServerResources;
 //$$import java.util.concurrent.CompletableFuture;
+//$$import java.util.concurrent.atomic.AtomicReferenceArray;
+//$$
 //$$import net.minecraft.Util;
+//$$import net.minecraft.client.Minecraft;
 //$$import net.minecraft.commands.Commands;
 //$$import net.minecraft.server.MinecraftServer;
 //$$import net.minecraft.server.packs.repository.FolderRepositorySource;
@@ -103,12 +111,14 @@ import net.minecraft.world.level.storage.LevelData;
 //$$import net.minecraft.server.packs.repository.ServerPacksSource;
 //$$import net.minecraft.server.packs.repository.PackSource;
 //$$import net.minecraft.world.level.storage.LevelResource;
+//$$import net.minecraft.world.level.ChunkPos;
 //$$import net.minecraft.world.level.DataPackConfig;
 // # end
 
 // # 1.16.1
 //$$import net.minecraft.world.level.Level;
 //$$import net.minecraft.util.DirectoryLock;
+//$$import net.minecraft.util.Unit;
 //$$import net.minecraft.nbt.CompoundTag;
 //$$import net.minecraft.nbt.NbtOps;
 //$$import net.minecraft.nbt.Tag;
@@ -117,6 +127,7 @@ import net.minecraft.world.level.storage.LevelData;
 //$$import net.minecraft.world.level.storage.LevelStorageSource.LevelStorageAccess;
 //$$import net.minecraft.world.level.storage.ServerLevelData;
 //$$import net.minecraft.world.level.storage.WorldData;
+//$$
 //$$import com.mojang.serialization.Dynamic;
 // # def
 //$$import net.minecraft.world.level.dimension.end.TheEndDimension;
@@ -232,6 +243,8 @@ public class SavestateMod extends Mod {
 	 * @throws IOException Filesystem Exception 
 	 */
 	private void savestate(String name) throws IOException {
+		
+		TickAdvance.instance.updateTickadvanceStatus(true);
 		// Save world
 		this.mcserver.getPlayerList().saveAll();
 		this.mcserver.saveAllChunks(false, true, false);
@@ -261,6 +274,7 @@ public class SavestateMod extends Mod {
 		// Save data and send to client
 		this.data.saveData();
 		this.sendStates();
+		TickAdvance.instance.updateTickadvanceStatus(false);
 	}
 
 	/**
@@ -268,21 +282,62 @@ public class SavestateMod extends Mod {
 	 * @param i Index to load
 	 * @throws IOException Filesystem Excepion
 	 */
-	// # 1.18.2
-//$$	@SuppressWarnings("deprecation")
-	// # end
 	private void loadstate(int i) throws IOException {
 		if (!this.data.isValid(i)) {
 			LoTAS.LOGGER.warn("Trying to load a state that does not exist: " + i);
 			return;
 		}
 		
+		// Enable tickrate 0
 		TickAdvance.instance.updateTickadvanceStatus(true);
 		
 		/*
 		 * Fully unload server level
 		 */
 		
+		unloadServerLevel();
+		
+		/*
+		 * Load state
+		 */
+
+		File worldDir = this.data.getWorldDir();
+		
+		// Unlock session.lock
+		//#1.16.1
+//$$		Path levelPath = unlockSessionLock();
+		//#def
+//$$		byte[] sessionLock = unlockSessionLock(worldDir);
+		//#end
+		
+		// Delete world
+		FileUtils.deleteDirectory(worldDir);
+
+		// Copy state
+		File worldSavestateDir = new File(this.data.getWorldSavestateDir(), this.data.getState(i).getIndex() + "");
+		FileUtils.copyDirectory(worldSavestateDir, this.data.getWorldDir());
+
+		// Lock session.lock
+		//#1.16.1
+//$$		lockSessionLock(levelPath);
+		//#def
+//$$		lockSessionLock(sessionLock, worldDir);
+		//#end
+		
+		// Load world data
+		//#1.16.1
+//$$		loadWorldData();
+		//#def
+//$$		loadWorldData(worldDir);
+		//#end
+		
+		loadPlayers();
+		
+		// Disable tickrate 0
+		TickAdvance.instance.updateTickadvanceStatus(false);
+	}
+	
+	private void unloadServerLevel() throws IOException {
 		for (ServerLevel level : this.mcserver.getAllLevels()) {
 			ServerChunkCache chunkCache = level.getChunkSource();
 			DistanceManager distanceManager = chunkCache.distanceManager;
@@ -366,6 +421,13 @@ public class SavestateMod extends Mod {
 			
 			// Clear chunk cache
 			chunkCache.clearCache();
+			
+            // Clear cache on the client
+//    		FriendlyByteBuf buf2 = new FriendlyByteBuf(Unpooled.buffer());
+//    		buf2.writeInt(2);
+//    		for (ServerPlayer player : mcserver.getPlayerList().getPlayers()) {
+//    			this.sendPacketToClient(player, buf2);
+//			}
 
 			// Close file
 			// # 1.15.2
@@ -390,79 +452,45 @@ public class SavestateMod extends Mod {
 //$$			map.regionCache.clear();
 			// # end
 		}
-		
-		/*
-		 * Load state
-		 */
-		
-		
-		// Save session.lock
-		File worldDir = this.data.getWorldDir();
-
+	}
+	
+	//#1.16.1
+//$$	private Path unlockSessionLock() throws IOException {
+	//#def
+//$$	private byte[] unlockSessionLock(File worldDir) throws IOException {
+	//#end
 		// # 1.16.1
-			// ## 1.19.3
-//$$			Path levelPath = this.mcserver.storageSource.getLevelPath(LevelResource.ROOT);
-			// ## def
+		// ## 1.19.3
+//$$		Path levelPath = this.mcserver.storageSource.getLevelPath(LevelResource.ROOT);
+		// ## def
 //$$		Path levelPath = this.mcserver.storageSource.levelPath;
-			// ## end
+		// ## end
 //$$		this.mcserver.storageSource.lock.close();
+//$$		return levelPath;
 		// # def
 //$$		Path sessionLockFile = new File(worldDir, "session.lock").toPath();
 //$$		byte[] sessionLock = Files.readAllBytes(sessionLockFile);
+//$$		return sessionLock;
 		// # end
-		
-		// Delete world
-		FileUtils.deleteDirectory(worldDir);
-
-		// Copy state
-		File worldSavestateDir = new File(this.data.getWorldSavestateDir(), this.data.getState(i).getIndex() + "");
-		FileUtils.copyDirectory(worldSavestateDir, this.data.getWorldDir());
-
-		// Load session.lock
+	}
+	
+	//#1.16.1
+//$$	private void lockSessionLock(Path levelPath) throws IOException {
+	//#def
+//$$	private void lockSessionLock(byte[] sessionLock, File worldDir) throws IOException {
+	//#end
 		// # 1.16.1
 //$$		this.mcserver.storageSource.lock = DirectoryLock.create(levelPath);
 		// # def
-//$$ 		Files.write(sessionLockFile, sessionLock, StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.CREATE);
+//$$		Path sessionLockFile = new File(worldDir, "session.lock").toPath();
+//$$ 		Files.write(sessionLockFile, sessionLock, StandardOpenOption.WRITE, StandardOpenOption.CREATE);
 		// # end
-		
-		/*
-		 * Fully reload world
-		 */
-		
-		// # 1.16.1
-//$$		WorldData worldData = this.loadWorldData(this.mcserver.storageSource);
-//$$		this.mcserver.worldData = worldData;
-//$$		
-//$$		for (ServerLevel level : this.mcserver.getAllLevels()) {
-//$$			
-//$$			ServerLevelData data = worldData.overworldData();
-//$$			if (level.dimension() != Level.OVERWORLD) {
-//$$				data = new DerivedLevelData(worldData, data);
-//$$			}
-//$$			level.levelData = data;
-//$$			level.serverLevelData = data;
-//$$			
-//$$			if (level.dragonFight != null)
-				// ## 1.19.3
-//$$				level.dragonFight = new EndDragonFight(level, this.mcserver.getWorldData().worldGenOptions().seed(), this.mcserver.getWorldData().endDragonFightData());
-				// ## def
-//$$				level.dragonFight = new EndDragonFight(level, this.mcserver.getWorldData().worldGenSettings().seed(), this.mcserver.getWorldData().endDragonFightData());
-				// ## end
-//$$		}
-		// # def
-//$$		LevelData data = LevelStorageSource.getLevelData(new File(worldDir, "level.dat"), this.mcserver.getFixerUpper());
-//$$		for (ServerLevel level : this.mcserver.getAllLevels()) {
-//$$			// Load level data
-//$$			if (level instanceof DerivedServerLevel)
-//$$				level.levelData = new DerivedLevelData(data);
-//$$			else
-//$$				level.levelData = data;
-//$$			// Load end fight
-//$$			if (level.dimension instanceof TheEndDimension)
-//$$				((TheEndDimension) level.dimension).dragonFight = new EndDragonFight((ServerLevel) level, level.getLevelData().getDimensionData(DimensionType.THE_END).getCompound("DragonFight")); 
-//$$		}
-		// # end
-		
+	}
+	
+	// # 1.18.2
+//$$	@SuppressWarnings("deprecation")
+	// # end
+	private void loadPlayers() {
 		PlayerList playerList = this.mcserver.getPlayerList();
 		for (ServerPlayer player : new ArrayList<>(playerList.getPlayers())) {
 			
@@ -498,6 +526,11 @@ public class SavestateMod extends Mod {
 	        player.moveTo(pos.x(), pos.y(), pos.z(), player.yRot, player.xRot);
 	        player.setLevel(newLevel);
 	        newLevel.addDuringPortalTeleport(player); // FIXME: player not added 1.17+
+	        ChunkPos chunkPos = player.chunkPosition();
+	        @SuppressWarnings({ "unchecked", "rawtypes" })
+			Ticket<?> ticket = new Ticket(TicketType.PLAYER, 33 + ChunkStatus.getDistance(ChunkStatus.FULL) - 2, chunkPos);
+	        ServerChunkCache chunkSource = newLevel.getChunkSource();
+	        chunkSource.distanceManager.addTicket(chunkPos.toLong(), ticket);
 	        
 	        // Update client level
 	        player.connection.teleport(pos.x(), pos.y(), pos.z(), player.yRot, player.xRot);
@@ -538,10 +571,52 @@ public class SavestateMod extends Mod {
     		buf2.writeInt(-1);
             this.sendPacketToClient(player, buf2);
 		}
-		
-		TickAdvance.instance.updateTickadvanceStatus(false);
 	}
-	
+
+	//#1.16.1
+//$$	private void loadWorldData() throws IOException {
+	//#def
+//$$	private void loadWorldData(File worldDir) {
+	//#end
+		// # 1.16.1
+//$$		WorldData worldData = this.loadWorldData(this.mcserver.storageSource);
+//$$		this.mcserver.worldData = worldData;
+//$$		
+//$$		for (ServerLevel level : this.mcserver.getAllLevels()) {
+//$$			
+//$$			ServerLevelData data = worldData.overworldData();
+//$$			if (level.dimension() != Level.OVERWORLD) {
+//$$				data = new DerivedLevelData(worldData, data);
+//$$			}
+//$$			level.levelData = data;
+//$$			level.serverLevelData = data;
+//$$	
+//$$				if (level.dragonFight != null)
+				// ## 1.19.3
+//$$					level.dragonFight = new EndDragonFight(level, this.mcserver.getWorldData().worldGenOptions().seed(), this.mcserver.getWorldData().endDragonFightData());
+				// ## def
+//$$					level.dragonFight = new EndDragonFight(level, this.mcserver.getWorldData().worldGenSettings().seed(), this.mcserver.getWorldData().endDragonFightData());
+				// ## end
+//$$		}
+		// # def
+//$$		LevelData data = LevelStorageSource.getLevelData(new File(worldDir, "level.dat"), this.mcserver.getFixerUpper());
+//$$		for (ServerLevel level : this.mcserver.getAllLevels()) {
+//$$			// Load level data
+//$$			if (level instanceof DerivedServerLevel)
+//$$				level.levelData = new DerivedLevelData(data);
+//$$			else
+//$$				level.levelData = data;
+//$$					
+//$$				// Load end fight
+//$$				if (level.dimension instanceof TheEndDimension)
+//$$					((TheEndDimension) level.dimension).dragonFight = new EndDragonFight((ServerLevel) level, level.getLevelData().getDimensionData(DimensionType.THE_END).getCompound("DragonFight")); 
+//$$			}
+//$$	
+//$$	//$$ 		Files.write(sessionLockFile, sessionLock, StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.CREATE);
+		// # end
+			
+	}
+
 	// # 1.19.3
 //$$	private WorldData loadWorldData(LevelStorageAccess levelStorageAccess) throws IOException {
 //$$		InitConfig initConfig = loadOrCreateConfig();
@@ -675,6 +750,9 @@ public class SavestateMod extends Mod {
 			case 1: // Load states
 				this.data.deserializeData(buf.readByteArray());
 				break;
+			case 2:
+//				unloadClient();
+				break;
 		}
 	}
 	
@@ -697,6 +775,14 @@ public class SavestateMod extends Mod {
 	protected void onServerLoad() {
 		this.data.onServerInitialize(this.mcserver);
 	}
+	
+//	@Environment(EnvType.CLIENT)
+//	private void unloadClient() {
+//		AtomicReferenceArray<LevelChunk> chunks = Minecraft.getInstance().level.chunkSource.storage.chunks;
+//		for(int i = 0; i < chunks.length(); i++) {
+//			chunks.set(i, null);
+//		}
+//	}
 	
 	public interface Task {
 		public void run() throws IOException;

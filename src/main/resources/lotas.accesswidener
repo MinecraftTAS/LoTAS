@@ -103,6 +103,9 @@ accessible field net/minecraft/world/entity/player/Player lastItemInMainHand Lne
 #$$accessible field net/minecraft/world/level/entity/PersistentEntitySectionManager visibleEntityStorage Lnet/minecraft/world/level/entity/EntityLookup;
 ## end
 
+accessible method net/minecraft/server/level/Ticket <init> (Lnet/minecraft/server/level/TicketType;ILjava/lang/Object;)V
+accessible method net/minecraft/server/level/DistanceManager addTicket (JLnet/minecraft/server/level/Ticket;)V
+
 ## 1.19.3
 #$$accessible method net/minecraft/server/WorldLoader loadAndReplaceLayer (Lnet/minecraft/server/packs/resources/ResourceManager;Lnet/minecraft/core/LayeredRegistryAccess;Lnet/minecraft/server/RegistryLayer;Ljava/util/List;)Lnet/minecraft/core/LayeredRegistryAccess;
 #$$accessible field net/minecraft/server/WorldLoader$InitConfig packConfig Lnet/minecraft/server/WorldLoader$PackConfig;
