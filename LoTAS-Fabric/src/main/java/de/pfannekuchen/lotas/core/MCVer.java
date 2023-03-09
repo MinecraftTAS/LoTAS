@@ -188,7 +188,9 @@ public class MCVer {
 //$$ 	}
 //$$
 //$$ 	public static void enableTexture() {
+		//#if MC<11904
 //$$ 		com.mojang.blaze3d.systems.RenderSystem.enableTexture();
+		//#endif
 //$$ 	}
 //$$
 //$$ 	public static void shadeModel(int i) {
@@ -213,7 +215,9 @@ public class MCVer {
 //$$ 	}
 //$$
 //$$ 	public static void disableTexture() {
+		//#if MC<11904
 //$$ 		com.mojang.blaze3d.systems.RenderSystem.disableTexture();
+		//#endif
 //$$ 	}
 //$$
 //$$ 	public static void disableFog() {

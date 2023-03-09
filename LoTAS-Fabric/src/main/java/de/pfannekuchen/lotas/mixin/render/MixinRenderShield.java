@@ -30,7 +30,11 @@ import net.minecraft.world.item.Items;
 //$$ 	@ModifyVariable(method = "renderByItem", at = @At(value = "STORE"), index = 9, ordinal = 0)
 	//#endif
 	//#if MC>=11601
+	//#if MC>=11904
+//$$ 	public com.mojang.blaze3d.vertex.VertexConsumer changeShield(com.mojang.blaze3d.vertex.VertexConsumer vertexconsumer, net.minecraft.world.item.ItemStack itemStack, net.minecraft.world.item.ItemDisplayContext transformType, com.mojang.blaze3d.vertex.PoseStack poseStack, net.minecraft.client.renderer.MultiBufferSource multiBufferSource, int i, int j){
+	//#else
 //$$ 	public com.mojang.blaze3d.vertex.VertexConsumer changeShield(com.mojang.blaze3d.vertex.VertexConsumer vertexconsumer, net.minecraft.world.item.ItemStack itemStack, net.minecraft.client.renderer.block.model.ItemTransforms.TransformType transformType, com.mojang.blaze3d.vertex.PoseStack poseStack, net.minecraft.client.renderer.MultiBufferSource multiBufferSource, int i, int j){
+	//#endif
 	//#else
 //$$ 	public com.mojang.blaze3d.vertex.VertexConsumer changeShield(com.mojang.blaze3d.vertex.VertexConsumer vertexconsumer, net.minecraft.world.item.ItemStack itemStack, com.mojang.blaze3d.vertex.PoseStack poseStack, net.minecraft.client.renderer.MultiBufferSource multiBufferSource, int i, int j){
 	//#endif

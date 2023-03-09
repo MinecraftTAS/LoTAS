@@ -5,7 +5,7 @@ import de.pfannekuchen.lotas.core.MCVer;
 /**
  * Draws a potion in the gui hud pixel by pixel
  * 
- * @author ScribbleLP
+ * @author Scribble
  * @since v1.0
  * @version v1.3
  */

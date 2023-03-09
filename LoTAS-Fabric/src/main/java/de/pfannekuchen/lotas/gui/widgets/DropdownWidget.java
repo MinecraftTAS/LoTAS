@@ -47,9 +47,17 @@ public class DropdownWidget<T> extends AbstractWidget {
             dropdown.visible ^= true;
             if(dropdown.visible) {
                 if(focused != null) {
+                	//#if MC>=11904
+                //$$ 	focused.nextFocusPath(new net.minecraft.client.gui.navigation.FocusNavigationEvent.TabNavigation(false));
+                	//#else
                     focused.changeFocus(true);
+                    //#endif
                 }
+                //#if MC>=11904
+                //$$ focused.nextFocusPath(new net.minecraft.client.gui.navigation.FocusNavigationEvent.TabNavigation(false));
+                //#else
                 dropdown.changeFocus(true);
+                //#endif
                 focused = dropdown;
             }
         });
@@ -69,11 +77,16 @@ public class DropdownWidget<T> extends AbstractWidget {
         }
     }
     
+    //#if MC>=11904
+    //$$ @Override public void renderWidget(com.mojang.blaze3d.vertex.PoseStack stack, int mouseX, int mouseY, float delta) {
+    //$$ MCVer.stack = stack;
+    //#else
     //#if MC>=11601
     //$$ @Override public void renderButton(com.mojang.blaze3d.vertex.PoseStack stack, int mouseX, int mouseY, float delta) {
     //$$ 	MCVer.stack = stack;
     //#else
     @Override public void renderButton(int mouseX, int mouseY, float delta) {
+    //#endif
     //#endif
     	//#if MC>=11903
     //$$     int buttonWidth = (this.height);
@@ -141,11 +154,18 @@ public class DropdownWidget<T> extends AbstractWidget {
     }
 
     //#if MC>=11601
+    //#if MC>=11904
+    //$$ @Override public void render(com.mojang.blaze3d.vertex.PoseStack stack, int mouseX, int mouseY, float partial) {
+    //#else
     //$$ @Override public void renderBg(com.mojang.blaze3d.vertex.PoseStack stack, Minecraft mc, int mouseX, int mouseY) {
+    //#endif
     //$$ 	MCVer.stack = stack;
     //$$ 	if(dropdown.visible) {
-    //$$ 		dropdown.render(stack, mouseX, mouseY, 1f);    
+    		//#if MC>=11904
+    //$$ 		dropdown.render(stack, mouseX, mouseY, 1f);
+    		//#else
     //$$ 		dropdown.renderButton(stack, mouseX, mouseY, 1f);
+    		//#endif
     //$$     }
     //$$ }
     //#else
@@ -169,19 +189,36 @@ public class DropdownWidget<T> extends AbstractWidget {
         focused = null;
     }
 
+    
     @Override
+    //#if MC>=11904
+    //$$ public ComponentPath nextFocusPath(net.minecraft.client.gui.navigation.FocusNavigationEvent focusNavigationEvent) {
+    //#else
     public boolean changeFocus(boolean lookForwards) {
+    //#endif
         if(focused != null) {
+        	//#if MC>=11904
+        //$$ 	focused.nextFocusPath(focusNavigationEvent);
+        	//#else
             focused.changeFocus(lookForwards);
+          //#endif
         } else {
             this.setFocused(true);
         }
         if(focused == searchBox) {
             // searchBox -> (dropdownButton | dropdown) | prev
+        	//#if MC>=11904
+        //$$     focused = focusNavigationEvent != null ? (dropdown.visible ? dropdown : dropdownButton) : null;
+        	//#else
             focused = lookForwards ? (dropdown.visible ? dropdown : dropdownButton) : null;
+            //#endif
         } else if(focused == dropdownButton) {
             // dropdownButton -> next | searchBox
+        	//#if MC>=11904
+        //$$ 	focused = focusNavigationEvent != null ? null : searchBox;
+        	//#else
             focused = lookForwards ? null : searchBox;
+            //#endif
         } else if(focused == dropdown) {
             // dropdown -> searchBox
             focused = searchBox;
@@ -189,25 +226,45 @@ public class DropdownWidget<T> extends AbstractWidget {
         } else {
             // prev/next -> this
             // dropdown is never open at this stage
-            focused = lookForwards ? searchBox : dropdownButton;
+        	//#if MC>=11904
+        //$$ 	focused = focusNavigationEvent!=null ? searchBox : dropdownButton;
+        	//#else
+        	focused = lookForwards ? searchBox : dropdownButton;
+        	//#endif
         }
         if(focused == null) {
             modcfg_clearFocus();
+            //#if MC>=11904
+            //$$ return null;
+            //#else
             return false;
+            //#endif
         } else {
+        	//#if MC>=11904
+        //$$ 	focused.nextFocusPath(focusNavigationEvent);
+        	//#else
             focused.changeFocus(lookForwards);
             this.onFocusedChanged(true);
+            //#endif
         }
+        //#if MC>=11904
+        //$$ return super.nextFocusPath(focusNavigationEvent);
+        //#else
         return true;
+        //#endif
     }
-
+    
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         if(focused != null) {
             if(focused == searchBox && dropdown.visible) {
                 if((dropdownOpenUp && keyCode == GLFW.GLFW_KEY_UP) || (!dropdownOpenUp && keyCode == GLFW.GLFW_KEY_DOWN)) {
                     focused = dropdown;
+                    //#if MC>=11904
+                    //$$ dropdown.nextFocusPath(null);
+                    //#else
                     dropdown.changeFocus(true);
+                    //#endif
                     // the dropdown always has at least one entry at this point
                     dropdown.setSelectedIndex(0);
                     return true;
@@ -226,10 +283,18 @@ public class DropdownWidget<T> extends AbstractWidget {
                 return false;
             }
             if(focused != null) {
+            	//#if MC>=11904
+            //$$     focused.nextFocusPath(null);
+                //#else
                 focused.changeFocus(true);
+                //#endif
             }
             focused = searchBox;
+        	//#if MC>=11904
+        //$$     focused.nextFocusPath(null);
+            //#else
             focused.changeFocus(true);
+            //#endif
         }
         return searchBox.charTyped(chr, keyCode);
     }
@@ -344,7 +409,11 @@ public class DropdownWidget<T> extends AbstractWidget {
         }
 
         //#if MC>=11601
+        //#if MC>=11904
+        //$$ @Override public void renderWidget(com.mojang.blaze3d.vertex.PoseStack stack, int mouseX, int mouseY, float delta) {
+        //#else
         //$$ @Override public void renderButton(com.mojang.blaze3d.vertex.PoseStack stack, int mouseX, int mouseY, float delta) {
+        //#endif
         //$$ 	MCVer.stack = stack;
         //#else
         @Override public void renderButton(int mouseX, int mouseY, float delta) {
@@ -420,9 +489,15 @@ public class DropdownWidget<T> extends AbstractWidget {
         }
 
         @Override
+        //#if MC>=11904
+        //$$ public ComponentPath nextFocusPath(net.minecraft.client.gui.navigation.FocusNavigationEvent focusNavigationEvent) {
+        //$$ 	ComponentPath ret = super.nextFocusPath(focusNavigationEvent);
+        //$$ 	if(ret!=null && selectedIndex < 0) {
+        //#else
         public boolean changeFocus(boolean lookForwards) {
             boolean ret = super.changeFocus(lookForwards);
             if(ret && selectedIndex < 0) {
+            	//#endif
                 scrollIdx = 0;
             }
             return ret;
@@ -453,7 +528,11 @@ public class DropdownWidget<T> extends AbstractWidget {
                     return true;
                 } else if(keyCode == GLFW.GLFW_KEY_ENTER) {
                     // close drop down and 'select' current selection
+                	//#if MC>=11904
+                //$$ 	DropdownWidget.this.nextFocusPath(null);
+                	//#else
                     DropdownWidget.this.changeFocus(true);
+                    //#endif
                 }
             }
             return false;

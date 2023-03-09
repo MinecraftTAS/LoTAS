@@ -6,11 +6,12 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import de.pfannekuchen.lotas.mods.SavestateMod;
+import de.pfannekuchen.lotas.mods.SavestateMod.State;
 import net.minecraft.world.storage.SaveHandler;
 
 @Mixin(SaveHandler.class)
 /**
- * On rare occasions, savestating fails due to the level.dat being
+ * On rare occasions, savestating fails due to the level.dat being saved while saving the world creating a phantom file
  * 
  * @author Scribble
  *
@@ -18,36 +19,9 @@ import net.minecraft.world.storage.SaveHandler;
 public class MixinSaveHandler {
 	@Inject(method = "saveWorldInfoWithPlayer", at = @At(value = "INVOKE", target = "Ljava/io/File;exists()Z", ordinal = 0), cancellable = true)
 	public void cancelLevelDataCreation(CallbackInfo ci) {
-		if(SavestateMod.isLoading) {
+		if(SavestateMod.state == State.LOADSTATING) {
 			ci.cancel();
 		}
 	}
 
-//	@Shadow
-//	private File worldDirectory;
-//	
-//	@Redirect(method = "saveWorldInfoWithPlayer", at = @At(value = "INVOKE", target = "Lnet/minecraft/nbt/CompressedStreamTools;writeCompressed(Lnet/minecraft/nbt/NBTTagCompound;Ljava/io/OutputStream;)V"))
-//	public void redirect_saveWorldInfoWithPlayer(NBTTagCompound compound, OutputStream outputStream) {
-//		if (SavestateMod.isSaving) {
-//			File file = new File(this.worldDirectory, "level.dat");
-//			if (file.exists()) {
-//				file.delete();
-//			}
-//			try {
-//				outputStream = new FileOutputStream(file);
-//			} catch (FileNotFoundException e) {
-//				e.printStackTrace();
-//			}
-//		}
-//		if(!SavestateMod.isLoading) {
-//			System.out.println("Writing");
-//			try {
-//				CompressedStreamTools.writeCompressed(compound, outputStream);
-//			} catch (FileNotFoundException e) {
-//				e.printStackTrace();
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//			}
-//		}
-//	}
 }

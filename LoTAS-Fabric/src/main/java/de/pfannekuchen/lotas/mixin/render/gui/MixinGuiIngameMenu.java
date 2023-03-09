@@ -95,8 +95,13 @@ public abstract class MixinGuiIngameMenu extends Screen {
 	}
 	
 	//#if MC>=11903
+	//#if MC>=11904
+//$$ 	@Redirect(method = "createPauseMenu", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/layouts/GridLayout$RowHelper;addChild(Lnet/minecraft/client/gui/layouts/LayoutElement;I)Lnet/minecraft/client/gui/layouts/LayoutElement;"))
+//$$ 	public net.minecraft.client.gui.components.AbstractWidget redirect_createPauseMenu(net.minecraft.client.gui.layouts.GridLayout.RowHelper parent, net.minecraft.client.gui.components.AbstractWidget button, int i) {
+	//#else
 //$$ 	@Redirect(method = "createPauseMenu", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/GridWidget$RowHelper;addChild(Lnet/minecraft/client/gui/components/AbstractWidget;I)Lnet/minecraft/client/gui/components/AbstractWidget;"))
 //$$ 	public net.minecraft.client.gui.components.AbstractWidget redirect_createPauseMenu(net.minecraft.client.gui.components.GridWidget.RowHelper parent, net.minecraft.client.gui.components.AbstractWidget button, int i) {
+	//#endif
 //$$ 		parent.addChild(lotasGui.getSavestateButton());
 //$$ 		parent.addChild(lotasGui.getLoadstateButton());
 //$$ 		return parent.addChild(button, i);

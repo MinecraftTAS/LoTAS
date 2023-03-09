@@ -430,7 +430,13 @@ public class LoTASIngameGui {
 			tickrateIncreaseButton.visible = false;
 			tickrateDecreaseButton.visible = false;
 			parentScreen.setFocused(tickrateField);
+			
+			//#if MC>=11904
+//$$ 			tickrateField.setFocused(true);
+			//#else
 			tickrateField.setFocus(true);
+			//#endif
+			
 		} else {
 			tickrateField = null;
 			tickrateFail = false;
@@ -447,7 +453,11 @@ public class LoTASIngameGui {
 			savestateButton.active = false;
 			savestateButton.visible = false;
 			parentScreen.setFocused(savestateNameField);
+			//#if MC>=11904
+//$$ 			savestateNameField.setFocused(true);
+			//#else
 			savestateNameField.setFocus(true);
+			//#endif
 		} else {
 			savestateNameField = null;
 			savestateButton.active = true;

@@ -80,11 +80,17 @@ public class EntitySliderWidget extends AbstractWidget {
 		return this.name + ": " + this.getSliderValue();
 	}
 
+	//#if MC>=11904
+//$$ 	@Override
+//$$ 	public void renderWidget(com.mojang.blaze3d.vertex.PoseStack poseStack, int x, int y, float partial) {
+//$$ 		Minecraft client = Minecraft.getInstance();
+	//#else
 	//#if MC>=11601
 //$$ 	@Override protected void renderBg(com.mojang.blaze3d.vertex.PoseStack stack, Minecraft client, int mouseX, int mouseY) {
 //$$ 		MCVer.stack = stack;
 	//#else
 	@Override protected void renderBg(Minecraft client, int mouseX, int mouseY) {
+	//#endif
 	//#endif
 		MCVer.bind(client.getTextureManager(), WIDGETS_LOCATION);
 		MCVer.color4f(1.0F, 1.0F, 1.0F, 1.0F);
@@ -138,10 +144,18 @@ public class EntitySliderWidget extends AbstractWidget {
 		return true;
 	}
 
+	//#if MC>=11904
+//$$ 	@Override
+//$$ 	public int getY() {
+//$$ 		// TODO Auto-generated method stub
+//$$ 		return super.getY();
+//$$ 	}
+	//#else
 	@Override
 	protected int getYImage(boolean isHovered) {
 		return 0;
 	}
+	//#endif
 
 	/**
 	 * Sets the position of the slider and notifies the associated

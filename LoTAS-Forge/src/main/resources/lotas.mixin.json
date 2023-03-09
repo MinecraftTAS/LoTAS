@@ -18,7 +18,6 @@
 		"patches.MixinLeavesPatch",
 		"patches.MixinPatchDurabilityEnch",
 		"patches.MixinPearlPatch",
-		"patches.MixinServerPatch",
 		"patches.MixinEntityPlayerMPPatch",
 		"patches.MixinWorldProviderPatch",
 		"patches.MixinEntitySheepPatch",
