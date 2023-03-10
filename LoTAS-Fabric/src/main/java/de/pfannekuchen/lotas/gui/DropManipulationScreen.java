@@ -236,6 +236,9 @@ public class DropManipulationScreen extends Screen {
 		//#endif
 		
 		MCVer.enableTexture();
+		//#if MC>=11904
+//$$ 		MCVer.color4f(1f, 1f, 1f, 1f);
+		//#endif
 		int y = 30;
 		for (DropManipulation m : manipulations) {
 			MCVer.drawShadow(m.getName(), 32, y, 0xFFFFFF);

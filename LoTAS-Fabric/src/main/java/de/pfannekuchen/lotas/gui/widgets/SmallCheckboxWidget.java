@@ -2,8 +2,11 @@ package de.pfannekuchen.lotas.gui.widgets;
 
 import java.util.function.Consumer;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+
 import de.pfannekuchen.lotas.core.MCVer;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -13,6 +16,7 @@ import net.minecraft.util.Mth;
  * @author Pancake
  */
 public class SmallCheckboxWidget extends AbstractButton {
+	
 	//#if MC>=11903
 //$$ 	private static final ResourceLocation TEXTURE = new ResourceLocation("lotas", "gui/small_checkbox.png");
 	//#else
@@ -44,6 +48,10 @@ public class SmallCheckboxWidget extends AbstractButton {
 
 	public boolean isChecked() {
 		return this.checked;
+	}
+	
+	@Override
+	protected void renderScrollingString(PoseStack poseStack, Font font, int i, int j) {
 	}
 	
 	//#if MC>=11903
@@ -110,4 +118,5 @@ public class SmallCheckboxWidget extends AbstractButton {
 //$$ 	}
 	//#endif
 	//#endif
+	
 }

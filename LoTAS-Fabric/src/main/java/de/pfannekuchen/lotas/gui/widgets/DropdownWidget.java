@@ -9,6 +9,8 @@ import javax.annotation.Nullable;
 
 import org.lwjgl.glfw.GLFW;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+
 import de.pfannekuchen.lotas.core.MCVer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -78,7 +80,7 @@ public class DropdownWidget<T> extends AbstractWidget {
     }
     
     //#if MC>=11904
-    //$$ @Override public void renderWidget(com.mojang.blaze3d.vertex.PoseStack stack, int mouseX, int mouseY, float delta) {
+    //$$ @Override public void render(com.mojang.blaze3d.vertex.PoseStack stack, int mouseX, int mouseY, float delta) {
     //$$ MCVer.stack = stack;
     //#else
     //#if MC>=11601
@@ -155,14 +157,14 @@ public class DropdownWidget<T> extends AbstractWidget {
 
     //#if MC>=11601
     //#if MC>=11904
-    //$$ @Override public void render(com.mojang.blaze3d.vertex.PoseStack stack, int mouseX, int mouseY, float partial) {
+    //$$ @Override public void renderWidget(com.mojang.blaze3d.vertex.PoseStack stack, int mouseX, int mouseY, float partial) {
     //#else
     //$$ @Override public void renderBg(com.mojang.blaze3d.vertex.PoseStack stack, Minecraft mc, int mouseX, int mouseY) {
     //#endif
     //$$ 	MCVer.stack = stack;
     //$$ 	if(dropdown.visible) {
     		//#if MC>=11904
-    //$$ 		dropdown.render(stack, mouseX, mouseY, 1f);
+    //$$ 		dropdown.renderWidget(stack, mouseX, mouseY, 1f);
     		//#else
     //$$ 		dropdown.renderButton(stack, mouseX, mouseY, 1f);
     		//#endif
@@ -192,7 +194,7 @@ public class DropdownWidget<T> extends AbstractWidget {
     
     @Override
     //#if MC>=11904
-    //$$ public ComponentPath nextFocusPath(net.minecraft.client.gui.navigation.FocusNavigationEvent focusNavigationEvent) {
+    //$$ public net.minecraft.client.gui.ComponentPath nextFocusPath(net.minecraft.client.gui.navigation.FocusNavigationEvent focusNavigationEvent) {
     //#else
     public boolean changeFocus(boolean lookForwards) {
     //#endif
@@ -490,8 +492,8 @@ public class DropdownWidget<T> extends AbstractWidget {
 
         @Override
         //#if MC>=11904
-        //$$ public ComponentPath nextFocusPath(net.minecraft.client.gui.navigation.FocusNavigationEvent focusNavigationEvent) {
-        //$$ 	ComponentPath ret = super.nextFocusPath(focusNavigationEvent);
+        //$$ public net.minecraft.client.gui.ComponentPath nextFocusPath(net.minecraft.client.gui.navigation.FocusNavigationEvent focusNavigationEvent) {
+        //$$ 	net.minecraft.client.gui.ComponentPath ret = super.nextFocusPath(focusNavigationEvent);
         //$$ 	if(ret!=null && selectedIndex < 0) {
         //#else
         public boolean changeFocus(boolean lookForwards) {
@@ -577,6 +579,11 @@ public class DropdownWidget<T> extends AbstractWidget {
 //$$ 		}
 //#endif
 //#endif
+
+		@Override
+		public void render(PoseStack var1, int var2, int var3, float var4) {
+			
+		}
 
     }
 //#if MC>=11903

@@ -14,16 +14,24 @@ import net.minecraft.client.gui.components.SubtitleOverlay;
 @Mixin(SubtitleOverlay.class)
 public abstract class MixinTickrateChangerSubtitleOverlay {
 
-	@ModifyConstant(method = "render", constant = @Constant(longValue = 3000L))
-	public long applyTickrate(long threethousand) {
-		float multiplier = TickrateChangerMod.tickrate == 0 ? 20F / TickrateChangerMod.tickrateSaved : 20F / TickrateChangerMod.tickrate;
-		return (long) (threethousand * multiplier);
-	}
-
-	@ModifyConstant(method = "render", constant = @Constant(floatValue = 3000F))
-	public float applyTickrate2(float threethousand) {
+	//#if MC>=1.19.4
+	@ModifyConstant(method = "render", constant = @Constant(doubleValue = 3000D))
+	public double applyTickrate2(double threethousand) {
 		float multiplier = TickrateChangerMod.tickrate == 0 ? 20F / TickrateChangerMod.tickrateSaved : 20F / TickrateChangerMod.tickrate;
 		return threethousand * multiplier;
 	}
-
+	//#else
+//$$ 	@ModifyConstant(method = "render", constant = @Constant(longValue = 3000L))
+//$$ 	public long applyTickrate(long threethousand) {
+//$$ 		float multiplier = TickrateChangerMod.tickrate == 0 ? 20F / TickrateChangerMod.tickrateSaved : 20F / TickrateChangerMod.tickrate;
+//$$ 		return (long) (threethousand * multiplier);
+//$$ 	}
+//$$
+//$$
+//$$ 	@ModifyConstant(method = "render", constant = @Constant(floatValue = 3000F))
+//$$ 	public float applyTickrate2(float threethousand) {
+//$$ 		float multiplier = TickrateChangerMod.tickrate == 0 ? 20F / TickrateChangerMod.tickrateSaved : 20F / TickrateChangerMod.tickrate;
+//$$ 		return threethousand * multiplier;
+//$$ 	}
+	//#endif
 }
