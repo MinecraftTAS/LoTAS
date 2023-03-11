@@ -29,7 +29,7 @@ sourceSets {
 
 dependencies {
 	//#if MC>=11904
-//$$  	minecraft "com.mojang:minecraft:1.19.4-rc1"
+//$$  	minecraft "com.mojang:minecraft:1.19.4"
 //$$  	modImplementation "net.fabricmc:fabric-loader:0.14.14"
 	//#else
 	//#if MC>=11903

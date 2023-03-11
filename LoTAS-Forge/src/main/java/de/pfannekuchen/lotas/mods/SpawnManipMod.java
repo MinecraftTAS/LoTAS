@@ -338,6 +338,7 @@ public class SpawnManipMod {
 			}
 		}else if(dim==-1) {
 			entities.add(new EntityOptions("Blaze", new EntityBlaze(world)));
+			entities.add(new EntityOptions("Enderman", new EntityEnderman(world)));
 			entities.add(new EntityOptions("Ghast", new EntityGhast(world)));
 			entities.add(new EntityOptions("Magma Cube", new EntityMagmaCube(world)));
 			EntityLiving entity = new EntitySkeleton(world);

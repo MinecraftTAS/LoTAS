@@ -9,8 +9,6 @@ import javax.annotation.Nullable;
 
 import org.lwjgl.glfw.GLFW;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-
 import de.pfannekuchen.lotas.core.MCVer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -82,6 +80,7 @@ public class DropdownWidget<T> extends AbstractWidget {
     //#if MC>=11904
     //$$ @Override public void render(com.mojang.blaze3d.vertex.PoseStack stack, int mouseX, int mouseY, float delta) {
     //$$ MCVer.stack = stack;
+    //$$ renderWidget(stack, mouseX, mouseY, delta);
     //#else
     //#if MC>=11601
     //$$ @Override public void renderButton(com.mojang.blaze3d.vertex.PoseStack stack, int mouseX, int mouseY, float delta) {
@@ -120,6 +119,8 @@ public class DropdownWidget<T> extends AbstractWidget {
     //$$             dropdownOpenUp = true;
     //$$         }
     //$$     }
+    //$$     dropdown.setWidth(searchBoxWidth + DropdownListWidget.SCROLL_BAR_PADDING + DropdownListWidget.SCROLL_BAR_WIDTH);
+    //$$     dropdown.setHeight(dropdownHeight);
     	//#else
         int buttonWidth = (this.height);
         int searchBoxWidth = this.width - buttonWidth - PADDING_H;
@@ -579,11 +580,6 @@ public class DropdownWidget<T> extends AbstractWidget {
 //$$ 		}
 //#endif
 //#endif
-
-		@Override
-		public void render(PoseStack var1, int var2, int var3, float var4) {
-			
-		}
 
     }
 //#if MC>=11903

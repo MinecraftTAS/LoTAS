@@ -41,6 +41,7 @@
 		"render.gui.MixinGuiMainMenu",
 		"render.gui.MixinGuiSelectWorldScreen",
 		"render.gui.MixinInGameHud",
+		"render.gui.MixinDeathScreen",
 		"render.MixinOverlayEvent",
 		"render.MixinRenderEvent",
 		"render.MixinRenderShield",

@@ -2,17 +2,18 @@ plugins {
 	id 'fabric-loom' version '1.1-SNAPSHOT'
 }
 
-sourceCompatibility = JavaVersion.VERSION_17
-targetCompatibility = JavaVersion.VERSION_17
 
 apply from: '../common.gradle'
 archivesBaseName = "LoTAS1.19.4"
+
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
 
 loom {
 	accessWidenerPath = file("../../src/main/resources/lotas.accesswidener")
 }
 
 dependencies {
-	minecraft "com.mojang:minecraft:1.19.4-rc1"
+	minecraft "com.mojang:minecraft:1.19.4"
 	mappings loom.officialMojangMappings()
 }
