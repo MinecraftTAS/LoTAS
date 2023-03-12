@@ -246,6 +246,13 @@ public class SavestateMod extends Mod {
 	 * @throws IOException Filesystem Exception 
 	 */
 	private void savestate(String name) throws IOException {
+		for (ServerPlayer player : this.mcserver.getPlayerList().getPlayers()) {
+			if (!player.isAlive()) {
+				LoTAS.LOGGER.warn("Unable to create savestate because {} is not alive.", player.getName().getString());
+				return;
+			}
+		}
+		
 		// Save world
 		this.mcserver.getPlayerList().saveAll();
 		this.mcserver.saveAllChunks(false, true, false);
@@ -287,6 +294,11 @@ public class SavestateMod extends Mod {
 			LoTAS.LOGGER.warn("Trying to load a state that does not exist: " + i);
 			return;
 		}
+		
+		// Revive every player to prevent a freeze
+		for (ServerPlayer player : this.mcserver.getPlayerList().getPlayers())
+			if (!player.isAlive())
+				player.setHealth(20.0f);
 		
 		// Unload level
 		this.unloadServerLevel();
