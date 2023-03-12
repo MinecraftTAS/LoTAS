@@ -12,7 +12,8 @@
 		"events.HookPlayNetworkHandler",
 		"events.HookPlayerList",
 		"tickratechanger.MixinDedicatedServer",
-		"tickratechanger.MixinMinecraftServer"
+		"tickratechanger.MixinMinecraftServer",
+		"savestatemod.MixinMinecraftServerSM"
 	],
 	"client": [
 		"client.events.HookClientPlayNetworkHandler",
