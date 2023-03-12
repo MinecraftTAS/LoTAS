@@ -48,9 +48,11 @@ import net.minecraft.stats.ServerStatsCounter;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
-
+import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.level.chunk.storage.RegionFile;
-
+import net.minecraft.world.level.dimension.DimensionType;
+import net.minecraft.world.level.dimension.end.EndDragonFight;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.level.storage.DerivedLevelData;
 import net.minecraft.world.level.storage.LevelData;
@@ -106,7 +108,6 @@ import net.minecraft.world.level.storage.LevelData;
 
 // # 1.16.1
 //$$import net.minecraft.world.level.Level;
-//$$import net.minecraft.world.level.dimension.DimensionType;
 //$$import net.minecraft.util.DirectoryLock;
 //$$import net.minecraft.nbt.CompoundTag;
 //$$import net.minecraft.nbt.NbtOps;
@@ -118,6 +119,7 @@ import net.minecraft.world.level.storage.LevelData;
 //$$import net.minecraft.world.level.storage.WorldData;
 //$$import com.mojang.serialization.Dynamic;
 // # def
+//$$import net.minecraft.world.level.dimension.end.TheEndDimension;
 //$$import net.minecraft.world.level.storage.LevelStorageSource;
 //$$import net.minecraft.server.level.DerivedServerLevel;
 //$$import java.nio.file.StandardOpenOption;
@@ -295,6 +297,16 @@ public class SavestateMod extends Mod {
 //$$			level.globalEntities.clear();
 			// # end
 			
+			// # 1.16.1
+//$$			if (level.dragonFight != null)
+//$$				for (EnderDragon dragon : level.getEntitiesOfClass(EnderDragon.class, new AABB(-256, 0, -256, 256, 256, 256)))
+//$$					dragon.kill();
+			// # def
+//$$			if (level.dimension instanceof TheEndDimension)
+//$$				for (EnderDragon dragon : level.getEntitiesOfClass(EnderDragon.class, new AABB(-256, 0, -256, 256, 256, 256)))
+//$$					dragon.kill();
+			// # end
+			
 			// # 1.17.1
 //$$			level.entityTickList = new EntityTickList();
 //$$			
@@ -332,7 +344,6 @@ public class SavestateMod extends Mod {
 //$$				if (entity != null)
 //$$					level.despawn(entity);
 			// # end
-			
 			
 			// Remove chunk loading requests
 			distanceManager.tickets.clear();
@@ -430,6 +441,13 @@ public class SavestateMod extends Mod {
 //$$			}
 //$$			level.levelData = data;
 //$$			level.serverLevelData = data;
+//$$			
+//$$			if (level.dragonFight != null)
+				// ## 1.19.3
+//$$				level.dragonFight = new EndDragonFight(level, this.mcserver.getWorldData().worldGenOptions().seed(), this.mcserver.getWorldData().endDragonFightData());
+				// ## def
+//$$				level.dragonFight = new EndDragonFight(level, this.mcserver.getWorldData().worldGenSettings().seed(), this.mcserver.getWorldData().endDragonFightData());
+				// ## end
 //$$		}
 		// # def
 //$$		LevelData data = LevelStorageSource.getLevelData(new File(worldDir, "level.dat"), this.mcserver.getFixerUpper());
@@ -439,6 +457,9 @@ public class SavestateMod extends Mod {
 //$$				level.levelData = new DerivedLevelData(data);
 //$$			else
 //$$				level.levelData = data;
+//$$			// Load end fight
+//$$			if (level.dimension instanceof TheEndDimension)
+//$$				((TheEndDimension) level.dimension).dragonFight = new EndDragonFight((ServerLevel) level, level.getLevelData().getDimensionData(DimensionType.THE_END).getCompound("DragonFight")); 
 //$$		}
 		// # end
 		
