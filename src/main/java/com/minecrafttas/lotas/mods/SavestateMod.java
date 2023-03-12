@@ -214,12 +214,15 @@ public class SavestateMod extends Mod {
 	protected void onServerTick() {
 		// Run task
 		if (this.task != null) {
+			boolean tickAdvanceState = TickAdvance.instance.isTickadvanceEnabled();
+			TickAdvance.instance.updateTickadvanceStatus(true);
 			try {
 				this.data.loadData();
 				this.task.run();
 			} catch (IOException e) {
 				LoTAS.LOGGER.error("State task failed!", e);
 			}
+			TickAdvance.instance.updateTickadvanceStatus(tickAdvanceState);
 			this.task = null;
 		}
 	}
@@ -284,8 +287,6 @@ public class SavestateMod extends Mod {
 			LoTAS.LOGGER.warn("Trying to load a state that does not exist: " + i);
 			return;
 		}
-
-		TickAdvance.instance.updateTickadvanceStatus(true);
 		
 		// Unload level
 		this.unloadServerLevel();
