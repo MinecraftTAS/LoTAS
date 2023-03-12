@@ -669,15 +669,14 @@ public class SavestateMod extends Mod {
 //$$			// Load level data
 //$$			if (level instanceof DerivedServerLevel)
 //$$				level.levelData = new DerivedLevelData(data);
-//$$			else
+//$$			else {
 //$$				level.levelData = data;
-//$$					
+//$$				
 //$$				// Load end fight
 //$$				if (level.dimension instanceof TheEndDimension)
 //$$					((TheEndDimension) level.dimension).dragonFight = new EndDragonFight((ServerLevel) level, level.getLevelData().getDimensionData(DimensionType.THE_END).getCompound("DragonFight")); 
 //$$			}
-//$$	
-//$$	//$$ 		Files.write(sessionLockFile, sessionLock, StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.CREATE);
+//$$		}
 		// # end
 			
 	}
