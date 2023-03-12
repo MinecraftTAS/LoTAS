@@ -18,6 +18,7 @@ import java.nio.file.Path;
 // # end
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicReferenceArray;
 
 import org.apache.commons.io.FileUtils;
 
@@ -29,6 +30,8 @@ import com.minecrafttas.lotas.system.ModSystem.Mod;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.Minecraft;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.game.ClientboundChangeDifficultyPacket;
 import net.minecraft.network.protocol.game.ClientboundPlayerAbilitiesPacket;
@@ -43,14 +46,17 @@ import net.minecraft.server.level.DistanceManager;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ThreadedLevelLightEngine;
 import net.minecraft.server.level.Ticket;
 import net.minecraft.server.level.TicketType;
 import net.minecraft.server.players.PlayerList;
 import net.minecraft.stats.ServerStatsCounter;
+import net.minecraft.util.Unit;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.chunk.storage.RegionFile;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.dimension.end.EndDragonFight;
@@ -87,6 +93,8 @@ import net.minecraft.world.level.storage.LevelData;
 // ## end
 //$$import net.minecraft.world.level.entity.EntityTickList;
 //$$import net.minecraft.world.level.entity.PersistentEntitySectionManager;
+//$$import net.minecraft.world.level.lighting.BlockLightEngine;
+//$$import net.minecraft.world.level.lighting.SkyLightEngine;
 //$$import net.minecraft.world.entity.Entity.RemovalReason;
 //$$import net.minecraft.world.level.chunk.ChunkSource;
 //$$import net.minecraft.world.level.chunk.ChunkStatus;
@@ -122,6 +130,7 @@ import net.minecraft.world.level.storage.LevelData;
 //$$import net.minecraft.nbt.CompoundTag;
 //$$import net.minecraft.nbt.NbtOps;
 //$$import net.minecraft.nbt.Tag;
+//$$import net.minecraft.core.BlockPos;
 //$$import net.minecraft.core.RegistryAccess;
 //$$import net.minecraft.world.level.biome.BiomeManager;
 //$$import net.minecraft.world.level.storage.LevelStorageSource.LevelStorageAccess;
@@ -144,6 +153,14 @@ import net.minecraft.world.level.storage.LevelData;
 public class SavestateMod extends Mod {
 
 	public static SavestateMod instance;
+
+	public static SavestateState state = SavestateState.NONE;
+	
+	public enum SavestateState{
+		SAVESTATING,
+		LOADSTATING,
+		NONE;
+	}
 	
 	/**
 	 * Initializes the savestate mod
@@ -243,6 +260,13 @@ public class SavestateMod extends Mod {
 	 * @throws IOException Filesystem Exception 
 	 */
 	private void savestate(String name) throws IOException {
+		if(state!=SavestateState.NONE) {
+			System.out.println("There is already something going on");
+			return;
+		}
+		
+		state = SavestateState.SAVESTATING;
+		
 		
 		TickAdvance.instance.updateTickadvanceStatus(true);
 		// Save world
@@ -275,6 +299,8 @@ public class SavestateMod extends Mod {
 		this.data.saveData();
 		this.sendStates();
 		TickAdvance.instance.updateTickadvanceStatus(false);
+		
+		state = SavestateState.NONE;
 	}
 
 	/**
@@ -283,13 +309,26 @@ public class SavestateMod extends Mod {
 	 * @throws IOException Filesystem Excepion
 	 */
 	private void loadstate(int i) throws IOException {
+		if(state!=SavestateState.NONE) {
+			System.out.println("There is already something going on");
+			return;
+		}
+		
 		if (!this.data.isValid(i)) {
 			LoTAS.LOGGER.warn("Trying to load a state that does not exist: " + i);
 			return;
 		}
 		
+		state = SavestateState.LOADSTATING;
+		
 		// Enable tickrate 0
 		TickAdvance.instance.updateTickadvanceStatus(true);
+
+//		((AccessorBlockableEventLoop) mcserver).runRunAllTasks();
+		
+		// Save world
+//		this.mcserver.getPlayerList().saveAll();
+//		this.mcserver.saveAllChunks(false, false, false);
 		
 		/*
 		 * Fully unload server level
@@ -331,10 +370,16 @@ public class SavestateMod extends Mod {
 //$$		loadWorldData(worldDir);
 		//#end
 		
+		loadWorld();
+		
 		loadPlayers();
+		
+		mcserver.runAllTasks();
 		
 		// Disable tickrate 0
 		TickAdvance.instance.updateTickadvanceStatus(false);
+		
+		state = SavestateState.NONE;
 	}
 	
 	private void unloadServerLevel() throws IOException {
@@ -412,6 +457,11 @@ public class SavestateMod extends Mod {
 			map.entitiesInLevel.clear();
 			map.processUnloads(() -> true);
 			
+			//#1.17.1
+//$$			chunkCache.getLightEngine().blockEngine=null;
+//$$			chunkCache.getLightEngine().skyEngine=null;
+			//#end
+			
 			// # 1.15.2
 //$$
 			// # def
@@ -487,6 +537,18 @@ public class SavestateMod extends Mod {
 		// # end
 	}
 	
+	private void loadWorld() {
+		for (ServerLevel level : this.mcserver.getAllLevels()) {
+			ServerChunkCache chunkCache = level.getChunkSource();
+			BlockPos blockPos = level.getSharedSpawnPos();
+			//#1.17.1
+//$$			chunkCache.getLightEngine().blockEngine = new BlockLightEngine(chunkCache);
+//$$			chunkCache.getLightEngine().skyEngine = level.dimensionType().hasSkyLight() ? new SkyLightEngine(chunkCache) : null;
+			//#end
+			chunkCache.addRegionTicket(TicketType.START,new ChunkPos(blockPos), 11, Unit.INSTANCE);
+		}
+	}
+	
 	// # 1.18.2
 //$$	@SuppressWarnings("deprecation")
 	// # end
@@ -526,11 +588,14 @@ public class SavestateMod extends Mod {
 	        player.moveTo(pos.x(), pos.y(), pos.z(), player.yRot, player.xRot);
 	        player.setLevel(newLevel);
 	        newLevel.addDuringPortalTeleport(player); // FIXME: player not added 1.17+
-	        ChunkPos chunkPos = player.chunkPosition();
-	        @SuppressWarnings({ "unchecked", "rawtypes" })
-			Ticket<?> ticket = new Ticket(TicketType.PLAYER, 33 + ChunkStatus.getDistance(ChunkStatus.FULL) - 2, chunkPos);
-	        ServerChunkCache chunkSource = newLevel.getChunkSource();
-	        chunkSource.distanceManager.addTicket(chunkPos.toLong(), ticket);
+	        
+	        //#1.17.1
+//$$	        ChunkPos chunkPos = player.chunkPosition();
+//$$	        @SuppressWarnings({ "unchecked", "rawtypes" })
+//$$			Ticket<?> ticket = new Ticket(TicketType.PLAYER, 33 + ChunkStatus.getDistance(ChunkStatus.FULL) - 2, chunkPos);
+//$$	        ServerChunkCache chunkSource = newLevel.getChunkSource();
+//$$	        chunkSource.distanceManager.addTicket(chunkPos.toLong(), ticket);
+	        //#end
 	        
 	        // Update client level
 	        player.connection.teleport(pos.x(), pos.y(), pos.z(), player.yRot, player.xRot);
