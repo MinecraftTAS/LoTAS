@@ -18,7 +18,6 @@ import java.nio.file.Path;
 // # end
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicReferenceArray;
 
 import org.apache.commons.io.FileUtils;
 
@@ -30,8 +29,6 @@ import com.minecrafttas.lotas.system.ModSystem.Mod;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.Minecraft;
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.game.ClientboundChangeDifficultyPacket;
 import net.minecraft.network.protocol.game.ClientboundPlayerAbilitiesPacket;
@@ -46,17 +43,12 @@ import net.minecraft.server.level.DistanceManager;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.level.ThreadedLevelLightEngine;
-import net.minecraft.server.level.Ticket;
-import net.minecraft.server.level.TicketType;
 import net.minecraft.server.players.PlayerList;
 import net.minecraft.stats.ServerStatsCounter;
-import net.minecraft.util.Unit;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
-import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.chunk.storage.RegionFile;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.dimension.end.EndDragonFight;
@@ -64,6 +56,8 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.level.storage.DerivedLevelData;
 import net.minecraft.world.level.storage.LevelData;
+import net.minecraft.world.level.lighting.BlockLightEngine;
+import net.minecraft.world.level.lighting.SkyLightEngine;
 
 // # 1.19.3
 //$$import net.minecraft.server.RegistryLayer;
@@ -91,14 +85,15 @@ import net.minecraft.world.level.storage.LevelData;
 // ## 1.19.3
 //$$import net.minecraft.world.flag.FeatureFlags;
 // ## end
+//$$import net.minecraft.core.BlockPos;
+//$$import net.minecraft.world.level.ChunkPos;
+//$$import net.minecraft.util.Unit;
+//$$import net.minecraft.server.level.TicketType;
+//$$import net.minecraft.server.level.Ticket;
 //$$import net.minecraft.world.level.entity.EntityTickList;
 //$$import net.minecraft.world.level.entity.PersistentEntitySectionManager;
-//$$import net.minecraft.world.level.lighting.BlockLightEngine;
-//$$import net.minecraft.world.level.lighting.SkyLightEngine;
 //$$import net.minecraft.world.entity.Entity.RemovalReason;
-//$$import net.minecraft.world.level.chunk.ChunkSource;
 //$$import net.minecraft.world.level.chunk.ChunkStatus;
-//$$import net.minecraft.world.level.chunk.LevelChunk;
 //$$import net.minecraft.world.level.chunk.storage.EntityStorage;
 // # end
 
@@ -108,10 +103,8 @@ import net.minecraft.world.level.storage.LevelData;
 //$$import net.minecraft.resources.RegistryReadOps;
 //$$import net.minecraft.server.ServerResources;
 //$$import java.util.concurrent.CompletableFuture;
-//$$import java.util.concurrent.atomic.AtomicReferenceArray;
 //$$
 //$$import net.minecraft.Util;
-//$$import net.minecraft.client.Minecraft;
 //$$import net.minecraft.commands.Commands;
 //$$import net.minecraft.server.MinecraftServer;
 //$$import net.minecraft.server.packs.repository.FolderRepositorySource;
@@ -119,18 +112,15 @@ import net.minecraft.world.level.storage.LevelData;
 //$$import net.minecraft.server.packs.repository.ServerPacksSource;
 //$$import net.minecraft.server.packs.repository.PackSource;
 //$$import net.minecraft.world.level.storage.LevelResource;
-//$$import net.minecraft.world.level.ChunkPos;
 //$$import net.minecraft.world.level.DataPackConfig;
 // # end
 
 // # 1.16.1
 //$$import net.minecraft.world.level.Level;
 //$$import net.minecraft.util.DirectoryLock;
-//$$import net.minecraft.util.Unit;
 //$$import net.minecraft.nbt.CompoundTag;
 //$$import net.minecraft.nbt.NbtOps;
 //$$import net.minecraft.nbt.Tag;
-//$$import net.minecraft.core.BlockPos;
 //$$import net.minecraft.core.RegistryAccess;
 //$$import net.minecraft.world.level.biome.BiomeManager;
 //$$import net.minecraft.world.level.storage.LevelStorageSource.LevelStorageAccess;
@@ -139,6 +129,7 @@ import net.minecraft.world.level.storage.LevelData;
 //$$
 //$$import com.mojang.serialization.Dynamic;
 // # def
+//$$import net.minecraft.world.level.dimension.NormalDimension;
 //$$import net.minecraft.world.level.dimension.end.TheEndDimension;
 //$$import net.minecraft.world.level.storage.LevelStorageSource;
 //$$import net.minecraft.server.level.DerivedServerLevel;
@@ -153,14 +144,6 @@ import net.minecraft.world.level.storage.LevelData;
 public class SavestateMod extends Mod {
 
 	public static SavestateMod instance;
-
-	public static SavestateState state = SavestateState.NONE;
-	
-	public enum SavestateState{
-		SAVESTATING,
-		LOADSTATING,
-		NONE;
-	}
 	
 	/**
 	 * Initializes the savestate mod
@@ -260,15 +243,6 @@ public class SavestateMod extends Mod {
 	 * @throws IOException Filesystem Exception 
 	 */
 	private void savestate(String name) throws IOException {
-		if(state!=SavestateState.NONE) {
-			System.out.println("There is already something going on");
-			return;
-		}
-		
-		state = SavestateState.SAVESTATING;
-		
-		
-		TickAdvance.instance.updateTickadvanceStatus(true);
 		// Save world
 		this.mcserver.getPlayerList().saveAll();
 		this.mcserver.saveAllChunks(false, true, false);
@@ -286,7 +260,7 @@ public class SavestateMod extends Mod {
 		// Make state
 		int latestStateIndex = this.data.getStateCount() - 1;
 		int index = latestStateIndex == -1 ? 0 : this.data.getState(latestStateIndex).getIndex() + 1;
-		File stateDir = new File(data.getWorldSavestateDir(), index + "");
+		File stateDir = new File(this.data.getWorldSavestateDir(), index + "");
 		FileUtils.copyDirectory(this.data.getWorldDir(), stateDir);
 		this.data.addState(new State(name == null ? "Untitled State" : name, Instant.now().getEpochSecond(), index));
 		
@@ -298,9 +272,6 @@ public class SavestateMod extends Mod {
 		// Save data and send to client
 		this.data.saveData();
 		this.sendStates();
-		TickAdvance.instance.updateTickadvanceStatus(false);
-		
-		state = SavestateState.NONE;
 	}
 
 	/**
@@ -309,45 +280,23 @@ public class SavestateMod extends Mod {
 	 * @throws IOException Filesystem Excepion
 	 */
 	private void loadstate(int i) throws IOException {
-		if(state!=SavestateState.NONE) {
-			System.out.println("There is already something going on");
-			return;
-		}
-		
 		if (!this.data.isValid(i)) {
 			LoTAS.LOGGER.warn("Trying to load a state that does not exist: " + i);
 			return;
 		}
-		
-		state = SavestateState.LOADSTATING;
-		
-		// Enable tickrate 0
+
 		TickAdvance.instance.updateTickadvanceStatus(true);
-
-//		((AccessorBlockableEventLoop) mcserver).runRunAllTasks();
 		
-		// Save world
-//		this.mcserver.getPlayerList().saveAll();
-//		this.mcserver.saveAllChunks(false, false, false);
-		
-		/*
-		 * Fully unload server level
-		 */
-		
-		unloadServerLevel();
-		
-		/*
-		 * Load state
-		 */
-
-		File worldDir = this.data.getWorldDir();
+		// Unload level
+		this.unloadServerLevel();
 		
 		// Unlock session.lock
-		//#1.16.1
-//$$		Path levelPath = unlockSessionLock();
-		//#def
-//$$		byte[] sessionLock = unlockSessionLock(worldDir);
-		//#end
+		File worldDir = this.data.getWorldDir();
+		// # 1.16.1
+//$$		Path levelPath = this.unlockSessionLock();
+		// # def
+//$$		byte[] sessionLock = this.unlockSessionLock(worldDir);
+		// # end
 		
 		// Delete world
 		FileUtils.deleteDirectory(worldDir);
@@ -357,29 +306,16 @@ public class SavestateMod extends Mod {
 		FileUtils.copyDirectory(worldSavestateDir, this.data.getWorldDir());
 
 		// Lock session.lock
-		//#1.16.1
-//$$		lockSessionLock(levelPath);
-		//#def
-//$$		lockSessionLock(sessionLock, worldDir);
-		//#end
-		
-		// Load world data
-		//#1.16.1
-//$$		loadWorldData();
-		//#def
-//$$		loadWorldData(worldDir);
-		//#end
-		
-		loadWorld();
-		
-		loadPlayers();
-		
-		mcserver.runAllTasks();
-		
-		// Disable tickrate 0
-		TickAdvance.instance.updateTickadvanceStatus(false);
-		
-		state = SavestateState.NONE;
+		// # 1.16.1
+//$$		this.lockSessionLock(levelPath);
+		// # def
+//$$		this.lockSessionLock(sessionLock, worldDir);
+		// # end
+
+		// Reload level
+		this.loadWorldData(worldDir);
+		this.loadWorld();
+		this.loadPlayers();
 	}
 	
 	private void unloadServerLevel() throws IOException {
@@ -457,10 +393,8 @@ public class SavestateMod extends Mod {
 			map.entitiesInLevel.clear();
 			map.processUnloads(() -> true);
 			
-			//#1.17.1
-//$$			chunkCache.getLightEngine().blockEngine=null;
-//$$			chunkCache.getLightEngine().skyEngine=null;
-			//#end
+			chunkCache.getLightEngine().blockEngine = null;
+			chunkCache.getLightEngine().skyEngine = null;
 			
 			// # 1.15.2
 //$$
@@ -471,13 +405,6 @@ public class SavestateMod extends Mod {
 			
 			// Clear chunk cache
 			chunkCache.clearCache();
-			
-            // Clear cache on the client
-//    		FriendlyByteBuf buf2 = new FriendlyByteBuf(Unpooled.buffer());
-//    		buf2.writeInt(2);
-//    		for (ServerPlayer player : mcserver.getPlayerList().getPlayers()) {
-//    			this.sendPacketToClient(player, buf2);
-//			}
 
 			// Close file
 			// # 1.15.2
@@ -504,11 +431,11 @@ public class SavestateMod extends Mod {
 		}
 	}
 	
-	//#1.16.1
+	// # 1.16.1
 //$$	private Path unlockSessionLock() throws IOException {
-	//#def
+	// # def
 //$$	private byte[] unlockSessionLock(File worldDir) throws IOException {
-	//#end
+	// # end
 		// # 1.16.1
 		// ## 1.19.3
 //$$		Path levelPath = this.mcserver.storageSource.getLevelPath(LevelResource.ROOT);
@@ -519,16 +446,15 @@ public class SavestateMod extends Mod {
 //$$		return levelPath;
 		// # def
 //$$		Path sessionLockFile = new File(worldDir, "session.lock").toPath();
-//$$		byte[] sessionLock = Files.readAllBytes(sessionLockFile);
-//$$		return sessionLock;
+//$$		return Files.readAllBytes(sessionLockFile);
 		// # end
 	}
 	
-	//#1.16.1
+	// # 1.16.1
 //$$	private void lockSessionLock(Path levelPath) throws IOException {
-	//#def
+	// # def
 //$$	private void lockSessionLock(byte[] sessionLock, File worldDir) throws IOException {
-	//#end
+	// # end
 		// # 1.16.1
 //$$		this.mcserver.storageSource.lock = DirectoryLock.create(levelPath);
 		// # def
@@ -540,12 +466,18 @@ public class SavestateMod extends Mod {
 	private void loadWorld() {
 		for (ServerLevel level : this.mcserver.getAllLevels()) {
 			ServerChunkCache chunkCache = level.getChunkSource();
-			BlockPos blockPos = level.getSharedSpawnPos();
-			//#1.17.1
+			// # 1.16.1
 //$$			chunkCache.getLightEngine().blockEngine = new BlockLightEngine(chunkCache);
 //$$			chunkCache.getLightEngine().skyEngine = level.dimensionType().hasSkyLight() ? new SkyLightEngine(chunkCache) : null;
-			//#end
-			chunkCache.addRegionTicket(TicketType.START,new ChunkPos(blockPos), 11, Unit.INSTANCE);
+			// # def
+//$$			chunkCache.getLightEngine().blockEngine = new BlockLightEngine(chunkCache);
+//$$			chunkCache.getLightEngine().skyEngine = level.dimension instanceof NormalDimension ? new SkyLightEngine(chunkCache) : null;
+			// # end
+			
+			// # 1.17.1
+//$$			BlockPos blockPos = level.getSharedSpawnPos();
+//$$			chunkCache.addRegionTicket(TicketType.START,new ChunkPos(blockPos), 11, Unit.INSTANCE);
+			// # end
 		}
 	}
 	
@@ -589,13 +521,13 @@ public class SavestateMod extends Mod {
 	        player.setLevel(newLevel);
 	        newLevel.addDuringPortalTeleport(player); // FIXME: player not added 1.17+
 	        
-	        //#1.17.1
+	        // # 1.17.1
 //$$	        ChunkPos chunkPos = player.chunkPosition();
 //$$	        @SuppressWarnings({ "unchecked", "rawtypes" })
 //$$			Ticket<?> ticket = new Ticket(TicketType.PLAYER, 33 + ChunkStatus.getDistance(ChunkStatus.FULL) - 2, chunkPos);
 //$$	        ServerChunkCache chunkSource = newLevel.getChunkSource();
 //$$	        chunkSource.distanceManager.addTicket(chunkPos.toLong(), ticket);
-	        //#end
+	        // # end
 	        
 	        // Update client level
 	        player.connection.teleport(pos.x(), pos.y(), pos.z(), player.yRot, player.xRot);
@@ -638,17 +570,11 @@ public class SavestateMod extends Mod {
 		}
 	}
 
-	//#1.16.1
-//$$	private void loadWorldData() throws IOException {
-	//#def
-//$$	private void loadWorldData(File worldDir) {
-	//#end
+	private void loadWorldData(File worldDir) throws IOException {
 		// # 1.16.1
 //$$		WorldData worldData = this.loadWorldData(this.mcserver.storageSource);
 //$$		this.mcserver.worldData = worldData;
-//$$		
 //$$		for (ServerLevel level : this.mcserver.getAllLevels()) {
-//$$			
 //$$			ServerLevelData data = worldData.overworldData();
 //$$			if (level.dimension() != Level.OVERWORLD) {
 //$$				data = new DerivedLevelData(worldData, data);
@@ -667,15 +593,15 @@ public class SavestateMod extends Mod {
 //$$		LevelData data = LevelStorageSource.getLevelData(new File(worldDir, "level.dat"), this.mcserver.getFixerUpper());
 //$$		for (ServerLevel level : this.mcserver.getAllLevels()) {
 //$$			// Load level data
-//$$			if (level instanceof DerivedServerLevel)
+//$$			if (level instanceof DerivedServerLevel) {
 //$$				level.levelData = new DerivedLevelData(data);
-//$$			else {
+//$$			} else {
 //$$				level.levelData = data;
-//$$				
-//$$				// Load end fight
-//$$				if (level.dimension instanceof TheEndDimension)
-//$$					((TheEndDimension) level.dimension).dragonFight = new EndDragonFight((ServerLevel) level, level.getLevelData().getDimensionData(DimensionType.THE_END).getCompound("DragonFight")); 
 //$$			}
+//$$
+//$$			// Load end fight
+//$$			if (level.dimension instanceof TheEndDimension)
+//$$				((TheEndDimension) level.dimension).dragonFight = new EndDragonFight(level, level.getLevelData().getDimensionData(DimensionType.THE_END).getCompound("DragonFight")); 
 //$$		}
 		// # end
 			
@@ -743,7 +669,7 @@ public class SavestateMod extends Mod {
 	// # end
 	
 	
-	//#1.19.3
+	// # 1.19.3
 //$$    private static WorldLoader.InitConfig loadOrCreateConfig() throws IOException {
 //$$    	Path path = Paths.get("server.properties", new String[0]);
 //$$        DedicatedServerSettings dedicatedServerSettings = new DedicatedServerSettings(path);
@@ -751,7 +677,6 @@ public class SavestateMod extends Mod {
 //$$        
 //$$        File file = new File(".");
 //$$        String string = dedicatedServerSettings.getProperties().levelName;
-//$$        
 //$$        
 //$$        LevelStorageSource levelStorageSource = LevelStorageSource.createDefault(file.toPath());
 //$$        LevelStorageSource.LevelStorageAccess levelStorageAccess = levelStorageSource.createAccess(string);
@@ -772,7 +697,7 @@ public class SavestateMod extends Mod {
 //$$        WorldLoader.PackConfig packConfig = new WorldLoader.PackConfig(packRepository, worldDataConfiguration2, false, bl2);
 //$$        return new WorldLoader.InitConfig(packConfig, Commands.CommandSelection.DEDICATED, dedicatedServerProperties.functionPermissionLevel);
 //$$    }
-    //#end
+    // # end
 	
 	/**
 	 * Deletes a state of the world
@@ -814,9 +739,6 @@ public class SavestateMod extends Mod {
 			case 1: // Load states
 				this.data.deserializeData(buf.readByteArray());
 				break;
-			case 2:
-//				unloadClient();
-				break;
 		}
 	}
 	
@@ -839,14 +761,6 @@ public class SavestateMod extends Mod {
 	protected void onServerLoad() {
 		this.data.onServerInitialize(this.mcserver);
 	}
-	
-//	@Environment(EnvType.CLIENT)
-//	private void unloadClient() {
-//		AtomicReferenceArray<LevelChunk> chunks = Minecraft.getInstance().level.chunkSource.storage.chunks;
-//		for(int i = 0; i < chunks.length(); i++) {
-//			chunks.set(i, null);
-//		}
-//	}
 	
 	public interface Task {
 		public void run() throws IOException;
