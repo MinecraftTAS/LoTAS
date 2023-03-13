@@ -53,9 +53,9 @@ public class NetherMobDropManipulation extends DropManipulationScreen.DropManipu
 		if (entity instanceof WitherSkeleton && optimizeWitherskeleton.isChecked())
 			return ImmutableList.of(new ItemStack(Items.COAL, 1+lootingBonus), new ItemStack(Items.BONE, 2+lootingBonus), new ItemStack(Items.WITHER_SKELETON_SKULL));
 		//#if MC>=11600
-//$$ 		if (entity instanceof net.minecraft.world.entity.monster.ZombifiedPiglin && optimizePigman.isChecked()) if (!((net.minecraft.world.entity.monster.ZombifiedPiglin) entity).isBaby()) return ImmutableList.of(new ItemStack(Items.ROTTEN_FLESH, 2+lootingBonus), new ItemStack(Items.GOLD_NUGGET, 1+lootingBonus), new ItemStack(Items.GOLD_INGOT, 1+lootingBonus));
+//$$ 		if (entity instanceof net.minecraft.world.entity.monster.ZombifiedPiglin && optimizePigman.isChecked()) if (!((net.minecraft.world.entity.monster.ZombifiedPiglin) entity).isBaby()) return ImmutableList.of(new ItemStack(Items.ROTTEN_FLESH, 2+lootingBonus), new ItemStack(Items.GOLD_NUGGET, 1+lootingBonus), new ItemStack(Items.GOLD_INGOT, 1));
 		//#else
-		if (entity instanceof net.minecraft.world.entity.monster.PigZombie && optimizePigman.isChecked()) if (!((net.minecraft.world.entity.monster.PigZombie) entity).isBaby()) return ImmutableList.of(new ItemStack(Items.ROTTEN_FLESH, 2+lootingBonus), new ItemStack(Items.GOLD_NUGGET, 1+lootingBonus), new ItemStack(Items.GOLD_INGOT, 1+lootingBonus));
+		if (entity instanceof net.minecraft.world.entity.monster.PigZombie && optimizePigman.isChecked()) if (!((net.minecraft.world.entity.monster.PigZombie) entity).isBaby()) return ImmutableList.of(new ItemStack(Items.ROTTEN_FLESH, 2+lootingBonus), new ItemStack(Items.GOLD_NUGGET, 1+lootingBonus), new ItemStack(Items.GOLD_INGOT, 1));
 		//#endif
 		if (entity instanceof MagmaCube && optimizeMagmaCube.isChecked())
 			if (((MagmaCube) entity).getSize() != 1)

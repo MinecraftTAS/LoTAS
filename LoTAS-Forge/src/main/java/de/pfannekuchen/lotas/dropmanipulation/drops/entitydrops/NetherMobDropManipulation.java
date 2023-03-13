@@ -65,7 +65,7 @@ public class NetherMobDropManipulation extends GuiDropChanceManipulation.DropMan
         //$$ 	}
         //$$ }
         //#endif
-        if (entity instanceof EntityPigZombie && optimizePigman.isChecked()) if (!((EntityPigZombie) entity).isChild()) return ImmutableList.of(new ItemStack(MCVer.getItem("ROTTEN_FLESH"), 2 + lootingValue), new ItemStack(MCVer.getItem("GOLD_NUGGET"), 1 + lootingValue), new ItemStack(MCVer.getItem("GOLD_INGOT"), 1 + lootingValue));
+        if (entity instanceof EntityPigZombie && optimizePigman.isChecked()) if (!((EntityPigZombie) entity).isChild()) return ImmutableList.of(new ItemStack(MCVer.getItem("ROTTEN_FLESH"), 2 + lootingValue), new ItemStack(MCVer.getItem("GOLD_NUGGET"), 1 + lootingValue), new ItemStack(MCVer.getItem("GOLD_INGOT"), 1));
         if (entity instanceof EntityMagmaCube && optimizeMagmaCube.isChecked()) if (((EntityMagmaCube) entity).getSlimeSize() != 1) return ImmutableList.of(new ItemStack(MCVer.getItem("MAGMA_CREAM"), 1 + lootingValue));
 
         return ImmutableList.of();
