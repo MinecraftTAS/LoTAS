@@ -35,9 +35,13 @@ jobs:
       with:
         name: LoTAS
         path: build/collect/*.jar
-    - name: Uploads to discord
+    - name: Zip artifacts
+      uses: montudor/action-zip@v1
+      with:
+        args: zip LoTAS.zip build/libs/*.jar
+    - name: Upload to discord
       uses: sinshutu/upload-to-discord@master
       env:
         DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
       with:
-        args: build/collect/*.jar
+        args: LoTAS.zip
