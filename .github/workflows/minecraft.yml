@@ -1,0 +1,30 @@
+name: Compile Fabric
+run-name: Compile LoTAS for all Minecraft Versions
+
+on:
+  push:
+    branches: [ "dev-3.0.0", "workflow"]
+
+permissions:
+  contents: read
+
+jobs:
+  fabric:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v3
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+    - name: Build with Gradle
+      uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
+      with:
+        arguments: buildCi
+    - name: Upload Build Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: LoTAS
+        path: build/collect/
