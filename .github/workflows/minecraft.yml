@@ -6,7 +6,7 @@ on:
     branches: [ "dev-3.0.0", "workflow"]
 
 permissions:
-  contents: read
+  contents: [read, write]
 
 jobs:
   fabric:
@@ -19,18 +19,25 @@ jobs:
       with:
         java-version: '17'
         distribution: 'temurin'
+        cache: gradle
     - name: Prepare build with Gradle
       uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
       with:
-        arguments: prepBase
+        arguments: prepBase --no-daemon
         gradle-version: 8.0.2
     - name: Build with Gradle
       uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
       with:
-        arguments: buildCi
+        arguments: buildCi --no-daemon
         gradle-version: 8.0.2
     - name: Upload Build Artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: LoTAS
-        path: build/collect/
+        path: build/collect/*.jar
+    - name: Uploads to discord
+      uses: sinshutu/upload-to-discord@master
+      env:
+        DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+      with:
+        args: build/collect/*.jar
