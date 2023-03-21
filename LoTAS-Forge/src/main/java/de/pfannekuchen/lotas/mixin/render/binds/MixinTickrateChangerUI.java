@@ -6,16 +6,21 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 import de.pfannekuchen.lotas.core.MCVer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.init.MobEffects;
+import net.minecraft.potion.Potion;
 import net.minecraftforge.client.GuiIngameForge;
 
 @Mixin(GuiIngameForge.class)
 public class MixinTickrateChangerUI {
 	
-	@Redirect(method="renderFood", at=@At(value="INVOKE", target="Lnet/minecraftforge/client/GuiIngameForge;drawTexturedModalRect(IIIIII)V", ordinal = 0), remap = false)
+	@Redirect(method="renderFood", at=@At(value="INVOKE", target="Lnet/minecraftforge/client/GuiIngameForge;drawTexturedModalRect(IIIIII)V", ordinal = 0))
 	public void redoRegistryAccess(GuiIngameForge gui, int x, int y, int textureX, int textureY, int width, int height) {
 		int color = 0x000000;
-		if (Minecraft.getMinecraft().player.isPotionActive(MobEffects.HUNGER)) {
+		//#if MC>10809
+		if (MCVer.player(Minecraft.getMinecraft()).isPotionActive(net.minecraft.init.MobEffects.HUNGER)) {
+		//#else
+//$$ 		if (MCVer.player(Minecraft.getMinecraft()).isPotionActive(Potion.hunger)) {
+		//#endif
+			
 			color = 0x12410b;
 		}
 		int mask = 0xFF000000;
