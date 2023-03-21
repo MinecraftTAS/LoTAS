@@ -38,7 +38,7 @@ jobs:
     - name: Zip artifacts
       uses: montudor/action-zip@v1
       with:
-        args: zip LoTAS.zip build/libs/*.jar
+        args: zip -r LoTAS.zip build/libs/*
     - name: Upload to discord
       uses: sinshutu/upload-to-discord@master
       env:
