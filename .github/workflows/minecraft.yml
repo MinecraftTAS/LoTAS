@@ -23,6 +23,7 @@ jobs:
       uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
       with:
         arguments: buildCi
+        gradle-version: 8.0.2
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v2
       with:
