@@ -17,16 +17,19 @@ jobs:
       with:
         java-version: '17'
         distribution: 'temurin'
+        cache: gradle
     - name: Prepare build with Gradle
-      uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
+      uses: gradle/gradle-build-action@v2
       with:
         arguments: prepBase --no-daemon
         gradle-version: 8.0.2
+        cache-disabled: true
     - name: Build with Gradle
-      uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
+      uses: gradle/gradle-build-action@v2
       with:
         arguments: buildCi --no-daemon
         gradle-version: 8.0.2
+        cache-disabled: true
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v3
       with:
