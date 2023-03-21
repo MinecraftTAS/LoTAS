@@ -5,8 +5,7 @@ on:
   push:
     branches: [ "dev-3.0.0", "workflow"]
 
-permissions:
-  contents: read|write
+permissions: read-all|write-all
 
 jobs:
   fabric:
