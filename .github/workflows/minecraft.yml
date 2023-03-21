@@ -38,7 +38,7 @@ jobs:
     - name: Install zip
       uses: montudor/action-zip@v1
     - name: Zip LoTAS
-      run: zip -r LoTAS.zip collect/*
+      run: zip -r -j LoTAS.zip collect/*
       working-directory: build/
     - name: Upload to discord
       uses: sinshutu/upload-to-discord@master
