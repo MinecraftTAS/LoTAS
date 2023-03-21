@@ -18,6 +18,7 @@
 		"client.events.HookClientPlayNetworkHandler",
 		"client.events.HookMinecraft",
 		"client.events.HookOptions",
+		"client.tickratechanger.MixinGui",
 		"client.tickratechanger.MixinItemRenderer",
 		"client.tickratechanger.MixinLevelRenderer",
 		"client.tickratechanger.MixinSoundEngine",
