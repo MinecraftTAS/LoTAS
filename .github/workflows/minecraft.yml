@@ -5,10 +5,9 @@ on:
   push:
     branches: [ "dev-3.0.0", "workflow"]
 
-permissions: read-all|write-all
-
 jobs:
   fabric:
+    permissions: read-all|write-all
     runs-on: ubuntu-latest
     steps:
     - name: Check out repository
