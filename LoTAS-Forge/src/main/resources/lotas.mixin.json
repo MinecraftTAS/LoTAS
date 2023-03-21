@@ -45,6 +45,7 @@
 		"render.binds.MixinTickrateChangerAchievement",
 		"render.binds.MixinTickrateChangerWorldborder",
 		"render.binds.MixinTickrateChangerSubtitle",
+		"render.binds.MixinTickrateChangerUI",
 		"render.binds.MixinSoundManager",
 		"render.MixinShieldRenderer",
 		"render.gui.MixinInGameHud",
