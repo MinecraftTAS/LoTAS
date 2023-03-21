@@ -161,10 +161,14 @@ public class BarteringDropManipulation extends DropManipulationScreen.DropManipu
 			MCVer.pushMatrix(null);
 			//#endif
 			MCVer.render(elementwidgets, mouseX, mouseY, delta);
+			//#if MC>=11904
+//$$ 			elementwidgets.render(MCVer.stack, mouseX, mouseY, delta);
+			//#else
 			//#if MC>=11601
 //$$ 			elementwidgets.renderBg(MCVer.stack, Minecraft.getInstance(), mouseX, mouseY);
 			//#else
 			elementwidgets.renderBg(Minecraft.getInstance(), mouseX, mouseY);
+			//#endif
 			//#endif
 			//#if MC>=11700
 //$$ 			MCVer.popMatrix(MCVer.stack);

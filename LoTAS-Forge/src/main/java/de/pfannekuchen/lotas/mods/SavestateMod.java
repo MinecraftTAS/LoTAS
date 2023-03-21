@@ -16,6 +16,7 @@ import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.core.utils.EventUtils.Timer;
 import de.pfannekuchen.lotas.mixin.accessors.AccessorAnvilChunkLoader;
 import de.pfannekuchen.lotas.mixin.render.gui.MixinGuiIngameMenu;
+import de.pfannekuchen.lotas.mods.SavestateMod.State;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.server.MinecraftServer;
@@ -48,9 +49,13 @@ public class SavestateMod {
 	public static long timeTitle;
 
 	/** Turns off rendering to fake loadless savestates */
-	public static boolean isLoading;
+	public static State state=State.NONE;
 	
-	public static boolean isSaving;
+	public enum State {
+		SAVESTATING,
+		LOADSTATING,
+		NONE;
+	}
 
 	/**
 	 * Returns the motion of the player, and the current time of the timer as a string
@@ -66,12 +71,15 @@ public class SavestateMod {
 	 * @throws IOException Throws when the World was locked
 	 */
 	public static void savestate(String name) {
-		final String data = generateSavestateFile();
-		final Minecraft mc = Minecraft.getMinecraft();
+		if(state == State.SAVESTATING) {
+			return;
+		}
+		String data = generateSavestateFile();
+		Minecraft mc = Minecraft.getMinecraft();
 		
-		isSaving = true;
+		state = State.SAVESTATING;
 
-		final MinecraftServer server = mc.getIntegratedServer();
+		MinecraftServer server = mc.getIntegratedServer();
 		
 		float tickratesaved=TickrateChangerMod.tickrateServer;
 		TickrateChangerMod.updateTickrate(20);
@@ -143,7 +151,7 @@ public class SavestateMod {
 		// show the label, that the savestates is done.
 		showSavestateDone = true;
 		timeTitle = System.currentTimeMillis();
-		isSaving = false;
+		state = State.NONE;
 		System.gc();
 		
 		TickrateChangerMod.updateTickrate(tickratesaved);
@@ -154,6 +162,9 @@ public class SavestateMod {
 	 * @throws IOException Throws when the World was locked
 	 */
 	public static void loadstate(int number) {
+		if(state == State.LOADSTATING) {
+			return;
+		}
 		if (!hasSavestate()) 
 			return; // check for a savestates
 
@@ -161,7 +172,7 @@ public class SavestateMod {
 		int x = Mouse.getX();
 		int y = Mouse.getY();
 
-		isLoading = true; // turn off rendering
+		state = State.LOADSTATING; // turn off rendering
 		
 		// Store the tickrate before the loadstate
 		float tickratesaved=TickrateChangerMod.tickrateServer;

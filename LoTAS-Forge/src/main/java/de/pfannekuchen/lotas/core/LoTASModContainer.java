@@ -15,7 +15,6 @@ import de.pfannekuchen.lotas.core.utils.EventUtils;
 import de.pfannekuchen.lotas.core.utils.KeybindsUtils;
 import de.pfannekuchen.lotas.gui.InfoHud;
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;
-import de.pfannekuchen.lotas.taschallenges.ChallengeMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IImageBuffer;
 import net.minecraft.client.renderer.ImageBufferDownload;
@@ -39,8 +38,6 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 @Mod(acceptedMinecraftVersions = "@MC_VERSION@", version = "@MOD_VERSION@", modid = "lotas", clientSideOnly = true, canBeDeactivated = false, name = "LoTAS")
 public class LoTASModContainer {
 
-	/** List of TAS Challenges */
-	public static final List<ChallengeMap> maps = new ArrayList<>();
 	/** Custom shield */
 	public static ResourceLocation shield;
 	/** World spawn offset X */
@@ -82,38 +79,6 @@ public class LoTASModContainer {
 				TickrateChangerMod.updateTickrate(TickrateChangerMod.ticks[TickrateChangerMod.index]);
 			}
 
-			// Try to download all tas challenge maps
-			try {
-				BufferedReader stream = new BufferedReader(new InputStreamReader(new URL("https://data.mgnet.work/lotas/taschallenges/" + version + ".txt").openStream()));
-				int maps = Integer.parseInt(stream.readLine().charAt(0) + ""); // First line contains number of maps
-				for (int i = 0; i < maps; i++) {
-					ChallengeMap map = new ChallengeMap();
-					// read map from stream using it's format
-					map.displayName = stream.readLine();
-					map.name = stream.readLine();
-					map.description = stream.readLine();
-					map.map = new URL("https://data.mgnet.work/lotas/taschallenges/maps/" + stream.readLine());
-					int board = Integer.parseInt(stream.readLine().charAt(0) + "");
-					map.leaderboard = new String[board];
-					for (int j = 0; j < board; j++) {
-						map.leaderboard[j] = stream.readLine();
-					}
-
-					// load the icon for the tas challenge
-					ResourceLocation loc = new ResourceLocation("maps", map.name);
-					ThreadDownloadImageData dw = new ThreadDownloadImageData((File) null, "https://data.mgnet.work/lotas/taschallenges/images/" + map.name + ".png", null, new ImageBufferDownload());
-					Minecraft.getMinecraft().getTextureManager().loadTexture(loc, dw);
-					map.resourceLoc = loc.getResourcePath();
-
-					LoTASModContainer.maps.add(map);
-
-					// one empty line for commenters purposes
-					stream.readLine(); // Empty
-				}
-				stream.close();
-			} catch (Exception e1) {
-				e1.printStackTrace();
-			}
 		}).start();
 
 		// register forge events

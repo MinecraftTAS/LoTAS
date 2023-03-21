@@ -56,7 +56,11 @@ public abstract class MixinServerPlayerEntityPatch extends Player {
 	void damage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> returnable) {
 		if (ConfigUtils.getBoolean("tools", "takeDamage"))
 			return;
+		//#if MC>=11904
+//$$ 		boolean bl = this.server.isDedicatedServer() && this.server.isPvpAllowed() && "fall".equals(source.getMsgId());
+		//#else
 		boolean bl = this.server.isDedicatedServer() && this.server.isPvpAllowed() && "fall".equals(source.msgId);
+		//#endif
 		AtomicBoolean flag = new AtomicBoolean(false);
 		server.getPlayerList().getPlayers().forEach(player -> {
 			if (((AccessorServerPlayerEntity) player).getSpawnInvulnerableTime() <= 0) {
@@ -64,7 +68,11 @@ public abstract class MixinServerPlayerEntityPatch extends Player {
 				flag.set(true);
 			}
 		});
+		//#if MC>=11904
+//$$ 		if (!bl && source.is(net.minecraft.world.damagesource.DamageTypes.OUT_OF_WORLD)) {
+		//#else
 		if (!bl && source != DamageSource.OUT_OF_WORLD) {
+		//#endif
 			if (flag.get()) {
 				Minecraft.getInstance().player.setDeltaMovement(0, 0, 0);
 				Minecraft.getInstance().player.hurtMarked = true;

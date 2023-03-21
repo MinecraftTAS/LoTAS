@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import de.pfannekuchen.lotas.core.MCVer;
-import de.pfannekuchen.lotas.core.utils.PotionRenderer;
+import de.pfannekuchen.lotas.core.utils.RegistryUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 
@@ -28,19 +28,13 @@ public abstract class MixinInGameHud {
 	//#else
 	public void mixinRenderExperienceBar(CallbackInfo ci) {
 	//#endif
-//		MCVer.bind(minecraft.getTextureManager(), potion);
 		int xPos = (this.screenWidth / 2)-6;
         int yPos = this.screenHeight - 31 - 19;
-//      int scale=20;
-//      GL11.glEnable(GL11.GL_BLEND);
-//		MCVer.color4f(1, 1, 1, 0.3F);
-//		MCVer.blit(xPos-3, yPos, 0F, 0F, scale, scale, scale, scale);
-//      GL11.glDisable(GL11.GL_BLEND);
         
         //#if MC>=11700
-        //$$ PotionRenderer.render(MCVer.stack, xPos, yPos, 0.3);
+        //$$ RegistryUtils.applyRegistry(MCVer.stack, xPos, yPos, 0.3);
         //#else
-        PotionRenderer.render(null, xPos, yPos, 15);
+        RegistryUtils.applyRegistry(null, xPos, yPos, 15);
         //#endif
 	}
 }

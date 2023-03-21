@@ -21,18 +21,8 @@ public abstract class MixinGuiGameOver extends GuiScreen {
 	@Inject(method = "initGui", at = @At("RETURN"))
 	public void injectinitGui(CallbackInfo ci) {
         this.buttonList.add(new GuiButton(2, this.width / 2 - 100, this.height / 4 + 120, "Loadstate"));
-        this.buttonList.get(this.buttonList.size() - 1).enabled = false;
-        enableButtonsTimer = 18;
 	}
 
-	@Inject(method = "updateScreen", at = @At("RETURN"))
-	public void injectupdateScreen(CallbackInfo ci) {
-		if (enableButtonsTimer == 20) {
-			this.buttonList.get(this.buttonList.size() - 1).enabled = true;
-		}
-	}
-
-	
 	@Inject(method = "actionPerformed", at = @At("HEAD"))
 	public void injectactionPerformed(GuiButton button, CallbackInfo ci) {
         if (button.id == 2) {

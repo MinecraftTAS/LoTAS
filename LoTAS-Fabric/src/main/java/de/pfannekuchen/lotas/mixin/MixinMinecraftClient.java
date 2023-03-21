@@ -23,6 +23,7 @@ import de.pfannekuchen.lotas.core.utils.Timer;
 import de.pfannekuchen.lotas.mixin.accessors.AccessorServerPlayerEntity;
 import de.pfannekuchen.lotas.mods.AIManipMod;
 import de.pfannekuchen.lotas.mods.SavestateMod;
+import de.pfannekuchen.lotas.mods.SavestateMod.State;
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -259,16 +260,16 @@ public class MixinMinecraftClient {
 	@Inject(method = "setScreen", at = @At(value = "HEAD"), cancellable = true)
 	public void injectdisplayGuiScreen(Screen guiScreenIn, CallbackInfo ci) {
 		/* Reset Tick Binds */
-		if (((guiScreenIn == null) ? true : guiScreenIn instanceof PauseScreen) && SavestateMod.isLoading) {
-			SavestateMod.isLoading = false;
+		if (((guiScreenIn == null) ? true : guiScreenIn instanceof PauseScreen) && SavestateMod.state == State.LOADSTATING) {
+			SavestateMod.state = State.NONE;
 			SavestateMod.showLoadstateDone = true;
 			SavestateMod.timeTitle = System.currentTimeMillis();
 			Minecraft.getInstance().getSingleplayerServer().getPlayerList().getPlayers().forEach(player -> {
 				((AccessorServerPlayerEntity) player).setSpawnInvulnerableTime(0);
 			});
 		}
-		if (((guiScreenIn == null) ? true : guiScreenIn instanceof PauseScreen) && SavestateMod.isSavestate) {
-			SavestateMod.isSavestate=false;
+		if (((guiScreenIn == null) ? true : guiScreenIn instanceof PauseScreen) && SavestateMod.state == State.SAVESTATING) {
+			SavestateMod.state = State.NONE;
 			Minecraft.getInstance().getSingleplayerServer().getPlayerList().getPlayers().forEach(player -> {
 				((AccessorServerPlayerEntity) player).setSpawnInvulnerableTime(0);
 			});
@@ -293,7 +294,7 @@ public class MixinMinecraftClient {
 	
 	@Inject(method = "Lnet/minecraft/client/Minecraft;clearLevel(Lnet/minecraft/client/gui/screens/Screen;)V", at = @At(value = "HEAD"))
 	public void injectClearLevel(CallbackInfo ci) {
-		if(Minecraft.getInstance().getSingleplayerServer()!=null&&!SavestateMod.isLoading) {
+		if(Minecraft.getInstance().getSingleplayerServer()!=null&&SavestateMod.state != State.LOADSTATING) {
 			AIManipMod.save();
 		}
 	}

@@ -24,9 +24,8 @@ import de.pfannekuchen.lotas.mixin.accessors.AccessorEntityPlayerMP;
 import de.pfannekuchen.lotas.mods.AIManipMod;
 import de.pfannekuchen.lotas.mods.DupeMod;
 import de.pfannekuchen.lotas.mods.SavestateMod;
+import de.pfannekuchen.lotas.mods.SavestateMod.State;
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;
-import de.pfannekuchen.lotas.taschallenges.ChallengeLoader;
-import de.pfannekuchen.lotas.taschallenges.ChallengeMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiIngameMenu;
 import net.minecraft.client.gui.GuiScreen;
@@ -64,17 +63,11 @@ public class MixinMinecraft {
 	public void injectloadWorld(WorldClient worldClientIn, String loadingMessage, CallbackInfo ci) {
 		isLoadingWorld = ConfigUtils.getBoolean("tools", "hitEscape") && worldClientIn != null;
 		
-		if (ChallengeLoader.startTimer) {
-			ChallengeLoader.startTimer = false;
-			EventUtils.Timer.startTime = Duration.ofMillis(System.currentTimeMillis());
-			EventUtils.Timer.ticks = 1;
-			EventUtils.Timer.running = true;
-		}
 	}
 	
 	@Inject(method = "updateDisplay", cancellable = true, at = @At("HEAD"))
 	public void redoUpdateDisplay(CallbackInfo ci) {
-		if (SavestateMod.isLoading) ci.cancel();
+		if (SavestateMod.state == State.LOADSTATING) ci.cancel();
 	}
 	
 	@Inject(method = "runTick", at = @At(value="HEAD"))
@@ -93,12 +86,7 @@ public class MixinMinecraft {
 		
 		if (KeybindsUtils.shouldLoadstate) {
 			KeybindsUtils.shouldLoadstate = false;
-			try {
-				if (ChallengeMap.currentMap != null) ChallengeLoader.reload();
-				else if (SavestateMod.hasSavestate()) SavestateMod.loadstate(-1);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			if (SavestateMod.hasSavestate()) SavestateMod.loadstate(-1);
 		}
 		
 		if (TickrateChangerMod.advanceClient) {
@@ -165,8 +153,8 @@ public class MixinMinecraft {
     
 	@Inject(method = "displayGuiScreen", at = @At("HEAD"))
 	public void injectdisplayGuiScreen(GuiScreen guiScreenIn, CallbackInfo ci) {
-		if (((guiScreenIn == null) ? true : guiScreenIn instanceof GuiIngameMenu) && SavestateMod.isLoading) {
-			SavestateMod.isLoading = false;
+		if (((guiScreenIn == null) ? true : guiScreenIn instanceof GuiIngameMenu) && SavestateMod.state == State.LOADSTATING) {
+			SavestateMod.state = State.NONE;
 	        SavestateMod.showLoadstateDone = true;
 	        SavestateMod.timeTitle = System.currentTimeMillis();
 		}
@@ -213,7 +201,7 @@ public class MixinMinecraft {
 	
 	@Inject(method = "Lnet/minecraft/client/Minecraft;loadWorld(Lnet/minecraft/client/multiplayer/WorldClient;Ljava/lang/String;)V", at = @At("HEAD"))
 	public void injectLoadLevel(WorldClient world, String string, CallbackInfo ci) {
-		if(world==null&&Minecraft.getMinecraft().getIntegratedServer()!=null&&!SavestateMod.isLoading) {
+		if(world==null&&Minecraft.getMinecraft().getIntegratedServer()!=null&&SavestateMod.state != State.LOADSTATING) {
 			AIManipMod.save();
 		}else if(world!=null) {
 			once=false;

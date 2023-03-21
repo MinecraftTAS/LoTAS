@@ -1,6 +1,6 @@
 import groovy.json.JsonOutput
 
-version = "2.1.0"
+version = "2.1.1"
 group= "de.pfannekuchen.lotas"
 
 subprojects {

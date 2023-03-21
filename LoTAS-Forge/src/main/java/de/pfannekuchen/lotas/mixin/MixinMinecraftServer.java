@@ -35,7 +35,7 @@ public abstract class MixinMinecraftServer {
 		TickrateChangerMod.ticksPassedServer++;
 		TickrateChangerMod.resetAdvanceServer();
 	}
-	
+	/*
 	//#if MC>=11102
 	@Redirect(method = "run", at = @At(value = "FIELD", target = "Lnet/minecraft/server/MinecraftServer;worlds:[Lnet/minecraft/world/WorldServer;"))
 	//#else
@@ -48,6 +48,7 @@ public abstract class MixinMinecraftServer {
 		}
 		return MCVer.getWorlds(server);
 	}
+*/
 
 	//#if MC>=11102
 //	@Redirect(method = "run", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/WorldServer;areAllPlayersAsleep()Z"))

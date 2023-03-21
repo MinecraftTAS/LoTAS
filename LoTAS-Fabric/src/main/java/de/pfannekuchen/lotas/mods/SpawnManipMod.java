@@ -45,7 +45,7 @@ import net.minecraft.world.phys.Vec3;
 
 /**
  * Allows for spawning entities at valid locations
- * @author ScribbleLP
+ * @author Scribble
  */
 public class SpawnManipMod {
 	
@@ -199,7 +199,7 @@ public class SpawnManipMod {
 	public List<EntityOptions> getManipList(){
 		List<EntityOptions> entities=new ArrayList<EntityOptions>();
 		//#if MC>=11601
-//$$ 		DimensionType dimension = MCVer.getCurrentLevel().dimensionType();
+//$$ 		net.minecraft.resources.ResourceKey<Level> dimension = MCVer.getCurrentLevel().dimension();
 		//#else
 		DimensionType dimension = MCVer.getCurrentLevel().getDimension().getType();
 		//#endif
@@ -207,8 +207,8 @@ public class SpawnManipMod {
 		float[] armor={1f,1f,1f,1f};
 		float[] hand= {1f,1f};
 		
-		//#if MC>=11900
-//$$ 		if(dimension.bedWorks()) {
+		//#if MC>=11601
+//$$ 		if(dimension == Level.OVERWORLD) {
 		//#else
 		if(dimension == AccessorDimensionTypes.getOverworld()) {
 		//#endif
@@ -340,12 +340,13 @@ public class SpawnManipMod {
 				entities.add(new EntityOptions("Zombie (Diamond Armor, Enchanted Sword)", entity));
 			}
 			
-		//#if MC>=11900
-//$$ 		}else if(dimension.ultraWarm()) {
+		//#if MC>=11601
+//$$ 		}else if(dimension == Level.NETHER) {
 		//#else
 		}else if(dimension == AccessorDimensionTypes.getNether()) {
 		//#endif
 			entities.add(new EntityOptions("Blaze", new Blaze(EntityType.BLAZE, world)));
+			entities.add(new EntityOptions("Enderman", new EnderMan(EntityType.ENDERMAN, world)));
 			entities.add(new EntityOptions("Ghast", new Ghast(EntityType.GHAST, world)));
 			entities.add(new EntityOptions("Magma Cube", new MagmaCube(EntityType.MAGMA_CUBE, world)));
 			//#if MC>=11600
@@ -444,8 +445,8 @@ public class SpawnManipMod {
 				entities.add(new EntityOptions("Skeleton (Diamond Armor, Enchanted Bow)", entity));
 			}
 			
-		//#if MC>=11900
-//$$ 		}else if(!dimension.bedWorks() && !dimension.ultraWarm()) {
+		//#if MC>=11601
+//$$ 		}else if(dimension == Level.END) {
 		//#else
 		} else if(dimension == AccessorDimensionTypes.getEnd()) {
 		//#endif

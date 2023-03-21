@@ -35,6 +35,11 @@ public class ImageButton extends Button {
 		this.toggled = toggled;
 	}
 
+	//#if MC>=11904
+//$$ 	@Override
+//$$ 	public void render(com.mojang.blaze3d.vertex.PoseStack poseStack, int i, int j, float f) {
+//$$ 		super.render(poseStack, i, j, f);
+	//#else
 	//#if MC>=11601
 //$$ 	public void renderButton(com.mojang.blaze3d.vertex.PoseStack matrices, int mouseX, int mouseY, float delta) {
 //$$ 		super.renderButton(matrices, mouseX, mouseY, delta);
@@ -42,6 +47,7 @@ public class ImageButton extends Button {
 	//#else
 	public void renderButton(int mouseX, int mouseY, float delta) {
 		super.renderButton(mouseX, mouseY, delta);
+	//#endif
 	//#endif
 		MCVer.bind(Minecraft.getInstance().getTextureManager(), pic);
 		MCVer.color4f(1.0F, 1.0F, 1.0F, 1.0F);

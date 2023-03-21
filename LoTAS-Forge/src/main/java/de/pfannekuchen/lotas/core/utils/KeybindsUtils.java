@@ -73,7 +73,7 @@ public class KeybindsUtils {
 	 */
 	public static void tickKeyEvent() throws Exception {
 		// Savestate and Loadstate handling
-		if (saveStateKeybind.isPressed() && de.pfannekuchen.lotas.taschallenges.ChallengeMap.currentMap == null) {
+		if (saveStateKeybind.isPressed()) {
 			Minecraft.getMinecraft().displayGuiScreen(new GuiIngameMenu());
 			shouldSavestate = true; // request a savestate next tick
 		} else if (loadStateKeybind.isPressed()) {
@@ -104,7 +104,7 @@ public class KeybindsUtils {
 		}
 
 		// Timer keybinds
-		if (KeybindsUtils.toggleTimerKeybind.isPressed() && de.pfannekuchen.lotas.taschallenges.ChallengeMap.currentMap == null) { // Start/Stop the timer if there are no tas challenges running
+		if (KeybindsUtils.toggleTimerKeybind.isPressed()) { // Start/Stop the timer if there are no tas challenges running
 			if (Timer.ticks < 0 || Timer.startTime == null) { // Start the timer
 				Timer.startTime = Duration.ofMillis(System.currentTimeMillis());
 				Timer.ticks = 0;

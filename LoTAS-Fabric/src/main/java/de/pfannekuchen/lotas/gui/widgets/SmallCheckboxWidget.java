@@ -4,6 +4,7 @@ import java.util.function.Consumer;
 
 import de.pfannekuchen.lotas.core.MCVer;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -13,6 +14,7 @@ import net.minecraft.util.Mth;
  * @author Pancake
  */
 public class SmallCheckboxWidget extends AbstractButton {
+	
 	//#if MC>=11903
 //$$ 	private static final ResourceLocation TEXTURE = new ResourceLocation("lotas", "gui/small_checkbox.png");
 	//#else
@@ -46,13 +48,27 @@ public class SmallCheckboxWidget extends AbstractButton {
 		return this.checked;
 	}
 	
+	//#if MC>=11904
+//$$ 	@Override
+//$$ 	protected void renderScrollingString(com.mojang.blaze3d.vertex.PoseStack poseStack, Font font, int i, int j) {
+//$$ 	}
+	//#endif
+	
 	//#if MC>=11903
+	//#if MC>=11904
+//$$ 	@Override
+//$$ 	public void render(com.mojang.blaze3d.vertex.PoseStack stack, int mouseX, int mouseY, float delta) {
+//$$ //		super.render(stack, mouseX, mouseY, delta);
+	//#else
 //$$ 	@Override public void renderButton(com.mojang.blaze3d.vertex.PoseStack stack, int mouseX, int mouseY, float delta) {
+	//#endif
 //$$ 		MCVer.stack = stack;
 //$$ 		Minecraft minecraftClient = Minecraft.getInstance();
 //$$ 		MCVer.bind(minecraftClient.getTextureManager(), TEXTURE);
 //$$ 		MCVer.blit(this.getX(), this.getY(), 0.0F, 0.0F, 11, this.height, 11, 11);
+		//#if MC<11904
 //$$ 		this.renderBg(MCVer.stack, minecraftClient, mouseX, mouseY);
+		//#endif
 //$$ 		MCVer.drawShadow(this.getMessage().getString(), this.getX() + 16, this.getY() + (this.height - 8) / 2, 14737632 | Mth.ceil(this.alpha * 255.0F) << 24);
 //$$ 		if (isChecked()) {
 //$$ 			MCVer.disableDepthTest();
@@ -100,4 +116,5 @@ public class SmallCheckboxWidget extends AbstractButton {
 //$$ 	}
 	//#endif
 	//#endif
+	
 }

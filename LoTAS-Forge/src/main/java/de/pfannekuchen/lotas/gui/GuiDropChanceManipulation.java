@@ -17,7 +17,6 @@ import de.pfannekuchen.lotas.dropmanipulation.drops.entitydrops.PassiveDropManip
 import de.pfannekuchen.lotas.dropmanipulation.drops.entitydrops.ZombieDropManipulation;
 import de.pfannekuchen.lotas.gui.widgets.ButtonWidget;
 import de.pfannekuchen.lotas.gui.widgets.CheckboxWidget;
-import de.pfannekuchen.lotas.taschallenges.ChallengeMap;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
