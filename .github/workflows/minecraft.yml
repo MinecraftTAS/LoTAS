@@ -1,5 +1,4 @@
-name: Compile Fabric
-run-name: Compile LoTAS for all Minecraft Versions
+name: Compile LoTAS
 
 on:
   push:
