@@ -1,7 +1,9 @@
 /* Add Plugins required for LoTAS */
 plugins {
-	id 'discombobulator' version '1.1.1'
+	id 'discombobulator' version '1.2.0'
 }
+
+def lotas_version = "3.0.0"
 
 /* Configure Discombobulator */
 discombobulator {
@@ -61,4 +63,11 @@ discombobulator {
 			"1.18.2": "TagKey;"
 		]
 	]
+}
+
+/* Configure subprojects */
+subprojects {
+	jar {
+		archivesBaseName = "LoTAS-v${lotas_version}-mc${project.name}"
+	}
 }
