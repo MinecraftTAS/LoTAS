@@ -19,6 +19,11 @@ jobs:
       with:
         java-version: '17'
         distribution: 'temurin'
+    - name: Prepare build with Gradle
+      uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
+      with:
+        arguments: prepBase
+        gradle-version: 8.0.2
     - name: Build with Gradle
       uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
       with:
