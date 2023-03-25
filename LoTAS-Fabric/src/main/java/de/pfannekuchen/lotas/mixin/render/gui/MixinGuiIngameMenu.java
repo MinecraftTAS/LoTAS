@@ -75,12 +75,15 @@ public abstract class MixinGuiIngameMenu extends Screen {
 
 	@Override
 	public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
+		if(!showPauseMenu) return super.mouseClicked(mouseX, mouseY, mouseButton);
 		lotasGui.mouseClicked(mouseX, mouseY, mouseButton);
 		return super.mouseClicked(mouseX, mouseY, mouseButton);
 	}
 
 	@Override
 	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+		if(!showPauseMenu) return super.keyPressed(keyCode, scanCode, modifiers);
+		
 		boolean focused = lotasGui.keyPressed(keyCode, scanCode, modifiers);
 		if(!focused) {
 			return super.keyPressed(keyCode, scanCode, modifiers);
@@ -90,6 +93,7 @@ public abstract class MixinGuiIngameMenu extends Screen {
 
 	@Override
 	public boolean charTyped(char typedChar, int keyCode) {
+		if(!showPauseMenu) return super.charTyped(typedChar, keyCode);
 		lotasGui.charTyped(typedChar, keyCode);
 		return super.charTyped(typedChar, keyCode);
 	}
@@ -102,6 +106,7 @@ public abstract class MixinGuiIngameMenu extends Screen {
 //$$ 	@Redirect(method = "createPauseMenu", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/GridWidget$RowHelper;addChild(Lnet/minecraft/client/gui/components/AbstractWidget;I)Lnet/minecraft/client/gui/components/AbstractWidget;"))
 //$$ 	public net.minecraft.client.gui.components.AbstractWidget redirect_createPauseMenu(net.minecraft.client.gui.components.GridWidget.RowHelper parent, net.minecraft.client.gui.components.AbstractWidget button, int i) {
 	//#endif
+//$$ 		if(!showPauseMenu) return null;
 //$$ 		parent.addChild(lotasGui.getSavestateButton());
 //$$ 		parent.addChild(lotasGui.getLoadstateButton());
 //$$ 		return parent.addChild(button, i);
