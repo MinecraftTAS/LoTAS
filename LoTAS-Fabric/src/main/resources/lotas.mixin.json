@@ -2,8 +2,12 @@
     "required": true,
     "minVersion": "0.8",
     "package": "de.pfannekuchen.lotas.mixin",
+    //#if MC>=11605
     //#if MC>=11904
     //$$ "compatibilityLevel": "JAVA_17",
+    //#else
+    //$$ "compatibilityLevel": "JAVA_16",
+    //#endif
     //#else
     "compatibilityLevel": "JAVA_8",
     //#endif

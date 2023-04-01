@@ -1,24 +1,17 @@
 plugins {
-	//#if MC>=11900
-//$$ 	id 'fabric-loom' version '1.1-SNAPSHOT'
-	//#else
-	//#if MC>=11801
-//$$ 	id 'fabric-loom' version '0.10-SNAPSHOT'
-	//#else
-	//#if MC>=11701
-//$$ 	id 'fabric-loom' version '0.8-SNAPSHOT'
-	//#else
-	id 'fabric-loom' version '0.7-SNAPSHOT'
-	//#endif
-	//#endif
-	//#endif
+	id 'fabric-loom' version '1.1-SNAPSHOT'
 }
 
 apply from: '../common.gradle'
 
+//#if MC>=11605
 //#if MC>=11904
 //$$ sourceCompatibility = 17
 //$$ targetCompatibility = 17
+//#else
+//$$ sourceCompatibility = 16
+//$$ targetCompatibility = 16
+//#endif
 //#endif
 
 
@@ -27,22 +20,23 @@ sourceSets {
     main.resources.srcDirs = ['../../src/main/resources']
 }
 
+loom {
+	accessWidenerPath = file("../../src/main/resources/lotas.accesswidener")
+}
+
 dependencies {
 	//#if MC>=11905
 //$$  	minecraft "com.mojang:minecraft:23w13a_or_b"
 //$$  	modImplementation "net.fabricmc:fabric-loader:0.14.19"
  	//#else
 	//#if MC>=11904
- //$$ 	minecraft "com.mojang:minecraft:1.19.4"
- //$$ 	modImplementation "net.fabricmc:fabric-loader:0.14.14"
+//$$  	minecraft "com.mojang:minecraft:1.19.4"
 	//#else
 	//#if MC>=11903
 //$$ 	minecraft "com.mojang:minecraft:1.19.3"
-//$$ 	modImplementation "net.fabricmc:fabric-loader:0.14.10"
 	//#else
 	//#if MC>=11902
 //$$ 	minecraft "com.mojang:minecraft:1.19.2"
-//$$ 	modImplementation "net.fabricmc:fabric-loader:0.14.8"
 	//#else
 	//#if MC>=11900
 //$$	minecraft "com.mojang:minecraft:1.19"
@@ -78,9 +72,5 @@ dependencies {
 	//#endif
 	//#endif
 	
-	//#if MC>=11900
-//$$ 	mappings loom.officialMojangMappings()
-	//#else
-		mappings minecraft.officialMojangMappings()
-	//#endif
+	mappings loom.officialMojangMappings()
 }

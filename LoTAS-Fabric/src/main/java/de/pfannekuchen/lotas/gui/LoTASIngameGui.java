@@ -7,7 +7,6 @@ import org.lwjgl.glfw.GLFW;
 
 import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.core.utils.ConfigUtils;
-import de.pfannekuchen.lotas.core.utils.Keyboard;
 import de.pfannekuchen.lotas.core.utils.Timer;
 import de.pfannekuchen.lotas.gui.widgets.SmallCheckboxWidget;
 import de.pfannekuchen.lotas.mods.AIManipMod;
@@ -21,6 +20,7 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.PauseScreen;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.util.Mth;
 
 /**
@@ -121,11 +121,11 @@ public class LoTASIngameGui {
 
 		// =============== MANIPULATION
 
-		dropButton = MCVer.Button((width / 4) * 0 + 1, height - 20, width / 4 - 2, 20, "Manipulate Drops", btn -> {
+		dropButton = MCVer.Button((width / 4) * 0 + 1, height - 20, width / 4 - 2, 20, I18n.get("menu.lotas.dropmanip"), btn -> { //"Manipulate Drops"
 			mc.setScreen(new DropManipulationScreen((PauseScreen) parentScreen));
 		});
 
-		dragonButton = MCVer.Button((width / 4) * 1 + 2, height - 20, width / 4 - 2, 20, "Manipulate Dragon", btn -> {
+		dragonButton = MCVer.Button((width / 4) * 1 + 2, height - 20, width / 4 - 2, 20, I18n.get("menu.lotas.dragonmanip"), btn -> { //"Manipulate Dragon"
 			mc.setScreen(new DragonManipulationScreen((PauseScreen) parentScreen));
 		});
 

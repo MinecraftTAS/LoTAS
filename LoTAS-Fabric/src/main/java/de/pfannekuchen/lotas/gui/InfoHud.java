@@ -22,6 +22,7 @@ import de.pfannekuchen.lotas.mods.SavestateMod;
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 
 /**
@@ -278,7 +279,12 @@ public class InfoHud extends Screen {
 			lists.add(new InfoLabel("worldseed", configuration, () -> {
 				if (mc.screen == this)
 					return "Worldseed";
-				return mc.getSingleplayerServer().getPlayerList().getPlayers().get(0).getLevel().getSeed() + "";
+				List<ServerPlayer> players = mc.getSingleplayerServer().getPlayerList().getPlayers();
+				if(!players.isEmpty()) {
+					return players.get(0).getLevel().getSeed() + "";
+				} else {
+					return "";
+				}
 			}));
 			y += 14;
 			setDefaults("ticks", y);
