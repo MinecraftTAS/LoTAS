@@ -1,7 +1,7 @@
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-version = "2.1.1"
+version = "2.1.2"
 group = "de.pfannekuchen.lotas"
 archivesBaseName = "lotas"
 
@@ -16,9 +16,8 @@ configurations {
 }
 
 dependencies {
-	implementation 'org.projectlombok:lombok:1.16.4'
     include 'com.google.code.findbugs:annotations:3.0.1u2'
-    modImplementation "net.fabricmc:fabric-loader:0.12.12"
+    modImplementation "net.fabricmc:fabric-loader:0.14.19"
 }
 
 processResources {
