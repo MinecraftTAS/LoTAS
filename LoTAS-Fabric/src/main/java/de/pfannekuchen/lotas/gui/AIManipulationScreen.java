@@ -4,10 +4,12 @@ package de.pfannekuchen.lotas.gui;
 import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.mods.AIManipMod;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.world.phys.Vec3;
 
 /**
@@ -44,12 +46,14 @@ public class AIManipulationScreen extends Screen {
 		}));
 
 		Vec3 target = AIManipMod.getTargetPos();
-		xText = MCVer.EditBox(Minecraft.getInstance().font, width / 2 - 98, height - 48, 58, 19, (int) target.x + "");
-		yText = MCVer.EditBox(Minecraft.getInstance().font, width / 2 - 29, height - 48, 59, 19, (int) target.y + "");
-		zText = MCVer.EditBox(Minecraft.getInstance().font, width / 2 + 39, height - 48, 59, 19, (int) target.z + "");
+		Minecraft mc = Minecraft.getInstance();
+		Font font = mc.font;
+		xText = MCVer.EditBox(font, width / 2 - 98, height - 48, 58, 19, (int) target.x + "");
+		yText = MCVer.EditBox(font, width / 2 - 29, height - 48, 59, 19, (int) target.y + "");
+		zText = MCVer.EditBox(font, width / 2 + 39, height - 48, 59, 19, (int) target.z + "");
 		setTextToVec(AIManipMod.getTargetPos());
 
-		MCVer.addButton(this, MCVer.Button(width / 2 - 100, height - 25, 200, 20, "Change Target", button -> {
+		MCVer.addButton(this, MCVer.Button(width / 2 - 100, height - 25, 200, 20, I18n.get("aimanipgui.lotas.changetarget"), button -> { //"Change Target"
 			manip.confirm();
 			button.active=false;
 		}));
@@ -59,13 +63,13 @@ public class AIManipulationScreen extends Screen {
 		MCVer.addButton(this, MCVer.Button(width / 2 +140 - margin, height - 49, 20, 20, "\u2193", btn -> manip.changeTargetBack()));
 		MCVer.addButton(this, MCVer.Button(width / 2 +118 - margin, height - 72, 20, 20, "\u2190", btn -> manip.changeTargetLeft()));
 		MCVer.addButton(this, MCVer.Button(width / 2 +162 - margin, height - 72, 20, 20, "\u2192", btn -> manip.changeTargetRight()));
-		MCVer.addButton(this, MCVer.Button(width / 2 +118 - margin, height - 25, 30, 20, "Up", btn -> manip.changeTargetUp()));
-		MCVer.addButton(this, MCVer.Button(width / 2 +153 - margin, height - 25, 30, 20, "Down", btn -> manip.changeTargetDown()));
-		MCVer.addButton(this, MCVer.Button(width / 2 - 100, height - 72, 200, 20, "Move to me", btn -> {
+		MCVer.addButton(this, MCVer.Button(width / 2 +118 - margin, height - 25, 30, 20, I18n.get("aimanipgui.lotas.up"), btn -> manip.changeTargetUp()));//"Up"
+		MCVer.addButton(this, MCVer.Button(width / 2 +153 - margin, height - 25, 30, 20, I18n.get("aimanipgui.lotas.down"), btn -> manip.changeTargetDown()));//"Down"
+		MCVer.addButton(this, MCVer.Button(width / 2 - 100, height - 72, 200, 20, I18n.get("aimanipgui.lotas.moveme"), btn -> {//"Move to me"
 			manip.setTargetToPlayer();
 			setTextToVec(AIManipMod.getTargetPos());
 		}));
-		MCVer.addButton(this, MCVer.Button(width / 2 - 100, height - 95, 200, 20, "Move to entity", btn -> {
+		MCVer.addButton(this, MCVer.Button(width / 2 - 100, height - 95, 200, 20, I18n.get("aimanipgui.lotas.moveentity"), btn -> {//"Move to entity"
 			manip.setTargetToEntity();
 			setTextToVec(AIManipMod.getTargetPos());
 		}));
