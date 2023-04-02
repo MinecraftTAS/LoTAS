@@ -12,6 +12,7 @@ import java.net.URL;
 import javax.net.ssl.HttpsURLConnection;
 
 import de.pfannekuchen.lotas.core.utils.ConfigUtils;
+import de.pfannekuchen.lotas.core.utils.LoTASLanguageManager;
 import de.pfannekuchen.lotas.core.utils.TextureYoinker;
 import de.pfannekuchen.lotas.gui.InfoHud;
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;
@@ -33,6 +34,8 @@ public class LoTASModContainer implements ModInitializer {
 	public static InfoHud hud;
 	
 	public static long i = -1;
+	
+	public static LoTASLanguageManager languageManager;
 	
 	/**
 	 * Called by the Fabric Loader, whenever the Mod is being initialized
