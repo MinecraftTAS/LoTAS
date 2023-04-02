@@ -1,4 +1,66 @@
-{ 
-	"menu.lotas.dropmanip": "Manipulate Drops",
-	"menu.lotas.dragonmanip": "Manipulate Dragon"
+{
+	// LoTAS Gui
+	"pausegui.lotas.dropmanip": "Manipulate Drops",
+	"pausegui.lotas.dragonmanip": "Manipulate Dragon",
+	"pausegui.lotas.spawnmanip":"Manipulate Spawning",
+	"pausegui.lotas.aimanip":"Manipulate AI",
+	"pausegui.lotas.duping.save":"Save Items",
+	"pausegui.lotas.duping.load":"Load Items",
+	"pausegui.lotas.jump":"Jump ticks",
+	"pausegui.lotas.jump.success":"Jumping...",
+	"pausegui.lotas.checkbox.invincible":"Avoid taking damage",
+	"pausegui.lotas.checkbox.dropToMe":"Drop towards me",
+	"pausegui.lotas.checkbox.dropAway":"Drop away from me",
+	"pausegui.lotas.checkbox.explosion":"Optimize Explosions",
+	"pausegui.lotas.checkbox.autoclicker":"Right Auto Clicker",
+	"pausegui.lotas.resettimer":"Reset Timer",
+	"pausegui.lotas.category.tickratechanger":"Tickrate Changer (%s)",
+	"pausegui.lotas.category.duping":"Duping",
+	"pausegui.lotas.category.jump":"Tickjump",
+	"pausegui.lotas.jump.ready.1":"Tickjump is ready,",
+	"pausegui.lotas.jump.ready.2":"press ESC to continue",
+	"pausegui.lotas.jump.tutorial.1":"\u00A7aReopens the Game Menu",
+	"pausegui.lotas.jump.tutorial.2":"\u00A7aafter %f ticks",
+	"pausegui.lotas.buttontext.shift.savestate":"\u00A76Name Savestate",
+	"pausegui.lotas.buttontext.shift.loadstate":"\u00A76Choose State",
+	"pausegui.lotas.buttontext.shift.trc1":"\u00A76Custom",
+	"pausegui.lotas.buttontext.shift.trc2":"\u00A76Tickrate",
+	"pausegui.lotas.buttontext.unshift.savestate":"Savestate",
+	"pausegui.lotas.buttontext.unshift.loadstate":"Loadstate",
+	"pausegui.lotas.shifttext":"Hold Shift to access more features",
+	"pausegui.lotas.textfield.apply":"Press \u2936 to apply",
+	"pausegui.lotas.successtext.savestate":"\u00A76Savestate successful...",
+	"pausegui.lotas.successtext.loadstate":"\u00A76Loadstate successful...",
+	"pausegui.lotas.textfield.fail":"\u00A7cPlease enter a number!",
+	
+	// AiManip
+	"aimanipgui.lotas.changetarget":"Change Target",
+	"aimanipgui.lotas.up":"Up",
+	"aimanipgui.lotas.down":"Down",
+	"aimanipgui.lotas.moveme":"Move to me",
+	"aimanipgui.lotas.moveentity":"Move to entity",
+	
+	
+	// Keybinds
+	"keybind.lotas.savestate": "Savestate",
+	"keybind.lotas.loadstate": "Loadstate",
+	"keybind.lotas.dupe.load": "Load Items/Chests",
+	"keybind.lotas.dupe.save": "Save Items/Chests",
+	"keybind.lotas.autostrafe": "Auto-Strafe",
+	"keybind.lotas.tickrate.faster": "Faster Tickrate",
+	"keybind.lotas.tickrate.slower": "Slower Tickrate",
+	"keybind.lotas.tickrate.tickadvance": "Advance Tick",
+	"keybind.lotas.tickrate.tick0": "Tickrate Zero Toggle",
+	"keybind.lotas.tickrate.timer": "Start/Stop Timer",
+	"keybind.lotas.infogui": "Open InfoGui Editor",
+	"keybind.lotas.test": "Test",
+	
+	// Keybind categories
+	"keybind.category.lotas.stating": "Stating",
+	"keybind.category.lotas.duping": "Duping",
+	"keybind.category.lotas.moving": "Moving",
+	"keybind.category.lotas.tickratechanger": "Tickrate Changer",
+	"keybind.category.lotas.misc": "Misc"
+	
+	// 
 }

@@ -24,6 +24,7 @@ import net.minecraft.client.gui.screens.PauseScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.controls.ControlsScreen;
 import net.minecraft.client.gui.screens.inventory.SignEditScreen;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.util.Mth;
 
 /**
@@ -36,29 +37,29 @@ import net.minecraft.util.Mth;
 public class KeybindsUtils {
 
 	/* Keybind that will savestate */
-	public static final KeyMapping saveStateKeybind = new KeyMapping("Savestate", GLFW.GLFW_KEY_J, "Stating");
+	public static final KeyMapping saveStateKeybind = new KeyMapping("keybind.lotas.savestate", GLFW.GLFW_KEY_J, "keybind.category.lotas.stating"); //"Savestate" "Stating"
 	/* Keybind that will load a state */
-	public static final KeyMapping loadStateKeybind = new KeyMapping("Loadstate", GLFW.GLFW_KEY_K, "Stating");
+	public static final KeyMapping loadStateKeybind = new KeyMapping("keybind.lotas.loadstate", GLFW.GLFW_KEY_K, "keybind.category.lotas.stating"); //"Loadstate"
 	/* Keybind that will load your Inventory */
-	public static final KeyMapping loadDupeKeybind = new KeyMapping("Load Items/Chests", GLFW.GLFW_KEY_O, "Duping");
+	public static final KeyMapping loadDupeKeybind = new KeyMapping("keybind.lotas.dupe.load", GLFW.GLFW_KEY_O, "keybind.category.lotas.duping"); //"Load Items/Chests" "Duping"
 	/* Keybind that will save your inventory */
-	public static final KeyMapping saveDupeKeybind = new KeyMapping("Save Items/Chests", GLFW.GLFW_KEY_P, "Duping");
+	public static final KeyMapping saveDupeKeybind = new KeyMapping("keybind.lotas.dupe.save", GLFW.GLFW_KEY_P, "keybind.category.lotas.duping"); //"Save Items/Chests"
 	/* Keybind used for automated strafing */
-	public static final KeyMapping holdStrafeKeybind = new KeyMapping("Auto-Strafe", GLFW.GLFW_KEY_H, "Moving");
+	public static final KeyMapping holdStrafeKeybind = new KeyMapping("keybind.lotas.autostrafe", GLFW.GLFW_KEY_H, "keybind.category.lotas.moving"); //"Auto-Strafe" "Moving"
 	/* Increases the Tickrate */
-	public static final KeyMapping increaseTickrateKeybind = new KeyMapping("Faster Tickrate", GLFW.GLFW_KEY_PERIOD, "Tickrate Changer");
+	public static final KeyMapping increaseTickrateKeybind = new KeyMapping("keybind.lotas.tickrate.faster", GLFW.GLFW_KEY_PERIOD, "keybind.category.lotas.tickratechanger"); //"Faster Tickrate" "Tickrate Changer"
 	/* Decreases the Tickrate */
-	public static final KeyMapping decreaseTickrateKeybind = new KeyMapping("Slower Tickrate", GLFW.GLFW_KEY_COMMA, "Tickrate Changer");
+	public static final KeyMapping decreaseTickrateKeybind = new KeyMapping("keybind.lotas.tickrate.slower", GLFW.GLFW_KEY_COMMA, "keybind.category.lotas.tickratechanger");//"Slower Tickrate"
 	/* Advances a single tick while in Tick Advance Mode */
-	public static final KeyMapping advanceTicksKeybind = new KeyMapping("Advance Tick", GLFW.GLFW_KEY_F9, "Tickrate Changer");
+	public static final KeyMapping advanceTicksKeybind = new KeyMapping("keybind.lotas.tickrate.tickadvance", GLFW.GLFW_KEY_F9, "keybind.category.lotas.tickratechanger");//"Advance Tick"
 	/* Toggles Tickrate Zero (aka Tick Advance Mode) */
-	public static final KeyMapping toggleAdvanceKeybind = new KeyMapping("Tickrate Zero Toggle", GLFW.GLFW_KEY_F8, "Tickrate Changer");
+	public static final KeyMapping toggleAdvanceKeybind = new KeyMapping("keybind.lotas.tickrate.tick0", GLFW.GLFW_KEY_F8, "keybind.category.lotas.tickratechanger"); //"Tickrate Zero Toggle"
 	/* Starts or stops the Timer */
-	public static final KeyMapping toggleTimerKeybind = new KeyMapping("Start/Stop Timer", GLFW.GLFW_KEY_KP_5, "Tickrate Changer");
+	public static final KeyMapping toggleTimerKeybind = new KeyMapping("keybind.lotas.tickrate.timer", GLFW.GLFW_KEY_KP_5, "keybind.category.lotas.tickratechanger"); //"Start/Stop Timer"
 	/* Opens the Info Hud Editor */
-	public static final KeyMapping openInfoHud = new KeyMapping("Open InfoGui Editor", GLFW.GLFW_KEY_F6, "Misc");
+	public static final KeyMapping openInfoHud = new KeyMapping("keybind.lotas.infogui", GLFW.GLFW_KEY_F6, "keybind.category.lotas.misc");//"Open InfoGui Editor" "Misc"
 	/* ^_____^ */
-	public static final KeyMapping test = new KeyMapping("Test", GLFW.GLFW_KEY_F12, "Misc");
+	public static final KeyMapping test = new KeyMapping("keybind.lotas.test", GLFW.GLFW_KEY_F12, "keybind.category.lotas.misc"); //"Test"
 	/** Temporary variable used to request a savestate */
 	public static boolean shouldSavestate;
 	/** Temporary variable used to request a loadstate */
