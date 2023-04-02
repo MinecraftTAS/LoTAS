@@ -131,11 +131,11 @@ public class LoTASGuiIngameMenu {
 		
 		// =============== MANIPULATION
 		
-		dropButton = new Button(-5, (width / 4) * 0 + 1, height - 20, width / 4 - 2, 20, "Manipulate Drops", btn->{
+		dropButton = new Button(-5, (width / 4) * 0 + 1, height - 20, width / 4 - 2, 20, I18n.format("menu.lotas.dropmanip"), btn->{ // "Manipulate Drops"
 			Minecraft.getMinecraft().displayGuiScreen(new GuiDropChanceManipulation((GuiIngameMenu) parentScreen));
 		});
 		
-		dragonButton = new Button(-6, (width / 4) * 1 + 2, height - 20, width / 4 - 2, 20, "Manipulate Dragon", btn->{
+		dragonButton = new Button(-6, (width / 4) * 1 + 2, height - 20, width / 4 - 2, 20, I18n.format("menu.lotas.dragonmanip"), btn->{ // "Manipulate Dragon"
 			//#if MC>=10900
 			Minecraft.getMinecraft().displayGuiScreen(new GuiDragonManipulation((GuiIngameMenu) parentScreen));
 			//#else

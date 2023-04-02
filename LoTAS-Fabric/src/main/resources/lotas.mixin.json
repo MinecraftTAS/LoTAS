@@ -36,6 +36,7 @@
     	"accessors.AccessorButtons",
     	"accessors.AccessorKeyMapping",
     	"accessors.AccessorSoundEngine",
+    	"accessors.AccessorLanguage",
 		"render.binds.MixinTickrateChangerAudioPitch",
 		"render.binds.MixinTickrateChangerEnchantmentGlimm",
 		"render.binds.MixinTickrateChangerSubtitleOverlay",
@@ -58,7 +59,8 @@
 		"patches.MixinEnderPearlPatch",
 		"patches.MixinUnbreakingPatch",
 		"patches.MixinItemEntity",
-		"patches.MixinPiglinBrainPatch"
+		"patches.MixinPiglinBrainPatch",
+		"patches.MixinLanguageManager"
 	],
   	"injectors": {
     	"defaultRequire": 1

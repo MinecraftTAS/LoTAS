@@ -108,12 +108,11 @@ public class KeybindsUtils {
 		}
 		// Autostrafe auto rotation handling
 		if (wasPressed != holdStrafeKeybind.isDown() && wasPressed == true) {
-			KeyMapping.set(Minecraft.getInstance().options.keyRight.getDefaultKey(), false);
+			Minecraft mc = Minecraft.getInstance();
+			KeyMapping.set(mc.options.keyRight.getDefaultKey(), false);
 		}
 		wasPressed = holdStrafeKeybind.isDown();
 		if (test.consumeClick()) {
-//			SpawnManipMod manip=new SpawnManipMod();
-//			manip.debugSpawn();
 		}
 	}
 
@@ -164,7 +163,8 @@ public class KeybindsUtils {
 	}
 
 	public static boolean isKeyDownExceptTextField(KeyMapping keybind) {
-		Screen screen=Minecraft.getInstance().screen;
+		Minecraft mc = Minecraft.getInstance();
+		Screen screen=mc.screen;
 		
 		if(screen instanceof ChatScreen || screen instanceof SignEditScreen) {
 			return false;
@@ -174,8 +174,8 @@ public class KeybindsUtils {
 	
 	public static boolean isKeyDown(int keycode) {
 		boolean down = false;
-
-		Screen screen=Minecraft.getInstance().screen;
+		Minecraft mc = Minecraft.getInstance();
+		Screen screen=mc.screen;
 		
 		if (screen instanceof ControlsScreen) {
 			return false;
@@ -216,7 +216,8 @@ public class KeybindsUtils {
 				advanceTicksKeybind,
 				toggleAdvanceKeybind,
 				toggleTimerKeybind,
-				openInfoHud));
+				openInfoHud/*,
+				test*/));
 
 		addCategories(modded);
 
