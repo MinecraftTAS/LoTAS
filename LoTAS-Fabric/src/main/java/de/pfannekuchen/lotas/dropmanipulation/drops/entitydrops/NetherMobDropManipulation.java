@@ -8,6 +8,7 @@ import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.gui.DropManipulationScreen;
 import de.pfannekuchen.lotas.gui.widgets.SmallCheckboxWidget;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.monster.Blaze;
@@ -20,23 +21,27 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class NetherMobDropManipulation extends DropManipulationScreen.DropManipulation {
 
-	public static SmallCheckboxWidget optimizeBlaze = new SmallCheckboxWidget(0, 0, "Optimize Blaze Drops", false);
-	public static SmallCheckboxWidget optimizeGhast = new SmallCheckboxWidget(0, 0, "Optimize Ghast Drops", false);
-	public static SmallCheckboxWidget optimizeWitherskeleton = new SmallCheckboxWidget(0, 0, "Optimize Witherskeleton Drops", false);
-	public static SmallCheckboxWidget optimizePigman = new SmallCheckboxWidget(0, 0, "Optimize Zombie Pigman Drops", false);
-	public static SmallCheckboxWidget optimizeMagmaCube = new SmallCheckboxWidget(0, 0, "Optimize Magma Cube Drops", false);
+	public static SmallCheckboxWidget optimizeBlaze = new SmallCheckboxWidget(0, 0, I18n.get("dropmanipgui.lotas.entity.nether.blaze"), false);//"Optimize Blaze Drops"
+	public static SmallCheckboxWidget optimizeGhast = new SmallCheckboxWidget(0, 0, I18n.get("dropmanipgui.lotas.entity.nether.ghast"), false);//"Optimize Ghast Drops"
+	public static SmallCheckboxWidget optimizeWitherskeleton = new SmallCheckboxWidget(0, 0, I18n.get("dropmanipgui.lotas.entity.nether.witherskeleton"), false);//"Optimize Witherskeleton Drops"
+	//#if MC>=11601
+//$$ 	public static SmallCheckboxWidget optimizePigman = new SmallCheckboxWidget(0, 0, I18n.get("dropmanipgui.lotas.entity.nether.zombiepiglin"), false);//"Optimize Zombified Piglin Drops"
+	//#else
+	public static SmallCheckboxWidget optimizePigman = new SmallCheckboxWidget(0, 0, I18n.get("dropmanipgui.lotas.entity.nether.zombiepigman"), false);//"Optimize Zombie Pigman Drops"
+	//#endif
+	public static SmallCheckboxWidget optimizeMagmaCube = new SmallCheckboxWidget(0, 0, I18n.get("dropmanipgui.lotas.entity.nether.magmacube"), false);//"Optimize Magma Cube Drops"
 
 	public NetherMobDropManipulation(int x, int y, int width, int height) {
 		NetherMobDropManipulation.x = x;
 		NetherMobDropManipulation.y = y;
 		NetherMobDropManipulation.width = width;
 		NetherMobDropManipulation.height = height;
-		enabled = MCVer.Checkbox(x, y, 150, 20, "Override Nether Mob Drops", false);
+		enabled = MCVer.Checkbox(x, y, 150, 20, I18n.get("dropmanipgui.lotas.entity.nether.override"), false);//"Override Nether Mob Drops"
 	}
 
 	@Override
 	public String getName() {
-		return "Nether Mobs";
+		return I18n.get("dropmanipgui.lotas.entity.nether.name");//"Nether Mobs"
 	}
 
 	@Override

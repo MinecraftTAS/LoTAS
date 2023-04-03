@@ -8,8 +8,8 @@ import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.gui.DropManipulationScreen;
 import de.pfannekuchen.lotas.gui.widgets.SmallCheckboxWidget;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -20,28 +20,28 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 
 public class PlantsDropManipulation extends DropManipulationScreen.DropManipulation {
 
-	public static SmallCheckboxWidget optimizeCarrots = new SmallCheckboxWidget(0, 0, "Optimize Carrot Drops", false);
-	public static SmallCheckboxWidget optimizePotato = new SmallCheckboxWidget(0, 0, "Optimize Potato Drops", false);
-	public static SmallCheckboxWidget optimizeWheat = new SmallCheckboxWidget(0, 0, "Optimize Wheat Drops", false);
-	public static SmallCheckboxWidget optimizeBeetroot = new SmallCheckboxWidget(0, 0, "Optimize Beetroot Drops", false);
-	public static SmallCheckboxWidget optimizeMelons = new SmallCheckboxWidget(0, 0, "Optimize Melon Drops", false);
-	public static SmallCheckboxWidget optimizeCocoa = new SmallCheckboxWidget(0, 0, "Optimize Cocoa Bean Drops", false);
-	public static SmallCheckboxWidget optimizeChorus = new SmallCheckboxWidget(0, 0, "Optimize Chorus Plant Drops", false);
-	public static SmallCheckboxWidget optimizeNetherwart = new SmallCheckboxWidget(0, 0, "Optimize Nether Wart Drops", false);
-	public static SmallCheckboxWidget optimizeMushroom = new SmallCheckboxWidget(0, 0, "Optimize Mushroom Block Drops", false);
-	public static SmallCheckboxWidget optimizeSweetBerry = new SmallCheckboxWidget(0, 0, "Optimize Sweet Berry Bush Drops", false);
+	public static SmallCheckboxWidget optimizeCarrots = new SmallCheckboxWidget(0, 0, I18n.get("dropmanipgui.lotas.blocks.plants.carrot"), false);//"Optimize Carrot Drops"
+	public static SmallCheckboxWidget optimizePotato = new SmallCheckboxWidget(0, 0, I18n.get("dropmanipgui.lotas.blocks.plants.potato"), false);//"Optimize Potato Drops"
+	public static SmallCheckboxWidget optimizeWheat = new SmallCheckboxWidget(0, 0, I18n.get("dropmanipgui.lotas.blocks.plants.wheat"), false);//"Optimize Wheat Drops"
+	public static SmallCheckboxWidget optimizeBeetroot = new SmallCheckboxWidget(0, 0, I18n.get("dropmanipgui.lotas.blocks.plants.beetroot"), false);//"Optimize Beetroot Drops"
+	public static SmallCheckboxWidget optimizeMelons = new SmallCheckboxWidget(0, 0, I18n.get("dropmanipgui.lotas.blocks.plants.melon"), false);//"Optimize Melon Drops"
+	public static SmallCheckboxWidget optimizeCocoa = new SmallCheckboxWidget(0, 0, I18n.get("dropmanipgui.lotas.blocks.plants.cocoa"), false);//"Optimize Cocoa Bean Drops"
+	public static SmallCheckboxWidget optimizeChorus = new SmallCheckboxWidget(0, 0, I18n.get("dropmanipgui.lotas.blocks.plants.chorus"), false);//"Optimize Chorus Plant Drops"
+	public static SmallCheckboxWidget optimizeNetherwart = new SmallCheckboxWidget(0, 0, I18n.get("dropmanipgui.lotas.blocks.plants.netherwart"), false);//"Optimize Nether Wart Drops"
+	public static SmallCheckboxWidget optimizeMushroom = new SmallCheckboxWidget(0, 0, I18n.get("dropmanipgui.lotas.blocks.plants.mushroom"), false);//"Optimize Mushroom Block Drops"
+	public static SmallCheckboxWidget optimizeSweetBerry = new SmallCheckboxWidget(0, 0, I18n.get("dropmanipgui.lotas.blocks.plants.berrybush"), false);//"Optimize Sweet Berry Bush Drops"
 
 	public PlantsDropManipulation(int x, int y, int width, int height) {
 		PlantsDropManipulation.x = x;
 		PlantsDropManipulation.y = y;
 		PlantsDropManipulation.width = width;
 		PlantsDropManipulation.height = height;
-		enabled = MCVer.Checkbox(x, y, 150, 20, "Override Plant Drops", false);
+		enabled = MCVer.Checkbox(x, y, 150, 20, I18n.get("dropmanipgui.lotas.blocks.plants.override"), false);//"Override Plant Drops"
 	}
 
 	@Override
 	public String getName() {
-		return "Plants";
+		return I18n.get("dropmanipgui.lotas.blocks.plants.name");//"Plants"
 	}
 
 	@Override

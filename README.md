@@ -11,8 +11,14 @@ Have a look in the [Wiki](https://github.com/MCPfannkuchenYT/LoTAS/wiki) to see 
 
 ## Bugs / Feature Requests
 
-Report Bugs under the Issues Section or on our [Discord](https://discord.gg/sdMc5UrGPN)
+Report Bugs under the Issues Section or on our [Discord](https://discord.gg/minecraft-tas-373166430478401555)
 All Feature Requests go also onto the Discord Server.
+
+## Translations
+You can find the file under [src/main/resources/assets/lotas/lang/en_us.lang](https://github.com/MinecraftTAS/LoTAS/blob/dev/LoTAS-Fabric/src/main/resources/assets/lotas/lang/en_us.lang)
+
+Credits:
+Simplified Chinese: RayXu6
 
 ## Features
 * Duping: Save your Inventory/Items/Chests with 1 button and load' em again with another click!

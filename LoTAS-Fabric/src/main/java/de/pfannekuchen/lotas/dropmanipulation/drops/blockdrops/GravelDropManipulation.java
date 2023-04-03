@@ -8,6 +8,7 @@ import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.gui.DropManipulationScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -20,10 +21,10 @@ public class GravelDropManipulation extends DropManipulationScreen.DropManipulat
 
 	public static boolean flint = false;
 
-	public static Button dropGravel = MCVer.Button(x, y, 98, 20, "Gravel", button -> {
+	public static Button dropGravel = MCVer.Button(x, y, 98, 20, I18n.get("dropmanipgui.lotas.blocks.gravel.gravel"), button -> {//"Gravel"
 		pressGravel();
 	});
-	public static Button dropFlint = MCVer.Button(x, y, 98, 20, "Flint", button -> {
+	public static Button dropFlint = MCVer.Button(x, y, 98, 20, I18n.get("dropmanipgui.lotas.blocks.gravel.flint"), button -> {//"Flint"
 		pressFlint();
 	});
 
@@ -44,13 +45,13 @@ public class GravelDropManipulation extends DropManipulationScreen.DropManipulat
 		GravelDropManipulation.y = y;
 		GravelDropManipulation.width = width;
 		GravelDropManipulation.height = height;
-		enabled = MCVer.Checkbox(x, y, 150, 20, "Override Gravel Drops", false);
+		enabled = MCVer.Checkbox(x, y, 150, 20, I18n.get("dropmanipgui.lotas.blocks.gravel.override"), false);//"Override Gravel Drops"
 		dropGravel.active = false;
 	}
 
 	@Override
 	public String getName() {
-		return "Gravel";
+		return I18n.get("dropmanipgui.lotas.blocks.gravel.name");//"Gravel"
 	}
 
 	@Override
@@ -104,7 +105,7 @@ public class GravelDropManipulation extends DropManipulationScreen.DropManipulat
 		if (!enabled.selected()) {
 			MCVer.color4f(.5f, .5f, .5f, .4f);
 		} else {
-			MCVer.drawShadow("Drop " + (flint ? "Flint" : "Gravel") + " when breaking Gravel", x, y + 64, 0xFFFFFF);
+			MCVer.drawShadow(I18n.get("dropmanipgui.lotas.blocks.gravel.description", (flint ? I18n.get("dropmanipgui.lotas.blocks.gravel.flint") : I18n.get("dropmanipgui.lotas.blocks.gravel.gravel"))), x, y + 64, 0xFFFFFF);//"Drop %s when breaking Gravel"
 			MCVer.render(dropGravel, mouseX, mouseY, delta);
 			MCVer.render(dropFlint, mouseX, mouseY, delta);
 		}
