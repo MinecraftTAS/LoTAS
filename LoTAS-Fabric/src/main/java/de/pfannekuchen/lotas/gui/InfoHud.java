@@ -22,6 +22,7 @@ import de.pfannekuchen.lotas.mods.SavestateMod;
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 
@@ -246,8 +247,8 @@ public class InfoHud extends Screen {
 			setDefaults("tickrate", y);
 			lists.add(new InfoLabel("tickrate", configuration, () -> {
 				if (mc.screen == this)
-					return "Tickrate";
-				return "Tickrate: " + TickrateChangerMod.tickrate;
+					return I18n.get("infohud.lotas.tickrate");//"Tickrate"
+				return I18n.get("infohud.lotas.tickrate")+": " + TickrateChangerMod.tickrate;//"Tickrate"
 			}));
 			y += 14;
 			setDefaults("position", y);
@@ -260,14 +261,14 @@ public class InfoHud extends Screen {
 			setDefaults("preciseposition", y);
 			lists.add(new InfoLabel("preciseposition", configuration, () -> {
 				if (mc.screen == this)
-					return "Precise XYZ";
+					return I18n.get("infohud.lotas.precise");//"Precise XYZ"
 				return String.format("%f %f %f", MCVer.getX(mc.player), MCVer.getY(mc.player), MCVer.getZ(mc.player));
 			}));
 			y += 14;
 			setDefaults("chunkposition", y);
 			lists.add(new InfoLabel("chunkposition", configuration, () -> {
 				if (mc.screen == this)
-					return "Chunk Position";
+					return I18n.get("infohud.lotas.chunkpos");//"Chunk Position"
 				//#if MC>=11700
 //$$ 				return String.format("%d %d", mc.player.chunkPosition().getRegionLocalX(), mc.player.chunkPosition().getRegionLocalZ());
 				//#else
@@ -278,7 +279,7 @@ public class InfoHud extends Screen {
 			setDefaults("worldseed", y);
 			lists.add(new InfoLabel("worldseed", configuration, () -> {
 				if (mc.screen == this)
-					return "Worldseed";
+					return I18n.get("infohud.lotas.worldseed");//"Worldseed"
 				List<ServerPlayer> players = mc.getSingleplayerServer().getPlayerList().getPlayers();
 				if(!players.isEmpty()) {
 					return players.get(0).getLevel().getSeed() + "";
@@ -290,35 +291,35 @@ public class InfoHud extends Screen {
 			setDefaults("ticks", y);
 			lists.add(new InfoLabel("ticks", configuration, () -> {
 				if (mc.screen == this)
-					return "Ticks";
+					return I18n.get("infohud.lotas.ticks");//"Ticks"
 				return TickrateChangerMod.ticksPassedServer + "";
 			}));
 			y += 14;
 			setDefaults("savestates", y);
 			lists.add(new InfoLabel("savestates", configuration, () -> {
 				if (mc.screen == this)
-					return "Savestate Count";
-				return ("Savestates: " + SavestateMod.TrackerFile.savestateCount);
+					return I18n.get("infohud.lotas.savestate.count");//"Savestate Count"
+				return (I18n.get("infohud.lotas.savestate") + SavestateMod.TrackerFile.savestateCount);//"Savestates: "
 			}));
 			y += 14;
 			setDefaults("loadstates", y);
 			lists.add(new InfoLabel("loadstates", configuration, () -> {
 				if (mc.screen == this)
-					return "Loadstate Count";
-				return ("Loadstates: " + SavestateMod.TrackerFile.loadstateCount);
+					return I18n.get("infohud.lotas.loadstate.count");//"Loadstate Count"
+				return (I18n.get("infohud.lotas.loadstate") + SavestateMod.TrackerFile.loadstateCount);//"Loadstates: "
 			}));
 			y += 14;
 			setDefaults("timer", y);
 			lists.add(new InfoLabel("timer", configuration, () -> {
 				if (mc.screen == this)
-					return "Timer";
-				return Timer.ticks == -1 ? "Timer is paused" : Timer.getDuration(Duration.ofMillis(Timer.ticks * 50));
+					return I18n.get("infohud.lotas.timer");//"Timer"
+				return Timer.ticks == -1 ? I18n.get("infohud.lotas.timer.paused") : Timer.getDuration(Duration.ofMillis(Timer.ticks * 50));//"Timer is paused"
 			}));
 			y += 14;
 			setDefaults("rtatimer", y);
 			lists.add(new InfoLabel("rtatimer", configuration, () -> {
 				if (mc.screen == this)
-					return "RTATimer";
+					return I18n.get("infohud.lotas.rtatimer");//"RTATimer"
 				if (Timer.running) TickrateChangerMod.rta = Duration.ofMillis(System.currentTimeMillis() - Timer.startTime.toMillis());
 				return Timer.ticks == -1 ? "" : ("RTA: " + Timer.getDuration(TickrateChangerMod.rta));
 			}));
@@ -326,20 +327,20 @@ public class InfoHud extends Screen {
 			setDefaults("bps", y);
 			lists.add(new InfoLabel("bps", configuration, () -> {
 				if (mc.screen == this)
-					return "Speed/BPS";
+					return I18n.get("infohud.lotas.bps.1");//"Speed/BPS"
 				double distTraveledLastTickX = MCVer.getX(mc.player) - mc.player.xOld;
 				double distTraveledLastTickZ = MCVer.getZ(mc.player) - mc.player.zOld;
 				//#if MC>=11700
-//$$ 				return String.format("%.2f", Mth.sqrt((float) (distTraveledLastTickX * distTraveledLastTickX + distTraveledLastTickZ * distTraveledLastTickZ)) / 0.05F) + " blocks/sec";
+//$$ 				return String.format("%.2f", Mth.sqrt((float) (distTraveledLastTickX * distTraveledLastTickX + distTraveledLastTickZ * distTraveledLastTickZ)) / 0.05F) + I18n.get("infohud.lotas.bps.2");//" blocks/sec"
 				//#else
-				return String.format("%.2f", Mth.sqrt((distTraveledLastTickX * distTraveledLastTickX + distTraveledLastTickZ * distTraveledLastTickZ)) / 0.05F) + " blocks/sec";
+				return String.format("%.2f", Mth.sqrt((distTraveledLastTickX * distTraveledLastTickX + distTraveledLastTickZ * distTraveledLastTickZ)) / 0.05F) + I18n.get("infohud.lotas.bps.2");//" blocks/sec"
 				//#endif
 			}));
 			y += 14;
 			setDefaults("keystroke", y);
 			lists.add(new InfoLabel("keystroke", configuration, () -> {
 				if (mc.screen == this)
-					return "Keystrokes";
+					return I18n.get("infohud.lotas.keystrokes");//"Keystrokes"
 				return KeystrokeUtils.getKeystrokes();
 			}));
 		} catch (Exception e) {
@@ -387,11 +388,11 @@ public class InfoHud extends Screen {
 				}
 			}
 			if (mc.screen instanceof InfoHud) {
-				MCVer.drawShadow("Leftclick to move", width - ypos, xpos - 30, 0x60FF00);
-				MCVer.drawShadow("Middleclick to enable", width - ypos, xpos - 20, 0x60FF00);
-				MCVer.drawShadow("Rightclick to add black background", width - ypos, xpos - 10, 0x60FF00);
-				MCVer.drawShadow("Hold Shift to snap to grid", width - ypos, xpos, 0x60FF00);
-				MCVer.drawShadow("CTRL+Shift+R to reset the layout", width - ypos, xpos + 10, 0xEE8100);
+				MCVer.drawShadow(I18n.get("infohud.lotas.tip.1"), width - ypos, xpos - 30, 0x60FF00);//"Leftclick to move"
+				MCVer.drawShadow(I18n.get("infohud.lotas.tip.2"), width - ypos, xpos - 20, 0x60FF00);//"Middleclick to enable"
+				MCVer.drawShadow(I18n.get("infohud.lotas.tip.3"), width - ypos, xpos - 10, 0x60FF00);//"Rightclick to add black background"
+				MCVer.drawShadow(I18n.get("infohud.lotas.tip.4"), width - ypos, xpos, 0x60FF00);//"Hold Shift to snap to grid"
+				MCVer.drawShadow(I18n.get("infohud.lotas.tip.5"), width - ypos, xpos + 10, 0xEE8100);//"CTRL+Shift+R to reset the layout"
 
 				if (Screen.hasShiftDown() && Screen.hasControlDown() && KeybindsUtils.isKeyDown(GLFW.GLFW_KEY_R)) {
 					resetLayout = true;
