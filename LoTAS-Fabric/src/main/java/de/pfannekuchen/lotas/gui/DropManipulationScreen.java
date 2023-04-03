@@ -31,6 +31,7 @@ import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Checkbox;
 import net.minecraft.client.gui.screens.PauseScreen;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
@@ -65,7 +66,7 @@ public class DropManipulationScreen extends Screen {
 	}
 
 	public DropManipulationScreen(PauseScreen gameMenuScreen) {
-		super(MCVer.literal("Drop Manipulation Screen"));
+		super(MCVer.literal(I18n.get("dropmanipgui.lotas.name")));//"Drop Manipulation Screen"
 	}
 
 	@Override

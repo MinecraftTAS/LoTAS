@@ -8,6 +8,7 @@ import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.gui.DropManipulationScreen;
 import de.pfannekuchen.lotas.gui.widgets.SmallCheckboxWidget;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.animal.Cod;
@@ -21,23 +22,23 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class FishDropManipulation extends DropManipulationScreen.DropManipulation {
 
-	public static SmallCheckboxWidget optimizeCod = new SmallCheckboxWidget(0, 0, "Cod drop Bone Meal", false);
-	public static SmallCheckboxWidget optimizeSalmon = new SmallCheckboxWidget(0, 0, "Salmon drop Bone Meal", false);
-	public static SmallCheckboxWidget optimizeDolphin = new SmallCheckboxWidget(0, 0, "Dolphin drop 1 Cod", false);
-	public static SmallCheckboxWidget optimizePufferfish = new SmallCheckboxWidget(0, 0, "Pufferfish drop Bone Meal", false);
-	public static SmallCheckboxWidget optimizeTropical = new SmallCheckboxWidget(0, 0, "Tropical Fish drop Bone Meal", false);
+	public static SmallCheckboxWidget optimizeCod = new SmallCheckboxWidget(0, 0, I18n.get("dropmanipgui.lotas.entity.fish.cod"), false);//"Cod drop Bone Meal"
+	public static SmallCheckboxWidget optimizeSalmon = new SmallCheckboxWidget(0, 0, I18n.get("dropmanipgui.lotas.entity.fish.salmon"), false);//"Salmon drop Bone Meal"
+	public static SmallCheckboxWidget optimizeDolphin = new SmallCheckboxWidget(0, 0, I18n.get("dropmanipgui.lotas.entity.fish.dolphin"), false);//"Dolphin drop 1 Cod"
+	public static SmallCheckboxWidget optimizePufferfish = new SmallCheckboxWidget(0, 0, I18n.get("dropmanipgui.lotas.entity.fish.pufferfish"), false);//"Pufferfish drop Bone Meal"
+	public static SmallCheckboxWidget optimizeTropical = new SmallCheckboxWidget(0, 0, I18n.get("dropmanipgui.lotas.entity.fish.tropicalfish"), false);//"Tropical Fish drop Bone Meal"
 
 	public FishDropManipulation(int x, int y, int width, int height) {
 		FishDropManipulation.x = x;
 		FishDropManipulation.y = y;
 		FishDropManipulation.width = width;
 		FishDropManipulation.height = height;
-		enabled = MCVer.Checkbox(x, y, 150, 20, "Override Fish Drops", false);
+		enabled = MCVer.Checkbox(x, y, 150, 20, I18n.get("dropmanipgui.lotas.entity.fish.override"), false);//"Override Fish Drops"
 	}
 
 	@Override
 	public String getName() {
-		return "Fish";
+		return I18n.get("dropmanipgui.lotas.entity.fish.name");//"Fish"
 	}
 
 	@Override

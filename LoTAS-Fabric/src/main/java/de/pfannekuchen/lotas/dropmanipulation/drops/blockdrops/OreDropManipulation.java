@@ -8,6 +8,7 @@ import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.gui.DropManipulationScreen;
 import de.pfannekuchen.lotas.gui.widgets.SmallCheckboxWidget;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -19,10 +20,10 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class OreDropManipulation extends DropManipulationScreen.DropManipulation {
 
-	public static SmallCheckboxWidget optimizeLapis = new SmallCheckboxWidget(0, 0, "Full Lapis Drops", false);
-	public static SmallCheckboxWidget optimizeRedstone = new SmallCheckboxWidget(0, 0, "Full Redstone Drops", false);
+	public static SmallCheckboxWidget optimizeLapis = new SmallCheckboxWidget(0, 0, I18n.get("dropmanipgui.lotas.blocks.ore.lapis"), false);//"Full Lapis Drops"
+	public static SmallCheckboxWidget optimizeRedstone = new SmallCheckboxWidget(0, 0, I18n.get("dropmanipgui.lotas.blocks.ore.redstone"), false);//"Full Redstone Drops"
 	//#if MC>=11700
-//$$ 	public static SmallCheckboxWidget optimizeCopper = new SmallCheckboxWidget(0, 0, "Full Copper Drops", false);
+//$$ 	public static SmallCheckboxWidget optimizeCopper = new SmallCheckboxWidget(0, 0, I18n.get("dropmanipgui.lotas.blocks.ore.copper"), false);//"Full Copper Drops"
 	//#endif
 
 	public OreDropManipulation(int x, int y, int width, int height) {
@@ -30,12 +31,12 @@ public class OreDropManipulation extends DropManipulationScreen.DropManipulation
 		OreDropManipulation.y = y;
 		OreDropManipulation.width = width;
 		OreDropManipulation.height = height;
-		enabled = MCVer.Checkbox(x, y, 150, 20, "Override Ore Drops", false);
+		enabled = MCVer.Checkbox(x, y, 150, 20, I18n.get("dropmanipgui.lotas.blocks.ore.override"), false);//"Override Ore Drops"
 	}
 
 	@Override
 	public String getName() {
-		return "Ores";
+		return I18n.get("dropmanipgui.lotas.blocks.ore.name");//"Ores"
 	}
 
 	@Override

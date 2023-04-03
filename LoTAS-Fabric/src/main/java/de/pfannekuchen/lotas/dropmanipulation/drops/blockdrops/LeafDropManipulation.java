@@ -9,6 +9,7 @@ import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.gui.DropManipulationScreen;
 import de.pfannekuchen.lotas.gui.widgets.ImageButton;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -35,12 +36,12 @@ public class LeafDropManipulation extends DropManipulationScreen.DropManipulatio
 		LeafDropManipulation.y = y;
 		LeafDropManipulation.width = width;
 		LeafDropManipulation.height = height;
-		enabled = MCVer.Checkbox(x, y, 150, 20, "Override Leaf Drops", false);
+		enabled = MCVer.Checkbox(x, y, 150, 20, I18n.get("dropmanipgui.lotas.blocks.leaf.override"), false);//"Override Leaf Drops"
 	}
 
 	@Override
 	public String getName() {
-		return "Leaves";
+		return I18n.get("dropmanipgui.lotas.blocks.leaf.name");//"Leaves"
 	}
 
 	@Override
@@ -121,7 +122,11 @@ public class LeafDropManipulation extends DropManipulationScreen.DropManipulatio
 		if (!enabled.selected()) {
 			MCVer.color4f(.5f, .5f, .5f, .4f);
 		} else {
-			MCVer.drawShadow("Leaves drop:" + (dropApple.isToggled() ? " 1 Apple" : "") + (dropStick.isToggled() ? " 2 Sticks" : "") + (dropSapling.isToggled() ? " 1 Sapling" : ""), x, y + 64, 0xFFFFFF);
+			String leaves = I18n.get("dropmanipgui.lotas.blocks.leaf.description.leaves");//"Leaves drop:"
+			String apple = I18n.get("dropmanipgui.lotas.blocks.leaf.description.apple");//" 1 Apple"
+			String sticks = I18n.get("dropmanipgui.lotas.blocks.leaf.description.sticks");//" 2 Sticks"
+			String sapling = I18n.get("dropmanipgui.lotas.blocks.leaf.description.sapling");//" 1 Sapling"
+			MCVer.drawShadow(leaves + (dropApple.isToggled() ? apple : "") + (dropStick.isToggled() ? sticks : "") + (dropSapling.isToggled() ? sapling : ""), x, y + 64, 0xFFFFFF);
 			MCVer.render(dropApple, mouseX, mouseY, delta);
 			MCVer.render(dropStick, mouseX, mouseY, delta);
 			MCVer.render(dropSapling, mouseX, mouseY, delta);

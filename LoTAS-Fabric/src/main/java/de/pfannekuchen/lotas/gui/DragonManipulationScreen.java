@@ -55,20 +55,20 @@ public class DragonManipulationScreen extends Screen {
 	Button action3;
 
 	public DragonManipulationScreen(Screen screen) {
-		super(MCVer.literal("Dragon Manipulator Screen"));
+		super(MCVer.literal(I18n.get("dragonmanipgui.lotas.name"))); //"Dragon Manipulation Screen"
 		EnderDragon dragon = MCVer.getCurrentLevel().getDragons().get(0);
 		dragonPhase = dragon.getPhaseManager().getCurrentPhase();
 		here = screen;
 
 		phases = new HashMap<String, EnderDragonPhase<?>>();
-		phases.put("Stop shooting at the Player", EnderDragonPhase.HOLDING_PATTERN);
-		phases.put("Shoot at the Player", EnderDragonPhase.STRAFE_PLAYER);
-		phases.put("Try to land", EnderDragonPhase.LANDING_APPROACH);
-		phases.put("Takeoff", EnderDragonPhase.TAKEOFF);
-		phases.put("Start Flaming", EnderDragonPhase.SITTING_FLAMING);
-		phases.put("Turn", EnderDragonPhase.SITTING_SCANNING);
-		phases.put("Cancel Landing", EnderDragonPhase.HOLDING_PATTERN);
-		phases.put("Cancel Landing and shoot at Player", EnderDragonPhase.STRAFE_PLAYER);
+		phases.put(I18n.get("dragonmanipgui.lotas.phase.holding"), EnderDragonPhase.HOLDING_PATTERN);//"Stop shooting at the Player"
+		phases.put(I18n.get("dragonmanipgui.lotas.phase.strafeplayer"), EnderDragonPhase.STRAFE_PLAYER);//"Shoot at the Player"
+		phases.put(I18n.get("dragonmanipgui.lotas.phase.landing"), EnderDragonPhase.LANDING_APPROACH);//"Try to land"
+		phases.put(I18n.get("dragonmanipgui.lotas.phase.takeoff"), EnderDragonPhase.TAKEOFF);//"Takeoff"
+		phases.put(I18n.get("dragonmanipgui.lotas.phase.flaming"), EnderDragonPhase.SITTING_FLAMING);//"Start Flaming"
+		phases.put(I18n.get("dragonmanipgui.lotas.phase.scanning"), EnderDragonPhase.SITTING_SCANNING);//"Turn"
+		phases.put(I18n.get("dragonmanipgui.lotas.phase.cancel_landing"), EnderDragonPhase.HOLDING_PATTERN);//"Cancel Landing"
+		phases.put(I18n.get("dragonmanipgui.lotas.phase.cancel_and_shoot"), EnderDragonPhase.STRAFE_PLAYER);//"Cancel Landing and shoot at Player"
 	}
 
 	public String getButtonMessage(Button btn) {
@@ -81,7 +81,7 @@ public class DragonManipulationScreen extends Screen {
 	
 	@Override
 	public void init() {
-		action1 = MCVer.Button(this.width / 3 * 0 + 5, height / 8, this.width / 3 - 10, 20, "Phase1", btn -> {
+		action1 = MCVer.Button(this.width / 3 * 0 + 5, height / 8, this.width / 3 - 10, 20, I18n.get("dragonmanipgui.lotas.actionname.1"), btn -> {//"Phase1"
 			action1.active = false;
 			action2.active = false;
 			action3.active = false;
@@ -90,7 +90,7 @@ public class DragonManipulationScreen extends Screen {
 			dragon.getPhaseManager().setPhase(phases.get(getButtonMessage(btn)));
 			dragonPhase = dragon.getPhaseManager().getCurrentPhase();
 		});
-		action2 = MCVer.Button(this.width / 3 * 1 + 5, height / 8, this.width / 3 - 10, 20, "Phase2", btn -> {
+		action2 = MCVer.Button(this.width / 3 * 1 + 5, height / 8, this.width / 3 - 10, 20, I18n.get("dragonmanipgui.lotas.actionname.2"), btn -> {//"Phase2"
 			action1.active = false;
 			action2.active = false;
 			action3.active = false;
@@ -99,7 +99,7 @@ public class DragonManipulationScreen extends Screen {
 			dragon.getPhaseManager().setPhase(phases.get(getButtonMessage(btn)));
 			dragonPhase = dragon.getPhaseManager().getCurrentPhase();
 		});
-		action3 = MCVer.Button(this.width / 3 * 2 + 5, height / 8, this.width / 3 - 10, 20, "Phase3", btn -> {
+		action3 = MCVer.Button(this.width / 3 * 2 + 5, height / 8, this.width / 3 - 10, 20, I18n.get("dragonmanipgui.lotas.actionname.3"), btn -> {//"Phase3"
 			action1.active = false;
 			action2.active = false;
 			action3.active = false;
@@ -110,30 +110,30 @@ public class DragonManipulationScreen extends Screen {
 		});
 
 		if (dragonPhase instanceof DragonHoldingPatternPhase) {
-			MCVer.setMessage(action1, "Try to land");
-			MCVer.setMessage(action2, "Shoot at the Player");
+			MCVer.setMessage(action1, I18n.get("dragonmanipgui.lotas.phase.holding"));//"Try to land"
+			MCVer.setMessage(action2, I18n.get("dragonmanipgui.lotas.phase.strafeplayer"));//"Shoot at the Player"
 			MCVer.setMessage(action3, "");
 			action1.active = true;
 			action2.active = true;
 			action3.active = false;
 		} else if (dragonPhase instanceof DragonLandingApproachPhase) {
-			MCVer.setMessage(action1, "Cancel Landing");
-			MCVer.setMessage(action2, "Cancel Landing and shoot at Player");
+			MCVer.setMessage(action1, I18n.get("dragonmanipgui.lotas.phase.cancel_landing"));//"Cancel Landing"
+			MCVer.setMessage(action2, I18n.get("dragonmanipgui.lotas.phase.cancel_and_shoot"));//"Cancel Landing and shoot at Player"
 			MCVer.setMessage(action3, "");
 			action1.active = true;
 			action2.active = true;
 			action3.active = false;
 		} else if (dragonPhase instanceof DragonStrafePlayerPhase) {
-			MCVer.setMessage(action1, "Stop shooting at the Player");
-			MCVer.setMessage(action2, "Try to land");
+			MCVer.setMessage(action1, I18n.get("dragonmanipgui.lotas.phase.holding"));//"Stop shooting at the Player"
+			MCVer.setMessage(action2, I18n.get("dragonmanipgui.lotas.phase.landing"));//"Try to land"
 			MCVer.setMessage(action3, "");
 			action1.active = true;
 			action2.active = true;
 			action3.active = false;
 		} else if (dragonPhase instanceof AbstractDragonSittingPhase) {
-			MCVer.setMessage(action1, "Takeoff");
-			MCVer.setMessage(action2, "Turn");
-			MCVer.setMessage(action3, "Start Flaming");
+			MCVer.setMessage(action1, I18n.get("dragonmanipgui.lotas.phase.takeoff"));//"Takeoff"
+			MCVer.setMessage(action2, I18n.get("dragonmanipgui.lotas.phase.scanning"));//"Turn"
+			MCVer.setMessage(action3, I18n.get("dragonmanipgui.lotas.phase.flaming"));//"Start Flaming"
 			action1.active = true;
 			action2.active = true;
 			action3.active = true;

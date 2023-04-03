@@ -8,6 +8,7 @@ import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.gui.DropManipulationScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -20,10 +21,10 @@ public class SealanternDropManipulation extends DropManipulationScreen.DropManip
 
 	public static int pris = 2;
 
-	public static Button drop2Pris = MCVer.Button(x, y, 98, 20, "2 Prismarine Crystals", button -> {
+	public static Button drop2Pris = MCVer.Button(x, y, 98, 20, I18n.get("dropmanipgui.lotas.blocks.sealantern.prismarine.2"), button -> {//"2 Prismarine Crystals"
 		press2pris();
 	});
-	public static Button drop3Pris = MCVer.Button(x, y, 98, 20, "3 Prismarine Crystals", button -> {
+	public static Button drop3Pris = MCVer.Button(x, y, 98, 20, I18n.get("dropmanipgui.lotas.blocks.sealantern.prismarine.3"), button -> {//"3 Prismarine Crystals"
 		press3pris();
 	});
 
@@ -44,13 +45,13 @@ public class SealanternDropManipulation extends DropManipulationScreen.DropManip
 		SealanternDropManipulation.y = y;
 		SealanternDropManipulation.width = width;
 		SealanternDropManipulation.height = height;
-		enabled = MCVer.Checkbox(x, y, 150, 20, "Override Sea Lantern Drops", false);
+		enabled = MCVer.Checkbox(x, y, 150, 20, I18n.get("dropmanipgui.lotas.blocks.sealantern.override"), false);//"Override Sea Lantern Drops"
 		drop2Pris.active = false;
 	}
 
 	@Override
 	public String getName() {
-		return "Sea Lantern";
+		return I18n.get("dropmanipgui.lotas.blocks.sealantern.name");//"Sea Lantern"
 	}
 
 	@Override
@@ -103,7 +104,7 @@ public class SealanternDropManipulation extends DropManipulationScreen.DropManip
 		if (!enabled.selected()) {
 			MCVer.color4f(.5f, .5f, .5f, .4f);
 		} else {
-			MCVer.drawShadow("Drop " + pris + " Prismarine Crystals when breaking Sea Lanterns", x, y + 64, 0xFFFFFF);
+			MCVer.drawShadow(I18n.get("dropmanipgui.lotas.blocks.sealantern.description", pris), x, y + 64, 0xFFFFFF);//"Drop %i Prismarine Crystals when breaking Sea Lanterns"
 			MCVer.render(drop2Pris, mouseX, mouseY, delta);
 			MCVer.render(drop3Pris, mouseX, mouseY, delta);
 		}

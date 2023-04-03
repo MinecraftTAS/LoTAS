@@ -34,7 +34,7 @@ public class DropdownWidget<T> extends AbstractWidget {
     private AbstractWidget focused;
     private boolean dropdownOpenUp;
 
-    public DropdownWidget(Font textRenderer, List<T> selections, Function<T, String> nameProvider, int x, int y, int width, int height, String title, T value, Consumer<T> saveHandler) {
+    public DropdownWidget(Font textRenderer, List<T> selections, Function<T, String> nameProvider, int x, int y, int width, int height, String title, Consumer<T> saveHandler) {
     	//#if MC>=11601
     //$$ 	super(x, y, width, height, MCVer.literal(title));
     	//#else

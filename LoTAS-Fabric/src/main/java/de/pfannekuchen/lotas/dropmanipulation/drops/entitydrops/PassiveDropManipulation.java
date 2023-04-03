@@ -8,6 +8,7 @@ import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.gui.DropManipulationScreen;
 import de.pfannekuchen.lotas.gui.widgets.SmallCheckboxWidget;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -38,33 +39,33 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class PassiveDropManipulation extends DropManipulationScreen.DropManipulation {
 
-	public static SmallCheckboxWidget optimizeChicken = new SmallCheckboxWidget(0, 0, "Optimize Chicken Drops", false);
-	public static SmallCheckboxWidget optimizeCow = new SmallCheckboxWidget(0, 0, "Optimize Cow Drops", false);
-	public static SmallCheckboxWidget optimizeMooshroom = new SmallCheckboxWidget(0, 0, "Optimize Mooshroom Drops", false);
-	public static SmallCheckboxWidget optimizeSkeletonhorse = new SmallCheckboxWidget(0, 0, "Optimize Skeleton Horse Drops", false);
-	public static SmallCheckboxWidget optimizeCat = new SmallCheckboxWidget(0, 0, "Optimize Cat Drops", false);
-	public static SmallCheckboxWidget optimizePig = new SmallCheckboxWidget(0, 0, "Optimize Pig Drops", false);
-	public static SmallCheckboxWidget optimizeParrot = new SmallCheckboxWidget(0, 0, "Optimize Parrot Drops", false);
-	public static SmallCheckboxWidget optimizeRabbit = new SmallCheckboxWidget(0, 0, "Optimize Rabbit Drops", false);
-	public static SmallCheckboxWidget optimizeSheep = new SmallCheckboxWidget(0, 0, "Optimize Sheep Drops", false);
-	public static SmallCheckboxWidget optimizeSnowgolem = new SmallCheckboxWidget(0, 0, "Optimize Snowgolem Drops", false);
-	public static SmallCheckboxWidget optimizeSquid = new SmallCheckboxWidget(0, 0, "Optimize Squid Drops", false);
-	public static SmallCheckboxWidget optimizeHorses = new SmallCheckboxWidget(0, 0, "Optimize All Horse Drops", false);
-	public static SmallCheckboxWidget optimizeTurtle = new SmallCheckboxWidget(0, 0, "Optimize Turtle Drops", false);
-	public static SmallCheckboxWidget optimizeIronGolem = new SmallCheckboxWidget(0, 0, "Optimize Iron Golem Drops", false);
-	public static SmallCheckboxWidget optimizePolarbear = new SmallCheckboxWidget(0, 0, "Optimize Polarbear Drops", false);
+	public static SmallCheckboxWidget optimizeChicken = new SmallCheckboxWidget(0, 0, I18n.get("dropmanipgui.lotas.entity.passive.chicken"), false);//"Optimize Chicken Drops"
+	public static SmallCheckboxWidget optimizeCow = new SmallCheckboxWidget(0, 0, I18n.get("dropmanipgui.lotas.entity.passive.cow"), false);//"Optimize Cow Drops"
+	public static SmallCheckboxWidget optimizeMooshroom = new SmallCheckboxWidget(0, 0, I18n.get("dropmanipgui.lotas.entity.passive.mooshroom"), false);//"Optimize Mooshroom Drops"
+	public static SmallCheckboxWidget optimizeSkeletonhorse = new SmallCheckboxWidget(0, 0, I18n.get("dropmanipgui.lotas.entity.passive.skeletonhorse"), false);//"Optimize Skeleton Horse Drops"
+	public static SmallCheckboxWidget optimizeCat = new SmallCheckboxWidget(0, 0, I18n.get("dropmanipgui.lotas.entity.passive.cat"), false);//"Optimize Cat Drops"
+	public static SmallCheckboxWidget optimizePig = new SmallCheckboxWidget(0, 0, I18n.get("dropmanipgui.lotas.entity.passive.pig"), false);//"Optimize Pig Drops"
+	public static SmallCheckboxWidget optimizeParrot = new SmallCheckboxWidget(0, 0, I18n.get("dropmanipgui.lotas.entity.passive.parrot"), false);//"Optimize Parrot Drops"
+	public static SmallCheckboxWidget optimizeRabbit = new SmallCheckboxWidget(0, 0, I18n.get("dropmanipgui.lotas.entity.passive.rabbit"), false);//"Optimize Rabbit Drops"
+	public static SmallCheckboxWidget optimizeSheep = new SmallCheckboxWidget(0, 0, I18n.get("dropmanipgui.lotas.entity.passive.sheep"), false);//"Optimize Sheep Drops"
+	public static SmallCheckboxWidget optimizeSnowgolem = new SmallCheckboxWidget(0, 0, I18n.get("dropmanipgui.lotas.entity.passive.snowgolem"), false);//"Optimize Snowgolem Drops"
+	public static SmallCheckboxWidget optimizeSquid = new SmallCheckboxWidget(0, 0, I18n.get("dropmanipgui.lotas.entity.passive.squid"), false);//"Optimize Squid Drops"
+	public static SmallCheckboxWidget optimizeHorses = new SmallCheckboxWidget(0, 0, I18n.get("dropmanipgui.lotas.entity.passive.horse"), false);//"Optimize All Horse Drops"
+	public static SmallCheckboxWidget optimizeTurtle = new SmallCheckboxWidget(0, 0, I18n.get("dropmanipgui.lotas.entity.passive.turtle"), false);//"Optimize Turtle Drops"
+	public static SmallCheckboxWidget optimizeIronGolem = new SmallCheckboxWidget(0, 0, I18n.get("dropmanipgui.lotas.entity.passive.irongolem"), false);//"Optimize Iron Golem Drops"
+	public static SmallCheckboxWidget optimizePolarbear = new SmallCheckboxWidget(0, 0, I18n.get("dropmanipgui.lotas.entity.passive.polarbear"), false);//"Optimize Polarbear Drops"
 
 	public PassiveDropManipulation(int x, int y, int width, int height) {
 		PassiveDropManipulation.x = x;
 		PassiveDropManipulation.y = y;
 		PassiveDropManipulation.width = width;
 		PassiveDropManipulation.height = height;
-		enabled = MCVer.Checkbox(x, y, 150, 20, "Override Passive Mob Drops", false);
+		enabled = MCVer.Checkbox(x, y, 150, 20, I18n.get("dropmanipgui.lotas.entity.passive.override"), false);//"Override Passive Mob Drops"
 	}
 
 	@Override
 	public String getName() {
-		return "Passive Mobs";
+		return I18n.get("dropmanipgui.lotas.entity.passive.name");//"Passive Mobs"
 	}
 
 	@Override

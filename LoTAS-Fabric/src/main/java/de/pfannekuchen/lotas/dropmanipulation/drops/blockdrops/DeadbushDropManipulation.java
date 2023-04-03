@@ -8,6 +8,7 @@ import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.gui.DropManipulationScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -18,15 +19,15 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class DeadbushDropManipulation extends DropManipulationScreen.DropManipulation {
 
-	public static int sticks = 0;
+	public static int sticks = 0;	
 
-	public static Button drop0Stick = MCVer.Button(x, y, 98, 20, "0 Sticks", button -> {
+	public static Button drop0Stick = MCVer.Button(x, y, 98, 20, I18n.get("dropmanipgui.lotas.blocks.deadbush.0"), button -> {//"0 Sticks"
 		press0Stick();
 	});
-	public static Button drop1Stick = MCVer.Button(x, y, 98, 20, "1 Sticks", button -> {
+	public static Button drop1Stick = MCVer.Button(x, y, 98, 20, I18n.get("dropmanipgui.lotas.blocks.deadbush.1"), button -> {//"1 Sticks"
 		press1Stick();
 	});
-	public static Button drop2Stick = MCVer.Button(x, y, 98, 20, "2 Sticks", button -> {
+	public static Button drop2Stick = MCVer.Button(x, y, 98, 20, I18n.get("dropmanipgui.lotas.blocks.deadbush.2"), button -> {//"2 Sticks"
 		press2Stick();
 	});
 
@@ -56,13 +57,13 @@ public class DeadbushDropManipulation extends DropManipulationScreen.DropManipul
 		DeadbushDropManipulation.y = y;
 		DeadbushDropManipulation.width = width;
 		DeadbushDropManipulation.height = height;
-		enabled = MCVer.Checkbox(x, y, 150, 20, "Override Dead Bush Drops", false);
+		enabled = MCVer.Checkbox(x, y, 150, 20, I18n.get("dropmanipgui.lotas.blocks.deadbush.override"), false);//"Override Dead Bush Drops"
 		drop0Stick.active = false;
 	}
 
 	@Override
 	public String getName() {
-		return "Dead Bush";
+		return I18n.get("dropmanipgui.lotas.blocks.deadbush.name");//"Dead Bush"
 	}
 
 	@Override
@@ -122,7 +123,7 @@ public class DeadbushDropManipulation extends DropManipulationScreen.DropManipul
 			MCVer.render(drop0Stick, mouseX, mouseY, delta);
 			MCVer.render(drop1Stick, mouseX, mouseY, delta);
 			MCVer.render(drop2Stick, mouseX, mouseY, delta);
-			MCVer.drawShadow("Drop " + sticks + " Sticks when breaking Dead Bush", x, y + 64, 0xFFFFFF);
+			MCVer.drawShadow(I18n.get("dropmanipgui.lotas.blocks.deadbush.description", sticks), x, y + 64, 0xFFFFFF);//"Drop %i Sticks when breaking Dead Bush"
 		}
 
 		MCVer.bind(Minecraft.getInstance().getTextureManager(), new ResourceLocation("lotas", "drops/deadbush.png"));
