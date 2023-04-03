@@ -204,6 +204,39 @@
 	"dropmanipgui.lotas.entity.bartering.override":"Override Bartering Drops",
 	"dropmanipgui.lotas.entity.bartering.name":"Bartering",
 	
+	// InfoHud
+	
+	"infohud.lotas.tickrate":"Tickrate",
+	"infohud.lotas.precise":"Precise XYZ",
+	"infohud.lotas.chunkpos":"Chunk Position",
+	"infohud.lotas.worldseed":"Worldseed",
+	"infohud.lotas.ticks":"Ticks",
+	"infohud.lotas.savestate.count":"Savestate Count",
+	"infohud.lotas.savestate":"Savestates: ",
+	"infohud.lotas.loadstate.count":"Loadstate Count",
+	"infohud.lotas.loadstate":"Loadstates: ",
+	"infohud.lotas.timer":"Timer",
+	"infohud.lotas.timer.paused":"Timer is paused",
+	"infohud.lotas.rtatimer":"RTATimer",
+	"infohud.lotas.bps.1":"Speed/BPS",
+	"infohud.lotas.bps.2":" blocks/sec",
+	"infohud.lotas.keystrokes":"Keystrokes",
+	
+	"infohud.lotas.tip.1":"Leftclick to move",
+	"infohud.lotas.tip.2":"Middleclick to enable",
+	"infohud.lotas.tip.3":"Rightclick to add black background",
+	"infohud.lotas.tip.4":"Hold Shift to snap to grid",
+	"infohud.lotas.tip.5":"CTRL+Shift+R to reset the layout",
+	
+	// LoadstateScreen
+	"loadstategui.lotas.name":"Loadstate Screen",
+	"loadstategui.lotas.loadstate":"Loadstate",
+	"loadstategui.lotas.deletestate":"Delete state",
+	"loadstategui.lotas.back":"Back",
+	"loadstategui.lotas.info":"Select a state to load",
+	"loadstategui.lotas.error.1":"Error while reading the file",
+	"loadstategui.lotas.error.2":"responsible for this text",
+	
 	// Keybinds
 	"keybind.lotas.savestate": "Savestate",
 	"keybind.lotas.loadstate": "Loadstate",
