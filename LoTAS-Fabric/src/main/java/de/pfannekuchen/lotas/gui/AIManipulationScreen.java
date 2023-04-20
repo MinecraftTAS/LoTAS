@@ -63,9 +63,9 @@ public class AIManipulationScreen extends Screen {
 		MCVer.addButton(this, MCVer.Button(width / 2 +140 - margin, height - 49, 20, 20, "\u2193", btn -> manip.changeTargetBack()));
 		MCVer.addButton(this, MCVer.Button(width / 2 +118 - margin, height - 72, 20, 20, "\u2190", btn -> manip.changeTargetLeft()));
 		MCVer.addButton(this, MCVer.Button(width / 2 +162 - margin, height - 72, 20, 20, "\u2192", btn -> manip.changeTargetRight()));
-		MCVer.addButton(this, MCVer.Button(width / 2 +118 - margin, height - 25, 30, 20, I18n.get("aimanipgui.lotas.up"), btn -> manip.changeTargetUp()));//"Up"
-		MCVer.addButton(this, MCVer.Button(width / 2 +153 - margin, height - 25, 30, 20, I18n.get("aimanipgui.lotas.down"), btn -> manip.changeTargetDown()));//"Down"
-		MCVer.addButton(this, MCVer.Button(width / 2 - 100, height - 72, 200, 20, I18n.get("aimanipgui.lotas.moveme"), btn -> {//"Move to me"
+		MCVer.addButton(this, MCVer.Button(width / 2 +118 - margin, height - 25, 30, 20, I18n.get("manipgui.lotas.up"), btn -> manip.changeTargetUp()));//"Up"
+		MCVer.addButton(this, MCVer.Button(width / 2 +153 - margin, height - 25, 30, 20, I18n.get("manipgui.lotas.down"), btn -> manip.changeTargetDown()));//"Down"
+		MCVer.addButton(this, MCVer.Button(width / 2 - 100, height - 72, 200, 20, I18n.get("manipgui.lotas.moveme"), btn -> {//"Move to me"
 			manip.setTargetToPlayer();
 			setTextToVec(AIManipMod.getTargetPos());
 		}));

@@ -231,7 +231,8 @@ public class AIManipMod {
 	}
 	
 	public static void save() {
-		File file=new File(Minecraft.getInstance().gameDirectory, "saves/"+MCVer.getCurrentWorldFolder()+"/aijobs.dat");
+		Minecraft mc = Minecraft.getInstance();
+		File file=new File(mc.gameDirectory, "saves/"+MCVer.getCurrentWorldFolder()+"/aijobs.dat");
 		List<String> aijobs=new ArrayList<>();
 		
 		if(jobQueue.isEmpty()&&file.exists()) {
@@ -253,7 +254,8 @@ public class AIManipMod {
 	}
 	
 	public static void read() {
-		File file=new File(Minecraft.getInstance().gameDirectory, "saves/"+MCVer.getCurrentWorldFolder()+"/aijobs.dat");
+		Minecraft mc = Minecraft.getInstance();
+		File file=new File(mc.gameDirectory, "saves/"+MCVer.getCurrentWorldFolder()+"/aijobs.dat");
 		if(!file.exists()) {
 			return;
 		}
