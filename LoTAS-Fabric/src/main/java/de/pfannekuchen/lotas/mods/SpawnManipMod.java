@@ -9,6 +9,7 @@ import de.pfannekuchen.lotas.mixin.accessors.AccessorDimensionTypes;
 import de.pfannekuchen.lotas.mixin.accessors.AccessorMobEntity;
 import de.pfannekuchen.lotas.mods.SpawnManipMod.EntityOptions;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Difficulty;
@@ -204,6 +205,7 @@ public class SpawnManipMod {
 		DimensionType dimension = MCVer.getCurrentLevel().getDimension().getType();
 		//#endif
 		ServerLevel world = mc.getSingleplayerServer().getPlayerList().getPlayers().get(0).getLevel();
+		Minecraft mc = Minecraft.getInstance();
 		float[] armor={1f,1f,1f,1f};
 		float[] hand= {1f,1f};
 		
@@ -212,32 +214,32 @@ public class SpawnManipMod {
 		//#else
 		if(dimension == AccessorDimensionTypes.getOverworld()) {
 		//#endif
-			entities.add(new EntityOptions("Cave Spider", new CaveSpider(EntityType.CAVE_SPIDER, world)));
-			entities.add(new EntityOptions("Creeper", new Creeper(EntityType.CREEPER, world)));
-			entities.add(new EntityOptions("Enderman", new EnderMan(EntityType.ENDERMAN, world)));
-			entities.add(new EntityOptions("Husk", new Husk(EntityType.HUSK, world)));
-			entities.add(new EntityOptions("Iron Golem", new IronGolem(EntityType.IRON_GOLEM, world)));
+			entities.add(new EntityOptions(I18n.get("Cave Spider"), new CaveSpider(EntityType.CAVE_SPIDER, world)));
+			entities.add(new EntityOptions(I18n.get("Creeper"), new Creeper(EntityType.CREEPER, world)));
+			entities.add(new EntityOptions(I18n.get("Enderman"), new EnderMan(EntityType.ENDERMAN, world)));
+			entities.add(new EntityOptions(I18n.get("Husk"), new Husk(EntityType.HUSK, world)));
+			entities.add(new EntityOptions(I18n.get("Iron Golem"), new IronGolem(EntityType.IRON_GOLEM, world)));
 			LivingEntity entity = new Skeleton(EntityType.SKELETON, world);
 			entity.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.BOW));
-			entities.add(new EntityOptions("Skeleton", entity));
-			entities.add(new EntityOptions("Slime", new Slime(EntityType.SLIME, world)));
-			entities.add(new EntityOptions("Spider", new Spider(EntityType.SPIDER, world)));
-			entities.add(new EntityOptions("Witch", new Witch(EntityType.WITCH, world)));
-			entities.add(new EntityOptions("Zombie", new Zombie(world)));
-			entities.add(new EntityOptions("Zombievillager", new ZombieVillager(EntityType.ZOMBIE_VILLAGER, world)));
+			entities.add(new EntityOptions(I18n.get("Skeleton"), entity));
+			entities.add(new EntityOptions(I18n.get("Slime"), new Slime(EntityType.SLIME, world)));
+			entities.add(new EntityOptions(I18n.get("Spider"), new Spider(EntityType.SPIDER, world)));
+			entities.add(new EntityOptions(I18n.get("Witch"), new Witch(EntityType.WITCH, world)));
+			entities.add(new EntityOptions(I18n.get("Zombie"), new Zombie(world)));
+			entities.add(new EntityOptions(I18n.get("Zombievillager"), new ZombieVillager(EntityType.ZOMBIE_VILLAGER, world)));
 			
-			if (Minecraft.getInstance().level.getDifficulty() == Difficulty.HARD) {
+			if (mc.level.getDifficulty() == Difficulty.HARD) {
 				entity = new Skeleton(EntityType.SKELETON, world);
 				entity.setItemInHand(InteractionHand.MAIN_HAND, addEnchants(new ItemStack(Items.BOW), skelBow));
 				((AccessorMobEntity)entity).setArmorDropChances(armor);
 				((AccessorMobEntity)entity).setHandDropChances(hand);
-				entities.add(new EntityOptions("Skeleton (Enchanted Bow)", entity));
+				entities.add(new EntityOptions(String.format("%s (%s)", I18n.get("Skeleton"), I18n.get("Enchanted Bow")), entity));
 				
 				entity = new Zombie(world);
 				entity.setItemInHand(InteractionHand.MAIN_HAND, addEnchants(new ItemStack(Items.IRON_SWORD), zombieSword));
 				((AccessorMobEntity)entity).setArmorDropChances(armor);
 				((AccessorMobEntity)entity).setHandDropChances(hand);
-				entities.add(new EntityOptions("Zombie (Enchanted Sword)", entity));
+				entities.add(new EntityOptions(String.format("%s (%s)", I18n.get("Zombie"), I18n.get("Enchanted Sword")), entity));
 
 				entity = new Skeleton(EntityType.SKELETON, world);
 				entity.setItemInHand(InteractionHand.MAIN_HAND, addEnchants(new ItemStack(Items.BOW), skelBow));
@@ -247,7 +249,7 @@ public class SpawnManipMod {
 				entity.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.LEATHER_HELMET));
 				((AccessorMobEntity)entity).setArmorDropChances(armor);
 				((AccessorMobEntity)entity).setHandDropChances(hand);
-				entities.add(new EntityOptions("Skeleton (Leather Armor, Enchanted Bow)", entity));
+				entities.add(new EntityOptions(String.format("%s (%s, %s)",I18n.get("Skeleton"), I18n.get("Leather Armor"), I18n.get("Enchanted Bow")), entity));
 				
 				entity = new Zombie(world);
 				entity.setItemInHand(InteractionHand.MAIN_HAND, addEnchants(new ItemStack(Items.IRON_SWORD), zombieSword));
@@ -257,7 +259,7 @@ public class SpawnManipMod {
 				entity.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.LEATHER_HELMET));
 				((AccessorMobEntity)entity).setArmorDropChances(armor);
 				((AccessorMobEntity)entity).setHandDropChances(hand);
-				entities.add(new EntityOptions("Zombie (Leather Armor, Enchanted Sword)", entity));
+				entities.add(new EntityOptions(String.format("%s (%s, %s)",I18n.get("Zombie"), I18n.get("Leather Armor"), I18n.get("Enchanted Sword")), entity));
 				
 				entity = new Skeleton(EntityType.SKELETON, world);
 				entity.setItemInHand(InteractionHand.MAIN_HAND, addEnchants(new ItemStack(Items.BOW), skelBow));
@@ -267,7 +269,7 @@ public class SpawnManipMod {
 				entity.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.GOLDEN_HELMET));
 				((AccessorMobEntity)entity).setArmorDropChances(armor);
 				((AccessorMobEntity)entity).setHandDropChances(hand);
-				entities.add(new EntityOptions("Skeleton (Gold Armor, Enchanted Bow)", entity));
+				entities.add(new EntityOptions(String.format("%s (%s, %s)","Skeleton", "Gold Armor", "Enchanted Bow"), entity));
 				
 				entity = new Zombie(world);
 				entity.setItemInHand(InteractionHand.MAIN_HAND, addEnchants(new ItemStack(Items.IRON_SWORD), zombieSword));
@@ -277,7 +279,7 @@ public class SpawnManipMod {
 				entity.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.GOLDEN_HELMET));
 				((AccessorMobEntity)entity).setArmorDropChances(armor);
 				((AccessorMobEntity)entity).setHandDropChances(hand);
-				entities.add(new EntityOptions("Zombie (Gold Armor, Enchanted Sword)", entity));
+				entities.add(new EntityOptions(String.format("%s (%s, %s)","Zombie", "Gold Armor", "Enchanted Sword"), entity));
 				
 				entity = new Skeleton(EntityType.SKELETON, world);
 				entity.setItemInHand(InteractionHand.MAIN_HAND, addEnchants(new ItemStack(Items.BOW), skelBow));
@@ -387,7 +389,7 @@ public class SpawnManipMod {
 			entity.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.STONE_SWORD));
 			entities.add(new EntityOptions("Wither Skeleton", entity));
 			
-			if (Minecraft.getInstance().level.getDifficulty() == Difficulty.HARD) {
+			if (mc.level.getDifficulty() == Difficulty.HARD) {
 				entity = new Skeleton(EntityType.SKELETON, world);
 				entity.setItemInHand(InteractionHand.MAIN_HAND, addEnchants(new ItemStack(Items.BOW), skelBow));
 				((AccessorMobEntity)entity).setArmorDropChances(armor);

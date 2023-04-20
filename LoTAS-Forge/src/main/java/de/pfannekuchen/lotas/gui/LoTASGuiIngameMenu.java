@@ -96,13 +96,13 @@ public class LoTASGuiIngameMenu {
 		
 		// =============== SAVESTATE
 		
-		savestateButton = new Button(-1, width / 2 - 100, height / 4 + 96 + -16, 98, 20, "Savestate", btn->{
+		savestateButton = new Button(-1, width / 2 - 100, height / 4 + 96 + -16, 98, 20, I18n.format("pausegui.lotas.buttontext.unshift.savestate"), btn->{
 			if (GuiScreen.isShiftKeyDown()) {
 				activateSavestateField(true);
 			} else SavestateMod.savestate(null);
 		});
 		
-		loadstateButton = new Button(-2, width / 2 + 2, height / 4 + 96 + -16, 98, 20, "Loadstate", btn ->{
+		loadstateButton = new Button(-2, width / 2 + 2, height / 4 + 96 + -16, 98, 20, I18n.format("pausegui.lotas.buttontext.unshift.loadstate"), btn ->{
 			if (GuiScreen.isShiftKeyDown()) mc.displayGuiScreen(new GuiLoadstateMenu());
 			else SavestateMod.loadstate(-1);
 		});
@@ -131,11 +131,11 @@ public class LoTASGuiIngameMenu {
 		
 		// =============== MANIPULATION
 		
-		dropButton = new Button(-5, (width / 4) * 0 + 1, height - 20, width / 4 - 2, 20, I18n.format("menu.lotas.dropmanip"), btn->{ // "Manipulate Drops"
+		dropButton = new Button(-5, (width / 4) * 0 + 1, height - 20, width / 4 - 2, 20, I18n.format("pausegui.lotas.dropmanip"), btn->{ // "Manipulate Drops"
 			Minecraft.getMinecraft().displayGuiScreen(new GuiDropChanceManipulation((GuiIngameMenu) parentScreen));
 		});
 		
-		dragonButton = new Button(-6, (width / 4) * 1 + 2, height - 20, width / 4 - 2, 20, I18n.format("menu.lotas.dragonmanip"), btn->{ // "Manipulate Dragon"
+		dragonButton = new Button(-6, (width / 4) * 1 + 2, height - 20, width / 4 - 2, 20, I18n.format("pausegui.lotas.dropmanip"), btn->{ // "Manipulate Dragon"
 			//#if MC>=10900
 			Minecraft.getMinecraft().displayGuiScreen(new GuiDragonManipulation((GuiIngameMenu) parentScreen));
 			//#else
@@ -144,23 +144,23 @@ public class LoTASGuiIngameMenu {
 			//#endif
 		});
 		
-		spawningButton = new Button(-7, (width / 4) * 2 + 3, height - 20, width / 4 - 2, 20, "Manipulate Spawning", btn->{
+		spawningButton = new Button(-7, (width / 4) * 2 + 3, height - 20, width / 4 - 2, 20, I18n.format("pausegui.lotas.spawnmanip"), btn->{
 			Minecraft.getMinecraft().displayGuiScreen(new GuiEntitySpawnManipulation());
 		});
 		
-		aiButton = new Button(-8, (width / 4) * 3 + 4, height - 20, width / 4 - 4, 20, "Manipulate AI", btn ->{
+		aiButton = new Button(-8, (width / 4) * 3 + 4, height - 20, width / 4 - 4, 20, I18n.format("pausegui.lotas.aimanip"), btn ->{
 			Minecraft.getMinecraft().displayGuiScreen(new GuiAiManipulation());
 		});
 		
 		// =============== DUPEMOD
 		
-		saveItemsButton = new Button(-9, 5, 55, 98, 20, "Save Items", btn->{
+		saveItemsButton = new Button(-9, 5, 55, 98, 20, I18n.format("pausegui.lotas.duping.save"), btn->{
 			DupeMod.saveItems();
 			DupeMod.saveChests();
 			btn.enabled = false;
 		});
 		
-		loadItemsButton = new Button(-10, 5, 77, 98, 20, "Load Items", btn->{
+		loadItemsButton = new Button(-10, 5, 77, 98, 20, I18n.format("pausegui.lotas.duping.load"), btn->{
 			DupeMod.loadItems();
 			DupeMod.loadChests();
 			btn.enabled = false;
@@ -168,10 +168,10 @@ public class LoTASGuiIngameMenu {
 		
 		// =============== JUMP TICKS
 		
-		jumpTicksButton = new Button(-11, 37, 115, 66, 20, "Jump ticks", btn->{
+		jumpTicksButton = new Button(-11, 37, 115, 66, 20, I18n.format("pausegui.lotas.jump"), btn->{
 			TickrateChangerMod.ticksToJump = (int) TickrateChangerMod.ticks[TickrateChangerMod.ji];
 			btn.enabled = false;
-			btn.displayString = "Jumping...";
+			btn.displayString = I18n.format("pausegui.lotas.jump.success");
 		});
 		
 		tickDisplayButton = new Button(-12, 5, 115, 30, 20, ((int) TickrateChangerMod.ticks[TickrateChangerMod.ji] + "t"), btn ->{
@@ -193,12 +193,12 @@ public class LoTASGuiIngameMenu {
 		
 		// =============== CHECKBOXES
 		
-		avoidDamageCheckbox = new CheckBox(22, 2, height - 20 - 15, "Avoid taking damage", !ConfigUtils.getBoolean("tools", "takeDamage"), btn->{
+		avoidDamageCheckbox = new CheckBox(22, 2, height - 20 - 15, I18n.format("pausegui.lotas.checkbox.invincible"), !ConfigUtils.getBoolean("tools", "takeDamage"), btn->{
 			ConfigUtils.setBoolean("tools", "takeDamage", !((GuiCheckBox) btn).isChecked());
 			ConfigUtils.save();
 		});
 		
-		dropTowardsMeCheckbox = new CheckBox(26, 2, height - 32 - 15, "Drop towards me", ConfigUtils.getBoolean("tools", "manipulateVelocityTowards"), btn ->{
+		dropTowardsMeCheckbox = new CheckBox(26, 2, height - 32 - 15, I18n.format("pausegui.lotas.checkbox.dropToMe"), ConfigUtils.getBoolean("tools", "manipulateVelocityTowards"), btn ->{
 			if (btn.isChecked()) {
 				ConfigUtils.setBoolean("tools", "manipulateVelocityAway", false);
 				ConfigUtils.save();
@@ -208,7 +208,7 @@ public class LoTASGuiIngameMenu {
 			ConfigUtils.save();
 		});
 		
-		dropAwayCheckbox = new CheckBox(27, 2, height - 44 - 15, "Drop away from me", ConfigUtils.getBoolean("tools", "manipulateVelocityAway"), btn ->{
+		dropAwayCheckbox = new CheckBox(27, 2, height - 44 - 15, I18n.format("pausegui.lotas.checkbox.dropAway"), ConfigUtils.getBoolean("tools", "manipulateVelocityAway"), btn ->{
 			if (btn.isChecked()) {
 				ConfigUtils.setBoolean("tools", "manipulateVelocityTowards", false);
 				ConfigUtils.save();
@@ -218,19 +218,19 @@ public class LoTASGuiIngameMenu {
 			ConfigUtils.save();
 		});
 		
-		optimizeExplosionsCheckbox = new CheckBox(28, 2, height - 56 - 15, "Optimize Explosions", ConfigUtils.getBoolean("tools", "manipulateExplosionDropChance"), btn ->{
+		optimizeExplosionsCheckbox = new CheckBox(28, 2, height - 56 - 15, I18n.format("pausegui.lotas.checkbox.explosion"), ConfigUtils.getBoolean("tools", "manipulateExplosionDropChance"), btn ->{
 			ConfigUtils.setBoolean("tools", "manipulateExplosionDropChance", btn.isChecked());
 			ConfigUtils.save();
 		});
 		
-		rightAutoClickerCheckbox = new CheckBox(30, 2, height - 68 - 15, "Toggle R Auto Clicker", ConfigUtils.getBoolean("tools", "lAutoClicker"), btn ->{
+		rightAutoClickerCheckbox = new CheckBox(30, 2, height - 68 - 15, I18n.format("pausegui.lotas.checkbox.autoclicker"), ConfigUtils.getBoolean("tools", "lAutoClicker"), btn ->{
 			ConfigUtils.setBoolean("tools", "lAutoClicker", btn.isChecked());
 			ConfigUtils.save();
 		});
 		
 		// =============== TIMER
 		
-		timerButton = new Button(-12, width / 2 - 100, height / 4 + 144 + -16, "Reset Timer", btn ->{
+		timerButton = new Button(-12, width / 2 - 100, height / 4 + 144 + -16, I18n.format("pausegui.lotas.resettimer"), btn ->{
 			Timer.ticks = -1;
 			Timer.startTime = Duration.ofMillis(System.currentTimeMillis());
 		});
@@ -281,16 +281,16 @@ public class LoTASGuiIngameMenu {
 		FontRenderer fontRenderer = MCVer.getFontRenderer(mc);
 		
 		// Tickratechanger text
-		fontRenderer.drawString("Tickrate Changer (" + TickrateChangerMod.tickrate + ")", 5, 5, 0xFFFFFF);
+		fontRenderer.drawString(I18n.format("pausegui.lotas.category.tickratechanger",TickrateChangerMod.tickrate), 5, 5, 0xFFFFFF);
 		
 		// Duping text
-		fontRenderer.drawStringWithShadow("Duping", 10, 45, 0xFFFFFF);
+		fontRenderer.drawStringWithShadow(I18n.format("pausegui.lotas.category.duping"), 10, 45, 0xFFFFFF);
 		
 		// Tickjump stuff
-		fontRenderer.drawStringWithShadow("Tickjump", 10, 105, 0xFFFFFF);
+		fontRenderer.drawStringWithShadow(I18n.format("pausegui.lotas.category.jump"), 10, 105, 0xFFFFFF);
 		if(jumpTicksButton.enabled==false) {
-			fontRenderer.drawStringWithShadow("Tickjump is ready,", 8, 137, 0xFFFFFF);
-			fontRenderer.drawStringWithShadow("press ESC to continue", 8, 147, 0xFFFFFF);
+			fontRenderer.drawStringWithShadow(I18n.format("pausegui.lotas.jump.ready.1"), 8, 137, 0xFFFFFF);
+			fontRenderer.drawStringWithShadow(I18n.format("pausegui.lotas.jump.ready.2"), 8, 147, 0xFFFFFF);
 		}
 		
 		boolean isShiftDown = GuiScreen.isShiftKeyDown();
@@ -302,19 +302,19 @@ public class LoTASGuiIngameMenu {
 		
 		if (isShiftDown && tickjumpText) {
 			parentScreen.drawCenteredString(fontRenderer, "\u00A7a^^^^^^^^", 70, 139, 0xFFFFFF);
-			parentScreen.drawCenteredString(fontRenderer, String.format("\u00A7aReopens the Game Menu"), 70, 145, 0xFFFFFF);
-			parentScreen.drawCenteredString(fontRenderer, String.format("\u00A7aafter %s ticks", TickrateChangerMod.ticks[TickrateChangerMod.ji]), 70, 155, 0xFFFFFF);
+			parentScreen.drawCenteredString(fontRenderer, String.format(I18n.format("pausegui.lotas.jump.tutorial.1")), 70, 145, 0xFFFFFF);
+			parentScreen.drawCenteredString(fontRenderer, I18n.format("pausegui.lotas.jump.tutorial.2", TickrateChangerMod.ticks[TickrateChangerMod.ji]), 70, 155, 0xFFFFFF);
 		}
 		
 		// Draw shift tooltip
 		if (isShiftDown) {
-			savestateButton.displayString = "\u00A76Name Savestate";
-			loadstateButton.displayString = "\u00A76Choose State";
-			tickrateIncreaseButton.displayString = "\u00A76Custom";
-			tickrateDecreaseButton.displayString = "\u00A76Tickrate";
+			savestateButton.displayString = I18n.format("pausegui.lotas.buttontext.shift.savestate");
+			loadstateButton.displayString = I18n.format("pausegui.lotas.buttontext.shift.loadstate");
+			tickrateIncreaseButton.displayString = I18n.format("pausegui.lotas.buttontext.shift.trc1");
+			tickrateDecreaseButton.displayString = I18n.format("pausegui.lotas.buttontext.shift.trc2");
 		} else {
-			savestateButton.displayString = "Savestate";
-			loadstateButton.displayString = "Loadstate";
+			savestateButton.displayString = I18n.format("pausegui.lotas.buttontext.unshift.savestate");
+			loadstateButton.displayString = I18n.format("pausegui.lotas.buttontext.unshift.loadstate");
 			tickrateIncreaseButton.displayString = "+";
 			tickrateDecreaseButton.displayString = "-";
 		}
@@ -323,19 +323,19 @@ public class LoTASGuiIngameMenu {
 		int height = parentScreen.height;
 
 		// Render Hint
-		parentScreen.drawCenteredString(fontRenderer, "Hold Shift to access more features", width / 2, height / 4 + 150, 0xFFFFFF);
+		parentScreen.drawCenteredString(fontRenderer, I18n.format("pausegui.lotas.shifttext"), width / 2, height / 4 + 150, 0xFFFFFF);
 		
 		// Render Edit boxes
 		if (savestateNameField != null) {
 			savestateNameField.drawTextBox();
 			if (savestateNameField.getText().isEmpty()) {
-				parentScreen.drawCenteredString(fontRenderer, "Press \u2936 to apply", x(savestateNameField) + 47, y(savestateNameField) + 4, 0x777777);
+				parentScreen.drawCenteredString(fontRenderer, I18n.format("pausegui.lotas.textfield.apply"), x(savestateNameField) + 47, y(savestateNameField) + 4, 0x777777);
 			}
 		}
 		if (tickrateField != null) {
 			tickrateField.drawTextBox();
 			if (tickrateField.getText().isEmpty()) {
-				parentScreen.drawCenteredString(fontRenderer, "Press \u2936 to apply", x(tickrateField) + 47, y(tickrateField) + 4, 0x777777);
+				parentScreen.drawCenteredString(fontRenderer, I18n.format("pausegui.lotas.textfield.apply"), x(tickrateField) + 47, y(tickrateField) + 4, 0x777777);
 			}
 		}
 		
@@ -347,19 +347,19 @@ public class LoTASGuiIngameMenu {
 				loadstateButton.enabled=SavestateMod.hasSavestate();
 				return;
 			}
-			parentScreen.drawCenteredString(fontRenderer, "\u00A76Savestate successful...", width / 2, 40, new Color(1F, 1F, 1F, 1F - (timeSince / 2000F)).getRGB());
+			parentScreen.drawCenteredString(fontRenderer, I18n.format("pausegui.lotas.successtext.savestate"), width / 2, 40, new Color(1F, 1F, 1F, 1F - (timeSince / 2000F)).getRGB());
 		} else if (SavestateMod.showLoadstateDone) {
 			long timeSince = System.currentTimeMillis() - SavestateMod.timeTitle;
 			if (timeSince >= 1800) {
 				SavestateMod.showLoadstateDone = false;
 				return;
 			}
-			parentScreen.drawCenteredString(fontRenderer, "\u00A76Loadstate successful...", width / 2, 40, new Color(1F, 1F, 1F, 1F - (timeSince / 2000F)).getRGB());
+			parentScreen.drawCenteredString(fontRenderer, I18n.format("pausegui.lotas.successtext.loadstate"), width / 2, 40, new Color(1F, 1F, 1F, 1F - (timeSince / 2000F)).getRGB());
 		}
 		
 		// Render tickrate fail
 		if (tickrateFail) {
-			parentScreen.drawCenteredString(fontRenderer, "\u00A7cPlease enter a number!", 170, 22, 0xFFFFFF);
+			parentScreen.drawCenteredString(fontRenderer, I18n.format("pausegui.lotas.textfield.fail"), 170, 22, 0xFFFFFF);
 		}
 	}
 	

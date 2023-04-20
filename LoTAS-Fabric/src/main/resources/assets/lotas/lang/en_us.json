@@ -35,10 +35,16 @@
 	
 	// AiManip
 	"aimanipgui.lotas.changetarget":"Change Target",
-	"aimanipgui.lotas.up":"Up",
-	"aimanipgui.lotas.down":"Down",
-	"aimanipgui.lotas.moveme":"Move to me",
 	"aimanipgui.lotas.moveentity":"Move to entity",
+	
+	"manipgui.lotas.up":"Up",
+	"manipgui.lotas.down":"Down",
+	"manipgui.lotas.moveme":"Move to me",
+	
+	// SpawnmanipGui
+	
+	"spawnmanipgui.lotas.entity":"Spawn Entity",
+	"spawnmanipgui.lotas.done":"Done",
 	
 	// ConfigurationScreen
 	

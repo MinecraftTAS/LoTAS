@@ -32,8 +32,9 @@ public class MixinBlockHitDelayPatch {
 						flag.set(true);
 					}
 				});
-				Minecraft.getInstance().player.setDeltaMovement(0, 0, 0);
-				Minecraft.getInstance().player.hurtMarked = true;
+				Minecraft mc = Minecraft.getInstance();
+				mc.player.setDeltaMovement(0, 0, 0);
+				mc.player.hurtMarked = true;
 			}
 			destroyDelay=0;
 		}
