@@ -2,15 +2,9 @@ package de.pfannekuchen.lotas.core.utils;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
-
-import com.google.common.collect.ImmutableMap;
 
 import de.pfannekuchen.lotas.mixin.accessors.AccessorLanguage;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.language.I18n;
-import net.minecraft.locale.Language;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -23,8 +17,6 @@ import net.minecraft.server.packs.resources.ResourceManager;
 public class LoTASLanguageManager{
 	
 	private String currentCode;
-	
-	private static HashMap<String, String> locale = new HashMap<>();
 	
 	public LoTASLanguageManager(String startCode) {
 		currentCode = startCode;
@@ -59,15 +51,6 @@ public class LoTASLanguageManager{
 	
 	public void setLanguage(String code) {
 		this.currentCode = code;
-	}
-	
-	public static String get(String code) {
-		System.out.println(I18n.exists(code));
-		return locale.get(code);
-	}
-	
-	public static boolean has(String code) {
-		return locale.containsKey(code);
 	}
 	
 	private InputStream getFromResources() {

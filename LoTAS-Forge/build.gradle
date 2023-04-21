@@ -6,7 +6,7 @@ group= "de.pfannekuchen.lotas"
 subprojects {
     buildscript {
         repositories {
-        	maven { url = "https://maven.mgnet.work" }
+        	maven { url = "https://maven.mgnet.work/main" }
         	maven { url = "https://jitpack.io" } // updated MCInjector
             mavenCentral()
             maven {
