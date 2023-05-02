@@ -31,9 +31,6 @@ public class ModSystem {
 		new TickAdvance(),
 		new TickrateChanger(),
 		new DragonManipulation(),
-//		new LootManipulation(),
-//		new NDISource(),
-//		new Overlay(),
 		new SavestateMod()
 	};
 
