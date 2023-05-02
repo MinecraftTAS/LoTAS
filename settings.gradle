@@ -1,17 +1,20 @@
-/* Add plugin management */
+// configure plugin management
 pluginManagement {
-	/* Add Repositories for finding plugins */
+	// add repositories for plugins
 	repositories {
-		// Add the MGNetwork repository for overrides
-		maven { url = 'https://maven.mgnet.work/' }
-		// Add the fabric repository for the loom plugin
+		// add mgnetwork repository
+		maven { url = 'https://maven.mgnet.work/main' }
+	
+		// add fabric repository
 		maven { url = 'https://maven.fabricmc.net/' }
-		// Add more repositories for dependency grabbing
+		
+		// add other main repositories
 		mavenCentral()
 		gradlePluginPortal()
 	}
 }
 
+// import projects with access widener (aka all preprocessed projects)
 rootDir.listFiles().each { 
 	if (it.directory && new File(it, 'build.gradle').exists() && new File(it, 'src/main/resources/lotas.accesswidener').exists()) {
 		include ":${it.name}"

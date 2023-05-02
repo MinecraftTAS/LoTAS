@@ -1,21 +1,23 @@
-/* Add Plugins required for LoTAS */
+// add required plugins
 plugins {
+	// discombobulator preprocessor plugin
 	id 'discombobulator' version '1.2.0'
 }
 
-def lotas_version = "3.0.0"
-
-/* Configure Discombobulator */
+// configure discombobulator
 discombobulator {
+	// configure versions
 	versions = [
-		"1.19.3",
-		"1.18.2",
-		"1.17.1",
-		"1.16.5",
-		"1.16.1",
-		"1.15.2",
-		"1.14.4"
+		"1.19.3: LoTAS-1.19.3",
+		"1.18.2: LoTAS-1.18.2",
+		"1.17.1: LoTAS-1.17.1",
+		"1.16.5: LoTAS-1.16.5",
+		"1.16.1: LoTAS-1.16.1",
+		"1.15.2: LoTAS-1.15.2",
+		"1.14.4: LoTAS-1.14.4"
 	]
+	
+	// configure preprocessing patterns
 	patterns = [
 		GetWindow: [
 			"def": "mc.window",
@@ -63,11 +65,4 @@ discombobulator {
 			"1.18.2": "TagKey;"
 		]
 	]
-}
-
-/* Configure subprojects */
-subprojects {
-	jar {
-		archivesBaseName = "LoTAS-v${lotas_version}-mc${project.name}"
-	}
 }
