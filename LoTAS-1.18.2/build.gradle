@@ -1,0 +1,17 @@
+// add required plugins
+plugins {
+	// loom plugin
+	id 'fabric-loom' version "${loom_version}"
+}
+
+// apply common gradle
+apply from: "../common.gradle"
+
+// override: compile for java 17
+targetCompatibility = sourceCompatibility = JavaVersion.VERSION_17
+
+// add dependencies
+dependencies {
+	// add minecraft dependency
+	minecraft "com.mojang:minecraft:1.18.2"
+}
