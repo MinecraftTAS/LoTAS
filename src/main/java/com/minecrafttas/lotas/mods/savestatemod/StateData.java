@@ -100,7 +100,6 @@ public class StateData {
 	 * Class holding the information of a state
 	 * @author Pancake
 	 */
-	@SuppressWarnings("serial")
 	public static class State implements Serializable {
 
 		/**
