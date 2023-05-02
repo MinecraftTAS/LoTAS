@@ -1,0 +1,14 @@
+// add required plugins
+plugins {
+	// loom plugin
+	id 'fabric-loom' version "${loom_version}"
+}
+
+// apply common gradle
+apply from: "../common.gradle"
+
+// add dependencies
+dependencies {
+	// add minecraft dependency
+	minecraft "com.mojang:minecraft:1.16.5"
+}
