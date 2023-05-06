@@ -28,9 +28,13 @@ sourceSets {
 }
 
 dependencies {
+	//#if MC>=11905
+//$$  	minecraft "com.mojang:minecraft:23w13a_or_b"
+//$$  	modImplementation "net.fabricmc:fabric-loader:0.14.19"
+ 	//#else
 	//#if MC>=11904
-//$$  	minecraft "com.mojang:minecraft:1.19.4"
-//$$  	modImplementation "net.fabricmc:fabric-loader:0.14.14"
+ //$$ 	minecraft "com.mojang:minecraft:1.19.4"
+ //$$ 	modImplementation "net.fabricmc:fabric-loader:0.14.14"
 	//#else
 	//#if MC>=11903
 //$$ 	minecraft "com.mojang:minecraft:1.19.3"
@@ -70,6 +74,7 @@ dependencies {
 	//#endif
 	//#endif
 	//#endif
+	//#endif	
 	//#endif
 	//#endif
 	
