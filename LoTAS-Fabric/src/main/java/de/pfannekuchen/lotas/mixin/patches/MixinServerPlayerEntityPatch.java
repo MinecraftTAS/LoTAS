@@ -52,7 +52,11 @@ public abstract class MixinServerPlayerEntityPatch extends Player {
 	/**
 	 * Disable Damage
 	 */
+	//#if MC>=11905
+//$$ 	@Inject(method = "hurtInternal(Lnet/minecraft/world/damagesource/DamageSource;F)Z", at = @At("HEAD"), cancellable = true)
+	//#else
 	@Inject(method = "hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z", at = @At("HEAD"), cancellable = true)
+	//#endif
 	void damage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> returnable) {
 		if (ConfigUtils.getBoolean("tools", "takeDamage"))
 			return;
