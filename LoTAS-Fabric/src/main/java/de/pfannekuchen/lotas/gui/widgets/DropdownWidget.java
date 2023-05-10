@@ -12,6 +12,7 @@ import org.lwjgl.glfw.GLFW;
 import de.pfannekuchen.lotas.core.MCVer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
@@ -78,7 +79,11 @@ public class DropdownWidget<T> extends AbstractWidget {
     }
     
     //#if MC>=11904
+    //#if MC>=12000
+    //$$ @Override public void render(net.minecraft.client.gui.GuiGraphics stack, int mouseX, int mouseY, float delta) {
+    //#else
     //$$ @Override public void render(com.mojang.blaze3d.vertex.PoseStack stack, int mouseX, int mouseY, float delta) {
+    //#endif
     //$$ MCVer.stack = stack;
     //$$ renderWidget(stack, mouseX, mouseY, delta);
     //#else
@@ -158,7 +163,11 @@ public class DropdownWidget<T> extends AbstractWidget {
 
     //#if MC>=11601
     //#if MC>=11904
+    //#if MC>=12000
+    //$$ @Override public void renderWidget(net.minecraft.client.gui.GuiGraphics stack, int mouseX, int mouseY, float partial) {
+    //#else
     //$$ @Override public void renderWidget(com.mojang.blaze3d.vertex.PoseStack stack, int mouseX, int mouseY, float partial) {
+    //#endif
     //#else
     //$$ @Override public void renderBg(com.mojang.blaze3d.vertex.PoseStack stack, Minecraft mc, int mouseX, int mouseY) {
     //#endif
@@ -413,7 +422,11 @@ public class DropdownWidget<T> extends AbstractWidget {
 
         //#if MC>=11601
         //#if MC>=11904
+        //#if MC>=12000
+        //$$ @Override public void renderWidget(net.minecraft.client.gui.GuiGraphics stack, int mouseX, int mouseY, float delta) {
+        //#else
         //$$ @Override public void renderWidget(com.mojang.blaze3d.vertex.PoseStack stack, int mouseX, int mouseY, float delta) {
+        //#endif
         //#else
         //$$ @Override public void renderButton(com.mojang.blaze3d.vertex.PoseStack stack, int mouseX, int mouseY, float delta) {
         //#endif

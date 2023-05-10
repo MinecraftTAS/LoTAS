@@ -94,7 +94,7 @@ public class DrownedDropManipulation extends DropManipulationScreen.DropManipula
 			String drowned = I18n.get("dropmanipgui.lotas.entity.drowned.drowned");//"Drowned drop:"
 			String rottenFlesh = I18n.get("dropmanipgui.lotas.entity.drowned.rottenflesh");//" 2 Rotten Flesh"
 			//#if MC>=11700
-//$$			String copper = I18n.get("dropmanipgui.lotas.entity.drowned.copper");//", 1 Copper Ingot"
+//$$ 			String copper = I18n.get("dropmanipgui.lotas.entity.drowned.copper");//", 1 Copper Ingot"
 //$$ 			MCVer.drawShadow(drowned+rottenFlesh + (drops.isToggled() ? copper : ""), x, y + 64, 0xFFFFFF);
 			//#else
 			String gold = I18n.get("dropmanipgui.lotas.entity.drowned.gold");//", 1 Gold Ingot"

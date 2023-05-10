@@ -133,7 +133,7 @@ public class AIManipulationScreen extends Screen {
 		MCVer.render(yText, mouseX, mouseY, partialTicks);
 		MCVer.render(zText, mouseX, mouseY, partialTicks);
 		Vec3 entityPos=AIManipMod.getSelectedEntityPos();
-		MCVer.drawCenteredString(this, AIManipMod.getSelectedEntity().getName().getString() + " (" + (int)entityPos.x + ", " + (int)entityPos.y + ", " + (int)entityPos.z + ")", width / 2, 5, 0xFFFFFF);
+		MCVer.drawCenteredString(AIManipMod.getSelectedEntity().getName().getString() + " (" + (int)entityPos.x + ", " + (int)entityPos.y + ", " + (int)entityPos.z + ")", width / 2, 5, 0xFFFFFF);
 	}
 	
 

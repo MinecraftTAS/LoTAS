@@ -86,7 +86,11 @@ public class EntitySliderWidget extends AbstractWidget {
 	//#if MC>=11601
 	//#if MC>=11904
 //$$ 	@Override
+	//#if MC>=12000
+//$$ 	public void renderWidget(net.minecraft.client.gui.GuiGraphics stack, int x, int y, float partial) {
+	//#else
 //$$ 	public void renderWidget(com.mojang.blaze3d.vertex.PoseStack stack, int x, int y, float partial) {
+	//#endif
 //$$ 		Minecraft client = Minecraft.getInstance();
 //$$ 		renderButton(stack, x, y, partial);
 	//#else
@@ -218,7 +222,12 @@ public class EntitySliderWidget extends AbstractWidget {
 	//#endif
 
 	//#if MC>=11904
+	//#if MC>=12000
+//$$ 	public void renderButton(net.minecraft.client.gui.GuiGraphics poseStack, int i, int j, float f) {
+	//#else
 //$$ 	public void renderButton(com.mojang.blaze3d.vertex.PoseStack poseStack, int i, int j, float f) {
+	//#endif
+//$$ 		MCVer.stack = poseStack;
 //$$ 		Minecraft minecraft = Minecraft.getInstance();
 //$$ 		Font font = minecraft.font;
 //$$ 		com.mojang.blaze3d.systems.RenderSystem.setShader(GameRenderer::getPositionTexShader);
@@ -228,10 +237,10 @@ public class EntitySliderWidget extends AbstractWidget {
 //$$ 		com.mojang.blaze3d.systems.RenderSystem.enableBlend();
 //$$ 		com.mojang.blaze3d.systems.RenderSystem.defaultBlendFunc();
 //$$ 		com.mojang.blaze3d.systems.RenderSystem.enableDepthTest();
-//$$ 		this.blit(poseStack, this.getX(), this.getY(), 0, 46 + k * 20, this.width / 2, this.height);
-//$$ 		this.blit(poseStack, this.getX() + this.width / 2, this.getY(), 200 - this.width / 2, 46 + k * 20, this.width / 2, this.height);
+//$$ 		MCVer.blit(this.getX(), this.getY(), 0, 46 + k * 20, this.width / 2, this.height);
+//$$ 		MCVer.blit(this.getX() + this.width / 2, this.getY(), 200 - this.width / 2, 46 + k * 20, this.width / 2, this.height);
 //$$ 		int l = this.active ? 16777215 : 10526880;
-//$$ 		drawCenteredString(poseStack, font, this.getMessage(), this.getX() + this.width / 2, this.getY() + (this.height - 8) / 2, l | Mth.ceil(this.alpha * 255.0F) << 24);
+//$$ 		poseStack.drawCenteredString(poseStack, font, this.getMessage(), this.getX() + this.width / 2, this.getY() + (this.height - 8) / 2, l | Mth.ceil(this.alpha * 255.0F) << 24);
 //$$ 	}
 //$$
 //$$ 	protected int getYImage(boolean bl) {
