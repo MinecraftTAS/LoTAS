@@ -6,7 +6,6 @@ import com.mojang.blaze3d.platform.GlStateManager.SourceFactor;
 import de.pfannekuchen.lotas.mixin.accessors.AccessorButtons;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Button.OnPress;
@@ -46,7 +45,11 @@ public class MCVer {
 //$$ 	}
 //$$ 	public static net.minecraft.server.level.ServerLevel getCurrentLevel() {
 //$$ 		ServerPlayer player = Minecraft.getInstance().getSingleplayerServer().getPlayerList().getPlayers().get(0);
+		//#if MC>=12000
+//$$ 		return player.serverLevel();
+		//#else
 //$$ 		return (ServerLevel) player.level;
+		//#endif
 //$$ 	}
 //$$ 	public static String getCurrentWorldFolder() {
 		//#if MC>=11601
@@ -75,16 +78,68 @@ public class MCVer {
 		return Minecraft.getInstance().getSingleplayerServer().getLevelIdName();
 	}
 	//#endif
-	// =============================================== 1.15.2 | 1.16.1 MATRICES  =========================================
+	
+	
+	
 	//#if MC>=11601
-//$$ 	public static com.mojang.blaze3d.vertex.PoseStack stack;
+	//#if MC>=11200
+//$$ 	// =============================================== 1.20 MATRICES  =========================================
+//$$  	public static net.minecraft.client.gui.GuiGraphics stack;
+//$$
+//$$  	private static ResourceLocation currentTexture;
+//$$
+//$$  	public static void bind(ResourceLocation texture) {
+//$$  		currentTexture = texture;
+//$$  	}
+//$$
 //$$ 	public static void blit(int a, int b, int c, float d, float e, int f, int g, int h, int i) {
-//$$ 		GuiComponent.blit(stack, a, b, c, d, e, f, g, h, i);
+//$$ 		stack.blit(currentTexture, a, b, c, d, e, f, g, h, i);
 //$$ 	}
 //$$ 	public static void fill(int a, int b, int c, int d, int e) {
-//$$ 		GuiComponent.fill(stack, a, b, c, d, e);
+//$$ 		stack.fill(a, b, c, d, e);
 //$$ 	}
-//$$ 	public static void drawCenteredString(Screen s, String text, int x, int y, int color) {
+//$$ 	public static void drawCenteredString(String text, int x, int y, int color) {
+//$$ 		Minecraft mc = Minecraft.getInstance();
+//$$ 		if (text == null) text = " ";
+//$$ 		stack.drawCenteredString(mc.font, text, x, y, color);
+//$$ 	}
+//$$ 	public static Checkbox Checkbox(int i, int j, int k, int l, String text, boolean bl) {
+//$$ 		return new Checkbox(i, j, k, l, MCVer.literal(text), bl);
+//$$ 	}
+//$$ 	public static Button Button(int i, int j, int k, int l, String text, OnPress onpress) {
+//$$ 		return Button.builder(MCVer.literal(text), onpress).pos(i, j).size(k, l).build();
+//$$ 	}
+//$$ 	public static EditBox EditBox(Font f, int i, int j, int k, int l, String text) {
+//$$ 		return new EditBox(f, i, j, k, l, MCVer.literal(text));
+//$$ 	}
+//$$ 	public static void blit(int i, int j, float k, float f, int g, int l) {
+//$$ 		stack.blit(currentTexture, i, j, k, f, g, l, 256, 256);
+//$$ 	}
+//$$ 	public static void blit(int i, int j, float k, float f, int g, int l, int m, int n) {
+//$$ 		stack.blit(currentTexture, i, j, k, f, g, l, m, n);
+//$$ 	}
+//$$ 	public static void render(AbstractWidget component, int mouseX, int mouseY, float delta) {
+//$$ 		component.render(stack, mouseX, mouseY, delta);
+//$$ 	}
+//$$ 	public static void drawShadow(String text, int x, int y, int color) {
+//$$ 		Minecraft mc = Minecraft.getInstance();
+//$$ 		if(text!=null) {
+//$$ 		stack.drawString(mc.font, text, x, y, color);
+//$$ 		}
+//$$ 	}
+//$$ 	public static void renderBackground(Screen screen) {
+//$$ 		screen.renderBackground(stack);
+//$$ 	}
+	//#else
+//$$ 	// =============================================== 1.15.2 | 1.16.1 MATRICES  =========================================
+//$$ 	public static com.mojang.blaze3d.vertex.PoseStack stack;
+//$$ 	public static void blit(int a, int b, int c, float d, float e, int f, int g, int h, int i) {
+//$$ 		net.minecraft.client.gui.GuiComponent.blit(stack, a, b, c, d, e, f, g, h, i);
+//$$ 	}
+//$$ 	public static void fill(int a, int b, int c, int d, int e) {
+//$$ 		net.minecraft.client.gui.GuiComponent.fill(stack, a, b, c, d, e);
+//$$ 	}
+//$$ 	public static void drawCenteredString(String text, int x, int y, int color) {
 //$$ 		Minecraft mc = Minecraft.getInstance();
 //$$ 		if (text == null) text = " ";
 		//#if MC>=11605
@@ -107,10 +162,10 @@ public class MCVer {
 //$$ 		return new EditBox(f, i, j, k, l, MCVer.literal(text));
 //$$ 	}
 //$$ 	public static void blit(int i, int j, float k, float f, int g, int l) {
-//$$ 		GuiComponent.blit(stack, i, j, k, f, g, l, 256, 256);
+//$$ 		net.minecraft.client.gui.GuiComponent.blit(stack, i, j, k, f, g, l, 256, 256);
 //$$ 	}
 //$$ 	public static void blit(int i, int j, float k, float f, int g, int l, int m, int n) {
-//$$ 		GuiComponent.blit(stack, i, j, k, f, g, l, m, n);
+//$$ 		net.minecraft.client.gui.GuiComponent.blit(stack, i, j, k, f, g, l, m, n);
 //$$ 	}
 //$$ 	public static void render(AbstractWidget component, int mouseX, int mouseY, float delta) {
 //$$ 		component.render(stack, mouseX, mouseY, delta);
@@ -128,6 +183,7 @@ public class MCVer {
 //$$ 	public static void renderBackground(Screen screen) {
 //$$ 		screen.renderBackground(stack);
 //$$ 	}
+	//#endif
 	//#if MC>=11903
 //$$     public static org.joml.Quaternionf fromYXZ(float f, float g, float h) {
 //$$     	org.joml.Quaternionf quaternion = new org.joml.Quaternionf(0.0f, 0.0f, 0.0f, 1.0f);
@@ -145,10 +201,10 @@ public class MCVer {
 		return new Button(i, j, k, l, text, onpress);
 	}
 	public static void blit(int i, int j, float k, float f, int g, int l, int m, int n) {
-		GuiComponent.blit(i, j, k, f, g, l, m, n);
+		net.minecraft.client.gui.GuiComponent.blit(i, j, k, f, g, l, m, n);
 	}
 	public static void blit(int i, int j, float k, float f, int g, int l) {
- 		GuiComponent.blit(i, j, k, f, g, l, 256, 256);
+		net.minecraft.client.gui.GuiComponent.blit(i, j, k, f, g, l, 256, 256);
  	}
 	public static void render(AbstractWidget component, int mouseX, int mouseY, float delta) {
 		component.render(mouseX, mouseY, delta);
@@ -163,10 +219,10 @@ public class MCVer {
 		return new EditBox(f, i, j, k, l, text);
 	}
 	public static void blit(int a, int b, int c, float d, float e, int f, int g, int h, int i) {
-		GuiComponent.blit(a, b, c, d, e, f, g, h, i);
+		net.minecraft.client.gui.GuiComponent.blit(a, b, c, d, e, f, g, h, i);
 	}
 	public static void fill(int x, int y, int x2, int y2, int color) {
-	      GuiComponent.fill(x, y, x2, y2, color);
+		net.minecraft.client.gui.GuiComponent.fill(x, y, x2, y2, color);
 	}
 	public static void drawCenteredString(Screen s, String text, int x, int y, int color) {
 		s.drawCenteredString(Minecraft.getInstance().font, text, x, y, color);

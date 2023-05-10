@@ -25,9 +25,11 @@ loom {
 }
 
 dependencies {
+	//#if MC>=12000
+//$$  	minecraft "com.mojang:minecraft:1.20-pre1"
+	//#else
 	//#if MC>=11905
-//$$  	minecraft "com.mojang:minecraft:23w13a_or_b"
-//$$  	modImplementation "net.fabricmc:fabric-loader:0.14.19"
+//$$   	minecraft "com.mojang:minecraft:23w13a_or_b"
  	//#else
 	//#if MC>=11904
 //$$  	minecraft "com.mojang:minecraft:1.19.4"
@@ -60,6 +62,7 @@ dependencies {
 //$$ 	minecraft "com.mojang:minecraft:1.15.2"
 	//#else
 	minecraft "com.mojang:minecraft:1.14.4"
+	//#endif
 	//#endif
 	//#endif
 	//#endif
