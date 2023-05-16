@@ -23,6 +23,7 @@ import de.pfannekuchen.lotas.gui.DropManipulationScreen;
 @Mixin(net.minecraft.world.level.block.Block.class)
 //#endif
 public class MixinBlockPatch {
+//#if MC<12000
 	/** 
 	 * Change the Items to be dropped
 	 */
@@ -39,4 +40,5 @@ public class MixinBlockPatch {
 		}
 	}
 
+//#endif
 }

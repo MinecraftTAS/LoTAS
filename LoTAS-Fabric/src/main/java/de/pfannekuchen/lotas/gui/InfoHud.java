@@ -282,7 +282,11 @@ public class InfoHud extends Screen {
 					return I18n.get("infohud.lotas.worldseed");//"Worldseed"
 				List<ServerPlayer> players = mc.getSingleplayerServer().getPlayerList().getPlayers();
 				if(!players.isEmpty()) {
+					//#if MC>=12000
+//$$ 					return players.get(0).serverLevel().getSeed() + "";
+					//#else
 					return players.get(0).getLevel().getSeed() + "";
+					//#endif
 				} else {
 					return "";
 				}

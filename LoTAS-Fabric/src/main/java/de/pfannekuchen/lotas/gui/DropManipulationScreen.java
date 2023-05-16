@@ -114,7 +114,11 @@ public class DropManipulationScreen extends Screen {
 	}
 
 	//#if MC>=11601
+	//#if MC>=12000
+//$$ 	@Override public void render(net.minecraft.client.gui.GuiGraphics stack, int mouseX, int mouseY, float delta) {
+	//#else
 //$$ 	@Override public void render(com.mojang.blaze3d.vertex.PoseStack stack, int mouseX, int mouseY, float delta) {
+	//#endif
 //$$ 		MCVer.stack = stack;
 	//#else
 	@Override public void render(int mouseX, int mouseY, float delta) {
@@ -132,7 +136,11 @@ public class DropManipulationScreen extends Screen {
 //$$ 		MCVer.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 //$$
 		//#if MC>=11903
+		//#if MC>=12000
+//$$ 		org.joml.Matrix4f matrix = MCVer.stack.pose().last().pose();
+		//#else
 //$$ 		org.joml.Matrix4f matrix = MCVer.stack.last().pose();
+		//#endif
 		//#else
 //$$ 		com.mojang.math.Matrix4f matrix = MCVer.stack.last().pose();
 		//#endif

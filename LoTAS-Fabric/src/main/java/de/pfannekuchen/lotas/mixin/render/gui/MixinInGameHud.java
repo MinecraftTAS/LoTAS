@@ -24,7 +24,11 @@ public abstract class MixinInGameHud {
 	
 	@Inject(method="renderExperienceBar", at=@At(value="HEAD"))
 	//#if MC>=11601
+	//#if MC>=12000
+//$$ 	public void mixinRenderExperienceBar(net.minecraft.client.gui.GuiGraphics poseStack, int i, CallbackInfo ci) {
+	//#else
 //$$ 	public void mixinRenderExperienceBar(com.mojang.blaze3d.vertex.PoseStack poseStack, int i, CallbackInfo ci) {
+	//#endif
 	//#else
 	public void mixinRenderExperienceBar(CallbackInfo ci) {
 	//#endif

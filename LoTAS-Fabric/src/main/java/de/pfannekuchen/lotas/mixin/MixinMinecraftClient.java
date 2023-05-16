@@ -179,7 +179,11 @@ public class MixinMinecraftClient {
 		/* Auto Strafing */
 		if (player != null) {
 			//#if MC>=11600
+			//#if MC>=12000
+//$$ 			boolean isOnGround = player.onGround();
+			//#else
 //$$ 			boolean isOnGround = player.isOnGround();
+			//#endif
 			//#else
 			boolean isOnGround = player.onGround;
 			//#endif

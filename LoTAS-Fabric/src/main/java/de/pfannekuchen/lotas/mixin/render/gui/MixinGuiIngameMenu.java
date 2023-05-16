@@ -61,7 +61,11 @@ public abstract class MixinGuiIngameMenu extends Screen {
 	
 	//#if MC>=11601
 //$$ 	@Inject(method = "render", at = @At("TAIL"))
+	//#if MC>=12000
+//$$ 	public void drawScreen(net.minecraft.client.gui.GuiGraphics stack, int mouseX, int mouseY, float partialTicks, CallbackInfo ci) {
+	//#else
 //$$ 	public void drawScreen(com.mojang.blaze3d.vertex.PoseStack stack, int mouseX, int mouseY, float partialTicks, CallbackInfo ci) {
+	//#endif
 //$$ 		MCVer.stack = stack;
 	//#else
 	@Inject(method = "render", at = @At("TAIL"))

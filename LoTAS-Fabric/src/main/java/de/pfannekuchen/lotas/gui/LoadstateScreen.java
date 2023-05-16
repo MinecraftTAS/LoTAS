@@ -57,7 +57,11 @@ public class LoadstateScreen extends Screen {
 	}
 	
 	//#if MC>=11601
+	//#if MC>=12000
+//$$ 	@Override public void render(net.minecraft.client.gui.GuiGraphics matrices, int mouseX, int mouseY, float partialTicks) {
+	//#else
 //$$ 	@Override public void render(com.mojang.blaze3d.vertex.PoseStack matrices, int mouseX, int mouseY, float partialTicks) {
+	//#endif
 //$$ 		MCVer.stack = matrices;
 //$$ 		list.render(matrices, mouseX, mouseY, partialTicks);
 	//#else
@@ -146,7 +150,11 @@ public class LoadstateScreen extends Screen {
 			}
 
 			//#if MC>=11601
+			//#if MC>=12000
+//$$ 			@Override public void render(net.minecraft.client.gui.GuiGraphics matrices, int slotIndex, int y, int x, int listWidth, int slotHeight, int mouseX, int mouseY, boolean isSelected, float partialTicks) {
+			//#else
 //$$ 			@Override public void render(com.mojang.blaze3d.vertex.PoseStack matrices, int slotIndex, int y, int x, int listWidth, int slotHeight, int mouseX, int mouseY, boolean isSelected, float partialTicks) {
+			//#endif
 //$$ 				MCVer.stack = matrices;
 			//#else
 			@Override public void render(int slotIndex, int y, int x, int listWidth, int slotHeight, int mouseX, int mouseY, boolean isSelected, float partialTicks) {

@@ -204,7 +204,11 @@ public class SpawnManipMod {
 		//#else
 		DimensionType dimension = MCVer.getCurrentLevel().getDimension().getType();
 		//#endif
+		//#if MC>=12000
+//$$ 		ServerLevel world = mc.getSingleplayerServer().getPlayerList().getPlayers().get(0).serverLevel();
+		//#else
 		ServerLevel world = mc.getSingleplayerServer().getPlayerList().getPlayers().get(0).getLevel();
+		//#endif
 		Minecraft mc = Minecraft.getInstance();
 		float[] armor={1f,1f,1f,1f};
 		float[] hand= {1f,1f};

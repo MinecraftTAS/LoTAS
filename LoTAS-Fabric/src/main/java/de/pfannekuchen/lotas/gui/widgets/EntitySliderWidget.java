@@ -240,7 +240,11 @@ public class EntitySliderWidget extends AbstractWidget {
 //$$ 		MCVer.blit(this.getX(), this.getY(), 0, 46 + k * 20, this.width / 2, this.height);
 //$$ 		MCVer.blit(this.getX() + this.width / 2, this.getY(), 200 - this.width / 2, 46 + k * 20, this.width / 2, this.height);
 //$$ 		int l = this.active ? 16777215 : 10526880;
+		//#if MC>=12000
+//$$ 		poseStack.drawCenteredString(font, this.getMessage(), this.getX() + this.width / 2, this.getY() + (this.height - 8) / 2, l | Mth.ceil(this.alpha * 255.0F) << 24);
+		//#else
 //$$ 		poseStack.drawCenteredString(poseStack, font, this.getMessage(), this.getX() + this.width / 2, this.getY() + (this.height - 8) / 2, l | Mth.ceil(this.alpha * 255.0F) << 24);
+		//#endif
 //$$ 	}
 //$$
 //$$ 	protected int getYImage(boolean bl) {

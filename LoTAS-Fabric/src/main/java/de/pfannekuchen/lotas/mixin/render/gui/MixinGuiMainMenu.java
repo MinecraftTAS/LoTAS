@@ -12,6 +12,7 @@ import de.pfannekuchen.lotas.core.utils.ConfigUtils;
 import de.pfannekuchen.lotas.gui.ConfigurationScreen;
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.SplashRenderer;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.client.gui.screens.worldselection.SelectWorldScreen;
@@ -29,15 +30,24 @@ public abstract class MixinGuiMainMenu extends Screen {
 		super(title);
 	}
 
+	//#if MC>=12000
+//$$ 	@Shadow
+//$$ 	private net.minecraft.client.gui.components.SplashRenderer splash;
+	//#else
 	@Shadow
 	private String splash;
+	//#endif
 	
 	@Inject(method="init", at = @At("HEAD"))
 	private void changeSplash(CallbackInfo ci) {
 		if (ConfigUtils.getBoolean("tools", "saveTickrate")) {
 			TickrateChangerMod.updatePitch();
 		}
+		//#if MC>=12000
+//$$ 		splash=new SplashRenderer("TaS iS cHeAtInG !!1");
+		//#else
 		splash="TaS iS cHeAtInG !!1";
+		//#endif
 	}
 
 	/**

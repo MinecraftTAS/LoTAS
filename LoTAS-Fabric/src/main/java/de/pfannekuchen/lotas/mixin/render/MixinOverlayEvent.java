@@ -21,8 +21,13 @@ import net.minecraft.resources.ResourceLocation;
 public class MixinOverlayEvent {
 
 	//#if MC>=11601
+	//#if MC>=12000
+//$$ 	@Inject(at = @At(value = "INVOKE", shift = At.Shift.AFTER, target = "Lnet/minecraft/client/gui/Gui;renderEffects(Lnet/minecraft/client/gui/GuiGraphics;)V"), method = "render")
+//$$ 	public void injectrender(net.minecraft.client.gui.GuiGraphics stack, float tickDelta, CallbackInfo ci) {
+	//#else
 //$$ 	@Inject(at = @At(value = "INVOKE", shift = At.Shift.AFTER, target = "Lnet/minecraft/client/gui/Gui;renderEffects(Lcom/mojang/blaze3d/vertex/PoseStack;)V"), method = "render")
 //$$ 	public void injectrender(com.mojang.blaze3d.vertex.PoseStack stack, float tickDelta, CallbackInfo ci) {
+	//#endif
 //$$ 		MCVer.stack = stack;
 	//#else
 	@Inject(at = @At(value = "INVOKE", shift = At.Shift.AFTER, target = "Lnet/minecraft/client/gui/Gui;renderEffects()V"), method = "render")

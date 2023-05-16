@@ -120,7 +120,11 @@ public class AIManipulationScreen extends Screen {
 	}
 
 	//#if MC>=11601
+	//#if MC>=12000
+//$$ 	@Override public void render(net.minecraft.client.gui.GuiGraphics stack, int mouseX, int mouseY, float partialTicks) {
+	//#else
 //$$ 	@Override public void render(com.mojang.blaze3d.vertex.PoseStack stack, int mouseX, int mouseY, float partialTicks) {
+	//#endif
 //$$ 		MCVer.stack = stack;
 	//#else
 	@Override public void render(int mouseX, int mouseY, float partialTicks) {
@@ -133,7 +137,7 @@ public class AIManipulationScreen extends Screen {
 		MCVer.render(yText, mouseX, mouseY, partialTicks);
 		MCVer.render(zText, mouseX, mouseY, partialTicks);
 		Vec3 entityPos=AIManipMod.getSelectedEntityPos();
-		MCVer.drawCenteredString(AIManipMod.getSelectedEntity().getName().getString() + " (" + (int)entityPos.x + ", " + (int)entityPos.y + ", " + (int)entityPos.z + ")", width / 2, 5, 0xFFFFFF);
+		MCVer.drawCenteredString(this, AIManipMod.getSelectedEntity().getName().getString() + " (" + (int)entityPos.x + ", " + (int)entityPos.y + ", " + (int)entityPos.z + ")", width / 2, 5, 0xFFFFFF);
 	}
 	
 

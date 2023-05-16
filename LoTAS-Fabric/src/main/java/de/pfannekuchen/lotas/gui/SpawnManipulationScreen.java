@@ -23,7 +23,11 @@ public class SpawnManipulationScreen extends Screen {
 	public SpawnManipulationScreen() {
 		super(MCVer.literal(""));
 		manip=new SpawnManipMod();
+		//#if MC>=12000
+//$$ 		world=Minecraft.getInstance().getSingleplayerServer().getPlayerList().getPlayers().get(0).serverLevel();
+		//#else
 		world=Minecraft.getInstance().getSingleplayerServer().getPlayerList().getPlayers().get(0).getLevel();
+		//#endif
 	}
 	
 	private final SpawnManipMod manip;
@@ -37,7 +41,11 @@ public class SpawnManipulationScreen extends Screen {
 	private final ServerLevel world;
 
 	//#if MC>=11601
+	//#if MC>=12000
+//$$ 	@Override public void render(net.minecraft.client.gui.GuiGraphics stack, int mouseX, int mouseY, float partialTicks) {
+	//#else
 //$$ 	@Override public void render(com.mojang.blaze3d.vertex.PoseStack stack, int mouseX, int mouseY, float partialTicks) {
+	//#endif
 //$$ 		MCVer.stack = stack;
 	//#else
 	@Override public void render(int mouseX, int mouseY, float partialTicks) {
