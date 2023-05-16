@@ -53,7 +53,11 @@ public abstract class MixinServerPlayerEntityPatch extends Player {
 	 * Disable Damage
 	 */
 	//#if MC>=11905
+	//#if MC>=12000
+//$$ 	@Inject(method = "hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z", at = @At("HEAD"), cancellable = true)
+	//#else
 //$$ 	@Inject(method = "hurtInternal(Lnet/minecraft/world/damagesource/DamageSource;F)Z", at = @At("HEAD"), cancellable = true)
+	//#endif
 	//#else
 	@Inject(method = "hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z", at = @At("HEAD"), cancellable = true)
 	//#endif
@@ -73,13 +77,18 @@ public abstract class MixinServerPlayerEntityPatch extends Player {
 			}
 		});
 		//#if MC>=11904
+		//#if MC>=12000
+//$$ 		if (!bl && source.is(net.minecraft.world.damagesource.DamageTypes.FELL_OUT_OF_WORLD)) {
+		//#else
 //$$ 		if (!bl && source.is(net.minecraft.world.damagesource.DamageTypes.OUT_OF_WORLD)) {
+		//#endif
 		//#else
 		if (!bl && source != DamageSource.OUT_OF_WORLD) {
 		//#endif
 			if (flag.get()) {
-				Minecraft.getInstance().player.setDeltaMovement(0, 0, 0);
-				Minecraft.getInstance().player.hurtMarked = true;
+				Minecraft mc = Minecraft.getInstance();
+				mc.player.setDeltaMovement(0, 0, 0);
+				mc.player.hurtMarked = true;
 			}
 			returnable.setReturnValue(false);
 			returnable.cancel();

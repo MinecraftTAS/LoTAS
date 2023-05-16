@@ -98,7 +98,7 @@ public class MCVer {
 //$$ 	public static void fill(int a, int b, int c, int d, int e) {
 //$$ 		stack.fill(a, b, c, d, e);
 //$$ 	}
-//$$ 	public static void drawCenteredString(String text, int x, int y, int color) {
+//$$ 	public static void drawCenteredString(Screen s, String text, int x, int y, int color) {
 //$$ 		Minecraft mc = Minecraft.getInstance();
 //$$ 		if (text == null) text = " ";
 //$$ 		stack.drawCenteredString(mc.font, text, x, y, color);
@@ -573,7 +573,11 @@ public class MCVer {
 	
 	public static void bind(TextureManager textureManager, ResourceLocation resource) {
 		//#if MC>=11700
+		//#if MC>=12000
+//$$ 		currentTexture = resource;
+		//#else
 //$$ 		com.mojang.blaze3d.systems.RenderSystem.setShaderTexture(0, resource);
+		//#endif
 		//#else
 		textureManager.bind(resource);
 		//#endif

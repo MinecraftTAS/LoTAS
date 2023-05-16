@@ -4,7 +4,6 @@ import java.util.HashMap;
 
 import de.pfannekuchen.lotas.core.MCVer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
@@ -161,10 +160,10 @@ public class DragonManipulationScreen extends Screen {
 	//#else
 //$$  	@Override public void render(com.mojang.blaze3d.vertex.PoseStack stack, int mouseX, int mouseY, float partialTicks) {
 		//#endif
+//$$ 	MCVer.stack = stack;
 	//#else
 	@Override public void render(int mouseX, int mouseY, float partialTicks) {
 	//#endif
-		MCVer.stack = stack;
 		MCVer.renderBackground(this);
 		MCVer.enableTexture();
 

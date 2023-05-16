@@ -233,7 +233,9 @@ public class LoTASIngameGui {
 		MCVer.addButton(parentScreen, tickrateIncreaseButton);
 		MCVer.addButton(parentScreen, tickrateDecreaseButton);
 
+		//#if MC<12000
 		MCVer.addButton(parentScreen, dropButton);
+		//#endif
 		MCVer.addButton(parentScreen, dragonButton);
 		MCVer.addButton(parentScreen, spawningButton);
 		MCVer.addButton(parentScreen, aiButton);
@@ -352,6 +354,10 @@ public class LoTASIngameGui {
 		if (tickrateFail) {
 			MCVer.drawCenteredString(parentScreen, I18n.get("pausegui.lotas.textfield.fail"), 170, 22, 0xFFFFFF);//"\u00A7cPlease enter a number!"
 		}
+		
+		//#if MC<12000
+ 		MCVer.drawCenteredString(parentScreen, I18n.get("pausegui.lotas.dropmanip.vanish"), 80, height-15, 0xFFFFFF);//"\u00A7cPlease enter a number!"
+		//#endif
 	}
 
 	public void mouseClicked(double mouseX, double mouseY, int mouseButton) {

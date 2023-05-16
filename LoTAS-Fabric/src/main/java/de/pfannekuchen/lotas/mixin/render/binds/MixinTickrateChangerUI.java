@@ -1,5 +1,6 @@
 package de.pfannekuchen.lotas.mixin.render.binds;
 
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -8,6 +9,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import de.pfannekuchen.lotas.core.MCVer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffects;
 
 @Mixin(Gui.class)
@@ -22,13 +24,17 @@ public class MixinTickrateChangerUI {
 	
 	//#if MC>=11601
 	//#if MC>=11701
-//$$ 	@Redirect(method = "renderPlayerHealth", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;blit(Lcom/mojang/blaze3d/vertex/PoseStack;IIIIII)V", ordinal = 3))
+//$$ 	@Redirect(method = "renderPlayerHealth", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;blit(Lnet/minecraft/resources/ResourceLocation;IIIIII)V", ordinal = 3))
 	//#else
 //$$ 	@Redirect(method = "renderPlayerHealth", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;blit(Lcom/mojang/blaze3d/vertex/PoseStack;IIIIII)V", ordinal = 10))
 	//#endif
 //$$
 	//#if MC>=11904
+	//#if MC>=12000
+//$$ 	private void redirect_renderPlayerHealth(net.minecraft.client.gui.GuiGraphics poseStack, ResourceLocation fireParticles, int x, int y, int textureX, int textureY, int width, int height) {
+	//#else
 //$$ 	private void redirect_renderPlayerHealth(com.mojang.blaze3d.vertex.PoseStack poseStack, int x, int y, int textureX, int textureY, int width, int height) {
+	//#endif
 	//#else
 //$$ 	public void redirect_renderPlayerHealth(Gui gui, com.mojang.blaze3d.vertex.PoseStack poseStack, int x, int y, int textureX, int textureY, int width, int height) {
 	//#endif
@@ -38,7 +44,11 @@ public class MixinTickrateChangerUI {
 	//#endif
 		//#if MC>=11601
 		//#if MC>=11904
+		//#if MC>=12000
+//$$ 		poseStack.blit(fireParticles, x, y, textureX, textureY, width, height);
+		//#else
 //$$ 		net.minecraft.client.gui.GuiComponent.blit(poseStack, x, y, textureX, textureY, width, height);
+		//#endif
 		//#else
 //$$ 		gui.blit(poseStack, x, y, textureX, textureY, width, height);
 		//#endif

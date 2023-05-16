@@ -32,6 +32,7 @@
 	"pausegui.lotas.successtext.savestate":"\u00A76Savestate successful...",
 	"pausegui.lotas.successtext.loadstate":"\u00A76Loadstate successful...",
 	"pausegui.lotas.textfield.fail":"\u00A7cPlease enter a number!",
+	"pausegui.lotas.dropmanip.vanish":"\u00A7oRIP Drop Manipulation!",
 	
 	// AiManip
 	"aimanipgui.lotas.changetarget":"Change Target",
