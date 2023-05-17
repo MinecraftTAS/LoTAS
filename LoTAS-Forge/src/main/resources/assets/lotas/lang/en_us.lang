@@ -244,23 +244,31 @@ loadstategui.lotas.error.1=Error while reading the file
 loadstategui.lotas.error.2=responsible for this text
 	
 # Keybinds
-keybind.lotas.savestate= Savestate
-keybind.lotas.loadstate= Loadstate
-keybind.lotas.dupe.load= Load Items/Chests
-keybind.lotas.dupe.save= Save Items/Chests
-keybind.lotas.autostrafe= Auto-Strafe
-keybind.lotas.tickrate.faster= Faster Tickrate
-keybind.lotas.tickrate.slower= Slower Tickrate
-keybind.lotas.tickrate.tickadvance= Advance Tick
-keybind.lotas.tickrate.tick0= Tickrate Zero Toggle
-keybind.lotas.tickrate.timer= Start/Stop Timer
-keybind.lotas.infogui= Open InfoGui Editor
-keybind.lotas.test= Test
+keybind.lotas.savestate=Savestate
+keybind.lotas.loadstate=Loadstate
+keybind.lotas.dupe.load=Load Items/Chests
+keybind.lotas.dupe.save=Save Items/Chests
+keybind.lotas.autostrafe=Auto-Strafe
+keybind.lotas.tickrate.faster=Faster Tickrate
+keybind.lotas.tickrate.slower=Slower Tickrate
+keybind.lotas.tickrate.tickadvance=Advance Tick
+keybind.lotas.tickrate.tick0=Tickrate Zero Toggle
+keybind.lotas.tickrate.timer=Start/Stop Timer
+keybind.lotas.infogui=Open InfoGui Editor
+keybind.lotas.test=Test
 	
 # Keybind categories
-keybind.category.lotas.stating= Stating
-keybind.category.lotas.duping= Duping
-keybind.category.lotas.moving= Moving
-keybind.category.lotas.tickratechanger= Tickrate Changer
-keybind.category.lotas.misc= Misc
+keybind.category.lotas.stating=Stating
+keybind.category.lotas.duping=Duping
+keybind.category.lotas.moving=Moving
+keybind.category.lotas.tickratechanger=Tickrate Changer
+keybind.category.lotas.misc=Misc
 	
+# Spawn Manipulation
+spawnmanip.lotas.ench_sword=Enchanted Sword
+spawnmanip.lotas.ench_bow=Enchanted Bow
+spawnmanip.lotas.leather_armor=Leather Armor
+spawnmanip.lotas.gold_armor=Gold Armor
+spawnmanip.lotas.chain_armor=Chain Armor
+spawnmanip.lotas.iron_armor=Iron Armor
+spawnmanip.lotas.diamond_armor=Diamond Armor

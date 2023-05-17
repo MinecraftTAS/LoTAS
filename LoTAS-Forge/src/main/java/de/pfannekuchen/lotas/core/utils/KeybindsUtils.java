@@ -29,27 +29,27 @@ import net.minecraft.client.settings.KeyBinding;
 public class KeybindsUtils {
 
 	/** Keybind that will save a state */
-	public static final KeyBinding saveStateKeybind = new KeyBinding("Savestate", Keyboard.KEY_J, "Stating");
+	public static final KeyBinding saveStateKeybind = new KeyBinding("keybind.lotas.savestate", Keyboard.KEY_J, "keybind.category.lotas.stating");
 	/** Keybind that will load a state */
-	public static final KeyBinding loadStateKeybind = new KeyBinding("Loadstate", Keyboard.KEY_K, "Stating");
+	public static final KeyBinding loadStateKeybind = new KeyBinding("keybind.lotas.loadstate", Keyboard.KEY_K, "keybind.category.lotas.stating");
 	/** Keybind that will load the dupemod */
-	public static final KeyBinding loadDupeKeybind = new KeyBinding("Load Items/Chests", Keyboard.KEY_O, "Duping");
+	public static final KeyBinding loadDupeKeybind = new KeyBinding("keybind.lotas.dupe.load", Keyboard.KEY_O, "keybind.category.lotas.duping");
 	/** Keybind that will save the dupemod */
-	public static final KeyBinding saveDupeKeybind = new KeyBinding("Save Items/Chests", Keyboard.KEY_P, "Duping");
+	public static final KeyBinding saveDupeKeybind = new KeyBinding("keybind.lotas.dupe.save", Keyboard.KEY_P, "keybind.category.lotas.duping");
 	/** Keybind that will strafe when held */
-	public static final KeyBinding holdStrafeKeybind = new KeyBinding("Auto-Strafe", Keyboard.KEY_H, "Moving");
+	public static final KeyBinding holdStrafeKeybind = new KeyBinding("keybind.lotas.autostrafe", Keyboard.KEY_H, "keybind.category.lotas.moving");
 	/** Keybind that will increase the Tickrate */
-	public static final KeyBinding increaseTickrateKeybind = new KeyBinding("Faster Tickrate", Keyboard.KEY_PERIOD, "Tickrate Changer");
+	public static final KeyBinding increaseTickrateKeybind = new KeyBinding("keybind.lotas.tickrate.faster", Keyboard.KEY_PERIOD, "keybind.category.lotas.tickratechanger");
 	/** Keybind that will decrease the Tickrate */
-	public static final KeyBinding decreaseTickrateKeybind = new KeyBinding("Slower Tickrate", Keyboard.KEY_COMMA, "Tickrate Changer");
+	public static final KeyBinding decreaseTickrateKeybind = new KeyBinding("keybind.lotas.tickrate.slower", Keyboard.KEY_COMMA, "keybind.category.lotas.tickratechanger");
 	/** Keybind that advance a single tick */
-	public static final KeyBinding advanceTicksKeybind = new KeyBinding("Advance Tick", Keyboard.KEY_F9, "Tickrate Changer");
+	public static final KeyBinding advanceTicksKeybind = new KeyBinding("keybind.lotas.tickrate.tickadvance", Keyboard.KEY_F9, "keybind.category.lotas.tickratechanger");
 	/** Keybind that will enable or disable tick advance (tickrate 0) */
-	public static final KeyBinding toggleAdvanceKeybind = new KeyBinding("Tickrate Zero Toggle", Keyboard.KEY_F8, "Tickrate Changer");
+	public static final KeyBinding toggleAdvanceKeybind = new KeyBinding("keybind.lotas.tickrate.tick0", Keyboard.KEY_F8, "keybind.category.lotas.tickratechanger");
 	/** Keybind that will toggle the timer */
-	public static final KeyBinding toggleTimerKeybind = new KeyBinding("Start/Stop Timer", Keyboard.KEY_NUMPAD5, "Tickrate Changer");
+	public static final KeyBinding toggleTimerKeybind = new KeyBinding("keybind.lotas.tickrate.timer", Keyboard.KEY_NUMPAD5, "keybind.category.lotas.tickratechanger");
 	/** Keybind that will open the info hud editor */
-	public static final KeyBinding openInfoHud = new KeyBinding("Open InfoGui Editor", Keyboard.KEY_F6, "Misc");
+	public static final KeyBinding openInfoHud = new KeyBinding("keybind.lotas.infogui", Keyboard.KEY_F6, "keybind.category.lotas.misc");
 	/** Temporary variable used to request a savestate */
 	public static boolean shouldSavestate;
 	/** Temporary variable used to request a loadstate */
