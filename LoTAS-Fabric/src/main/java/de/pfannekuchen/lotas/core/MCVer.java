@@ -82,7 +82,7 @@ public class MCVer {
 	
 	
 	//#if MC>=11601
-	//#if MC>=11200
+	//#if MC>=12000
 //$$ 	// =============================================== 1.20 MATRICES  =========================================
 //$$  	public static net.minecraft.client.gui.GuiGraphics stack;
 //$$
@@ -139,7 +139,7 @@ public class MCVer {
 //$$ 	public static void fill(int a, int b, int c, int d, int e) {
 //$$ 		net.minecraft.client.gui.GuiComponent.fill(stack, a, b, c, d, e);
 //$$ 	}
-//$$ 	public static void drawCenteredString(String text, int x, int y, int color) {
+//$$ 	public static void drawCenteredString(Screen s, String text, int x, int y, int color) {
 //$$ 		Minecraft mc = Minecraft.getInstance();
 //$$ 		if (text == null) text = " ";
 		//#if MC>=11605
