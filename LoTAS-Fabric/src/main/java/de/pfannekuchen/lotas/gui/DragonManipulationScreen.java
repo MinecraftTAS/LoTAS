@@ -110,7 +110,7 @@ public class DragonManipulationScreen extends Screen {
 		});
 
 		if (dragonPhase instanceof DragonHoldingPatternPhase) {
-			MCVer.setMessage(action1, I18n.get("dragonmanipgui.lotas.phase.holding"));//"Try to land"
+			MCVer.setMessage(action1, I18n.get("dragonmanipgui.lotas.phase.landing"));//"Try to land"
 			MCVer.setMessage(action2, I18n.get("dragonmanipgui.lotas.phase.strafeplayer"));//"Shoot at the Player"
 			MCVer.setMessage(action3, "");
 			action1.active = true;

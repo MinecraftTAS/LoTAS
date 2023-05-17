@@ -38,17 +38,17 @@ public class GuiDragonManipulation extends GuiScreen {
 
     static HashMap<String, String> translation = new HashMap<String, String>() {
     	{
-    		put("PhaseHoldingPattern", "Ender Dragon is flying through the air");
-    		put("PhaseStrafePlayer", "Ender Dragon is shooting at you");
-    		put("PhaseLandingApproach", "Ender Dragon trying to land");
-    		put("PhaseLanding", "Ender Dragon is landing");
-    		put("PhaseTakeoff", "Ender Dragon is taking off from the Portal");
-    		put("PhaseSittingFlaming", "Ender Dragon is flaming at the Portal");
-    		put("PhaseSittingScanning", "Ender Dragon is turning at the Portal");
-    		put("PhaseSittingAttacking", "Ender Dragon is attacking you at the Portal");
-    		put("PhaseChargingPlayer", "Ender Dragon currently charging you");
-    		put("PhaseDying", "Ender Dragon is dying");
-    		put("PhaseHover", "Ender Dragon is hovering over the Portal");
+    		put("PhaseHoldingPattern", I18n.format("dragonmanipgui.lotas.phase.holding"));
+    		put("PhaseStrafePlayer", I18n.format("dragonmanipgui.lotas.phase.strafeplayer"));
+    		put("PhaseLandingApproach", I18n.format("dragonmanipgui.lotas.phase.trylanding"));
+    		put("PhaseLanding", I18n.format("dragonmanipgui.lotas.phase.landing"));
+    		put("PhaseTakeoff", I18n.format("dragonmanipgui.lotas.phase.takeoff"));
+    		put("PhaseSittingFlaming", I18n.format("dragonmanipgui.lotas.phase.flaming"));
+    		put("PhaseSittingScanning", I18n.format("dragonmanipgui.lotas.phase.scanning"));
+    		put("PhaseSittingAttacking", I18n.format("dragonmanipgui.lotas.phase.attacking"));
+    		put("PhaseChargingPlayer", I18n.format("dragonmanipgui.lotas.phase.charge"));
+    		put("PhaseDying", I18n.format("dragonmanipgui.lotas.phase.dying"));
+    		put("PhaseHover", I18n.format("dragonmanipgui.lotas.phase.hovering"));
     	}
     };
 
@@ -64,14 +64,14 @@ public class GuiDragonManipulation extends GuiScreen {
 		here = screen;
 
 		phases = new HashMap<String, PhaseList<?>>();
-		phases.put("Stop shooting at the Player", PhaseList.HOLDING_PATTERN);
-		phases.put("Shoot at the Player", PhaseList.STRAFE_PLAYER);
-		phases.put("Try to land", PhaseList.LANDING_APPROACH);
-		phases.put("Takeoff", PhaseList.TAKEOFF);
-		phases.put("Start Flaming", PhaseList.SITTING_FLAMING);
-		phases.put("Turn", PhaseList.SITTING_SCANNING);
-		phases.put("Cancel Landing", PhaseList.HOLDING_PATTERN);
-		phases.put("Cancel Landing and shoot at Player", PhaseList.STRAFE_PLAYER);
+		phases.put(I18n.format("dragonmanipgui.lotas.phase.holding"), PhaseList.HOLDING_PATTERN);
+		phases.put(I18n.format("dragonmanipgui.lotas.phase.strafeplayer"), PhaseList.STRAFE_PLAYER);
+		phases.put(I18n.format("dragonmanipgui.lotas.phase.landing"), PhaseList.LANDING_APPROACH);
+		phases.put(I18n.format("dragonmanipgui.lotas.phase.takeoff"), PhaseList.TAKEOFF);
+		phases.put(I18n.format("dragonmanipgui.lotas.phase.flaming"), PhaseList.SITTING_FLAMING);
+		phases.put(I18n.format("dragonmanipgui.lotas.phase.scanning"), PhaseList.SITTING_SCANNING);
+		phases.put(I18n.format("dragonmanipgui.lotas.phase.cancel_landing"), PhaseList.HOLDING_PATTERN);
+		phases.put(I18n.format("dragonmanipgui.lotas.phase.cancel_and_shoot"), PhaseList.STRAFE_PLAYER);
 	}
 
 	@Override
@@ -81,35 +81,35 @@ public class GuiDragonManipulation extends GuiScreen {
 
 	@Override
 	public void initGui() {
-		action1 = new GuiButton(0, this.width / 3 * 0 + 5, height / 8, this.width / 3 - 10, 20, "Phase1");
-		action2 = new GuiButton(1, this.width / 3 * 1 + 5, height / 8, this.width / 3 - 10, 20, "Phase2");
-		action3 = new GuiButton(2, this.width / 3 * 2 + 5, height / 8, this.width / 3 - 10, 20, "Phase3");
+		action1 = new GuiButton(0, this.width / 3 * 0 + 5, height / 8, this.width / 3 - 10, 20, I18n.format("dragonmanipgui.lotas.actionname.1"));
+		action2 = new GuiButton(1, this.width / 3 * 1 + 5, height / 8, this.width / 3 - 10, 20, I18n.format("dragonmanipgui.lotas.actionname.2"));
+		action3 = new GuiButton(2, this.width / 3 * 2 + 5, height / 8, this.width / 3 - 10, 20, I18n.format("dragonmanipgui.lotas.actionname.3"));
 
 		if (dragonPhase instanceof PhaseHoldingPattern) {
-			action1.displayString = "Try to land";
-			action2.displayString = "Shoot at the Player";
+			action1.displayString = I18n.format("dragonmanipgui.lotas.phase.landing");
+			action2.displayString = I18n.format("dragonmanipgui.lotas.phase.strafeplayer");
 			action3.displayString = "";
 			action1.enabled = true;
 			action2.enabled = true;
 			action3.enabled = false;
 		} else if (dragonPhase instanceof PhaseLandingApproach) {
-			action1.displayString = "Cancel Landing";
-			action2.displayString = "Cancel Landing and shoot at Player";
+			action1.displayString = I18n.format("dragonmanipgui.lotas.phase.cancel_landing");
+			action2.displayString = I18n.format("dragonmanipgui.lotas.phase.cancel_and_shoot");
 			action3.displayString = "";
 			action1.enabled = true;
 			action2.enabled = true;
 			action3.enabled = false;
 		} else if (dragonPhase instanceof PhaseStrafePlayer) {
-			action1.displayString = "Stop shooting at the Player";
-			action2.displayString = "Try to land";
+			action1.displayString = I18n.format("dragonmanipgui.lotas.phase.holding");
+			action2.displayString = I18n.format("dragonmanipgui.lotas.phase.landing");
 			action3.displayString = "";
 			action1.enabled = true;
 			action2.enabled = true;
 			action3.enabled = false;
 		} else if (dragonPhase instanceof PhaseSittingBase) {
-			action1.displayString = "Takeoff";
-			action2.displayString = "Turn";
-			action3.displayString = "Start Flaming";
+			action1.displayString = I18n.format("dragonmanipgui.lotas.phase.takeoff");
+			action2.displayString = I18n.format("dragonmanipgui.lotas.phase.scanning");
+			action3.displayString = I18n.format("dragonmanipgui.lotas.phase.flaming");
 			action1.enabled = true;
 			action2.enabled = true;
 			action3.enabled = true;
