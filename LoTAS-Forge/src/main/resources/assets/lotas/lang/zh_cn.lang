@@ -1,0 +1,241 @@
+
+# LoTAS Gui
+pausegui.lotas.dropmanip=Manipulate Drops
+pausegui.lotas.dragonmanip=Manipulate Dragon
+pausegui.lotas.spawnmanip=Manipulate Spawning
+pausegui.lotas.aimanip=Manipulate AI
+pausegui.lotas.duping.save=Save Items
+pausegui.lotas.duping.load=Load Items
+pausegui.lotas.jump=Jump ticks
+pausegui.lotas.jump.success=Jumping...
+pausegui.lotas.checkbox.invincible=Avoid taking damage
+pausegui.lotas.checkbox.dropToMe=Drop towards me
+pausegui.lotas.checkbox.dropAway=Drop away from me
+pausegui.lotas.checkbox.explosion=Optimize Explosions
+pausegui.lotas.checkbox.autoclicker=Right Auto Clicker
+pausegui.lotas.resettimer=Reset Timer
+pausegui.lotas.category.tickratechanger=Tickrate Changer (%f)
+pausegui.lotas.category.duping=Duping
+pausegui.lotas.category.jump=Tickjump
+pausegui.lotas.jump.ready.1=Tickjump is ready,
+pausegui.lotas.jump.ready.2=press ESC to continue
+pausegui.lotas.jump.tutorial.1=Reopens the Game Menu
+pausegui.lotas.jump.tutorial.2=after %f ticks
+pausegui.lotas.buttontext.shift.savestate=Name Savestate
+pausegui.lotas.buttontext.shift.loadstate=Choose State
+pausegui.lotas.buttontext.shift.trc1=Custom
+pausegui.lotas.buttontext.shift.trc2=Tickrate
+pausegui.lotas.buttontext.unshift.savestate=Savestate
+pausegui.lotas.buttontext.unshift.loadstate=Loadstate
+pausegui.lotas.shifttext=Hold Shift to access more features
+pausegui.lotas.textfield.apply=Press %s to apply
+pausegui.lotas.successtext.savestate=Savestate successful...
+pausegui.lotas.successtext.loadstate=Loadstate successful...
+pausegui.lotas.textfield.fail=Please enter a number!
+	
+# AiManip
+aimanipgui.lotas.changetarget=Change Target
+aimanipgui.lotas.moveentity=Move to entity
+	
+manipgui.lotas.up=Up
+manipgui.lotas.down=Down
+manipgui.lotas.moveme=Move to me
+	
+# SpawnmanipGui
+	
+spawnmanipgui.lotas.entity=Spawn Entity
+spawnmanipgui.lotas.done=Done
+	
+# ConfigurationScreen
+	
+config.lotas.buttontext=Configuration
+	
+# DragonManip
+	
+dragonmanipgui.lotas.name=Dragon Manipulation Screen
+dragonmanipgui.lotas.phase.holding=Stop shooting at the Player
+dragonmanipgui.lotas.phase.strafeplayer=Shoot at the Player
+dragonmanipgui.lotas.phase.landing=Try to land
+dragonmanipgui.lotas.phase.takeoff=Takeoff
+dragonmanipgui.lotas.phase.flaming=Start Flaming
+dragonmanipgui.lotas.phase.scanning=Turn
+dragonmanipgui.lotas.phase.cancel_landing=Cancel Landing
+dragonmanipgui.lotas.phase.cancel_and_shoot=Cancel Landing and shoot at Player
+dragonmanipgui.lotas.actionname.1=Phase1
+dragonmanipgui.lotas.actionname.2=Phase2
+dragonmanipgui.lotas.actionname.3=Phase3
+	
+	
+# DropManip
+dropmanipgui.lotas.name=Drop Manipulation Screen
+	
+dropmanipgui.lotas.blocks.deadbush.0=0 Sticks
+dropmanipgui.lotas.blocks.deadbush.1=1 Sticks
+dropmanipgui.lotas.blocks.deadbush.2=2 Sticks
+dropmanipgui.lotas.blocks.deadbush.override=Override Dead Bush Drops
+dropmanipgui.lotas.blocks.deadbush.name=Dead Bush
+dropmanipgui.lotas.blocks.deadbush.description=Drop %s sticks when breaking Dead Bush
+	
+dropmanipgui.lotas.blocks.glowstone.2=2 Glowstone Dust
+dropmanipgui.lotas.blocks.glowstone.3=3 Glowstone Dust
+dropmanipgui.lotas.blocks.glowstone.4=4 Glowstone Dust
+dropmanipgui.lotas.blocks.glowstone.override=Override Glowstone Drops
+dropmanipgui.lotas.blocks.glowstone.name=Glowstone
+dropmanipgui.lotas.blocks.glowstone.description=Drop %s Glowstone Dust when breaking Glowstone
+	
+dropmanipgui.lotas.blocks.gravel.gravel=Gravel
+dropmanipgui.lotas.blocks.gravel.flint=Flint
+dropmanipgui.lotas.blocks.gravel.override=Override Gravel Drops
+dropmanipgui.lotas.blocks.gravel.name=Gravel
+dropmanipgui.lotas.blocks.gravel.description=Drop %s when breaking Gravel,
+	
+dropmanipgui.lotas.blocks.leaf.override=Override Leaf Drops
+dropmanipgui.lotas.blocks.leaf.name=Leaves
+dropmanipgui.lotas.blocks.leaf.description.leaves=Leaves drop:
+dropmanipgui.lotas.blocks.leaf.description.apple= 1 Apple
+dropmanipgui.lotas.blocks.leaf.description.sapling= 1 Sapling
+	
+dropmanipgui.lotas.blocks.ore.lapis=Full Lapis Drops
+dropmanipgui.lotas.blocks.ore.redstone=Full Redstone Drops
+dropmanipgui.lotas.blocks.ore.override=Override Ore Drops
+dropmanipgui.lotas.blocks.ore.name=Ores
+	
+dropmanipgui.lotas.blocks.plants.carrot=Optimize Carrot Drops
+dropmanipgui.lotas.blocks.plants.potato=Optimize Potato Drops
+dropmanipgui.lotas.blocks.plants.wheat=Optimize Wheat Drops
+dropmanipgui.lotas.blocks.plants.beetroot=Optimize Beetroot Drops
+dropmanipgui.lotas.blocks.plants.melon=Optimize Melon Drops
+dropmanipgui.lotas.blocks.plants.cocoa=Optimize Cocoa Bean Drops
+dropmanipgui.lotas.blocks.plants.chorus=Optimize Chorus Plant Drops
+dropmanipgui.lotas.blocks.plants.netherwart=Optimize Nether Wart Drops
+dropmanipgui.lotas.blocks.plants.mushroom=Optimize Mushroom Block Drops
+dropmanipgui.lotas.blocks.plants.berrybush=Optimize Sweet Berry Bush Drops
+dropmanipgui.lotas.blocks.plants.override=Override Plant Drops
+dropmanipgui.lotas.blocks.plants.name=Plants
+	
+dropmanipgui.lotas.blocks.sealantern.prismarine.2=2 Prismarine Crystals
+dropmanipgui.lotas.blocks.sealantern.prismarine.3=3 Prismarine Crystals
+dropmanipgui.lotas.blocks.sealantern.override=Override Sea Lantern Drops
+dropmanipgui.lotas.blocks.sealantern.name=Sea Lantern
+dropmanipgui.lotas.blocks.sealantern.description=Drop %s Prismarine Crystals when breaking Sea Lanterns
+	
+dropmanipgui.lotas.entity.monster.spider=Optimize Spider Drops
+dropmanipgui.lotas.entity.monster.creeper=Optimize Creeper Drops
+dropmanipgui.lotas.entity.monster.elderguardian=Optimize Elder Guardian Drops
+dropmanipgui.lotas.entity.monster.enderman=Optimize Enderman Drops
+dropmanipgui.lotas.entity.monster.phantom=Optimize Phantom Drops
+dropmanipgui.lotas.entity.monster.slime=Optimize Slime Drops
+dropmanipgui.lotas.entity.monster.vindicator=Optimize Vindicator Drops
+dropmanipgui.lotas.entity.monster.skeleton=Optimize Skeleton Drops
+dropmanipgui.lotas.entity.monster.shulker=Optimize Shulker Drops
+dropmanipgui.lotas.entity.monster.guardian=Optimize Guardian Drops
+dropmanipgui.lotas.entity.monster.witch=Optimize Witch Drops
+dropmanipgui.lotas.entity.monster.override=Override Monster Drops
+dropmanipgui.lotas.entity.monster.name=Monsters
+	
+dropmanipgui.lotas.entity.nether.blaze=Optimize Blaze Drops
+dropmanipgui.lotas.entity.nether.ghast=Optimize Ghast Drops
+dropmanipgui.lotas.entity.nether.witherskeleton=Optimize Witherskeleton Drops
+dropmanipgui.lotas.entity.nether.zombiepiglin=Optimize Zombified Piglin Drops
+dropmanipgui.lotas.entity.nether.zombiepigman=Optimize Zombie Pigman Drops
+dropmanipgui.lotas.entity.nether.magmacube=Optimize Magma Cube Drops
+dropmanipgui.lotas.entity.nether.override=Override Nether Mob Drops
+dropmanipgui.lotas.entity.nether.name=Nether Mobs
+	
+dropmanipgui.lotas.entity.passive.chicken=Optimize Chicken Drops
+dropmanipgui.lotas.entity.passive.cow=Optimize Cow Drops
+dropmanipgui.lotas.entity.passive.mooshroom=Optimize Mooshroom Drops
+dropmanipgui.lotas.entity.passive.skeletonhorse=Optimize Skeleton Horse Drops
+dropmanipgui.lotas.entity.passive.cat=Optimize Cat Drops
+dropmanipgui.lotas.entity.passive.pig=Optimize Pig Drops
+dropmanipgui.lotas.entity.passive.parrot=Optimize Parrot Drops
+dropmanipgui.lotas.entity.passive.rabbit=Optimize Rabbit Drops
+dropmanipgui.lotas.entity.passive.sheep=Optimize Sheep Drops
+dropmanipgui.lotas.entity.passive.snowgolem=Optimize Snowgolem Drops
+dropmanipgui.lotas.entity.passive.squid=Optimize Squid Drops
+dropmanipgui.lotas.entity.passive.horse=Optimize Horse Drops
+dropmanipgui.lotas.entity.passive.turtle=Optimize Turtle Drops
+dropmanipgui.lotas.entity.passive.irongolem=Optimize Iron Golem Drops
+dropmanipgui.lotas.entity.passive.polarbear=Optimize Polarbear Drops
+dropmanipgui.lotas.entity.passive.override=Override Passive Mob Drops
+dropmanipgui.lotas.entity.passive.name=Passive Mobs
+	
+dropmanipgui.lotas.entity.zombie.override=Override Zombie/Zombie-Villager/Husk Drops
+dropmanipgui.lotas.entity.zombie.name=Zombie
+dropmanipgui.lotas.entity.zombie.zombie=Zombies drop:
+dropmanipgui.lotas.entity.zombie.rottenflesh= 2 Rotten Flesh
+dropmanipgui.lotas.entity.zombie.iron=, 1 Iron Ingot
+dropmanipgui.lotas.entity.zombie.potato=, 1 Potato
+dropmanipgui.lotas.entity.zombie.carrot=, 1 Carrot
+	
+# InfoHud
+	
+infohud.lotas.tickrate=Tickrate
+infohud.lotas.precise=Precise XYZ
+infohud.lotas.chunkpos=Chunk Position
+infohud.lotas.worldseed=Worldseed
+infohud.lotas.ticks=Ticks
+infohud.lotas.savestate.count=Savestate Count
+infohud.lotas.savestate=Savestates= 
+infohud.lotas.loadstate.count=Loadstate Count
+infohud.lotas.loadstate=Loadstates= 
+infohud.lotas.timer=Timer
+infohud.lotas.timer.paused=Timer is paused
+infohud.lotas.rtatimer=RTATimer
+infohud.lotas.bps.1=Speed/BPS
+infohud.lotas.bps.2= blocks/sec
+infohud.lotas.keystrokes=Keystrokes
+	
+infohud.lotas.tip.1=Leftclick to move
+infohud.lotas.tip.2=Middleclick to enable
+infohud.lotas.tip.3=Rightclick to add black background
+infohud.lotas.tip.4=Hold Shift to snap to grid
+infohud.lotas.tip.5=CTRL+Shift+R to reset the layout
+	
+# LoadstateScreen
+loadstategui.lotas.name=Loadstate Screen
+loadstategui.lotas.loadstate=Loadstate
+loadstategui.lotas.deletestate=Delete state
+loadstategui.lotas.back=Back
+loadstategui.lotas.info=Select a state to load
+loadstategui.lotas.error.1=Error while reading the file
+loadstategui.lotas.error.2=responsible for this text
+	
+# Keybinds
+keybind.lotas.savestate=Savestate
+keybind.lotas.loadstate=Loadstate
+keybind.lotas.dupe.load=Load Items/Chests
+keybind.lotas.dupe.save=Save Items/Chests
+keybind.lotas.autostrafe=Auto-Strafe
+keybind.lotas.tickrate.faster=Faster Tickrate
+keybind.lotas.tickrate.slower=Slower Tickrate
+keybind.lotas.tickrate.tickadvance=Advance Tick
+keybind.lotas.tickrate.tick0=Tickrate Zero Toggle
+keybind.lotas.tickrate.timer=Start/Stop Timer
+keybind.lotas.infogui=Open InfoGui Editor
+keybind.lotas.test=Test
+	
+# Keybind categories
+keybind.category.lotas.stating=Stating
+keybind.category.lotas.duping=Duping
+keybind.category.lotas.moving=Moving
+keybind.category.lotas.tickratechanger=Tickrate Changer
+keybind.category.lotas.misc=Misc
+	
+# Spawn Manipulation
+spawnmanip.lotas.ench_sword=Enchanted Sword
+spawnmanip.lotas.ench_bow=Enchanted Bow
+spawnmanip.lotas.leather_armor=Leather Armor
+spawnmanip.lotas.gold_armor=Gold Armor
+spawnmanip.lotas.chain_armor=Chain Armor
+spawnmanip.lotas.iron_armor=Iron Armor
+spawnmanip.lotas.diamond_armor=Diamond Armor
+
+# Tickratechanger
+tickratechanger.lotas.message=Updated Tickrate to %s
+
+# SelectWorldScreen
+selectworld.lotas.openpause=Open ESC when joining world
+
+# Misc
+menu.lotas.multiplayer=LoTAS doesn't work in multiplayer :(
