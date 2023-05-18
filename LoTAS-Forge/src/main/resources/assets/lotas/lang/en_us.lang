@@ -230,3 +230,12 @@ spawnmanip.lotas.gold_armor=Gold Armor
 spawnmanip.lotas.chain_armor=Chain Armor
 spawnmanip.lotas.iron_armor=Iron Armor
 spawnmanip.lotas.diamond_armor=Diamond Armor
+
+# Tickratechanger
+tickratechanger.lotas.message=Updated Tickrate to %s
+
+# SelectWorldScreen
+selectworld.lotas.openpause=Open ESC when joining world
+
+# Misc
+menu.lotas.multiplayer=LoTAS doesn't work in multiplayer :(

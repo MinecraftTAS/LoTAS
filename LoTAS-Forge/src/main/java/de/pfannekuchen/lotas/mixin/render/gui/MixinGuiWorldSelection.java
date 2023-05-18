@@ -14,6 +14,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiListWorldSelection;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiWorldSelection;
+import net.minecraft.client.resources.I18n;
 import net.minecraftforge.fml.client.config.GuiCheckBox;
 @Mixin(GuiWorldSelection.class)
 public abstract class MixinGuiWorldSelection extends GuiScreen {
@@ -35,7 +36,7 @@ public abstract class MixinGuiWorldSelection extends GuiScreen {
 	
 	@Inject(at = @At("HEAD"), method = "initGui")
 	public void injectinitGui(CallbackInfo ci) {
-		this.buttonList.add(new GuiCheckBox(17, width - 17 - MCVer.getFontRenderer(mc).getStringWidth("Open ESC when joining world"), 4, "Open ESC when joining world", ConfigUtils.getBoolean("tools", "hitEscape")));
+		this.buttonList.add(new GuiCheckBox(17, width - 17 - MCVer.getFontRenderer(mc).getStringWidth(I18n.format("selectworld.lotas.openpause")), 4, I18n.format("selectworld.lotas.openpause"), ConfigUtils.getBoolean("tools", "hitEscape")));
 	}
 	
 	@Inject(at = @At("HEAD"), method = "actionPerformed")

@@ -10,6 +10,7 @@ import de.pfannekuchen.lotas.mixin.accessors.AccessorMinecraftClient;
 import de.pfannekuchen.lotas.mixin.accessors.AccessorSoundEngine;
 import de.pfannekuchen.lotas.mixin.accessors.AccessorTimer;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.language.I18n;
 
 /**
  * Here is the basic Tickrate Changer Management.
@@ -100,7 +101,7 @@ public class TickrateChangerMod {
 		tickrate = tickrateIn;
 		if (!ConfigUtils.getBoolean("ui", "hideTickrateMessages") && Minecraft.getInstance().gui != null) {
 			Minecraft mc=Minecraft.getInstance();
-			mc.gui.getChat().addMessage(MCVer.literal("Updated Tickrate to \u00A7b" + tickrateIn));
+			mc.gui.getChat().addMessage(MCVer.literal(I18n.get("tickratechanger.lotas.message", "\u00A7b" + tickrateIn)));//"Updated Tickrate to %s"
 		}
 		updatePitch();
 	}
