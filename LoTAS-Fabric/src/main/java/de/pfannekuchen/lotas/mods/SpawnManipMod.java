@@ -313,7 +313,7 @@ public class SpawnManipMod {
 				entity.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.IRON_HELMET));
 				((AccessorMobEntity)entity).setArmorDropChances(armor);
 				((AccessorMobEntity)entity).setHandDropChances(hand);
-				entities.add(new EntityOptions(String.format("%s (%s, %s)", I18n.get("entity.minecraft.skeleton"), I18n.get("spawnmanip.lotas.iron_armor"), I18n.get("spawnmanip.lotas.ench_sword")), entity));
+				entities.add(new EntityOptions(String.format("%s (%s, %s)", I18n.get("entity.minecraft.skeleton"), I18n.get("spawnmanip.lotas.iron_armor"), I18n.get("spawnmanip.lotas.ench_bow")), entity));
 				
 				entity = new Zombie(world);
 				entity.setItemInHand(InteractionHand.MAIN_HAND, addEnchants(new ItemStack(Items.IRON_SWORD), zombieSword));
@@ -391,7 +391,7 @@ public class SpawnManipMod {
 			entities.add(new EntityOptions(I18n.get("entity.minecraft.skeleton"), entity));
 			entity = new WitherSkeleton(EntityType.WITHER_SKELETON, world);
 			entity.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.STONE_SWORD));
-			entities.add(new EntityOptions(I18n.get("Wither Skeleton"), entity));
+			entities.add(new EntityOptions(I18n.get("entity.minecraft.wither_skeleton"), entity));
 			
 			if (mc.level.getDifficulty() == Difficulty.HARD) {
 				entity = new Skeleton(EntityType.SKELETON, world);

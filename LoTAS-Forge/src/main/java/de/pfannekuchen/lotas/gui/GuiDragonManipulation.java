@@ -134,7 +134,7 @@ public class GuiDragonManipulation extends GuiScreen {
         drawBackground(0);
         GlStateManager.enableTexture2D();
 
-        drawCenteredString(MCVer.getFontRenderer(mc), translation.get(dragonPhase.getClass().getSimpleName()), width / 2, 10, 0xFFFFFF);
+//        drawCenteredString(MCVer.getFontRenderer(mc), translation.get(dragonPhase.getClass().getSimpleName()), width / 2, 10, 0xFFFFFF);
 
 		mc.getTextureManager().bindTexture(DRAGONGIF);
 		drawModalRectWithCustomSizedTexture(width / 28 * 3, height / 19 * 2, 0, 0, width / 28 * 23, height / 19 * 17, width / 28 * 23, height / 19 * 17);

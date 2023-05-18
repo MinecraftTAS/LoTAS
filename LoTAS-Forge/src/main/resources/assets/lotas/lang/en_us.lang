@@ -19,19 +19,19 @@ pausegui.lotas.category.duping=Duping
 pausegui.lotas.category.jump=Tickjump
 pausegui.lotas.jump.ready.1=Tickjump is ready,
 pausegui.lotas.jump.ready.2=press ESC to continue
-pausegui.lotas.jump.tutorial.1=\u00A7aReopens the Game Menu
-pausegui.lotas.jump.tutorial.2=\u00A7aafter %f ticks
-pausegui.lotas.buttontext.shift.savestate=\u00A76Name Savestate
-pausegui.lotas.buttontext.shift.loadstate=\u00A76Choose State
-pausegui.lotas.buttontext.shift.trc1=\u00A76Custom
-pausegui.lotas.buttontext.shift.trc2=\u00A76Tickrate
+pausegui.lotas.jump.tutorial.1=Reopens the Game Menu
+pausegui.lotas.jump.tutorial.2=after %f ticks
+pausegui.lotas.buttontext.shift.savestate=Name Savestate
+pausegui.lotas.buttontext.shift.loadstate=Choose State
+pausegui.lotas.buttontext.shift.trc1=Custom
+pausegui.lotas.buttontext.shift.trc2=Tickrate
 pausegui.lotas.buttontext.unshift.savestate=Savestate
 pausegui.lotas.buttontext.unshift.loadstate=Loadstate
 pausegui.lotas.shifttext=Hold Shift to access more features
-pausegui.lotas.textfield.apply=Press \u2936 to apply
-pausegui.lotas.successtext.savestate=\u00A76Savestate successful...
-pausegui.lotas.successtext.loadstate=\u00A76Loadstate successful...
-pausegui.lotas.textfield.fail=\u00A7cPlease enter a number!
+pausegui.lotas.textfield.apply=Press %s to apply
+pausegui.lotas.successtext.savestate=Savestate successful...
+pausegui.lotas.successtext.loadstate=Loadstate successful...
+pausegui.lotas.textfield.fail=Please enter a number!
 	
 # AiManip
 aimanipgui.lotas.changetarget=Change Target
@@ -74,31 +74,29 @@ dropmanipgui.lotas.blocks.deadbush.1=1 Sticks
 dropmanipgui.lotas.blocks.deadbush.2=2 Sticks
 dropmanipgui.lotas.blocks.deadbush.override=Override Dead Bush Drops
 dropmanipgui.lotas.blocks.deadbush.name=Dead Bush
-dropmanipgui.lotas.blocks.deadbush.description=Drop %i sticks when breaking Dead Bush
+dropmanipgui.lotas.blocks.deadbush.description=Drop %s sticks when breaking Dead Bush
 	
 dropmanipgui.lotas.blocks.glowstone.2=2 Glowstone Dust
 dropmanipgui.lotas.blocks.glowstone.3=3 Glowstone Dust
 dropmanipgui.lotas.blocks.glowstone.4=4 Glowstone Dust
 dropmanipgui.lotas.blocks.glowstone.override=Override Glowstone Drops
 dropmanipgui.lotas.blocks.glowstone.name=Glowstone
-dropmanipgui.lotas.blocks.glowstone.description=Drop %i Glowstone Dust when breaking Glowstone
+dropmanipgui.lotas.blocks.glowstone.description=Drop %s Glowstone Dust when breaking Glowstone
 	
-dropmanipgui.lotas.blocks.gravel.gravel= Gravel
-dropmanipgui.lotas.blocks.gravel.flint= Flint
-dropmanipgui.lotas.blocks.gravel.override= Override Gravel Drops
+dropmanipgui.lotas.blocks.gravel.gravel=Gravel
+dropmanipgui.lotas.blocks.gravel.flint=Flint
+dropmanipgui.lotas.blocks.gravel.override=Override Gravel Drops
 dropmanipgui.lotas.blocks.gravel.name=Gravel
-dropmanipgui.lotas.blocks.gravel.description=Drop %s when breaking Gravel, #%s will be replaced by either dropmanipgui.lotas.blocks.gravel.gravel or dropmanipgui.lotas.blocks.gravel.flint
+dropmanipgui.lotas.blocks.gravel.description=Drop %s when breaking Gravel,
 	
 dropmanipgui.lotas.blocks.leaf.override=Override Leaf Drops
 dropmanipgui.lotas.blocks.leaf.name=Leaves
-dropmanipgui.lotas.blocks.leaf.description.leaves=Leaves drop=
+dropmanipgui.lotas.blocks.leaf.description.leaves=Leaves drop:
 dropmanipgui.lotas.blocks.leaf.description.apple= 1 Apple
-dropmanipgui.lotas.blocks.leaf.description.sticks= 2 Sticks
 dropmanipgui.lotas.blocks.leaf.description.sapling= 1 Sapling
 	
 dropmanipgui.lotas.blocks.ore.lapis=Full Lapis Drops
 dropmanipgui.lotas.blocks.ore.redstone=Full Redstone Drops
-dropmanipgui.lotas.blocks.ore.copper=Full Copper Drops
 dropmanipgui.lotas.blocks.ore.override=Override Ore Drops
 dropmanipgui.lotas.blocks.ore.name=Ores
 	
@@ -119,24 +117,9 @@ dropmanipgui.lotas.blocks.sealantern.prismarine.2=2 Prismarine Crystals
 dropmanipgui.lotas.blocks.sealantern.prismarine.3=3 Prismarine Crystals
 dropmanipgui.lotas.blocks.sealantern.override=Override Sea Lantern Drops
 dropmanipgui.lotas.blocks.sealantern.name=Sea Lantern
-dropmanipgui.lotas.blocks.sealantern.description=Drop %i Prismarine Crystals when breaking Sea Lanterns
+dropmanipgui.lotas.blocks.sealantern.description=Drop %s Prismarine Crystals when breaking Sea Lanterns
 	
-dropmanipgui.lotas.entity.drowned.override=Override Drowned Drops
-dropmanipgui.lotas.entity.drowned.name=Drowned
-dropmanipgui.lotas.entity.drowned.drowned=Drowned drop=
-dropmanipgui.lotas.entity.drowned.rottenflesh= 2 Rotten Flesh
-dropmanipgui.lotas.entity.drowned.copper=, 1 Copper Ingot
-dropmanipgui.lotas.entity.drowned.gold=, 1 Gold Ingot
-	
-dropmanipgui.lotas.entity.fish.cod=Cod drop Bone Meal
-dropmanipgui.lotas.entity.fish.salmon=Salmon drop Bone Meal
-dropmanipgui.lotas.entity.fish.dolphin=Dolphin drop 1 Cod
-dropmanipgui.lotas.entity.fish.pufferfish=Pufferfish drop Bone Meal
-dropmanipgui.lotas.entity.fish.tropicalfish=Tropical Fish drop Bone Meal
-dropmanipgui.lotas.entity.fish.override=Override Fish Drops
-dropmanipgui.lotas.entity.fish.name=Fish
-	
-dropmanipgui.lotas.entity.monster.spider=Optimize Cave Spider Drops
+dropmanipgui.lotas.entity.monster.spider=Optimize Spider Drops
 dropmanipgui.lotas.entity.monster.creeper=Optimize Creeper Drops
 dropmanipgui.lotas.entity.monster.elderguardian=Optimize Elder Guardian Drops
 dropmanipgui.lotas.entity.monster.enderman=Optimize Enderman Drops
@@ -170,7 +153,7 @@ dropmanipgui.lotas.entity.passive.rabbit=Optimize Rabbit Drops
 dropmanipgui.lotas.entity.passive.sheep=Optimize Sheep Drops
 dropmanipgui.lotas.entity.passive.snowgolem=Optimize Snowgolem Drops
 dropmanipgui.lotas.entity.passive.squid=Optimize Squid Drops
-dropmanipgui.lotas.entity.passive.horse=Optimize All Horse Drops
+dropmanipgui.lotas.entity.passive.horse=Optimize Horse Drops
 dropmanipgui.lotas.entity.passive.turtle=Optimize Turtle Drops
 dropmanipgui.lotas.entity.passive.irongolem=Optimize Iron Golem Drops
 dropmanipgui.lotas.entity.passive.polarbear=Optimize Polarbear Drops
@@ -179,36 +162,11 @@ dropmanipgui.lotas.entity.passive.name=Passive Mobs
 	
 dropmanipgui.lotas.entity.zombie.override=Override Zombie/Zombie-Villager/Husk Drops
 dropmanipgui.lotas.entity.zombie.name=Zombie
-dropmanipgui.lotas.entity.zombie.zombie=Zombies drop=
+dropmanipgui.lotas.entity.zombie.zombie=Zombies drop:
 dropmanipgui.lotas.entity.zombie.rottenflesh= 2 Rotten Flesh
 dropmanipgui.lotas.entity.zombie.iron=, 1 Iron Ingot
 dropmanipgui.lotas.entity.zombie.potato=, 1 Potato
 dropmanipgui.lotas.entity.zombie.carrot=, 1 Carrot
-	
-dropmanipgui.lotas.entity.bartering.boxname=Bartering Rng
-dropmanipgui.lotas.entity.bartering.soulboots=Soul Speed Boots
-dropmanipgui.lotas.entity.bartering.soulbook=Soul Speed Book
-dropmanipgui.lotas.entity.bartering.splashfireres=Splash Potion of Fire Resistance
-dropmanipgui.lotas.entity.bartering.fireres=Potion of Fire Resistance
-dropmanipgui.lotas.entity.bartering.ironnugget=Iron Nugget
-dropmanipgui.lotas.entity.bartering.enderpearl=Ender Pearl
-dropmanipgui.lotas.entity.bartering.string=String
-dropmanipgui.lotas.entity.bartering.netherquartz=Nether Quartz
-dropmanipgui.lotas.entity.bartering.obsidian=Obsidian
-dropmanipgui.lotas.entity.bartering.cryingobsidian=Crying Obsidian
-dropmanipgui.lotas.entity.bartering.firecharge=Fire Charge
-dropmanipgui.lotas.entity.bartering.leather=Leather
-dropmanipgui.lotas.entity.bartering.soulsand=Soul Sand
-dropmanipgui.lotas.entity.bartering.netherbrick=Nether Brick
-dropmanipgui.lotas.entity.bartering.arrow=Arrow
-dropmanipgui.lotas.entity.bartering.gravel=Gravel
-dropmanipgui.lotas.entity.bartering.glowstonedust=Glowstone Dust
-dropmanipgui.lotas.entity.bartering.waterbottle=Water Bottle
-dropmanipgui.lotas.entity.bartering.spectralarrow=Spectral Arrow
-dropmanipgui.lotas.entity.bartering.blackstone=Blackstone
-dropmanipgui.lotas.entity.bartering.magmacream=Magma Cream
-dropmanipgui.lotas.entity.bartering.override=Override Bartering Drops
-dropmanipgui.lotas.entity.bartering.name=Bartering
 	
 # InfoHud
 	

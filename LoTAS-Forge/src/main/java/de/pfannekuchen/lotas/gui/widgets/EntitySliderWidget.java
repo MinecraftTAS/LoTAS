@@ -5,7 +5,7 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 
-import de.pfannekuchen.lotas.gui.GuiEntitySpawnManipulation;
+import de.pfannekuchen.lotas.gui.GuiSpawnManipulation;
 import de.pfannekuchen.lotas.mixin.accessors.AccessorEntityLiving;
 import de.pfannekuchen.lotas.mods.SpawnManipMod.EntityOptions;
 import net.minecraft.client.Minecraft;

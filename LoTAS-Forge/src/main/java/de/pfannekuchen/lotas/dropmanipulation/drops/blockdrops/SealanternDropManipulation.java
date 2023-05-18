@@ -5,25 +5,26 @@ import java.util.List;
 import com.google.common.collect.ImmutableList;
 
 import de.pfannekuchen.lotas.core.MCVer;
-import de.pfannekuchen.lotas.gui.GuiDropChanceManipulation;
+import de.pfannekuchen.lotas.gui.GuiDropManipulation;
 import de.pfannekuchen.lotas.gui.widgets.ButtonWidget;
 import de.pfannekuchen.lotas.gui.widgets.CheckboxWidget;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-public class SealanternDropManipulation extends GuiDropChanceManipulation.DropManipulation {
+public class SealanternDropManipulation extends GuiDropManipulation.DropManipulation {
 
     public static int pris = 2;
 
-    public static ButtonWidget drop2Pris = new ButtonWidget(x, y, 98, 20, "2 Prismarine Crystals", button -> {
+    public static ButtonWidget drop2Pris = new ButtonWidget(x, y, 98, 20, I18n.format("dropmanipgui.lotas.blocks.sealantern.prismarine.2"), button -> {
         press2pris();
     });
-    public static ButtonWidget drop3Pris = new ButtonWidget(x, y, 98, 20, "3 Prismarine Crystals", button -> {
+    public static ButtonWidget drop3Pris = new ButtonWidget(x, y, 98, 20, I18n.format("dropmanipgui.lotas.blocks.sealantern.prismarine.3"), button -> {
         press3pris();
     });
 
@@ -44,13 +45,13 @@ public class SealanternDropManipulation extends GuiDropChanceManipulation.DropMa
     	SealanternDropManipulation.y = y;
     	SealanternDropManipulation.width = width;
         SealanternDropManipulation.height = height;
-        enabled = new CheckboxWidget(x, y, 150, 20, "Override Sea Lantern Drops", false);
+        enabled = new CheckboxWidget(x, y, 150, 20, I18n.format("dropmanipgui.lotas.blocks.sealantern.override"), false);
         drop2Pris.enabled = false;
     }
 
     @Override
     public String getName() {
-        return "Sea Lantern";
+        return I18n.format("dropmanipgui.lotas.blocks.sealantern.name");
     }
 
     @Override
@@ -95,9 +96,10 @@ public class SealanternDropManipulation extends GuiDropChanceManipulation.DropMa
         if (!enabled.isChecked()) {
             GlStateManager.color(.5f, .5f, .5f, .4f);
         } else {
-            MCVer.getFontRenderer(Minecraft.getMinecraft()).drawStringWithShadow("Drop " + pris + " Prismarine Crystals when breaking Sea Lanterns", x, y + 64, 0xFFFFFF);
+            MCVer.getFontRenderer(Minecraft.getMinecraft()).drawStringWithShadow(I18n.format("dropmanipgui.lotas.blocks.sealantern.description", pris), x, y + 64, 0xFFFFFF);
             drop2Pris.render(mouseX, mouseY, delta);
             drop3Pris.render(mouseX, mouseY, delta);
+            GlStateManager.color(1f, 1f, 1f, 1f);
         }
 
         Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation("lotas", "drops/sealantern.gif"));

@@ -11,6 +11,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiIngameMenu;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.EntityLiving;
 //#if MC>10900
 import net.minecraft.util.math.BlockPos;
@@ -23,9 +24,9 @@ import net.minecraft.world.WorldServer;
  * @author Pancake
  *
  */
-public class GuiEntitySpawnManipulation extends GuiScreen {
+public class GuiSpawnManipulation extends GuiScreen {
 	
-	public GuiEntitySpawnManipulation() {
+	public GuiSpawnManipulation() {
 		manip=new SpawnManipMod();
 		world=MCVer.world(Minecraft.getMinecraft().getIntegratedServer(), MCVer.player(Minecraft.getMinecraft()).dimension);
 	}
@@ -77,8 +78,8 @@ public class GuiEntitySpawnManipulation extends GuiScreen {
 		buttonList.add(new ButtonWidget(width / 2 +140 - margin, height - 49, 20, 20, "\u2193", btn -> manip.changeTargetBack()));   
 		buttonList.add(new ButtonWidget(width / 2 +118 - margin, height - 72, 20, 20, "\u2190", btn -> manip.changeTargetLeft()));   
 		buttonList.add(new ButtonWidget(width / 2 +162 - margin, height - 72, 20, 20, "\u2192", btn -> manip.changeTargetRight()));  
-		buttonList.add(new ButtonWidget(width / 2 +118 - margin, height - 25, 30, 20, "Up", btn -> manip.changeTargetUp()));         
-		buttonList.add(new ButtonWidget(width / 2 +153 - margin, height - 25, 30, 20, "Down", btn -> manip.changeTargetDown()));     
+		buttonList.add(new ButtonWidget(width / 2 +118 - margin, height - 25, 30, 20, I18n.format("manipgui.lotas.up"), btn -> manip.changeTargetUp()));         
+		buttonList.add(new ButtonWidget(width / 2 +153 - margin, height - 25, 30, 20, I18n.format("manipgui.lotas.down"), btn -> manip.changeTargetDown()));     
 		
 		
 		Vec target = SpawnManipMod.getTargetPos();
@@ -87,13 +88,13 @@ public class GuiEntitySpawnManipulation extends GuiScreen {
 		zText = new GuiTextField(93, MCVer.getFontRenderer(Minecraft.getMinecraft()), width / 2 + 39, height - 71, 59, 18);
 		setTextToVec(target);
 		
-		this.buttonList.add(new ButtonWidget(width / 2 - 100, height - 49, 200, 20, "Spawn Entity", btn -> {
+		this.buttonList.add(new ButtonWidget(width / 2 - 100, height - 49, 200, 20, I18n.format("spawnmanipgui.lotas.entity"), btn -> {
 			manip.confirm();
 			slider.updateManipList(manip.getManipList());
 		}));
-		this.buttonList.add(new ButtonWidget(width / 2 - 100, height - 75 + 50, 200, 20, "Done", btn -> Minecraft.getMinecraft().displayGuiScreen(new GuiIngameMenu())));
+		this.buttonList.add(new ButtonWidget(width / 2 - 100, height - 75 + 50, 200, 20, I18n.format("spawnmanipgui.lotas.done"), btn -> Minecraft.getMinecraft().displayGuiScreen(new GuiIngameMenu())));
 		
-		buttonList.add(new ButtonWidget(width / 2 - 100, height - 95, 200, 20, "Move to me", btn -> {
+		buttonList.add(new ButtonWidget(width / 2 - 100, height - 95, 200, 20, I18n.format("manipgui.lotas.moveme"), btn -> {
 			manip.setTargetToPlayer();
 			setTextToVec(SpawnManipMod.getTargetPos());
 		}));

@@ -8,6 +8,7 @@ import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.mixin.accessors.AccessorEntityLiving;
 import de.pfannekuchen.lotas.mods.AIManipMod.Vec;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.enchantment.EnchantmentData;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
@@ -192,22 +193,22 @@ public class SpawnManipMod {
 		WorldServer world=MCVer.world(mc.getIntegratedServer(), dim);
 		
 		if(dim == 0) {
-			entities.add(new EntityOptions("Cave Spider", new EntityCaveSpider(world)));
-			entities.add(new EntityOptions("Creeper", new EntityCreeper(world)));
-			entities.add(new EntityOptions("Enderman", new EntityEnderman(world)));
+			entities.add(new EntityOptions(I18n.format("entity.CaveSpider.name"), new EntityCaveSpider(world)));
+			entities.add(new EntityOptions(I18n.format("entity.Creeper.name"), new EntityCreeper(world)));
+			entities.add(new EntityOptions(I18n.format("entity.Enderman.name"), new EntityEnderman(world)));
 			//#if MC>=11100
-			entities.add(new EntityOptions("Husk", new net.minecraft.entity.monster.EntityHusk(world)));
+			entities.add(new EntityOptions(I18n.format("entity.Husk.name"), new net.minecraft.entity.monster.EntityHusk(world)));
 			//#endif
-			entities.add(new EntityOptions("Iron Golem", new EntityIronGolem(world)));
+			entities.add(new EntityOptions(I18n.format("entity.VillagerGolem.name"), new EntityIronGolem(world)));
 			EntityLiving entity = new EntitySkeleton(world);
 			MCVer.setItemToSlot(entity, 0, new ItemStack(MCVer.getItem("bow")));
-			entities.add(new EntityOptions("Skeleton", entity));
-			entities.add(new EntityOptions("Slime", new EntitySlime(world)));
-			entities.add(new EntityOptions("Spider", new EntitySpider(world)));
-			entities.add(new EntityOptions("Witch", new EntityWitch(world)));
-			entities.add(new EntityOptions("Zombie", new EntityZombie(world)));
+			entities.add(new EntityOptions(I18n.format("entity.Skeleton.name"), entity));
+			entities.add(new EntityOptions(I18n.format("entity.Slime.name"), new EntitySlime(world)));
+			entities.add(new EntityOptions(I18n.format("entity.Spider.name"), new EntitySpider(world)));
+			entities.add(new EntityOptions(I18n.format("entity.Witch.name"), new EntityWitch(world)));
+			entities.add(new EntityOptions(I18n.format("entity.Zombie.name"), new EntityZombie(world)));
 			//#if MC>=11100
-			entities.add(new EntityOptions("Zombievillager", new net.minecraft.entity.monster.EntityZombieVillager(world)));
+			entities.add(new EntityOptions(I18n.format("entity.ZombieVillager.name"), new net.minecraft.entity.monster.EntityZombieVillager(world)));
 			//#else
 //$$ 			entity = new EntityZombie(world);
 //$$ 			EntityZombie zombentity=(EntityZombie) entity;
@@ -220,7 +221,7 @@ public class SpawnManipMod {
 //$$ 			zombentity.setVillager(true);
 			//#endif
 			//#endif
-//$$ 			entities.add(new EntityOptions("Zombievillager", zombentity));
+//$$ 			entities.add(new EntityOptions(I18n.format("entity.ZombieVillager.name"), zombentity));
 			//#endif
 			
 			if (MCVer.world(mc).getDifficulty() == EnumDifficulty.HARD) {
@@ -228,13 +229,13 @@ public class SpawnManipMod {
 				MCVer.setItemToSlot(entity, 0, addEnchants(new ItemStack(MCVer.getItem("bow")), skelBow));
 				MCVer.setArmorDropChances(entity, new float[] { 1.0f, 1.0f, 1.0f, 1.0f });
 				MCVer.setHandDropChances(entity, new float[] { 1.0f, 1.0f });
-				entities.add(new EntityOptions("Skeleton (Enchanted Bow)", entity));
+				entities.add(new EntityOptions(String.format("%s (%s)", I18n.format("entity.Skeleton.name"), I18n.format("spawnmanip.lotas.ench_bow")), entity));
 				
 				entity = new EntityZombie(world);
 				MCVer.setItemToSlot(entity, 0, addEnchants(new ItemStack(MCVer.getItem("iron_sword")), zombieSword));
 				MCVer.setArmorDropChances(entity, new float[] { 1.0f, 1.0f, 1.0f, 1.0f });
 				MCVer.setHandDropChances(entity, new float[] { 1.0f, 1.0f });
-				entities.add(new EntityOptions("Zombie (Enchanted Sword)", entity));
+				entities.add(new EntityOptions(String.format("%s (%s)", I18n.format("entity.Zombie.name"), I18n.format("spawnmanip.lotas.ench_sword")), entity));
 
 				entity = new EntitySkeleton(world);
 				MCVer.setItemToSlot(entity, 0, addEnchants(new ItemStack(MCVer.getItem("bow")), skelBow));
@@ -244,7 +245,7 @@ public class SpawnManipMod {
 				MCVer.setItemToSlot(entity, 4, new ItemStack(MCVer.getItem("leather_helmet")));
 				MCVer.setArmorDropChances(entity, new float[] { 1.0f, 1.0f, 1.0f, 1.0f });
 				MCVer.setHandDropChances(entity, new float[] { 1.0f, 1.0f });
-				entities.add(new EntityOptions("Skeleton (Leather Armor, Enchanted Bow)", entity));
+				entities.add(new EntityOptions(String.format("%s (%s, %s)", I18n.format("entity.Skeleton.name"), I18n.format("spawnmanip.lotas.leather_armor"), I18n.format("spawnmanip.lotas.ench_bow")), entity));
 				
 				entity = new EntityZombie(world);
 				MCVer.setItemToSlot(entity, 0, addEnchants(new ItemStack(MCVer.getItem("iron_sword")), zombieSword));
@@ -254,7 +255,7 @@ public class SpawnManipMod {
 				MCVer.setItemToSlot(entity, 4, new ItemStack(MCVer.getItem("leather_helmet")));    
 				MCVer.setArmorDropChances(entity, new float[] { 1.0f, 1.0f, 1.0f, 1.0f });
 				MCVer.setHandDropChances(entity, new float[] { 1.0f, 1.0f });
-				entities.add(new EntityOptions("Zombie (Leather Armor, Enchanted Sword)", entity));
+				entities.add(new EntityOptions(String.format("%s (%s, %s)", I18n.format("entity.Zombie.name"), I18n.format("spawnmanip.lotas.leather_armor"), I18n.format("spawnmanip.lotas.ench_sword")), entity));
 				
 				entity = new EntitySkeleton(world);
 				MCVer.setItemToSlot(entity, 0, addEnchants(new ItemStack(MCVer.getItem("bow")), skelBow));
@@ -264,7 +265,7 @@ public class SpawnManipMod {
 				MCVer.setItemToSlot(entity, 4, new ItemStack(MCVer.getItem("golden_helmet")));    
 				MCVer.setArmorDropChances(entity, new float[] { 1.0f, 1.0f, 1.0f, 1.0f });
 				MCVer.setHandDropChances(entity, new float[] { 1.0f, 1.0f });
-				entities.add(new EntityOptions("Skeleton (Gold Armor, Enchanted Bow)", entity));
+				entities.add(new EntityOptions(String.format("%s (%s, %s)", I18n.format("entity.Skeleton.name"), I18n.format("spawnmanip.lotas.gold_armor"), I18n.format("spawnmanip.lotas.ench_bow")), entity));
 				
 				entity = new EntityZombie(world);
 				MCVer.setItemToSlot(entity, 0, addEnchants(new ItemStack(MCVer.getItem("iron_sword")), zombieSword));
@@ -274,7 +275,7 @@ public class SpawnManipMod {
 				MCVer.setItemToSlot(entity, 4, new ItemStack(MCVer.getItem("golden_helmet")));    
 				MCVer.setArmorDropChances(entity, new float[] { 1.0f, 1.0f, 1.0f, 1.0f });
 				MCVer.setHandDropChances(entity, new float[] { 1.0f, 1.0f });
-				entities.add(new EntityOptions("Zombie (Gold Armor, Enchanted Sword)", entity));
+				entities.add(new EntityOptions(String.format("%s (%s, %s)", I18n.format("entity.Zombie.name"), I18n.format("spawnmanip.lotas.gold_armor"), I18n.format("spawnmanip.lotas.ench_sword")), entity));
 				
 				entity = new EntitySkeleton(world);
 				MCVer.setItemToSlot(entity, 0, addEnchants(new ItemStack(MCVer.getItem("bow")), skelBow));
@@ -284,7 +285,7 @@ public class SpawnManipMod {
 				MCVer.setItemToSlot(entity, 4, new ItemStack(MCVer.getItem("chainmail_helmet")));    
 				MCVer.setArmorDropChances(entity, new float[] { 1.0f, 1.0f, 1.0f, 1.0f });
 				MCVer.setHandDropChances(entity, new float[] { 1.0f, 1.0f });
-				entities.add(new EntityOptions("Skeleton (Chain Armor, Enchanted Bow)", entity));
+				entities.add(new EntityOptions(String.format("%s (%s, %s)", I18n.format("entity.Skeleton.name"), I18n.format("spawnmanip.lotas.chain_armor"), I18n.format("spawnmanip.lotas.ench_bow")), entity));
 				
 				entity = new EntityZombie(world);
 				MCVer.setItemToSlot(entity, 0, addEnchants(new ItemStack(MCVer.getItem("iron_sword")), zombieSword));
@@ -294,7 +295,7 @@ public class SpawnManipMod {
 				MCVer.setItemToSlot(entity, 4, new ItemStack(MCVer.getItem("chainmail_helmet")));    
 				MCVer.setArmorDropChances(entity, new float[] { 1.0f, 1.0f, 1.0f, 1.0f });
 				MCVer.setHandDropChances(entity, new float[] { 1.0f, 1.0f });
-				entities.add(new EntityOptions("Zombie (Chain Armor, Enchanted Sword)", entity));
+				entities.add(new EntityOptions(String.format("%s (%s, %s)", I18n.format("entity.Zombie.name"), I18n.format("spawnmanip.lotas.chain_armor"), I18n.format("spawnmanip.lotas.ench_sword")), entity));
 				
 				entity = new EntitySkeleton(world);
 				MCVer.setItemToSlot(entity, 0, addEnchants(new ItemStack(MCVer.getItem("bow")), skelBow));
@@ -304,7 +305,7 @@ public class SpawnManipMod {
 				MCVer.setItemToSlot(entity, 4, new ItemStack(MCVer.getItem("iron_helmet")));     
 				MCVer.setArmorDropChances(entity, new float[] { 1.0f, 1.0f, 1.0f, 1.0f });
 				MCVer.setHandDropChances(entity, new float[] { 1.0f, 1.0f });
-				entities.add(new EntityOptions("Skeleton (Iron Armor, Enchanted Sword)", entity));
+				entities.add(new EntityOptions(String.format("%s (%s, %s)", I18n.format("entity.Skeleton.name"), I18n.format("spawnmanip.lotas.iron_armor"), I18n.format("spawnmanip.lotas.ench_bow")), entity));
 				
 				entity = new EntityZombie(world);
 				MCVer.setItemToSlot(entity, 0, addEnchants(new ItemStack(MCVer.getItem("iron_sword")), zombieSword));
@@ -314,7 +315,7 @@ public class SpawnManipMod {
 				MCVer.setItemToSlot(entity, 4, new ItemStack(MCVer.getItem("iron_helmet")));    
 				MCVer.setArmorDropChances(entity, new float[] { 1.0f, 1.0f, 1.0f, 1.0f });
 				MCVer.setHandDropChances(entity, new float[] { 1.0f, 1.0f });
-				entities.add(new EntityOptions("Zombie (Iron Armor, Enchanted Sword)", entity));
+				entities.add(new EntityOptions(String.format("%s (%s, %s)", I18n.format("entity.Zombie.name"), I18n.format("spawnmanip.lotas.iron_armor"), I18n.format("spawnmanip.lotas.ench_sword")), entity));
 				
 				entity = new EntitySkeleton(world);
 				MCVer.setItemToSlot(entity, 0, addEnchants(new ItemStack(MCVer.getItem("bow")), skelBow));
@@ -324,7 +325,7 @@ public class SpawnManipMod {
 				MCVer.setItemToSlot(entity, 4, new ItemStack(MCVer.getItem("diamond_helmet")));    
 				MCVer.setArmorDropChances(entity, new float[] { 1.0f, 1.0f, 1.0f, 1.0f });
 				MCVer.setHandDropChances(entity, new float[] { 1.0f, 1.0f });
-				entities.add(new EntityOptions("Skeleton (Diamond Armor, Enchanted Bow)", entity));
+				entities.add(new EntityOptions(String.format("%s (%s, %s)", I18n.format("entity.Skeleton.name"), I18n.format("spawnmanip.lotas.diamond_armor"), I18n.format("spawnmanip.lotas.ench_bow")), entity));
 				
 				entity = new EntityZombie(world);
 				MCVer.setItemToSlot(entity, 0, addEnchants(new ItemStack(MCVer.getItem("iron_sword")), zombieSword));
@@ -334,16 +335,16 @@ public class SpawnManipMod {
 				MCVer.setItemToSlot(entity, 4, new ItemStack(MCVer.getItem("diamond_helmet")));    
 				MCVer.setArmorDropChances(entity, new float[] { 1.0f, 1.0f, 1.0f, 1.0f });
 				MCVer.setHandDropChances(entity, new float[] { 1.0f, 1.0f });
-				entities.add(new EntityOptions("Zombie (Diamond Armor, Enchanted Sword)", entity));
+				entities.add(new EntityOptions(String.format("%s (%s, %s)", I18n.format("entity.Zombie.name"), I18n.format("spawnmanip.lotas.diamond_armor"), I18n.format("spawnmanip.lotas.ench_sword")), entity));
 			}
 		}else if(dim==-1) {
-			entities.add(new EntityOptions("Blaze", new EntityBlaze(world)));
-			entities.add(new EntityOptions("Enderman", new EntityEnderman(world)));
-			entities.add(new EntityOptions("Ghast", new EntityGhast(world)));
-			entities.add(new EntityOptions("Magma Cube", new EntityMagmaCube(world)));
+			entities.add(new EntityOptions(I18n.format("entity.Blaze.name"), new EntityBlaze(world)));
+			entities.add(new EntityOptions(I18n.format("entity.Enderman.name"), new EntityEnderman(world)));
+			entities.add(new EntityOptions(I18n.format("entity.Ghast.name"), new EntityGhast(world)));
+			entities.add(new EntityOptions(I18n.format("entity.LavaSlime.name"), new EntityMagmaCube(world)));
 			EntityLiving entity = new EntitySkeleton(world);
 			MCVer.setItemToSlot(entity, 0, new ItemStack(MCVer.getItem("bow")));
-			entities.add(new EntityOptions("Skeleton", entity));
+			entities.add(new EntityOptions(I18n.format("entity.Skeleton.name"), entity));
 			//#if MC>=11100
 			entity = new net.minecraft.entity.monster.EntityWitherSkeleton(world);
 			//#else
@@ -356,7 +357,7 @@ public class SpawnManipMod {
 			//#endif
 			//#endif
 			MCVer.setItemToSlot(entity, 0, new ItemStack(MCVer.getItem("stone_sword")));
-			entities.add(new EntityOptions("Wither Skeleton", entity));
+			entities.add(new EntityOptions(I18n.format("entity.WitherSkeleton.name"), entity));
 			
 			
 			if (MCVer.world(mc).getDifficulty() == EnumDifficulty.HARD) {
@@ -364,7 +365,7 @@ public class SpawnManipMod {
 				MCVer.setItemToSlot(entity, 0, addEnchants(new ItemStack(MCVer.getItem("bow")), skelBow));
 				MCVer.setArmorDropChances(entity, new float[] { 1.0f, 1.0f, 1.0f, 1.0f });
 				MCVer.setHandDropChances(entity, new float[] { 1.0f, 1.0f });
-				entities.add(new EntityOptions("Skeleton (Enchanted Bow)", entity));
+				entities.add(new EntityOptions(String.format("%s (%s)", I18n.format("entity.Skeleton.name"), I18n.format("Enchanted Bow")), entity));
 				
 				entity = new EntitySkeleton(world);
 				MCVer.setItemToSlot(entity, 0, addEnchants(new ItemStack(MCVer.getItem("bow")), skelBow));
@@ -374,7 +375,7 @@ public class SpawnManipMod {
 				MCVer.setItemToSlot(entity, 4, new ItemStack(MCVer.getItem("leather_helmet")));    
 				MCVer.setArmorDropChances(entity, new float[] { 1.0f, 1.0f, 1.0f, 1.0f });
 				MCVer.setHandDropChances(entity, new float[] { 1.0f, 1.0f });
-				entities.add(new EntityOptions("Skeleton (Leather Armor, Enchanted Bow)", entity));
+				entities.add(new EntityOptions(String.format("%s (%s, %s)", I18n.format("entity.Skeleton.name"), I18n.format("spawnmanip.lotas.leather_armor"), I18n.format("spawnmanip.lotas.ench_bow")), entity));
 				
 				entity = new EntitySkeleton(world);
 				MCVer.setItemToSlot(entity, 0, addEnchants(new ItemStack(MCVer.getItem("bow")), skelBow));
@@ -384,7 +385,7 @@ public class SpawnManipMod {
 				MCVer.setItemToSlot(entity, 4, new ItemStack(MCVer.getItem("golden_helmet")));    
 				MCVer.setArmorDropChances(entity, new float[] { 1.0f, 1.0f, 1.0f, 1.0f });
 				MCVer.setHandDropChances(entity, new float[] { 1.0f, 1.0f });
-				entities.add(new EntityOptions("Skeleton (Gold Armor, Enchanted Bow)", entity));
+				entities.add(new EntityOptions(String.format("%s (%s, %s)", I18n.format("entity.Skeleton.name"), I18n.format("spawnmanip.lotas.gold_armor"), I18n.format("spawnmanip.lotas.ench_bow")), entity));
 				
 				entity = new EntitySkeleton(world);
 				MCVer.setItemToSlot(entity, 0, addEnchants(new ItemStack(MCVer.getItem("bow")), skelBow));
@@ -394,7 +395,7 @@ public class SpawnManipMod {
 				MCVer.setItemToSlot(entity, 4, new ItemStack(MCVer.getItem("chainmail_helmet")));    
 				MCVer.setArmorDropChances(entity, new float[] { 1.0f, 1.0f, 1.0f, 1.0f });
 				MCVer.setHandDropChances(entity, new float[] { 1.0f, 1.0f });
-				entities.add(new EntityOptions("Skeleton (Chain Armor, Enchanted Bow)", entity));
+				entities.add(new EntityOptions(String.format("%s (%s, %s)", I18n.format("entity.Skeleton.name"), I18n.format("spawnmanip.lotas.chain_armor"), I18n.format("spawnmanip.lotas.ench_bow")), entity));
 				
 				entity = new EntitySkeleton(world);
 				MCVer.setItemToSlot(entity, 0, addEnchants(new ItemStack(MCVer.getItem("bow")), skelBow));
@@ -404,7 +405,7 @@ public class SpawnManipMod {
 				MCVer.setItemToSlot(entity, 4, new ItemStack(MCVer.getItem("iron_helmet")));    
 				MCVer.setArmorDropChances(entity, new float[] { 1.0f, 1.0f, 1.0f, 1.0f });
 				MCVer.setHandDropChances(entity, new float[] { 1.0f, 1.0f });
-				entities.add(new EntityOptions("Skeleton (Iron Armor, Enchanted Sword)", entity));
+				entities.add(new EntityOptions(String.format("%s (%s, %s)", I18n.format("entity.Skeleton.name"), I18n.format("spawnmanip.lotas.iron_armor"), I18n.format("spawnmanip.lotas.ench_bow")), entity));
 				
 				entity = new EntitySkeleton(world);
 				MCVer.setItemToSlot(entity, 0, addEnchants(new ItemStack(MCVer.getItem("bow")), skelBow));
@@ -414,10 +415,10 @@ public class SpawnManipMod {
 				MCVer.setItemToSlot(entity, 4, new ItemStack(MCVer.getItem("diamond_helmet")));    
 				MCVer.setArmorDropChances(entity, new float[] { 1.0f, 1.0f, 1.0f, 1.0f });
 				MCVer.setHandDropChances(entity, new float[] { 1.0f, 1.0f });
-				entities.add(new EntityOptions("Skeleton (Diamond Armor, Enchanted Bow)", entity));
+				entities.add(new EntityOptions(String.format("%s (%s, %s)", I18n.format("entity.Skeleton.name"), I18n.format("spawnmanip.lotas.diamond_armor"), I18n.format("spawnmanip.lotas.ench_bow")), entity));
 			}
 		}else if(dim==1) {
-			entities.add(new EntityOptions("Enderman", new EntityEnderman(world)));
+			entities.add(new EntityOptions(I18n.format("entity.Enderman.name"), new EntityEnderman(world)));
 		}
 		return entities;
 	}

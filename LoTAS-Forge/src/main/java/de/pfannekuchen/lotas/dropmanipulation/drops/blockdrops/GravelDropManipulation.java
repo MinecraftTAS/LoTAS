@@ -5,25 +5,26 @@ import java.util.List;
 import com.google.common.collect.ImmutableList;
 
 import de.pfannekuchen.lotas.core.MCVer;
-import de.pfannekuchen.lotas.gui.GuiDropChanceManipulation;
+import de.pfannekuchen.lotas.gui.GuiDropManipulation;
 import de.pfannekuchen.lotas.gui.widgets.ButtonWidget;
 import de.pfannekuchen.lotas.gui.widgets.CheckboxWidget;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-public class GravelDropManipulation extends GuiDropChanceManipulation.DropManipulation {
+public class GravelDropManipulation extends GuiDropManipulation.DropManipulation {
 
     public static boolean flint = false;
 
-    public static ButtonWidget dropGravel = new ButtonWidget(x, y, 98, 20, "Gravel", button -> {
+    public static ButtonWidget dropGravel = new ButtonWidget(x, y, 98, 20, I18n.format("dropmanipgui.lotas.blocks.gravel.gravel"), button -> {
         pressGravel();
     });
-    public static ButtonWidget dropFlint = new ButtonWidget(x, y, 98, 20, "Flint", button -> {
+    public static ButtonWidget dropFlint = new ButtonWidget(x, y, 98, 20, I18n.format("dropmanipgui.lotas.blocks.gravel.flint"), button -> {
         pressFlint();
     });
 
@@ -44,13 +45,13 @@ public class GravelDropManipulation extends GuiDropChanceManipulation.DropManipu
     	GravelDropManipulation.y = y;
     	GravelDropManipulation.width = width;
         GravelDropManipulation.height = height;
-        enabled = new CheckboxWidget(x, y, 150, 20, "Override Gravel Drops", false);
+        enabled = new CheckboxWidget(x, y, 150, 20, I18n.format("dropmanipgui.lotas.blocks.gravel.override"), false);
         dropGravel.enabled = false;
     }
 
     @Override
     public String getName() {
-        return "Gravel";
+        return I18n.format("dropmanipgui.lotas.blocks.gravel.name");
     }
 
     @Override
@@ -95,11 +96,11 @@ public class GravelDropManipulation extends GuiDropChanceManipulation.DropManipu
         if (!enabled.isChecked()) {
             GlStateManager.color(.5f, .5f, .5f, .4f);
         } else {
-            MCVer.getFontRenderer(Minecraft.getMinecraft()).drawStringWithShadow("Drop " + (flint ? "Flint" : "Gravel") + " when breaking Gravel", x, y + 64, 0xFFFFFF);
+            MCVer.getFontRenderer(Minecraft.getMinecraft()).drawStringWithShadow(I18n.format("dropmanipgui.lotas.blocks.gravel.description", (flint ? I18n.format("dropmanipgui.lotas.blocks.gravel.flint") : I18n.format("dropmanipgui.lotas.blocks.gravel.gravel"))), x, y + 64, 0xFFFFFF);
             dropGravel.render(mouseX, mouseY, delta);
             dropFlint.render(mouseX, mouseY, delta);
+            GlStateManager.color(1f, 1f, 1f, 1f);
         }
-
         Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation("lotas", "drops/gravel.png"));
         Gui.drawModalRectWithCustomSizedTexture(width - 128, y + 24, 0.0F, 0.0F, 96, 96, 96, 96);
     }

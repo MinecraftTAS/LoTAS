@@ -5,28 +5,29 @@ import java.util.List;
 import com.google.common.collect.ImmutableList;
 
 import de.pfannekuchen.lotas.core.MCVer;
-import de.pfannekuchen.lotas.gui.GuiDropChanceManipulation;
+import de.pfannekuchen.lotas.gui.GuiDropManipulation;
 import de.pfannekuchen.lotas.gui.widgets.ButtonWidget;
 import de.pfannekuchen.lotas.gui.widgets.CheckboxWidget;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-public class GlowstoneDropManipulation extends GuiDropChanceManipulation.DropManipulation {
+public class GlowstoneDropManipulation extends GuiDropManipulation.DropManipulation {
 
     public static int dust = 2;
 
-    public static ButtonWidget drop2Glowstonedust = new ButtonWidget(x, y, 98, 20, "2 Glowstone Dust", button -> {
+    public static ButtonWidget drop2Glowstonedust = new ButtonWidget(x, y, 98, 20, I18n.format("dropmanipgui.lotas.blocks.glowstone.2"), button -> {
         press2Glowstonedust();
     });
-    public static ButtonWidget drop3Glowstonedust = new ButtonWidget(x, y, 98, 20, "3 Glowstone Dust", button -> {
+    public static ButtonWidget drop3Glowstonedust = new ButtonWidget(x, y, 98, 20, I18n.format("dropmanipgui.lotas.blocks.glowstone.3"), button -> {
         press3Glowstonedust();
     });
-    public static ButtonWidget drop4Glowstonedust = new ButtonWidget(x, y, 98, 20, "4 Glowstone Dust", button -> {
+    public static ButtonWidget drop4Glowstonedust = new ButtonWidget(x, y, 98, 20, I18n.format("dropmanipgui.lotas.blocks.glowstone.4"), button -> {
         press4Glowstonedust();
     });
 
@@ -56,13 +57,13 @@ public class GlowstoneDropManipulation extends GuiDropChanceManipulation.DropMan
         GlowstoneDropManipulation.y = y;
         GlowstoneDropManipulation.width = width;
         GlowstoneDropManipulation.height = height;
-        enabled = new CheckboxWidget(x, y, 150, 20, "Override Glowstone Drops", false);
+        enabled = new CheckboxWidget(x, y, 150, 20, I18n.format("dropmanipgui.lotas.blocks.glowstone.override"), false);
         drop2Glowstonedust.enabled = false;
     }
 
     @Override
     public String getName() {
-        return "Glowstone";
+        return I18n.format("dropmanipgui.lotas.blocks.glowstone.name");
     }
 
     @Override
@@ -110,7 +111,7 @@ public class GlowstoneDropManipulation extends GuiDropChanceManipulation.DropMan
         if (!enabled.isChecked()) {
             GlStateManager.color(.5f, .5f, .5f, .4f);
         } else {
-            MCVer.getFontRenderer(Minecraft.getMinecraft()).drawStringWithShadow("Drop " + dust + " Glowstone Dust when breaking Glowstone", x, y + 64, 0xFFFFFF);
+            MCVer.getFontRenderer(Minecraft.getMinecraft()).drawStringWithShadow(I18n.format("dropmanipgui.lotas.blocks.glowstone.description", dust), x, y + 64, 0xFFFFFF);
             drop4Glowstonedust.render(mouseX, mouseY, delta);
             drop3Glowstonedust.render(mouseX, mouseY, delta);
             drop2Glowstonedust.render(mouseX, mouseY, delta);

@@ -5,7 +5,7 @@ import java.util.List;
 import com.google.common.collect.ImmutableList;
 
 import de.pfannekuchen.lotas.core.MCVer;
-import de.pfannekuchen.lotas.gui.GuiDropChanceManipulation;
+import de.pfannekuchen.lotas.gui.GuiDropManipulation;
 import de.pfannekuchen.lotas.gui.widgets.CheckboxWidget;
 import de.pfannekuchen.lotas.gui.widgets.ModifiedCheckBoxWidget;
 import net.minecraft.block.Block;
@@ -14,35 +14,36 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-public class PlantsDropManipulation extends GuiDropChanceManipulation.DropManipulation {
+public class PlantsDropManipulation extends GuiDropManipulation.DropManipulation {
 
-    public static ModifiedCheckBoxWidget optimizeCarrots = new ModifiedCheckBoxWidget(999, 0, 0, "Optimize Carrot Drops", false);
-    public static ModifiedCheckBoxWidget optimizePotato = new ModifiedCheckBoxWidget(999, 0, 0, "Optimize Potato Drops", false);
-    public static ModifiedCheckBoxWidget optimizeWheat = new ModifiedCheckBoxWidget(999, 0, 0, "Optimize Wheat Drops", false);
-    public static ModifiedCheckBoxWidget optimizeBeetroot = new ModifiedCheckBoxWidget(999, 0, 0, "Optimize Beetroot Drops", false);
-    public static ModifiedCheckBoxWidget optimizeMelons = new ModifiedCheckBoxWidget(999, 0, 0, "Optimize Melon Drops", false);
-    public static ModifiedCheckBoxWidget optimizeCocoa = new ModifiedCheckBoxWidget(999, 0, 0, "Optimize Cocoa Bean Drops", false);
-    public static ModifiedCheckBoxWidget optimizeChorus = new ModifiedCheckBoxWidget(999, 0, 0, "Optimize Chorus Plant Drops", false);
-    public static ModifiedCheckBoxWidget optimizeNetherwart = new ModifiedCheckBoxWidget(999, 0, 0, "Optimize Nether Wart Drops", false);
-    public static ModifiedCheckBoxWidget optimizeMushroom = new ModifiedCheckBoxWidget(999, 0, 0, "Optimize Mushroom Block Drops", false);
+    public static ModifiedCheckBoxWidget optimizeCarrots = new ModifiedCheckBoxWidget(999, 0, 0, I18n.format("dropmanipgui.lotas.blocks.plants.carrot"), false);
+    public static ModifiedCheckBoxWidget optimizePotato = new ModifiedCheckBoxWidget(999, 0, 0, I18n.format("dropmanipgui.lotas.blocks.plants.potato"), false);
+    public static ModifiedCheckBoxWidget optimizeWheat = new ModifiedCheckBoxWidget(999, 0, 0, I18n.format("dropmanipgui.lotas.blocks.plants.wheat"), false);
+    public static ModifiedCheckBoxWidget optimizeBeetroot = new ModifiedCheckBoxWidget(999, 0, 0, I18n.format("dropmanipgui.lotas.blocks.plants.beetroot"), false);
+    public static ModifiedCheckBoxWidget optimizeMelons = new ModifiedCheckBoxWidget(999, 0, 0, I18n.format("dropmanipgui.lotas.blocks.plants.melon"), false);
+    public static ModifiedCheckBoxWidget optimizeCocoa = new ModifiedCheckBoxWidget(999, 0, 0, I18n.format("dropmanipgui.lotas.blocks.plants.cocoa"), false);
+    public static ModifiedCheckBoxWidget optimizeChorus = new ModifiedCheckBoxWidget(999, 0, 0, I18n.format("dropmanipgui.lotas.blocks.plants.chorus"), false);
+    public static ModifiedCheckBoxWidget optimizeNetherwart = new ModifiedCheckBoxWidget(999, 0, 0, I18n.format("dropmanipgui.lotas.blocks.plants.netherwart"), false);
+    public static ModifiedCheckBoxWidget optimizeMushroom = new ModifiedCheckBoxWidget(999, 0, 0, I18n.format("dropmanipgui.lotas.blocks.plants.mushroom"), false);
 
     public PlantsDropManipulation(int x, int y, int width, int height) {
     	PlantsDropManipulation.x = x;
         PlantsDropManipulation.y = y;
         PlantsDropManipulation.width = width;
         PlantsDropManipulation.height = height;
-        enabled = new CheckboxWidget(x, y, 150, 20, "Override Plant Drops", false);
+        enabled = new CheckboxWidget(x, y, 150, 20, I18n.format("dropmanipgui.lotas.blocks.plants.override"), false);
     }
 
     @Override
     public String getName() {
-        return "Plants";
+        return I18n.format("dropmanipgui.lotas.blocks.plants.name");
     }
 
     @Override
