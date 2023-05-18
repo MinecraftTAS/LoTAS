@@ -7,8 +7,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-import de.pfannekuchen.lotas.gui.GuiDropChanceManipulation;
-import de.pfannekuchen.lotas.gui.GuiDropChanceManipulation.DropManipulation;
+import de.pfannekuchen.lotas.gui.GuiDropManipulation;
+import de.pfannekuchen.lotas.gui.GuiDropManipulation.DropManipulation;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -23,7 +23,7 @@ public class MixinEntityLivingPatch {
 
 	@Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/world/storage/loot/LootTable;generateLootForPools(Ljava/util/Random;Lnet/minecraft/world/storage/loot/LootContext;)Ljava/util/List;"), method = "dropLoot")
     public List<ItemStack> generateLootForPools(LootTable input, Random rng, LootContext context, boolean wasRecentlyHit, int lootingModifier, DamageSource source) {
-        for (DropManipulation man : GuiDropChanceManipulation.manipulations) {
+        for (DropManipulation man : GuiDropManipulation.manipulations) {
            if (!man.enabled.isChecked()) continue;
            List<ItemStack> list = man.redirectDrops((EntityLiving) (Object) this, lootingModifier);
             if (!list.isEmpty()) {

@@ -286,7 +286,7 @@ public class LoTASIngameGui {
 		//#endif
 
 		// Hint
-		if (isShiftDown && tickjumpText) {
+		if (isShiftDown && tickjumpText && jumpTicksButton.active) {
 			MCVer.drawCenteredString(parentScreen, "\u00A7a^^^^^^^^", 70, 139, 0xFFFFFF);
 			MCVer.drawCenteredString(parentScreen, String.format(I18n.get("pausegui.lotas.jump.tutorial.1")), 70, 145, 0xFFFFFF);//"\u00A7aReopens the Game Menu"
 			MCVer.drawCenteredString(parentScreen, I18n.get("pausegui.lotas.jump.tutorial.2", TickrateChangerMod.ticks[TickrateChangerMod.ji]), 70, 155, 0xFFFFFF);//"\u00A7aafter %s ticks"

@@ -5,28 +5,29 @@ import java.util.List;
 import com.google.common.collect.ImmutableList;
 
 import de.pfannekuchen.lotas.core.MCVer;
-import de.pfannekuchen.lotas.gui.GuiDropChanceManipulation;
+import de.pfannekuchen.lotas.gui.GuiDropManipulation;
 import de.pfannekuchen.lotas.gui.widgets.ButtonWidget;
 import de.pfannekuchen.lotas.gui.widgets.CheckboxWidget;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-public class DeadbushDropManipulation extends GuiDropChanceManipulation.DropManipulation {
+public class DeadbushDropManipulation extends GuiDropManipulation.DropManipulation {
 
     public static int sticks = 0;
 
-    public static ButtonWidget drop0Stick = new ButtonWidget(x, y, 98, 20, "0 Sticks", button -> {
+    public static ButtonWidget drop0Stick = new ButtonWidget(x, y, 98, 20, I18n.format("dropmanipgui.lotas.blocks.deadbush.0"), button -> {
         press0Stick();
     });
-    public static ButtonWidget drop1Stick = new ButtonWidget(x, y, 98, 20, "1 Sticks", button -> {
+    public static ButtonWidget drop1Stick = new ButtonWidget(x, y, 98, 20, I18n.format("dropmanipgui.lotas.blocks.deadbush.1"), button -> {
         press1Stick();
     });
-    public static ButtonWidget drop2Stick = new ButtonWidget(x, y, 98, 20, "2 Sticks", button -> {
+    public static ButtonWidget drop2Stick = new ButtonWidget(x, y, 98, 20, I18n.format("dropmanipgui.lotas.blocks.deadbush.2"), button -> {
         press2Stick();
     });
 
@@ -56,13 +57,13 @@ public class DeadbushDropManipulation extends GuiDropChanceManipulation.DropMani
         DeadbushDropManipulation.y = y;
         DeadbushDropManipulation.width = width;
         DeadbushDropManipulation.height = height;
-        enabled = new CheckboxWidget(x, y, 150, 20, "Override Dead Bush Drops", false);
+        enabled = new CheckboxWidget(x, y, 150, 20, I18n.format("dropmanipgui.lotas.blocks.deadbush.override"), false);
         drop0Stick.enabled = false;
     }
 
     @Override
     public String getName() {
-        return "Dead Bush";
+        return I18n.format("dropmanipgui.lotas.blocks.deadbush.name");
     }
 
     @Override
@@ -110,7 +111,7 @@ public class DeadbushDropManipulation extends GuiDropChanceManipulation.DropMani
         if (!enabled.isChecked()) {
             GlStateManager.color(.5f, .5f, .5f, .4f);
         } else {
-            MCVer.getFontRenderer(Minecraft.getMinecraft()).drawStringWithShadow("Drop " + sticks + " Sticks when breaking a Dead Bush", x, y + 64, 0xFFFFFF);
+            MCVer.getFontRenderer(Minecraft.getMinecraft()).drawStringWithShadow(I18n.format("dropmanipgui.lotas.blocks.deadbush.description", sticks), x, y + 64, 0xFFFFFF);
             drop2Stick.render(mouseX, mouseY, delta);
             drop1Stick.render(mouseX, mouseY, delta);
             drop0Stick.render(mouseX, mouseY, delta);

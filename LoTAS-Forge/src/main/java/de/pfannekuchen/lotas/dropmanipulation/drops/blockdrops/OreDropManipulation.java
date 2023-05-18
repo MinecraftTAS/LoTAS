@@ -5,7 +5,7 @@ import java.util.List;
 import com.google.common.collect.ImmutableList;
 
 import de.pfannekuchen.lotas.core.MCVer;
-import de.pfannekuchen.lotas.gui.GuiDropChanceManipulation;
+import de.pfannekuchen.lotas.gui.GuiDropManipulation;
 import de.pfannekuchen.lotas.gui.widgets.CheckboxWidget;
 import de.pfannekuchen.lotas.gui.widgets.ModifiedCheckBoxWidget;
 import net.minecraft.block.Block;
@@ -13,26 +13,27 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-public class OreDropManipulation extends GuiDropChanceManipulation.DropManipulation {
+public class OreDropManipulation extends GuiDropManipulation.DropManipulation {
 
-    public static ModifiedCheckBoxWidget optimizeLapis = new ModifiedCheckBoxWidget(999, 0, 0, "Full Lapis Drops", false);
-    public static ModifiedCheckBoxWidget optimizeRedstone = new ModifiedCheckBoxWidget(999, 0, 0, "Full Redstone Drops", false);
+    public static ModifiedCheckBoxWidget optimizeLapis = new ModifiedCheckBoxWidget(999, 0, 0, I18n.format("dropmanipgui.lotas.blocks.ore.lapis"), false);
+    public static ModifiedCheckBoxWidget optimizeRedstone = new ModifiedCheckBoxWidget(999, 0, 0, I18n.format("dropmanipgui.lotas.blocks.ore.redstone"), false);
 
     public OreDropManipulation(int x, int y, int width, int height) {
     	OreDropManipulation.x = x;
     	OreDropManipulation.y = y;
     	OreDropManipulation.width = width;
     	OreDropManipulation.height = height;
-        enabled = new CheckboxWidget(x, y, 150, 20, "Override Ore Drops", false);
+        enabled = new CheckboxWidget(x, y, 150, 20, I18n.format("dropmanipgui.lotas.blocks.ore.override"), false);
     }
 
     @Override
     public String getName() {
-        return "Ores";
+        return I18n.format("dropmanipgui.lotas.blocks.ore.name");
     }
 
     @Override

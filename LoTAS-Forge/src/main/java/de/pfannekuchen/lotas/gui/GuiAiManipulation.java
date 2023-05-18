@@ -9,6 +9,7 @@ import de.pfannekuchen.lotas.mods.AIManipMod.Vec;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.client.resources.I18n;
 
 public class GuiAiManipulation extends GuiScreen {
 	
@@ -40,7 +41,7 @@ public class GuiAiManipulation extends GuiScreen {
 		zText = new GuiTextField(93, MCVer.getFontRenderer(Minecraft.getMinecraft()), width / 2 + 39, height - 48, 59, 19);
 		setTextToVec(target);
 		
-		buttonList.add(new ButtonWidget(width / 2 - 100, height - 25, 200, 20, "aimanipgui.lotas.changetarget", b -> {
+		buttonList.add(new ButtonWidget(width / 2 - 100, height - 25, 200, 20, I18n.format("aimanipgui.lotas.changetarget"), b -> {
 			manip.confirm();
 			b.enabled = false;
 		}));
@@ -50,13 +51,13 @@ public class GuiAiManipulation extends GuiScreen {
 		buttonList.add(new ButtonWidget(width / 2 +140 - margin, height - 49, 20, 20, "\u2193", btn -> manip.changeTargetBack()));   
 		buttonList.add(new ButtonWidget(width / 2 +118 - margin, height - 72, 20, 20, "\u2190", btn -> manip.changeTargetLeft()));   
 		buttonList.add(new ButtonWidget(width / 2 +162 - margin, height - 72, 20, 20, "\u2192", btn -> manip.changeTargetRight()));  
-		buttonList.add(new ButtonWidget(width / 2 +118 - margin, height - 25, 30, 20, "manipgui.lotas.up", btn -> manip.changeTargetUp()));         
-		buttonList.add(new ButtonWidget(width / 2 +153 - margin, height - 25, 30, 20, "manipgui.lotas.down", btn -> manip.changeTargetDown()));     
-		buttonList.add(new ButtonWidget(width / 2 - 100, height - 72, 200, 20, "manipgui.lotas.moveme", btn -> {
+		buttonList.add(new ButtonWidget(width / 2 +118 - margin, height - 25, 30, 20, I18n.format("manipgui.lotas.up"), btn -> manip.changeTargetUp()));         
+		buttonList.add(new ButtonWidget(width / 2 +153 - margin, height - 25, 30, 20, I18n.format("manipgui.lotas.down"), btn -> manip.changeTargetDown()));     
+		buttonList.add(new ButtonWidget(width / 2 - 100, height - 72, 200, 20, I18n.format("manipgui.lotas.moveme"), btn -> {
 			manip.setTargetToPlayer();
 			setTextToVec(AIManipMod.getTargetPos());
 		}));
-		buttonList.add(new ButtonWidget(width / 2 - 100, height - 95, 200, 20, "aimanipgui.lotas.moveentity", btn -> {
+		buttonList.add(new ButtonWidget(width / 2 - 100, height - 95, 200, 20, I18n.format("aimanipgui.lotas.moveentity"), btn -> {
 			manip.setTargetToEntity();
 			setTextToVec(AIManipMod.getTargetPos());
 		}));

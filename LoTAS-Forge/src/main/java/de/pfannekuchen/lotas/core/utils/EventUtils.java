@@ -8,7 +8,7 @@ import org.lwjgl.opengl.GL11;
 import de.pfannekuchen.lotas.core.LoTASModContainer;
 import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.gui.GuiAiManipulation;
-import de.pfannekuchen.lotas.gui.GuiEntitySpawnManipulation;
+import de.pfannekuchen.lotas.gui.GuiSpawnManipulation;
 import de.pfannekuchen.lotas.mixin.accessors.AccessorRenderManager;
 import de.pfannekuchen.lotas.mods.AIManipMod;
 import de.pfannekuchen.lotas.mods.SpawnManipMod;
@@ -66,7 +66,7 @@ public class EventUtils {
 	@SubscribeEvent public void onRender(RenderWorldLastEvent e) {
 		final GuiScreen gui = Minecraft.getMinecraft().currentScreen;
 		/* Render the Entity Spawn Manipulation or AI Manipulation Outline 3D Box */
-		if (gui instanceof GuiEntitySpawnManipulation) {
+		if (gui instanceof GuiSpawnManipulation) {
 			GL11.glPushMatrix();
 			GL11.glDisable(GL11.GL_TEXTURE_2D);
 			GL11.glEnable(GL11.GL_BLEND);

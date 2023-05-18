@@ -11,6 +11,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiGameOver;
 import net.minecraft.client.gui.GuiIngameMenu;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.resources.I18n;
 
 @Mixin(GuiGameOver.class)
 public abstract class MixinGuiGameOver extends GuiScreen {
@@ -20,7 +21,7 @@ public abstract class MixinGuiGameOver extends GuiScreen {
 	
 	@Inject(method = "initGui", at = @At("RETURN"))
 	public void injectinitGui(CallbackInfo ci) {
-        this.buttonList.add(new GuiButton(2, this.width / 2 - 100, this.height / 4 + 120, "Loadstate"));
+        this.buttonList.add(new GuiButton(2, this.width / 2 - 100, this.height / 4 + 120, I18n.format("pausegui.lotas.buttontext.unshift.loadstate")));
 	}
 
 	@Inject(method = "actionPerformed", at = @At("HEAD"))

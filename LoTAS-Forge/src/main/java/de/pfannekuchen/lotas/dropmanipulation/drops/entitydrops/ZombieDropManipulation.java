@@ -6,20 +6,21 @@ import java.util.List;
 import com.google.common.collect.ImmutableList;
 
 import de.pfannekuchen.lotas.core.MCVer;
-import de.pfannekuchen.lotas.gui.GuiDropChanceManipulation;
+import de.pfannekuchen.lotas.gui.GuiDropManipulation;
 import de.pfannekuchen.lotas.gui.widgets.CheckboxWidget;
 import de.pfannekuchen.lotas.gui.widgets.ImageWidget;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntityPigZombie;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-public class ZombieDropManipulation extends GuiDropChanceManipulation.DropManipulation {
+public class ZombieDropManipulation extends GuiDropManipulation.DropManipulation {
 
     public static ImageWidget dropIron = new ImageWidget(x, y, c -> {
         ZombieDropManipulation.dropPotato.setToggled(false);
@@ -42,12 +43,12 @@ public class ZombieDropManipulation extends GuiDropChanceManipulation.DropManipu
     	ZombieDropManipulation.y = y;
     	ZombieDropManipulation.width = width;
     	ZombieDropManipulation.height = height;
-    	enabled = new CheckboxWidget(x, y, 150, 20, "Override Zombie", false);
+    	enabled = new CheckboxWidget(x, y, 150, 20, I18n.format("dropmanipgui.lotas.entity.zombie.override"), false);
     }
 
     @Override
     public String getName() {
-        return "Zombie";
+        return I18n.format("dropmanipgui.lotas.entity.zombie.name");
     }
 
     @Override
@@ -96,7 +97,12 @@ public class ZombieDropManipulation extends GuiDropChanceManipulation.DropManipu
         if (!enabled.isChecked()) {
             GlStateManager.color(.5f, .5f, .5f, .4f);
         } else {
-            MCVer.getFontRenderer(Minecraft.getMinecraft()).drawStringWithShadow("Zombies drop: 2 Rotten Flesh" + (dropIron.isToggled() ? ", 1 Iron Ingot" : "") + (dropPotato.isToggled() ? ", 1 Potato" : "") + (dropCarrot.isToggled() ? ", 1 Carrot" : ""), x, y + 64, 0xFFFFFF);
+			String zombie = I18n.format("dropmanipgui.lotas.entity.zombie.zombie");//"Zombies drop:"
+			String rottenflesh = I18n.format("dropmanipgui.lotas.entity.zombie.rottenflesh");//" 2 Rotten Flesh"
+			String iron = I18n.format("dropmanipgui.lotas.entity.zombie.iron");//", 1 Iron Ingot"
+			String potato = I18n.format("dropmanipgui.lotas.entity.zombie.potato");//", 1 Potato"
+			String carrot = I18n.format("dropmanipgui.lotas.entity.zombie.carrot");//", 1 Carrot"
+            MCVer.getFontRenderer(Minecraft.getMinecraft()).drawStringWithShadow(zombie+rottenflesh + (dropIron.isToggled() ? iron : "") + (dropPotato.isToggled() ? potato : "") + (dropCarrot.isToggled() ? carrot : ""), x, y + 64, 0xFFFFFF);
             dropIron.render(mouseX, mouseY, delta);
             dropPotato.render(mouseX, mouseY, delta);
             dropCarrot.render(mouseX, mouseY, delta);

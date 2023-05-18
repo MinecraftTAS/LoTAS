@@ -6,7 +6,7 @@ import java.util.List;
 import com.google.common.collect.ImmutableList;
 
 import de.pfannekuchen.lotas.core.MCVer;
-import de.pfannekuchen.lotas.gui.GuiDropChanceManipulation;
+import de.pfannekuchen.lotas.gui.GuiDropManipulation;
 import de.pfannekuchen.lotas.gui.widgets.CheckboxWidget;
 import de.pfannekuchen.lotas.gui.widgets.ImageWidget;
 import net.minecraft.block.BlockLeaves;
@@ -16,12 +16,13 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-public class LeavesDropManipulation extends GuiDropChanceManipulation.DropManipulation {
+public class LeavesDropManipulation extends GuiDropManipulation.DropManipulation {
 
     public static ImageWidget dropApple = new ImageWidget(x, y, c -> {LeavesDropManipulation.dropApple.setToggled(!LeavesDropManipulation.dropApple.isToggled());}, new ResourceLocation("lotas", "drops/apple.png"));
     public static ImageWidget dropSapling = new ImageWidget(x, y, c -> {LeavesDropManipulation.dropSapling.setToggled(!LeavesDropManipulation.dropSapling.isToggled());}, new ResourceLocation("lotas", "drops/sapling.png"));
@@ -31,12 +32,12 @@ public class LeavesDropManipulation extends GuiDropChanceManipulation.DropManipu
     	LeavesDropManipulation.y = y;
     	LeavesDropManipulation.width = width;
         LeavesDropManipulation.height = height;
-        enabled = new CheckboxWidget(x, y, 150, 20, "Override Leave Drops", false);
+        enabled = new CheckboxWidget(x, y, 150, 20, I18n.format("dropmanipgui.lotas.blocks.leaf.override"), false);
     }
 
     @Override
     public String getName() {
-        return "Leaves";
+        return I18n.format("dropmanipgui.lotas.blocks.leaf.name");
     }
 
     @Override
@@ -88,7 +89,10 @@ public class LeavesDropManipulation extends GuiDropChanceManipulation.DropManipu
         if (!enabled.isChecked()) {
             GlStateManager.color(.5f, .5f, .5f, .4f);
         } else {
-            MCVer.getFontRenderer(Minecraft.getMinecraft()).drawStringWithShadow("Leaves drop:" + (dropApple.isToggled() ? " 1 Apple" : "") + (dropSapling.isToggled() ? " 1 Sapling" : ""), x, y + 64, 0xFFFFFF);
+			String leaves = I18n.format("dropmanipgui.lotas.blocks.leaf.description.leaves");//"Leaves drop:"
+			String apple = I18n.format("dropmanipgui.lotas.blocks.leaf.description.apple");//" 1 Apple"
+			String sapling = I18n.format("dropmanipgui.lotas.blocks.leaf.description.sapling");//" 1 Sapling"
+            MCVer.getFontRenderer(Minecraft.getMinecraft()).drawStringWithShadow(leaves + (dropApple.isToggled() ? apple : "") + (dropSapling.isToggled() ? sapling : ""), x, y + 64, 0xFFFFFF);
             dropApple.render(mouseX, mouseY, delta);
             dropSapling.render(mouseX, mouseY, delta);
         }

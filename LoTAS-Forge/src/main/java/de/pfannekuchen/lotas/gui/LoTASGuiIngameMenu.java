@@ -132,10 +132,10 @@ public class LoTASGuiIngameMenu {
 		// =============== MANIPULATION
 		
 		dropButton = new Button(-5, (width / 4) * 0 + 1, height - 20, width / 4 - 2, 20, I18n.format("pausegui.lotas.dropmanip"), btn->{ // "Manipulate Drops"
-			Minecraft.getMinecraft().displayGuiScreen(new GuiDropChanceManipulation((GuiIngameMenu) parentScreen));
+			Minecraft.getMinecraft().displayGuiScreen(new GuiDropManipulation((GuiIngameMenu) parentScreen));
 		});
 		
-		dragonButton = new Button(-6, (width / 4) * 1 + 2, height - 20, width / 4 - 2, 20, I18n.format("pausegui.lotas.dropmanip"), btn->{ // "Manipulate Dragon"
+		dragonButton = new Button(-6, (width / 4) * 1 + 2, height - 20, width / 4 - 2, 20, I18n.format("pausegui.lotas.dragonmanip"), btn->{ // "Manipulate Dragon"
 			//#if MC>=10900
 			Minecraft.getMinecraft().displayGuiScreen(new GuiDragonManipulation((GuiIngameMenu) parentScreen));
 			//#else
@@ -145,7 +145,7 @@ public class LoTASGuiIngameMenu {
 		});
 		
 		spawningButton = new Button(-7, (width / 4) * 2 + 3, height - 20, width / 4 - 2, 20, I18n.format("pausegui.lotas.spawnmanip"), btn->{
-			Minecraft.getMinecraft().displayGuiScreen(new GuiEntitySpawnManipulation());
+			Minecraft.getMinecraft().displayGuiScreen(new GuiSpawnManipulation());
 		});
 		
 		aiButton = new Button(-8, (width / 4) * 3 + 4, height - 20, width / 4 - 4, 20, I18n.format("pausegui.lotas.aimanip"), btn ->{
@@ -300,18 +300,18 @@ public class LoTASGuiIngameMenu {
 
 		tickDisplayButton.displayString = color + TickrateChangerMod.ticks[TickrateChangerMod.ji] + "t";
 		
-		if (isShiftDown && tickjumpText) {
+		if (isShiftDown && tickjumpText && jumpTicksButton.enabled) {
 			parentScreen.drawCenteredString(fontRenderer, "\u00A7a^^^^^^^^", 70, 139, 0xFFFFFF);
-			parentScreen.drawCenteredString(fontRenderer, String.format(I18n.format("pausegui.lotas.jump.tutorial.1")), 70, 145, 0xFFFFFF);
-			parentScreen.drawCenteredString(fontRenderer, I18n.format("pausegui.lotas.jump.tutorial.2", TickrateChangerMod.ticks[TickrateChangerMod.ji]), 70, 155, 0xFFFFFF);
+			parentScreen.drawCenteredString(fontRenderer, String.format("\u00A7a"+I18n.format("pausegui.lotas.jump.tutorial.1")), 70, 145, 0xFFFFFF);
+			parentScreen.drawCenteredString(fontRenderer, "\u00A7a"+I18n.format("pausegui.lotas.jump.tutorial.2", TickrateChangerMod.ticks[TickrateChangerMod.ji]), 70, 155, 0xFFFFFF);
 		}
 		
 		// Draw shift tooltip
 		if (isShiftDown) {
-			savestateButton.displayString = I18n.format("pausegui.lotas.buttontext.shift.savestate");
-			loadstateButton.displayString = I18n.format("pausegui.lotas.buttontext.shift.loadstate");
-			tickrateIncreaseButton.displayString = I18n.format("pausegui.lotas.buttontext.shift.trc1");
-			tickrateDecreaseButton.displayString = I18n.format("pausegui.lotas.buttontext.shift.trc2");
+			savestateButton.displayString = "\u00A76"+I18n.format("pausegui.lotas.buttontext.shift.savestate");
+			loadstateButton.displayString = "\u00A76"+I18n.format("pausegui.lotas.buttontext.shift.loadstate");
+			tickrateIncreaseButton.displayString = "\u00A76"+I18n.format("pausegui.lotas.buttontext.shift.trc1");
+			tickrateDecreaseButton.displayString = "\u00A76"+I18n.format("pausegui.lotas.buttontext.shift.trc2");
 		} else {
 			savestateButton.displayString = I18n.format("pausegui.lotas.buttontext.unshift.savestate");
 			loadstateButton.displayString = I18n.format("pausegui.lotas.buttontext.unshift.loadstate");
@@ -329,13 +329,13 @@ public class LoTASGuiIngameMenu {
 		if (savestateNameField != null) {
 			savestateNameField.drawTextBox();
 			if (savestateNameField.getText().isEmpty()) {
-				parentScreen.drawCenteredString(fontRenderer, I18n.format("pausegui.lotas.textfield.apply"), x(savestateNameField) + 47, y(savestateNameField) + 4, 0x777777);
+				parentScreen.drawCenteredString(fontRenderer, I18n.format("pausegui.lotas.textfield.apply", "\u2936"), x(savestateNameField) + 47, y(savestateNameField) + 4, 0x777777);
 			}
 		}
 		if (tickrateField != null) {
 			tickrateField.drawTextBox();
 			if (tickrateField.getText().isEmpty()) {
-				parentScreen.drawCenteredString(fontRenderer, I18n.format("pausegui.lotas.textfield.apply"), x(tickrateField) + 47, y(tickrateField) + 4, 0x777777);
+				parentScreen.drawCenteredString(fontRenderer, I18n.format("pausegui.lotas.textfield.apply", "\u2936"), x(tickrateField) + 47, y(tickrateField) + 4, 0x777777);
 			}
 		}
 		
@@ -347,19 +347,19 @@ public class LoTASGuiIngameMenu {
 				loadstateButton.enabled=SavestateMod.hasSavestate();
 				return;
 			}
-			parentScreen.drawCenteredString(fontRenderer, I18n.format("pausegui.lotas.successtext.savestate"), width / 2, 40, new Color(1F, 1F, 1F, 1F - (timeSince / 2000F)).getRGB());
+			parentScreen.drawCenteredString(fontRenderer, "\u00A76"+I18n.format("pausegui.lotas.successtext.savestate"), width / 2, 40, new Color(1F, 1F, 1F, 1F - (timeSince / 2000F)).getRGB());
 		} else if (SavestateMod.showLoadstateDone) {
 			long timeSince = System.currentTimeMillis() - SavestateMod.timeTitle;
 			if (timeSince >= 1800) {
 				SavestateMod.showLoadstateDone = false;
 				return;
 			}
-			parentScreen.drawCenteredString(fontRenderer, I18n.format("pausegui.lotas.successtext.loadstate"), width / 2, 40, new Color(1F, 1F, 1F, 1F - (timeSince / 2000F)).getRGB());
+			parentScreen.drawCenteredString(fontRenderer, "\u00A76"+I18n.format("pausegui.lotas.successtext.loadstate"), width / 2, 40, new Color(1F, 1F, 1F, 1F - (timeSince / 2000F)).getRGB());
 		}
 		
 		// Render tickrate fail
 		if (tickrateFail) {
-			parentScreen.drawCenteredString(fontRenderer, I18n.format("pausegui.lotas.textfield.fail"), 170, 22, 0xFFFFFF);
+			parentScreen.drawCenteredString(fontRenderer, "\u00A7c"+I18n.format("pausegui.lotas.textfield.fail"), 170, 22, 0xFFFFFF);
 		}
 	}
 	

@@ -28,7 +28,7 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 
-public class GuiDropChanceManipulation extends GuiScreen {
+public class GuiDropManipulation extends GuiScreen {
 
 
 	public static ArrayList<DropManipulation> manipulations;
@@ -49,7 +49,7 @@ public class GuiDropChanceManipulation extends GuiScreen {
 		manipulations.add(new ZombieDropManipulation(0, 0, 0, 0));
 	}
 
-	public GuiDropChanceManipulation(GuiIngameMenu gameMenuScreen) {
+	public GuiDropManipulation(GuiIngameMenu gameMenuScreen) {
 		super();
 	}
 
