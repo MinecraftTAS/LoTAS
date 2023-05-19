@@ -19,6 +19,7 @@ You can find the file under [src/main/resources/assets/lotas/lang/en_us.lang](ht
 
 Credits:
 Simplified Chinese: RayXu6
+Japanese: [Naruyoko](https://github.com/Naruyoko)
 
 ## Features
 * Duping: Save your Inventory/Items/Chests with 1 button and load' em again with another click!
