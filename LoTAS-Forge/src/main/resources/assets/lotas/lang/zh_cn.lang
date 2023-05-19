@@ -1,241 +1,241 @@
 
 # LoTAS Gui
-pausegui.lotas.dropmanip=Manipulate Drops
-pausegui.lotas.dragonmanip=Manipulate Dragon
-pausegui.lotas.spawnmanip=Manipulate Spawning
-pausegui.lotas.aimanip=Manipulate AI
-pausegui.lotas.duping.save=Save Items
-pausegui.lotas.duping.load=Load Items
-pausegui.lotas.jump=Jump ticks
-pausegui.lotas.jump.success=Jumping...
-pausegui.lotas.checkbox.invincible=Avoid taking damage
-pausegui.lotas.checkbox.dropToMe=Drop towards me
-pausegui.lotas.checkbox.dropAway=Drop away from me
-pausegui.lotas.checkbox.explosion=Optimize Explosions
-pausegui.lotas.checkbox.autoclicker=Right Auto Clicker
-pausegui.lotas.resettimer=Reset Timer
-pausegui.lotas.category.tickratechanger=Tickrate Changer (%f)
-pausegui.lotas.category.duping=Duping
-pausegui.lotas.category.jump=Tickjump
-pausegui.lotas.jump.ready.1=Tickjump is ready,
-pausegui.lotas.jump.ready.2=press ESC to continue
-pausegui.lotas.jump.tutorial.1=Reopens the Game Menu
-pausegui.lotas.jump.tutorial.2=after %f ticks
-pausegui.lotas.buttontext.shift.savestate=Name Savestate
-pausegui.lotas.buttontext.shift.loadstate=Choose State
-pausegui.lotas.buttontext.shift.trc1=Custom
+pausegui.lotas.dropmanip=控制掉落物
+pausegui.lotas.dragonmanip=控制末影龙
+pausegui.lotas.spawnmanip=控制生成
+pausegui.lotas.aimanip=控制AI
+pausegui.lotas.duping.save=保存物品
+pausegui.lotas.duping.load=加载物品
+pausegui.lotas.jump=开始计时
+pausegui.lotas.jump.success=准备...
+pausegui.lotas.checkbox.invincible=避免受到伤害
+pausegui.lotas.checkbox.dropToMe=物品朝向玩家掉落
+pausegui.lotas.checkbox.dropAway=物品远离玩家掉落
+pausegui.lotas.checkbox.explosion=优化爆炸
+pausegui.lotas.checkbox.autoclicker=右键连点器
+pausegui.lotas.resettimer=重置计时器
+pausegui.lotas.category.tickratechanger=Tickrate修改器 (%f)
+pausegui.lotas.category.duping=刷物品
+pausegui.lotas.category.jump=游戏刻计时
+pausegui.lotas.jump.ready.1=计时准备完毕,
+pausegui.lotas.jump.ready.2=按下Esc继续
+pausegui.lotas.jump.tutorial.1=重新打开游戏菜单
+pausegui.lotas.jump.tutorial.2=%f 游戏刻之后
+pausegui.lotas.buttontext.shift.savestate=命名存档
+pausegui.lotas.buttontext.shift.loadstate=选择存档
+pausegui.lotas.buttontext.shift.trc1=自定义
 pausegui.lotas.buttontext.shift.trc2=Tickrate
-pausegui.lotas.buttontext.unshift.savestate=Savestate
-pausegui.lotas.buttontext.unshift.loadstate=Loadstate
-pausegui.lotas.shifttext=Hold Shift to access more features
-pausegui.lotas.textfield.apply=Press %s to apply
-pausegui.lotas.successtext.savestate=Savestate successful...
-pausegui.lotas.successtext.loadstate=Loadstate successful...
-pausegui.lotas.textfield.fail=Please enter a number!
+pausegui.lotas.buttontext.unshift.savestate=存档
+pausegui.lotas.buttontext.unshift.loadstate=读档
+pausegui.lotas.shifttext=按住Shift查看更多功能
+pausegui.lotas.textfield.apply=按下%s开启
+pausegui.lotas.successtext.savestate=存档成功...
+pausegui.lotas.successtext.loadstate=读档成功...
+pausegui.lotas.textfield.fail=请输入一个数字!
 	
 # AiManip
-aimanipgui.lotas.changetarget=Change Target
-aimanipgui.lotas.moveentity=Move to entity
+aimanipgui.lotas.changetarget=更改目标
+aimanipgui.lotas.moveentity=移动到实体处
 	
-manipgui.lotas.up=Up
-manipgui.lotas.down=Down
-manipgui.lotas.moveme=Move to me
+manipgui.lotas.up=向上
+manipgui.lotas.down=向下
+manipgui.lotas.moveme=移动到此处
 	
 # SpawnmanipGui
 	
-spawnmanipgui.lotas.entity=Spawn Entity
-spawnmanipgui.lotas.done=Done
+spawnmanipgui.lotas.entity=生成实体
+spawnmanipgui.lotas.done=完成
 	
 # ConfigurationScreen
 	
-config.lotas.buttontext=Configuration
+config.lotas.buttontext=配置界面
 	
 # DragonManip
 	
-dragonmanipgui.lotas.name=Dragon Manipulation Screen
-dragonmanipgui.lotas.phase.holding=Stop shooting at the Player
-dragonmanipgui.lotas.phase.strafeplayer=Shoot at the Player
-dragonmanipgui.lotas.phase.landing=Try to land
-dragonmanipgui.lotas.phase.takeoff=Takeoff
-dragonmanipgui.lotas.phase.flaming=Start Flaming
-dragonmanipgui.lotas.phase.scanning=Turn
-dragonmanipgui.lotas.phase.cancel_landing=Cancel Landing
-dragonmanipgui.lotas.phase.cancel_and_shoot=Cancel Landing and shoot at Player
-dragonmanipgui.lotas.actionname.1=Phase1
-dragonmanipgui.lotas.actionname.2=Phase2
-dragonmanipgui.lotas.actionname.3=Phase3
+dragonmanipgui.lotas.name=控制末影龙界面
+dragonmanipgui.lotas.phase.holding=停止轰炸玩家
+dragonmanipgui.lotas.phase.strafeplayer=轰炸玩家
+dragonmanipgui.lotas.phase.landing=尝试降落
+dragonmanipgui.lotas.phase.takeoff=起飞
+dragonmanipgui.lotas.phase.flaming=开始冲刺
+dragonmanipgui.lotas.phase.scanning=转向
+dragonmanipgui.lotas.phase.cancel_landing=取消降落
+dragonmanipgui.lotas.phase.cancel_and_shoot=取消降落并轰炸玩家
+dragonmanipgui.lotas.actionname.1=阶段1
+dragonmanipgui.lotas.actionname.2=阶段2
+dragonmanipgui.lotas.actionname.3=阶段3
 	
 	
 # DropManip
-dropmanipgui.lotas.name=Drop Manipulation Screen
+dropmanipgui.lotas.name=控制掉落物界面
 	
-dropmanipgui.lotas.blocks.deadbush.0=0 Sticks
-dropmanipgui.lotas.blocks.deadbush.1=1 Sticks
-dropmanipgui.lotas.blocks.deadbush.2=2 Sticks
-dropmanipgui.lotas.blocks.deadbush.override=Override Dead Bush Drops
-dropmanipgui.lotas.blocks.deadbush.name=Dead Bush
-dropmanipgui.lotas.blocks.deadbush.description=Drop %s sticks when breaking Dead Bush
+dropmanipgui.lotas.blocks.deadbush.0=0根木棍
+dropmanipgui.lotas.blocks.deadbush.1=1根木棍
+dropmanipgui.lotas.blocks.deadbush.2=2根木棍
+dropmanipgui.lotas.blocks.deadbush.override=更改枯死的灌木掉落物
+dropmanipgui.lotas.blocks.deadbush.name=枯死的灌木
+dropmanipgui.lotas.blocks.deadbush.description=当打破枯死的灌木时掉落%i根木棍
 	
-dropmanipgui.lotas.blocks.glowstone.2=2 Glowstone Dust
-dropmanipgui.lotas.blocks.glowstone.3=3 Glowstone Dust
-dropmanipgui.lotas.blocks.glowstone.4=4 Glowstone Dust
-dropmanipgui.lotas.blocks.glowstone.override=Override Glowstone Drops
-dropmanipgui.lotas.blocks.glowstone.name=Glowstone
-dropmanipgui.lotas.blocks.glowstone.description=Drop %s Glowstone Dust when breaking Glowstone
+dropmanipgui.lotas.blocks.glowstone.2=2个萤石粉
+dropmanipgui.lotas.blocks.glowstone.3=3个萤石粉
+dropmanipgui.lotas.blocks.glowstone.4=4个萤石粉
+dropmanipgui.lotas.blocks.glowstone.override=更改萤石凋落物
+dropmanipgui.lotas.blocks.glowstone.name=萤石
+dropmanipgui.lotas.blocks.glowstone.description=当打破萤石时掉落%s个萤石粉
 	
-dropmanipgui.lotas.blocks.gravel.gravel=Gravel
-dropmanipgui.lotas.blocks.gravel.flint=Flint
-dropmanipgui.lotas.blocks.gravel.override=Override Gravel Drops
-dropmanipgui.lotas.blocks.gravel.name=Gravel
-dropmanipgui.lotas.blocks.gravel.description=Drop %s when breaking Gravel,
+dropmanipgui.lotas.blocks.gravel.gravel=沙砾
+dropmanipgui.lotas.blocks.gravel.flint=燧石
+dropmanipgui.lotas.blocks.gravel.override=更改沙砾掉落物
+dropmanipgui.lotas.blocks.gravel.name=沙砾
+dropmanipgui.lotas.blocks.gravel.description=当打破沙砾时掉落%s
 	
-dropmanipgui.lotas.blocks.leaf.override=Override Leaf Drops
-dropmanipgui.lotas.blocks.leaf.name=Leaves
-dropmanipgui.lotas.blocks.leaf.description.leaves=Leaves drop:
-dropmanipgui.lotas.blocks.leaf.description.apple= 1 Apple
-dropmanipgui.lotas.blocks.leaf.description.sapling= 1 Sapling
+dropmanipgui.lotas.blocks.leaf.override=更改树叶掉落物
+dropmanipgui.lotas.blocks.leaf.name=树叶
+dropmanipgui.lotas.blocks.leaf.description.leaves=树叶掉落:
+dropmanipgui.lotas.blocks.leaf.description.apple= 1个苹果
+dropmanipgui.lotas.blocks.leaf.description.sapling= 1个树苗
 	
-dropmanipgui.lotas.blocks.ore.lapis=Full Lapis Drops
-dropmanipgui.lotas.blocks.ore.redstone=Full Redstone Drops
-dropmanipgui.lotas.blocks.ore.override=Override Ore Drops
-dropmanipgui.lotas.blocks.ore.name=Ores
+dropmanipgui.lotas.blocks.ore.lapis=完整青金石掉落
+dropmanipgui.lotas.blocks.ore.redstone=完整红石掉落
+dropmanipgui.lotas.blocks.ore.override=更改矿石掉落物
+dropmanipgui.lotas.blocks.ore.name=矿石
 	
-dropmanipgui.lotas.blocks.plants.carrot=Optimize Carrot Drops
-dropmanipgui.lotas.blocks.plants.potato=Optimize Potato Drops
-dropmanipgui.lotas.blocks.plants.wheat=Optimize Wheat Drops
-dropmanipgui.lotas.blocks.plants.beetroot=Optimize Beetroot Drops
-dropmanipgui.lotas.blocks.plants.melon=Optimize Melon Drops
-dropmanipgui.lotas.blocks.plants.cocoa=Optimize Cocoa Bean Drops
-dropmanipgui.lotas.blocks.plants.chorus=Optimize Chorus Plant Drops
-dropmanipgui.lotas.blocks.plants.netherwart=Optimize Nether Wart Drops
-dropmanipgui.lotas.blocks.plants.mushroom=Optimize Mushroom Block Drops
-dropmanipgui.lotas.blocks.plants.berrybush=Optimize Sweet Berry Bush Drops
-dropmanipgui.lotas.blocks.plants.override=Override Plant Drops
-dropmanipgui.lotas.blocks.plants.name=Plants
+dropmanipgui.lotas.blocks.plants.carrot=优化胡萝卜掉落
+dropmanipgui.lotas.blocks.plants.potato=优化马铃薯掉落
+dropmanipgui.lotas.blocks.plants.wheat=优化小麦掉落
+dropmanipgui.lotas.blocks.plants.beetroot=优化甜菜根掉落
+dropmanipgui.lotas.blocks.plants.melon=优化西瓜掉落
+dropmanipgui.lotas.blocks.plants.cocoa=优化可可豆掉落
+dropmanipgui.lotas.blocks.plants.chorus=优化紫颂植株掉落
+dropmanipgui.lotas.blocks.plants.netherwart=优化下界疣掉落
+dropmanipgui.lotas.blocks.plants.mushroom=优化蘑菇块掉落
+dropmanipgui.lotas.blocks.plants.berrybush=优化甜浆果掉落
+dropmanipgui.lotas.blocks.plants.override=更改植物掉落物
+dropmanipgui.lotas.blocks.plants.name=植物
 	
-dropmanipgui.lotas.blocks.sealantern.prismarine.2=2 Prismarine Crystals
-dropmanipgui.lotas.blocks.sealantern.prismarine.3=3 Prismarine Crystals
-dropmanipgui.lotas.blocks.sealantern.override=Override Sea Lantern Drops
-dropmanipgui.lotas.blocks.sealantern.name=Sea Lantern
-dropmanipgui.lotas.blocks.sealantern.description=Drop %s Prismarine Crystals when breaking Sea Lanterns
+dropmanipgui.lotas.blocks.sealantern.prismarine.2=2个海晶沙粒
+dropmanipgui.lotas.blocks.sealantern.prismarine.3=3个海晶沙粒
+dropmanipgui.lotas.blocks.sealantern.override=更改海晶灯掉落物
+dropmanipgui.lotas.blocks.sealantern.name=海晶灯
+dropmanipgui.lotas.blocks.sealantern.description=当打破海晶灯时掉落%s个海晶沙砾
 	
-dropmanipgui.lotas.entity.monster.spider=Optimize Spider Drops
-dropmanipgui.lotas.entity.monster.creeper=Optimize Creeper Drops
-dropmanipgui.lotas.entity.monster.elderguardian=Optimize Elder Guardian Drops
-dropmanipgui.lotas.entity.monster.enderman=Optimize Enderman Drops
-dropmanipgui.lotas.entity.monster.phantom=Optimize Phantom Drops
-dropmanipgui.lotas.entity.monster.slime=Optimize Slime Drops
-dropmanipgui.lotas.entity.monster.vindicator=Optimize Vindicator Drops
-dropmanipgui.lotas.entity.monster.skeleton=Optimize Skeleton Drops
-dropmanipgui.lotas.entity.monster.shulker=Optimize Shulker Drops
-dropmanipgui.lotas.entity.monster.guardian=Optimize Guardian Drops
-dropmanipgui.lotas.entity.monster.witch=Optimize Witch Drops
-dropmanipgui.lotas.entity.monster.override=Override Monster Drops
-dropmanipgui.lotas.entity.monster.name=Monsters
+dropmanipgui.lotas.entity.monster.spider=优化洞穴蜘蛛掉落
+dropmanipgui.lotas.entity.monster.creeper=优化苦力怕掉落
+dropmanipgui.lotas.entity.monster.elderguardian=优化远古守卫者掉落
+dropmanipgui.lotas.entity.monster.enderman=优化末影人掉落
+dropmanipgui.lotas.entity.monster.phantom=优化幻翼掉落
+dropmanipgui.lotas.entity.monster.slime=优化史莱姆掉落
+dropmanipgui.lotas.entity.monster.vindicator=优化卫道士掉落
+dropmanipgui.lotas.entity.monster.skeleton=优化骷髅掉落
+dropmanipgui.lotas.entity.monster.shulker=优化潜影贝掉落
+dropmanipgui.lotas.entity.monster.guardian=优化守卫者掉落
+dropmanipgui.lotas.entity.monster.witch=优化女巫掉落
+dropmanipgui.lotas.entity.monster.override=更改怪物掉落物
+dropmanipgui.lotas.entity.monster.name=怪物
 	
-dropmanipgui.lotas.entity.nether.blaze=Optimize Blaze Drops
-dropmanipgui.lotas.entity.nether.ghast=Optimize Ghast Drops
-dropmanipgui.lotas.entity.nether.witherskeleton=Optimize Witherskeleton Drops
-dropmanipgui.lotas.entity.nether.zombiepiglin=Optimize Zombified Piglin Drops
+dropmanipgui.lotas.entity.nether.blaze=优化烈焰人掉落
+dropmanipgui.lotas.entity.nether.ghast=优化恶魂掉落
+dropmanipgui.lotas.entity.nether.witherskeleton=优化凋零骷髅掉落
+dropmanipgui.lotas.entity.nether.zombiepiglin=优化僵尸猪人掉落
 dropmanipgui.lotas.entity.nether.zombiepigman=Optimize Zombie Pigman Drops
-dropmanipgui.lotas.entity.nether.magmacube=Optimize Magma Cube Drops
-dropmanipgui.lotas.entity.nether.override=Override Nether Mob Drops
-dropmanipgui.lotas.entity.nether.name=Nether Mobs
+dropmanipgui.lotas.entity.nether.magmacube=优化岩浆怪掉落
+dropmanipgui.lotas.entity.nether.override=更改下界生物掉落物
+dropmanipgui.lotas.entity.nether.name=下界生物
 	
-dropmanipgui.lotas.entity.passive.chicken=Optimize Chicken Drops
-dropmanipgui.lotas.entity.passive.cow=Optimize Cow Drops
-dropmanipgui.lotas.entity.passive.mooshroom=Optimize Mooshroom Drops
-dropmanipgui.lotas.entity.passive.skeletonhorse=Optimize Skeleton Horse Drops
-dropmanipgui.lotas.entity.passive.cat=Optimize Cat Drops
-dropmanipgui.lotas.entity.passive.pig=Optimize Pig Drops
-dropmanipgui.lotas.entity.passive.parrot=Optimize Parrot Drops
-dropmanipgui.lotas.entity.passive.rabbit=Optimize Rabbit Drops
-dropmanipgui.lotas.entity.passive.sheep=Optimize Sheep Drops
-dropmanipgui.lotas.entity.passive.snowgolem=Optimize Snowgolem Drops
-dropmanipgui.lotas.entity.passive.squid=Optimize Squid Drops
-dropmanipgui.lotas.entity.passive.horse=Optimize Horse Drops
-dropmanipgui.lotas.entity.passive.turtle=Optimize Turtle Drops
-dropmanipgui.lotas.entity.passive.irongolem=Optimize Iron Golem Drops
-dropmanipgui.lotas.entity.passive.polarbear=Optimize Polarbear Drops
-dropmanipgui.lotas.entity.passive.override=Override Passive Mob Drops
-dropmanipgui.lotas.entity.passive.name=Passive Mobs
+dropmanipgui.lotas.entity.passive.chicken=优化鸡掉落
+dropmanipgui.lotas.entity.passive.cow=优化牛掉落
+dropmanipgui.lotas.entity.passive.mooshroom=优化蘑菇牛掉落
+dropmanipgui.lotas.entity.passive.skeletonhorse=优化骷髅马掉落
+dropmanipgui.lotas.entity.passive.cat=优化猫掉落
+dropmanipgui.lotas.entity.passive.pig=优化猪掉落
+dropmanipgui.lotas.entity.passive.parrot=优化鹦鹉掉落
+dropmanipgui.lotas.entity.passive.rabbit优化兔子掉落
+dropmanipgui.lotas.entity.passive.sheep=优化羊掉落
+dropmanipgui.lotas.entity.passive.snowgolem=优化雪傀儡掉落
+dropmanipgui.lotas.entity.passive.squid=优化鱿鱼掉落
+dropmanipgui.lotas.entity.passive.horse=优化马掉落
+dropmanipgui.lotas.entity.passive.turtle=优化海龟掉落
+dropmanipgui.lotas.entity.passive.irongolem=优化铁傀儡掉落
+dropmanipgui.lotas.entity.passive.polarbear=优化北极熊掉落
+dropmanipgui.lotas.entity.passive.override=更改中立生物掉落
+dropmanipgui.lotas.entity.passive.name=中立生物
 	
-dropmanipgui.lotas.entity.zombie.override=Override Zombie/Zombie-Villager/Husk Drops
-dropmanipgui.lotas.entity.zombie.name=Zombie
-dropmanipgui.lotas.entity.zombie.zombie=Zombies drop:
-dropmanipgui.lotas.entity.zombie.rottenflesh= 2 Rotten Flesh
-dropmanipgui.lotas.entity.zombie.iron=, 1 Iron Ingot
-dropmanipgui.lotas.entity.zombie.potato=, 1 Potato
+dropmanipgui.lotas.entity.zombie.override=更改僵尸/僵尸村民/尸壳掉落物
+dropmanipgui.lotas.entity.zombie.name=僵尸
+dropmanipgui.lotas.entity.zombie.zombie=僵尸掉落:
+dropmanipgui.lotas.entity.zombie.rottenflesh= 2个腐肉
+dropmanipgui.lotas.entity.zombie.iron=, 1个铁锭
+dropmanipgui.lotas.entity.zombie.potato=, 1个马铃薯
 dropmanipgui.lotas.entity.zombie.carrot=, 1 Carrot
 	
 # InfoHud
 	
 infohud.lotas.tickrate=Tickrate
-infohud.lotas.precise=Precise XYZ
-infohud.lotas.chunkpos=Chunk Position
-infohud.lotas.worldseed=Worldseed
-infohud.lotas.ticks=Ticks
-infohud.lotas.savestate.count=Savestate Count
-infohud.lotas.savestate=Savestates= 
-infohud.lotas.loadstate.count=Loadstate Count
-infohud.lotas.loadstate=Loadstates= 
-infohud.lotas.timer=Timer
-infohud.lotas.timer.paused=Timer is paused
-infohud.lotas.rtatimer=RTATimer
-infohud.lotas.bps.1=Speed/BPS
-infohud.lotas.bps.2= blocks/sec
-infohud.lotas.keystrokes=Keystrokes
+infohud.lotas.precise=精确的XYZ
+infohud.lotas.chunkpos=区块的位置
+infohud.lotas.worldseed=世界种子
+infohud.lotas.ticks=游戏刻
+infohud.lotas.savestate.count=存档数量
+infohud.lotas.savestate=存档数: 
+infohud.lotas.loadstate.count=读档数量
+infohud.lotas.loadstate=读档数: 
+infohud.lotas.timer=计时器
+infohud.lotas.timer.paused=计时器暂停中
+infohud.lotas.rtatimer=真实时间计时器
+infohud.lotas.bps.1=速度/每秒放置方块数
+infohud.lotas.bps.2= 方块/秒
+infohud.lotas.keystrokes=按键显示
 	
-infohud.lotas.tip.1=Leftclick to move
-infohud.lotas.tip.2=Middleclick to enable
-infohud.lotas.tip.3=Rightclick to add black background
-infohud.lotas.tip.4=Hold Shift to snap to grid
-infohud.lotas.tip.5=CTRL+Shift+R to reset the layout
+infohud.lotas.tip.1=左键点击以移动
+infohud.lotas.tip.2=中键点击以开启
+infohud.lotas.tip.3=右键点击以添加黑色背景
+infohud.lotas.tip.4=按住 Shift 键可与网格对齐
+infohud.lotas.tip.5=按下CTRL+Shift+R以重置布局
 	
 # LoadstateScreen
 loadstategui.lotas.name=Loadstate Screen
-loadstategui.lotas.loadstate=Loadstate
-loadstategui.lotas.deletestate=Delete state
-loadstategui.lotas.back=Back
-loadstategui.lotas.info=Select a state to load
+loadstategui.lotas.loadstate=读档
+loadstategui.lotas.deletestate=删除存档
+loadstategui.lotas.back=返回
+loadstategui.lotas.info=选择一个存档读取
 loadstategui.lotas.error.1=Error while reading the file
 loadstategui.lotas.error.2=responsible for this text
 	
 # Keybinds
-keybind.lotas.savestate=Savestate
-keybind.lotas.loadstate=Loadstate
-keybind.lotas.dupe.load=Load Items/Chests
-keybind.lotas.dupe.save=Save Items/Chests
-keybind.lotas.autostrafe=Auto-Strafe
-keybind.lotas.tickrate.faster=Faster Tickrate
-keybind.lotas.tickrate.slower=Slower Tickrate
-keybind.lotas.tickrate.tickadvance=Advance Tick
-keybind.lotas.tickrate.tick0=Tickrate Zero Toggle
-keybind.lotas.tickrate.timer=Start/Stop Timer
-keybind.lotas.infogui=Open InfoGui Editor
+keybind.lotas.savestate=存档
+keybind.lotas.loadstate=读档
+keybind.lotas.dupe.load=加载物品
+keybind.lotas.dupe.save=保存物品/箱子
+keybind.lotas.autostrafe=自动斜跑
+keybind.lotas.tickrate.faster=增加Tickrate
+keybind.lotas.tickrate.slower=减慢Tickrate
+keybind.lotas.tickrate.tickadvance=预先刻
+keybind.lotas.tickrate.tick0=切换Tickrate至0
+keybind.lotas.tickrate.timer=开始/停止计时器
+keybind.lotas.infogui=打开信息菜单编辑器
 keybind.lotas.test=Test
 	
 # Keybind categories
-keybind.category.lotas.stating=Stating
-keybind.category.lotas.duping=Duping
-keybind.category.lotas.moving=Moving
-keybind.category.lotas.tickratechanger=Tickrate Changer
-keybind.category.lotas.misc=Misc
+keybind.category.lotas.stating=存档&读档
+keybind.category.lotas.duping=刷物品
+keybind.category.lotas.moving=移动
+keybind.category.lotas.tickratechanger=Tickrate修改器
+keybind.category.lotas.misc=杂项
 	
 # Spawn Manipulation
-spawnmanip.lotas.ench_sword=Enchanted Sword
-spawnmanip.lotas.ench_bow=Enchanted Bow
-spawnmanip.lotas.leather_armor=Leather Armor
-spawnmanip.lotas.gold_armor=Gold Armor
-spawnmanip.lotas.chain_armor=Chain Armor
-spawnmanip.lotas.iron_armor=Iron Armor
-spawnmanip.lotas.diamond_armor=Diamond Armor
+spawnmanip.lotas.ench_sword=附魔剑
+spawnmanip.lotas.ench_bow=附魔弓
+spawnmanip.lotas.leather_armor=皮革护甲
+spawnmanip.lotas.gold_armor=金护甲
+spawnmanip.lotas.chain_armor=锁链护甲
+spawnmanip.lotas.iron_armor=铁护甲
+spawnmanip.lotas.diamond_armor=钻石护甲
 
 # Tickratechanger
-tickratechanger.lotas.message=Updated Tickrate to %s
+tickratechanger.lotas.message=将游戏速度更新至 %s
 
 # SelectWorldScreen
-selectworld.lotas.openpause=Open ESC when joining world
+selectworld.lotas.openpause=进入世界时自动打开Esc界面
 
 # Misc
-menu.lotas.multiplayer=LoTAS doesn't work in multiplayer :(
+menu.lotas.multiplayer=LoTAS不支持多人游戏:(
