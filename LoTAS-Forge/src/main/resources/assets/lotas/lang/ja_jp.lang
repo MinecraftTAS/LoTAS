@@ -1,0 +1,283 @@
+
+# LoTAS Gui
+pausegui.lotas.dropmanip=ドロップを操作
+pausegui.lotas.dragonmanip=エンダードラゴンを操作
+pausegui.lotas.spawnmanip=スポーンを操作
+pausegui.lotas.aimanip=モブの行動を操作
+pausegui.lotas.duping.save=アイテムを保存
+pausegui.lotas.duping.load=アイテムを読み込む
+pausegui.lotas.jump=この時間後に設定
+pausegui.lotas.jump.success=設定済み
+pausegui.lotas.checkbox.invincible=ダメージを受けないようにする
+pausegui.lotas.checkbox.dropToMe=自分に近い方にドロップ
+pausegui.lotas.checkbox.dropAway=自分に遠い方にドロップ
+pausegui.lotas.checkbox.explosion=爆発によるドロップを最適化
+pausegui.lotas.checkbox.autoclicker=自動右クリック
+pausegui.lotas.resettimer=タイマーをリセット
+pausegui.lotas.category.tickratechanger=ティックレートを変更 (%s)
+pausegui.lotas.category.duping=アイテム増殖
+pausegui.lotas.category.jump=自動ポーズ
+pausegui.lotas.jump.ready.1=自動でポーズします
+pausegui.lotas.jump.ready.2=ESCキーを押して実行
+pausegui.lotas.jump.tutorial.1=一定時間後に再度メニューが開きます
+pausegui.lotas.jump.tutorial.2=(%fティック後に設定されています)
+pausegui.lotas.buttontext.shift.savestate=ステートに名前を付ける
+pausegui.lotas.buttontext.shift.loadstate=ステートを選択
+pausegui.lotas.buttontext.shift.trc1=手動
+pausegui.lotas.buttontext.shift.trc2=設定
+pausegui.lotas.buttontext.unshift.savestate=ステートを保存
+pausegui.lotas.buttontext.unshift.loadstate=ステートを読み込む
+pausegui.lotas.shifttext=シフトキーを押して追加の機能を表示
+pausegui.lotas.textfield.apply=⤶を押して適用
+pausegui.lotas.successtext.savestate=正常にステートを保存しました
+pausegui.lotas.successtext.loadstate=正常にステートを読み込みました
+pausegui.lotas.textfield.fail=数値を入力してください
+	
+# AiManip
+aimanipgui.lotas.changetarget=目標を変更
+aimanipgui.lotas.moveentity=自身へ向かう
+	
+manipgui.lotas.up=上
+manipgui.lotas.down=下
+manipgui.lotas.moveme=プレイヤーへ向かう
+	
+# SpawnmanipGui
+	
+spawnmanipgui.lotas.entity=エンティティーをスポーン
+spawnmanipgui.lotas.done=完了
+	
+# ConfigurationScreen
+	
+config.lotas.buttontext=設定
+	
+# DragonManip
+	
+dragonmanipgui.lotas.name=エンダードラゴンの操作画面
+dragonmanipgui.lotas.phase.holding=攻撃を中断
+dragonmanipgui.lotas.phase.strafeplayer=火の玉を吐く
+dragonmanipgui.lotas.phase.landing=着陸
+dragonmanipgui.lotas.phase.takeoff=離陸
+dragonmanipgui.lotas.phase.flaming=ブレスを吐く
+dragonmanipgui.lotas.phase.scanning=旋回
+dragonmanipgui.lotas.phase.cancel_landing=着陸を中断
+dragonmanipgui.lotas.phase.cancel_and_shoot=着陸を中断して火の玉を吐く
+dragonmanipgui.lotas.actionname.1=Phase1
+dragonmanipgui.lotas.actionname.2=Phase2
+dragonmanipgui.lotas.actionname.3=Phase3
+	
+	
+# DropManip
+dropmanipgui.lotas.name=ドロップの操作画面
+	
+dropmanipgui.lotas.blocks.deadbush.0=0x 棒
+dropmanipgui.lotas.blocks.deadbush.1=1x 棒
+dropmanipgui.lotas.blocks.deadbush.2=2x 棒
+dropmanipgui.lotas.blocks.deadbush.override=枯れ木のドロップを変更する
+dropmanipgui.lotas.blocks.deadbush.name=枯れ木
+dropmanipgui.lotas.blocks.deadbush.description=枯れ木を破壊したとき棒を%d個ドロップする
+	
+dropmanipgui.lotas.blocks.glowstone.2=2x グロウストーンダスト
+dropmanipgui.lotas.blocks.glowstone.3=3x グロウストーンダスト
+dropmanipgui.lotas.blocks.glowstone.4=4x グロウストーンダスト
+dropmanipgui.lotas.blocks.glowstone.override=グロウストーンのドロップを変更する
+dropmanipgui.lotas.blocks.glowstone.name=グロウストーン
+dropmanipgui.lotas.blocks.glowstone.description=グロウストーンを破壊したときグロウストーンダストを%d個ドロップする
+	
+dropmanipgui.lotas.blocks.gravel.gravel=砂利
+dropmanipgui.lotas.blocks.gravel.flint=火打ち石
+dropmanipgui.lotas.blocks.gravel.override=砂利のドロップを変更する
+dropmanipgui.lotas.blocks.gravel.name=砂利
+dropmanipgui.lotas.blocks.gravel.description=砂利を破壊したとき%sをドロップする
+	
+dropmanipgui.lotas.blocks.leaf.override=葉のドロップを変更する
+dropmanipgui.lotas.blocks.leaf.name=葉
+dropmanipgui.lotas.blocks.leaf.description.leaves=葉は次をドロップする:
+dropmanipgui.lotas.blocks.leaf.description.apple= 1x リンゴ
+dropmanipgui.lotas.blocks.leaf.description.sticks= 2x 棒
+dropmanipgui.lotas.blocks.leaf.description.sapling= 1x 苗木
+	
+dropmanipgui.lotas.blocks.ore.lapis=ラピスラズリのドロップを最大化
+dropmanipgui.lotas.blocks.ore.redstone=レッドストーンのドロップを最大化
+dropmanipgui.lotas.blocks.ore.copper=銅のドロップを最大化
+dropmanipgui.lotas.blocks.ore.override=鉱石のドロップを最大化
+dropmanipgui.lotas.blocks.ore.name=鉱石のドロップを変更する
+	
+dropmanipgui.lotas.blocks.plants.carrot=ニンジンのドロップを最適化する
+dropmanipgui.lotas.blocks.plants.potato=ジャガイモのドロップを最適化する
+dropmanipgui.lotas.blocks.plants.wheat=小麦のドロップを最適化する
+dropmanipgui.lotas.blocks.plants.beetroot=ビートルートのドロップを最適化する
+dropmanipgui.lotas.blocks.plants.melon=スイカのドロップを最適化する
+dropmanipgui.lotas.blocks.plants.cocoa=カカオ豆のドロップを最適化する
+dropmanipgui.lotas.blocks.plants.chorus=コーラスプラントのドロップを最適化する
+dropmanipgui.lotas.blocks.plants.netherwart=ネザーウォートのドロップを最適化する
+dropmanipgui.lotas.blocks.plants.mushroom=キノコブロックのドロップを最適化する
+dropmanipgui.lotas.blocks.plants.berrybush=スイートベリーの低木のドロップを最適化する
+dropmanipgui.lotas.blocks.plants.override=植物のドロップを変更する
+dropmanipgui.lotas.blocks.plants.name=植物
+	
+dropmanipgui.lotas.blocks.sealantern.prismarine.2=2x プリズマリンクリスタル
+dropmanipgui.lotas.blocks.sealantern.prismarine.3=3x プリズマリンクリスタル
+dropmanipgui.lotas.blocks.sealantern.override=シーランタンのドロップを変更する
+dropmanipgui.lotas.blocks.sealantern.name=シーランタン
+dropmanipgui.lotas.blocks.sealantern.description=シーランタンを破壊したときプリズマリンクリスタルを%d個ドロップする
+	
+dropmanipgui.lotas.entity.drowned.override=ドラウンドのドロップを変更する
+dropmanipgui.lotas.entity.drowned.name=ドラウンド
+dropmanipgui.lotas.entity.drowned.drowned=ドラウンドは次をドロップする:
+dropmanipgui.lotas.entity.drowned.rottenflesh= 2x 腐った肉
+dropmanipgui.lotas.entity.drowned.copper=, 1x 銅インゴット
+dropmanipgui.lotas.entity.drowned.gold=, 1x 金インゴット
+	
+dropmanipgui.lotas.entity.fish.cod=タラから骨粉をドロップする
+dropmanipgui.lotas.entity.fish.salmon=サケから骨粉をドロップする
+dropmanipgui.lotas.entity.fish.dolphin=イルカから鱈をドロップする
+dropmanipgui.lotas.entity.fish.pufferfish=フグから骨粉をドロップする
+dropmanipgui.lotas.entity.fish.tropicalfish=熱帯魚から骨粉をドロップする
+dropmanipgui.lotas.entity.fish.override=魚のドロップを変更する
+dropmanipgui.lotas.entity.fish.name=魚
+	
+dropmanipgui.lotas.entity.monster.spider=洞窟グモのドロップを最適化する
+dropmanipgui.lotas.entity.monster.creeper=クリーパーのドロップを最適化する
+dropmanipgui.lotas.entity.monster.elderguardian=エルダーガーディアンのドロップを最適化する
+dropmanipgui.lotas.entity.monster.enderman=エンダーマンのドロップを最適化する
+dropmanipgui.lotas.entity.monster.phantom=ファントムのドロップを最適化する
+dropmanipgui.lotas.entity.monster.slime=スライムのドロップを最適化する
+dropmanipgui.lotas.entity.monster.vindicator=ヴィンディケーターのドロップを最適化する
+dropmanipgui.lotas.entity.monster.skeleton=スケルトンのドロップを最適化する
+dropmanipgui.lotas.entity.monster.shulker=シュルカーのドロップを最適化する
+dropmanipgui.lotas.entity.monster.guardian=ガーディアンのドロップを最適化する
+dropmanipgui.lotas.entity.monster.witch=ウィッチのドロップを最適化する
+dropmanipgui.lotas.entity.monster.override=オーバーワールドのモンスターのドロップを変更する
+dropmanipgui.lotas.entity.monster.name=オーバーワールドのモンスター
+	
+dropmanipgui.lotas.entity.nether.blaze=ブレイズのドロップを最適化する
+dropmanipgui.lotas.entity.nether.ghast=ガストのドロップを最適化する
+dropmanipgui.lotas.entity.nether.witherskeleton=ウィザースケルトンのドロップを最適化する
+dropmanipgui.lotas.entity.nether.zombiepiglin=ゾンビピグリンのドロップを最適化する
+dropmanipgui.lotas.entity.nether.zombiepigman=ゾンビピッグマンのドロップを最適化する
+dropmanipgui.lotas.entity.nether.magmacube=マグマキューブのドロップを最適化する
+dropmanipgui.lotas.entity.nether.override=ネザーのモンスターのドロップを変更する
+dropmanipgui.lotas.entity.nether.name=ネザーのモンスター
+	
+dropmanipgui.lotas.entity.passive.chicken=ニワトリのドロップを最適化する
+dropmanipgui.lotas.entity.passive.cow=ウシのドロップを最適化する
+dropmanipgui.lotas.entity.passive.mooshroom=ムーシュルームのドロップを最適化する
+dropmanipgui.lotas.entity.passive.skeletonhorse=スケルトンホースのドロップを最適化する
+dropmanipgui.lotas.entity.passive.cat=ネコのドロップを最適化する
+dropmanipgui.lotas.entity.passive.pig=ブタのドロップを最適化する
+dropmanipgui.lotas.entity.passive.parrot=オウムのドロップを最適化する
+dropmanipgui.lotas.entity.passive.rabbit=ウサギのドロップを最適化する
+dropmanipgui.lotas.entity.passive.sheep=ヒツジのドロップを最適化する
+dropmanipgui.lotas.entity.passive.snowgolem=スノウゴーレムのドロップを最適化する
+dropmanipgui.lotas.entity.passive.squid=イカのドロップを最適化する
+dropmanipgui.lotas.entity.passive.horse=ウマ/ラバ/ロバ/ラマのドロップを最適化する
+dropmanipgui.lotas.entity.passive.turtle=カメのドロップを最適化する
+dropmanipgui.lotas.entity.passive.irongolem=アイアンゴーレムのドロップを最適化する
+dropmanipgui.lotas.entity.passive.polarbear=シロクマのドロップを最適化する
+dropmanipgui.lotas.entity.passive.override=友好・中立モブのドロップを変更する
+dropmanipgui.lotas.entity.passive.name=友好・中立モブ
+	
+dropmanipgui.lotas.entity.zombie.override=ゾンビ/村人ゾンビ/ハスクのドロップを変更する
+dropmanipgui.lotas.entity.zombie.name=ゾンビ
+dropmanipgui.lotas.entity.zombie.zombie=ゾンビは次をドロップする:
+dropmanipgui.lotas.entity.zombie.rottenflesh= 2x 腐った肉
+dropmanipgui.lotas.entity.zombie.iron=, 1x 鉄インゴット
+dropmanipgui.lotas.entity.zombie.potato=, 1x ジャガイモ
+dropmanipgui.lotas.entity.zombie.carrot=, 1x ニンジン
+	
+dropmanipgui.lotas.entity.bartering.boxname=物々交換の乱数
+dropmanipgui.lotas.entity.bartering.soulboots=ソウルスピード付きの鉄のブーツ
+dropmanipgui.lotas.entity.bartering.soulbook=ソウルスピード付きのエンチャントの本
+dropmanipgui.lotas.entity.bartering.splashfireres=耐火のスプラッシュポーション
+dropmanipgui.lotas.entity.bartering.fireres=耐火のポーション
+dropmanipgui.lotas.entity.bartering.ironnugget=鉄塊
+dropmanipgui.lotas.entity.bartering.enderpearl=エンダーパール
+dropmanipgui.lotas.entity.bartering.string=糸
+dropmanipgui.lotas.entity.bartering.netherquartz=ネザークォーツ
+dropmanipgui.lotas.entity.bartering.obsidian=黒曜石
+dropmanipgui.lotas.entity.bartering.cryingobsidian=泣く黒曜石
+dropmanipgui.lotas.entity.bartering.firecharge=ファイヤーチャージ
+dropmanipgui.lotas.entity.bartering.leather=革
+dropmanipgui.lotas.entity.bartering.soulsand=ソウルサンド
+dropmanipgui.lotas.entity.bartering.netherbrick=ネザーレンガ
+dropmanipgui.lotas.entity.bartering.arrow=矢
+dropmanipgui.lotas.entity.bartering.gravel=砂利
+dropmanipgui.lotas.entity.bartering.glowstonedust=グロウストーンダスト
+dropmanipgui.lotas.entity.bartering.waterbottle=水入り瓶
+dropmanipgui.lotas.entity.bartering.spectralarrow=光の矢
+dropmanipgui.lotas.entity.bartering.blackstone=ブラックストーン
+dropmanipgui.lotas.entity.bartering.magmacream=マグマクリーム
+dropmanipgui.lotas.entity.bartering.override=物々交換のドロップを変更する
+dropmanipgui.lotas.entity.bartering.name=物々交換
+	
+# InfoHud
+	
+infohud.lotas.tickrate=ティックレート
+infohud.lotas.precise=正確な座標
+infohud.lotas.chunkpos=チャンクの位置
+infohud.lotas.worldseed=シード値
+infohud.lotas.ticks=経過ティック数
+infohud.lotas.savestate.count=ステートの保存回数
+infohud.lotas.savestate=ステートの保存回数: 
+infohud.lotas.loadstate.count=ステートの読み込み回数
+infohud.lotas.loadstate=ステートの読み込み回数: 
+infohud.lotas.timer=タイマー
+infohud.lotas.timer.paused=タイマー停止中
+infohud.lotas.rtatimer=RTAタイマー
+infohud.lotas.bps.1=移動速度/BPS
+infohud.lotas.bps.2= ブロック/秒
+infohud.lotas.keystrokes=キー入力
+	
+infohud.lotas.tip.1=左クリックで移動
+infohud.lotas.tip.2=中クリックで有効化/無効化
+infohud.lotas.tip.3=右クリックで背景を表示
+infohud.lotas.tip.4=シフトキーを押して格子状に合わせる
+infohud.lotas.tip.5=CTRL+Shift+Rで配置をリセット
+	
+# LoadstateScreen
+loadstategui.lotas.name=ステートの読み込み画面
+loadstategui.lotas.loadstate=読み込む
+loadstategui.lotas.deletestate=削除
+loadstategui.lotas.back=戻る
+loadstategui.lotas.info=読み込むステートを選択
+loadstategui.lotas.error.1=この文章を生成するためのファイルの
+loadstategui.lotas.error.2=読み込み中にエラーが発生しました
+	
+# Keybinds
+keybind.lotas.savestate=ステートを保存
+keybind.lotas.loadstate=ステートを読み込む
+keybind.lotas.dupe.load=アイテム/チェストを読み込む
+keybind.lotas.dupe.save=アイテム/チェストを保存
+keybind.lotas.autostrafe=自動Strafe
+keybind.lotas.tickrate.faster=ティックレートを上げる
+keybind.lotas.tickrate.slower=ティックレートを下げる
+keybind.lotas.tickrate.tickadvance=1ティック進める
+keybind.lotas.tickrate.tick0=ティックレート0の切り替え
+keybind.lotas.tickrate.timer=タイマーを停止
+keybind.lotas.infogui=InfoGuiエディターを開く
+keybind.lotas.test=テスト
+	
+# Keybind categories
+keybind.category.lotas.stating=セーブステート
+keybind.category.lotas.duping=アイテム増殖
+keybind.category.lotas.moving=移動
+keybind.category.lotas.tickratechanger=ティックレート変更
+keybind.category.lotas.misc=その他
+	
+# Spawn Manipulation
+spawnmanip.lotas.ench_sword=エンチャント付きの剣
+spawnmanip.lotas.ench_bow=エンチャント付きの弓
+spawnmanip.lotas.leather_armor=革の防具
+spawnmanip.lotas.gold_armor=金の防具
+spawnmanip.lotas.chain_armor=チェーンの防具
+spawnmanip.lotas.iron_armor=鉄の防具
+spawnmanip.lotas.diamond_armor=ダイヤモンドの防具
+
+# Tickratechanger
+tickratechanger.lotas.message=ティックレートを%s§rに変更しました
+
+# SelectWorldScreen
+selectworld.lotas.openpause=ワールドを開いたときメニューを開く
+
+# Misc
+menu.lotas.multiplayer=マルチプレイヤーではLoTASは使えません (T.T)
