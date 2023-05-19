@@ -176,9 +176,9 @@ infohud.lotas.chunkpos=Chunk Position
 infohud.lotas.worldseed=Worldseed
 infohud.lotas.ticks=Ticks
 infohud.lotas.savestate.count=Savestate Count
-infohud.lotas.savestate=Savestates= 
+infohud.lotas.savestate=Savestates
 infohud.lotas.loadstate.count=Loadstate Count
-infohud.lotas.loadstate=Loadstates= 
+infohud.lotas.loadstate=Loadstates
 infohud.lotas.timer=Timer
 infohud.lotas.timer.paused=Timer is paused
 infohud.lotas.rtatimer=RTATimer
