@@ -17,8 +17,8 @@ All Feature Requests go also onto the Discord Server.
 ## Translations
 You can find the file under [src/main/resources/assets/lotas/lang/en_us.lang](https://github.com/MinecraftTAS/LoTAS/blob/dev/LoTAS-Fabric/src/main/resources/assets/lotas/lang/en_us.lang)
 
-Credits:
-Simplified Chinese: RayXu6
+Credits:  
+Simplified Chinese: [RayXu6](https://github.com/Naruyoko), Proofreading by NormalZombie#2431  
 Japanese: [Naruyoko](https://github.com/Naruyoko)
 
 ## Features
