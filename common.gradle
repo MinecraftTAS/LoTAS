@@ -3,12 +3,13 @@
  */
 
 // compile for java 8
-targetCompatibility = sourceCompatibility = JavaVersion.VERSION_1_8
-
+java {
+	targetCompatibility = sourceCompatibility = JavaVersion.VERSION_1_8
+}
 // configure jar
-jar {
+base { 
 	// change compiled filename
-	archivesBaseName = "LoTAS-v${lotas_version}-mc" + ("${project.name}").replace("LoTAS-", "")
+	archivesName = "LoTAS-v${lotas_version}-mc" + ("${project.name}").replace("LoTAS-", "")
 }
 
 // configure loom
