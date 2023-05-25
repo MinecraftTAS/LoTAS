@@ -8,7 +8,9 @@ plugins {
 apply from: "../common.gradle"
 
 // override: compile for java 17
-targetCompatibility = sourceCompatibility = JavaVersion.VERSION_17
+java {
+	targetCompatibility = sourceCompatibility = JavaVersion.VERSION_17
+}
 
 // add dependencies
 dependencies {
