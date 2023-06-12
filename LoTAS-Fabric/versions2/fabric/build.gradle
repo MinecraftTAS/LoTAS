@@ -26,7 +26,7 @@ loom {
 
 dependencies {
 	//#if MC>=12000
-//$$  	minecraft "com.mojang:minecraft:1.20-pre4"
+//$$  	minecraft "com.mojang:minecraft:1.20.1"
 	//#else
 	//#if MC>=11905
 //$$   	minecraft "com.mojang:minecraft:23w13a_or_b"
