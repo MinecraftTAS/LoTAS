@@ -4,7 +4,7 @@ plugins {
 
 
 apply from: '../common.gradle'
-archivesBaseName = "LoTAS1.20"
+archivesBaseName = "LoTAS1.20.1"
 
 sourceCompatibility = JavaVersion.VERSION_17
 targetCompatibility = JavaVersion.VERSION_17
