@@ -17,9 +17,11 @@ import net.minecraft.world.effect.MobEffects;
 //$$import com.mojang.blaze3d.platform.GlStateManager;
 //# end
 
+//# 1.20.1
+
 //# 1.16.1
 //$$import com.mojang.blaze3d.vertex.PoseStack;
-// # end
+//# end
 
 /**
  * This Mixin slows down many aspects of the ingame hud
