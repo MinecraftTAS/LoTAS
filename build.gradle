@@ -1,7 +1,7 @@
 // add required plugins
 plugins {
 	// discombobulator preprocessor plugin
-	id 'discombobulator' version '1.2.0'
+	id 'discombobulator' version '1.2.1-SNAPSHOT'
 }
 
 // configure discombobulator
@@ -56,7 +56,8 @@ discombobulator {
 		Toast: [
 			"def": "render(II)Z",
 			"1.16.1": "render(IILcom/mojang/blaze3d/vertex/PoseStack;)Z",
-			"1.19.3": "render(ILcom/mojang/blaze3d/vertex/PoseStack;)Z"
+			"1.19.3": "render(ILcom/mojang/blaze3d/vertex/PoseStack;)Z",
+			"1.20.1": "render(ILnet/minecraft/client/gui/GuiGraphics;)Z"
 		],
 		LootTag: [
 			"def": "Tag<",
