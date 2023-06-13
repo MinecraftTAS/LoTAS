@@ -50,7 +50,8 @@ discombobulator {
 		],
 		PostRender: [
 			"def": "Lnet/minecraft/client/gui/components/toasts/ToastComponent;render()V",
-			"1.16.1": "Lnet/minecraft/client/gui/components/toasts/ToastComponent;render(Lcom/mojang/blaze3d/vertex/PoseStack;)V"
+			"1.16.1": "Lnet/minecraft/client/gui/components/toasts/ToastComponent;render(Lcom/mojang/blaze3d/vertex/PoseStack;)V",
+			"1.20.1": "Lnet/minecraft/client/renderer/GameRenderer;render(FJZ)V"
 		],
 		Toast: [
 			"def": "render(II)Z",
