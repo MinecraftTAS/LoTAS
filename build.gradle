@@ -8,6 +8,7 @@ plugins {
 discombobulator {
 	// configure versions
 	versions = [
+		"1.20.1: LoTAS-1.20.1",
 		"1.19.3: LoTAS-1.19.3",
 		"1.18.2: LoTAS-1.18.2",
 		"1.17.1: LoTAS-1.17.1",
