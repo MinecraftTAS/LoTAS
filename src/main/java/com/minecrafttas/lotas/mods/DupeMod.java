@@ -104,6 +104,8 @@ public class DupeMod extends Mod {
 					continue;
 				}
 
+				//# 1.20.1
+//$$				if (!tag.getString("Dimension").equals(player.level().dimension().location().toString())) {
 				//# 1.16.1
 //$$				if (!tag.getString("Dimension").equals(player.getLevel().dimension().location().toString())) {
 				//# def

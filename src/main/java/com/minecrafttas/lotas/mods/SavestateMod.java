@@ -512,6 +512,8 @@ public class SavestateMod extends Mod {
 
 	        // Update client pre-level
 	        LevelData levelData = newLevel.getLevelData();
+	        // # 1.20.1
+//$$	        player.connection.send(new ClientboundRespawnPacket(newLevel.dimensionTypeId(), newLevel.dimension(), BiomeManager.obfuscateSeed(newLevel.getSeed()), player.gameMode.getGameModeForPlayer(), player.gameMode.getPreviousGameModeForPlayer(), newLevel.isDebug(), newLevel.isFlat(), (byte) 1, player.getLastDeathLocation(), player.getPortalCooldown()));        
 	        // # 1.19.3
 //$$	        player.connection.send(new ClientboundRespawnPacket(newLevel.dimensionTypeId(), newLevel.dimension(), BiomeManager.obfuscateSeed(newLevel.getSeed()), player.gameMode.getGameModeForPlayer(), player.gameMode.getPreviousGameModeForPlayer(), newLevel.isDebug(), newLevel.isFlat(), (byte) 1, player.getLastDeathLocation()));        
 	        // # 1.18.2
