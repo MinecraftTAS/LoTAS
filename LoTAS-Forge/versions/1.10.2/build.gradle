@@ -14,7 +14,7 @@ minecraft {
 }
 
 repositories {
-	maven { url = "https://maven.mgnet.work" }
+	maven { url = "https://maven.mgnet.work/main" }
 }
 
 dependencies {

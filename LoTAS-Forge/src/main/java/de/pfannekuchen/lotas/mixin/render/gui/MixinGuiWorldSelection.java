@@ -24,6 +24,7 @@ public abstract class MixinGuiWorldSelection extends GuiScreen {
 //$$ import net.minecraft.world.storage.SaveFormatComparator;
 //$$ import net.minecraftforge.fml.client.config.GuiCheckBox;
 //$$ import net.minecraft.client.gui.GuiSelectWorld;
+//$$ import net.minecraft.client.resources.I18n;
 //$$ @Mixin(GuiSelectWorld.class)
 //$$ public abstract class MixinGuiWorldSelection extends GuiScreen {
 //$$ 	@Shadow

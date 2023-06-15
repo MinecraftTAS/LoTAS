@@ -243,7 +243,7 @@ public class EntitySliderWidget extends AbstractWidget {
 		//#if MC>=12000
 //$$ 		poseStack.drawCenteredString(font, this.getMessage(), this.getX() + this.width / 2, this.getY() + (this.height - 8) / 2, l | Mth.ceil(this.alpha * 255.0F) << 24);
 		//#else
-//$$ 		poseStack.drawCenteredString(poseStack, font, this.getMessage(), this.getX() + this.width / 2, this.getY() + (this.height - 8) / 2, l | Mth.ceil(this.alpha * 255.0F) << 24);
+//$$ 		drawCenteredString(poseStack, font, this.getMessage(), this.getX() + this.width / 2, this.getY() + (this.height - 8) / 2, l | Mth.ceil(this.alpha * 255.0F) << 24);
 		//#endif
 //$$ 	}
 //$$

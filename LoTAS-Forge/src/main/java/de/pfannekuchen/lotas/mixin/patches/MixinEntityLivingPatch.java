@@ -46,7 +46,7 @@ public class MixinEntityLivingPatch {
 //$$ 	}
 //$$
 //$$ 	public List<ItemStack> generateLootForPools(int i) {
-//$$         for (DropManipulation man : GuiDropChanceManipulation.manipulations) {
+//$$         for (DropManipulation man : GuiDropManipulation.manipulations) {
 //$$             if (!man.enabled.isChecked()) continue;
 //$$             List<ItemStack> list = man.redirectDrops((EntityLivingBase) (Object) this, i);
 //$$             if (!list.isEmpty()) {
