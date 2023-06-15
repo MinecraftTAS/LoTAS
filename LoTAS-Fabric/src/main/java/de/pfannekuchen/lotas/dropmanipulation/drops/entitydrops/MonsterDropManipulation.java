@@ -8,6 +8,7 @@ import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.gui.DropManipulationScreen;
 import de.pfannekuchen.lotas.gui.widgets.SmallCheckboxWidget;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
@@ -33,29 +34,29 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class MonsterDropManipulation extends DropManipulationScreen.DropManipulation {
 
-	public static SmallCheckboxWidget optimizeCaveSpider = new SmallCheckboxWidget(0, 0, "Optimize Cave Spider Drops", false);
-	public static SmallCheckboxWidget optimizeCreeper = new SmallCheckboxWidget(0, 0, "Optimize Creeper Drops", false);
-	public static SmallCheckboxWidget optimizeElderGuardian = new SmallCheckboxWidget(0, 0, "Optimize Elder Guardian Drops", false);
-	public static SmallCheckboxWidget optimizeEnderman = new SmallCheckboxWidget(0, 0, "Optimize Enderman Drops", false);
-	public static SmallCheckboxWidget optimizePhantom = new SmallCheckboxWidget(0, 0, "Optimize Phantom Drops", false);
-	public static SmallCheckboxWidget optimizeSlime = new SmallCheckboxWidget(0, 0, "Optimize Slime Drops", false);
-	public static SmallCheckboxWidget optimizeVindicator = new SmallCheckboxWidget(0, 0, "Optimize Vindicator Drops", false);
-	public static SmallCheckboxWidget optimizeSkeleton = new SmallCheckboxWidget(0, 0, "Optimize Skeleton Drops", false);
-	public static SmallCheckboxWidget optimizeShulker = new SmallCheckboxWidget(0, 0, "Optimize Shulker Drops", false);
-	public static SmallCheckboxWidget optimizeGuardian = new SmallCheckboxWidget(0, 0, "Optimize Guardian Drops", false);
-	public static SmallCheckboxWidget optimizeWitch = new SmallCheckboxWidget(0, 0, "Optimize Witch Drops", false);
+	public static SmallCheckboxWidget optimizeCaveSpider = new SmallCheckboxWidget(0, 0, I18n.get("dropmanipgui.lotas.entity.monster.spider"), false);//"Optimize Cave Spider Drops"
+	public static SmallCheckboxWidget optimizeCreeper = new SmallCheckboxWidget(0, 0, I18n.get("dropmanipgui.lotas.entity.monster.creeper"), false);//"Optimize Creeper Drops"
+	public static SmallCheckboxWidget optimizeElderGuardian = new SmallCheckboxWidget(0, 0, I18n.get("dropmanipgui.lotas.entity.monster.elderguardian"), false);//"Optimize Elder Guardian Drops"
+	public static SmallCheckboxWidget optimizeEnderman = new SmallCheckboxWidget(0, 0, I18n.get("dropmanipgui.lotas.entity.monster.enderman"), false);//"Optimize Enderman Drops"
+	public static SmallCheckboxWidget optimizePhantom = new SmallCheckboxWidget(0, 0, I18n.get("dropmanipgui.lotas.entity.monster.phantom"), false);//"Optimize Phantom Drops"
+	public static SmallCheckboxWidget optimizeSlime = new SmallCheckboxWidget(0, 0, I18n.get("dropmanipgui.lotas.entity.monster.slime"), false);//"Optimize Slime Drops"
+	public static SmallCheckboxWidget optimizeVindicator = new SmallCheckboxWidget(0, 0, I18n.get("dropmanipgui.lotas.entity.monster.vindicator"), false);//"Optimize Vindicator Drops"
+	public static SmallCheckboxWidget optimizeSkeleton = new SmallCheckboxWidget(0, 0, I18n.get("dropmanipgui.lotas.entity.monster.skeleton"), false);//"Optimize Skeleton Drops"
+	public static SmallCheckboxWidget optimizeShulker = new SmallCheckboxWidget(0, 0, I18n.get("dropmanipgui.lotas.entity.monster.shulker"), false);//"Optimize Shulker Drops"
+	public static SmallCheckboxWidget optimizeGuardian = new SmallCheckboxWidget(0, 0, I18n.get("dropmanipgui.lotas.entity.monster.guardian"), false);//"Optimize Guardian Drops"
+	public static SmallCheckboxWidget optimizeWitch = new SmallCheckboxWidget(0, 0, I18n.get("dropmanipgui.lotas.entity.monster.witch"), false);//"Optimize Witch Drops"
 
 	public MonsterDropManipulation(int x, int y, int width, int height) {
 		MonsterDropManipulation.x = x;
 		MonsterDropManipulation.y = y;
 		MonsterDropManipulation.width = width;
 		MonsterDropManipulation.height = height;
-		enabled = MCVer.Checkbox(x, y, 150, 20, "Override Monster Drops", false);
+		enabled = MCVer.Checkbox(x, y, 150, 20, I18n.get("dropmanipgui.lotas.entity.monster.override"), false);//"Override Monster Drops"
 	}
 
 	@Override
 	public String getName() {
-		return "Monsters";
+		return I18n.get("dropmanipgui.lotas.entity.monster.name");//"Monsters"
 	}
 
 	@Override

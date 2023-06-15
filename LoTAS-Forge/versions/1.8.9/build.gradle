@@ -13,9 +13,5 @@ minecraft {
     mappings = "stable_22"
 }
 
-repositories {
-	maven { url = "https://maven.mgnet.work" }
-}
-
 dependencies {
 }

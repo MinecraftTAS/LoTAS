@@ -34,7 +34,7 @@ public class DropdownWidget<T> extends AbstractWidget {
     private AbstractWidget focused;
     private boolean dropdownOpenUp;
 
-    public DropdownWidget(Font textRenderer, List<T> selections, Function<T, String> nameProvider, int x, int y, int width, int height, String title, T value, Consumer<T> saveHandler) {
+    public DropdownWidget(Font textRenderer, List<T> selections, Function<T, String> nameProvider, int x, int y, int width, int height, String title, Consumer<T> saveHandler) {
     	//#if MC>=11601
     //$$ 	super(x, y, width, height, MCVer.literal(title));
     	//#else
@@ -78,7 +78,11 @@ public class DropdownWidget<T> extends AbstractWidget {
     }
     
     //#if MC>=11904
+    //#if MC>=12000
+    //$$ @Override public void render(net.minecraft.client.gui.GuiGraphics stack, int mouseX, int mouseY, float delta) {
+    //#else
     //$$ @Override public void render(com.mojang.blaze3d.vertex.PoseStack stack, int mouseX, int mouseY, float delta) {
+    //#endif
     //$$ MCVer.stack = stack;
     //$$ renderWidget(stack, mouseX, mouseY, delta);
     //#else
@@ -158,7 +162,11 @@ public class DropdownWidget<T> extends AbstractWidget {
 
     //#if MC>=11601
     //#if MC>=11904
+    //#if MC>=12000
+    //$$ @Override public void renderWidget(net.minecraft.client.gui.GuiGraphics stack, int mouseX, int mouseY, float partial) {
+    //#else
     //$$ @Override public void renderWidget(com.mojang.blaze3d.vertex.PoseStack stack, int mouseX, int mouseY, float partial) {
+    //#endif
     //#else
     //$$ @Override public void renderBg(com.mojang.blaze3d.vertex.PoseStack stack, Minecraft mc, int mouseX, int mouseY) {
     //#endif
@@ -413,7 +421,11 @@ public class DropdownWidget<T> extends AbstractWidget {
 
         //#if MC>=11601
         //#if MC>=11904
+        //#if MC>=12000
+        //$$ @Override public void renderWidget(net.minecraft.client.gui.GuiGraphics stack, int mouseX, int mouseY, float delta) {
+        //#else
         //$$ @Override public void renderWidget(com.mojang.blaze3d.vertex.PoseStack stack, int mouseX, int mouseY, float delta) {
+        //#endif
         //#else
         //$$ @Override public void renderButton(com.mojang.blaze3d.vertex.PoseStack stack, int mouseX, int mouseY, float delta) {
         //#endif

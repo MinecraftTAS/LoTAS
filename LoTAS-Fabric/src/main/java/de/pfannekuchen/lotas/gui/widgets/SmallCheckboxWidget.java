@@ -50,14 +50,22 @@ public class SmallCheckboxWidget extends AbstractButton {
 	
 	//#if MC>=11904
 //$$ 	@Override
+	//#if MC>=12000
+//$$ 	protected void renderScrollingString(net.minecraft.client.gui.GuiGraphics poseStack, Font font, int i, int j) {
+	//#else
 //$$ 	protected void renderScrollingString(com.mojang.blaze3d.vertex.PoseStack poseStack, Font font, int i, int j) {
+	//#endif
 //$$ 	}
 	//#endif
 	
 	//#if MC>=11903
 	//#if MC>=11904
 //$$ 	@Override
+	//#if MC>=12000
+//$$ 	public void render(net.minecraft.client.gui.GuiGraphics stack, int mouseX, int mouseY, float delta) {
+	//#else
 //$$ 	public void render(com.mojang.blaze3d.vertex.PoseStack stack, int mouseX, int mouseY, float delta) {
+	//#endif
 //$$ //		super.render(stack, mouseX, mouseY, delta);
 	//#else
 //$$ 	@Override public void renderButton(com.mojang.blaze3d.vertex.PoseStack stack, int mouseX, int mouseY, float delta) {

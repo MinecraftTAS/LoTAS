@@ -21,6 +21,7 @@ import net.minecraft.client.gui.GuiIngameMenu;
 import net.minecraft.client.gui.GuiListExtended;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.resources.I18n;
 
 public class GuiLoadstateMenu extends GuiScreen {
 
@@ -33,13 +34,13 @@ public class GuiLoadstateMenu extends GuiScreen {
 		} catch (NumberFormatException | IOException e) {
 			e.printStackTrace();
 		}
-		this.buttonList.add(new GuiButton(0, width / 2 - 102, height - 55, 120, 20, "Loadstate"));
+		this.buttonList.add(new GuiButton(0, width / 2 - 102, height - 55, 120, 20, I18n.format("loadstategui.lotas.loadstate")));
 		//#if MC>10900
-		this.buttonList.add(new GuiButton(1, width / 2 + 22, height - 55, 80, 20, net.minecraft.util.text.TextFormatting.RED+"Delete state"));
+		this.buttonList.add(new GuiButton(1, width / 2 + 22, height - 55, 80, 20, net.minecraft.util.text.TextFormatting.RED+I18n.format("loadstategui.lotas.deletestate")));
 		//#else
-//$$ 		this.buttonList.add(new GuiButton(1, width / 2 + 22, height - 55, 80, 20, com.mojang.realmsclient.gui.ChatFormatting.RED+"Delete state"));
+//$$ 		this.buttonList.add(new GuiButton(1, width / 2 + 22, height - 55, 80, 20, com.mojang.realmsclient.gui.ChatFormatting.RED+I18n.format("loadstategui.lotas.deletestate")));
 		//#endif
-		this.buttonList.add(new ButtonWidget(width / 2 - 102, height - 31, 204, 20, "Back", btn->{
+		this.buttonList.add(new ButtonWidget(width / 2 - 102, height - 31, 204, 20, I18n.format("loadstategui.lotas.back"), btn->{
 			Minecraft.getMinecraft().displayGuiScreen(new GuiIngameMenu());
 		}));
 		super.initGui();
@@ -59,7 +60,7 @@ public class GuiLoadstateMenu extends GuiScreen {
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		list.drawScreen(mouseX, mouseY, partialTicks);
-		drawCenteredString(MCVer.getFontRenderer(mc), "Select a state to load", width / 2, 16, 0xFFFFFF);
+		drawCenteredString(MCVer.getFontRenderer(mc), I18n.format("loadstategui.lotas.info"), width / 2, 16, 0xFFFFFF);
 		super.drawScreen(mouseX, mouseY, partialTicks);
 	}
 	
@@ -107,7 +108,7 @@ public class GuiLoadstateMenu extends GuiScreen {
 				try {
 				states.add(new StateEntry(Files.readLines(new File(file, "lotas.dat"), StandardCharsets.UTF_8).get(0), "Savestate " + file.getName().split("-Savestate")[1]));
 				} catch(Exception e) {
-					states.add(new StateEntry("Error while reading the file", "responsible for this text"));
+					states.add(new StateEntry(I18n.format("loadstategui.lotas.error.1"), I18n.format("loadstategui.lotas.error.2")));
 					e.printStackTrace();
 				}
 			}

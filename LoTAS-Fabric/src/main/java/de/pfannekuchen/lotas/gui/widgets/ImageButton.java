@@ -37,7 +37,11 @@ public class ImageButton extends Button {
 
 	//#if MC>=11904
 //$$ 	@Override
+	//#if MC>=12000
+//$$ 	public void render(net.minecraft.client.gui.GuiGraphics poseStack, int i, int j, float f) {
+	//#else
 //$$ 	public void render(com.mojang.blaze3d.vertex.PoseStack poseStack, int i, int j, float f) {
+	//#endif
 //$$ 		super.render(poseStack, i, j, f);
 	//#else
 	//#if MC>=11601

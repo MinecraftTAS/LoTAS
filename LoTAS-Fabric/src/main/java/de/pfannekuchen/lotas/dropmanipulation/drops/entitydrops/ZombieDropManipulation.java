@@ -9,6 +9,7 @@ import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.gui.DropManipulationScreen;
 import de.pfannekuchen.lotas.gui.widgets.ImageButton;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.monster.Husk;
@@ -41,12 +42,12 @@ public class ZombieDropManipulation extends DropManipulationScreen.DropManipulat
 		ZombieDropManipulation.y = y;
 		ZombieDropManipulation.width = width;
 		ZombieDropManipulation.height = height;
-		enabled = MCVer.Checkbox(x, y, 150, 20, "Override Zombie/Zombie-Villager/Husk Drops", false);
+		enabled = MCVer.Checkbox(x, y, 150, 20, I18n.get("dropmanipgui.lotas.entity.zombie.override"), false);//"Override Zombie/Zombie-Villager/Husk Drops"
 	}
 
 	@Override
 	public String getName() {
-		return "Zombie";
+		return I18n.get("dropmanipgui.lotas.entity.zombie.name");//"Zombie"
 	}
 
 	@Override
@@ -113,7 +114,13 @@ public class ZombieDropManipulation extends DropManipulationScreen.DropManipulat
 		if (!enabled.selected()) {
 			MCVer.color4f(.5f, .5f, .5f, .4f);
 		} else {
-			MCVer.drawShadow("Zombies drop: 2 Rotten Flesh" + (dropIron.isToggled() ? ", 1 Iron Ingot" : "") + (dropPotato.isToggled() ? ", 1 Potato" : "") + (dropCarrot.isToggled() ? ", 1 Carrot" : ""), x, y + 64, 0xFFFFFF);
+			String zombie = I18n.get("dropmanipgui.lotas.entity.zombie.zombie");//"Zombies drop:"
+			String rottenflesh = I18n.get("dropmanipgui.lotas.entity.zombie.rottenflesh");//" 2 Rotten Flesh"
+			String iron = I18n.get("dropmanipgui.lotas.entity.zombie.iron");//", 1 Iron Ingot"
+			String potato = I18n.get("dropmanipgui.lotas.entity.zombie.potato");//", 1 Potato"
+			String carrot = I18n.get("dropmanipgui.lotas.entity.zombie.carrot");//", 1 Carrot"
+			
+			MCVer.drawShadow(zombie+rottenflesh + (dropIron.isToggled() ? iron : "") + (dropPotato.isToggled() ? potato : "") + (dropCarrot.isToggled() ? carrot : ""), x, y + 64, 0xFFFFFF);
 			MCVer.render(dropIron, mouseX, mouseY, delta);
 			MCVer.render(dropPotato, mouseX, mouseY, delta);
 			MCVer.render(dropCarrot, mouseX, mouseY, delta);

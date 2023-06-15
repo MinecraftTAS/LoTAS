@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.core.utils.ConfigUtils;
-import de.pfannekuchen.lotas.gui.GuiDropChanceManipulation;
+import de.pfannekuchen.lotas.gui.GuiDropManipulation;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -74,7 +74,7 @@ public class MixinBlockPatch {
 //$$ 	public void getDropsInject(IBlockAccess world, BlockPos pos, IBlockState state, int fortune, org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable<List<ItemStack>> ci) {
 	//#endif
 	//#endif
-		for (GuiDropChanceManipulation.DropManipulation man : GuiDropChanceManipulation .manipulations) {
+		for (GuiDropManipulation.DropManipulation man : GuiDropManipulation .manipulations) {
 			if (!man.enabled.isChecked()) continue;
 			List<ItemStack> list = man.redirectDrops(state);
             if (!list.isEmpty()) {

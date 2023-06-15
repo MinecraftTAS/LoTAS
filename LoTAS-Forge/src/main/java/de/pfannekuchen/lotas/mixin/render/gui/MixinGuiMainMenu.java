@@ -19,6 +19,7 @@ import de.pfannekuchen.lotas.gui.GuiConfiguration;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.resources.I18n;
 
 @Mixin(GuiMainMenu.class)
 public abstract class MixinGuiMainMenu extends GuiScreen {
@@ -37,14 +38,14 @@ public abstract class MixinGuiMainMenu extends GuiScreen {
 	@Inject(at = @At("RETURN"), method = "addSingleplayerMultiplayerButtons")
 	public void redoaddSingleplayerMultiplayerButtons(int p_73969_1_, int p_73969_2_, CallbackInfo ci) {
 		this.buttonList.get(1).enabled=false;
-		this.buttonList.get(1).displayString = "LoTAS doesn't work in multiplayer :(";
+		this.buttonList.get(1).displayString = I18n.format("menu.lotas.multiplayer");
 		
 		//#if MC>=10900
 		this.modButton.width = this.buttonList.get(1).width;
 		this.modButton.visible = false;
 		//#endif
 		
-		buttonList.add(new GuiButton(69, width / 2 - (this.buttonList.get(1).width / 2), MCVer.y(this.buttonList.get(1)) + 24, this.buttonList.get(1).width, 20, "Configuration"));
+		buttonList.add(new GuiButton(69, width / 2 - (this.buttonList.get(1).width / 2), MCVer.y(this.buttonList.get(1)) + 24, this.buttonList.get(1).width, 20, I18n.format("config.lotas.buttontext")));
 		this.realmsButton.visible = false;
 	}
 	

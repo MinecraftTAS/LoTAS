@@ -5,13 +5,14 @@ import java.util.List;
 import com.google.common.collect.ImmutableList;
 
 import de.pfannekuchen.lotas.core.MCVer;
-import de.pfannekuchen.lotas.gui.GuiDropChanceManipulation;
+import de.pfannekuchen.lotas.gui.GuiDropManipulation;
 import de.pfannekuchen.lotas.gui.widgets.CheckboxWidget;
 import de.pfannekuchen.lotas.gui.widgets.ModifiedCheckBoxWidget;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntityBlaze;
 import net.minecraft.entity.monster.EntityGhast;
@@ -22,13 +23,13 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-public class NetherMobDropManipulation extends GuiDropChanceManipulation.DropManipulation {
+public class NetherMobDropManipulation extends GuiDropManipulation.DropManipulation {
 
-    public static ModifiedCheckBoxWidget optimizeBlaze = new ModifiedCheckBoxWidget(999, 0, 0, "Optimize Blaze Drops", false);
-    public static ModifiedCheckBoxWidget optimizeGhast = new ModifiedCheckBoxWidget(999, 0, 0, "Optimize Ghast Drops", false);
-    public static ModifiedCheckBoxWidget optimizeWitherskeleton = new ModifiedCheckBoxWidget(999, 0, 0, "Optimize Witherskeleton Drops", false);
-    public static ModifiedCheckBoxWidget optimizePigman = new ModifiedCheckBoxWidget(999, 0, 0, "Optimize Zombie Pigman Drops", false);
-    public static ModifiedCheckBoxWidget optimizeMagmaCube = new ModifiedCheckBoxWidget(999, 0, 0, "Optimize Magma Cube Drops", false);
+    public static ModifiedCheckBoxWidget optimizeBlaze = new ModifiedCheckBoxWidget(999, 0, 0, I18n.format("dropmanipgui.lotas.entity.nether.blaze"), false);
+    public static ModifiedCheckBoxWidget optimizeGhast = new ModifiedCheckBoxWidget(999, 0, 0, I18n.format("dropmanipgui.lotas.entity.nether.ghast"), false);
+    public static ModifiedCheckBoxWidget optimizeWitherskeleton = new ModifiedCheckBoxWidget(999, 0, 0, I18n.format("dropmanipgui.lotas.entity.nether.witherskeleton"), false);
+    public static ModifiedCheckBoxWidget optimizePigman = new ModifiedCheckBoxWidget(999, 0, 0, I18n.format("dropmanipgui.lotas.entity.nether.zombiepigman"), false);
+    public static ModifiedCheckBoxWidget optimizeMagmaCube = new ModifiedCheckBoxWidget(999, 0, 0, I18n.format("dropmanipgui.lotas.entity.nether.magmacube"), false);
 
 
     public NetherMobDropManipulation(int x, int y, int width, int height) {
@@ -36,12 +37,12 @@ public class NetherMobDropManipulation extends GuiDropChanceManipulation.DropMan
     	NetherMobDropManipulation.y = y;
     	NetherMobDropManipulation.width = width;
     	NetherMobDropManipulation.height = height;
-        enabled = new CheckboxWidget(x, y, 150, 20, "Override Nether Mob Drops", false);
+        enabled = new CheckboxWidget(x, y, 150, 20, I18n.format("dropmanipgui.lotas.entity.nether.override"), false);
     }
 
     @Override
     public String getName() {
-        return "Nether Mobs";
+        return I18n.format("dropmanipgui.lotas.entity.nether.name");
     }
 
     @Override

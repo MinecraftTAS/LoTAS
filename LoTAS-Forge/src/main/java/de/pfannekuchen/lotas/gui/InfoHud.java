@@ -23,6 +23,7 @@ import de.pfannekuchen.lotas.mods.TickrateChangerMod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.resources.I18n;
 
 /**
  * The info hud is a hud that is always being rendered ontop of the screen, it
@@ -260,8 +261,8 @@ public class InfoHud extends GuiScreen {
 			setDefaults("tickrate", y);
 			lists.add(new InfoLabel("tickrate", configuration, () -> {
 				if (Minecraft.getMinecraft().currentScreen == this)
-					return "Tickrate";
-				return "Tickrate: " + TickrateChangerMod.tickrate;
+					return I18n.format("infohud.lotas.tickrate");
+				return I18n.format("infohud.lotas.tickrate")+": " + TickrateChangerMod.tickrate;
 			}));
 			y += 14;
 			setDefaults("position", y);
@@ -274,56 +275,56 @@ public class InfoHud extends GuiScreen {
 			setDefaults("preciseposition", y);
 			lists.add(new InfoLabel("preciseposition", configuration, () -> {
 				if (Minecraft.getMinecraft().currentScreen == this)
-					return "Precise XYZ";
+					return I18n.format("infohud.lotas.precise");
 				return String.format("%f %f %f", MCVer.player(Minecraft.getMinecraft()).posX, MCVer.player(Minecraft.getMinecraft()).posY, MCVer.player(Minecraft.getMinecraft()).posZ);
 			}));
 			y += 14;
 			setDefaults("chunkposition", y);
 			lists.add(new InfoLabel("chunkposition", configuration, () -> {
 				if (Minecraft.getMinecraft().currentScreen == this)
-					return "Chunk Position";
+					return I18n.format("infohud.lotas.chunkpos");
 				return String.format("%d %d %d", MCVer.player(Minecraft.getMinecraft()).chunkCoordX, MCVer.player(Minecraft.getMinecraft()).chunkCoordY, MCVer.player(Minecraft.getMinecraft()).chunkCoordZ);
 			}));
 			y += 14;
 			setDefaults("worldseed", y);
 			lists.add(new InfoLabel("worldseed", configuration, () -> {
 				if (Minecraft.getMinecraft().currentScreen == this)
-					return "Worldseed";
+					return I18n.format("infohud.lotas.worldseed");
 				return MCVer.world(Minecraft.getMinecraft().getIntegratedServer(), 0).getWorldInfo().getSeed() + "";
 			}));
 			y += 14;
 			setDefaults("ticks", y);
 			lists.add(new InfoLabel("ticks", configuration, () -> {
 				if (Minecraft.getMinecraft().currentScreen == this)
-					return "Ticks";
+					return I18n.format("infohud.lotas.ticks");
 				return TickrateChangerMod.ticksPassedServer + "";
 			}));
 			y += 14;
 			setDefaults("savestates", y);
 			lists.add(new InfoLabel("savestates", configuration, () -> {
 				if (Minecraft.getMinecraft().currentScreen == this)
-					return "Savestate Count";
-				return ("Savestates: " + SavestateMod.TrackerFile.savestateCount);
+					return I18n.format("infohud.lotas.savestate.count");
+				return (I18n.format("infohud.lotas.savestate") + SavestateMod.TrackerFile.savestateCount);
 			}));
 			y += 14;
 			setDefaults("loadstates", y);
 			lists.add(new InfoLabel("loadstates", configuration, () -> {
 				if (Minecraft.getMinecraft().currentScreen == this)
-					return "Loadstate Count";
-				return ("Loadstates: " + SavestateMod.TrackerFile.loadstateCount);
+					return I18n.format("infohud.lotas.loadstate.count");
+				return (I18n.format("infohud.lotas.loadstate") + SavestateMod.TrackerFile.loadstateCount);
 			}));
 			y += 14;
 			setDefaults("timer", y);
 			lists.add(new InfoLabel("timer", configuration, () -> {
 				if (Minecraft.getMinecraft().currentScreen == this)
-					return "Timer";
-				return Timer.ticks == -1 ? "Timer is paused" : Timer.getDuration(Duration.ofMillis(Timer.ticks * 50));
+					return I18n.format("infohud.lotas.timer");
+				return Timer.ticks == -1 ? I18n.format("infohud.lotas.timer.paused") : Timer.getDuration(Duration.ofMillis(Timer.ticks * 50));
 			}));
 			y += 14;
 			setDefaults("rtatimer", y);
 			lists.add(new InfoLabel("rtatimer", configuration, () -> {
 				if (Minecraft.getMinecraft().currentScreen == this)
-					return "RTATimer";
+					return I18n.format("infohud.lotas.rtatimer");
 				if (Timer.running)
 					TickrateChangerMod.rta = Duration.ofMillis(System.currentTimeMillis() - Timer.startTime.toMillis());
 				return Timer.ticks == -1 ? "" : ("RTA: " + Timer.getDuration(TickrateChangerMod.rta));
@@ -332,16 +333,16 @@ public class InfoHud extends GuiScreen {
 			setDefaults("bps", y);
 			lists.add(new InfoLabel("bps", configuration, () -> {
 				if (Minecraft.getMinecraft().currentScreen == this)
-					return "Speed/BPS";
+					return I18n.format("infohud.lotas.bps.1");
 				double distTraveledLastTickX = MCVer.player(Minecraft.getMinecraft()).posX - MCVer.player(Minecraft.getMinecraft()).prevPosX;
 				double distTraveledLastTickZ = MCVer.player(Minecraft.getMinecraft()).posZ - MCVer.player(Minecraft.getMinecraft()).prevPosZ;
-				return String.format("%.2f", MCVer.sqrt((distTraveledLastTickX * distTraveledLastTickX + distTraveledLastTickZ * distTraveledLastTickZ)) / 0.05F) + " blocks/sec";
+				return String.format("%.2f", MCVer.sqrt((distTraveledLastTickX * distTraveledLastTickX + distTraveledLastTickZ * distTraveledLastTickZ)) / 0.05F) + I18n.format("infohud.lotas.bps.2");
 			}));
 			y += 14;
 			setDefaults("keystroke", y);
 			lists.add(new InfoLabel("keystroke", configuration, () -> {
 				if (Minecraft.getMinecraft().currentScreen == this)
-					return "Keystrokes";
+					return I18n.format("infohud.lotas.keystrokes");
 				return KeystrokeUtils.getKeystrokes();
 			}));
 		} catch (Exception e) {
@@ -379,11 +380,11 @@ public class InfoHud extends GuiScreen {
 				}
 			}
 			if (Minecraft.getMinecraft().currentScreen instanceof InfoHud) {
-				MCVer.getFontRenderer(mc).drawStringWithShadow("Leftclick to move", width - ypos, xpos - 30, 0x60FF00);
-				MCVer.getFontRenderer(mc).drawStringWithShadow("Middleclick to enable", width - ypos, xpos - 20, 0x60FF00);
-				MCVer.getFontRenderer(mc).drawStringWithShadow("Rightclick to add black background", width - ypos, xpos - 10, 0x60FF00);
-				MCVer.getFontRenderer(mc).drawStringWithShadow("Hold Shift to snap to grid", width - ypos, xpos, 0x60FF00);
-				MCVer.getFontRenderer(mc).drawStringWithShadow("CTRL+Shift+R to reset the layout", width - ypos, xpos + 10, 0xEE8100);
+				MCVer.getFontRenderer(mc).drawStringWithShadow(I18n.format("infohud.lotas.tip.1"), width - ypos, xpos - 30, 0x60FF00);
+				MCVer.getFontRenderer(mc).drawStringWithShadow(I18n.format("infohud.lotas.tip.2"), width - ypos, xpos - 20, 0x60FF00);
+				MCVer.getFontRenderer(mc).drawStringWithShadow(I18n.format("infohud.lotas.tip.3"), width - ypos, xpos - 10, 0x60FF00);
+				MCVer.getFontRenderer(mc).drawStringWithShadow(I18n.format("infohud.lotas.tip.4"), width - ypos, xpos, 0x60FF00);
+				MCVer.getFontRenderer(mc).drawStringWithShadow(I18n.format("infohud.lotas.tip.5"), width - ypos, xpos + 10, 0xEE8100);
 
 				if (isCtrlKeyDown() && isShiftKeyDown() && KeybindsUtils.isKeyDown(Keyboard.KEY_R)) {
 					resetLayout = true;

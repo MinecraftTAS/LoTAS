@@ -19,8 +19,13 @@ public class RegistryUtils {
 		MCVer.translated(poseStack, memOffsetX, memOffsetY, 0);
 		MCVer.scaled(poseStack, flip, flip, flip);
 		
+		
 		//#if MC>=11903
+		//#if MC>=12000
+//$$ 		MCVer.stack.pose().mulPose(MCVer.fromYXZ(0F, 0F, (float) flipOffset) );
+		//#else
 //$$ 		MCVer.stack.mulPose(MCVer.fromYXZ(0F, 0F, (float) flipOffset) );
+		//#endif
 		//#else
 		//#if MC>=11700
 //$$ 		MCVer.stack.mulPose(com.mojang.math.Quaternion.fromXYZ(0, 0, (float) flipOffset));
@@ -138,7 +143,11 @@ public class RegistryUtils {
 		setRegistryState(7, y, w);
 		
 		//#if MC>=11903
+		//#if MC>=12000
+//$$ 		MCVer.stack.pose().mulPose(MCVer.fromYXZ(0F, 0F, (float) -flipOffset));
+		//#else
 //$$ 		MCVer.stack.mulPose(MCVer.fromYXZ(0F, 0F, (float) -flipOffset));
+		//#endif
 		//#else
 		//#if MC>=11700
 //$$ 		MCVer.stack.mulPose(com.mojang.math.Quaternion.fromXYZ(0, 0, (float) -flipOffset));

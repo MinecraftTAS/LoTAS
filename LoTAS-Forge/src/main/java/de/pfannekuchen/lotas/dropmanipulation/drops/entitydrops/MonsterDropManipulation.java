@@ -5,13 +5,14 @@ import java.util.List;
 import com.google.common.collect.ImmutableList;
 
 import de.pfannekuchen.lotas.core.MCVer;
-import de.pfannekuchen.lotas.gui.GuiDropChanceManipulation;
+import de.pfannekuchen.lotas.gui.GuiDropManipulation;
 import de.pfannekuchen.lotas.gui.widgets.CheckboxWidget;
 import de.pfannekuchen.lotas.gui.widgets.ModifiedCheckBoxWidget;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntityCaveSpider;
 import net.minecraft.entity.monster.EntityCreeper;
@@ -27,30 +28,30 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-public class MonsterDropManipulation extends GuiDropChanceManipulation.DropManipulation {
+public class MonsterDropManipulation extends GuiDropManipulation.DropManipulation {
 
-    public static ModifiedCheckBoxWidget optimizeCreeper = new ModifiedCheckBoxWidget(999, 0, 0, "Optimize Creeper Drops", false);
-    public static ModifiedCheckBoxWidget optimizeElderGuardian = new ModifiedCheckBoxWidget(999, 0, 0, "Optimize Elder Guardian Drops", false);
-    public static ModifiedCheckBoxWidget optimizeEnderman = new ModifiedCheckBoxWidget(999, 0, 0, "Optimize Enderman Drops", false);
-    public static ModifiedCheckBoxWidget optimizeSlime = new ModifiedCheckBoxWidget(999, 0, 0, "Optimize Slime Drops", false);
-    public static ModifiedCheckBoxWidget optimizeVindicator = new ModifiedCheckBoxWidget(999, 0, 0, "Optimize Vindicator Drops", false);
-    public static ModifiedCheckBoxWidget optimizeShulker = new ModifiedCheckBoxWidget(999, 0, 0, "Optimize Shulker Drops", false);
-    public static ModifiedCheckBoxWidget optimizeSkeleton = new ModifiedCheckBoxWidget(999, 0, 0, "Optimize Skeleton Drops", false);
-    public static ModifiedCheckBoxWidget optimizeSpider = new ModifiedCheckBoxWidget(999, 0, 0, "Optimize Spider Drops", false);
-    public static ModifiedCheckBoxWidget optimizeGuardian = new ModifiedCheckBoxWidget(999, 0, 0, "Optimize Guardian Drops", false);
-    public static ModifiedCheckBoxWidget optimizeWitch = new ModifiedCheckBoxWidget(999, 0, 0, "Optimize Witch Drops", false);
+	public static ModifiedCheckBoxWidget optimizeSpider = new ModifiedCheckBoxWidget(999, 0, 0, I18n.format("dropmanipgui.lotas.entity.monster.spider"), false);
+    public static ModifiedCheckBoxWidget optimizeCreeper = new ModifiedCheckBoxWidget(999, 0, 0, I18n.format("dropmanipgui.lotas.entity.monster.creeper"), false);
+    public static ModifiedCheckBoxWidget optimizeElderGuardian = new ModifiedCheckBoxWidget(999, 0, 0, I18n.format("dropmanipgui.lotas.entity.monster.elderguardian"), false);
+    public static ModifiedCheckBoxWidget optimizeEnderman = new ModifiedCheckBoxWidget(999, 0, 0, I18n.format("dropmanipgui.lotas.entity.monster.enderman"), false);
+    public static ModifiedCheckBoxWidget optimizeSlime = new ModifiedCheckBoxWidget(999, 0, 0, I18n.format("dropmanipgui.lotas.entity.monster.slime"), false);
+    public static ModifiedCheckBoxWidget optimizeVindicator = new ModifiedCheckBoxWidget(999, 0, 0, I18n.format("dropmanipgui.lotas.entity.monster.vindicator"), false);
+    public static ModifiedCheckBoxWidget optimizeSkeleton = new ModifiedCheckBoxWidget(999, 0, 0, I18n.format("dropmanipgui.lotas.entity.monster.skeleton"), false);
+    public static ModifiedCheckBoxWidget optimizeShulker = new ModifiedCheckBoxWidget(999, 0, 0, I18n.format("dropmanipgui.lotas.entity.monster.shulker"), false);
+    public static ModifiedCheckBoxWidget optimizeGuardian = new ModifiedCheckBoxWidget(999, 0, 0, I18n.format("dropmanipgui.lotas.entity.monster.guardian"), false);
+    public static ModifiedCheckBoxWidget optimizeWitch = new ModifiedCheckBoxWidget(999, 0, 0, I18n.format("dropmanipgui.lotas.entity.monster.witch"), false);
 
     public MonsterDropManipulation(int x, int y, int width, int height) {
     	MonsterDropManipulation.x = x;
     	MonsterDropManipulation.y = y;
     	MonsterDropManipulation.width = width;
         MonsterDropManipulation.height = height;
-        enabled = new CheckboxWidget(x, y, 150, 20, "Override Monster Drops", false);
+        enabled = new CheckboxWidget(x, y, 150, 20, I18n.format("dropmanipgui.lotas.entity.monster.override"), false);
     }
 
     @Override
     public String getName() {
-        return "Monsters";
+        return I18n.format("dropmanipgui.lotas.entity.monster.name");
     }
 
     @Override

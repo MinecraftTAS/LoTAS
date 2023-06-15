@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "lotas",
-  "version": "2.1.1",
+  "version": "2.1.2",
 
   "name": "LoTAS",
   "description": "Low Optimization Tool Assisted Speedrun Mod",
@@ -11,7 +11,7 @@
   ],
   "contact": {
     "homepage": "https://minecrafttas.com/",
-    "sources": "https://github.com/MCPfannkuchenYT/LoTAS"
+    "sources": "https://github.com/MinecraftTAS/LoTAS"
   },
 
   "license": "GPTv3",
