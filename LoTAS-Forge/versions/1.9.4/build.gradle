@@ -13,9 +13,5 @@ minecraft {
     mappings = "snapshot_20160518"
 }
 
-repositories {
-	maven { url = "https://maven.mgnet.work" }
-}
-
 dependencies {
 }
