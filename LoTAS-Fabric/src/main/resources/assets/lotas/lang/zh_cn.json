@@ -75,14 +75,14 @@
 	"dropmanipgui.lotas.blocks.deadbush.2":"2根木棍",
 	"dropmanipgui.lotas.blocks.deadbush.override":"更改枯死的灌木的掉落",
 	"dropmanipgui.lotas.blocks.deadbush.name":"枯死的灌木",
-	"dropmanipgui.lotas.blocks.deadbush.description":"在破坏枯死的灌木时掉落%i根木棍",
+	"dropmanipgui.lotas.blocks.deadbush.description":"在破坏枯死的灌木时掉落%d根木棍",
 
 	"dropmanipgui.lotas.blocks.glowstone.2":"2个荧石粉",
 	"dropmanipgui.lotas.blocks.glowstone.3":"3个荧石粉",
 	"dropmanipgui.lotas.blocks.glowstone.4":"4个荧石粉",
 	"dropmanipgui.lotas.blocks.glowstone.override":"更改荧石的掉落",
 	"dropmanipgui.lotas.blocks.glowstone.name":"荧石",
-	"dropmanipgui.lotas.blocks.glowstone.description":"在破坏荧石时掉落%i个荧石粉",
+	"dropmanipgui.lotas.blocks.glowstone.description":"在破坏荧石时掉落%d个荧石粉",
 
 	"dropmanipgui.lotas.blocks.gravel.gravel": "沙砾",
 	"dropmanipgui.lotas.blocks.gravel.flint": "燧石",
@@ -120,7 +120,7 @@
 	"dropmanipgui.lotas.blocks.sealantern.prismarine.3":"3个海晶砂粒",
 	"dropmanipgui.lotas.blocks.sealantern.override":"更改海晶灯掉落",
 	"dropmanipgui.lotas.blocks.sealantern.name":"海晶灯",
-	"dropmanipgui.lotas.blocks.sealantern.description":"在破坏海晶灯时掉落%i个海晶砂粒",
+	"dropmanipgui.lotas.blocks.sealantern.description":"在破坏海晶灯时掉落%d个海晶砂粒",
 
 	"dropmanipgui.lotas.entity.drowned.override":"更改溺尸的掉落",
 	"dropmanipgui.lotas.entity.drowned.name":"溺尸",

@@ -75,14 +75,14 @@
 	"dropmanipgui.lotas.blocks.deadbush.2":"2 Sticks",
 	"dropmanipgui.lotas.blocks.deadbush.override":"Override Dead Bush Drops",
 	"dropmanipgui.lotas.blocks.deadbush.name":"Dead Bush",
-	"dropmanipgui.lotas.blocks.deadbush.description":"Drop %i sticks when breaking Dead Bush",
+	"dropmanipgui.lotas.blocks.deadbush.description":"Drop %d sticks when breaking Dead Bush",
 	
 	"dropmanipgui.lotas.blocks.glowstone.2":"2 Glowstone Dust",
 	"dropmanipgui.lotas.blocks.glowstone.3":"3 Glowstone Dust",
 	"dropmanipgui.lotas.blocks.glowstone.4":"4 Glowstone Dust",
 	"dropmanipgui.lotas.blocks.glowstone.override":"Override Glowstone Drops",
 	"dropmanipgui.lotas.blocks.glowstone.name":"Glowstone",
-	"dropmanipgui.lotas.blocks.glowstone.description":"Drop %i Glowstone Dust when breaking Glowstone",
+	"dropmanipgui.lotas.blocks.glowstone.description":"Drop %d Glowstone Dust when breaking Glowstone",
 	
 	"dropmanipgui.lotas.blocks.gravel.gravel": "Gravel",
 	"dropmanipgui.lotas.blocks.gravel.flint": "Flint",
@@ -120,7 +120,7 @@
 	"dropmanipgui.lotas.blocks.sealantern.prismarine.3":"3 Prismarine Crystals",
 	"dropmanipgui.lotas.blocks.sealantern.override":"Override Sea Lantern Drops",
 	"dropmanipgui.lotas.blocks.sealantern.name":"Sea Lantern",
-	"dropmanipgui.lotas.blocks.sealantern.description":"Drop %i Prismarine Crystals when breaking Sea Lanterns",
+	"dropmanipgui.lotas.blocks.sealantern.description":"Drop %d Prismarine Crystals when breaking Sea Lanterns",
 	
 	"dropmanipgui.lotas.entity.drowned.override":"Override Drowned Drops",
 	"dropmanipgui.lotas.entity.drowned.name":"Drowned",
