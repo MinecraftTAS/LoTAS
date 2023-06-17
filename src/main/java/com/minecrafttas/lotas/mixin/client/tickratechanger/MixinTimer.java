@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 //# 1.16.1
 //$$import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 //# def
-//$$import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 //# end
 
 import com.minecrafttas.lotas.mods.TickAdvance;
@@ -40,7 +40,7 @@ public class MixinTimer {
 	//# 1.16.1
 //$$	public void onAdvanceTime(CallbackInfoReturnable<Integer> cir) {
 	//# def
-//$$	public void onAdvanceTime(CallbackInfo cir) {
+	public void onAdvanceTime(CallbackInfo cir) {
 	//# end
 		this.msPerTick = (float) (TickAdvance.instance.isTickadvanceEnabled() && !TickAdvance.instance.shouldTickClient ? Float.MAX_VALUE : TickrateChanger.instance.getMsPerTick());
 	}
