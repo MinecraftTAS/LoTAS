@@ -13,7 +13,7 @@ package com.minecrafttas.lotas.mods;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
-// # 1.19.3
+// # 1.19.4
 //$$import java.nio.file.Paths;
 // # end
 import java.time.Instant;
@@ -59,7 +59,7 @@ import net.minecraft.world.level.storage.LevelData;
 import net.minecraft.world.level.lighting.BlockLightEngine;
 import net.minecraft.world.level.lighting.SkyLightEngine;
 
-// # 1.19.3
+// # 1.19.4
 //$$import net.minecraft.server.RegistryLayer;
 //$$import net.minecraft.server.WorldLoader;
 //$$import net.minecraft.server.WorldLoader.DataLoadContext;
@@ -82,7 +82,7 @@ import net.minecraft.world.level.lighting.SkyLightEngine;
 // # end
 
 // # 1.17.1
-// ## 1.19.3
+// ## 1.19.4
 //$$import net.minecraft.world.flag.FeatureFlags;
 // ## end
 //$$import net.minecraft.core.BlockPos;
@@ -97,9 +97,9 @@ import net.minecraft.world.level.lighting.SkyLightEngine;
 //$$import net.minecraft.world.level.chunk.storage.EntityStorage;
 // # end
 
-// # 1.18.2
+//# 1.18.2
 //$$import net.minecraft.resources.RegistryOps;
-// # 1.16.1
+//# 1.16.1
 //$$import net.minecraft.resources.RegistryReadOps;
 //$$import net.minecraft.server.ServerResources;
 //$$import java.util.concurrent.CompletableFuture;
@@ -129,12 +129,12 @@ import net.minecraft.world.level.lighting.SkyLightEngine;
 //$$
 //$$import com.mojang.serialization.Dynamic;
 // # def
-//$$import net.minecraft.world.level.dimension.NormalDimension;
-//$$import net.minecraft.world.level.dimension.end.TheEndDimension;
-//$$import net.minecraft.world.level.storage.LevelStorageSource;
-//$$import net.minecraft.server.level.DerivedServerLevel;
-//$$import java.nio.file.StandardOpenOption;
-//$$import java.nio.file.Files;
+import net.minecraft.world.level.dimension.NormalDimension;
+import net.minecraft.world.level.dimension.end.TheEndDimension;
+import net.minecraft.world.level.storage.LevelStorageSource;
+import net.minecraft.server.level.DerivedServerLevel;
+import java.nio.file.StandardOpenOption;
+import java.nio.file.Files;
 // # end
 
 /**
@@ -259,7 +259,7 @@ public class SavestateMod extends Mod {
 		
 		// Disable Session Lock
 		// # 1.16.1
-		// ## 1.19.3
+		// ## 1.19.4
 //$$		Path levelPath = this.mcserver.storageSource.getLevelPath(LevelResource.ROOT);
 		// ## def
 //$$		Path levelPath = this.mcserver.storageSource.levelPath;
@@ -308,7 +308,7 @@ public class SavestateMod extends Mod {
 		// # 1.16.1
 //$$		Path levelPath = this.unlockSessionLock();
 		// # def
-//$$		byte[] sessionLock = this.unlockSessionLock(worldDir);
+		byte[] sessionLock = this.unlockSessionLock(worldDir);
 		// # end
 		
 		// Delete world
@@ -322,7 +322,7 @@ public class SavestateMod extends Mod {
 		// # 1.16.1
 //$$		this.lockSessionLock(levelPath);
 		// # def
-//$$		this.lockSessionLock(sessionLock, worldDir);
+		this.lockSessionLock(sessionLock, worldDir);
 		// # end
 
 		// Reload level
@@ -343,7 +343,7 @@ public class SavestateMod extends Mod {
 			// # 1.16.1
 //$$			level.toAddAfterTick.clear();
 			// # def
-//$$			level.globalEntities.clear();
+			level.globalEntities.clear();
 			// # end
 			
 			// # 1.16.1
@@ -351,9 +351,9 @@ public class SavestateMod extends Mod {
 //$$				for (EnderDragon dragon : level.getEntitiesOfClass(EnderDragon.class, new AABB(-256, 0, -256, 256, 256, 256)))
 //$$					dragon.kill();
 			// # def
-//$$			if (level.dimension instanceof TheEndDimension)
-//$$				for (EnderDragon dragon : level.getEntitiesOfClass(EnderDragon.class, new AABB(-256, 0, -256, 256, 256, 256)))
-//$$					dragon.kill();
+			if (level.dimension instanceof TheEndDimension)
+				for (EnderDragon dragon : level.getEntitiesOfClass(EnderDragon.class, new AABB(-256, 0, -256, 256, 256, 256)))
+					dragon.kill();
 			// # end
 			
 			// # 1.17.1
@@ -388,10 +388,10 @@ public class SavestateMod extends Mod {
 //$$				file.close();
 //$$			entityStorage.worker.storage.regionCache.clear();
 			// # def
-//$$			// Despawn existing entities
-//$$			for (Entity entity : new ArrayList<>(level.entitiesById.values()))
-//$$				if (entity != null)
-//$$					level.despawn(entity);
+			// Despawn existing entities
+			for (Entity entity : new ArrayList<>(level.entitiesById.values()))
+				if (entity != null)
+					level.despawn(entity);
 			// # end
 			
 			// Remove chunk loading requests
@@ -412,8 +412,8 @@ public class SavestateMod extends Mod {
 			// # 1.15.2
 //$$
 			// # def
-//$$			// Unload nether portals
-//$$			level.getPortalForcer().cachedPortals.clear();
+			// Unload nether portals
+			level.getPortalForcer().cachedPortals.clear();
 			// # end
 			
 			// Clear chunk cache
@@ -433,13 +433,13 @@ public class SavestateMod extends Mod {
 //$$			map.worker.storage.regionCache.clear();
 //$$			map.worker.pendingWrites.clear();
 			// # def
-//$$			for (RegionFile file : map.poiManager.regionCache.values())
-//$$				file.close();
-//$$			map.poiManager.regionCache.clear();
-//$$			
-//$$			for (RegionFile file : map.regionCache.values())
-//$$				file.close();
-//$$			map.regionCache.clear();
+			for (RegionFile file : map.poiManager.regionCache.values())
+				file.close();
+			map.poiManager.regionCache.clear();
+			
+			for (RegionFile file : map.regionCache.values())
+				file.close();
+			map.regionCache.clear();
 			// # end
 		}
 	}
@@ -447,10 +447,10 @@ public class SavestateMod extends Mod {
 	// # 1.16.1
 //$$	private Path unlockSessionLock() throws IOException {
 	// # def
-//$$	private byte[] unlockSessionLock(File worldDir) throws IOException {
+	private byte[] unlockSessionLock(File worldDir) throws IOException {
 	// # end
 		// # 1.16.1
-		// ## 1.19.3
+		// ## 1.19.4
 //$$		Path levelPath = this.mcserver.storageSource.getLevelPath(LevelResource.ROOT);
 		// ## def
 //$$		Path levelPath = this.mcserver.storageSource.levelPath;
@@ -458,21 +458,21 @@ public class SavestateMod extends Mod {
 //$$		this.mcserver.storageSource.lock.close();
 //$$		return levelPath;
 		// # def
-//$$		Path sessionLockFile = new File(worldDir, "session.lock").toPath();
-//$$		return Files.readAllBytes(sessionLockFile);
+		Path sessionLockFile = new File(worldDir, "session.lock").toPath();
+		return Files.readAllBytes(sessionLockFile);
 		// # end
 	}
 	
 	// # 1.16.1
 //$$	private void lockSessionLock(Path levelPath) throws IOException {
 	// # def
-//$$	private void lockSessionLock(byte[] sessionLock, File worldDir) throws IOException {
+	private void lockSessionLock(byte[] sessionLock, File worldDir) throws IOException {
 	// # end
 		// # 1.16.1
 //$$		this.mcserver.storageSource.lock = DirectoryLock.create(levelPath);
 		// # def
-//$$		Path sessionLockFile = new File(worldDir, "session.lock").toPath();
-//$$ 		Files.write(sessionLockFile, sessionLock, StandardOpenOption.WRITE, StandardOpenOption.CREATE);
+		Path sessionLockFile = new File(worldDir, "session.lock").toPath();
+ 		Files.write(sessionLockFile, sessionLock, StandardOpenOption.WRITE, StandardOpenOption.CREATE);
 		// # end
 	}
 	
@@ -483,8 +483,8 @@ public class SavestateMod extends Mod {
 //$$			chunkCache.getLightEngine().blockEngine = new BlockLightEngine(chunkCache);
 //$$			chunkCache.getLightEngine().skyEngine = level.dimensionType().hasSkyLight() ? new SkyLightEngine(chunkCache) : null;
 			// # def
-//$$			chunkCache.getLightEngine().blockEngine = new BlockLightEngine(chunkCache);
-//$$			chunkCache.getLightEngine().skyEngine = level.dimension instanceof NormalDimension ? new SkyLightEngine(chunkCache) : null;
+			chunkCache.getLightEngine().blockEngine = new BlockLightEngine(chunkCache);
+			chunkCache.getLightEngine().skyEngine = level.dimension instanceof NormalDimension ? new SkyLightEngine(chunkCache) : null;
 			// # end
 			
 			// # 1.17.1
@@ -506,15 +506,15 @@ public class SavestateMod extends Mod {
 //$$			CompoundTag compoundTag = playerList.load(player);
 //$$			ServerLevel newLevel = this.mcserver.getLevel(compoundTag != null ? DimensionType.parseLegacy(new Dynamic<Tag>(NbtOps.INSTANCE, compoundTag.get("Dimension"))).result().orElse(Level.OVERWORLD) : Level.OVERWORLD);
 			// # def
-//$$			playerList.load(player);
-//$$			ServerLevel newLevel = this.mcserver.getLevel(player.dimension);
+			playerList.load(player);
+			ServerLevel newLevel = this.mcserver.getLevel(player.dimension);
 			// # end
 
 	        // Update client pre-level
 	        LevelData levelData = newLevel.getLevelData();
 	        // # 1.20.1
 //$$	        player.connection.send(new ClientboundRespawnPacket(newLevel.dimensionTypeId(), newLevel.dimension(), BiomeManager.obfuscateSeed(newLevel.getSeed()), player.gameMode.getGameModeForPlayer(), player.gameMode.getPreviousGameModeForPlayer(), newLevel.isDebug(), newLevel.isFlat(), (byte) 1, player.getLastDeathLocation(), player.getPortalCooldown()));        
-	        // # 1.19.3
+	        // # 1.19.4
 //$$	        player.connection.send(new ClientboundRespawnPacket(newLevel.dimensionTypeId(), newLevel.dimension(), BiomeManager.obfuscateSeed(newLevel.getSeed()), player.gameMode.getGameModeForPlayer(), player.gameMode.getPreviousGameModeForPlayer(), newLevel.isDebug(), newLevel.isFlat(), (byte) 1, player.getLastDeathLocation()));        
 	        // # 1.18.2
 //$$	        player.connection.send(new ClientboundRespawnPacket(newLevel.dimensionTypeRegistration(), newLevel.dimension(), BiomeManager.obfuscateSeed(newLevel.getSeed()), player.gameMode.getGameModeForPlayer(), player.gameMode.getPreviousGameModeForPlayer(), newLevel.isDebug(), newLevel.isFlat(), true));        
@@ -525,7 +525,7 @@ public class SavestateMod extends Mod {
 	        // # 1.15.2
 //$$	        player.connection.send(new ClientboundRespawnPacket(player.dimension, LevelData.obfuscateSeed(levelData.getSeed()), levelData.getGeneratorType(), player.gameMode.getGameModeForPlayer()));
 	        // # def
-//$$	        player.connection.send(new ClientboundRespawnPacket(player.dimension, levelData.getGeneratorType(), player.gameMode.getGameModeForPlayer()));
+	        player.connection.send(new ClientboundRespawnPacket(player.dimension, levelData.getGeneratorType(), player.gameMode.getGameModeForPlayer()));
 	        // # end
 	        player.connection.send(new ClientboundChangeDifficultyPacket(levelData.getDifficulty(), levelData.isDifficultyLocked()));
 	        player.server.getPlayerList().sendPlayerPermissionLevel(player);
@@ -560,7 +560,7 @@ public class SavestateMod extends Mod {
 			// # 1.16.1
 //$$			adv.reload(this.mcserver.getAdvancements());
 			// # def
-//$$			adv.reload();
+			adv.reload();
 			// # end
             adv.flushDirty(player);
             
@@ -598,31 +598,31 @@ public class SavestateMod extends Mod {
 //$$			level.serverLevelData = data;
 //$$	
 //$$				if (level.dragonFight != null)
-				// ## 1.19.3
+				// ## 1.19.4
 //$$					level.dragonFight = new EndDragonFight(level, this.mcserver.getWorldData().worldGenOptions().seed(), this.mcserver.getWorldData().endDragonFightData());
 				// ## def
 //$$					level.dragonFight = new EndDragonFight(level, this.mcserver.getWorldData().worldGenSettings().seed(), this.mcserver.getWorldData().endDragonFightData());
 				// ## end
 //$$		}
 		// # def
-//$$		LevelData data = LevelStorageSource.getLevelData(new File(worldDir, "level.dat"), this.mcserver.getFixerUpper());
-//$$		for (ServerLevel level : this.mcserver.getAllLevels()) {
-//$$			// Load level data
-//$$			if (level instanceof DerivedServerLevel) {
-//$$				level.levelData = new DerivedLevelData(data);
-//$$			} else {
-//$$				level.levelData = data;
-//$$			}
-//$$
-//$$			// Load end fight
-//$$			if (level.dimension instanceof TheEndDimension)
-//$$				((TheEndDimension) level.dimension).dragonFight = new EndDragonFight(level, level.getLevelData().getDimensionData(DimensionType.THE_END).getCompound("DragonFight")); 
-//$$		}
+		LevelData data = LevelStorageSource.getLevelData(new File(worldDir, "level.dat"), this.mcserver.getFixerUpper());
+		for (ServerLevel level : this.mcserver.getAllLevels()) {
+			// Load level data
+			if (level instanceof DerivedServerLevel) {
+				level.levelData = new DerivedLevelData(data);
+			} else {
+				level.levelData = data;
+			}
+
+			// Load end fight
+			if (level.dimension instanceof TheEndDimension)
+				((TheEndDimension) level.dimension).dragonFight = new EndDragonFight(level, level.getLevelData().getDimensionData(DimensionType.THE_END).getCompound("DragonFight")); 
+		}
 		// # end
 			
 	}
 
-	// # 1.19.3
+	// # 1.19.4
 //$$	private WorldData loadWorldData(LevelStorageAccess levelStorageAccess) throws IOException {
 //$$		InitConfig initConfig = loadOrCreateConfig();
 //$$        Pair<WorldDataConfiguration, CloseableResourceManager> pair = initConfig.packConfig.createResourceManager();
@@ -684,7 +684,7 @@ public class SavestateMod extends Mod {
 	// # end
 	
 	
-	// # 1.19.3
+	// # 1.19.4
 //$$    private static WorldLoader.InitConfig loadOrCreateConfig() throws IOException {
 //$$    	Path path = Paths.get("server.properties", new String[0]);
 //$$        DedicatedServerSettings dedicatedServerSettings = new DedicatedServerSettings(path);

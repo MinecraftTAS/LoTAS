@@ -9,7 +9,7 @@ discombobulator {
 	// configure versions
 	versions = [
 		"1.20.1: LoTAS-1.20.1",
-		"1.19.3: LoTAS-1.19.3",
+		"1.19.4: LoTAS-1.19.4",
 		"1.18.2: LoTAS-1.18.2",
 		"1.17.1: LoTAS-1.17.1",
 		"1.16.5: LoTAS-1.16.5",
@@ -38,15 +38,15 @@ discombobulator {
 		],
 		RandomSourceDescriptor: [
 			"def": "Ljava/util/Random;",
-			"1.19.3": "Lnet/minecraft/util/RandomSource;"
+			"1.19.4": "Lnet/minecraft/util/RandomSource;"
 		],
 		RngSourceClass: [
 			"def": "Random ",
-			"1.19.3": "RandomSource "
+			"1.19.4": "RandomSource "
 		],
 		RandomSourceImport: [
 			"def": "import java.util.Random;",
-			"1.19.3": "import net.minecraft.util.RandomSource;"
+			"1.19.4": "import net.minecraft.util.RandomSource;"
 		],
 		PostRender: [
 			"def": "Lnet/minecraft/client/gui/components/toasts/ToastComponent;render()V",
@@ -56,7 +56,7 @@ discombobulator {
 		Toast: [
 			"def": "render(II)Z",
 			"1.16.1": "render(IILcom/mojang/blaze3d/vertex/PoseStack;)Z",
-			"1.19.3": "render(ILcom/mojang/blaze3d/vertex/PoseStack;)Z",
+			"1.19.4": "render(ILcom/mojang/blaze3d/vertex/PoseStack;)Z",
 			"1.20.1": "render(ILnet/minecraft/client/gui/GuiGraphics;)Z"
 		],
 		LootTag: [
@@ -66,6 +66,16 @@ discombobulator {
 		LootImportTag: [
 			"def": "Tag;",
 			"1.18.2": "TagKey;"
+		],
+		PoseStack: [
+			"def": "Object",
+			"1.16.1": "com.mojang.blaze3d.vertex.PoseStack",
+			"1.20.1": "net.minecraft.client.gui.GuiGraphics"
+		],
+		Quaternion: [
+			"def": "Object",
+			"1.16.1": "com.mojang.math.Quaternion",
+			"1.19.4": "org.joml.Quaternionf"
 		]
 	]
 }

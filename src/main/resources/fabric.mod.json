@@ -3,14 +3,14 @@
 	"id": "lotas",
 	"version": "3.0.0-SNAPSHOT",
 	"name": "LoTAS",
-	"description": "Low Optimization Tool Assisted Speedrun Mod! A mod that allows players to create tool assisted speedruns/superplays in Minecraft.",
+	"description": "Low optimization Tool-Assisted Speedrun Mod! A mod that allows players to create tool assisted speedruns/superplays in Minecraft.",
 	"authors": [
 		"Pancake",
 		"Scribble"
 	],
 	"contact": {
-		"homepage": "https://lotas.mgnet.work/",
-		"sources": "https://github.com/MCPfannkuchenYT/LoTAS"
+		"homepage": "https://minecrafttas.com",
+		"sources": "https://github.com/MinecraftTAS/LoTAS"
 	},
 
 	"license": "GPLv3",

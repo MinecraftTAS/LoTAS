@@ -29,20 +29,20 @@ public class MixinSubtitleOverlay {
 //$$		return (double) (threethousand * (20.0 / TickrateChanger.instance.getTickrate()));
 //$$	}
 	// # def
-//$$	@ModifyConstant(method = "render", constant = @Constant(longValue = 3000L))
-//$$	public long applyTickrate(long threethousand) {
-//$$		return (long) (threethousand * (20.0 / TickrateChanger.instance.getTickrate()));
-//$$	}
-//$$	
-//$$	/**
-//$$	 * Slows down the render speed by multiplying with the Gamespeed
-//$$	 * @param threethousand 3000, well
-//$$	 * @return Slowed down 3000
-//$$	 */
-//$$	@ModifyConstant(method = "render", constant = @Constant(floatValue = 3000F))
-//$$	public float applyTickrate2(float threethousand) {
-//$$		return (float) (threethousand * (20.0 / TickrateChanger.instance.getTickrate()));
-//$$	}
+	@ModifyConstant(method = "render", constant = @Constant(longValue = 3000L))
+	public long applyTickrate(long threethousand) {
+		return (long) (threethousand * (20.0 / TickrateChanger.instance.getTickrate()));
+	}
+	
+	/**
+	 * Slows down the render speed by multiplying with the Gamespeed
+	 * @param threethousand 3000, well
+	 * @return Slowed down 3000
+	 */
+	@ModifyConstant(method = "render", constant = @Constant(floatValue = 3000F))
+	public float applyTickrate2(float threethousand) {
+		return (float) (threethousand * (20.0 / TickrateChanger.instance.getTickrate()));
+	}
 	// # end
 
 }
