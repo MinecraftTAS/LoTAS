@@ -32,35 +32,35 @@ import net.fabricmc.api.Environment;
 //$$
 //$$}
 //# def
-//$$import net.minecraft.client.renderer.entity.ItemRenderer;
-//$$
-//$$/**
-//$$ * This Mixin slows down the foil item layer to the tickrate
-//$$ * @author Pancake
-//$$ */
-//$$@Mixin(ItemRenderer.class)
-//$$@Environment(EnvType.CLIENT)
-//$$public class MixinItemRenderer {
-//$$
-//$$	/**
-//$$	 * Slows down the getMillis call in the ItemRenderer class
-//$$	 * @param ignored Ignored original value
-//$$	 * @return Manipulated value
-//$$	 */
-//$$	@ModifyVariable(method = "renderFoilLayer", at = @At("STORE"), index = 2, ordinal = 0)
-//$$	private static float modifyrenderEffect1(float f) {
-//$$		return (TickrateChanger.instance.getMilliseconds() % 3000L) / 3000.0F / 8F;
-//$$	}
-//$$
-//$$	/**
-//$$	 * Slows down the getMillis call in the ItemRenderer class
-//$$	 * @param ignored Ignored original value
-//$$	 * @return Manipulated value
-//$$	 */
-//$$	@ModifyVariable(method = "renderFoilLayer", at = @At("STORE"), index = 3, ordinal = 1)
-//$$	private static float modifyrenderEffect2(float f) {
-//$$		return (TickrateChanger.instance.getMilliseconds() % 4873L) / 4873.0F / 8F;
-//$$	}
-//$$
-//$$}
+import net.minecraft.client.renderer.entity.ItemRenderer;
+
+/**
+ * This Mixin slows down the foil item layer to the tickrate
+ * @author Pancake
+ */
+@Mixin(ItemRenderer.class)
+@Environment(EnvType.CLIENT)
+public class MixinItemRenderer {
+
+	/**
+	 * Slows down the getMillis call in the ItemRenderer class
+	 * @param ignored Ignored original value
+	 * @return Manipulated value
+	 */
+	@ModifyVariable(method = "renderFoilLayer", at = @At("STORE"), index = 2, ordinal = 0)
+	private static float modifyrenderEffect1(float f) {
+		return (TickrateChanger.instance.getMilliseconds() % 3000L) / 3000.0F / 8F;
+	}
+
+	/**
+	 * Slows down the getMillis call in the ItemRenderer class
+	 * @param ignored Ignored original value
+	 * @return Manipulated value
+	 */
+	@ModifyVariable(method = "renderFoilLayer", at = @At("STORE"), index = 3, ordinal = 1)
+	private static float modifyrenderEffect2(float f) {
+		return (TickrateChanger.instance.getMilliseconds() % 4873L) / 4873.0F / 8F;
+	}
+
+}
 //# end

@@ -109,7 +109,7 @@ public class DupeMod extends Mod {
 				//# 1.16.1
 //$$				if (!tag.getString("Dimension").equals(player.getLevel().dimension().location().toString())) {
 				//# def
-//$$				if (tag.getInt("Dimension") != player.getLevel().getDimension().getType().getId()) {
+				if (tag.getInt("Dimension") != player.getLevel().getDimension().getType().getId()) {
 				//# end
 					LoTAS.LOGGER.warn("Unable to load playerdata for {} as they are in a different dimension!", player.getName().getString());
 					continue;
