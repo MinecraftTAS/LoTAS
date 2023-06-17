@@ -69,7 +69,7 @@ accessible field net/minecraft/world/entity/player/Player lastItemInMainHand Lne
 
 
 ## 1.16.1
-### 1.19.3
+### 1.19.4
 #$$accessible field net/minecraft/world/level/storage/LevelStorageSource$LevelStorageAccess levelDirectory Lnet/minecraft/world/level/storage/LevelStorageSource$LevelDirectory;
 ### def
 #$$accessible field net/minecraft/world/level/storage/LevelStorageSource$LevelStorageAccess levelPath Ljava/nio/file/Path;
@@ -119,7 +119,7 @@ accessible field net/minecraft/world/entity/player/Player lastItemInMainHand Lne
 
 accessible method net/minecraft/util/thread/BlockableEventLoop runAllTasks ()V
 
-## 1.19.3
+## 1.19.4
 #$$accessible method net/minecraft/server/WorldLoader loadAndReplaceLayer (Lnet/minecraft/server/packs/resources/ResourceManager;Lnet/minecraft/core/LayeredRegistryAccess;Lnet/minecraft/server/RegistryLayer;Ljava/util/List;)Lnet/minecraft/core/LayeredRegistryAccess;
 #$$accessible field net/minecraft/server/WorldLoader$InitConfig packConfig Lnet/minecraft/server/WorldLoader$PackConfig;
 ## end

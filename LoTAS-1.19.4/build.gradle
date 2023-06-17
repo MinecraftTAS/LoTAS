@@ -15,5 +15,5 @@ java {
 // add dependencies
 dependencies {
 	// add minecraft dependency
-	minecraft "com.mojang:minecraft:1.19.3"
+	minecraft "com.mojang:minecraft:1.19.4"
 }

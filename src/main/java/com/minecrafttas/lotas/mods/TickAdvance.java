@@ -163,5 +163,4 @@ public class TickAdvance extends Mod {
 	public boolean isTickadvanceEnabled() {
 		return this.tickadvance;
 	}
-
 }
