@@ -37,7 +37,10 @@ public class LoTASLanguageManager{
 		InputStream langfile = getFromResourceManager(); // First check if a resourcepack is loaded and if it has a language file
 		
 		if(langfile == null) {
-			langfile = getFromResources();	// If that fails, load data from the resources
+			langfile = getFromResources(currentCode);	// If that fails, load data from the resources
+		}
+		if(langfile == null) {
+			langfile = getFromResources("en_us");	// If that fails, load data from the resources
 		}
 		if(langfile!=null) {
 			//#if MC>=11601
@@ -58,8 +61,8 @@ public class LoTASLanguageManager{
 		this.currentCode = code;
 	}
 	
-	private InputStream getFromResources() {
-		InputStream resource = getClass().getResourceAsStream("/assets/lotas/lang/"+currentCode+".json");
+	private InputStream getFromResources(String code) {
+		InputStream resource = getClass().getResourceAsStream("/assets/lotas/lang/"+code+".json");
 		return resource;
 	}
 	
