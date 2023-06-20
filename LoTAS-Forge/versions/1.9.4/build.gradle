@@ -15,3 +15,16 @@ minecraft {
 
 dependencies {
 }
+
+processResources {
+	rename { String fileName ->
+		def patt = ~"(\\w+)_(\\w+)\\.lang";
+		def matcher = fileName =~ patt;
+		
+		if(matcher.find()) {
+			exclude fileName;
+			return matcher.group(1)+"_"+matcher.group(2).toUpperCase()+".lang";
+		}
+		return fileName;
+	}
+}
