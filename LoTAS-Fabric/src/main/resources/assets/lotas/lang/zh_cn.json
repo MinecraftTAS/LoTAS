@@ -32,7 +32,6 @@
 	"pausegui.lotas.successtext.savestate":"\u00A76存档成功...",
 	"pausegui.lotas.successtext.loadstate":"\u00A76读档成功...",
 	"pausegui.lotas.textfield.fail":"\u00A7c请输入一个数字!",
-	"pausegui.lotas.dropmanip.vanish":"\u00A7o死后掉落物控制!",
 
 	// AiManip
 	"aimanipgui.lotas.changetarget":"更改目标",
