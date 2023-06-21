@@ -365,9 +365,6 @@ public class LoTASIngameGui {
 			MCVer.drawCenteredString(parentScreen, I18n.get("pausegui.lotas.textfield.fail"), 170, 22, 0xFFFFFF);//"\u00A7cPlease enter a number!"
 		}
 		
-		//#if MC>=12000
-//$$  		MCVer.drawCenteredString(parentScreen, I18n.get("pausegui.lotas.dropmanip.vanish"), 80, height-15, 0xFFFFFF);//"\u00A7oRIP DropManipulation!"
-		//#endif
 	}
 
 	public void mouseClicked(double mouseX, double mouseY, int mouseButton) {
