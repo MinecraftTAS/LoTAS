@@ -302,20 +302,12 @@ public class MCVer {
 //$$ 	}
 //$$
 //$$ 	public static void translated(Object stack, double x, double y, double z) {
-		//#if MC>=12000
-//$$ 		com.mojang.blaze3d.vertex.PoseStack poseStack = ((net.minecraft.client.gui.GuiGraphics)stack).pose();
-		//#else
-//$$ 		com.mojang.blaze3d.vertex.PoseStack poseStack = (com.mojang.blaze3d.vertex.PoseStack)stack;
-		//#endif
+//$$  		com.mojang.blaze3d.vertex.PoseStack poseStack = (com.mojang.blaze3d.vertex.PoseStack)stack;
 //$$ 		poseStack.translate(x, y, z);
 //$$ 	}
 //$$
 //$$ 	public static void scaled(Object stack, double scale, double scale2, double scale3) {
-		//#if MC>=12000
-//$$ 		com.mojang.blaze3d.vertex.PoseStack poseStack = ((net.minecraft.client.gui.GuiGraphics)stack).pose();
-		//#else
-//$$ 		com.mojang.blaze3d.vertex.PoseStack poseStack = (com.mojang.blaze3d.vertex.PoseStack)stack;
-		//#endif
+//$$  		com.mojang.blaze3d.vertex.PoseStack poseStack = (com.mojang.blaze3d.vertex.PoseStack)stack;
 //$$ 		poseStack.scale((float)scale, (float)scale2, (float)scale3);
 //$$ 	}
 //$$
