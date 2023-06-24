@@ -438,6 +438,9 @@ public class LoTASIngameGui {
 	private void activateTickrateField(boolean activate) {
 		if (activate) {
 			tickrateField = MCVer.EditBox(fontRenderer, 7, 17, 94, 16, "");
+			//#if MC>=12000
+//$$ 				tickrateField.setCanLoseFocus(false);
+			//#endif
 			tickrateIncreaseButton.active = false;
 			tickrateDecreaseButton.active = false;
 			tickrateIncreaseButton.visible = false;
@@ -463,6 +466,9 @@ public class LoTASIngameGui {
 	private void activateSavestateField(boolean activate) {
 		if (activate) {
 			savestateNameField = MCVer.EditBox(fontRenderer, parentScreen.width / 2 - 100, parentScreen.height / 4 + 82, 94, 16, "");
+			//#if MC>=12000
+//$$ 			savestateNameField.setCanLoseFocus(false);
+			//#endif
 			savestateButton.active = false;
 			savestateButton.visible = false;
 			parentScreen.setFocused(savestateNameField);
