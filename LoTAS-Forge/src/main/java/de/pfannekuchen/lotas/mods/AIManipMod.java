@@ -328,7 +328,7 @@ public class AIManipMod {
 		 * @return
 		 */
 		public boolean isFinished() {
-			if(entity==null) {
+			if(entity==null || target==null) {
 				System.err.println("The entity to check is null (isFinished)");
 				return true;
 			}
