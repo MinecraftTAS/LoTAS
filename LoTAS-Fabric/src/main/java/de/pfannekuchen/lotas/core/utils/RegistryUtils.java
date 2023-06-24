@@ -16,8 +16,14 @@ public class RegistryUtils {
 		memOffsetX+=2.2;
 		memOffsetY+=-0.5;
 		flip+=0.26;
+		//#if MC>=12000
+//$$ 		com.mojang.blaze3d.vertex.PoseStack memstack = ((net.minecraft.client.gui.GuiGraphics)poseStack).pose();
+//$$ 		MCVer.translated(memstack, memOffsetX, memOffsetY, 0);
+//$$ 		MCVer.scaled(memstack, flip, flip, flip);
+		//#else
 		MCVer.translated(poseStack, memOffsetX, memOffsetY, 0);
 		MCVer.scaled(poseStack, flip, flip, flip);
+		//#endif
 		
 		
 		//#if MC>=11903
@@ -155,8 +161,14 @@ public class RegistryUtils {
 		MCVer.rotated(poseStack, -flipOffset, 0, 0, 1);
 		//#endif
 		//#endif
+		
+		//#if MC>=12000
+//$$ 		MCVer.scaled(memstack, (double)1/flip, (double)1/flip, (double)1/flip);
+//$$ 		MCVer.translated(memstack, -memOffsetX, -memOffsetY, 0);
+		//#else
 		MCVer.scaled(poseStack, (double)1/flip, (double)1/flip, (double)1/flip);
 		MCVer.translated(poseStack, -memOffsetX, -memOffsetY, 0);
+		//#endif
 		
 		//#if MC<11600
 		MCVer.color4f(255, 255, 255, 255);
