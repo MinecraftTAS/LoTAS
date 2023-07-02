@@ -194,7 +194,11 @@ public class BarteringDropManipulation extends DropManipulationScreen.DropManipu
 			MCVer.color4f(.5f, .5f, .5f, .4f);
 		} else {
 			//#if MC>=11700
+			//#if MC>=12000
+//$$ 			MCVer.pushMatrix(MCVer.stack.pose());
+			//#else
 //$$ 			MCVer.pushMatrix(MCVer.stack);
+			//#endif
 			//#else
 			MCVer.pushMatrix(null);
 			//#endif
@@ -209,7 +213,11 @@ public class BarteringDropManipulation extends DropManipulationScreen.DropManipu
 			//#endif
 			//#endif
 			//#if MC>=11700
+			//#if MC>=12000
+//$$ 			MCVer.popMatrix(MCVer.stack.pose());
+			//#else
 //$$ 			MCVer.popMatrix(MCVer.stack);
+			//#endif
 			//#else
 			MCVer.popMatrix(null);
 			//#endif

@@ -376,7 +376,11 @@ public class InfoHud extends Screen {
 			} else if (mc.screen != null) {
 				if (mc.screen.getClass().getSimpleName().contains("InfoHud")) {
 					//#if MC>=11700
+					//#if MC>=12001
+//$$ 					MCVer.pushMatrix(MCVer.stack.pose());
+					//#else
 //$$ 					MCVer.pushMatrix(MCVer.stack);
+					//#endif
 					//#else
 					MCVer.pushMatrix(null);
 					//#endif
@@ -385,7 +389,11 @@ public class InfoHud extends Screen {
 		         	MCVer.drawShadow(label.renderText, lx + 2, ly + 3, 0x40FFFFFF);
 		    		GL11.glDisable(GL11.GL_BLEND);
 		    		//#if MC>=11700
+		    		//#if MC>=12001
+//$$ 					MCVer.popMatrix(MCVer.stack.pose());
+					//#else
 //$$ 					MCVer.popMatrix(MCVer.stack);
+					//#endif
 					//#else
 					MCVer.popMatrix(null);
 					//#endif
