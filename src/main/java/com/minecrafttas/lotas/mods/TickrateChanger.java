@@ -59,6 +59,12 @@ public class TickrateChanger extends Mod {
 	 * Tickrate of the game stored in game speed percentage
 	 */
 	private double gamespeed = 1.0;
+	
+	/**
+	 * Previous game speed, clientside
+	 */
+	@Environment(EnvType.CLIENT)
+	private double prevGamespeed = 1.0;
 
 	/**
 	 * Array of the most common tickrates available via decrease and increase tickrate keybinds
@@ -76,7 +82,7 @@ public class TickrateChanger extends Mod {
 	 * Game time in milliseconds since last tickrate change
 	 */
 	@Environment(EnvType.CLIENT)
-	private long fakeTimeSinceTC = System.currentTimeMillis();
+	private long fakeTimeSinceTC = 0L;
 
 	/**
 	 * Updates the Client tickrate when receiving a packet
@@ -84,11 +90,13 @@ public class TickrateChanger extends Mod {
 	 */
 	@Override
 	protected void onClientsidePayload(FriendlyByteBuf buf) {
-		this.internallyUpdateTickrate(buf.readDouble());
 		// Update the local time
 		long time = System.currentTimeMillis() - this.timeSinceTC;
-		this.fakeTimeSinceTC += time * this.gamespeed;
+		this.fakeTimeSinceTC += (time * this.prevGamespeed);
 		this.timeSinceTC = System.currentTimeMillis();
+		// Update the tickrate
+		this.prevGamespeed = this.gamespeed;
+		this.internallyUpdateTickrate(buf.readDouble());
 	}
 	
 	@Override
