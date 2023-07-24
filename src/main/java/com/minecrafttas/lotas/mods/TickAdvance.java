@@ -60,10 +60,14 @@ public class TickAdvance extends Mod {
 	@Override
 	@Environment(EnvType.CLIENT)
 	protected void onClientsidePayload(FriendlyByteBuf buf) {
-		if (buf.readInt() == 0)
+		if (buf.readInt() == 0) {
 			this.tickadvance = buf.readBoolean();
-		else
+			
+			TickrateChanger trc = TickrateChanger.instance;
+			trc.updateGameTime(trc.getGamespeed());
+		} else {
 			this.shouldTickClient = true; // Tick the client
+		}
 	}
 
 	/**
@@ -82,6 +86,7 @@ public class TickAdvance extends Mod {
 	@Override
 	protected void onClientsideTick() {
 		this.shouldTickClient = false;
+		TickrateChanger.instance.advanceGameTime(50L);
 	}
 
 	/**
