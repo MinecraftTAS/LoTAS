@@ -67,12 +67,6 @@ public class TickrateChanger extends Mod {
 	private double prevGamespeed = 1.0;
 
 	/**
-	 * Previous tick advance and or tick pass, clientside
-	 */
-	@Environment(EnvType.CLIENT)
-	private boolean prevTickadvance, prevShouldTick;
-
-	/**
 	 * Array of the most common tickrates available via decrease and increase tickrate keybinds
 	 */
 	@Environment(EnvType.CLIENT)
@@ -82,13 +76,13 @@ public class TickrateChanger extends Mod {
 	 * System time in milliseconds since last tickrate change
 	 */
 	@Environment(EnvType.CLIENT)
-	private long timeSinceTC = System.currentTimeMillis();
+	private long systemTimeSinceUpdate = System.currentTimeMillis();
 
 	/**
 	 * Game time in milliseconds since last tickrate change
 	 */
 	@Environment(EnvType.CLIENT)
-	private long fakeTimeSinceTC = 0L;
+	private long gameTime = 0L;
 
 	/**
 	 * Updates the Client tickrate when receiving a packet
@@ -96,13 +90,29 @@ public class TickrateChanger extends Mod {
 	 */
 	@Override
 	protected void onClientsidePayload(FriendlyByteBuf buf) {
-		// Update the local time
-		long time = System.currentTimeMillis() - this.timeSinceTC;
-		this.fakeTimeSinceTC += (time * this.prevGamespeed);
-		this.timeSinceTC = System.currentTimeMillis();
-		// Update the tickrate
-		this.prevGamespeed = this.gamespeed;
+		this.updateGameTime(this.prevGamespeed);
 		this.internallyUpdateTickrate(buf.readDouble());
+		this.prevGamespeed = this.gamespeed;
+	}
+	
+	/**
+	 * Update game time using gamespeed
+	 * @param gamespeed Speed of game
+	 */
+	@Environment(EnvType.CLIENT)
+	public void updateGameTime(double gamespeed) {
+		this.gameTime += ((System.currentTimeMillis() - this.systemTimeSinceUpdate) * gamespeed);
+		this.systemTimeSinceUpdate = System.currentTimeMillis();
+	}
+	
+	/**
+	 * Advance game time by millis
+	 * @param millis Milliseconds
+	 */
+	@Environment(EnvType.CLIENT)
+	public void advanceGameTime(long millis) {
+		this.gameTime += millis;
+		this.systemTimeSinceUpdate = System.currentTimeMillis();
 	}
 	
 	@Override
@@ -164,32 +174,15 @@ public class TickrateChanger extends Mod {
 	 */
 	@Environment(EnvType.CLIENT)
 	public long getMilliseconds() {
-		long time = System.currentTimeMillis() - this.timeSinceTC;
-		time *= this.gamespeed;
-		
-		boolean tickadvance = TickAdvance.instance.isTickadvanceEnabled();
-
-		if (tickadvance && prevShouldTick && !TickAdvance.instance.shouldTickClient) {
-			this.fakeTimeSinceTC += 50;
+		TickAdvance adv = TickAdvance.instance;
+		if (adv.isTickadvanceEnabled() && !adv.shouldTickClient) {
+			this.systemTimeSinceUpdate = System.currentTimeMillis();
+			return this.gameTime;
 		}
 		
-		this.prevShouldTick = TickAdvance.instance.shouldTickClient;
-		
-		if (!this.prevTickadvance && tickadvance) { // tick advance was enabled
-			this.timeSinceTC = System.currentTimeMillis();
-			this.fakeTimeSinceTC += (time * this.gamespeed);
-			
-			this.prevTickadvance = tickadvance;
-			return this.fakeTimeSinceTC;
-		} if (tickadvance && !TickAdvance.instance.shouldTickClient) { // tick advance is on
-			this.timeSinceTC = System.currentTimeMillis();
-			
-			this.prevTickadvance = tickadvance;
-			return this.fakeTimeSinceTC;
-		}
-		this.prevTickadvance = tickadvance;
-		
-		return this.fakeTimeSinceTC + time;
+		long gameTimePassed = System.currentTimeMillis() - this.systemTimeSinceUpdate;
+		gameTimePassed *= this.gamespeed;
+		return this.gameTime + gameTimePassed;
 	}
 
 	/**
