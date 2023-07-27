@@ -67,7 +67,7 @@ public class LoTASLanguageManager{
 	}
 	
 	private InputStream getFromResourceManager() {
-		ResourceLocation location = new ResourceLocation("lotas", "lang/"+currentCode+".json");
+		ResourceLocation location = new ResourceLocation("lotas", "lang/"+currentCode.toLowerCase()+".json");
 		ResourceManager manager = Minecraft.getInstance().getResourceManager();
 		//#if MC>=11900
 //$$ 		if(!manager.getResource(location).isPresent()) {
