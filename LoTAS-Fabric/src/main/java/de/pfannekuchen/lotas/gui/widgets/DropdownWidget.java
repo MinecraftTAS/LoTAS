@@ -54,7 +54,7 @@ public class DropdownWidget<T> extends AbstractWidget {
                     //#endif
                 }
                 //#if MC>=11904
-                //$$ focused.nextFocusPath(new net.minecraft.client.gui.navigation.FocusNavigationEvent.TabNavigation(false));
+                //$$ dropdown.nextFocusPath(new net.minecraft.client.gui.navigation.FocusNavigationEvent.TabNavigation(false));
                 //#else
                 dropdown.changeFocus(true);
                 //#endif
