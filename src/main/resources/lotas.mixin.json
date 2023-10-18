@@ -1,8 +1,7 @@
 {
 	"required": true,
-	"minVersion": "0.8",
 	"package": "com.minecrafttas.lotas.mixin",
-	"compatibilityLevel": "JAVA_8",
+	"compatibilityLevel": "JAVA_18",
 	"mixins": [
 		"dragonmanipulation.MixinDragonHoldingPatternPhase",
 		"dragonmanipulation.MixinDragonLandingApproachPhase",
@@ -18,8 +17,6 @@
 		"client.events.HookClientPlayNetworkHandler",
 		"client.events.HookMinecraft",
 		"client.events.HookOptions",
-		"client.events.HookGui",
-		"client.tickratechanger.MixinGui",
 		"client.tickratechanger.MixinItemRenderer",
 		"client.tickratechanger.MixinLevelRenderer",
 		"client.tickratechanger.MixinSoundEngine",

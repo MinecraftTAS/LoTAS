@@ -1,6 +1,6 @@
 package com.minecrafttas.lotas.mixin.dragonmanipulation;
 
-import java.util.Random; // @RandomSourceImport;
+import java.util.Random;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -23,17 +23,17 @@ public abstract class MixinDragonStrafePlayerPhase extends AbstractDragonPhaseIn
 	public MixinDragonStrafePlayerPhase(EnderDragon enderDragon) { super(enderDragon); }
 
 	/**
-	 * Forces an optimal dragon path by (step 1) removing the 20 block addend
+	 * Force optimal dragon path by (step 1) removing the 20 block addend
 	 * @param r Random source
 	 * @return Multiplier
 	 */
-	@Redirect(method = "navigateToNextPathNode", at = @At(value = "INVOKE", target = "Ljava/util/Random;nextFloat()F")) // @RandomSourceDescriptor;
-	public float redirect_nextFloat(Random r) { // @RngSourceClass;
+	@Redirect(method = "navigateToNextPathNode", at = @At(value = "INVOKE", target = "Ljava/util/Random;nextFloat()F"))
+	public float redirect_nextFloat(Random r) {
 		return DragonManipulation.instance.getPhase() == Phase.OFF ? r.nextFloat() : 0.0f;
 	}
 	
 	/**
-	 * Forces an optimal dragon path by (step 2) calculating the optimal block addend depending on the dragons position
+	 * Force optimal dragon path by (step 2) calculating the optimal block addend depending on the dragons position
 	 * @param x Node x pos
 	 * @param y Target y pos
 	 * @param z Node z pos
@@ -43,7 +43,7 @@ public abstract class MixinDragonStrafePlayerPhase extends AbstractDragonPhaseIn
 	public Vec3 navigate_nodeInit(double x, double y, double z) {
 		if (DragonManipulation.instance.getPhase() == Phase.OFF)
 			return new Vec3(x, y, z);
-		
+
 		double distance = Math.max(0, Math.min(20, dragon.position().y - y));
 		return new Vec3(x, y + distance, z);
 	}

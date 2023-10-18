@@ -1,17 +1,15 @@
 package com.minecrafttas.lotas.mixin.client.events;
 
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.At.Shift;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
 import com.minecrafttas.lotas.system.KeybindSystem;
 import com.minecrafttas.lotas.system.ModSystem;
-
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.At.Shift;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /**
  * This mixin is purely responsible for the hooking up the events in {@link ModSystem}.
@@ -22,7 +20,7 @@ import net.minecraft.client.Minecraft;
 public class HookMinecraft {
 
 	/**
-	 * Triggers an Event in {@link ModSystem#onClientsideRenderInitialize(Minecraft)} before the game enters the game loop
+	 * Trigger event in {@link ModSystem#onClientsideRenderInitialize(Minecraft)} before the game enters the game loop.
 	 * @param ci Callback Info
 	 */
 	@Inject(method = "run", at = @At("HEAD"))
@@ -31,7 +29,7 @@ public class HookMinecraft {
 	}
 
 	/**
-	 * Triggers an Event in {@link ModSystem#onClientsideShutdown(Minecraft)} before the JVM shuts down.
+	 * Trigger event in {@link ModSystem#onClientsideShutdown(Minecraft)} before the JVM shuts down.
 	 * @param ci Callback Info
 	 */
 	@Inject(method = "close", at = @At("RETURN"))
@@ -40,7 +38,7 @@ public class HookMinecraft {
 	}
 
 	/**
-	 * Triggers an Event in {@link ModSystem#onClientsideTick(Minecraft)} every tick.
+	 * Trigger event in {@link ModSystem#onClientsideTick(Minecraft)} every tick.
 	 * @param ci Callback Info
 	 */
 	@Inject(method = "tick", at = @At("HEAD"))
@@ -49,7 +47,7 @@ public class HookMinecraft {
 	}
 
 	/**
-	 * Triggers an Event in {@link ModSystem#onClientsideGameLoop(Minecraft)} every game logic loop and updates the keybind system in {@link KeybindSystem#onGameLoop(Minecraft)}
+	 * Trigger event in {@link ModSystem#onClientsideGameLoop(Minecraft)} every game logic loop and updates the keybind system in {@link KeybindSystem#onGameLoop(Minecraft)}
 	 * @param ci Callback Info
 	 */
 	@Inject(method = "runTick", at = @At("HEAD"))
@@ -59,7 +57,7 @@ public class HookMinecraft {
 	}
 
 	/**
-	 * Triggers an Event in {@link ModSystem#onClientsideDisconnect()} if the player disconnects
+	 * Trigger event in {@link ModSystem#onClientsideDisconnect()} when a player disconnects
 	 * @param ci Callback Info
 	 */
 	@Inject(method = "clearLevel(Lnet/minecraft/client/gui/screens/Screen;)V", at = @At("HEAD"))
@@ -68,10 +66,10 @@ public class HookMinecraft {
 	}
 	
 	/**
-	 * Triggers an Event in {@link ModSystem#onClientsidePostRender(Minecraft)} after the game has rendered the frame
+	 * Trigger event in {@link ModSystem#onClientsidePostRender(Minecraft)} after the game has rendered the frame
 	 * @param ci Callback Info
 	 */
-	@Inject(method = "runTick", at = @At(value = "INVOKE", shift = Shift.AFTER, target = "Lnet/minecraft/client/gui/components/toasts/ToastComponent;render()V")) // @PostRender;
+	@Inject(method = "runTick", at = @At(value = "INVOKE", shift = Shift.AFTER, target = "Lnet/minecraft/client/gui/components/toasts/ToastComponent;render(Lcom/mojang/blaze3d/vertex/PoseStack;)V"))
 	public void hookPostRenderEvent(CallbackInfo ci) {
 		ModSystem.onClientsidePostRender();
 	}

@@ -19,7 +19,7 @@ import net.minecraft.server.players.PlayerList;
 public class HookPlayerList {
 
 	/**
-	 * Triggers an Event in {@link ModSystem#onClientConnect(ServerPlayer)} if the player connects
+	 * Trigger event in {@link ModSystem#onClientConnect(ServerPlayer)} when a player connects
 	 * @param connection Connection to the client
 	 * @param serverPlayer Player associated with this connection
 	 * @param ci Callback Info

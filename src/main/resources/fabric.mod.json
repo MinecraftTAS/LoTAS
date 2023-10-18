@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"id": "lotas",
-	"version": "3.0.0-SNAPSHOT",
+	"version": "${version}",
 	"name": "LoTAS",
 	"description": "Low optimization Tool-Assisted Speedrun Mod! A mod that allows players to create tool assisted speedruns/superplays in Minecraft.",
 	"authors": [
@@ -29,8 +29,8 @@
 		"lotas.mixin.json"
 	],
 	"depends": {
-		"fabricloader": ">=0.14.11",
-		"minecraft": "*",
-		"java": "*"
+		"fabricloader": ">=0.14.23",
+		"minecraft": "1.16.1",
+		"java": "21"
 	}
 }

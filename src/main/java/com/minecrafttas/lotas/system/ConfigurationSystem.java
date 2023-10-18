@@ -6,44 +6,55 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Properties;
 
-import com.minecrafttas.lotas.LoTAS;
+import static com.minecrafttas.lotas.LoTAS.LOGGER;
 
 /**
- * The Configuration can read and store keys in a file using java's configuration.
+ * Configuration system that can read and store keys in a file using java properties.
  * @author Pancake
  */
 public class ConfigurationSystem {
 
-	/**
-	 * Configuration object
-	 */
+	/** Configuration object */
 	private static Properties props = new Properties();
 
-	/**
-	 * Configuration file
-	 */
+	/** Configuration file */
 	private static File configurationFile;
 
 	/**
-	 * Loads the configuration to a file.
+	 * Load configuration from file
 	 * @param configuration Configuration file
 	 */
 	public static void load(File configuration) {
 		try {
 			configurationFile = configuration;
+
 			if (!configuration.exists())
 				configuration.createNewFile();
-			props = new Properties();
+
 			FileReader reader = new FileReader(configuration);
+			props = new Properties();
 			props.load(reader);
 			reader.close();
 		} catch (IOException e) {
-			LoTAS.LOGGER.error("Could not load configuration file! {}", e);
+			LOGGER.error("Could not load configuration file!", e);
 		}
 	}
 
 	/**
-	 * Stores something in the configuration.
+	 * Save configuration to file
+	 */
+	public static void save() {
+		try {
+			FileWriter writer = new FileWriter(configurationFile);
+			props.store(writer, "LoTAS Configuration File");
+			writer.close();
+		} catch (Exception e) {
+			LOGGER.error("Could not save configuration file!", e);
+		}
+	}
+
+	/**
+	 * Store something in configuration.
 	 * @param key Name of the variable
 	 * @param value Value of the variable
 	 */
@@ -52,7 +63,7 @@ public class ConfigurationSystem {
 	}
 
 	/**
-	 * Obtains something from the configuration.
+	 * Obtain something from configuration
 	 * @param key Name of the variable
 	 * @param def Default value
 	 */
@@ -61,7 +72,7 @@ public class ConfigurationSystem {
 	}
 
 	/**
-	 * Verifies whether a property is present in the configuration or not.
+	 * Verify property is present in configuration
 	 * @param key Name of the variable
 	 * @return Value present
 	 */
@@ -69,23 +80,10 @@ public class ConfigurationSystem {
 		return props.containsKey(key);
 	}
 
-	/**
-	 * Saves the configuration to a file
-	 */
-	public static void save() {
-		try {
-			FileWriter writer = new FileWriter(configurationFile);
-			props.store(writer, "LoTAS Configuration File");
-			writer.close();
-		} catch (Exception e) {
-			LoTAS.LOGGER.error("Could not save configuration file! {}", e);
-		}
-	}
-
 	// generic set methods
 
 	/**
-	 * Stores a string in the configuration.
+	 * Store string in configuration
 	 * @param key Name of the variable
 	 * @param value Value of the variable
 	 */
@@ -94,7 +92,7 @@ public class ConfigurationSystem {
 	}
 
 	/**
-	 * Stores a char in the configuration.
+	 * Store char in configuration
 	 * @param key Name of the variable
 	 * @param value Value of the variable
 	 */
@@ -103,7 +101,7 @@ public class ConfigurationSystem {
 	}
 
 	/**
-	 * Stores a byte in the configuration.
+	 * Store byte in configuration
 	 * @param key Name of the variable
 	 * @param value Value of the variable
 	 */
@@ -112,7 +110,7 @@ public class ConfigurationSystem {
 	}
 
 	/**
-	 * Stores a short in the configuration.
+	 * Store short in configuration
 	 * @param key Name of the variable
 	 * @param value Value of the variable
 	 */
@@ -121,7 +119,7 @@ public class ConfigurationSystem {
 	}
 
 	/**
-	 * Stores an int in the configuration.
+	 * Store int in configuration
 	 * @param key Name of the variable
 	 * @param value Value of the variable
 	 */
@@ -130,7 +128,7 @@ public class ConfigurationSystem {
 	}
 
 	/**
-	 * Stores a long in the configuration.
+	 * Store long in configuration
 	 * @param key Name of the variable
 	 * @param value Value of the variable
 	 */
@@ -139,7 +137,7 @@ public class ConfigurationSystem {
 	}
 
 	/**
-	 * Stores a double in the configuration.
+	 * Store double in configuration
 	 * @param key Name of the variable
 	 * @param value Value of the variable
 	 */
@@ -148,7 +146,7 @@ public class ConfigurationSystem {
 	}
 
 	/**
-	 * Stores a float in the configuration.
+	 * Store float in configuration
 	 * @param key Name of the variable
 	 * @param value Value of the variable
 	 */
@@ -157,7 +155,7 @@ public class ConfigurationSystem {
 	}
 
 	/**
-	 * Stores a boolean in the configuration.
+	 * Store boolean in configuration
 	 * @param key Name of the variable
 	 * @param value Value of the variable
 	 */
@@ -168,7 +166,7 @@ public class ConfigurationSystem {
 	// generic get methods
 
 	/**
-	 * Obtains a string from the configuration.
+	 * Obtain string from configuration
 	 * @param key Name of the variable
 	 * @param def Default value
 	 * @return Value or default
@@ -178,7 +176,7 @@ public class ConfigurationSystem {
 	}
 
 	/**
-	 * Obtains a char from the configuration.
+	 * Obtain char from configuration
 	 * @param key Name of the variable
 	 * @param def Default value
 	 * @return Value or default
@@ -188,13 +186,13 @@ public class ConfigurationSystem {
 		try {
 			return (char) Short.parseShort(stringVal);
 		} catch (NumberFormatException e) {
-			LoTAS.LOGGER.warn("Configuration file for key \"{}\" contains invalid char value \"{}\".", key, stringVal);
+			LOGGER.warn("Configuration file for key \"{}\" contains invalid char value \"{}\".", key, stringVal);
 		}
 		return def;
 	}
 
 	/**
-	 * Obtains a byte from the configuration.
+	 * Obtain byte from configuration
 	 * @param key Name of the variable
 	 * @param def Default value
 	 * @return Value or default
@@ -204,13 +202,13 @@ public class ConfigurationSystem {
 		try {
 			return Byte.parseByte(stringVal);
 		} catch (NumberFormatException e) {
-			LoTAS.LOGGER.warn("Configuration file for key \"{}\" contains invalid byte value \"{}\".", key, stringVal);
+			LOGGER.warn("Configuration file for key \"{}\" contains invalid byte value \"{}\".", key, stringVal);
 		}
 		return def;
 	}
 
 	/**
-	 * Obtains a short from the configuration.
+	 * Obtain short from configuration
 	 * @param key Name of the variable
 	 * @param def Default value
 	 * @return Value or default
@@ -220,13 +218,13 @@ public class ConfigurationSystem {
 		try {
 			return Short.parseShort(stringVal);
 		} catch (NumberFormatException e) {
-			LoTAS.LOGGER.warn("Configuration file for key \"{}\" contains invalid short value \"{}\".", key, stringVal);
+			LOGGER.warn("Configuration file for key \"{}\" contains invalid short value \"{}\".", key, stringVal);
 		}
 		return def;
 	}
 
 	/**
-	 * Obtains an int from the configuration.
+	 * Obtain int from configuration
 	 * @param key Name of the variable
 	 * @param def Default value
 	 * @return Value or default
@@ -236,13 +234,13 @@ public class ConfigurationSystem {
 		try {
 			return Integer.parseInt(stringVal);
 		} catch (NumberFormatException e) {
-			LoTAS.LOGGER.warn("Configuration file for key \"{}\" contains invalid int value \"{}\".", key, stringVal);
+			LOGGER.warn("Configuration file for key \"{}\" contains invalid int value \"{}\".", key, stringVal);
 		}
 		return def;
 	}
 
 	/**
-	 * Obtains a long from the configuration.
+	 * Obtain long from configuration
 	 * @param key Name of the variable
 	 * @param def Default value
 	 * @return Value or default
@@ -252,13 +250,13 @@ public class ConfigurationSystem {
 		try {
 			return Long.parseLong(stringVal);
 		} catch (NumberFormatException e) {
-			LoTAS.LOGGER.warn("Configuration file for key \"{}\" contains invalid long value \"{}\".", key, stringVal);
+			LOGGER.warn("Configuration file for key \"{}\" contains invalid long value \"{}\".", key, stringVal);
 		}
 		return def;
 	}
 
 	/**
-	 * Obtains a double from the configuration.
+	 * Obtain double from configuration
 	 * @param key Name of the variable
 	 * @param def Default value
 	 * @return Value or default
@@ -268,13 +266,13 @@ public class ConfigurationSystem {
 		try {
 			return Double.longBitsToDouble(Long.parseLong(stringVal));
 		} catch (NumberFormatException e) {
-			LoTAS.LOGGER.warn("Configuration file for key \"{}\" contains invalid double value \"{}\".", key, stringVal);
+			LOGGER.warn("Configuration file for key \"{}\" contains invalid double value \"{}\".", key, stringVal);
 		}
 		return def;
 	}
 
 	/**
-	 * Obtains a float from the configuration.
+	 * Obtain float from configuration
 	 * @param key Name of the variable
 	 * @param def Default value
 	 * @return Value or default
@@ -284,13 +282,13 @@ public class ConfigurationSystem {
 		try {
 			return Float.intBitsToFloat(Integer.parseInt(stringVal));
 		} catch (NumberFormatException e) {
-			LoTAS.LOGGER.warn("Configuration file for key \"{}\" contains invalid float value \"{}\".", key, stringVal);
+			LOGGER.warn("Configuration file for key \"{}\" contains invalid float value \"{}\".", key, stringVal);
 		}
 		return def;
 	}
 
 	/**
-	 * Obtains a boolean from the configuration.
+	 * Obtain boolean from configuration
 	 * @param key Name of the variable
 	 * @param def Default value
 	 * @return Value or default
@@ -300,7 +298,7 @@ public class ConfigurationSystem {
 		try {
 			return Boolean.parseBoolean(stringVal);
 		} catch (NumberFormatException e) {
-			LoTAS.LOGGER.warn("Configuration file for key \"{}\" contains invalid boolean value \"{}\".", key, stringVal);
+			LOGGER.warn("Configuration file for key \"{}\" contains invalid boolean value \"{}\".", key, stringVal);
 		}
 		return def;
 	}

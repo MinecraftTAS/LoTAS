@@ -13,10 +13,3 @@ pluginManagement {
 		gradlePluginPortal()
 	}
 }
-
-// import projects with access widener (aka all preprocessed projects)
-rootDir.listFiles().each { 
-	if (it.directory && new File(it, 'build.gradle').exists() && new File(it, 'src/main/resources/lotas.accesswidener').exists()) {
-		include ":${it.name}"
-	}
-}
