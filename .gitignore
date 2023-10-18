@@ -1,15 +1,20 @@
-# Exclude build folders
-bin/
+# Gradle
+.gradle
 build/
 
-# Exclude more stuff
+# Eclipse
+.metadata/
+.settings/
+*.launch
+.classpath
+.project
+.factorypath
+
+# Minecraft
 run/
 run-server/
-*.launch
 
-# Exclude project files
-.classpath
-.settings
-.gradle
-.project
-*/src
+# IntelliJ
+idea/
+out
+*.iml

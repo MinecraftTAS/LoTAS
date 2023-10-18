@@ -1,19 +1,8 @@
 package com.minecrafttas.lotas.system;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.apache.commons.lang3.ArrayUtils;
-import org.lwjgl.glfw.GLFW;
-
-import com.minecrafttas.lotas.mods.DragonManipulation;
+import com.minecrafttas.lotas.mods.*;
 import com.minecrafttas.lotas.mods.DragonManipulation.Phase;
-import com.minecrafttas.lotas.mods.DupeMod;
-import com.minecrafttas.lotas.mods.SavestateMod;
-import com.minecrafttas.lotas.mods.TickAdvance;
-import com.minecrafttas.lotas.mods.TickrateChanger;
-
+import lombok.Getter;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.KeyMapping;
@@ -21,18 +10,22 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.recipebook.RecipeBookComponent;
+import org.apache.commons.lang3.ArrayUtils;
+import org.lwjgl.glfw.GLFW;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * Manages keybinds and their categories.
+ * This class manages keybinds and their categories.
  * @author Pancake
  */
 @Environment(EnvType.CLIENT)
 public class KeybindSystem {
 
-	/**
-	 * List of keybinds
-	 */
-	private static Keybind[] keybinds = {
+	/** List of keybinds */
+	private static final Keybind[] KEYBINDS = {
 		new Keybind("Advance a tick", "Tickrate Changer", GLFW.GLFW_KEY_F9, true, () -> {
 			TickAdvance.instance.requestTickadvance();
 		}),
@@ -75,33 +68,26 @@ public class KeybindSystem {
 	};
 
 	/**
-	 * Represents a keybind
+	 * This class represents a keybind
 	 * @author Pancake
 	 */
 	private static class Keybind {
 
-		/**
-		 * Minecraft key mapping
-		 */
+		/** Minecraft key mapping */
+		@Getter
 		private KeyMapping keyMapping;
 
-		/**
-		 * Category of the keybind in the controls menu
-		 */
+		/** Category of the keybind in the controls menu */
 		private String category;
 
-		/**
-		 * Should the keybind only be available if mc.level is not null
-		 */
+		/** Should the keybind only be available if mc.level is not null */
 		private boolean isInGame;
 
-		/**
-		 * Will be run when the keybind is pressed
-		 */
+		/** Ran when keybind is pressed */
 		private Runnable onKeyDown;
 
 		/**
-		 * Initializes a keybind
+		 * Initialize keybind
 		 * @param name Name of the keybind
 		 * @param category Category of the keybind
 		 * @param defaultKey Default key of the keybind
@@ -115,35 +101,28 @@ public class KeybindSystem {
 			this.onKeyDown = onKeyDown;
 		}
 
-		/**
-		 * Returns the minecraft key mapping
-		 * @return Minecraft key mapping
-		 */
-		public KeyMapping getKeyMapping() {
-			return this.keyMapping;
-		}
-
 	}
 
 	/**
-	 * Initializes the keybind Manager, registers categories and key binds.
+	 * Initialize keybind system and register categories and key binds.
 	 */
 	public static KeyMapping[] onKeybindInitialize(KeyMapping[] keyMappings) {
-		// Initialize categories
+		// initialize categories
 		Map<String, Integer> categories = KeyMapping.CATEGORY_SORT_ORDER;
-		for (int i = 0; i < keybinds.length; i++)
-			if (!categories.containsKey(keybinds[i].category))
-				categories.put(keybinds[i].category, i + 8);
-		// Add keybinds
-		return ArrayUtils.addAll(keyMappings, Arrays.asList(keybinds).stream().map(Keybind::getKeyMapping).toArray(KeyMapping[]::new)); // convert Keybind array to KeyMapping on the fly
+		for (int i = 0; i < KEYBINDS.length; i++)
+			if (!categories.containsKey(KEYBINDS[i].category))
+				categories.put(KEYBINDS[i].category, i + 8);
+
+		// add keybinds
+		return ArrayUtils.addAll(keyMappings, Arrays.asList(KEYBINDS).stream().map(Keybind::getKeyMapping).toArray(KeyMapping[]::new)); // convert Keybind array to KeyMapping on the fly
 	}
 
 	/**
-	 * Watches out for key presses and triggers sub events.
+	 * Trigger keybinds on key press
 	 * @param mc Instance of minecraft
 	 */
 	public static void onGameLoop(Minecraft mc) {
-		for (Keybind keybind : keybinds) {
+		for (Keybind keybind : KEYBINDS) {
 			if (keybind.isInGame && mc.level == null || !isKeyDown(mc, keybind.getKeyMapping()))
 				continue;
 			keybind.onKeyDown.run();
@@ -156,19 +135,20 @@ public class KeybindSystem {
 	private static Map<KeyMapping, Boolean> keys = new HashMap<>();
 
 	/**
-	 * Checks whether a key has been pressed recently.
+	 * Check whether key has been pressed this frame.
 	 * @param mc Instance of minecraft
-	 * @param map Key mappings to check
-	 * @return Key has been pressed recently
+	 * @param map Key mapping to check
+	 * @return Key has been pressed in this frame
 	 */
 	private static boolean isKeyDown(Minecraft mc, KeyMapping map) {
-		// Check if in a text field
+		// check if in a text field
 		Screen screen = mc.screen;
 		if (screen != null && ((screen.getFocused() instanceof EditBox && ((EditBox) screen.getFocused()).canConsumeInput()) || screen.getFocused() instanceof RecipeBookComponent))
 			return false;
 
+		// check if key is just pressed
 		boolean wasPressed = keys.containsKey(map) ? keys.get(map) : false;
-		boolean isPressed = GLFW.glfwGetKey(mc.window.getWindow(), map.key.getValue()) == GLFW.GLFW_PRESS; // @GetWindow;
+		boolean isPressed = GLFW.glfwGetKey(mc.getWindow().getWindow(), map.key.getValue()) == GLFW.GLFW_PRESS;
 		keys.put(map, isPressed);
 		return !wasPressed && isPressed;
 	}

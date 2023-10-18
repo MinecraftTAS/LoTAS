@@ -11,14 +11,14 @@ import net.minecraft.network.protocol.game.ServerboundCustomPayloadPacket;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 
 /**
- * This mixin is purely responsible for the hooking up the events in {@link ModSystem}. It also cancelles a logger
+ * This mixin is purely responsible for the hooking up the events in {@link ModSystem}.
  * @author Pancake
  */
 @Mixin(ServerGamePacketListenerImpl.class)
 public class HookPlayNetworkHandler {
 
 	/**
-	 * Triggers an Event in {@link ModSystem#onServerPayload(ServerboundCustomPayloadPacket)} before the game enters the game loop
+	 * Trigger event in {@link ModSystem#onServerPayload(ServerboundCustomPayloadPacket)} when a custom payload packet is received.
 	 * @param ci Callback Info
 	 */
 	@Inject(method = "handleCustomPayload", at = @At("HEAD"), cancellable = true)

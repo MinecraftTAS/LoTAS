@@ -1,81 +1,46 @@
 // add required plugins
 plugins {
-	// discombobulator preprocessor plugin
-	id 'discombobulator' version '1.2.1-SNAPSHOT'
+	// loom plugin
+	id 'fabric-loom' version "${loom_version}"
+	// lombok plugin
+	id 'io.freefair.lombok' version "8.4"
 }
 
-// configure discombobulator
-discombobulator {
-	// configure versions
-	versions = [
-		"1.20.1: LoTAS-1.20.1",
-		"1.19.4: LoTAS-1.19.4",
-		"1.18.2: LoTAS-1.18.2",
-		"1.17.1: LoTAS-1.17.1",
-		"1.16.5: LoTAS-1.16.5",
-		"1.16.1: LoTAS-1.16.1",
-		"1.15.2: LoTAS-1.15.2",
-		"1.14.4: LoTAS-1.14.4"
-	]
-	
-	// configure preprocessing patterns
-	patterns = [
-		GetWindow: [
-			"def": "mc.window",
-			"1.15.2": "mc.getWindow()"
-		],
-		WorldBorder: [
-			"def": "renderWorldBounds",
-			"1.17.1": "renderWorldBorder"
-		],
-		RunServer: [
-			"def": '"run"',
-			"1.16.1": '"runServer"'
-		],
-		Profiler: [
-			"def": "Lnet/minecraft/util/profiling/GameProfiler;",
-			"1.16.1": "Lnet/minecraft/util/profiling/ProfilerFiller;"
-		],
-		RandomSourceDescriptor: [
-			"def": "Ljava/util/Random;",
-			"1.19.4": "Lnet/minecraft/util/RandomSource;"
-		],
-		RngSourceClass: [
-			"def": "Random ",
-			"1.19.4": "RandomSource "
-		],
-		RandomSourceImport: [
-			"def": "import java.util.Random;",
-			"1.19.4": "import net.minecraft.util.RandomSource;"
-		],
-		PostRender: [
-			"def": "Lnet/minecraft/client/gui/components/toasts/ToastComponent;render()V",
-			"1.16.1": "Lnet/minecraft/client/gui/components/toasts/ToastComponent;render(Lcom/mojang/blaze3d/vertex/PoseStack;)V",
-			"1.20.1": "Lnet/minecraft/client/renderer/GameRenderer;render(FJZ)V"
-		],
-		Toast: [
-			"def": "render(II)Z",
-			"1.16.1": "render(IILcom/mojang/blaze3d/vertex/PoseStack;)Z",
-			"1.19.4": "render(ILcom/mojang/blaze3d/vertex/PoseStack;)Z",
-			"1.20.1": "render(ILnet/minecraft/client/gui/GuiGraphics;)Z"
-		],
-		LootTag: [
-			"def": "Tag<",
-			"1.18.2": "TagKey<"
-		],
-		LootImportTag: [
-			"def": "Tag;",
-			"1.18.2": "TagKey;"
-		],
-		PoseStack: [
-			"def": "Object",
-			"1.16.1": "com.mojang.blaze3d.vertex.PoseStack",
-			"1.20.1": "net.minecraft.client.gui.GuiGraphics"
-		],
-		Quaternion: [
-			"def": "Object",
-			"1.16.1": "com.mojang.math.Quaternion",
-			"1.19.4": "org.joml.Quaternionf"
-		]
-	]
+// configure jar
+base {
+	// change compiled filename
+	archivesName = "LoTAS-v${lotas_version}-mc1.16.1"
+}
+
+// configure loom
+loom {
+	// set access widener path
+	accessWidenerPath = file('src/main/resources/lotas.accesswidener')
+}
+
+// add dependencies
+dependencies {
+	// add mojang mappings
+	mappings loom.officialMojangMappings()
+
+	// add fabric loader
+	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+
+	// add minecraft dependency
+	minecraft "com.mojang:minecraft:1.16.1"
+}
+
+// compile for java 8
+java {
+	targetCompatibility = sourceCompatibility = JavaVersion.VERSION_1_8
+}
+
+// process resources
+processResources {
+	inputs.property "version", project.version
+
+	// update fabric.mod.json with version
+	filesMatching("fabric.mod.json") {
+		expand "version": project.version
+	}
 }

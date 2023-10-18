@@ -14,7 +14,7 @@ import net.minecraft.client.sounds.SoundEngine;
 import net.minecraft.util.Mth;
 
 /**
- * This Mixin levels down the pitch to the tickrate
+ * This mixin adjusts the pitch of audio to the tickrate
  * @author Pancake
  */
 @Mixin(SoundEngine.class)
@@ -22,7 +22,7 @@ import net.minecraft.util.Mth;
 public class MixinSoundEngine {
 
 	/**
-	 * Calculates a new pitch to play based on the tickrate
+	 * Calculate new pitch to play based on tickrate
 	 * @param soundInstance Sound to play
 	 * @param ci Returnable
 	 */

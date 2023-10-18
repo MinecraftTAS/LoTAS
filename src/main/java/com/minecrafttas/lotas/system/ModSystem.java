@@ -1,11 +1,6 @@
 package com.minecrafttas.lotas.system;
 
-import com.minecrafttas.lotas.mods.DragonManipulation;
-import com.minecrafttas.lotas.mods.DupeMod;
-import com.minecrafttas.lotas.mods.SavestateMod;
-import com.minecrafttas.lotas.mods.TickAdvance;
-import com.minecrafttas.lotas.mods.TickrateChanger;
-
+import com.minecrafttas.lotas.mods.*;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
@@ -17,16 +12,13 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 
 /**
- * Mod Manager managing different mods
+ * Mod manager managing events for mods
  * @author Pancake
- *
  */
 public class ModSystem {
 
-	/**
-	 * Registered of mods
-	 */
-	private static Mod[] mods = {
+	/** Registered mods */
+	private static final Mod[] MODS = {
 		new DupeMod(),
 		new TickAdvance(),
 		new TickrateChanger(),
@@ -37,7 +29,7 @@ public class ModSystem {
 	// 1: event handlers that update the mod
 
 	public static void onServerLoad(MinecraftServer minecraftServer) {
-		for (Mod mod : mods) {
+		for (Mod mod : MODS) {
 			mod.mcserver = minecraftServer;
 			mod.onServerLoad();
 		}
@@ -45,7 +37,7 @@ public class ModSystem {
 
 	@Environment(EnvType.CLIENT)
 	public static void onClientsideRenderInitialize(Minecraft minecraft) {
-		for (Mod mod : mods) {
+		for (Mod mod : MODS) {
 			mod.mc = minecraft;
 			mod.onClientsideRenderInitialize();
 		}
@@ -54,14 +46,14 @@ public class ModSystem {
 	// 2: event handlers that check for id
 
 	public static void onServerPayload(ServerboundCustomPayloadPacket buf) {
-		for (Mod mod : mods)
+		for (Mod mod : MODS)
 			if (mod.id.equals(buf.identifier))
 				mod.onServerPayload(buf.data);
 	}
 
 	@Environment(EnvType.CLIENT)
 	public static void onClientsidePayload(ClientboundCustomPayloadPacket buf) {
-		for (Mod mod : mods)
+		for (Mod mod : MODS)
 			if (mod.id.equals(buf.getIdentifier()))
 				mod.onClientsidePayload(buf.getData());
 	}
@@ -69,95 +61,91 @@ public class ModSystem {
 	// 3: simple event handlers
 
 	public static void onInitialize() {
-		for (Mod mod : mods)
+		for (Mod mod : MODS)
 			mod.onInitialize();
 	}
 
 	public static void onServerTick() {
-		for (Mod mod : mods)
+		for (Mod mod : MODS)
 			mod.onServerTick();
 	}
 
 	public static void onClientConnect(ServerPlayer player) {
-		for (Mod mod : mods)
+		for (Mod mod : MODS)
 			mod.onClientConnect(player);
 	}
 
 	@Environment(EnvType.CLIENT)
 	public static void onClientsideInitialize() {
-		for (Mod mod : mods)
+		for (Mod mod : MODS)
 			mod.onClientsideInitialize();
 	}
 
 	@Environment(EnvType.CLIENT)
 	public static void onClientsideShutdown() {
-		for (Mod mod : mods)
+		for (Mod mod : MODS)
 			mod.onClientsideShutdown();
 	}
 
 	@Environment(EnvType.CLIENT)
 	public static void onClientsideTick() {
-		for (Mod mod : mods)
+		for (Mod mod : MODS)
 			mod.onClientsideTick();
 	}
 
 	@Environment(EnvType.CLIENT)
 	public static void onClientsideGameLoop() {
-		for (Mod mod : mods)
+		for (Mod mod : MODS)
 			mod.onClientsideGameLoop();
 	}
 
 	@Environment(EnvType.CLIENT)
 	public static void onClientsideDisconnect() {
-		for (Mod mod : mods)
+		for (Mod mod : MODS)
 			mod.onClientsideDisconnect();
 	}
-	
+
 	@Environment(EnvType.CLIENT)
 	public static void onClientsidePostRender() {
-		for (Mod mod : mods)
+		for (Mod mod : MODS)
 			mod.onClientsidePostRender();
 	}
-	
+
 	/**
-	 * Hull of a mod containing events for the mod
+	 * Hull of a mod containing all events for the mod
 	 * @author Pancake
 	 */
 	public static abstract class Mod {
 
-		/**
-		 * Instance of Minecraft
-		 */
+		/** Instance of Minecraft */
 		@Environment(EnvType.CLIENT)
 		protected Minecraft mc;
 
-		/**
-		 * Instance of Server or null
-		 */
+		/** Instance of server or null */
 		protected MinecraftServer mcserver;
 
-		/**
-		 * Id of the mod
-		 */
+		/** Id of the mod */
 		protected ResourceLocation id;
 
 		/**
-		 * Initializes a mod
-		 * @param id Id of the mod
+		 * Initialize a mod
+		 * @param id Id of this mod
 		 */
 		public Mod(ResourceLocation id) {
 			this.id = id;
 		}
 
 		/**
-		 * Executed after the fabric launcher. Mc and mcserver will still be null
+		 * Executed after the fabric launcher
+		 * (mc and mcserver will still be null!)
 		 */
 		protected void onInitialize() {
 
 		}
 
 		/**
-		 * Executed after the server launches. This will set mcserver
+		 * Executed after the server launches.
+		 * (mcserver will be set)
 		 */
 		protected void onServerLoad() {
 
@@ -165,7 +153,7 @@ public class ModSystem {
 
 		/**
 		 * Executed inbetween every tick on the server
-		 * @param server Server Instance
+		 * @param server Server instance
 		 */
 		protected void onServerTick() {
 
@@ -196,7 +184,8 @@ public class ModSystem {
 		}
 
 		/**
-		 * Executed after the rendering engine launches. mc will be set here
+		 * Executed after the rendering engine launches.
+		 * (mc will be set)
 		 */
 		@Environment(EnvType.CLIENT)
 		protected void onClientsideRenderInitialize() {
@@ -253,7 +242,7 @@ public class ModSystem {
 		}
 		
 		/**
-		 * Sends a packet from the server to a client
+		 * Send packet to a client
 		 * @param player Player
 		 * @param buf Data
 		 */
@@ -262,7 +251,7 @@ public class ModSystem {
 		}
 
 		/**
-		 * Sends a packet from the client to the server
+		 * Send packet from to server
 		 * @param buf Data
 		 */
 		@Environment(EnvType.CLIENT)

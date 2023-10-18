@@ -11,7 +11,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.components.SubtitleOverlay;
 
 /**
- * This Mixin slows down the subtitle overlay to the tickrate
+ * This mixin slows down the subtitle overlay to the tickrate
  * @author Scribble
  */
 @Mixin(SubtitleOverlay.class)
@@ -19,23 +19,17 @@ import net.minecraft.client.gui.components.SubtitleOverlay;
 public class MixinSubtitleOverlay {
 
 	/**
-	 * Slows down the render speed by multiplying with the Gamespeed
+	 * Slow down animation speed by multiplying with the gamespeed
 	 * @param threethousand 3000, well
 	 * @return Slowed down 3000
 	 */
-	 // # 1.20.1
-//$$	@ModifyConstant(method = "render", constant = @Constant(doubleValue = 3000L))
-//$$	public double applyTickrate(double threethousand) {
-//$$		return (double) (threethousand * (20.0 / TickrateChanger.instance.getTickrate()));
-//$$	}
-	// # def
 	@ModifyConstant(method = "render", constant = @Constant(longValue = 3000L))
 	public long applyTickrate(long threethousand) {
 		return (long) (threethousand * (20.0 / TickrateChanger.instance.getTickrate()));
 	}
 	
 	/**
-	 * Slows down the render speed by multiplying with the Gamespeed
+	 * Slow down animation speed by multiplying with the gamespeed
 	 * @param threethousand 3000, well
 	 * @return Slowed down 3000
 	 */
@@ -43,6 +37,5 @@ public class MixinSubtitleOverlay {
 	public float applyTickrate2(float threethousand) {
 		return (float) (threethousand * (20.0 / TickrateChanger.instance.getTickrate()));
 	}
-	// # end
 
 }
