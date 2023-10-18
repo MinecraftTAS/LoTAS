@@ -17,8 +17,8 @@
 package com.minecrafttas.lotas.mods;
 
 import com.minecrafttas.lotas.system.ModSystem.Mod;
-
 import io.netty.buffer.Unpooled;
+import lombok.Getter;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.network.FriendlyByteBuf;
@@ -26,68 +26,28 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
 /**
- * Main Dragon Manipulation
+ * Dragon manipulation mod
  * @author Pancake
  */
+@Getter
 public class DragonManipulation extends Mod {
 
 	public static DragonManipulation instance;
 	
 	/**
-	 * Initializes the dragon manipulation
+	 * Construct dragon manipulation mod
 	 */
 	public DragonManipulation() {
 		super(new ResourceLocation("lotas", "dragonmanipulation"));
 		instance = this;
 	}
-	
-	/**
-	 * Dragon phases
-	 * @author Pancake
-	 */
-	public static enum Phase {
-		OFF, LANDINGAPPROACH, STRAFING, HOLDINGPATTERN
-	}
-	/**
-	 * Current manipulation phase or OFF
-	 */
+
+	/** Current manipulation phase or OFF */
 	private Phase phase = Phase.OFF;
 
 	/**
-	 * Returns manipulation phase or OFF
-	 * @return Manipulation phase
-	 */
-	public Phase getPhase() {
-		return this.phase;
-	}
-
-	/**
-	 * Updates local settings on packet
-	 * @param buf Packet Data
-	 */
-	@Override
-	@Environment(EnvType.CLIENT)
-	protected void onClientsidePayload(FriendlyByteBuf buf) {
-		this.phase = Phase.values()[buf.readInt()];
-	}
-	
-	/**
-	 * Resend when receiving a packet
-	 * @param buf Packet Data
-	 */
-	@Override
-	protected void onServerPayload(FriendlyByteBuf buf) {
-		this.phase = Phase.values()[buf.readInt()];
-		// Send packet to client
-		for (ServerPlayer player : this.mcserver.getPlayerList().getPlayers()) {
-			FriendlyByteBuf data = new FriendlyByteBuf(Unpooled.buffer());
-			data.writeInt(this.phase.ordinal());
-			this.sendPacketToClient(player, data);
-		}
-	}
-	
-	/**
-	 * Client-Side only settings edit request. Sends a packet to the server contains the new phase setting
+	 * Request phase change by sending a packet to the server
+	 * (Clientside only)
 	 * @param phase New phase or null
 	 */
 	@Environment(EnvType.CLIENT)
@@ -96,20 +56,50 @@ public class DragonManipulation extends Mod {
 		buf.writeInt(phase.ordinal());
 		this.sendPacketToServer(buf);
 	}
-	
+
+	/**
+	 * Update phase on server and send packet to clients when receiving packet
+	 * @param buf Packet
+	 */
+	@Override
+	protected void onServerPayload(FriendlyByteBuf buf) {
+		this.phase = Phase.values()[buf.readInt()];
+
+		// send packet to client
+		for (ServerPlayer player : this.mcserver.getPlayerList().getPlayers()) {
+			FriendlyByteBuf data = new FriendlyByteBuf(Unpooled.buffer());
+			data.writeInt(this.phase.ordinal());
+			this.sendPacketToClient(player, data);
+		}
+	}
+
+	/**
+	 * Update mirrored phase on packet receive
+	 * @param buf Packet
+	 */
+	@Override
+	@Environment(EnvType.CLIENT)
+	protected void onClientsidePayload(FriendlyByteBuf buf) {
+		this.phase = Phase.values()[buf.readInt()];
+	}
+
+	public static enum Phase {
+		OFF, LANDINGAPPROACH, STRAFING, HOLDINGPATTERN
+	}
+
 }
 
-/* Let me write down how the ender dragon ai works for future reference.
-
-The dragon has a set of 24 nodes placed in determinated spots at a height depending on the terrain. Two nodes are generated higher then all others.
-The dragon then creates a path through these nodes with a somewhat deteministic path. The beginning of the path is where the dragon is at. 
-The length of the path is the shortest possible (shortest possible through minecrafts algorithm, 4 max it seems) and the end of the path is different depending on the orientation and phase of the dragon.
-The path is also different if there are 0 end crystals remaining. The only actual RNG in the path is the end node, during the holding pattern phase. After finishing the previous path,
-the dragon has a 1/8 chance to switch rotation, which then changes the last node of the path.
-
-Therefore EnderDragon#findPath takes the start node, end node and optionally a custom end node, being around the player during strafing phase.
-
-Now that the path is clear (no pun intended), lets look at the phases of the dragon.
-At the end of every one of the holding pattern phase, the dragon does some math together with some randomness to decide which phase it goes to next... and that's it
-
-*/
+/*
+ * Let me write down how the ender dragon ai works for future reference.
+ *
+ * The dragon has a set of 24 nodes placed in determinated spots at a height depending on the terrain. Two nodes are generated higher then all others.
+ * The dragon then creates a path through these nodes with a somewhat deteministic path. The beginning of the path is where the dragon is at.
+ * The length of the path is the shortest possible (shortest possible through minecrafts algorithm, 4 max it seems) and the end of the path is different depending on the orientation and phase of the dragon.
+ * The path is also different if there are 0 end crystals remaining. The only actual RNG in the path is the end node, during the holding pattern phase. After finishing the previous path,
+ * the dragon has a 1/8 chance to switch rotation, which then changes the last node of the path.
+ *
+ * Therefore EnderDragon#findPath takes the start node, end node and optionally a custom end node, being around the player during strafing phase.
+ *
+ * Now that the path is clear (no pun intended), lets look at the phases of the dragon.
+ * At the end of every one of the holding pattern phase, the dragon does some math together with some randomness to decide which phase it goes to next... and that's it
+ */

@@ -1,21 +1,19 @@
 package com.minecrafttas.lotas.mixin.dragonmanipulation;
 
-import java.util.Random; // @RandomSourceImport;
-
+import com.minecrafttas.lotas.mods.DragonManipulation;
+import com.minecrafttas.lotas.mods.DragonManipulation.Phase;
+import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
+import net.minecraft.world.entity.boss.enderdragon.phases.AbstractDragonPhaseInstance;
+import net.minecraft.world.entity.boss.enderdragon.phases.DragonHoldingPatternPhase;
+import net.minecraft.world.level.pathfinder.Path;
+import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-import com.minecrafttas.lotas.mods.DragonManipulation;
-import com.minecrafttas.lotas.mods.DragonManipulation.Phase;
-
-import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
-import net.minecraft.world.entity.boss.enderdragon.phases.AbstractDragonPhaseInstance;
-import net.minecraft.world.entity.boss.enderdragon.phases.DragonHoldingPatternPhase;
-import net.minecraft.world.level.pathfinder.Path;
-import net.minecraft.world.phys.Vec3;
+import java.util.Random;
 
 /**
  * This mixin manipulates the rng of the dragon holding pattern phase
@@ -26,17 +24,17 @@ public abstract class MixinDragonHoldingPatternPhase extends AbstractDragonPhase
 	public MixinDragonHoldingPatternPhase(EnderDragon enderDragon) { super(enderDragon); }
 
 	/**
-	 * Forces an optimal dragon path by (step 1) removing the 20 block addend
+	 * Force optimal dragon path by (step 1) removing the 20 block addend
 	 * @param r Random source
 	 * @return Multiplier
 	 */
-	@Redirect(method = "navigateToNextPathNode", at = @At(value = "INVOKE", target = "Ljava/util/Random;nextFloat()F")) // @RandomSourceDescriptor;
-	public float redirect_nextFloat(Random r) { // @RngSourceClass;
+	@Redirect(method = "navigateToNextPathNode", at = @At(value = "INVOKE", target = "Ljava/util/Random;nextFloat()F"))
+	public float redirect_nextFloat(Random r) {
 		return DragonManipulation.instance.getPhase() == Phase.OFF ? r.nextFloat() : 0.0f;
 	}
 	
 	/**
-	 * Forces an optimal dragon path by (step 2) calculating the optimal block addend depending on the dragons position
+	 * Force optimal dragon path by (step 2) calculating the optimal block addend depending on the dragons position
 	 * @param x Node x pos
 	 * @param y Target y pos
 	 * @param z Node z pos
@@ -55,10 +53,10 @@ public abstract class MixinDragonHoldingPatternPhase extends AbstractDragonPhase
 	public int shouldCCWCWC = 1; // should counter clock wise clock wise change, lol. 0 == switch, anything else == no switch
 	
 	@Shadow
-	public boolean clockwise;
+	private boolean clockwise;
 	
 	/**
-	 * Forces an optimal dragon path by (step 3) calculating whether a direction change would result in the more optimal path.
+	 * Force optimal dragon path by (step 3) calculating whether a direction change would result in the more optimal path.
 	 * Coincidentally the length of the path does not need to be checked, because for some odd mathematical reason the path length will always be 1 in the outer circle
 	 * @param dragon Ender Dragon
 	 * @return Closest node
@@ -88,24 +86,24 @@ public abstract class MixinDragonHoldingPatternPhase extends AbstractDragonPhase
 	}
 	
 	/**
-	 * Forces an optimal dragon path by (step 4) applying the calculated math from redirect_findClosestNode
+	 * Force optimal dragon path by (step 4) applying the calculated math from redirect_findClosestNode
 	 * @param r Random source
 	 * @param i Bound
 	 * @return Random int
 	 */
-	@Redirect(method = "findNewTarget", at = @At(value = "INVOKE", target = "Ljava/util/Random;nextInt(I)I", ordinal = 3)) // @RandomSourceDescriptor;
-	public int redirect_nextInt(Random r, int i) { // @RngSourceClass;
+	@Redirect(method = "findNewTarget", at = @At(value = "INVOKE", target = "Ljava/util/Random;nextInt(I)I", ordinal = 3))
+	public int redirect_nextInt(Random r, int i) {
 		return DragonManipulation.instance.getPhase() == Phase.OFF ? r.nextInt(i) : this.shouldCCWCWC;
 	}
 	
 	/**
-	 * Forces the dragon to enter landing approach phase after finishing its path
+	 * Force dragon to enter landing approach phase after finishing its path
 	 * @param r Random source
 	 * @param i Bound
 	 * @return Random int
 	 */
-	@Redirect(method = "findNewTarget", at = @At(value = "INVOKE", target = "Ljava/util/Random;nextInt(I)I", ordinal = 0)) // @RandomSourceDescriptor;
-	public int redirect_nextInt_perching(Random r, int i) { // @RngSourceClass;
+	@Redirect(method = "findNewTarget", at = @At(value = "INVOKE", target = "Ljava/util/Random;nextInt(I)I", ordinal = 0))
+	public int redirect_nextInt_perching(Random r, int i) {
 		switch (DragonManipulation.instance.getPhase()) {
 			case LANDINGAPPROACH:
 				return 0;
@@ -118,13 +116,13 @@ public abstract class MixinDragonHoldingPatternPhase extends AbstractDragonPhase
 	}
 
 	/**
-	 * Forces the dragon to enter strafing phase after finishing its path
+	 * Force dragon to enter strafing phase after finishing its path
 	 * @param r Random source
 	 * @param i Bound
 	 * @return Random int
 	 */
-	@Redirect(method = "findNewTarget", at = @At(value = "INVOKE", target = "Ljava/util/Random;nextInt(I)I", ordinal = 1)) // @RandomSourceDescriptor;
-	public int redirect_nextInt_strafing(Random r, int i) { // @RngSourceClass;
+	@Redirect(method = "findNewTarget", at = @At(value = "INVOKE", target = "Ljava/util/Random;nextInt(I)I", ordinal = 1))
+	public int redirect_nextInt_strafing(Random r, int i) {
 		switch (DragonManipulation.instance.getPhase()) {
 			case STRAFING:
 				return 0;
@@ -137,13 +135,13 @@ public abstract class MixinDragonHoldingPatternPhase extends AbstractDragonPhase
 	}
 
 	/**
-	 * Forces the dragon to enter strafing phase after finishing its path
+	 * Force dragon to enter strafing phase after finishing its path
 	 * @param r Random source
 	 * @param i Bound
 	 * @return Random int
 	 */
-	@Redirect(method = "findNewTarget", at = @At(value = "INVOKE", target = "Ljava/util/Random;nextInt(I)I", ordinal = 2)) // @RandomSourceDescriptor;
-	public int redirect_nextInt_strafing2(Random r, int i) { // @RngSourceClass;
+	@Redirect(method = "findNewTarget", at = @At(value = "INVOKE", target = "Ljava/util/Random;nextInt(I)I", ordinal = 2))
+	public int redirect_nextInt_strafing2(Random r, int i) {
 		switch (DragonManipulation.instance.getPhase()) {
 			case STRAFING:
 				return 0;

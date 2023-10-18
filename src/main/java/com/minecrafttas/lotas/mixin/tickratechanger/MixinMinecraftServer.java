@@ -36,6 +36,7 @@ import java.util.function.BooleanSupplier;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -50,7 +51,8 @@ import net.minecraft.Util;
 import net.minecraft.server.MinecraftServer;
 
 /**
- * Slows down the Minecraft Server
+ * This mixin slows down the server
+ * TODO: understand this mess properly
  * @author Scribble
  */
 @Mixin(MinecraftServer.class)
@@ -59,7 +61,10 @@ public abstract class MixinMinecraftServer {
 	@Shadow
 	private long nextTickTime;
 
+	@Unique
 	private long offset = 0;
+
+	@Unique
 	private long currentTime = 0;
 
 	/**
@@ -68,7 +73,7 @@ public abstract class MixinMinecraftServer {
 	 * @param ignored the value that was originally used, in this case 50L
 	 * @return Milliseconds per tick
 	 */
-	@ModifyConstant(method = "run", constant = @Constant(longValue = 50L)) // @RunServer;
+	@ModifyConstant(method = "runServer", constant = @Constant(longValue = 50L))
 	private long serverTickWaitTime(long ignored) {
 		return (long) TickrateChanger.instance.getMsPerTick();
 	}
@@ -78,7 +83,7 @@ public abstract class MixinMinecraftServer {
 	 * returns {@link #getCurrentTime()}
 	 * @return Modified measuring time
 	 */
-	@Redirect(method = "run", at = @At(value = "INVOKE", target = "Lnet/minecraft/Util;getMillis()J")) // @RunServer;
+	@Redirect(method = "runServer", at = @At(value = "INVOKE", target = "Lnet/minecraft/Util;getMillis()J"))
 	public long redirectGetMillis() {
 		return this.getCurrentTime();
 	}
@@ -97,8 +102,9 @@ public abstract class MixinMinecraftServer {
 	 * Returns the time dependant on if the current tickrate is tickrate 0
 	 * @return In tickrates > 0 the vanilla time - offset else the current time in tickrate 0
 	 */
+	@Unique
 	private long getCurrentTime() {
-		if (!TickAdvance.instance.isTickadvanceEnabled() || TickAdvance.instance.shouldTickServer) {
+		if (!TickAdvance.instance.isTickadvance() || TickAdvance.instance.shouldTickServer) {
 			this.currentTime = Util.getMillis(); // Set the current time that will be returned if the player decides to activate
 													// tickrate 0
 			return Util.getMillis() - this.offset; // Returns the Current time - offset which was set while tickrate 0 was active

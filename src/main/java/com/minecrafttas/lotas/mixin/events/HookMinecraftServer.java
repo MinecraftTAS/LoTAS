@@ -17,17 +17,16 @@ import net.minecraft.server.MinecraftServer;
 public class HookMinecraftServer {
 
 	/**
-	 * Triggers an Event in {@link ModSystem#onServerTick(MinecraftServer)} after the server ticks
+	 * Trigger event in {@link ModSystem#onServerTick(MinecraftServer)} after the server has ticked
 	 * @param ci Callback Info
 	 */
-	@Inject(method = "run", at = @At(value = "INVOKE", shift = At.Shift.AFTER, // @RunServer;
-		target = "Lnet/minecraft/util/profiling/GameProfiler;pop()V")) // @Profiler;
+	@Inject(method = "runServer", at = @At(value = "INVOKE", shift = At.Shift.AFTER, target = "Lnet/minecraft/util/profiling/ProfilerFiller;pop()V"))
 	public void hookTickEvent(CallbackInfo ci) {
 		ModSystem.onServerTick();
 	}
 
 	/**
-	 * Triggers an Event in {@link ModSystem#onServerLoad(MinecraftServer)} before the game enters the game loop
+	 * Trigger event in {@link ModSystem#onServerLoad(MinecraftServer)} before the server enters the tick loop
 	 * @param ci Callback Info
 	 */
 	@Inject(method = "<init>", at = @At("RETURN"))

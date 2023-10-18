@@ -11,7 +11,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.LevelRenderer;
 
 /**
- * This Mixin slows down the world border renderer to the tickrate
+ * This mixin slows down the world border renderer to the tickrate
  * @author Pancake
  */
 @Mixin(LevelRenderer.class)
@@ -19,11 +19,11 @@ import net.minecraft.client.renderer.LevelRenderer;
 public class MixinLevelRenderer {
 
 	/**
-	 * Slows down the getMillis call
+	 * Slow down getMillis
 	 * @param f Ignored original value
 	 * @return Manipulated value
 	 */
-	@ModifyVariable(method = "renderWorldBounds", at = @At(value = "STORE"), index = 19, ordinal = 3) // @WorldBorder;
+	@ModifyVariable(method = "renderWorldBounds", at = @At(value = "STORE"), index = 19, ordinal = 3)
 	public float injectf3(float f) {
 		return TickrateChanger.instance.getMilliseconds() % 3000L / 3000.0F;
 	}

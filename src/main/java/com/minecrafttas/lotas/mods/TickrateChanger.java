@@ -13,6 +13,7 @@ import com.minecrafttas.lotas.system.ConfigurationSystem;
 import com.minecrafttas.lotas.system.ModSystem.Mod;
 
 import io.netty.buffer.Unpooled;
+import lombok.Getter;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.network.FriendlyByteBuf;
@@ -20,72 +21,110 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
 /**
- * Main tickrate changer
+ * Tickrate changer mod
  * @author Pancake
  */
 public class TickrateChanger extends Mod {
 
-	public static TickrateChanger instance;
+	/** Array of the most common tickrates available via decrease and increase tickrate keybinds */
+	@Environment(EnvType.CLIENT)
+	private static final double[] TICKRATES = { 0.5f, 1.0f, 2.0f, 4.0f, 5.0f, 10.0f, 20.0f };
+
+	public static TickrateChanger instance; // FIXME: Remove this instance variable (applies to all mods)
 
 	/**
-	 * Initializes the tickrate changer
+	 * Construct tickrate changer mod
 	 */
 	public TickrateChanger() {
 		super(new ResourceLocation("lotas", "tickratechanger"));
 		instance = this;
 	}
 
-	/**
-	 * Should the game remember the tickrate
-	 */
-	private boolean rememberTickrate;
+	/** Should the game remember the tickrate in-between different levels */
+	private boolean restoreLastSession;
 	
-	/**
-	 * Tickrate stored between worlds (static for integrated server)
-	 */
-	private static double storedTickrate = 20.0;
+	/** Tickrate of the last session, used for restoring tickrate (static for integrated server) */
+	private static double lastSessionTickrate = 20.0; // TODO: does this need to be static? i don't feel like thinking right now
 	
-	/**
-	 * Tickrate of the game
-	 */
-	private double tickrate = 20.0;
+	/** Current speed of the game */
+	@Getter
+	private double tickrate = 20.0, msPerTick = 50.0, gamespeed = 1.0;
 
-	/**
-	 * Tickrate of the game stored in milliseconds per tick
-	 */
-	private double msPerTick = 50.0;
-
-	/**
-	 * Tickrate of the game stored in game speed percentage
-	 */
-	private double gamespeed = 1.0;
-	
-	/**
-	 * Previous game speed, clientside
-	 */
+	/** Previous game speed, clientside */
 	@Environment(EnvType.CLIENT)
 	private double prevGamespeed = 1.0;
 
-	/**
-	 * Array of the most common tickrates available via decrease and increase tickrate keybinds
-	 */
-	@Environment(EnvType.CLIENT)
-	private double[] tickrates = { 0.5f, 1.0f, 2.0f, 4.0f, 5.0f, 10.0f, 20.0f };
-
-	/**
-	 * System time in milliseconds since last tickrate change
-	 */
+	/** System time since last tickrate change (in milliseconds) */
 	@Environment(EnvType.CLIENT)
 	private long systemTimeSinceUpdate = System.currentTimeMillis();
 
-	/**
-	 * Game time in milliseconds since last tickrate change
-	 */
+	/** Game time since last tickrate change (in milliseconds) */
 	@Environment(EnvType.CLIENT)
 	private long gameTime = 0L;
 
 	/**
-	 * Updates the Client tickrate when receiving a packet
+	 * Initialize tickrate changer mod
+	 */
+	@Override
+	protected void onInitialize() {
+		this.restoreLastSession = ConfigurationSystem.getBoolean("tickratechanger_remembertickrate", true);
+	}
+
+	/**
+	 * Request tickrate update by sendiong a packet to the server updating the tickrate.
+	 * (Clientside only)
+	 * @param tickrate Tickrate to update to
+	 */
+	@Environment(EnvType.CLIENT)
+	public void requestTickrateUpdate(double tickrate) {
+		// request tickrate update
+		FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
+		buf.writeDouble(tickrate);
+		this.sendPacketToServer(buf);
+	}
+
+	/**
+	 * Update server tickrate on packet receive
+	 * @param buf Packet
+	 */
+	@Override
+	protected void onServerPayload(FriendlyByteBuf buf) {
+		this.updateTickrate(buf.readDouble());
+	}
+
+	/**
+	 * Update tickrate and send a packet to all players
+	 * (Serverside only)
+	 * @param tickrate Tickrate
+	 */
+	public void updateTickrate(double tickrate) {
+		if (tickrate < 0.1)
+			return;
+
+		// change tickrate
+		lastSessionTickrate = tickrate;
+		this.internallyUpdateTickrate(tickrate);
+
+		// update tickrate for all clients
+		this.mcserver.getPlayerList().getPlayers().forEach(player -> {
+			FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
+			buf.writeDouble(tickrate);
+			this.sendPacketToClient(player, buf);
+		});
+	}
+
+	/**
+	 * Internally update tickrate of game
+	 * @param tickrate Tickrate
+	 */
+	private void internallyUpdateTickrate(double tickrate) {
+		this.tickrate = tickrate;
+		this.msPerTick = 1000.0 / tickrate;
+		this.gamespeed = tickrate / 20;
+	}
+
+	/**
+	 * Update client tickrate on packet receive
 	 * @param buf Packet Data
 	 */
 	@Override
@@ -94,17 +133,41 @@ public class TickrateChanger extends Mod {
 		this.internallyUpdateTickrate(buf.readDouble());
 		this.prevGamespeed = this.gamespeed;
 	}
-	
+
 	/**
 	 * Update game time using gamespeed
 	 * @param gamespeed Speed of game
 	 */
 	@Environment(EnvType.CLIENT)
 	public void updateGameTime(double gamespeed) {
-		this.gameTime += ((System.currentTimeMillis() - this.systemTimeSinceUpdate) * gamespeed);
+		this.gameTime += (long) ((System.currentTimeMillis() - this.systemTimeSinceUpdate) * gamespeed);
 		this.systemTimeSinceUpdate = System.currentTimeMillis();
 	}
-	
+
+	/**
+	 * Send tickrate to newly connected client
+	 * @param player Client connected
+	 */
+	@Override
+	protected void onClientConnect(ServerPlayer player) {
+		// update server tickrate on singleplayer connect
+		if (this.mcserver.isSingleplayer() && this.restoreLastSession)
+			this.internallyUpdateTickrate(lastSessionTickrate);
+
+		// update client tickrate on connect
+		FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
+		buf.writeDouble(this.tickrate);
+		this.sendPacketToClient(player, buf);
+	}
+
+	/**
+	 * Reset tickrate on disconnect
+	 */
+	@Override @Environment(EnvType.CLIENT)
+	public void onClientsideDisconnect() {
+		this.internallyUpdateTickrate(20.0);
+	}
+
 	/**
 	 * Advance game time by millis
 	 * @param millis Milliseconds
@@ -114,103 +177,35 @@ public class TickrateChanger extends Mod {
 		this.gameTime += millis;
 		this.systemTimeSinceUpdate = System.currentTimeMillis();
 	}
-	
-	@Override
-	protected void onInitialize() {
-		this.rememberTickrate = ConfigurationSystem.getBoolean("tickratechanger_remembertickrate", true);
-	}
 
 	/**
-	 * Updates the Server tickrate and resend when receiving a packet
-	 * @param buf Packet Data
-	 */
-	@Override
-	protected void onServerPayload(FriendlyByteBuf buf) {
-		this.updateTickrate(buf.readDouble());
-	}
-
-	/**
-	 * Client-Side only tickrate update request. Sends a packet to the server updating the tickrate.
-	 * @param tickrate Tickrate to update to
-	 */
-	@Environment(EnvType.CLIENT)
-	public void requestTickrateUpdate(double tickrate) {
-		// Request tickrate update
-		FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
-		buf.writeDouble(tickrate);
-		this.sendPacketToServer(buf);
-	}
-
-	/**
-	 * Server-Side only tickrate update. Sends a packet to all players
-	 * @param tickrate Tickrate to update to
-	 */
-	public void updateTickrate(double tickrate) {
-		if (tickrate < 0.1)
-			return;
-		storedTickrate = tickrate;
-		this.internallyUpdateTickrate(tickrate);
-		// Update Tickrate for all clients
-		this.mcserver.getPlayerList().getPlayers().forEach(player -> {
-			FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
-			buf.writeDouble(tickrate);
-			this.sendPacketToClient(player, buf);
-		});
-	}
-
-	/**
-	 * Internally update the tickrate for the game
-	 * @param tickrate Tickrate to update to
-	 */
-	private void internallyUpdateTickrate(double tickrate) {
-		this.tickrate = tickrate;
-		this.msPerTick = 1000.0 / tickrate;
-		this.gamespeed = tickrate / 20;
-	}
-
-	/**
-	 * Client-side only slowed down millisecond counter
+	 * Get current game time in milliseconds. This is the time that the game would be at if the game was running at 20 tps.
+	 * (Clientside only)
 	 * @return Milliseconds passed in game time
 	 */
 	@Environment(EnvType.CLIENT)
 	public long getMilliseconds() {
+		// ignore time passed if tick advance is enabled and client is not ticking
 		TickAdvance adv = TickAdvance.instance;
-		if (adv.isTickadvanceEnabled() && !adv.shouldTickClient) {
+		if (adv.isTickadvance() && !adv.shouldTickClient) {
 			this.systemTimeSinceUpdate = System.currentTimeMillis();
 			return this.gameTime;
 		}
-		
+
+		// update game time
 		long gameTimePassed = System.currentTimeMillis() - this.systemTimeSinceUpdate;
-		gameTimePassed *= this.gamespeed;
+		gameTimePassed = (long) (gameTimePassed * this.gamespeed);
 		return this.gameTime + gameTimePassed;
 	}
 
 	/**
-	 * Resets tickrate on disconnect
-	 */
-	@Override
-	@Environment(EnvType.CLIENT)
-	public void onClientsideDisconnect() {
-		this.internallyUpdateTickrate(20.0);
-	}
-
-	@Override
-	protected void onClientConnect(ServerPlayer player) {
-		if (this.mcserver.isSingleplayer() && this.rememberTickrate)
-			this.internallyUpdateTickrate(storedTickrate);
-		FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
-		buf.writeDouble(this.tickrate);
-		this.sendPacketToClient(player, buf);
-	}
-
-	/**
-	 * Decreases the tickrate to the nearest recommended value
+	 * Decrease tickrate to nearest recommended value
 	 */
 	@Environment(EnvType.CLIENT)
 	public void decreaseTickrate() {
 		double newTickrate = this.tickrate;
-		for (int i = this.tickrates.length - 1; i >= 0; i--) {
-			newTickrate = this.tickrates[i];
+		for (int i = TICKRATES.length - 1; i >= 0; i--) {
+			newTickrate = TICKRATES[i];
 			if (newTickrate < this.tickrate)
 				break;
 		}
@@ -219,30 +214,18 @@ public class TickrateChanger extends Mod {
 	}
 
 	/**
-	 * Increases the tickrate to the nearest recommended value
+	 * Increase tickrate to nearest recommended value
 	 */
 	@Environment(EnvType.CLIENT)
 	public void increaseTickrate() {
 		double newTickrate = this.tickrate;
-		for (double tickrate2 : this.tickrates) {
+		for (double tickrate2 : TICKRATES) {
 			newTickrate = tickrate2;
 			if (newTickrate > this.tickrate)
 				break;
 		}
 
 		this.requestTickrateUpdate(newTickrate);
-	}
-
-	public double getTickrate() {
-		return this.tickrate;
-	}
-
-	public double getMsPerTick() {
-		return this.msPerTick;
-	}
-
-	public double getGamespeed() {
-		return this.gamespeed;
 	}
 
 }

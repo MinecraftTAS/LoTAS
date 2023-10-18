@@ -1,14 +1,12 @@
 package com.minecrafttas.lotas;
 
-import java.io.File;
-
+import com.minecrafttas.lotas.system.ConfigurationSystem;
+import com.minecrafttas.lotas.system.ModSystem;
+import net.fabricmc.api.ModInitializer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.minecrafttas.lotas.system.ConfigurationSystem;
-import com.minecrafttas.lotas.system.ModSystem;
-
-import net.fabricmc.api.ModInitializer;
+import java.io.File;
 
 /**
  * LoTAS fabric mod core.
@@ -16,12 +14,9 @@ import net.fabricmc.api.ModInitializer;
  */
 public class LoTAS implements ModInitializer {
 
-	// LoTAS Logger for printing debug lines into the console.
+	/** Logger instance */
 	public static final Logger LOGGER = LogManager.getLogger("lotas");
 
-	/**
-	 * Executed after the game launches.
-	 */
 	@Override
 	public void onInitialize() {
 		ConfigurationSystem.load(new File("lotas_develop.properties"));
