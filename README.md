@@ -20,6 +20,7 @@ You can find the file under [src/main/resources/assets/lotas/lang/en_us.lang](ht
 Credits:  
 Simplified Chinese: [RayXu6](https://github.com/Naruyoko), Proofreading by NormalZombie#2431  
 Japanese: [Naruyoko](https://github.com/Naruyoko)
+Korean: Sidite
 French: azulamazigh
 
 ## Features
