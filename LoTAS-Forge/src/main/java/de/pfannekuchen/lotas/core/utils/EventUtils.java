@@ -44,6 +44,10 @@ public class EventUtils {
 			Minecraft.getMinecraft().getTextureManager().bindTexture(TickrateChangerMod.streaming);
 			Gui.drawModalRectWithCustomSizedTexture(new net.minecraft.client.gui.ScaledResolution(Minecraft.getMinecraft()).getScaledWidth() - 17, 1, 0, 0, 16, 16, 16, 64);
 		}
+		if(ConfigUtils.getBoolean("tools", "showPausedIndicator") && TickrateChangerMod.tickrate == 0) {
+			Minecraft.getMinecraft().getTextureManager().bindTexture(TickrateChangerMod.streaming);
+			Gui.drawModalRectWithCustomSizedTexture(new net.minecraft.client.gui.ScaledResolution(Minecraft.getMinecraft()).getScaledWidth() - 17, 1, 16, 16, 16, 16, 16, 64);
+		}
 	}
 	
 	/**
