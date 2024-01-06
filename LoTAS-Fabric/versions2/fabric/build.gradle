@@ -43,6 +43,9 @@ dependencies {
 	//#if MC>=11900
 //$$ 	minecraft "com.mojang:minecraft:1.19"
 	//#else
+	//#if MC>=11803
+//$$ 	minecraft "com.mojang:minecraft:22w13oneblockatatime"
+	//#else
 	//#if MC>=11802
 //$$ 	minecraft "com.mojang:minecraft:1.18.2"
 	//#else
@@ -62,6 +65,7 @@ dependencies {
 //$$ 	minecraft "com.mojang:minecraft:1.15.2"
 	//#else
 	minecraft "com.mojang:minecraft:1.14.4"
+	//#endif
 	//#endif
 	//#endif
 	//#endif
