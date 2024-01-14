@@ -1,16 +1,17 @@
-﻿# This project is on hiatus!
-We are focussing our attention to [TASmod](https://github.com/MinecraftTAS/TASmod).  
-For more information and plans read this announcement: [Future of Mineraft TAS tools](https://gist.github.com/ScribbleTAS/43b18e8a92a111e92bf4bb0d9cf49e99)
+﻿> [!IMPORTANT]  
+> # This project is no longer actively being developed!
+>We are shifting our focus to [TASmod](https://github.com/MinecraftTAS/TASmod).  
+>For more information and plans read this announcement: [Future of Mineraft TAS tools](https://>gist.github.com/ScribbleTAS/43b18e8a92a111e92bf4bb0d9cf49e99)
 
 # LoTAS
 Used to create non-playback, Low optimization Tool-Assisted Speedruns (LoTAS).  
-Essentially, you record the game in slow motion, record yourself speedrunning with a recording program such as [OBS](https://obsproject.com),  
+You essentially play through your route in slow motion while using a recording program such as [OBS](https://obsproject.com) to capture yourself playing the game. Later you speed up the video footage and edit your attempts into a final video.
 then speed up the video footage.  
 
 LoTAS is a collection of tools commonly used for TASing, with a big focus on RNG manipulation.  
 
 ## Tools
-- *Tickratechanger*: Used for slowing down the game speed
+- *Tickrate Changer*: Used for slowing down the game speed
 - *Savestates*: Used for creating backups of your world, basically quick save/quick load
 - *Drop Manipulation*: Manipulates mob drops to always drop the best items
 - *Dragon Manipulation*: Manipulates the dragon phases
@@ -20,7 +21,7 @@ LoTAS is a collection of tools commonly used for TASing, with a big focus on RNG
 
 *and more...*
 ## Bugs / Feature Requests
-We won't accept any feature-requests at this time, as well as bug reports.
+Due to lack of time and motivation, we will, for the time being, not be accepting feature requests or bug reports.
 
 If you need help with setting up LoTAS then join this [Discord](https://discord.gg/minecraft-tas-373166430478401555)
 
@@ -33,9 +34,9 @@ French: azulamazigh
 
 # FAQ
 ## How do I start?
-- Most functionality is in the in-game pause menu via buttons.
+- Most of LoTAS is accessible via the in-game pause menu.
 - The main menu has a "configuration" button
-- Pressing F6 opens an in game HUD, where you can enable information or an in-game timer.
+- Pressing F6 opens an in game HUD, where you can display various information onscreen.
 
 ## Can I disable the potion in the hotbar?
 No, we do not provide that feature. We want to prevent cheating with our mod and this is our compromise for making it not too annoying. Please live with it and support our fight against cheaters.
@@ -56,7 +57,7 @@ This differs if you are on versions below 1.12.2 (Forge) or versions higher than
 1. Throw the item(s) you want to duplicate on the ground
 2. Open the pause menu and click in the top left **Save Items**
 3. Pick up the item(s)
-4. Open the pause menu and click in the top left **LoadItems**
+4. Open the pause menu and click in the top left **Load Items**
 5. An item should spawn *on the ground*
 
 ## Where is the video upspeeder?
