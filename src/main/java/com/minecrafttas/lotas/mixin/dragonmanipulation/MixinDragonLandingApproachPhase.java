@@ -6,13 +6,14 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-import com.minecrafttas.lotas.mods.DragonManipulation;
 import com.minecrafttas.lotas.mods.DragonManipulation.Phase;
 
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.boss.enderdragon.phases.AbstractDragonPhaseInstance;
 import net.minecraft.world.entity.boss.enderdragon.phases.DragonLandingApproachPhase;
 import net.minecraft.world.phys.Vec3;
+
+import static com.minecrafttas.lotas.LoTAS.DRAGON_MANIPULATION;
 
 /**
  * This mixin manipulates the rng of the dragon landing approach phase
@@ -29,7 +30,7 @@ public abstract class MixinDragonLandingApproachPhase extends AbstractDragonPhas
 	 */
 	@Redirect(method = "navigateToNextPathNode", at = @At(value = "INVOKE", target = "Ljava/util/Random;nextFloat()F"))
 	public float redirect_nextFloat(Random r) {
-		return DragonManipulation.instance.getPhase() == Phase.OFF ? r.nextFloat() : 0.0f;
+		return DRAGON_MANIPULATION.getPhase() == Phase.OFF ? r.nextFloat() : 1.0f;
 	}
 	
 	/**
@@ -41,7 +42,7 @@ public abstract class MixinDragonLandingApproachPhase extends AbstractDragonPhas
 	 */
 	@Redirect(method = "navigateToNextPathNode", at = @At(value = "NEW", target = "Lnet/minecraft/world/phys/Vec3;<init>(DDD)Lnet/minecraft/world/phys/Vec3;"))
 	public Vec3 navigate_nodeInit(double x, double y, double z) {
-		if (DragonManipulation.instance.getPhase() == Phase.OFF)
+		if (DRAGON_MANIPULATION.getPhase() == Phase.OFF)
 			return new Vec3(x, y, z);
 		
 		double distance = Math.max(0, Math.min(20, dragon.position().y - y));

@@ -4,11 +4,11 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
-import com.minecrafttas.lotas.mods.TickrateChanger;
-
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.LevelRenderer;
+
+import static com.minecrafttas.lotas.LoTAS.TICKRATE_CHANGER;
 
 /**
  * This mixin slows down the world border renderer to the tickrate
@@ -25,7 +25,7 @@ public class MixinLevelRenderer {
 	 */
 	@ModifyVariable(method = "renderWorldBounds", at = @At(value = "STORE"), index = 19, ordinal = 3)
 	public float injectf3(float f) {
-		return TickrateChanger.instance.getMilliseconds() % 3000L / 3000.0F;
+		return TICKRATE_CHANGER.getMilliseconds() % 3000L / 3000.0F;
 	}
 
 }

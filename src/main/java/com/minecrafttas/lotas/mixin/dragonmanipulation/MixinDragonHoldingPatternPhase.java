@@ -1,6 +1,5 @@
 package com.minecrafttas.lotas.mixin.dragonmanipulation;
 
-import com.minecrafttas.lotas.mods.DragonManipulation;
 import com.minecrafttas.lotas.mods.DragonManipulation.Phase;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.boss.enderdragon.phases.AbstractDragonPhaseInstance;
@@ -11,9 +10,13 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.ModifyArgs;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 import java.util.Random;
+
+import static com.minecrafttas.lotas.LoTAS.DRAGON_MANIPULATION;
 
 /**
  * This mixin manipulates the rng of the dragon holding pattern phase
@@ -30,15 +33,15 @@ public abstract class MixinDragonHoldingPatternPhase extends AbstractDragonPhase
 	 */
 	@Redirect(method = "navigateToNextPathNode", at = @At(value = "INVOKE", target = "Ljava/util/Random;nextFloat()F"))
 	public float redirect_nextFloat(Random r) {
-		return DragonManipulation.instance.getPhase() == Phase.OFF ? r.nextFloat() : 0.0f;
+		return DRAGON_MANIPULATION.getPhase() == Phase.OFF ? r.nextFloat() : 1.0f;
 	}
 	
 	/**
 	 * Force optimal dragon path by (step 2) calculating the optimal block addend depending on the dragons position
+	 *
 	 * @param x Node x pos
 	 * @param y Target y pos
 	 * @param z Node z pos
-	 * @return Target
 	 */
 	@Redirect(method = "navigateToNextPathNode", at = @At(value = "NEW", target = "Lnet/minecraft/world/phys/Vec3;<init>(DDD)Lnet/minecraft/world/phys/Vec3;"))
 	public Vec3 navigate_nodeInit(double x, double y, double z) {
@@ -93,7 +96,7 @@ public abstract class MixinDragonHoldingPatternPhase extends AbstractDragonPhase
 	 */
 	@Redirect(method = "findNewTarget", at = @At(value = "INVOKE", target = "Ljava/util/Random;nextInt(I)I", ordinal = 3))
 	public int redirect_nextInt(Random r, int i) {
-		return DragonManipulation.instance.getPhase() == Phase.OFF ? r.nextInt(i) : this.shouldCCWCWC;
+		return DRAGON_MANIPULATION.getPhase() == Phase.OFF ? r.nextInt(i) : this.shouldCCWCWC;
 	}
 	
 	/**
@@ -104,7 +107,7 @@ public abstract class MixinDragonHoldingPatternPhase extends AbstractDragonPhase
 	 */
 	@Redirect(method = "findNewTarget", at = @At(value = "INVOKE", target = "Ljava/util/Random;nextInt(I)I", ordinal = 0))
 	public int redirect_nextInt_perching(Random r, int i) {
-		switch (DragonManipulation.instance.getPhase()) {
+		switch (DRAGON_MANIPULATION.getPhase()) {
 			case LANDINGAPPROACH:
 				return 0;
 			case HOLDINGPATTERN:
@@ -123,7 +126,7 @@ public abstract class MixinDragonHoldingPatternPhase extends AbstractDragonPhase
 	 */
 	@Redirect(method = "findNewTarget", at = @At(value = "INVOKE", target = "Ljava/util/Random;nextInt(I)I", ordinal = 1))
 	public int redirect_nextInt_strafing(Random r, int i) {
-		switch (DragonManipulation.instance.getPhase()) {
+		switch (DRAGON_MANIPULATION.getPhase()) {
 			case STRAFING:
 				return 0;
 			case LANDINGAPPROACH:
@@ -142,7 +145,7 @@ public abstract class MixinDragonHoldingPatternPhase extends AbstractDragonPhase
 	 */
 	@Redirect(method = "findNewTarget", at = @At(value = "INVOKE", target = "Ljava/util/Random;nextInt(I)I", ordinal = 2))
 	public int redirect_nextInt_strafing2(Random r, int i) {
-		switch (DragonManipulation.instance.getPhase()) {
+		switch (DRAGON_MANIPULATION.getPhase()) {
 			case STRAFING:
 				return 0;
 			case LANDINGAPPROACH:

@@ -1,6 +1,5 @@
 package com.minecrafttas.lotas.mods.savestatemod;
 
-import com.minecrafttas.lotas.LoTAS;
 import lombok.Data;
 import lombok.Getter;
 import net.fabricmc.api.EnvType;

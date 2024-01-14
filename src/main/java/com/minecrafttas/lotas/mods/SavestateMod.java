@@ -61,22 +61,15 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
 
-import static com.minecrafttas.lotas.LoTAS.LOGGER;
+import static com.minecrafttas.lotas.LoTAS.*;
 
 /**
  * Savestate mod
  * @author Pancake
  */
 public class SavestateMod extends Mod {
-
-	public static SavestateMod instance;
-	
-	/**
-	 * Construct savestate mod
-	 */
 	public SavestateMod() {
 		super(new ResourceLocation("lotas", "savestatemod"));
-		instance = this;
 	}
 
 	/** Mirrored state data */
@@ -134,8 +127,8 @@ public class SavestateMod extends Mod {
 		}
 		
 		// tick the server
-		if (TickAdvance.instance.isTickadvance())
-			TickAdvance.instance.updateTickadvance();
+		if (TICK_ADVANCE.isTickadvance())
+			TICK_ADVANCE.updateTickadvance();
 	}
 
 	/**
@@ -145,8 +138,8 @@ public class SavestateMod extends Mod {
 	protected void onServerTick() {
 
 		if (this.task != null) {
-			boolean tickAdvanceState = TickAdvance.instance.isTickadvance();
-			TickAdvance.instance.updateTickadvanceStatus(true); // enable tick advance to freeze clients
+			boolean tickAdvanceState = TICK_ADVANCE.isTickadvance();
+			TICK_ADVANCE.updateTickadvanceStatus(true); // enable tick advance to freeze clients
 
 			try {
 				// load state data and execute task
@@ -156,7 +149,7 @@ public class SavestateMod extends Mod {
 				LOGGER.error("State task failed!", e);
 			}
 
-			TickAdvance.instance.updateTickadvanceStatus(tickAdvanceState); // restore tick advance state
+			TICK_ADVANCE.updateTickadvanceStatus(tickAdvanceState); // restore tick advance state
 			this.task = null;
 		}
 
@@ -390,7 +383,7 @@ public class SavestateMod extends Mod {
             // update dupe mod data
 			FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
     		buf.writeBoolean(true);
-            DupeMod.instance.onServerPayload(buf);
+            DUPE_MOD.onServerPayload(buf);
             
             // run quality of life stuff
             player.getCooldowns().cooldowns.clear();

@@ -4,10 +4,10 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
-import com.minecrafttas.lotas.mods.TickrateChanger;
-
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+
+import static com.minecrafttas.lotas.LoTAS.TICKRATE_CHANGER;
 
 /**
  * This mixin slows down the toast in the top right to the tickrate
@@ -24,7 +24,7 @@ public class MixinToastInstance {
 	 */
 	@ModifyVariable(method = "render(IILcom/mojang/blaze3d/vertex/PoseStack;)Z", at = @At(value = "STORE"), ordinal = 0, index = 4)
 	public long modifyAnimationTime(long animationTimer) {
-		return TickrateChanger.instance.getMilliseconds();
+		return TICKRATE_CHANGER.getMilliseconds();
 	}
 
 }

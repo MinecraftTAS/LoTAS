@@ -31,15 +31,8 @@ import net.minecraft.server.level.ServerPlayer;
  */
 @Getter
 public class DragonManipulation extends Mod {
-
-	public static DragonManipulation instance;
-	
-	/**
-	 * Construct dragon manipulation mod
-	 */
 	public DragonManipulation() {
 		super(new ResourceLocation("lotas", "dragonmanipulation"));
-		instance = this;
 	}
 
 	/** Current manipulation phase or OFF */

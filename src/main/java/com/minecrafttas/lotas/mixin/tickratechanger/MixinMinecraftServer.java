@@ -44,11 +44,11 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import com.minecrafttas.lotas.mods.TickAdvance;
-import com.minecrafttas.lotas.mods.TickrateChanger;
-
 import net.minecraft.Util;
 import net.minecraft.server.MinecraftServer;
+
+import static com.minecrafttas.lotas.LoTAS.TICKRATE_CHANGER;
+import static com.minecrafttas.lotas.LoTAS.TICK_ADVANCE;
 
 /**
  * This mixin slows down the server
@@ -75,7 +75,7 @@ public abstract class MixinMinecraftServer {
 	 */
 	@ModifyConstant(method = "runServer", constant = @Constant(longValue = 50L))
 	private long serverTickWaitTime(long ignored) {
-		return (long) TickrateChanger.instance.getMsPerTick();
+		return (long) TICKRATE_CHANGER.getMsPerTick();
 	}
 
 	/**
@@ -104,7 +104,7 @@ public abstract class MixinMinecraftServer {
 	 */
 	@Unique
 	private long getCurrentTime() {
-		if (!TickAdvance.instance.isTickadvance() || TickAdvance.instance.shouldTickServer) {
+		if (!TICK_ADVANCE.isTickadvance() || TICK_ADVANCE.shouldTickServer) {
 			this.currentTime = Util.getMillis(); // Set the current time that will be returned if the player decides to activate
 													// tickrate 0
 			return Util.getMillis() - this.offset; // Returns the Current time - offset which was set while tickrate 0 was active
@@ -128,7 +128,7 @@ public abstract class MixinMinecraftServer {
 	 */
 	@Inject(method = "tickServer", at = @At("HEAD"))
 	public void injectrunTick(BooleanSupplier supplier, CallbackInfo ci) {
-		TickAdvance.instance.shouldTickServer = false;
+		TICK_ADVANCE.shouldTickServer = false;
 	}
 
 }

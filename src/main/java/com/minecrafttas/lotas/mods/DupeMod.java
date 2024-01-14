@@ -30,15 +30,8 @@ import static com.minecrafttas.lotas.LoTAS.LOGGER;
  * @author Pancake
  */
 public class DupeMod extends Mod {
-
-	public static DupeMod instance;
-
-	/**
-	 * Construct dupe mod
-	 */
 	public DupeMod() {
 		super(new ResourceLocation("lotas", "dupemod"));
-		instance = this;
 	}
 
 	/** Copy of the clients local players playerdata */
