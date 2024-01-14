@@ -37,10 +37,10 @@ java {
 
 // process resources
 processResources {
-	inputs.property "version", project.version
+	inputs.property "version", project.lotas_version
 
 	// update fabric.mod.json with version
 	filesMatching("fabric.mod.json") {
-		expand "version": project.version
+		expand "mod_version": project.lotas_version
 	}
 }
