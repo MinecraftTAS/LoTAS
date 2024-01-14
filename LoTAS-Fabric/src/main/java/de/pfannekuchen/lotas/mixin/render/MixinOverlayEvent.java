@@ -8,6 +8,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import de.pfannekuchen.lotas.core.LoTASModContainer;
 import de.pfannekuchen.lotas.core.MCVer;
 import de.pfannekuchen.lotas.core.utils.ConfigUtils;
+import de.pfannekuchen.lotas.core.utils.RenderUtils;
 import de.pfannekuchen.lotas.mods.TickrateChangerMod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -37,6 +38,10 @@ public class MixinOverlayEvent {
 		if (ConfigUtils.getBoolean("tools", "showTickIndicator") && TickrateChangerMod.tickrate <= 5F && TickrateChangerMod.show) {
 			MCVer.bind(Minecraft.getInstance().getTextureManager(),streaming);
 			MCVer.blit(MCVer.getGLWindow().getGuiScaledWidth() - 17, 1, 0, 0, 16, 16, 16, 64);
+		}
+		if (ConfigUtils.getBoolean("tools", "showPausedIndicator") && TickrateChangerMod.tickrate==0) {
+			MCVer.bind(Minecraft.getInstance().getTextureManager(),streaming);
+			MCVer.blit(MCVer.getGLWindow().getGuiScaledWidth() - 17, 1, 16, 16, 16, 16, 16, 64);
 		}
 	}
 

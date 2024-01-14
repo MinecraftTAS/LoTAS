@@ -123,9 +123,9 @@ static def convertFile(Map<String, String> kws, Map<String, Integer> vars, File 
     }
     outFile.parentFile.mkdirs()
     if (string.endsWith('\n')) {
-        outFile.write(lines.collect { it + '\n' }.join(''))
+        outFile.write(lines.collect { it + '\n' }.join(''), "UTF-8")
     } else {
-        outFile.write(lines.join('\n'))
+        outFile.write(lines.join('\n'), "UTF-8")
     }
 }
 

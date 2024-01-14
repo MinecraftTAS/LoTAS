@@ -3,7 +3,7 @@ plugins {
 }
 
 apply from: '../common.gradle'
-archivesBaseName = "LoTAS1.18.2"
+archivesBaseName = "LoTASoneblockatatime"
 
 sourceCompatibility = targetCompatibility = JavaVersion.VERSION_17
 
@@ -12,6 +12,6 @@ loom {
 }
 
 dependencies {
-	minecraft "com.mojang:minecraft:1.18.2"
+	minecraft "com.mojang:minecraft:22w13oneblockatatime"
 	mappings loom.officialMojangMappings()
 }

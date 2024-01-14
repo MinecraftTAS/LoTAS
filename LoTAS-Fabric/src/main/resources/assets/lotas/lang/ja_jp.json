@@ -32,7 +32,6 @@
 	"pausegui.lotas.successtext.savestate":"\u00A76正常にステートを保存しました",
 	"pausegui.lotas.successtext.loadstate":"\u00A76正常にステートを読み込みました",
 	"pausegui.lotas.textfield.fail":"\u00A7c数値を入力してください",
-	"pausegui.lotas.dropmanip.vanish":"\u00A7oドロップ操作機能 ここに眠る",
 	
 	// AiManip
 	"aimanipgui.lotas.changetarget":"目標を変更",

@@ -17,6 +17,7 @@ public class GuiConfiguration extends GuiScreen {
 		"B:tools:saveTickrate:INSERT",
 		"B:ui:hideTickrateMessages:INSERT",
 		"B:tools:showTickIndicator:INSERT",
+		"B:tools:showPausedIndicator:INSERT",
 		"B:tools:removePearlDelay:INSERT",
 		"B:tools:noDamageUnbreaking:INSERT",
 		"B:tools:removeThrowableInaccuracy:INSERT",

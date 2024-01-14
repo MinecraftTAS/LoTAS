@@ -22,6 +22,7 @@ public class MixinExplosionPatch {
 	 * Redirect the Randomness of an Explosion
 	 */
 	//#if MC>=11900
+	//#if MC<12000
 //$$ 	@ModifyArg(method = "finalizeExplosion", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/storage/loot/LootContext$Builder;withRandom(Lnet/minecraft/util/RandomSource;)Lnet/minecraft/world/level/storage/loot/LootContext$Builder;"), index = 0)
 //$$ 	public net.minecraft.util.RandomSource stupid(net.minecraft.util.RandomSource random) {
 //$$ 		return ConfigUtils.getBoolean("tools", "manipulateExplosionDropChance") ? new net.minecraft.util.RandomSource() {
@@ -79,11 +80,13 @@ public class MixinExplosionPatch {
 //$$
 //$$ 			}
 //$$ 		}: random;
+		//#endif
 	//#else
 	@ModifyArg(method = "finalizeExplosion", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/storage/loot/LootContext$Builder;withRandom(Ljava/util/Random;)Lnet/minecraft/world/level/storage/loot/LootContext$Builder;"), index = 0)
 	public Random stupid(Random random) {
 		return ConfigUtils.getBoolean("tools", "manipulateExplosionDropChance") ? new FakeRandom() : random;
 	//#endif
+	//#if MC<12000
 	}
-
+	//#endif
 }

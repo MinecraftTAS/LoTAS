@@ -178,12 +178,15 @@ public class LoTASIngameGui {
 
 		// =============== CHECKBOXES
 
-		avoidDamageCheckbox = new SmallCheckboxWidget(2, height - 20 - 15, I18n.get("pausegui.lotas.checkbox.invincible"), !ConfigUtils.getBoolean("tools", "takeDamage"), box -> {//"Avoid taking damage"
+		
+		int checkboxY=20;
+		avoidDamageCheckbox = new SmallCheckboxWidget(2, height - checkboxY - 15, I18n.get("pausegui.lotas.checkbox.invincible"), !ConfigUtils.getBoolean("tools", "takeDamage"), box -> {//"Avoid taking damage"
 			ConfigUtils.setBoolean("tools", "takeDamage", !box.isChecked());
 			ConfigUtils.save();
 		});
 
-		dropTowardsMeCheckbox = new SmallCheckboxWidget(2, height - 32 - 15, I18n.get("pausegui.lotas.checkbox.dropToMe"), ConfigUtils.getBoolean("tools", "manipulateVelocityTowards"), box -> {//"Drop towards me"
+		checkboxY+=12;
+		dropTowardsMeCheckbox = new SmallCheckboxWidget(2, height - checkboxY - 15, I18n.get("pausegui.lotas.checkbox.dropToMe"), ConfigUtils.getBoolean("tools", "manipulateVelocityTowards"), box -> {//"Drop towards me"
 			ConfigUtils.setBoolean("tools", "manipulateVelocityTowards", box.isChecked());
 			if (box.isChecked()) {
 				ConfigUtils.setBoolean("tools", "manipulateVelocityAway", false);
@@ -192,7 +195,8 @@ public class LoTASIngameGui {
 			ConfigUtils.save();
 		});
 
-		dropAwayCheckbox = new SmallCheckboxWidget(2, height - 44 - 15, I18n.get("pausegui.lotas.checkbox.dropAway"), ConfigUtils.getBoolean("tools", "manipulateVelocityAway"), box -> {//"Drop away from me"
+		checkboxY+=12;
+		dropAwayCheckbox = new SmallCheckboxWidget(2, height - checkboxY - 15, I18n.get("pausegui.lotas.checkbox.dropAway"), ConfigUtils.getBoolean("tools", "manipulateVelocityAway"), box -> {//"Drop away from me"
 			ConfigUtils.setBoolean("tools", "manipulateVelocityAway", box.isChecked());
 			if (box.isChecked()) {
 				ConfigUtils.setBoolean("tools", "manipulateVelocityTowards", false);
@@ -200,13 +204,17 @@ public class LoTASIngameGui {
 			}
 			ConfigUtils.save();
 		});
-
-		optimizeExplosionsCheckbox = new SmallCheckboxWidget(2, height - 56 - 15, I18n.get("pausegui.lotas.checkbox.explosion"), ConfigUtils.getBoolean("tools", "manipulateExplosionDropChance"), box -> {//"Optimize Explosions"
+		
+		//#if MC<12000
+		checkboxY+=12;
+		optimizeExplosionsCheckbox = new SmallCheckboxWidget(2, height - checkboxY - 15, I18n.get("pausegui.lotas.checkbox.explosion"), ConfigUtils.getBoolean("tools", "manipulateExplosionDropChance"), box -> {//"Optimize Explosions"
 			ConfigUtils.setBoolean("tools", "manipulateExplosionDropChance", box.isChecked());
 			ConfigUtils.save();
 		});
+		//#endif
 
-		rightAutoClickerCheckbox = new SmallCheckboxWidget(2, height - 68 - 15, I18n.get("pausegui.lotas.checkbox.autoclicker"), ConfigUtils.getBoolean("tools", "rAutoClicker"), box -> {//"Right Auto Clicker"
+		checkboxY+=12;
+		rightAutoClickerCheckbox = new SmallCheckboxWidget(2, height - checkboxY - 15, I18n.get("pausegui.lotas.checkbox.autoclicker"), ConfigUtils.getBoolean("tools", "rAutoClicker"), box -> {//"Right Auto Clicker"
 			ConfigUtils.setBoolean("tools", "rAutoClicker", box.isChecked());
 			ConfigUtils.save();
 		});
@@ -249,7 +257,9 @@ public class LoTASIngameGui {
 		MCVer.addButton(parentScreen, avoidDamageCheckbox);
 		MCVer.addButton(parentScreen, dropTowardsMeCheckbox);
 		MCVer.addButton(parentScreen, dropAwayCheckbox);
+		//#if MC<12000
 		MCVer.addButton(parentScreen, optimizeExplosionsCheckbox);
+		//#endif
 		MCVer.addButton(parentScreen, rightAutoClickerCheckbox);
 
 		MCVer.addButton(parentScreen, timerButton);
@@ -355,9 +365,6 @@ public class LoTASIngameGui {
 			MCVer.drawCenteredString(parentScreen, I18n.get("pausegui.lotas.textfield.fail"), 170, 22, 0xFFFFFF);//"\u00A7cPlease enter a number!"
 		}
 		
-		//#if MC>=12000
-//$$  		MCVer.drawCenteredString(parentScreen, I18n.get("pausegui.lotas.dropmanip.vanish"), 80, height-15, 0xFFFFFF);//"\u00A7oRIP DropManipulation!"
-		//#endif
 	}
 
 	public void mouseClicked(double mouseX, double mouseY, int mouseButton) {
@@ -431,6 +438,9 @@ public class LoTASIngameGui {
 	private void activateTickrateField(boolean activate) {
 		if (activate) {
 			tickrateField = MCVer.EditBox(fontRenderer, 7, 17, 94, 16, "");
+			//#if MC>=12000
+//$$ 				tickrateField.setCanLoseFocus(false);
+			//#endif
 			tickrateIncreaseButton.active = false;
 			tickrateDecreaseButton.active = false;
 			tickrateIncreaseButton.visible = false;
@@ -456,6 +466,9 @@ public class LoTASIngameGui {
 	private void activateSavestateField(boolean activate) {
 		if (activate) {
 			savestateNameField = MCVer.EditBox(fontRenderer, parentScreen.width / 2 - 100, parentScreen.height / 4 + 82, 94, 16, "");
+			//#if MC>=12000
+//$$ 			savestateNameField.setCanLoseFocus(false);
+			//#endif
 			savestateButton.active = false;
 			savestateButton.visible = false;
 			parentScreen.setFocused(savestateNameField);

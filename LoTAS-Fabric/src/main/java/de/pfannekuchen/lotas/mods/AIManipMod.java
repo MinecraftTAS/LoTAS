@@ -320,8 +320,7 @@ public class AIManipMod {
 		}
 		
 		public AiJob(Mob entity, Vec3 target, Vec3 prevPos) {
-			this.entity = entity;
-			this.target=target;
+			this(entity, target);
 			this.prevPos=prevPos;
 		}
 
@@ -330,6 +329,9 @@ public class AIManipMod {
 		 * @return
 		 */
 		public boolean isFinished() {
+			if(target == null || entity == null) {
+				return true;
+			}
 			double distance=target.distanceTo(entity.position());
 			if (distance < 1) {
 				return true;
