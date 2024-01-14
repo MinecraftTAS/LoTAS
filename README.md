@@ -1,32 +1,67 @@
-﻿# LoTAS Mod
-### Low Optimization Tool Assisted Speedrun Mod
+﻿# This project is on hiatus!
+We are focussing our attention to [TASmod](https://github.com/MinecraftTAS/TASmod).  
+For more information and plans read this announcement: [Future of Mineraft TAS tools](https://gist.github.com/ScribbleTAS/43b18e8a92a111e92bf4bb0d9cf49e99)
 
-LoTAS is a Mod used to create [Tool Assisted Speedruns](https://en.wikipedia.org/wiki/Tool-assisted_speedrun). In Minecraft TASing you use a mod called Tickrate Changer to slow the game down. The Game runs at 20 ticks per second so 10 would be 50% speed.
+# LoTAS
+Used to create non-playback, Low optimization Tool-Assisted Speedruns (LoTAS).  
+Essentially, you record the game in slow motion, record yourself speedrunning with a recording program such as [OBS](https://obsproject.com),  
+then speed up the video footage.  
 
-## How do I start?
+LoTAS is a collection of tools commonly used for TASing, with a big focus on RNG manipulation.  
 
-Once you installed the Mod and opened a World you can access the TAS Features by pressing `Escape`.
-This might look confusing to you, but all you need to know is that the top left buttons + and -, increase or decrease the speed of the game.
-Have a look in the [Wiki](https://github.com/MCPfannkuchenYT/LoTAS/wiki) to see the rest of the features explained
+## Tools
+- *Tickratechanger*: Used for slowing down the game speed
+- *Savestates*: Used for creating backups of your world, basically quick save/quick load
+- *Drop Manipulation*: Manipulates mob drops to always drop the best items
+- *Dragon Manipulation*: Manipulates the dragon phases
+- *Dupemod*: Replicates the duping bug from vanilla, without the need to close the game.
+- *Spawn manipulation*: Spawn entities at a certain location.
+- *AI manipulation*: Let entities pathfind to a certain place  
 
+*and more...*
 ## Bugs / Feature Requests
+We won't accept any feature-requests at this time, as well as bug reports.
 
-Report Bugs under the Issues Section or on our [Discord](https://discord.gg/minecraft-tas-373166430478401555)
-All Feature Requests go also onto the Discord Server.
+If you need help with setting up LoTAS then join this [Discord](https://discord.gg/minecraft-tas-373166430478401555)
 
 ## Translations
-You can find the file under [src/main/resources/assets/lotas/lang/en_us.lang](https://github.com/MinecraftTAS/LoTAS/blob/dev/LoTAS-Fabric/src/main/resources/assets/lotas/lang/en_us.lang)
-
 Credits:  
-Simplified Chinese: [RayXu6](https://github.com/Naruyoko), Proofreading by NormalZombie#2431  
+Simplified Chinese: [RayXu6](https://github.com/Naruyoko), Proofreading by normalzombie
 Japanese: [Naruyoko](https://github.com/Naruyoko)  
 Korean: Sidite  
 French: azulamazigh  
 
-## Features
-* Duping: Save your Inventory/Items/Chests with 1 button and load' em again with another click!
-* Savestates: Create copies of your World and load them again without copying the world manually!
-* Drop Manipulation: Need Flint? Get Flint!
-* Spawn Manipulation: Spawn Mobs everywhere possible using the Gui!
-* AI Manipulation: Change what the Dragon should do and where your Entities should move.
-* And More: There are more features like: Tick Indicator, Timer, No Damage and more.. all of those in the wiki.
+# FAQ
+## How do I start?
+- Most functionality is in the in-game pause menu via buttons.
+- The main menu has a "configuration" button
+- Pressing F6 opens an in game HUD, where you can enable information or an in-game timer.
+
+## Can I disable the potion in the hotbar?
+No, we do not provide that feature. We want to prevent cheating with our mod and this is our compromise for making it not too annoying. Please live with it and support our fight against cheaters.
+
+## Can this mod record and play back inputs?
+No, it can not. This mod was specifically made to not allow for that, hence the "non-playback" in the description. For a playback mod, check [TASmod](https://github.com/MinecraftTAS/TASmod).
+
+## How do I use item duplication?
+This differs if you are on versions below 1.12.2 (Forge) or versions higher than 1.14.4 (Fabric)
+
+### 1.14.4-1.20.1
+1. Open the pause menu and click in the top left **Save Items**
+2. Throw item(s) on the ground
+3. Open the pause menu and click in the top left **Load Items**
+4. An item should spawn *in your inventory*
+
+### 1.8.9-1.12.2
+1. Throw the item(s) you want to duplicate on the ground
+2. Open the pause menu and click in the top left **Save Items**
+3. Pick up the item(s)
+4. Open the pause menu and click in the top left **LoadItems**
+5. An item should spawn *on the ground*
+
+## Where is the video upspeeder?
+This feature that was a minor desaster...  
+We decided to remove it, because video editors like [Shotcut](https://shotcut.org) are much better, provide more functionality and happen to work as intended.  
+
+## Why is there no multiplayer?
+This mod wasn't developed with multiplayer in mind. The plan was to add it later but this turned out to be *very* tedious. Multiplayer support is/was planned in [LoTAS 3.0](https://github.com/MinecraftTAS/LoTAS/tree/dev-3.0.0)
