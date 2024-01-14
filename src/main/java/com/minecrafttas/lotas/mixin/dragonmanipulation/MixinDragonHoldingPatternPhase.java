@@ -5,7 +5,6 @@ import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.boss.enderdragon.phases.AbstractDragonPhaseInstance;
 import net.minecraft.world.entity.boss.enderdragon.phases.DragonHoldingPatternPhase;
 import net.minecraft.world.level.pathfinder.Path;
-import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -33,23 +32,22 @@ public abstract class MixinDragonHoldingPatternPhase extends AbstractDragonPhase
 	 */
 	@Redirect(method = "navigateToNextPathNode", at = @At(value = "INVOKE", target = "Ljava/util/Random;nextFloat()F"))
 	public float redirect_nextFloat(Random r) {
-		return DRAGON_MANIPULATION.getPhase() == Phase.OFF ? r.nextFloat() : 1.0f;
+		return DRAGON_MANIPULATION.getPhase() == Phase.OFF ? r.nextFloat() : 0.0f;
 	}
-	
+
 	/**
 	 * Force optimal dragon path by (step 2) calculating the optimal block addend depending on the dragons position
-	 *
 	 * @param x Node x pos
 	 * @param y Target y pos
 	 * @param z Node z pos
 	 */
-	@Redirect(method = "navigateToNextPathNode", at = @At(value = "NEW", target = "Lnet/minecraft/world/phys/Vec3;<init>(DDD)Lnet/minecraft/world/phys/Vec3;"))
-	public Vec3 navigate_nodeInit(double x, double y, double z) {
-		if (DragonManipulation.instance.getPhase() == Phase.OFF)
-			return new Vec3(x, y, z);
-		
-		double distance = Math.max(0, Math.min(20, dragon.position().y - y));
-		return new Vec3(x, y + distance, z);
+	@ModifyArgs(method = "navigateToNextPathNode", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/phys/Vec3;<init>(DDD)V"))
+	public void navigate_nodeInit(Args args) {
+		if (DRAGON_MANIPULATION.getPhase() == Phase.OFF)
+			return;
+
+		double distance = Math.max(0, Math.min(20, dragon.position().y - (double) args.get(1)));
+		args.set(1, (double) args.get(1) + distance);
 	}
 	
 	@Unique

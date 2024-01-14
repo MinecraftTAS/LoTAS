@@ -29,6 +29,13 @@ public class LoTAS implements ModInitializer {
 	/** Savestate mod instance */
 	public static final SavestateMod SAVESTATE_MOD = new SavestateMod();
 
+	/**
+	 * Static initializer for registering mods.
+	 */
+	static {
+		ModSystem.registerMods(DUPE_MOD, TICK_ADVANCE, TICKRATE_CHANGER, DRAGON_MANIPULATION, SAVESTATE_MOD);
+	}
+
 	@Override
 	public void onInitialize() {
 		ConfigurationSystem.load(new File("lotas_develop.properties"));
