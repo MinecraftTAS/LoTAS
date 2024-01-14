@@ -1,4 +1,4 @@
-[!CAUTION]
+> [!CAUTION]
 > You are reading the README.md for **LoTAS 3!**  You most likely want to read [this](https://github.com/MinecraftTAS/LoTAS/tree/latest) instead.
 > LoTAS 3 is currently in early development and not ready for use.
 
@@ -6,7 +6,7 @@
 LoTAS is a mod used for creating **L**ow **o**ptimization **T**ool **A**ssisted **S**peedruns in Minecraft.
 This mod contains a bunch of tools that can be used to manipulate the game in various ways, allowing for the creation of TASes.
 
-[!NOTE]
+> [!NOTE]
 > TASes created with LoTAS cannot be played back, therefore you have to use a [recording software](https://obsproject.com/) to record and speed up your TAS.
 
 ## Tools
