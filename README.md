@@ -14,9 +14,9 @@ LoTAS is a collection of tools commonly used for TASing, with a big focus on RNG
 - *Savestates*: Used for creating backups of your world, basically quick save/quick load
 - *Drop Manipulation*: Manipulates mob drops to always drop the best items
 - *Dragon Manipulation*: Manipulates the dragon phases
-- *Dupemod*: Replicates the duping bug from vanilla, without the need to close the game.
-- *Spawn manipulation*: Spawn entities at a certain location.
-- *AI manipulation*: Let entities pathfind to a certain place  
+- *Item Duplication (Dupemod)*: Replicates the duping bug from vanilla, without the need to close the game.
+- *Spawn Manipulation*: Spawn entities at a certain location.
+- *AI Manipulation*: Let entities pathfind to a certain place  
 
 *and more...*
 ## Bugs / Feature Requests
@@ -26,7 +26,7 @@ If you need help with setting up LoTAS then join this [Discord](https://discord.
 
 ## Translations
 Credits:  
-Simplified Chinese: [RayXu6](https://github.com/Naruyoko), Proofreading by normalzombie
+Simplified Chinese: [RayXu6](https://github.com/Naruyoko), Proofreading by normalzombie  
 Japanese: [Naruyoko](https://github.com/Naruyoko)  
 Korean: Sidite  
 French: azulamazigh  
