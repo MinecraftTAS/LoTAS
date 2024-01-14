@@ -14,7 +14,7 @@
 	},
 
 	"license": "GPLv3",
-	"icon": "",
+	"icon": "icon.png",
 	"environment": "*",
 	"accessWidener": "lotas.accesswidener",
 	"entrypoints": {
