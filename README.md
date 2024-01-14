@@ -1,7 +1,7 @@
 ﻿> [!IMPORTANT]  
 > # This project is no longer actively being developed!
 >We are shifting our focus to [TASmod](https://github.com/MinecraftTAS/TASmod).  
->For more information and plans read this announcement: [Future of Mineraft TAS tools](https://>gist.github.com/ScribbleTAS/43b18e8a92a111e92bf4bb0d9cf49e99)
+>For more information and plans, read this announcement: [Future of Mineraft TAS tools](https://>gist.github.com/ScribbleTAS/43b18e8a92a111e92bf4bb0d9cf49e99)
 
 # LoTAS
 Used to create non-playback, Low optimization Tool-Assisted Speedruns (LoTAS).  
@@ -21,7 +21,7 @@ LoTAS is a collection of tools commonly used for TASing, with a big focus on RNG
 
 *and more...*
 ## Bugs / Feature Requests
-Due to lack of time and motivation, we will, for the time being, not be accepting feature requests or bug reports.
+We won't accept any feature-requests at this time, as well as bug reports.
 
 If you need help with setting up LoTAS then join this [Discord](https://discord.gg/minecraft-tas-373166430478401555)
 
