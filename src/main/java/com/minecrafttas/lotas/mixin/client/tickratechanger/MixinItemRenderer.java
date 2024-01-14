@@ -5,7 +5,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.RenderStateShard;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.Redirect;
 
 import static com.minecrafttas.lotas.LoTAS.TICKRATE_CHANGER;
 
@@ -19,12 +19,11 @@ public class MixinItemRenderer {
 
 	/**
 	 * Slow down the getMillis
-	 * @param ignored Ignored original value
 	 * @return Manipulated value
 	 */
-	@ModifyVariable(method = "setupGlintTexturing", at = @At(value = "STORE"), index = 1, ordinal = 0)
-	private static long modifyrenderEffect(long value) {
-		return TICKRATE_CHANGER.getMilliseconds() * 8L;
+	@Redirect(method = "setupGlintTexturing", at = @At(value = "INVOKE", target = "Lnet/minecraft/Util;getMillis()J"))
+	private static long modifyrenderEffect() {
+		return TICKRATE_CHANGER.getMilliseconds();
 	}
 
 }

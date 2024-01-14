@@ -1,11 +1,10 @@
 package com.minecrafttas.lotas.mixin.client.tickratechanger;
 
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
-
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Redirect;
 
 import static com.minecrafttas.lotas.LoTAS.TICKRATE_CHANGER;
 
@@ -19,11 +18,10 @@ public class MixinToastInstance {
 
 	/**
 	 * Slow down toast timer
-	 * @param animationTimer Original value
 	 * @return Manipulated value
 	 */
-	@ModifyVariable(method = "render(IILcom/mojang/blaze3d/vertex/PoseStack;)Z", at = @At(value = "STORE"), ordinal = 0, index = 4)
-	public long modifyAnimationTime(long animationTimer) {
+	@Redirect(method = "render(IILcom/mojang/blaze3d/vertex/PoseStack;)Z", at = @At(value = "INVOKE", target = "Lnet/minecraft/Util;getMillis()J"))
+	public long modifyAnimationTime() {
 		return TICKRATE_CHANGER.getMilliseconds();
 	}
 

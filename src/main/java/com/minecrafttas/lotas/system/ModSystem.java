@@ -11,6 +11,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -23,11 +24,11 @@ public class ModSystem {
 	private static final List<Mod> MODS = new ArrayList<>();
 
 	/**
-	 * Register a mod
-	 * @param m Mod
+	 * Register a list of mods
+	 * @param m Mods
 	 */
-	public static void registerMod(Mod m) {
-		MODS.add(m);
+	public static void registerMods(Mod... m) {
+		MODS.addAll(Arrays.asList(m));
 	}
 
 	// 1: event handlers that update the mod
