@@ -27,6 +27,7 @@ import net.minecraft.server.level.ServerPlayer;
 
 /**
  * Dragon manipulation mod
+ *
  * @author Pancake
  */
 @Getter
@@ -41,6 +42,7 @@ public class DragonManipulation extends Mod {
 	/**
 	 * Request phase change by sending a packet to the server
 	 * (Clientside only)
+	 *
 	 * @param phase New phase or null
 	 */
 	@Environment(EnvType.CLIENT)
@@ -52,6 +54,7 @@ public class DragonManipulation extends Mod {
 
 	/**
 	 * Update phase on server and send packet to clients when receiving packet
+	 *
 	 * @param buf Packet
 	 */
 	@Override
@@ -68,6 +71,7 @@ public class DragonManipulation extends Mod {
 
 	/**
 	 * Update mirrored phase on packet receive
+	 *
 	 * @param buf Packet
 	 */
 	@Override
@@ -76,7 +80,7 @@ public class DragonManipulation extends Mod {
 		this.phase = Phase.values()[buf.readInt()];
 	}
 
-	public static enum Phase {
+	public enum Phase {
 		OFF, LANDINGAPPROACH, STRAFING, HOLDINGPATTERN
 	}
 

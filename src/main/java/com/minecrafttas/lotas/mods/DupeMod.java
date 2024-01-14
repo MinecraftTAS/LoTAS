@@ -27,6 +27,7 @@ import static com.minecrafttas.lotas.LoTAS.LOGGER;
 
 /**
  * Dupe mod
+ *
  * @author Pancake
  */
 public class DupeMod extends Mod {
@@ -39,11 +40,12 @@ public class DupeMod extends Mod {
 	private CompoundTag localPlayer;
 
 	/** Copy of all serverside players */
-	private HashMap<ServerPlayer, CompoundTag> onlineClients = new HashMap<>();
+	private final HashMap<ServerPlayer, CompoundTag> onlineClients = new HashMap<>();
 
 	/**
 	 * Request dupe by sending a packet to the server
 	 * (Clientside only)
+	 *
 	 * @param saveOLoad Whether player data should be loaded or saved
 	 */
 	@Environment(EnvType.CLIENT)
@@ -55,6 +57,7 @@ public class DupeMod extends Mod {
 
 	/**
 	 * Trigger dupe and resend packet to all clients when receiving packet
+	 *
 	 * @param buf Packet
 	 */
 	@Override
@@ -72,7 +75,7 @@ public class DupeMod extends Mod {
 
 				// send packet to client
 				FriendlyByteBuf data = new FriendlyByteBuf(Unpooled.buffer());
-				data.writeBoolean(saveOLoad);
+				data.writeBoolean(true);
 				data.writeInt(tag.getInt("playerGameType"));
 				this.sendPacketToClient(player, data);
 			}
@@ -102,13 +105,14 @@ public class DupeMod extends Mod {
 
 				// send packet to client
 				FriendlyByteBuf data = new FriendlyByteBuf(Unpooled.buffer());
-				data.writeBoolean(saveOLoad);
+				data.writeBoolean(false);
 				this.sendPacketToClient(player, data);
 			}
 	}
 
 	/**
 	 * Save or load when receiving packet
+	 *
 	 * @param buf Packet
 	 */
 	@Override
@@ -129,6 +133,7 @@ public class DupeMod extends Mod {
 
 	/**
 	 * Save client data on connect
+	 *
 	 * @param player Player
 	 */
 	@Override

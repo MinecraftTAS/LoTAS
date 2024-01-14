@@ -16,6 +16,7 @@ import java.util.List;
 
 /**
  * Mod manager managing events for mods
+ *
  * @author Pancake
  */
 public class ModSystem {
@@ -25,6 +26,7 @@ public class ModSystem {
 
 	/**
 	 * Register a list of mods
+	 *
 	 * @param m Mods
 	 */
 	public static void registerMods(Mod... m) {
@@ -118,6 +120,7 @@ public class ModSystem {
 
 	/**
 	 * Hull of a mod containing all events for the mod
+	 *
 	 * @author Pancake
 	 */
 	public static abstract class Mod {
@@ -130,10 +133,11 @@ public class ModSystem {
 		protected MinecraftServer mcserver;
 
 		/** Id of the mod */
-		protected ResourceLocation id;
+		protected final ResourceLocation id;
 
 		/**
 		 * Initialize a mod
+		 *
 		 * @param id Id of this mod
 		 */
 		public Mod(ResourceLocation id) {
@@ -158,7 +162,6 @@ public class ModSystem {
 
 		/**
 		 * Executed inbetween every tick on the server
-		 * @param server Server instance
 		 */
 		protected void onServerTick() {
 
@@ -166,6 +169,7 @@ public class ModSystem {
 
 		/**
 		 * Executed every time the server receives a custom payload packet.
+		 *
 		 * @param buf Packet
 		 */
 		protected void onServerPayload(FriendlyByteBuf buf) {
@@ -174,6 +178,7 @@ public class ModSystem {
 
 		/**
 		 * Executed if a client connects to the server
+		 *
 		 * @param player Client connected
 		 */
 		protected void onClientConnect(ServerPlayer player) {
@@ -223,6 +228,7 @@ public class ModSystem {
 
 		/**
 		 * Executed every time the client receives a custom payload packet.
+		 *
 		 * @param buf Packet
 		 */
 		@Environment(EnvType.CLIENT)
@@ -248,6 +254,7 @@ public class ModSystem {
 		
 		/**
 		 * Send packet to a client
+		 *
 		 * @param player Player
 		 * @param buf Data
 		 */
@@ -257,6 +264,7 @@ public class ModSystem {
 
 		/**
 		 * Send packet from to server
+		 *
 		 * @param buf Data
 		 */
 		@Environment(EnvType.CLIENT)

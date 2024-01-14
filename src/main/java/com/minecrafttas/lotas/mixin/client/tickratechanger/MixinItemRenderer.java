@@ -11,6 +11,7 @@ import static com.minecrafttas.lotas.LoTAS.TICKRATE_CHANGER;
 
 /**
  * This mixin slows down the Foil renderer to the tickrate
+ *
  * @author Pancake
  */
 @Mixin(RenderStateShard.class)
@@ -19,6 +20,7 @@ public class MixinItemRenderer {
 
 	/**
 	 * Slow down the getMillis
+	 * 
 	 * @return Manipulated value
 	 */
 	@Redirect(method = "setupGlintTexturing", at = @At(value = "INVOKE", target = "Lnet/minecraft/Util;getMillis()J"))

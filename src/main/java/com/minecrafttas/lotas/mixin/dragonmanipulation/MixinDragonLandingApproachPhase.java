@@ -18,6 +18,7 @@ import static com.minecrafttas.lotas.LoTAS.DRAGON_MANIPULATION;
 
 /**
  * This mixin manipulates the rng of the dragon landing approach phase
+ *
  * @author Pancake
  */
 @Mixin(DragonLandingApproachPhase.class)
@@ -26,6 +27,7 @@ public abstract class MixinDragonLandingApproachPhase extends AbstractDragonPhas
 
 	/**
 	 * Force optimal dragon path by (step 1) removing the 20 block addend
+	 *
 	 * @param r Random source
 	 * @return Multiplier
 	 */
@@ -36,9 +38,8 @@ public abstract class MixinDragonLandingApproachPhase extends AbstractDragonPhas
 
 	/**
 	 * Force optimal dragon path by (step 2) calculating the optimal block addend depending on the dragons position
-	 * @param x Node x pos
-	 * @param y Target y pos
-	 * @param z Node z pos
+	 *
+	 * @param args Arguments
 	 */
 	@ModifyArgs(method = "navigateToNextPathNode", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/phys/Vec3;<init>(DDD)V"))
 	public void navigate_nodeInit(Args args) {

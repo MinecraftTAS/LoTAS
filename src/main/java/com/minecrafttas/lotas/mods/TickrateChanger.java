@@ -24,6 +24,7 @@ import static com.minecrafttas.lotas.LoTAS.TICK_ADVANCE;
 
 /**
  * Tickrate changer mod
+ *
  * @author Pancake
  */
 public class TickrateChanger extends Mod {
@@ -40,7 +41,7 @@ public class TickrateChanger extends Mod {
 	private boolean restoreLastSession;
 	
 	/** Tickrate of the last session, used for restoring tickrate (static for integrated server) */
-	private static double lastSessionTickrate = 20.0; // TODO: does this need to be static? i don't feel like thinking right now
+	private static double lastSessionTickrate = 20.0;
 	
 	/** Current speed of the game */
 	@Getter
@@ -69,6 +70,7 @@ public class TickrateChanger extends Mod {
 	/**
 	 * Request tickrate update by sendiong a packet to the server updating the tickrate.
 	 * (Clientside only)
+	 *
 	 * @param tickrate Tickrate to update to
 	 */
 	@Environment(EnvType.CLIENT)
@@ -81,6 +83,7 @@ public class TickrateChanger extends Mod {
 
 	/**
 	 * Update server tickrate on packet receive
+	 *
 	 * @param buf Packet
 	 */
 	@Override
@@ -91,6 +94,7 @@ public class TickrateChanger extends Mod {
 	/**
 	 * Update tickrate and send a packet to all players
 	 * (Serverside only)
+	 *
 	 * @param tickrate Tickrate
 	 */
 	public void updateTickrate(double tickrate) {
@@ -111,6 +115,7 @@ public class TickrateChanger extends Mod {
 
 	/**
 	 * Internally update tickrate of game
+	 *
 	 * @param tickrate Tickrate
 	 */
 	private void internallyUpdateTickrate(double tickrate) {
@@ -121,6 +126,7 @@ public class TickrateChanger extends Mod {
 
 	/**
 	 * Update client tickrate on packet receive
+	 *
 	 * @param buf Packet Data
 	 */
 	@Override
@@ -132,6 +138,7 @@ public class TickrateChanger extends Mod {
 
 	/**
 	 * Update game time using gamespeed
+	 *
 	 * @param gamespeed Speed of game
 	 */
 	@Environment(EnvType.CLIENT)
@@ -142,6 +149,7 @@ public class TickrateChanger extends Mod {
 
 	/**
 	 * Send tickrate to newly connected client
+	 *
 	 * @param player Client connected
 	 */
 	@Override
@@ -166,6 +174,7 @@ public class TickrateChanger extends Mod {
 
 	/**
 	 * Advance game time by millis
+	 *
 	 * @param millis Milliseconds
 	 */
 	@Environment(EnvType.CLIENT)
@@ -177,6 +186,7 @@ public class TickrateChanger extends Mod {
 	/**
 	 * Get current game time in milliseconds. This is the time that the game would be at if the game was running at 20 tps.
 	 * (Clientside only)
+	 *
 	 * @return Milliseconds passed in game time
 	 */
 	@Environment(EnvType.CLIENT)

@@ -13,6 +13,7 @@ import net.minecraft.server.players.PlayerList;
 
 /**
  * This mixin is purely responsible for the hooking up the events in {@link ModSystem}.
+ *
  * @author Pancake
  */
 @Mixin(PlayerList.class)
@@ -20,6 +21,7 @@ public class HookPlayerList {
 
 	/**
 	 * Trigger event in {@link ModSystem#onClientConnect(ServerPlayer)} when a player connects
+	 *
 	 * @param connection Connection to the client
 	 * @param serverPlayer Player associated with this connection
 	 * @param ci Callback Info

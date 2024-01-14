@@ -19,6 +19,7 @@ import static com.minecrafttas.lotas.LoTAS.DRAGON_MANIPULATION;
 
 /**
  * This mixin manipulates the rng of the dragon holding pattern phase
+ *
  * @author Pancake
  */
 @Mixin(DragonHoldingPatternPhase.class)
@@ -27,6 +28,7 @@ public abstract class MixinDragonHoldingPatternPhase extends AbstractDragonPhase
 
 	/**
 	 * Force optimal dragon path by (step 1) removing the 20 block addend
+	 *
 	 * @param r Random source
 	 * @return Multiplier
 	 */
@@ -37,9 +39,8 @@ public abstract class MixinDragonHoldingPatternPhase extends AbstractDragonPhase
 
 	/**
 	 * Force optimal dragon path by (step 2) calculating the optimal block addend depending on the dragons position
-	 * @param x Node x pos
-	 * @param y Target y pos
-	 * @param z Node z pos
+	 *
+	 * @param args Arguments
 	 */
 	@ModifyArgs(method = "navigateToNextPathNode", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/phys/Vec3;<init>(DDD)V"))
 	public void navigate_nodeInit(Args args) {
@@ -59,6 +60,7 @@ public abstract class MixinDragonHoldingPatternPhase extends AbstractDragonPhase
 	/**
 	 * Force optimal dragon path by (step 3) calculating whether a direction change would result in the more optimal path.
 	 * Coincidentally the length of the path does not need to be checked, because for some odd mathematical reason the path length will always be 1 in the outer circle
+	 *
 	 * @param dragon Ender Dragon
 	 * @return Closest node
 	 */
@@ -88,6 +90,7 @@ public abstract class MixinDragonHoldingPatternPhase extends AbstractDragonPhase
 	
 	/**
 	 * Force optimal dragon path by (step 4) applying the calculated math from redirect_findClosestNode
+	 *
 	 * @param r Random source
 	 * @param i Bound
 	 * @return Random int
@@ -99,6 +102,7 @@ public abstract class MixinDragonHoldingPatternPhase extends AbstractDragonPhase
 	
 	/**
 	 * Force dragon to enter landing approach phase after finishing its path
+	 *
 	 * @param r Random source
 	 * @param i Bound
 	 * @return Random int
@@ -118,6 +122,7 @@ public abstract class MixinDragonHoldingPatternPhase extends AbstractDragonPhase
 
 	/**
 	 * Force dragon to enter strafing phase after finishing its path
+	 *
 	 * @param r Random source
 	 * @param i Bound
 	 * @return Random int
@@ -137,6 +142,7 @@ public abstract class MixinDragonHoldingPatternPhase extends AbstractDragonPhase
 
 	/**
 	 * Force dragon to enter strafing phase after finishing its path
+	 *
 	 * @param r Random source
 	 * @param i Bound
 	 * @return Random int

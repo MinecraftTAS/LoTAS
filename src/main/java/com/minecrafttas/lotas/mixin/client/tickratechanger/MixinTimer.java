@@ -16,6 +16,7 @@ import static com.minecrafttas.lotas.LoTAS.TICK_ADVANCE;
 
 /**
  * This mixin slows down the integrated Timer making the game run slower
+ *
  * @author Pancake
  */
 @Mixin(Timer.class)
@@ -27,6 +28,7 @@ public class MixinTimer {
 
 	/**
 	 * Slow down the timer
+	 *
 	 * @param cir Returnable
 	 */
 	@Inject(method = "advanceTime", at = @At("HEAD"))

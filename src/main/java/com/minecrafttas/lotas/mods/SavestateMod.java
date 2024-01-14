@@ -65,6 +65,7 @@ import static com.minecrafttas.lotas.LoTAS.*;
 
 /**
  * Savestate mod
+ *
  * @author Pancake
  */
 public class SavestateMod extends Mod {
@@ -73,7 +74,7 @@ public class SavestateMod extends Mod {
 	}
 
 	/** Mirrored state data */
-	private StateData data = new StateData();
+	private final StateData data = new StateData();
 	
 	/** Task to execute next tick */
 	private Task task;
@@ -88,6 +89,7 @@ public class SavestateMod extends Mod {
 
 	/**
 	 * Request state action by sending a packet to the server
+	 *
 	 * @param state State action (state 0 is save, state 1 is load, state 2 is delete)
 	 * @param index Index of state to load/delete (only used for state 1 and 2)
 	 * @param name Name of the state (only used for state 0)
@@ -106,6 +108,7 @@ public class SavestateMod extends Mod {
 	
 	/**
 	 * Trigger load/delete/savestate when client packet is incoming and then inform every client
+	 *
 	 * @param buf Packet
 	 */
 	@Override
@@ -170,6 +173,7 @@ public class SavestateMod extends Mod {
 
 	/**
 	 * Save new state of the world
+	 *
 	 * @param name Savestate Name
 	 * @throws IOException If an exception occurs while saving
 	 */
@@ -207,6 +211,7 @@ public class SavestateMod extends Mod {
 
 	/**
 	 * Load state of the world
+	 *
 	 * @param i Index to load
 	 * @throws IOException If an exception occurs while loading
 	 */
@@ -233,19 +238,20 @@ public class SavestateMod extends Mod {
 
 		// copy state
 		File worldSavestateDir = new File(this.data.getWorldSavestateDir(), this.data.getStates()[i].getIndex() + "");
-		FileUtils.copyDirectory(worldSavestateDir, this.data.getWorldDir());
+		FileUtils.copyDirectory(worldSavestateDir, worldDir);
 
 		// lock session.lock
 		this.lockSessionLock(levelPath);
 
 		// reload level
-		this.loadWorldData(worldDir);
+		this.loadWorldData();
 		this.loadWorldLighting();
 		this.loadPlayers();
 	}
 
 	/**
 	 * Unload all levels
+	 *
 	 * @throws IOException If an exception occurs while unloading
 	 */
 	private void unloadServerLevel() throws IOException {
@@ -305,6 +311,7 @@ public class SavestateMod extends Mod {
 
 	/**
 	 * Unlock session lock
+	 *
 	 * @return Path to level
 	 * @throws IOException If an exception occurs while unlocking
 	 */
@@ -316,6 +323,7 @@ public class SavestateMod extends Mod {
 
 	/**
 	 * Create session lock
+	 *
 	 * @param levelPath Path to level
 	 * @throws IOException If an exception occurs while locking
 	 */
@@ -344,7 +352,7 @@ public class SavestateMod extends Mod {
 			// load player data
 			CompoundTag compoundTag = playerList.load(player);
 			@SuppressWarnings("deprecation")
-			ServerLevel newLevel = this.mcserver.getLevel(compoundTag != null ? DimensionType.parseLegacy(new Dynamic<Tag>(NbtOps.INSTANCE, compoundTag.get("Dimension"))).result().orElse(Level.OVERWORLD) : Level.OVERWORLD);
+			ServerLevel newLevel = this.mcserver.getLevel(compoundTag != null ? DimensionType.parseLegacy(new Dynamic<>(NbtOps.INSTANCE, compoundTag.get("Dimension"))).result().orElse(Level.OVERWORLD) : Level.OVERWORLD);
 
 	        // update client before spawning
 			LevelData levelData = newLevel.getLevelData();
@@ -397,10 +405,8 @@ public class SavestateMod extends Mod {
 
 	/**
 	 * Load world data
-	 * @param worldDir World Directory
-	 * @throws IOException If an exception occurs while loading
 	 */
-	private void loadWorldData(File worldDir) throws IOException {
+	private void loadWorldData() {
 		WorldData worldData = this.loadWorldData(this.mcserver.storageSource);
 		this.mcserver.worldData = worldData;
 		for (ServerLevel level : this.mcserver.getAllLevels()) {
@@ -418,13 +424,14 @@ public class SavestateMod extends Mod {
 
 	/**
 	 * Load world data from level storage access
+	 *
 	 * @param levelStorageAccess Level Storage Access
 	 * @return World Data
 	 */
 	private WorldData loadWorldData(LevelStorageAccess levelStorageAccess) {
         ServerResources serverResources;
 		DataPackConfig dataPackConfig = levelStorageAccess.getDataPacks();
-        PackRepository<Pack> packRepository = new PackRepository<Pack>(Pack::new, new ServerPacksSource(), new FolderRepositorySource(levelStorageAccess.getLevelPath(LevelResource.DATAPACK_DIR).toFile(), PackSource.WORLD));
+        PackRepository<Pack> packRepository = new PackRepository<>(Pack::new, new ServerPacksSource(), new FolderRepositorySource(levelStorageAccess.getLevelPath(LevelResource.DATAPACK_DIR).toFile(), PackSource.WORLD));
         DataPackConfig dataPackConfig2 = MinecraftServer.configurePackRepository(packRepository, dataPackConfig == null ? DataPackConfig.DEFAULT : dataPackConfig, false);
         CompletableFuture<ServerResources> completableFuture = ServerResources.loadResources(packRepository.openAllSelected(), Commands.CommandSelection.DEDICATED, 2, Util.backgroundExecutor(), Runnable::run);
         try {
@@ -440,6 +447,7 @@ public class SavestateMod extends Mod {
 	
 	/**
 	 * Delete state of the world
+	 *
 	 * @param i Index to delete
 	 * @throws IOException If an exception occurs while deleting
 	 */
@@ -461,6 +469,7 @@ public class SavestateMod extends Mod {
 	
 	/**
 	 * Update state list on incoming packet
+	 *
 	 * @param buf Packet
 	 */
 	@Override
@@ -480,11 +489,11 @@ public class SavestateMod extends Mod {
 				break;
 		}
 	}
-	
+
 	/**
 	 * Update client data on connect
 	 */
-	public void onConnect(ServerPlayer c) {
+	public void onClientConnect(ServerPlayer c) {
 		try {
 			this.data.loadData();
 			this.sendStates();
@@ -494,6 +503,6 @@ public class SavestateMod extends Mod {
 	}
 
 	public interface Task {
-		public void run() throws IOException;
+		void run() throws IOException;
 	}
 }
