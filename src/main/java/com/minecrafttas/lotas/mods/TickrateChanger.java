@@ -20,25 +20,21 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
+import static com.minecrafttas.lotas.LoTAS.TICK_ADVANCE;
+
 /**
  * Tickrate changer mod
  * @author Pancake
  */
 public class TickrateChanger extends Mod {
+	public TickrateChanger() {
+		super(new ResourceLocation("lotas", "tickratechanger"));
+	}
 
 	/** Array of the most common tickrates available via decrease and increase tickrate keybinds */
 	@Environment(EnvType.CLIENT)
 	private static final double[] TICKRATES = { 0.5f, 1.0f, 2.0f, 4.0f, 5.0f, 10.0f, 20.0f };
 
-	public static TickrateChanger instance; // FIXME: Remove this instance variable (applies to all mods)
-
-	/**
-	 * Construct tickrate changer mod
-	 */
-	public TickrateChanger() {
-		super(new ResourceLocation("lotas", "tickratechanger"));
-		instance = this;
-	}
 
 	/** Should the game remember the tickrate in-between different levels */
 	private boolean restoreLastSession;
@@ -186,8 +182,7 @@ public class TickrateChanger extends Mod {
 	@Environment(EnvType.CLIENT)
 	public long getMilliseconds() {
 		// ignore time passed if tick advance is enabled and client is not ticking
-		TickAdvance adv = TickAdvance.instance;
-		if (adv.isTickadvance() && !adv.shouldTickClient) {
+		if (TICK_ADVANCE.isTickadvance() && !TICK_ADVANCE.shouldTickClient) {
 			this.systemTimeSinceUpdate = System.currentTimeMillis();
 			return this.gameTime;
 		}

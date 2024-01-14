@@ -1,6 +1,5 @@
 package com.minecrafttas.lotas.system;
 
-import com.minecrafttas.lotas.mods.*;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
@@ -11,6 +10,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Mod manager managing events for mods
  * @author Pancake
@@ -18,13 +20,15 @@ import net.minecraft.server.level.ServerPlayer;
 public class ModSystem {
 
 	/** Registered mods */
-	private static final Mod[] MODS = {
-		new DupeMod(),
-		new TickAdvance(),
-		new TickrateChanger(),
-		new DragonManipulation(),
-		new SavestateMod()
-	};
+	private static final List<Mod> MODS = new ArrayList<>();
+
+	/**
+	 * Register a mod
+	 * @param m Mod
+	 */
+	public static void registerMod(Mod m) {
+		MODS.add(m);
+	}
 
 	// 1: event handlers that update the mod
 

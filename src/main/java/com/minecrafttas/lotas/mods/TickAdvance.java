@@ -11,21 +11,16 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
+import static com.minecrafttas.lotas.LoTAS.TICKRATE_CHANGER;
+
 /**
  * Tick advance mod
  * ~ same logic as tickrate changer
  * @author Pancake
  */
 public class TickAdvance extends Mod {
-
-	public static TickAdvance instance;
-
-	/**
-	 * Construct tick advance mod
-	 */
 	public TickAdvance() {
 		super(new ResourceLocation("lotas", "tickadvance"));
-		instance = this;
 	}
 
 	/** Should tick advance when a player joins the server */
@@ -131,8 +126,7 @@ public class TickAdvance extends Mod {
 		if (buf.readInt() == 0) { // toggle tickadvance
 			this.tickadvance = buf.readBoolean();
 			
-			TickrateChanger trc = TickrateChanger.instance;
-			trc.updateGameTime(trc.getGamespeed());
+			TICKRATE_CHANGER.updateGameTime(TICKRATE_CHANGER.getGamespeed());
 		} else {
 			this.shouldTickClient = true; // tick client
 		}
@@ -145,7 +139,7 @@ public class TickAdvance extends Mod {
 	@Override
 	protected void onClientsideTick() {
 		this.shouldTickClient = false;
-		TickrateChanger.instance.advanceGameTime(50L);
+		TICKRATE_CHANGER.advanceGameTime(50L);
 	}
 
 	/**
