@@ -1,20 +1,18 @@
-# Gradle
-.gradle
+# Gradle files
+.gradle/
 build/
 
-# Eclipse
-.metadata/
+# IntelliJ files
+.idea/
+
+# Eclipse files
 .settings/
-*.launch
+.metadata/
+.factorypath
 .classpath
 .project
-.factorypath
 
-# Minecraft
-run/
+# Minecraft files
 run-server/
-
-# IntelliJ
-idea/
-out
-*.iml
+run/
+*.launch
