@@ -10,6 +10,7 @@ import static com.minecrafttas.lotas.LoTAS.TICKRATE_CHANGER;
 
 /**
  * This mixin slows down the toast in the top right to the tickrate
+ *
  * @author Pancake
  */
 @Mixin(targets = "net/minecraft/client/gui/components/toasts/ToastComponent$ToastInstance")
@@ -18,6 +19,7 @@ public class MixinToastInstance {
 
 	/**
 	 * Slow down toast timer
+	 *
 	 * @return Manipulated value
 	 */
 	@Redirect(method = "render(IILcom/mojang/blaze3d/vertex/PoseStack;)Z", at = @At(value = "INVOKE", target = "Lnet/minecraft/Util;getMillis()J"))

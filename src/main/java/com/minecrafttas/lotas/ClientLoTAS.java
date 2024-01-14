@@ -7,6 +7,7 @@ import net.fabricmc.api.Environment;
 
 /**
  * LoTAS fabric mod core for the client
+ *
  * @author Pancake
  */
 @Environment(EnvType.CLIENT)

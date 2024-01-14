@@ -12,6 +12,7 @@ import static com.minecrafttas.lotas.LoTAS.TICKRATE_CHANGER;
 
 /**
  * This mixin slows down the subtitle overlay to the tickrate
+ *
  * @author Scribble
  */
 @Mixin(SubtitleOverlay.class)
@@ -20,6 +21,7 @@ public class MixinSubtitleOverlay {
 
 	/**
 	 * Slow down animation speed by multiplying with the gamespeed
+	 *
 	 * @param threethousand 3000, well
 	 * @return Slowed down 3000
 	 */
@@ -30,6 +32,7 @@ public class MixinSubtitleOverlay {
 	
 	/**
 	 * Slow down animation speed by multiplying with the gamespeed
+	 *
 	 * @param threethousand 3000, well
 	 * @return Slowed down 3000
 	 */

@@ -1,7 +1,6 @@
 package com.minecrafttas.lotas.mixin.client.events;
 
 import com.minecrafttas.lotas.system.KeybindSystem;
-import com.minecrafttas.lotas.system.ModSystem;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.KeyMapping;
@@ -16,6 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /**
  * This mixin is purely responsible for the hooking up the events in {@link KeybindSystem}.
+ * 
  * @author Pancake
  */
 @Mixin(Options.class)
@@ -27,7 +27,7 @@ public class HookOptions {
 	public KeyMapping[] keyMappings;
 
 	/**
-	 * Trigger event in {@link ModSystem#onKeybindInitialize(KeyMapping[])} before keybinds are initialized and replace them with a custom array.
+	 * Trigger event in {@link KeybindSystem#onKeybindInitialize(KeyMapping[])} before keybinds are initialized and replace them with a custom array.
 	 * @param ci Callback Info
 	 */
 	@Inject(method = "load", at = @At("HEAD"))

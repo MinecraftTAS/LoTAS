@@ -10,6 +10,7 @@ import static com.minecrafttas.lotas.LoTAS.LOGGER;
 
 /**
  * Configuration system that can read and store keys in a file using java properties.
+ *
  * @author Pancake
  */
 public class ConfigurationSystem {
@@ -22,6 +23,7 @@ public class ConfigurationSystem {
 
 	/**
 	 * Load configuration from file
+	 *
 	 * @param configuration Configuration file
 	 */
 	public static void load(File configuration) {
@@ -55,6 +57,7 @@ public class ConfigurationSystem {
 
 	/**
 	 * Store something in configuration.
+	 *
 	 * @param key Name of the variable
 	 * @param value Value of the variable
 	 */
@@ -64,6 +67,7 @@ public class ConfigurationSystem {
 
 	/**
 	 * Obtain something from configuration
+	 *
 	 * @param key Name of the variable
 	 * @param def Default value
 	 */
@@ -73,6 +77,7 @@ public class ConfigurationSystem {
 
 	/**
 	 * Verify property is present in configuration
+	 *
 	 * @param key Name of the variable
 	 * @return Value present
 	 */
@@ -84,6 +89,7 @@ public class ConfigurationSystem {
 
 	/**
 	 * Store string in configuration
+	 *
 	 * @param key Name of the variable
 	 * @param value Value of the variable
 	 */
@@ -93,6 +99,7 @@ public class ConfigurationSystem {
 
 	/**
 	 * Store char in configuration
+	 *
 	 * @param key Name of the variable
 	 * @param value Value of the variable
 	 */
@@ -102,6 +109,7 @@ public class ConfigurationSystem {
 
 	/**
 	 * Store byte in configuration
+	 *
 	 * @param key Name of the variable
 	 * @param value Value of the variable
 	 */
@@ -111,6 +119,7 @@ public class ConfigurationSystem {
 
 	/**
 	 * Store short in configuration
+	 *
 	 * @param key Name of the variable
 	 * @param value Value of the variable
 	 */
@@ -120,6 +129,7 @@ public class ConfigurationSystem {
 
 	/**
 	 * Store int in configuration
+	 *
 	 * @param key Name of the variable
 	 * @param value Value of the variable
 	 */
@@ -129,6 +139,7 @@ public class ConfigurationSystem {
 
 	/**
 	 * Store long in configuration
+	 *
 	 * @param key Name of the variable
 	 * @param value Value of the variable
 	 */
@@ -138,6 +149,7 @@ public class ConfigurationSystem {
 
 	/**
 	 * Store double in configuration
+	 *
 	 * @param key Name of the variable
 	 * @param value Value of the variable
 	 */
@@ -147,6 +159,7 @@ public class ConfigurationSystem {
 
 	/**
 	 * Store float in configuration
+	 *
 	 * @param key Name of the variable
 	 * @param value Value of the variable
 	 */
@@ -156,6 +169,7 @@ public class ConfigurationSystem {
 
 	/**
 	 * Store boolean in configuration
+	 *
 	 * @param key Name of the variable
 	 * @param value Value of the variable
 	 */
@@ -167,6 +181,7 @@ public class ConfigurationSystem {
 
 	/**
 	 * Obtain string from configuration
+	 *
 	 * @param key Name of the variable
 	 * @param def Default value
 	 * @return Value or default
@@ -177,6 +192,7 @@ public class ConfigurationSystem {
 
 	/**
 	 * Obtain char from configuration
+	 *
 	 * @param key Name of the variable
 	 * @param def Default value
 	 * @return Value or default
@@ -193,6 +209,7 @@ public class ConfigurationSystem {
 
 	/**
 	 * Obtain byte from configuration
+	 *
 	 * @param key Name of the variable
 	 * @param def Default value
 	 * @return Value or default
@@ -209,6 +226,7 @@ public class ConfigurationSystem {
 
 	/**
 	 * Obtain short from configuration
+	 *
 	 * @param key Name of the variable
 	 * @param def Default value
 	 * @return Value or default
@@ -225,6 +243,7 @@ public class ConfigurationSystem {
 
 	/**
 	 * Obtain int from configuration
+	 *
 	 * @param key Name of the variable
 	 * @param def Default value
 	 * @return Value or default
@@ -241,6 +260,7 @@ public class ConfigurationSystem {
 
 	/**
 	 * Obtain long from configuration
+	 *
 	 * @param key Name of the variable
 	 * @param def Default value
 	 * @return Value or default
@@ -257,6 +277,7 @@ public class ConfigurationSystem {
 
 	/**
 	 * Obtain double from configuration
+	 *
 	 * @param key Name of the variable
 	 * @param def Default value
 	 * @return Value or default
@@ -273,6 +294,7 @@ public class ConfigurationSystem {
 
 	/**
 	 * Obtain float from configuration
+	 *
 	 * @param key Name of the variable
 	 * @param def Default value
 	 * @return Value or default
@@ -289,6 +311,7 @@ public class ConfigurationSystem {
 
 	/**
 	 * Obtain boolean from configuration
+	 *
 	 * @param key Name of the variable
 	 * @param def Default value
 	 * @return Value or default

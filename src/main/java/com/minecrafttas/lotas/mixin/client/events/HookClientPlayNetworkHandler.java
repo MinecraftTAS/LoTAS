@@ -12,6 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /**
  * This mixin is purely responsible for the hooking up the events in {@link ModSystem}.
+ * 
  * @author Pancake
  */
 @Mixin(ClientPacketListener.class)
@@ -19,7 +20,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class HookClientPlayNetworkHandler {
 
 	/**
-	 * Trigger event in {@link ModSystem#onClientsidePayload(Minecraft)} when a custom payload packet is received
+	 * Trigger event in {@link ModSystem#onClientsidePayload(ClientboundCustomPayloadPacket)} )} when a custom payload packet is received
+	 * 
 	 * @param ci Callback Info
 	 */
 	@Inject(method = "handleCustomPayload", at = @At("HEAD"), cancellable = true)

@@ -11,13 +11,15 @@ import net.minecraft.server.MinecraftServer;
 
 /**
  * This mixin is purely responsible for the hooking up the events in {@link ModSystem}.
+ *
  * @author Pancake
  */
 @Mixin(MinecraftServer.class)
 public class HookMinecraftServer {
 
 	/**
-	 * Trigger event in {@link ModSystem#onServerTick(MinecraftServer)} after the server has ticked
+	 * Trigger event in {@link ModSystem#onServerTick()} after the server has ticked
+	 *
 	 * @param ci Callback Info
 	 */
 	@Inject(method = "runServer", at = @At(value = "INVOKE", shift = At.Shift.AFTER, target = "Lnet/minecraft/util/profiling/ProfilerFiller;pop()V"))
@@ -27,6 +29,7 @@ public class HookMinecraftServer {
 
 	/**
 	 * Trigger event in {@link ModSystem#onServerLoad(MinecraftServer)} before the server enters the tick loop
+	 *
 	 * @param ci Callback Info
 	 */
 	@Inject(method = "<init>", at = @At("RETURN"))

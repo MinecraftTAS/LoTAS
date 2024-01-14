@@ -16,6 +16,7 @@ import static com.minecrafttas.lotas.LoTAS.TICKRATE_CHANGER;
 /**
  * Tick advance mod
  * ~ same logic as tickrate changer
+ *
  * @author Pancake
  */
 public class TickAdvance extends Mod {
@@ -73,6 +74,7 @@ public class TickAdvance extends Mod {
 
 	/**
 	 * Update server tickadvance status and resend packet when receiving a request
+	 *
 	 * @param buf Packet
 	 */
 	@Override
@@ -86,6 +88,7 @@ public class TickAdvance extends Mod {
 	/**
 	 * Update server tickadvance status and update clients
 	 * (Serverside only)
+	 *
 	 * @param tickadvance Tickadvance status
 	 */
 	public void updateTickadvanceStatus(boolean tickadvance) {
@@ -103,7 +106,6 @@ public class TickAdvance extends Mod {
 	/**
 	 * Advance server tick and update clients
 	 * (Serverside only)
-	 * @param tickadvance Tickadvance status
 	 */
 	public void updateTickadvance() {
 		this.shouldTickServer = true;
@@ -118,6 +120,7 @@ public class TickAdvance extends Mod {
 
 	/**
 	 * Update client tickadvance status when receiving packet
+	 *
 	 * @param buf Packet
 	 */
 	@Override
@@ -153,6 +156,7 @@ public class TickAdvance extends Mod {
 
 	/**
 	 * Update client tick advance status on connect
+	 *
 	 * @param player Player
 	 */
 	@Override

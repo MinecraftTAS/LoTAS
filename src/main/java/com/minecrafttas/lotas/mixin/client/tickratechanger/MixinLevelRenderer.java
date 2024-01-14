@@ -12,6 +12,7 @@ import static com.minecrafttas.lotas.LoTAS.TICKRATE_CHANGER;
 
 /**
  * This mixin slows down the world border renderer to the tickrate
+ *
  * @author Pancake
  */
 @Mixin(LevelRenderer.class)
@@ -20,6 +21,7 @@ public class MixinLevelRenderer {
 
 	/**
 	 * Slow down getMillis
+	 *
 	 * @param f Ignored original value
 	 * @return Manipulated value
 	 */

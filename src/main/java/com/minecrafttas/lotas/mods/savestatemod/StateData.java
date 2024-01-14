@@ -18,6 +18,7 @@ import static com.minecrafttas.lotas.LoTAS.LOGGER;
 
 /**
  * This class represents the state data of a world.
+ *
  * @author Pancake
  */
 @Getter
@@ -37,6 +38,7 @@ public class StateData {
 
 	/**
 	 * Initialize state data
+	 *
 	 * @param mcserver Minecraft server instance
 	 */
 	public void onServerInitialize(MinecraftServer mcserver) {
@@ -47,6 +49,7 @@ public class StateData {
 	
 	/**
 	 * Load states data of world
+	 *
 	 * @throws IOException If an exception occurs while loading
 	 */
 	public void loadData() throws IOException {
@@ -64,6 +67,7 @@ public class StateData {
 	
 	/**
 	 * Save state data of world
+	 *
 	 * @throws IOException If an exception occurs while saving
 	 */
 	public void saveData() throws IOException {
@@ -75,6 +79,7 @@ public class StateData {
 
 	/**
 	 * Deserialize state data from byte array
+	 *
 	 * @param data Serialized Data
 	 */
 	public void deserializeData(byte[] data) {
@@ -92,6 +97,7 @@ public class StateData {
 
 	/**
 	 * Add state to list of states
+	 *
 	 * @param state State
 	 */
 	public void addState(State state) {
@@ -100,6 +106,7 @@ public class StateData {
 
 	/**
 	 * Verify state exists
+	 *
 	 * @param i Index
 	 * @return Is state valid
 	 */
@@ -112,6 +119,7 @@ public class StateData {
 
 	/**
 	 * Remove state from list of states
+	 *
 	 * @param i Index
 	 */
 	public void removeState(int i) {
@@ -120,6 +128,7 @@ public class StateData {
 
 	/**
 	 * This class represents a state
+	 *
 	 * @author Pancake
 	 */
 	@Data

@@ -15,6 +15,7 @@ import static com.minecrafttas.lotas.LoTAS.TICKRATE_CHANGER;
 
 /**
  * This mixin adjusts the pitch of audio to the tickrate
+ *
  * @author Pancake
  */
 @Mixin(SoundEngine.class)
@@ -23,6 +24,7 @@ public class MixinSoundEngine {
 
 	/**
 	 * Calculate new pitch to play based on tickrate
+	 *
 	 * @param soundInstance Sound to play
 	 * @param ci Returnable
 	 */
