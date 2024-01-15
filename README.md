@@ -1,7 +1,7 @@
 ﻿> [!IMPORTANT]  
 > # This project is no longer actively being developed!
 >We are shifting our focus to [TASmod](https://github.com/MinecraftTAS/TASmod).  
->For more information and plans, read this announcement: [Future of Mineraft TAS tools](https://>gist.github.com/ScribbleTAS/43b18e8a92a111e92bf4bb0d9cf49e99)
+>For more information and plans, read this announcement: [Future of Mineraft TAS tools](https://gist.github.com/ScribbleTAS/43b18e8a92a111e92bf4bb0d9cf49e99)
 
 # LoTAS
 Used to create non-playback, Low optimization Tool-Assisted Speedruns (LoTAS).  
@@ -65,4 +65,4 @@ This feature that was a minor desaster...
 We decided to remove it, because video editors like [Shotcut](https://shotcut.org) are much better, provide more functionality and happen to work as intended.  
 
 ## Why is there no multiplayer?
-This mod wasn't developed with multiplayer in mind. The plan was to add it later but this turned out to be *very* tedious. Multiplayer support is/was planned in [LoTAS 3.0](https://github.com/MinecraftTAS/LoTAS/tree/dev-3.0.0)
+This mod wasn't developed with multiplayer in mind. The plan was to add it later but this turned out to be *very* tedious. Multiplayer support is/was planned in LoTAS 3.0
